@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 // ICONS
-import { MdRemoveRedEye } from "react-icons/md";
-import { AiFillEyeInvisible } from "react-icons/ai";
+import EyeI from "../assets/icon/eye";
+import EyeInv from "../assets/icon/eyeInv";
 
 function LoginPage({ setFormName }) {
   const dispatch = useDispatch();
@@ -16,16 +16,16 @@ function LoginPage({ setFormName }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inputType, setInputType] = useState("password");
-  const [icon, setIcon] = useState(<AiFillEyeInvisible />);
+  const [icon, setIcon] = useState(<EyeInv />);
 
   const iconClick = (e) => {
     e.preventDefault();
     if (inputType === "password") {
       setInputType("text");
-      setIcon(<MdRemoveRedEye />);
+      setIcon(<EyeI />);
     } else {
       setInputType("password");
-      setIcon(<AiFillEyeInvisible />);
+      setIcon(<EyeInv />);
     }
   };
 

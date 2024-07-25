@@ -5,12 +5,14 @@ import Home from "./pages/home";
 import toastOptions from "./config/toast";
 import NotFound from "./pages/404";
 import LoginRegister from "./pages/loginRegister";
+import AdminLoginPage from "./pages/adminLogin";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/login" element={<LoginRegister />} />
+        <Route path="/9007/admin" element={<AdminLoginPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/*" element={<Home />} />
           <Route path="*" element={<NotFound />} />

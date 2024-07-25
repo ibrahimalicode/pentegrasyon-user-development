@@ -16,7 +16,7 @@ import {
 } from "../../assets/icon/index";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import ArrowI from "../../assets/icon/arrowR";
+import ArrowR from "../../assets/icon/arrowR";
 
 const sidebarItems = [
   {
@@ -86,7 +86,7 @@ function Sidebar() {
           className="absolute -right-8 top-2/3 bg-[--white-1] py-8 pr-2 border-2 border-solid border-[--light-3] border-l-0 cursor-pointer lg:hidden"
           onClick={() => setHideSide(!hideSide)}
         >
-          <ArrowI className="text-[--black-1] font-bold" />
+          <ArrowR className="text-[--black-1] font-bold" />
         </div>
         <header className="flex flex-col justify-center items-start p-6 w-full text-xl font-[500] leading-7 text-black whitespace-nowrap">
           <div className="flex gap-2">

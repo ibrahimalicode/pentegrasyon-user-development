@@ -8,7 +8,7 @@ const img =
 const LoginRegister = () => {
   const [formName, setFormName] = useState(null);
   return (
-    <section className="p-0 overflow-hidden">
+    <section className="p-0 sm:overflow-hidden">
       <div className="flex flex-col justify-center items-center h-[100dvh] bg-white">
         <div
           className={`flex gap-5 w-full h-full relative ${
@@ -26,7 +26,7 @@ const LoginRegister = () => {
           </div>
 
           {/* Card Slider */}
-          <div className="lg:flex flex-col w-6/12 max-md:ml-0 max-md:w-full hidden overlay-container">
+          <div className="lg:flex flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:overflow-hidden overlay-container">
             <AuthImg />
           </div>
         </div>

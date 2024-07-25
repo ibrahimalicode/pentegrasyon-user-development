@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BACKEND_PORT = import.meta.env.VITE_BACKEND_URL;
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 const initialState = {
   loading: false,
   success: false,
@@ -44,7 +45,7 @@ export const verifyCode = createAsyncThunk(
   async ({ phone, code }) => {
     try {
       const res = await axios.get(
-        `${BACKEND_PORT}/api/v1/Verify/VerifyCode`,
+        `${baseURL}/api/v1/Verify/VerifyCode`,
         {
           emailOrPhoneNumber: phone,
           verificationCode: code,

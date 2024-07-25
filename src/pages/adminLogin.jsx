@@ -12,7 +12,7 @@ import EyeInv from "../assets/icon/eyeInv";
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
 
-function LoginPage({ setFormName }) {
+function AdminLoginPage({ setFormName }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { success, loading, error } = useSelector((state) => state.auth.login);
@@ -35,7 +35,7 @@ function LoginPage({ setFormName }) {
   const handleLogin = (e) => {
     e.preventDefault();
     if (!email || !password) return;
-    dispatch(login({ email, password, role: "user" }));
+    dispatch(login({ email, password, role: "admin" }));
   };
 
   useEffect(() => {
@@ -60,7 +60,7 @@ function LoginPage({ setFormName }) {
   return (
     <div className="flex items-center justify-center w-full">
       <form
-        className="flex flex-col pb-12 w-full max-w-[38rem] px-12"
+        className="flex flex-col w-full max-w-[38rem] px-12 mt-40"
         onSubmit={handleLogin}
       >
         <div className="flex justify-center">
@@ -68,7 +68,7 @@ function LoginPage({ setFormName }) {
             Giriş
           </h2>
         </div>
-        <div className="flex flex-col mt-10 max-w-full">
+        <div className="flex flex-col max-w-full">
           <CustomInput
             label="E-posta"
             type="email"
@@ -101,10 +101,10 @@ function LoginPage({ setFormName }) {
             >
               Giriş
             </button>
-            <div className="shrink-0 mt-10 h-px bg-slate-200 w-full" />
+            {/* <div className="shrink-0 mt-10 h-px bg-slate-200 w-full" /> */}
           </div>
         </div>
-        <div className="flex flex-col mt-10 w-full">
+        {/*  <div className="flex flex-col mt-10 w-full">
           <p className="text-sm leading-5 text-[--link-1] w-full text-center">
             <a href="/">Hesabınız yok mu ?</a>
           </p>
@@ -114,10 +114,10 @@ function LoginPage({ setFormName }) {
           >
             Kayıt ol
           </span>
-        </div>
+        </div> */}
       </form>
     </div>
   );
 }
 
-export default LoginPage;
+export default AdminLoginPage;

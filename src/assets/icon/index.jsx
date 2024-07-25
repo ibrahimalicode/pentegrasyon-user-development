@@ -13,6 +13,10 @@ import ParamsI from "./parameters";
 import WarnI from "./warn";
 import GobackI from "./goback";
 import BellI from "./bell";
+import ArrowIU from "./arrowU";
+import ArrowID from "./arrowD";
+import ArrowIR from "./arrowR";
+import ArrowIL from "./arrowL";
 
 export {
   DashboardI,
@@ -28,4 +32,8 @@ export {
   WarnI,
   GobackI,
   BellI,
+  ArrowIU,
+  ArrowID,
+  ArrowIR,
+  ArrowIL,
 };

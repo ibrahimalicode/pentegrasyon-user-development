@@ -5,7 +5,7 @@ const EyeI = ({ className, strokeWidth = 2.5 }) => (
     viewBox="0 0 24 24"
     strokeWidth={strokeWidth}
     stroke="currentColor"
-    className="size-6"
+    className={`size-6 ${className}`}
   >
     <path
       strokeLinecap="round"

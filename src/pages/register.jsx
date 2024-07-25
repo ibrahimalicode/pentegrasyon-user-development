@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import CustomInput from "../components/common/CustomInput";
 
 // ICONS
-import { MdRemoveRedEye } from "react-icons/md";
-import { AiFillEyeInvisible } from "react-icons/ai";
 import toast from "react-hot-toast";
 import GobackI from "../assets/icon/goback";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyCode } from "../redux/auth/verifyCodeSlice";
+import EyeI from "../assets/icon/eye";
+import EyeInv from "../assets/icon/eyeInv";
 
 const RegisterPage = ({ setFormName }) => {
   const dispatch = useDispatch();
@@ -23,8 +23,8 @@ const RegisterPage = ({ setFormName }) => {
   const [toConfirm, setToConfirm] = useState(false);
   const [smsCode, setSmsCode] = useState("");
 
-  const [icon, setIcon] = useState(<AiFillEyeInvisible />);
-  const [icon2, setIcon2] = useState(<AiFillEyeInvisible />);
+  const [icon, setIcon] = useState(<EyeInv />);
+  const [icon2, setIcon2] = useState(<EyeInv />);
 
   const confirmUser = (e) => {
     e.preventDefault();
@@ -66,20 +66,20 @@ const RegisterPage = ({ setFormName }) => {
     e.preventDefault();
     if (inputType === "password") {
       setInputType("text");
-      setIcon(<MdRemoveRedEye />);
+      setIcon(<EyeI />);
     } else {
       setInputType("password");
-      setIcon(<AiFillEyeInvisible />);
+      setIcon(<EyeInv />);
     }
   };
   const iconClick2 = (e) => {
     e.preventDefault();
     if (inputType2 === "password") {
       setInputType2("text");
-      setIcon2(<MdRemoveRedEye />);
+      setIcon2(<EyeI />);
     } else {
       setInputType2("password");
-      setIcon2(<AiFillEyeInvisible />);
+      setIcon2(<EyeInv />);
     }
   };
 

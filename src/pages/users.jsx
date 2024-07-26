@@ -5,25 +5,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsers, resetGetUsersState } from "../redux/users/getUsersSlice";
 import toast from "react-hot-toast";
 import { formatDateString } from "../utils/utils";
-import { users } from "../data/users";
 import CustomPagination from "../components/common/pagination";
+import CloseI from "../assets/icon/close";
 
 const Users = () => {
   const dispatch = useDispatch();
-  //const { loading, success, error, users } = useSelector(
-  //  (state) => state.users.getUsers
-  //);
+  const { loading, success, error, users } = useSelector(
+    (state) => state.users.getUsers
+  );
 
   const [searchVal, setSearchVal] = useState("");
   const [usersData, setUsersData] = useState(null);
   const [selectedType, setSelectedType] = useState("users");
 
-  useEffect(() => {
-    //dispatch(getUsers());
-    setUsersData(formatUsers(users));
-  }, []);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
-  /* 
+  const totalItems = usersData?.length;
+  const lastItemIndex = pageNumber * itemsPerPage;
+  const firstItemIndex = lastItemIndex - itemsPerPage;
+  const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
+
+  useEffect(() => {
+    if (!usersData) {
+      dispatch(getUsers());
+      //setUsersData(formatUsers(users));
+    }
+  }, [usersData]);
+
   useEffect(() => {
     if (loading) {
       toast.dismiss();
@@ -41,8 +50,7 @@ const Users = () => {
       setUsersData(formatUsers(users));
     }
     dispatch(resetGetUsersState());
-  }, [loading, success, error, users]); 
-  */
+  }, [loading, success, error, users]);
 
   const formatUsers = (data) => {
     if (selectedType === "dealers") {
@@ -96,6 +104,11 @@ const Users = () => {
             placeholder="Search..."
             className2="mt-[0px] w-full"
             className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
+            icon={<CloseI className="w-4 text-[--red-1]" />}
+            className3={`top-[20px] hover:bg-[--light-4] rounded-full px-2 py-1 ${
+              searchVal ? "block" : "hidden"
+            }`}
+            onClick={() => handleSearch("")}
           />
         </div>
 
@@ -130,60 +143,45 @@ const Users = () => {
       </div>
 
       {/* TABLE */}
-      {usersData ? (
+      {!usersData ? (
         <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
           <table className="w-full text-sm font-light min-w-[60rem]">
             <thead>
-              <tr className="bg-[--light-3] h-8">
-                <th className="first:pl-4 font-normal first:text-left text-center">
-                  Ad Soyad
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  Rol
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  iletişim
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  Il
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  Durum
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  Onaylı
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  Kayıt Tarihi
-                </th>
-                <th className="irst:pl-4 font-normal first:text-left last:text-left text-center">
-                  İşlem
-                </th>
+              <tr className="bg-[--light-3] h-8 text-left">
+                <th className="first:pl-4 font-normal">Ad</th>
+                <th className="irst:pl-4 font-normal">Soyad</th>
+                <th className="irst:pl-4 font-normal">iletişim</th>
+                <th className="irst:pl-4 font-normal">Il</th>
+                <th className="irst:pl-4 font-normal">Durum</th>
+                <th className="irst:pl-4 font-normal text-center">Onaylı</th>
+                <th className="irst:pl-4 font-normal">Kayıt Tarihi</th>
+                <th className="irst:pl-4 font-normal text-center">İşlem</th>
               </tr>
             </thead>
 
             <tbody>
-              {usersData.map((data, index) => (
+              {currentItems.map((data, index) => (
                 <tr
                   key={data.Id}
                   className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
                 >
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
-                    {data.FirstName} {data.LastName}
+                  <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
+                    {data.FirstName}
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
-                    {data.IsDealer ? "Bayi" : "Müşteri"}
+                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
+                    {data.LastName}
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
+                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     {data.PhoneNumber}
-                    <p className="text-xs font-light text-[--gr-1]">
+                    <br />
+                    <span className="text-xs font-light text-[--gr-1]">
                       {data.Email}
-                    </p>
+                    </span>
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
+                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     {data.City}
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
+                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     <span
                       className={`text-xs font-normal ${
                         data.IsActive
@@ -194,7 +192,7 @@ const Users = () => {
                       ● {data.IsActive ? "Aktif" : "Pasif"}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
+                  <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
                     <span
                       className={`text-xs font-normal ${
                         data.IsVerify
@@ -205,10 +203,10 @@ const Users = () => {
                       {data.IsVerify ? "Onaylı" : "Onlaylanmadı"}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
+                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     {formatDateString(data.CreatedDateTime)}
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] first:text-left last:text-right first:pl-4 font-light first:font-normal">
+                  <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
                     <MenuI className="w-full" />
                   </td>
                 </tr>
@@ -216,10 +214,32 @@ const Users = () => {
             </tbody>
           </table>
         </div>
-      ) : null}
-      <div className="w-full self-end flex justify-center pt-4">
-        <CustomPagination />
-      </div>
+      ) : (
+        <table className="w-full text-sm font-light min-w-[60rem]">
+          <thead>
+            <tr className="bg-[--light-3] h-8 text-left">
+              <th className="first:pl-4 font-normal">Ad</th>
+              <th className="irst:pl-4 font-normal">Soyad</th>
+              <th className="irst:pl-4 font-normal">iletişim</th>
+              <th className="irst:pl-4 font-normal">Il</th>
+              <th className="irst:pl-4 font-normal">Durum</th>
+              <th className="irst:pl-4 font-normal text-center">Onaylı</th>
+              <th className="irst:pl-4 font-normal">Kayıt Tarihi</th>
+              <th className="irst:pl-4 font-normal text-center">İşlem</th>
+            </tr>
+          </thead>
+        </table>
+      )}
+      {usersData && (
+        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
+          <CustomPagination
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            itemsPerPage={itemsPerPage}
+            totalItems={totalItems}
+          />
+        </div>
+      )}
     </section>
   );
 };

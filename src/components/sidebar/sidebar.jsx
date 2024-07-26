@@ -15,7 +15,7 @@ import {
   ParamsI,
 } from "../../assets/icon/index";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ArrowR from "../../assets/icon/arrowR";
 
 const sidebarItems = [
@@ -23,56 +23,67 @@ const sidebarItems = [
     icon: <DashboardI />,
     text: "Gösterge Paneli",
     to: "/dashboard",
+    path: "dashboard",
   },
   {
     icon: <UsersI />,
     text: "Kullanıcılar",
     to: "/users",
+    path: "users",
   },
   {
     icon: <RestourantI />,
     text: "Restoranlar",
     to: "/restourants",
+    path: "restourants",
   },
   {
     icon: <LicenseI />,
     text: "Lisanslar",
     to: "/licenses",
+    path: "licenses",
   },
   {
     icon: <PackagesI />,
     text: "Lisans Paketleri",
     to: "/packages",
+    path: "packages",
   },
   {
     icon: <MessagesI />,
     text: "Mesajlar",
     to: "/messages",
+    path: "messages",
   },
   {
     icon: <LogI />,
     text: "İşlem Kayıtları",
     to: "/activity-logs",
+    path: "activity-logs",
   },
   {
     icon: <RolesI />,
     text: "Roller",
     to: "/roles",
+    path: "roles",
   },
   {
     icon: <PaymentI />,
     text: "Ödemeler",
     to: "/payments",
+    path: "payments",
   },
   {
     icon: <ParamsI />,
     text: "Parametreler",
     to: "/parameters",
+    path: "parameters",
   },
 ];
 
 function Sidebar() {
-  const [selectedRow, setSelectedRow] = useState(0);
+  const param = useParams();
+  const path = Object.values(param)[0];
   const [hideSide, setHideSide] = useState(false);
 
   return (
@@ -106,11 +117,11 @@ function Sidebar() {
               <Link to={item.to} key={index}>
                 <div
                   onClick={() => {
-                    setSelectedRow(index);
                     setHideSide(!hideSide);
                   }}
                   className={`flex flex-col justify-center px-4 py-[10px] rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item ${
-                    index === selectedRow && "bg-[--light-1] text-[--primary-1]"
+                    path.includes(item.path) &&
+                    "bg-[--light-1] text-[--primary-1]"
                   }`}
                 >
                   <div className="flex items-center gap-3">

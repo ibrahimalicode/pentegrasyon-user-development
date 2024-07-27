@@ -5,18 +5,21 @@ const CustomPagination = ({
   setPageNumber,
   totalItems,
   itemsPerPage,
+  handlePageChange,
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePrevious = () => {
     if (pageNumber > 1) {
       setPageNumber(pageNumber - 1);
+      handlePageChange(pageNumber - 1);
     }
   };
 
   const handleNext = () => {
     if (pageNumber < totalPages) {
       setPageNumber(pageNumber + 1);
+      handlePageChange(pageNumber + 1);
     }
   };
 
@@ -69,7 +72,10 @@ const CustomPagination = ({
                 className={`py-2 px-4 text-sm border border-solid border-transparent hover:border-[--border-1] rounded-md ${
                   pageNumber === page ? "bg-[--border-1]" : ""
                 }`}
-                onClick={() => setPageNumber(page)}
+                onClick={() => {
+                  setPageNumber(page);
+                  handlePageChange(page);
+                }}
               >
                 {page}
               </button>

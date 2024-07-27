@@ -16,12 +16,12 @@ const LoginRegister = () => {
           }`}
         >
           {/* Sign Up Form */}
-          <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-in-container max-md:w-full">
+          <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-in-container max-lg:w-full">
             <LoginPage setFormName={setFormName} />
           </div>
 
           {/* Sign in Form */}
-          <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-up-container max-md:w-full">
+          <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-up-container max-lg:w-full">
             <RegisterPage setFormName={setFormName} />{" "}
           </div>
 

@@ -16,13 +16,13 @@ const axiosPrivate = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-const auth = () => {
+export const auth = () => {
   const authItemString = localStorage.getItem(KEY);
   const authItem = JSON.parse(authItemString);
   return authItem;
 };
 
-const clearAuth = () => {
+export const clearAuth = () => {
   localStorage.removeItem(KEY);
 };
 

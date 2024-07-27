@@ -125,3 +125,20 @@ body {
     transform: none !important;
   }
 }
+
+
+/* FadeIn */
+@keyframes fadeInOutAnimation {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.fade {
+  animation: fadeInOutAnimation 1.5s ease-in-out infinite;
+}

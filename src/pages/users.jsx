@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { formatDateString } from "../utils/utils";
 import CustomPagination from "../components/common/pagination";
 import CloseI from "../assets/icon/close";
+import TableSkeleton from "../components/common/tableSkeleton";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -19,74 +20,53 @@ const Users = () => {
   const [selectedType, setSelectedType] = useState("users");
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const itemsPerPage = 8;
 
-  const totalItems = usersData?.length;
+  const [totalItems, setTotalItems] = useState(null);
   const lastItemIndex = pageNumber * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
 
-  useEffect(() => {
-    if (!usersData) {
-      dispatch(getUsers());
-      //setUsersData(formatUsers(users));
-    }
-  }, [usersData]);
-
-  useEffect(() => {
-    if (loading) {
-      toast.dismiss();
-      toast.loading("Loading..");
-    } else if (error) {
-      toast.dismiss();
-      if (error?.message) {
-        toast.error(error.message);
-      } else {
-        toast.error("Something went wrong");
-      }
-    } else if (success) {
-      toast.dismiss();
-      toast.success("Success");
-      setUsersData(formatUsers(users));
-    }
-    dispatch(resetGetUsersState());
-  }, [loading, success, error, users]);
-
-  const formatUsers = (data) => {
-    if (selectedType === "dealers") {
-      return data.filter((item) => item.IsDealer);
-    } else {
-      return data.filter((item) => !item.IsDealer);
-    }
-  };
-
   const filter = (type) => {
     setSelectedType(type);
-    if (type === "dealers") {
-      const data = users.filter((item) => item.IsDealer);
-      return setUsersData(data);
-    } else {
-      const data = users.filter((item) => !item.IsDealer);
-      return setUsersData(data);
-    }
   };
 
   const handleSearch = (word) => {
     setSearchVal(word);
     if (!word) {
-      setUsersData(formatUsers(users));
+      setUsersData(users.Data);
       return;
     }
-    const data = users.filter((user) => {
-      return Object.values(user).some((value) => {
-        if (typeof value === "string") {
-          return value.toLowerCase().includes(word.toLowerCase());
-        }
-        return false;
-      });
-    });
-    setUsersData(data);
   };
+
+  const handlePageChange = (number) => {
+    dispatch(getUsers({ pageNumber: number, pageSize: itemsPerPage }));
+  };
+
+  useEffect(() => {
+    if (!usersData) {
+      dispatch(getUsers({ pageNumber, pageSize: itemsPerPage }));
+    }
+  }, [usersData]);
+
+  useEffect(() => {
+    if (error) {
+      toast.dismiss();
+
+      if (error?.message) {
+        toast.error(error.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+
+    if (success) {
+      toast.dismiss();
+      setUsersData(users.Data);
+      setTotalItems(users.TotalCount);
+    }
+    dispatch(resetGetUsersState());
+  }, [loading, success, error, users]);
 
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-24 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -143,7 +123,7 @@ const Users = () => {
       </div>
 
       {/* TABLE */}
-      {!usersData ? (
+      {usersData ? (
         <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
           <table className="w-full text-sm font-light min-w-[60rem]">
             <thead>
@@ -160,7 +140,7 @@ const Users = () => {
             </thead>
 
             <tbody>
-              {currentItems.map((data, index) => (
+              {usersData.map((data, index) => (
                 <tr
                   key={data.Id}
                   className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
@@ -215,28 +195,17 @@ const Users = () => {
           </table>
         </div>
       ) : (
-        <table className="w-full text-sm font-light min-w-[60rem]">
-          <thead>
-            <tr className="bg-[--light-3] h-8 text-left">
-              <th className="first:pl-4 font-normal">Ad</th>
-              <th className="irst:pl-4 font-normal">Soyad</th>
-              <th className="irst:pl-4 font-normal">iletişim</th>
-              <th className="irst:pl-4 font-normal">Il</th>
-              <th className="irst:pl-4 font-normal">Durum</th>
-              <th className="irst:pl-4 font-normal text-center">Onaylı</th>
-              <th className="irst:pl-4 font-normal">Kayıt Tarihi</th>
-              <th className="irst:pl-4 font-normal text-center">İşlem</th>
-            </tr>
-          </thead>
-        </table>
+        <TableSkeleton />
       )}
-      {usersData && (
+
+      {usersData && totalItems && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
             itemsPerPage={itemsPerPage}
             totalItems={totalItems}
+            handlePageChange={handlePageChange}
           />
         </div>
       )}

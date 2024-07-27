@@ -14,20 +14,21 @@ const CustomSelect = ({
 }) => {
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
-      <label className="text-xs font-[600] tracking-wide text-[--black-1] max-md:max-w-full text-left z-[999]">
+      <label className="text-xs font-[600] tracking-wide text-[--black-1] max-md:max-w-full text-left">
         {label}
       </label>
       <Select
         value={value}
         onChange={onChange}
         options={options}
-        className={`mt-1 sm:mt-2.5 text-base font-[300] ${className}`}
+        className={`mt-1 sm:mt-2.5 text-base font-[350] ${className}`}
         isDisabled={isDisabled}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
         styles={{
           control: (provided, state) => ({
             ...provided,
             boxShadow: "none",
+            cursor: "pointer",
             border: "1px solid var(--border-1)",
             backgroundColor: "var(--white-1)",
             color: "--gr-1",

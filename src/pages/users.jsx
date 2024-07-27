@@ -8,6 +8,9 @@ import { formatDateString } from "../utils/utils";
 import CustomPagination from "../components/common/pagination";
 import CloseI from "../assets/icon/close";
 import TableSkeleton from "../components/common/tableSkeleton";
+import { ParamsI } from "../assets/icon";
+import CustomSelect from "../components/common/CustomSelector";
+import CustomDatePicker from "../components/common/customdatePicker";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -17,7 +20,8 @@ const Users = () => {
 
   const [searchVal, setSearchVal] = useState("");
   const [usersData, setUsersData] = useState(null);
-  const [selectedType, setSelectedType] = useState("users");
+  const [filter, setFilter] = useState(null);
+  const [openFilter, setOpenFilter] = useState(false);
 
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
@@ -27,8 +31,39 @@ const Users = () => {
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
 
-  const filter = (type) => {
-    setSelectedType(type);
+  const handleFilter = (bool) => {
+    if (bool) {
+      console.log(filter);
+      setOpenFilter(false);
+      dispatch(
+        getUsers({
+          pageNumber,
+          pageSize: itemsPerPage,
+          active: filter?.active?.value ? filter.active.value : null,
+          verify: filter?.verify?.value ? filter.verify.value : null,
+          dealer: filter?.dealer?.value ? filter.dealer.value : null,
+          startDateTime: filter?.startDateTime ? filter.startDateTime : null,
+          endDateTime: filter?.endDateTime ? filter.endDateTime : null,
+        })
+      );
+    } else {
+      if (filter) {
+        dispatch(
+          getUsers({
+            pageNumber,
+            pageSize: itemsPerPage,
+            active: null,
+            verify: null,
+            dealer: null,
+            startDateTime: null,
+            endDateTime: null,
+          })
+        );
+      }
+      setFilter(null);
+      setOpenFilter(false);
+      console.log("temizle");
+    }
   };
 
   const handleSearch = (word) => {
@@ -40,7 +75,17 @@ const Users = () => {
   };
 
   const handlePageChange = (number) => {
-    dispatch(getUsers({ pageNumber: number, pageSize: itemsPerPage }));
+    dispatch(
+      getUsers({
+        pageNumber: number,
+        pageSize: itemsPerPage,
+        active: filter?.active?.value ? filter.active.value : null,
+        verify: filter?.verify?.value ? filter.verify.value : null,
+        dealer: filter?.dealer?.value ? filter.dealer.value : null,
+        startDateTime: filter?.startDateTime ? filter.startDateTime : null,
+        endDateTime: filter?.endDateTime ? filter.endDateTime : null,
+      })
+    );
   };
 
   useEffect(() => {
@@ -69,14 +114,14 @@ const Users = () => {
   }, [loading, success, error, users]);
 
   return (
-    <section className="lg:ml-[280px] pt-16 sm:pt-24 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
       <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
         <h2>Customers</h2>
       </div>
 
       {/* ACTIONS/BUTTONS */}
-      <div className="w-full flex justify-between items-center mb-6 flex-wrap gap-2">
+      <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
           <CustomInput
             onChange={handleSearch}
@@ -92,33 +137,159 @@ const Users = () => {
           />
         </div>
 
-        <div className="flex gap-2 max-sm:order-1">
-          <button
-            className={`h-11 px-3 rounded-md text-sm font-normal border-solid border-[--primary-2] ${
-              selectedType === "users"
-                ? "bg-[--primary-2] text-[--white-1]"
-                : "text-[--primary-2] border-[1.5px]"
-            }`}
-            onClick={() => filter("users")}
-          >
-            Customers
-          </button>
-          <button
-            className={`h-11 px-3 rounded-md text-sm font-normal border-solid border-[--primary-2] ${
-              selectedType === "dealers"
-                ? "bg-[--primary-2] text-[--white-1]"
-                : "text-[--primary-2] border-[1.5px]"
-            }`}
-            onClick={() => filter("dealers")}
-          >
-            Sellers
-          </button>
-          <button className="text-[--primary-2] h-11 px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]">
-            Filter
-          </button>
-          <button className="text-[--primary-2] h-11 px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]">
-            Add user
-          </button>
+        <div className="w-full flex justify-end">
+          <div className="flex gap-2 max-sm:order-1 ">
+            <div className="w-full relative">
+              <button
+                className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+                onClick={() => setOpenFilter(!openFilter)}
+              >
+                Filter
+              </button>
+
+              <div
+                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[20rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
+                  openFilter ? "visible" : "hidden"
+                }`}
+              >
+                <div className="w-1/2">
+                  <CustomSelect
+                    label="Rol"
+                    className="text-sm sm:mt-1"
+                    className2="sm:mt-3"
+                    style={{ padding: "0 !important" }}
+                    options={[
+                      { value: null, label: "Hepsi" },
+                      { value: true, label: "Bayi" },
+                      { value: false, label: "Müşteri" },
+                    ]}
+                    value={
+                      filter?.dealer
+                        ? filter.dealer
+                        : { value: null, label: "Hepsi" }
+                    }
+                    onChange={(selectedOption) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          dealer: selectedOption,
+                        };
+                      });
+                    }}
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <CustomSelect
+                    label="Durum"
+                    className2="sm:mt-[.75rem] mt-1"
+                    className="text-sm sm:mt-[.25rem]"
+                    isSearchable={false}
+                    style={{ padding: "0 !important" }}
+                    options={[
+                      { value: null, label: "Hepsi" },
+                      { value: true, label: "aktif" },
+                      { value: false, label: "pasif" },
+                    ]}
+                    value={
+                      filter?.active
+                        ? filter.active
+                        : { value: null, label: "Hepsi" }
+                    }
+                    onChange={(selectedOption) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          active: selectedOption,
+                        };
+                      });
+                    }}
+                  />
+                  <CustomSelect
+                    label="Onay"
+                    className2="sm:mt-[.75rem] mt-1"
+                    className="text-sm sm:mt-[.25rem]"
+                    isSearchable={false}
+                    style={{ padding: "0 !important" }}
+                    options={[
+                      { value: null, label: "Hepsi" },
+                      { value: true, label: "Onaylı" },
+                      { value: false, label: "Onlaylanmadı" },
+                    ]}
+                    value={
+                      filter?.verify
+                        ? filter.verify
+                        : { value: null, label: "Hepsi" }
+                    }
+                    onChange={(selectedOption) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          verify: selectedOption,
+                        };
+                      });
+                    }}
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <CustomDatePicker
+                    label="Başlangıç"
+                    className="sm:py-[.5rem] py-[.5rem] w-full"
+                    className2="sm:mt-[.75rem]"
+                    popperClassName="custom-popper-left"
+                    dateFormat="dd.MM.yyyy"
+                    value={filter?.startDateTime ? filter.startDateTime : null}
+                    onChange={(date) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          startDateTime: date,
+                        };
+                      });
+                    }}
+                  />
+                  <CustomDatePicker
+                    label="Bitiş"
+                    className="sm:py-[.5rem] py-[.5rem] w-full"
+                    className2="sm:mt-[.75rem]"
+                    popperClassName="custom-popper-right"
+                    dateFormat="dd.MM.yyyy"
+                    value={filter?.endDateTime ? filter.endDateTime : null}
+                    onChange={(date) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          endDateTime: date,
+                        };
+                      });
+                    }}
+                  />
+                </div>
+
+                <div className="w-full flex gap-2 justify-center pt-8">
+                  <button
+                    className="text-[--white-1] bg-[--red-1] py-2 px-12 rounded-lg hover:opacity-90"
+                    onClick={() => handleFilter(false)}
+                  >
+                    Temizle
+                  </button>
+                  <button
+                    className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
+                    onClick={() => handleFilter(true)}
+                  >
+                    Filter
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="">
+              <button className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]">
+                Add user
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -128,8 +299,8 @@ const Users = () => {
           <table className="w-full text-sm font-light min-w-[60rem]">
             <thead>
               <tr className="bg-[--light-3] h-8 text-left">
-                <th className="first:pl-4 font-normal">Ad</th>
-                <th className="irst:pl-4 font-normal">Soyad</th>
+                <th className="first:pl-4 font-normal">Ad Soyad</th>
+                <th className="irst:pl-4 font-normal">Rol</th>
                 <th className="irst:pl-4 font-normal">iletişim</th>
                 <th className="irst:pl-4 font-normal">Il</th>
                 <th className="irst:pl-4 font-normal">Durum</th>
@@ -146,10 +317,10 @@ const Users = () => {
                   className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
                 >
                   <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
-                    {data.FirstName}
+                    {data.FullName}
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.LastName}
+                    {data.IsDealer ? "Dealer" : "Musteri"}
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     {data.PhoneNumber}

@@ -164,7 +164,7 @@ function LoginPage({ setFormName }) {
           <div className="flex flex-col mt-10 max-w-full">
             <CustomInput
               label="E-posta"
-              type="number"
+              type="text"
               placeholder="E-posta"
               value={email}
               onChange={setEmail}

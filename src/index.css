@@ -142,3 +142,15 @@ body {
 .fade {
   animation: fadeInOutAnimation 1.5s ease-in-out infinite;
 }
+
+.custom-datepicker {
+  min-width: 20.5rem;
+}
+
+.custom-popper-left {
+  right: -3rem;
+}
+.custom-popper-right {
+  right: -22rem;
+}
+

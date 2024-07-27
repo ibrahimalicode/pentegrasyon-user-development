@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../api";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const verifyCodeSlice = createSlice({
-  name: "verifyCode",
+  name: "VerifyCode",
   initialState: initialState,
   reducers: {
     resetVerifyCodeState: (state) => {
@@ -41,18 +41,15 @@ const verifyCodeSlice = createSlice({
 
 export const verifyCode = createAsyncThunk(
   "Auth/VerifyCode",
-
-  async ({ phone, code }) => {
+  async ({ phoneNumber, verificationCode }) => {
+    console.log(phoneNumber, verificationCode);
     try {
-      const res = await axios.get(
-        `${baseURL}/api/v1/Verify/VerifyCode`,
+      const res = await api.get(
+        `${baseURL}/Verify/VerifyUserWithVerificationCode`,
         {
-          emailOrPhoneNumber: phone,
-          verificationCode: code,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+          params: {
+            phoneNumber,
+            verificationCode,
           },
         }
       );

@@ -120,8 +120,8 @@ body {
   transform: translateX(-100%);
 }
 
-@media (max-width: 768px) {
-  .sign-up-container {
+@media (max-width: 1024px) {
+  .sign-up-container { 
     transform: none !important;
   }
 }

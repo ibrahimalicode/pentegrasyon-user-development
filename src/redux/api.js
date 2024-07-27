@@ -6,8 +6,8 @@ const KEY = import.meta.env.VITE_LOACAL_KEY;
 
 const api = axios.create({
   baseURL: baseURL,
-  headers: { "Content-Type": "application/json" },
   withCredentials: false,
+  headers: { "Content-Type": "application/json" },
 });
 
 const axiosPrivate = axios.create({

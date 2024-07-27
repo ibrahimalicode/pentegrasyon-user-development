@@ -5,11 +5,16 @@ import CustomInput from "../components/common/CustomInput";
 import toast from "react-hot-toast";
 import GobackI from "../assets/icon/goback";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyCode } from "../redux/auth/verifyCodeSlice";
 import EyeI from "../assets/icon/eye";
 import EyeInv from "../assets/icon/eyeInv";
 import CustomSelect from "../components/common/CustomSelector";
 import cities from "../assets/json/cities";
+import LoadingI from "../assets/anim/loading";
+import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
+import {
+  resetVerifyCodeState,
+  verifyCode,
+} from "../redux/auth/verifyCodeSlice";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
@@ -17,14 +22,23 @@ const eyeIconInv = <EyeInv className="w-5" />;
 const RegisterPage = ({ setFormName }) => {
   const dispatch = useDispatch();
 
-  const { loading, success, error } = useSelector((state) => state.auth.code);
+  const { loading, success, error } = useSelector(
+    (state) => state.auth.register
+  );
+  const {
+    loading: verifyL,
+    success: verifyS,
+    error: verifyE,
+  } = useSelector((state) => state.auth.verify);
 
-  const [name, setName] = useState("");
-  const [sirName, setSirName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [city, setCity] = useState(null);
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [address, setAddress] = useState("");
   const [inputType, setInputType] = useState("password");
   const [inputType2, setInputType2] = useState("password");
   const [toConfirm, setToConfirm] = useState(false);
@@ -33,31 +47,49 @@ const RegisterPage = ({ setFormName }) => {
   const [icon, setIcon] = useState(eyeIconInv);
   const [icon2, setIcon2] = useState(eyeIconInv);
 
-  const confirmUser = (e) => {
+  const register = (e) => {
     e.preventDefault();
 
     if (password !== password2) {
       toast.error("Şifreler eşit değil");
       return;
     }
-    if (name && sirName && phone && city?.value && password) {
-      console.log(name, sirName, phone, city.value, password);
-      setToConfirm(true);
+    if (firstName && lastName && phoneNumber && city?.value && password) {
+      console.log(
+        email,
+        phoneNumber,
+        password,
+        firstName,
+        lastName,
+        city.value,
+        address
+      );
+      dispatch(
+        registerUser({
+          email,
+          phoneNumber,
+          password,
+          firstName,
+          lastName,
+          city: city.value,
+          address,
+        })
+      );
     } else {
-      console.log("first");
+      console.log("Fill all the inputs");
+      toast("Fill all the inputs");
     }
   };
 
-  const registerUser = (e) => {
-    e.preventDefault();
-    if (smsCode === "123456") {
-      console.log("register");
-      toast.dismiss();
-      toast.success("Registered successfully");
-    } else {
-      toast.dismiss();
-      toast.error("Wrong Code");
+  useEffect(() => {
+    if (success) {
+      setToConfirm(true);
     }
+  }, [success]);
+
+  const verify = (e) => {
+    e.preventDefault();
+    dispatch(verifyCode({ phoneNumber, verificationCode: smsCode }));
   };
 
   useEffect(() => {
@@ -66,11 +98,38 @@ const RegisterPage = ({ setFormName }) => {
     } else if (success) {
       toast.dismiss();
       toast.success("SMS has beeen sent successfully");
+      resetRgisterState();
     } else if (error) {
-      toast.error("Couldn't send SMS");
+      toast.dismiss();
+      if (error?.message) {
+        toast.error(error.message);
+      } else {
+        toast.error("Couldn't send SMS");
+      }
+      resetRgisterState();
     }
   }, [loading, success, error]);
 
+  useEffect(() => {
+    if (verifyL) {
+      toast.loading("Loading...");
+    } else if (verifyS) {
+      toast.dismiss();
+      toast.success("Registered Successfully");
+      setFormName(null);
+      resetVerifyCodeState();
+    } else if (verifyE) {
+      toast.dismiss();
+      if (verifyE?.message) {
+        toast.error(verifyE.message);
+      } else {
+        toast.error("Couldn't register");
+      }
+      resetVerifyCodeState();
+    }
+  }, [verifyL, verifyS, verifyE]);
+
+  // ICON RELATED
   const iconClick = (e) => {
     e.preventDefault();
     if (inputType === "password") {
@@ -98,7 +157,7 @@ const RegisterPage = ({ setFormName }) => {
         /* Register Page */
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
-          onSubmit={confirmUser}
+          onSubmit={register}
         >
           <div className="flex justify-center">
             <h2 className="text-[2.7rem] font-bold text-black tracking-tighter">
@@ -111,17 +170,19 @@ const RegisterPage = ({ setFormName }) => {
                 label="Ad"
                 type="text"
                 placeholder="Ad"
-                value={name}
-                onChange={setName}
+                value={firstName}
+                onChange={setFirstName}
                 required={true}
+                className="py-2"
               />
               <CustomInput
                 label="Soyad"
                 type="text"
                 placeholder="Ad Soyad"
-                value={sirName}
-                onChange={setSirName}
+                value={lastName}
+                onChange={setLastName}
                 required={true}
+                className="py-2"
               />
             </div>
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
@@ -129,10 +190,22 @@ const RegisterPage = ({ setFormName }) => {
                 label="Telefon"
                 type="tel"
                 placeholder="Telefon"
-                value={phone}
-                onChange={setPhone}
+                value={phoneNumber}
+                onChange={setPhoneNumber}
                 required={true}
+                className="py-2"
               />
+              <CustomInput
+                label="E-Posta"
+                type="email"
+                placeholder="E-Posta"
+                value={email}
+                onChange={setEmail}
+                required={true}
+                className="py-2"
+              />
+            </div>
+            <div className="flex w-full sm:gap-4 max-sm:flex-col">
               <CustomSelect
                 label="Il"
                 options={cities}
@@ -140,60 +213,82 @@ const RegisterPage = ({ setFormName }) => {
                 onChange={setCity}
                 className="w-full"
                 className2="container-class"
+                style={{ padding: "2px 0px" }}
+              />
+              <CustomInput
+                label="Adres"
+                type="address"
+                placeholder="Adres"
+                value={address}
+                onChange={setAddress}
+                required={true}
+                className="py-2"
               />
             </div>
 
-            <CustomInput
-              label="Şifre"
-              type={inputType}
-              placeholder="Şifre"
-              value={password}
-              onChange={setPassword}
-              icon={icon}
-              onClick={iconClick}
-              required={true}
-            />
-            <CustomInput
-              label="Şifreyi onayla"
-              type={inputType2}
-              placeholder="Şifre"
-              value={password2}
-              onChange={setPassword2}
-              icon={icon2}
-              onClick={iconClick2}
-              required={true}
-            />
+            <div>
+              <CustomInput
+                label="Şifre"
+                type={inputType}
+                placeholder="Şifre"
+                value={password}
+                onChange={setPassword}
+                icon={icon}
+                onClick={iconClick}
+                required={true}
+                className="py-2"
+              />
+              <CustomInput
+                label="Şifreyi onayla"
+                type={inputType2}
+                placeholder="Şifre"
+                value={password2}
+                onChange={setPassword2}
+                icon={icon2}
+                onClick={iconClick2}
+                required={true}
+                className="py-2"
+              />
+            </div>
             <div className="flex flex-col mt-4 sm:mt-10 w-full">
               <button
                 type="submit"
-                className="px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1]"
+                className={`flex justify-center px-7 py-2 text-xl font-light rounded-md hover:opacity-90 ${
+                  loading
+                    ? "border border-solid border-[--light-3]"
+                    : "bg-[--primary-1] text-[--white-1]"
+                }`}
+                disabled={loading}
               >
-                Devam
+                {loading ? <LoadingI className="h-7" /> : "Devam"}
               </button>
               <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
             </div>
           </div>
           <div className="flex flex-col mt-4 sm:mt-10 w-full">
-            <p className="text-sm leading-5 text-[--link-1] w-full text-center">
-              <a href="/">Hesabınız var mı ?</a>
-            </p>
-            <span
+            <div className="text-sm leading-5 text-[--link-1] w-full text-center">
+              <p>Hesabınız var mı ?</p>
+            </div>
+            <button
+              type="button"
+              disabled={loading}
               onClick={() => setFormName(null)}
-              className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
+              className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-1] hover:border-transparent transition-colors text-center cursor-pointer"
             >
               Giriş yap
-            </span>
+            </button>
           </div>
         </form>
       ) : (
         /* Verify Page*/
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
-          onSubmit={registerUser}
+          onSubmit={verify}
         >
           <div className="flex justify-center relative">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">
               <button
+                type="button"
                 onClick={() => setToConfirm(false)}
                 className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white] sm:hover:text-[--white-1] sm:hover:bg-[--primary-1]"
               >
@@ -210,24 +305,25 @@ const RegisterPage = ({ setFormName }) => {
           <div className="flex flex-col max-w-full">
             <CustomInput
               label="Doğrulama Codu"
-              type="number"
+              type="text"
               placeholder="Doğrulama Codu"
               value={smsCode}
               onChange={setSmsCode}
               required={true}
             />
             <div className="mt-10 text-[--gr-1] font-light">
-              {phone} telefon numaranıza bir onay kodu gönderdik. Lütfen SMS
-              mesajlarınızı kontrol edin ve kodu doğrulama işlemi için girin.
+              {phoneNumber} telefon numaranıza bir onay kodu gönderdik. Lütfen
+              SMS mesajlarınızı kontrol edin ve kodu doğrulama işlemi için
+              girin.
               <br />
               Teşekkür ederiz!
             </div>
             <div className="flex flex-col mt-10 w-full">
               <button
                 type="submit"
-                className="px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1]"
+                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90"
               >
-                Devam
+                {verifyL ? <LoadingI className="h-7" /> : "Devam"}
               </button>
               <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
             </div>
@@ -236,12 +332,13 @@ const RegisterPage = ({ setFormName }) => {
             <p className="text-sm leading-5 text-[--link-1] w-full text-center">
               <a href="/">Hesabınız var mı ?</a>
             </p>
-            <span
+            <button
+              type="button"
               onClick={() => setFormName(null)}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
             >
               Giriş yap
-            </span>
+            </button>
           </div>
         </form>
       )}

@@ -10,6 +10,7 @@ const CustomSelect = ({
   className,
   className2,
   isDisabled,
+  style,
 }) => {
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
@@ -36,6 +37,7 @@ const CustomSelect = ({
               padding: "6px 0px",
               borderRadius: ".5rem",
             },
+            ...style,
           }),
           option: (provided, state) => ({
             ...provided,

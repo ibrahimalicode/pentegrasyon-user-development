@@ -77,5 +77,5 @@ export const addUser = createAsyncThunk(
   }
 );
 
-export const { resetaddUserState } = registerSlice.actions;
+export const { resetaddUserState } = addUserSlice.actions;
 export default addUserSlice.reducer;

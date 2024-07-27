@@ -15,7 +15,6 @@ function Header() {
 
   const handleLogout = () => {
     const sessionId = auth().sessionId;
-    console.log(auth());
     setOpen(!open);
     dispatch(logout(sessionId));
   };

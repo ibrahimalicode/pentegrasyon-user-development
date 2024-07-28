@@ -8,9 +8,8 @@ import { formatDateString } from "../utils/utils";
 import CustomPagination from "../components/common/pagination";
 import CloseI from "../assets/icon/close";
 import TableSkeleton from "../components/common/tableSkeleton";
-import { ParamsI } from "../assets/icon";
 import CustomSelect from "../components/common/CustomSelector";
-import CustomDatePicker from "../components/common/customdatePicker";
+import cities from "../assets/json/cities";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -33,17 +32,16 @@ const Users = () => {
 
   const handleFilter = (bool) => {
     if (bool) {
-      console.log(filter);
       setOpenFilter(false);
+      setPageNumber(1);
       dispatch(
         getUsers({
-          pageNumber,
+          pageNumber: 1,
           pageSize: itemsPerPage,
-          active: filter?.active?.value ? filter.active.value : null,
-          verify: filter?.verify?.value ? filter.verify.value : null,
-          dealer: filter?.dealer?.value ? filter.dealer.value : null,
-          startDateTime: filter?.startDateTime ? filter.startDateTime : null,
-          endDateTime: filter?.endDateTime ? filter.endDateTime : null,
+          active: filter?.active?.value,
+          verify: filter?.verify?.value,
+          dealer: filter?.dealer?.value,
+          city: filter?.city?.value,
         })
       );
     } else {
@@ -55,14 +53,12 @@ const Users = () => {
             active: null,
             verify: null,
             dealer: null,
-            startDateTime: null,
-            endDateTime: null,
+            city: null,
           })
         );
       }
       setFilter(null);
       setOpenFilter(false);
-      console.log("temizle");
     }
   };
 
@@ -82,15 +78,23 @@ const Users = () => {
         active: filter?.active?.value ? filter.active.value : null,
         verify: filter?.verify?.value ? filter.verify.value : null,
         dealer: filter?.dealer?.value ? filter.dealer.value : null,
-        startDateTime: filter?.startDateTime ? filter.startDateTime : null,
-        endDateTime: filter?.endDateTime ? filter.endDateTime : null,
+        city: filter?.city?.value,
       })
     );
   };
 
   useEffect(() => {
     if (!usersData) {
-      dispatch(getUsers({ pageNumber, pageSize: itemsPerPage }));
+      dispatch(
+        getUsers({
+          pageNumber,
+          pageSize: itemsPerPage,
+          active: null,
+          verify: null,
+          dealer: null,
+          city: null,
+        })
+      );
     }
   }, [usersData]);
 
@@ -148,11 +152,11 @@ const Users = () => {
               </button>
 
               <div
-                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[20rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
+                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
                   openFilter ? "visible" : "hidden"
                 }`}
               >
-                <div className="w-1/2">
+                <div className="flex gap-6">
                   <CustomSelect
                     label="Rol"
                     className="text-sm sm:mt-1"
@@ -177,9 +181,30 @@ const Users = () => {
                       });
                     }}
                   />
+
+                  <CustomSelect
+                    label="Şehir"
+                    className="text-sm sm:mt-1"
+                    className2="sm:mt-3"
+                    style={{ padding: "0 !important" }}
+                    options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    value={
+                      filter?.city
+                        ? filter.city
+                        : { value: null, label: "Hepsi" }
+                    }
+                    onChange={(selectedOption) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          city: selectedOption,
+                        };
+                      });
+                    }}
+                  />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-6">
                   <CustomSelect
                     label="Durum"
                     className2="sm:mt-[.75rem] mt-1"
@@ -232,6 +257,7 @@ const Users = () => {
                   />
                 </div>
 
+                {/* 
                 <div className="flex gap-2">
                   <CustomDatePicker
                     label="Başlangıç"
@@ -266,8 +292,9 @@ const Users = () => {
                     }}
                   />
                 </div>
+                */}
 
-                <div className="w-full flex gap-2 justify-center pt-8">
+                <div className="w-full flex gap-2 justify-center pt-10">
                   <button
                     className="text-[--white-1] bg-[--red-1] py-2 px-12 rounded-lg hover:opacity-90"
                     onClick={() => handleFilter(false)}

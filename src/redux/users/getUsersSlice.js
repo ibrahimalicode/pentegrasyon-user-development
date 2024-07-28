@@ -52,16 +52,7 @@ const getUsersSlice = createSlice({
 
 export const getUsers = createAsyncThunk(
   "Users/GetUsers",
-  async ({
-    pageNumber,
-    pageSize,
-    active,
-    verify,
-    dealer,
-    startDateTime,
-    endDateTime,
-  }) => {
-    //console.log(pageNumber, pageSize);
+  async ({ pageNumber, pageSize, active, verify, dealer, city }) => {
     try {
       const res = await api.get(`${baseURL}/Users/GetUsers`, {
         params: {
@@ -70,12 +61,11 @@ export const getUsers = createAsyncThunk(
           active,
           verify,
           dealer,
-          startDateTime,
-          endDateTime,
+          city,
         },
       });
 
-      console.log(JSON.parse(res.data.data));
+      //console.log(JSON.parse(res.data.data));
       return JSON.parse(res.data.data);
     } catch (err) {
       console.log(err);

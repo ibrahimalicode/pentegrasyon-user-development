@@ -83,7 +83,8 @@ const sidebarItems = [
 
 function Sidebar() {
   const param = useParams();
-  const path = Object.values(param)[0];
+  const route = Object.values(param)[0];
+  const path = route.length > 1 ? route : "dashboard";
   const [hideSide, setHideSide] = useState(false);
 
   return (

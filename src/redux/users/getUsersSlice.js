@@ -54,7 +54,7 @@ export const getUsers = createAsyncThunk(
   "Users/GetUsers",
   async ({ pageNumber, pageSize, active, verify, dealer, city }) => {
     try {
-      const res = await api.get(`${baseURL}/Users/GetUsers`, {
+      const res = await api.get(`${baseURL}Users/GetUsers`, {
         params: {
           pageNumber,
           pageSize,

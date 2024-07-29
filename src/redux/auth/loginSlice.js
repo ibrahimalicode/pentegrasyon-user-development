@@ -48,7 +48,7 @@ export const login = createAsyncThunk(
   async ({ email: emailOrPhoneNumber, password, role }) => {
     try {
       const res = await api.post(
-        `${baseURL}/Auth/${role === "admin" ? "ManagerLogin" : "UserLogin"}`,
+        `${baseURL}Auth/${role === "admin" ? "ManagerLogin" : "UserLogin"}`,
         {
           emailOrPhoneNumber,
           password,

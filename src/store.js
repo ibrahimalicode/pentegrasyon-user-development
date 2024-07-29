@@ -6,12 +6,14 @@ import logoutSlice from "./redux/auth/logoutSlice";
 import registerSlice from "./redux/auth/registerSlice";
 import addUserSlice from "./redux/users/addUserSlice";
 import forgotPasswordSlice from "./redux/auth/forgotPasswordSlice";
+import changePasswordSlice from "./redux/auth/changePasswordSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
   logout: logoutSlice,
   register: registerSlice,
-  forgot: forgotPasswordSlice,
+  forgotPassword: forgotPasswordSlice,
+  changePassword: changePasswordSlice,
   verify: verifyCodeSlice,
 });
 

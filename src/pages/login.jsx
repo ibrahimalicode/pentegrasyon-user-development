@@ -12,19 +12,22 @@ import { GobackI } from "../assets/icon";
 import LoadingI from "../assets/anim/loading";
 import CustomCheckbox from "../components/common/customCheckbox";
 import {
-  forgotPasswordWithEmail,
-  forgotPasswordWithPhone,
+  forgotPassword,
   resetForgotPassword,
 } from "../redux/auth/forgotPasswordSlice";
 import {
   resetVerifyCodeState,
   verifyCode,
 } from "../redux/auth/verifyCodeSlice";
+import {
+  EmailUserMessage,
+  PhoneUserMessage,
+} from "../components/common/messages";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
 
-function LoginPage({ setFormName }) {
+function LoginPage({ pageName, setPageName }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -33,7 +36,7 @@ function LoginPage({ setFormName }) {
     success: forgotSuccess,
     loading: forgotLoading,
     error: forgotError,
-  } = useSelector((state) => state.auth.forgot);
+  } = useSelector((state) => state.auth.forgotPassword);
   const {
     success: verifySuccess,
     loading: verifyLoading,
@@ -70,15 +73,15 @@ function LoginPage({ setFormName }) {
     dispatch(login({ email, password, role: "user" }));
   };
 
-  const forgotPassword = (e) => {
+  const forgotPass = (e) => {
     e.preventDefault();
 
     if (checked) {
       console.log(phoneNumber);
-      dispatch(forgotPasswordWithPhone({ phoneNumber }));
+      dispatch(forgotPassword({ toAddress: phoneNumber, isEmail: false }));
     } else {
       console.log(email);
-      dispatch(forgotPasswordWithEmail({ email }));
+      dispatch(forgotPassword({ toAddress: email, isEmail: true }));
     }
   };
 
@@ -86,67 +89,76 @@ function LoginPage({ setFormName }) {
     e.preventDefault();
     if (checked) {
       console.log(phoneNumber, verificationCode);
-      dispatch(verifyCode({ phoneNumber, verificationCode }));
+      dispatch(
+        verifyCode({ phoneNumberOrEmail: phoneNumber, verificationCode })
+      );
     } else {
       console.log(email, verificationCode);
-      dispatch(verifyCode({ phoneNumber: email, verificationCode }));
+      dispatch(verifyCode({ phoneNumberOrEmail: email, verificationCode }));
     }
   };
 
   useEffect(() => {
-    if (loading) {
-      toast.dismiss();
-      toast.loading("Logging in..");
-    } else if (error) {
-      toast.dismiss();
-      if (error?.message) {
-        toast.error(error.message);
-      } else {
-        toast.error("Something went wrong");
+    if (!pageName) {
+      if (loading) {
+        toast.dismiss();
+        toast.loading("Logging in..");
+      } else if (error) {
+        toast.dismiss();
+        if (error?.message) {
+          toast.error(error.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+        dispatch(resetLoginState());
+      } else if (success) {
+        navigate("/dashboard");
+        toast.dismiss();
+        toast.success("Successfuly logged in");
+        dispatch(resetLoginState());
       }
-      dispatch(resetLoginState());
-    } else if (success) {
-      navigate("/dashboard");
-      toast.dismiss();
-      toast.success("Successfuly logged in");
-      dispatch(resetLoginState());
     }
   }, [loading, success, error, dispatch, navigate]);
 
   useEffect(() => {
-    if (forgotSuccess) {
-      setOpenVerify(true);
-      dispatch(resetForgotPassword());
-    }
-    if (forgotError) {
-      toast.dismiss();
-      if (forgotError?.message) {
-        toast.error(forgotError.message);
-      } else {
-        toast.error("Something went wrong");
+    if (!pageName) {
+      if (forgotSuccess) {
+        setOpenVerify(true);
+        dispatch(resetForgotPassword());
       }
-      dispatch(resetForgotPassword());
+      if (forgotError) {
+        toast.dismiss();
+        if (forgotError?.message) {
+          toast.error(forgotError.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+        dispatch(resetForgotPassword());
+      }
     }
   }, [forgotSuccess, forgotError]);
 
   useEffect(() => {
-    if (verifySuccess) {
-      toast.dismiss();
-      toast.success("Code Verified");
-      setOpenForget(false);
-      setOpenVerify(false);
-      dispatch(resetVerifyCodeState());
-    }
-    if (verifyError) {
-      toast.dismiss();
-      if (verifyError?.message) {
-        toast.error(verifyError.message);
-      } else {
-        toast.error("Something went wrong");
+    if (!pageName) {
+      if (verifySuccess) {
+        toast.dismiss();
+        toast.success("Code Verified");
+        setOpenForget(false);
+        setOpenVerify(false);
+        navigate("/setNewPassword");
+        dispatch(resetVerifyCodeState());
       }
-      dispatch(resetVerifyCodeState());
+      if (verifyError) {
+        toast.dismiss();
+        if (verifyError?.message) {
+          toast.error(verifyError.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+        dispatch(resetVerifyCodeState());
+      }
     }
-  }, [verifySuccess, verifyError]);
+  }, [verifySuccess, verifyError, pageName]);
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -199,7 +211,7 @@ function LoginPage({ setFormName }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex justify-center px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 font-[400]"
+                className="flex justify-center px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 font-[400] disabled:opacity-90 disabled:cursor-not-allowed"
               >
                 {loading ? <LoadingI className="h-7" /> : "Giriş"}
               </button>
@@ -212,7 +224,7 @@ function LoginPage({ setFormName }) {
             </div>
             <button
               type="button"
-              onClick={() => setFormName("register")}
+              onClick={() => setPageName("register")}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--light-4] mt-10 hover:bg-[--light-3] hover:border-transparent hover:text-[--gr-1] transition-colors text-center cursor-pointer"
             >
               Kayıt ol
@@ -223,7 +235,7 @@ function LoginPage({ setFormName }) {
         /* Forget Password Page*/
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
-          onSubmit={forgotPassword}
+          onSubmit={forgotPass}
         >
           <div className="flex justify-center relative">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">
@@ -276,7 +288,7 @@ function LoginPage({ setFormName }) {
               <button
                 disabled={forgotLoading}
                 type="submit"
-                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90"
+                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
               >
                 {forgotLoading ? <LoadingI className="h-7" /> : "Devam"}
               </button>
@@ -347,7 +359,7 @@ function LoginPage({ setFormName }) {
               <button
                 disabled={verifyError}
                 type="submit"
-                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90"
+                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
               >
                 {verifyError ? <LoadingI className="h-7" /> : "Devam"}
               </button>
@@ -374,25 +386,5 @@ function LoginPage({ setFormName }) {
     </div>
   );
 }
-
-const PhoneUserMessage = ({ number }) => {
-  return (
-    <>
-      <span className="text-[--primary-1]">{number}</span> telefon numaranıza
-      bir onay kodu gönderdik. Lütfen SMS mesajlarınızı kontrol edin ve kodu
-      doğrulama işlemi için girin.
-    </>
-  );
-};
-
-const EmailUserMessage = ({ mail }) => {
-  return (
-    <>
-      <span className="text-[--primary-1]">{mail}</span> email adresinize bir
-      onay kodu gönderdik. Lütfen e-posta mesajlarınızı kontrol edin ve kodu
-      doğrulama işlemi için girin.
-    </>
-  );
-};
 
 export default LoginPage;

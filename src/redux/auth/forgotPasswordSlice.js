@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const forgotPasswordSlice = createSlice({
-  name: "forgotPasswordWithPhone",
+  name: "forgotPassword",
   initialState: initialState,
   reducers: {
     resetForgotPassword: (state) => {
@@ -21,18 +21,18 @@ const forgotPasswordSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(forgotPasswordWithPhone.pending, (state) => {
+      .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.sessionId = null;
       })
-      .addCase(forgotPasswordWithPhone.fulfilled, (state) => {
+      .addCase(forgotPassword.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
       })
-      .addCase(forgotPasswordWithPhone.rejected, (state, action) => {
+      .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.error;
@@ -40,33 +40,14 @@ const forgotPasswordSlice = createSlice({
   },
 });
 
-export const forgotPasswordWithPhone = createAsyncThunk(
-  "Auth/SendSMSPasswordReset",
-  async ({ phoneNumber }) => {
-    console.log(phoneNumber);
+export const forgotPassword = createAsyncThunk(
+  "Auth/forgotPassword",
+  async ({ toAddress, isEmail }) => {
+    const API = isEmail
+      ? `${baseURL}Email/SendEmailPasswordReset`
+      : `${baseURL}SMS/SendSMSPasswordReset`;
     try {
-      const res = await api.get(`${baseURL}/SMS/SendSMSPasswordReset`, {
-        params: {
-          phoneNumber,
-        },
-      });
-      console.log(res.data);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
-      }
-      throw err.message;
-    }
-  }
-);
-
-export const forgotPasswordWithEmail = createAsyncThunk(
-  "Auth/SendEmailPasswordReset",
-  async ({ toAddress }) => {
-    try {
-      const res = await api.get(`${baseURL}/Email/SendEmailPasswordReset`, {
+      const res = await api.get(API, {
         params: {
           toAddress,
         },

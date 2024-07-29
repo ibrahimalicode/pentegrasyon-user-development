@@ -6,6 +6,7 @@ import toastOptions from "./config/toast";
 import NotFound from "./pages/404";
 import LoginRegister from "./pages/loginRegister";
 import AdminLoginPage from "./pages/adminLogin";
+import SetNewPassword from "./pages/setNewPass";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginRegister />} />
         <Route path="/9007/admin" element={<AdminLoginPage />} />
+        <Route path="/setNewPassword" element={<SetNewPassword />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/*" element={<Home />} />
           <Route path="*" element={<NotFound />} />

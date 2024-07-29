@@ -41,18 +41,25 @@ const verifyCodeSlice = createSlice({
 
 export const verifyCode = createAsyncThunk(
   "Auth/VerifyCode",
-  async ({ phoneNumber, verificationCode }) => {
-    console.log(phoneNumber, verificationCode);
+  async ({ phoneNumberOrEmail, verificationCode }) => {
+    console.log(phoneNumberOrEmail, verificationCode);
     try {
-      const res = await api.get(
-        `${baseURL}/Verify/VerifyUserWithVerificationCode`,
-        {
-          params: {
-            phoneNumber,
-            verificationCode,
-          },
-        }
-      );
+      const res = await api.get(`${baseURL}Auth/Verify`, {
+        params: {
+          phoneNumberOrEmail,
+          verificationCode,
+        },
+      });
+
+      let data;
+      const KEY = import.meta.env.VITE_LOACAL_KEY;
+      if (res?.data?.data?.length > 0) {
+        data = JSON.parse(res.data.data);
+      } else {
+        data = res.data;
+      }
+      localStorage.setItem(`${KEY}`, JSON.stringify(data));
+
       console.log(res.data);
       return res.data;
     } catch (err) {

@@ -15,11 +15,12 @@ import {
   resetVerifyCodeState,
   verifyCode,
 } from "../redux/auth/verifyCodeSlice";
+import { PhoneUserMessage } from "../components/common/messages";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
 
-const RegisterPage = ({ setFormName }) => {
+const RegisterPage = ({ pageName, setPageName }) => {
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
@@ -81,53 +82,60 @@ const RegisterPage = ({ setFormName }) => {
     }
   };
 
+  const verify = (e) => {
+    e.preventDefault();
+    dispatch(
+      verifyCode({ phoneNumberOrEmail: phoneNumber, verificationCode: smsCode })
+    );
+  };
+
+  // USE EFFECTS
   useEffect(() => {
     if (success) {
       setToConfirm(true);
     }
   }, [success]);
 
-  const verify = (e) => {
-    e.preventDefault();
-    dispatch(verifyCode({ phoneNumber, verificationCode: smsCode }));
-  };
+  useEffect(() => {
+    if (pageName) {
+      if (loading) {
+        toast.loading("Loading...");
+      } else if (success) {
+        toast.dismiss();
+        toast.success("SMS has beeen sent successfully");
+        resetRgisterState();
+      } else if (error) {
+        toast.dismiss();
+        if (error?.message) {
+          toast.error(error.message);
+        } else {
+          toast.error("Couldn't send SMS");
+        }
+        resetRgisterState();
+      }
+    }
+  }, [loading, success, error, pageName]);
 
   useEffect(() => {
-    if (loading) {
-      toast.loading("Loading...");
-    } else if (success) {
-      toast.dismiss();
-      toast.success("SMS has beeen sent successfully");
-      resetRgisterState();
-    } else if (error) {
-      toast.dismiss();
-      if (error?.message) {
-        toast.error(error.message);
-      } else {
-        toast.error("Couldn't send SMS");
+    if (pageName) {
+      if (verifyL) {
+        toast.loading("Loading...");
+      } else if (verifyS) {
+        toast.dismiss();
+        toast.success("Registered Successfully");
+        setPageName(null);
+        resetVerifyCodeState();
+      } else if (verifyE) {
+        toast.dismiss();
+        if (verifyE?.message) {
+          toast.error(verifyE.message);
+        } else {
+          toast.error("Couldn't register");
+        }
+        resetVerifyCodeState();
       }
-      resetRgisterState();
     }
-  }, [loading, success, error]);
-
-  useEffect(() => {
-    if (verifyL) {
-      toast.loading("Loading...");
-    } else if (verifyS) {
-      toast.dismiss();
-      toast.success("Registered Successfully");
-      setFormName(null);
-      resetVerifyCodeState();
-    } else if (verifyE) {
-      toast.dismiss();
-      if (verifyE?.message) {
-        toast.error(verifyE.message);
-      } else {
-        toast.error("Couldn't register");
-      }
-      resetVerifyCodeState();
-    }
-  }, [verifyL, verifyS, verifyE]);
+  }, [verifyL, verifyS, verifyE, pageName]);
 
   // ICON RELATED
   const iconClick = (e) => {
@@ -272,7 +280,7 @@ const RegisterPage = ({ setFormName }) => {
             <button
               type="button"
               disabled={loading}
-              onClick={() => setFormName(null)}
+              onClick={() => setPageName(null)}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-1] hover:border-transparent transition-colors text-center cursor-pointer"
             >
               Giriş yap
@@ -312,16 +320,12 @@ const RegisterPage = ({ setFormName }) => {
               required={true}
             />
             <div className="mt-10 text-[--gr-1] font-light">
-              {phoneNumber} telefon numaranıza bir onay kodu gönderdik. Lütfen
-              SMS mesajlarınızı kontrol edin ve kodu doğrulama işlemi için
-              girin.
-              <br />
-              Teşekkür ederiz!
+              <PhoneUserMessage number={phoneNumber} />
             </div>
             <div className="flex flex-col mt-10 w-full">
               <button
                 type="submit"
-                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90"
+                className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
               >
                 {verifyL ? <LoadingI className="h-7" /> : "Devam"}
               </button>
@@ -334,7 +338,7 @@ const RegisterPage = ({ setFormName }) => {
             </p>
             <button
               type="button"
-              onClick={() => setFormName(null)}
+              onClick={() => setPageName(null)}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
             >
               Giriş yap

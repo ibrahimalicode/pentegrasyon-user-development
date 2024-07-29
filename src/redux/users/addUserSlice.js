@@ -48,7 +48,7 @@ export const addUser = createAsyncThunk(
   async ({ name, sirName, phone, city, address, password }) => {
     try {
       const res = await axios.post(
-        `${baseURL}/api/v1/Auth/addUser`,
+        `${baseURL}api/v1/Auth/addUser`,
         {
           email,
           phoneNumber: phone,

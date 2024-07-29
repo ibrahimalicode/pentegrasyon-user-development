@@ -1,6 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api";
+import {
+  createSlice,
+  asyncThunkCreator,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
+import { privateApi } from "../api";
 
+const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const initialState = {
@@ -9,11 +14,11 @@ const initialState = {
   error: null,
 };
 
-const logoutSlice = createSlice({
-  name: "Logout",
+const changePasswordSlice = createSlice({
+  name: "changePassword",
   initialState: initialState,
   reducers: {
-    resetLogoutState: (state) => {
+    resetChangePassword: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -21,17 +26,17 @@ const logoutSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(logout.pending, (state) => {
+      .addCase(changePassword.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
       })
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(changePassword.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
       })
-      .addCase(logout.rejected, (state, action) => {
+      .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.error;
@@ -39,17 +44,15 @@ const logoutSlice = createSlice({
   },
 });
 
-export const logout = createAsyncThunk(
-  "Auth/UserLogout",
-  async ({ sessionId }) => {
-    console.log("logout..");
-    /* 
+export const changePassword = createAsyncThunk(
+  "Auth/changePassword",
+  async ({ newPassword, newPasswordConfirm }) => {
     try {
-      const res = await api.post(`${baseURL}Auth/deleteSessionId`, {
-        sessionId,
+      const res = await api.put(`${baseURL}Users/UpdateUserPasswordByUserId`, {
+        newPassword,
+        newPasswordConfirm,
       });
-      const KEY = import.meta.env.VITE_LOACAL_KEY;
-      localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
+
       return res.data;
     } catch (err) {
       console.log(err);
@@ -58,11 +61,8 @@ export const logout = createAsyncThunk(
       }
       throw err.message;
     }
-  */
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return null;
   }
 );
 
-export const { resetLogoutState } = logoutSlice.actions;
-export default logoutSlice.reducer;
+export const { resetChangePassword } = changePasswordSlice.actions;
+export default changePasswordSlice.reducer;

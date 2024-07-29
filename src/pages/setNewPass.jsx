@@ -11,6 +11,11 @@ import {
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, clearAuth } from "../redux/api";
+import {
+  resetVerifyCodeState,
+  verifyCode,
+} from "../redux/auth/verifyCodeSlice";
+import NotFound from "./404";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
@@ -23,6 +28,11 @@ const SetNewPassword = () => {
   const { loading, success, error } = useSelector(
     (state) => state.auth.changePassword
   );
+  const {
+    loading: verifyL,
+    success: verifyS,
+    error: verifyE,
+  } = useSelector((state) => state.auth.verify);
 
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -31,6 +41,7 @@ const SetNewPassword = () => {
   const [inputType, setInputType] = useState("password");
   const [inputType2, setInputType2] = useState("password");
   const [credentials, setCredentials] = useState(null);
+  const [isError, setIsError] = useState(false);
 
   const handleChangePassword = (e) => {
     e.preventDefault();
@@ -94,10 +105,33 @@ const SetNewPassword = () => {
     const verificationCode = searchParams.get("verificationCode");
     if (email && verificationCode) {
       setCredentials({ email, verificationCode });
+      dispatch(
+        verifyCode({
+          phoneNumberOrEmail: email,
+          verificationCode: verificationCode,
+        })
+      );
     }
   }, [location]);
 
-  return !credentials ? (
+  useEffect(() => {
+    if (verifyS) {
+      toast.success("Code verified");
+      setCredentials(null);
+      dispatch(resetVerifyCodeState());
+    }
+    if (verifyE) {
+      if (verifyE?.message) {
+        toast.error(verifyE.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+      setIsError(true);
+      dispatch(resetVerifyCodeState());
+    }
+  }, [verifyS, verifyE]);
+
+  return !credentials && !isError ? (
     <div className="flex items-center justify-center w-full">
       <form
         className="flex flex-col w-full max-w-[38rem] px-12 mt-40"
@@ -149,13 +183,15 @@ const SetNewPassword = () => {
         </div>
       </form>
     </div>
-  ) : (
+  ) : credentials && !isError ? (
     <div className="flex items-center justify-center w-full">
       <div>
         {credentials.email}
         {credentials.verificationCode}
       </div>
     </div>
+  ) : (
+    <NotFound showGoBack={false} />
   );
 };
 

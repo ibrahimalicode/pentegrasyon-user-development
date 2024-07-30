@@ -6,6 +6,7 @@ const CustomInput = ({
   placeholder,
   value,
   onChange,
+  onKeyDown,
   required,
   className,
   className2,
@@ -21,7 +22,8 @@ const CustomInput = ({
         value={value}
         required={required}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
         className={`px-4 sm:py-3 mt-1 sm:mt-2.5 text-base font-[300] rounded-md sm:rounded-lg border border-solid border-[--border-1] text-[--gr-1] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`}
       />
       <div

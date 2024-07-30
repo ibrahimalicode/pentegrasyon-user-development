@@ -74,7 +74,7 @@ function AdminLoginPage({ setFormName }) {
             type="email"
             placeholder="E-posta"
             value={email}
-            onChange={setEmail}
+            onChange={(e) => setEmail(e.target.value)}
             required={true}
             className="py-4"
           />
@@ -83,7 +83,7 @@ function AdminLoginPage({ setFormName }) {
             type={inputType}
             placeholder="Şifre"
             value={password}
-            onChange={setPassword}
+            onChange={(e) => setPassword(e.target.value)}
             icon={icon}
             onClick={iconClick}
             required={true}

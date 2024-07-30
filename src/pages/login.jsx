@@ -16,13 +16,17 @@ import {
   resetForgotPassword,
 } from "../redux/auth/forgotPasswordSlice";
 import {
+  codeVerification,
   resetVerifyCodeState,
-  verifyCode,
 } from "../redux/auth/verifyCodeSlice";
 import {
   EmailUserMessage,
   PhoneUserMessage,
 } from "../components/common/messages";
+import {
+  resetUserVerification,
+  userVerification,
+} from "../redux/auth/userVerificationSlice";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
@@ -38,10 +42,16 @@ function LoginPage({ pageName, setPageName }) {
     error: forgotError,
   } = useSelector((state) => state.auth.forgotPassword);
   const {
-    success: verifySuccess,
-    loading: verifyLoading,
-    error: verifyError,
-  } = useSelector((state) => state.auth.verify);
+    success: verifyCodeSuccess,
+    loading: verifyCodeLoading,
+    error: verifyCodeError,
+  } = useSelector((state) => state.auth.verifyCode);
+
+  const {
+    success: verifyUserSuccess,
+    loading: verifyUserLoading,
+    error: verifyUserError,
+  } = useSelector((state) => state.auth.verifyUser);
 
   const [email, setEmail] = useState(""); //Careful!!!! ⚠️⚠️⚠️⚠️⚠️
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -53,7 +63,8 @@ function LoginPage({ pageName, setPageName }) {
   const [checked2, setChecked2] = useState(false);
   const [openForget, setOpenForget] = useState(false);
 
-  const [openVerify, setOpenVerify] = useState(false);
+  const [openVerifyCode, setOpenVerifyCode] = useState(false);
+  const [openVerifyUser, setOpenVerifyUser] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
 
   const iconClick = (e) => {
@@ -85,17 +96,24 @@ function LoginPage({ pageName, setPageName }) {
     }
   };
 
-  const verify = (e) => {
+  const verifyCode = (e) => {
     e.preventDefault();
     if (checked) {
       console.log(phoneNumber, verificationCode);
       dispatch(
-        verifyCode({ phoneNumberOrEmail: phoneNumber, verificationCode })
+        codeVerification({ phoneNumberOrEmail: phoneNumber, verificationCode })
       );
     } else {
       console.log(email, verificationCode);
-      dispatch(verifyCode({ phoneNumberOrEmail: email, verificationCode }));
+      dispatch(
+        codeVerification({ phoneNumberOrEmail: email, verificationCode })
+      );
     }
+  };
+
+  const verifyUser = (e) => {
+    e.preventDefault();
+    dispatch(userVerification({ phoneNumber }));
   };
 
   useEffect(() => {
@@ -105,10 +123,15 @@ function LoginPage({ pageName, setPageName }) {
         toast.loading("Logging in..");
       } else if (error) {
         toast.dismiss();
-        if (error?.message) {
-          toast.error(error.message);
+        if (error?.message_TR) {
+          toast.error(error.message_TR);
         } else {
           toast.error("Something went wrong");
+        }
+        if (error?.statusCode == 422) {
+          setChecked(true);
+          setOpenVerifyUser(true);
+          console.log("first");
         }
         dispatch(resetLoginState());
       } else if (success) {
@@ -123,7 +146,7 @@ function LoginPage({ pageName, setPageName }) {
   useEffect(() => {
     if (!pageName) {
       if (forgotSuccess) {
-        setOpenVerify(true);
+        setOpenVerifyCode(true);
         dispatch(resetForgotPassword());
       }
       if (forgotError) {
@@ -136,33 +159,59 @@ function LoginPage({ pageName, setPageName }) {
         dispatch(resetForgotPassword());
       }
     }
-  }, [forgotSuccess, forgotError]);
+  }, [forgotSuccess, forgotError, pageName]);
 
   useEffect(() => {
     if (!pageName) {
-      if (verifySuccess) {
+      if (verifyCodeSuccess) {
         toast.dismiss();
         toast.success("Code Verified");
         setOpenForget(false);
-        setOpenVerify(false);
-        navigate("/setNewPassword");
+        setOpenVerifyCode(false);
         dispatch(resetVerifyCodeState());
+        if (openVerifyUser) {
+          setOpenVerifyUser(false);
+          navigate("/");
+        } else {
+          navigate("/setNewPassword");
+        }
       }
-      if (verifyError) {
+      if (verifyCodeError) {
         toast.dismiss();
-        if (verifyError?.message) {
-          toast.error(verifyError.message);
+        if (verifyCodeError?.message) {
+          toast.error(verifyCodeError.message);
         } else {
           toast.error("Something went wrong");
         }
         dispatch(resetVerifyCodeState());
       }
     }
-  }, [verifySuccess, verifyError, pageName]);
+  }, [verifyCodeSuccess, verifyCodeError, pageName]);
+
+  useEffect(() => {
+    if (!pageName) {
+      if (verifyUserSuccess) {
+        toast.dismiss();
+        toast.success("Verification has been sent");
+        //setOpenVerifyUser(false);
+        setOpenVerifyCode(true);
+        dispatch(resetUserVerification());
+      }
+      if (verifyUserError) {
+        toast.dismiss();
+        if (verifyUserError?.message_TR) {
+          toast.error(verifyCodeError.message_TR);
+        } else {
+          toast.error("Something went wrong");
+        }
+        dispatch(resetUserVerification());
+      }
+    }
+  }, [verifyUserSuccess, verifyUserError, pageName]);
 
   return (
     <div className="flex items-center justify-center w-full">
-      {!openForget && !openVerify ? (
+      {!openForget && !openVerifyCode && !openVerifyUser ? (
         /* Login Page*/
         <form
           className="flex flex-col pb-12 w-full max-w-[38rem] px-12"
@@ -179,7 +228,7 @@ function LoginPage({ pageName, setPageName }) {
               type="text"
               placeholder="E-posta"
               value={email}
-              onChange={setEmail}
+              onChange={(e) => setEmail(e.target.value)}
               required={true}
               className="py-4"
             />
@@ -188,7 +237,7 @@ function LoginPage({ pageName, setPageName }) {
               type={inputType}
               placeholder="Şifre"
               value={password}
-              onChange={setPassword}
+              onChange={(e) => setPassword(e.target.value)}
               icon={icon}
               onClick={iconClick}
               required={true}
@@ -201,7 +250,7 @@ function LoginPage({ pageName, setPageName }) {
                     type="button"
                     onClick={() => {
                       setOpenForget(true);
-                      setOpenVerify(false);
+                      setOpenVerifyCode(false);
                     }}
                   >
                     Şifremi unuttum ?
@@ -231,7 +280,7 @@ function LoginPage({ pageName, setPageName }) {
             </button>
           </div>
         </form>
-      ) : openForget && !openVerify ? (
+      ) : openForget && !openVerifyCode ? (
         /* Forget Password Page*/
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
@@ -243,7 +292,7 @@ function LoginPage({ pageName, setPageName }) {
                 type="button"
                 onClick={() => {
                   setOpenForget(false);
-                  setOpenVerify(false);
+                  setOpenVerifyCode(false);
                 }}
                 className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white]"
               >
@@ -281,7 +330,11 @@ function LoginPage({ pageName, setPageName }) {
               type={checked ? "number" : "email"}
               placeholder={checked ? "Telefone" : "E-Posta"}
               value={checked ? phoneNumber : email}
-              onChange={checked ? setPhoneNumber : setEmail}
+              onChange={(e) => {
+                checked
+                  ? setPhoneNumber(e.target.value)
+                  : setEmail(e.target.value);
+              }}
               required={true}
             />
             <div className="flex flex-col mt-10 w-full">
@@ -303,7 +356,7 @@ function LoginPage({ pageName, setPageName }) {
               type="button"
               onClick={() => {
                 setOpenForget(false);
-                setOpenVerify(false);
+                setOpenVerifyCode(false);
               }}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
             >
@@ -311,11 +364,11 @@ function LoginPage({ pageName, setPageName }) {
             </button>
           </div>
         </form>
-      ) : (
-        /* Verify Page*/
+      ) : openVerifyCode ? (
+        /* Code Verify Page*/
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
-          onSubmit={verify}
+          onSubmit={verifyCode}
         >
           <div className="flex justify-center relative">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">
@@ -323,7 +376,7 @@ function LoginPage({ pageName, setPageName }) {
                 type="button"
                 onClick={() => {
                   setOpenForget(true);
-                  setOpenVerify(false);
+                  setOpenVerifyCode(false);
                 }}
                 className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white]"
               >
@@ -343,8 +396,9 @@ function LoginPage({ pageName, setPageName }) {
               type="text"
               placeholder="Onay Kodu"
               value={verificationCode}
-              onChange={setVerificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
               required={true}
+              className="py-3"
             />
             <div className="mt-10 text-[--gr-1] font-light">
               {checked ? (
@@ -357,11 +411,11 @@ function LoginPage({ pageName, setPageName }) {
             </div>
             <div className="flex flex-col mt-10 w-full">
               <button
-                disabled={verifyError}
+                disabled={verifyCodeLoading}
                 type="submit"
                 className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
               >
-                {verifyError ? <LoadingI className="h-7" /> : "Devam"}
+                {verifyCodeLoading ? <LoadingI className="h-7" /> : "Devam"}
               </button>
               <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
             </div>
@@ -374,7 +428,7 @@ function LoginPage({ pageName, setPageName }) {
               type="button"
               onClick={() => {
                 setOpenForget(false);
-                setOpenVerify(false);
+                setOpenVerifyCode(false);
               }}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
             >
@@ -382,6 +436,68 @@ function LoginPage({ pageName, setPageName }) {
             </button>
           </div>
         </form>
+      ) : (
+        openVerifyUser && (
+          /* Verify User Login */
+          <form
+            className="flex flex-col w-full max-w-[38rem] px-12"
+            onSubmit={verifyUser}
+          >
+            <div className="flex justify-center relative">
+              <div className="absolute left-0 top-0 bottom-0 flex items-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpenVerifyUser(false);
+                  }}
+                  className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white]"
+                >
+                  <GobackI />
+                  <span>Gri dön</span>
+                </button>
+              </div>
+              <div className="w-max">
+                <h2 className="text-[2.3rem] font-bold text-black tracking-tighter">
+                  Onayla
+                </h2>
+              </div>
+            </div>
+            <div className="flex flex-col max-w-full">
+              <CustomInput
+                label="Telefone"
+                type="number"
+                placeholder="Telefone"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                required={true}
+              />
+              <div className="flex flex-col mt-10 w-full">
+                <button
+                  disabled={verifyUserLoading}
+                  type="submit"
+                  className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
+                >
+                  {verifyUserLoading ? <LoadingI className="h-7" /> : "Devam"}
+                </button>
+                <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
+              </div>
+            </div>
+            <div className="flex flex-col mt-10 w-full">
+              <div className="text-sm leading-5 text-[--link-1] w-full text-center">
+                <p>Zaten Hesabınız var mı ?</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenVerifyUser(false);
+                }}
+                className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
+              >
+                Giriş yap
+              </button>
+            </div>
+          </form>
+        )
       )}
     </div>
   );

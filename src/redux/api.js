@@ -2,7 +2,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
-const KEY = import.meta.env.VITE_LOACAL_KEY;
+const KEY = import.meta.env.VITE_LOCAL_KEY;
 
 const api = axios.create({
   baseURL: baseURL,
@@ -27,11 +27,15 @@ export const clearAuth = () => {
 };
 
 export const privateApi = () => {
+  const TOKEN = auth()?.token;
+
   axiosPrivate.interceptors.request.use(
     (config) => {
-      if (!config.headers["Authorization"]) {
-        config.headers["Authorization"] = `Bearer ${auth().token}`;
+      if (!TOKEN) {
+        window.location.href = "/login";
+        return Promise.reject("No token!");
       }
+      config.headers["Authorization"] = `Bearer ${TOKEN}`;
       return config;
     },
     (error) => Promise.reject(error)
@@ -40,6 +44,7 @@ export const privateApi = () => {
   axiosPrivate.interceptors.response.use(
     (response) => response,
     async (error) => {
+      console.log(error);
       if (error.response?.status === 401) {
         clearAuth();
         window.location.href = "/login";

@@ -30,6 +30,39 @@ const Users = () => {
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
 
+  const handleSearch = (e) => {
+    if ((!e.code && e?.target?.value === "") || typeof e === "string" || !e) {
+      setSearchVal("");
+      dispatch(
+        getUsers({
+          pageNumber,
+          pageSize: itemsPerPage,
+          searchKey: null,
+          active: filter?.active?.value ? filter.active.value : null,
+          verify: filter?.verify?.value ? filter.verify.value : null,
+          dealer: filter?.dealer?.value ? filter.dealer.value : null,
+          city: filter?.city?.value,
+        })
+      );
+      return;
+    }
+    setSearchVal(e.target.value);
+    if (e.code === "Enter") {
+      dispatch(
+        getUsers({
+          pageNumber,
+          pageSize: itemsPerPage,
+          searchKey: searchVal,
+          active: filter?.active?.value ? filter.active.value : null,
+          verify: filter?.verify?.value ? filter.verify.value : null,
+          dealer: filter?.dealer?.value ? filter.dealer.value : null,
+          city: filter?.city?.value,
+        })
+      );
+    }
+    return;
+  };
+
   const handleFilter = (bool) => {
     if (bool) {
       setOpenFilter(false);
@@ -62,19 +95,12 @@ const Users = () => {
     }
   };
 
-  const handleSearch = (word) => {
-    setSearchVal(word);
-    if (!word) {
-      setUsersData(users.Data);
-      return;
-    }
-  };
-
   const handlePageChange = (number) => {
     dispatch(
       getUsers({
         pageNumber: number,
         pageSize: itemsPerPage,
+        searchKey: searchVal,
         active: filter?.active?.value ? filter.active.value : null,
         verify: filter?.verify?.value ? filter.verify.value : null,
         dealer: filter?.dealer?.value ? filter.dealer.value : null,
@@ -89,6 +115,7 @@ const Users = () => {
         getUsers({
           pageNumber,
           pageSize: itemsPerPage,
+          searchKey: searchVal,
           active: null,
           verify: null,
           dealer: null,
@@ -111,8 +138,8 @@ const Users = () => {
 
     if (success) {
       toast.dismiss();
-      setUsersData(users.Data);
-      setTotalItems(users.TotalCount);
+      setUsersData(users.data);
+      setTotalItems(users.totalCount);
     }
     dispatch(resetGetUsersState());
   }, [loading, success, error, users]);
@@ -128,7 +155,8 @@ const Users = () => {
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
           <CustomInput
-            onChange={handleSearch}
+            onKeyDown={(e) => handleSearch(e)}
+            onChange={(e) => handleSearch(e)}
             value={searchVal}
             placeholder="Search..."
             className2="mt-[0px] w-full"
@@ -213,8 +241,8 @@ const Users = () => {
                     style={{ padding: "0 !important" }}
                     options={[
                       { value: null, label: "Hepsi" },
-                      { value: true, label: "aktif" },
-                      { value: false, label: "pasif" },
+                      { value: true, label: "Aktif" },
+                      { value: false, label: "Pasif" },
                     ]}
                     value={
                       filter?.active
@@ -340,49 +368,49 @@ const Users = () => {
             <tbody>
               {usersData.map((data, index) => (
                 <tr
-                  key={data.Id}
+                  key={data.id}
                   className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
                 >
                   <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
-                    {data.FullName}
+                    {data.fullName}
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.IsDealer ? "Dealer" : "Musteri"}
+                    {data.isDealer ? "Bayi" : "Musteri"}
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.PhoneNumber}
+                    {data.phoneNumber}
                     <br />
                     <span className="text-xs font-light text-[--gr-1]">
-                      {data.Email}
+                      {data.email}
                     </span>
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.City}
+                    {data.city}
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     <span
                       className={`text-xs font-normal ${
-                        data.IsActive
+                        data.isActive
                           ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
                           : "text-[--red-1] bg-[--status-red] border-[--red-1]"
                       } px-3 py-1 border border-solid rounded-full`}
                     >
-                      ● {data.IsActive ? "Aktif" : "Pasif"}
+                      ● {data.isActive ? "Aktif" : "Pasif"}
                     </span>
                   </td>
                   <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
                     <span
                       className={`text-xs font-normal ${
-                        data.IsVerify
+                        data.isVerify
                           ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
                           : "text-[--black-1] bg-[--light-4]"
                       } px-3 py-1 border border-solid rounded-full`}
                     >
-                      {data.IsVerify ? "Onaylı" : "Onlaylanmadı"}
+                      {data.isVerify ? "Onaylı" : "Onlaylanmadı"}
                     </span>
                   </td>
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {formatDateString(data.CreatedDateTime)}
+                    {formatDateString(data.createdDateTime)}
                   </td>
                   <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
                     <MenuI className="w-full" />
@@ -396,6 +424,7 @@ const Users = () => {
         <TableSkeleton />
       )}
 
+      {/* PAGINATION */}
       {usersData && totalItems && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
           <CustomPagination

@@ -21,17 +21,17 @@ const verifyCodeSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(verifyCode.pending, (state) => {
+      .addCase(codeVerification.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
       })
-      .addCase(verifyCode.fulfilled, (state) => {
+      .addCase(codeVerification.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
       })
-      .addCase(verifyCode.rejected, (state, action) => {
+      .addCase(codeVerification.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.error;
@@ -39,7 +39,7 @@ const verifyCodeSlice = createSlice({
   },
 });
 
-export const verifyCode = createAsyncThunk(
+export const codeVerification = createAsyncThunk(
   "Auth/VerifyCode",
   async ({ phoneNumberOrEmail, verificationCode }) => {
     console.log(phoneNumberOrEmail, verificationCode);
@@ -52,7 +52,7 @@ export const verifyCode = createAsyncThunk(
       });
 
       let data;
-      const KEY = import.meta.env.VITE_LOACAL_KEY;
+      const KEY = import.meta.env.VITE_LOCAL_KEY;
       if (res?.data?.data?.length > 0) {
         data = JSON.parse(res.data.data);
       } else {

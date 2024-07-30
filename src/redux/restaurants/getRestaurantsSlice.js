@@ -11,58 +11,65 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  users: null,
+  restaurants: null,
 };
 
-const getUsersSlice = createSlice({
-  name: "getUsers",
+const getRestaurantsSlice = createSlice({
+  name: "getRestaurants",
   initialState: initialState,
   reducers: {
-    resetGetUsersState: (state) => {
+    resetGetRestaurantsState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
     },
-    resetGetUsers: (state) => {
-      state.users = null;
+    resetGetRestaurants: (state) => {
+      state.restaurants = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(getUsers.pending, (state) => {
+      .addCase(getRestaurants.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.users = null;
+        state.restaurants = null;
       })
-      .addCase(getUsers.fulfilled, (state, action) => {
+      .addCase(getRestaurants.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.users = action.payload;
+        state.restaurants = action.payload;
       })
-      .addCase(getUsers.rejected, (state, action) => {
+      .addCase(getRestaurants.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.error;
-        state.users = null;
+        state.restaurants = null;
       });
   },
 });
 
-export const getUsers = createAsyncThunk(
-  "Users/GetUsers",
-  async ({ pageNumber, pageSize, searchKey, active, verify, dealer, city }) => {
+export const getRestaurants = createAsyncThunk(
+  "Restaurants/getRestaurants",
+  async ({
+    pageNumber,
+    pageSize,
+    searchKey,
+    status,
+    city,
+    district,
+    neighbourhood,
+  }) => {
     try {
-      const res = await api.get(`${baseURL}Users/GetUsers`, {
+      const res = await api.get(`${baseURL}Restaurants/GetRestaurants`, {
         params: {
           pageNumber,
           pageSize,
           searchKey,
-          active,
-          verify,
-          dealer,
           city,
+          district,
+          neighbourhood,
         },
       });
 
@@ -76,5 +83,6 @@ export const getUsers = createAsyncThunk(
   }
 );
 
-export const { resetGetUsersState, resetGetUsers } = getUsersSlice.actions;
-export default getUsersSlice.reducer;
+export const { resetGetRestaurantsState, resetGetRestaurants } =
+  getRestaurantsSlice.actions;
+export default getRestaurantsSlice.reducer;

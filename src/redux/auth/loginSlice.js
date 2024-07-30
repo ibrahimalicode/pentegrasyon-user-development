@@ -37,7 +37,7 @@ const loginSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.sessionId = null;
       });
   },
@@ -45,7 +45,10 @@ const loginSlice = createSlice({
 
 export const login = createAsyncThunk(
   "Auth/UserLogin",
-  async ({ email: emailOrPhoneNumber, password, role }) => {
+  async (
+    { email: emailOrPhoneNumber, password, role },
+    { rejectWithValue }
+  ) => {
     try {
       const res = await api.post(
         `${baseURL}Auth/${role === "admin" ? "ManagerLogin" : "UserLogin"}`,
@@ -54,13 +57,14 @@ export const login = createAsyncThunk(
           password,
         }
       );
-      const KEY = import.meta.env.VITE_LOACAL_KEY;
+      //console.log(res.data);
+      const KEY = import.meta.env.VITE_LOCAL_KEY;
       localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
       return res.data.sessionId;
     } catch (err) {
-      console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
+      console.log(err.response.data);
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
       }
       throw err.message;
     }

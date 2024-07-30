@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api";
+import { auth, privateApi } from "../api";
+
+const api = privateApi();
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -41,15 +43,17 @@ const logoutSlice = createSlice({
 
 export const logout = createAsyncThunk(
   "Auth/UserLogout",
-  async ({ sessionId }) => {
-    console.log("logout..");
-    /* 
+  async ({ userSessionId }) => {
     try {
-      const res = await api.post(`${baseURL}Auth/deleteSessionId`, {
-        sessionId,
-      });
-      const KEY = import.meta.env.VITE_LOACAL_KEY;
-      localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
+      console.log(userSessionId);
+      const res = await api.delete(
+        `${baseURL}UserSessions/DeleteUserSessionById`,
+        {
+          params: { userSessionId },
+        }
+      );
+
+      //console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);
@@ -58,9 +62,9 @@ export const logout = createAsyncThunk(
       }
       throw err.message;
     }
-  */
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return null;
+
+    //await new Promise((resolve) => setTimeout(resolve, 1000));
+    //return null;
   }
 );
 

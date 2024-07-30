@@ -14,9 +14,9 @@ function Header() {
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
-    const sessionId = auth().sessionId;
+    const userSessionId = auth().sessionId;
     setOpen(!open);
-    dispatch(logout(sessionId));
+    dispatch(logout({ userSessionId }));
   };
 
   useEffect(() => {

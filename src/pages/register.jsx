@@ -12,8 +12,8 @@ import cities from "../assets/json/cities";
 import LoadingI from "../assets/anim/loading";
 import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
 import {
+  codeVerification,
   resetVerifyCodeState,
-  verifyCode,
 } from "../redux/auth/verifyCodeSlice";
 import { PhoneUserMessage } from "../components/common/messages";
 
@@ -30,7 +30,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
     loading: verifyL,
     success: verifyS,
     error: verifyE,
-  } = useSelector((state) => state.auth.verify);
+  } = useSelector((state) => state.auth.verifyCode);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -42,8 +42,8 @@ const RegisterPage = ({ pageName, setPageName }) => {
   const [address, setAddress] = useState("");
   const [inputType, setInputType] = useState("password");
   const [inputType2, setInputType2] = useState("password");
-  const [toConfirm, setToConfirm] = useState(false);
   const [smsCode, setSmsCode] = useState("");
+  const [toConfirm, setToConfirm] = useState(false);
 
   const [icon, setIcon] = useState(eyeIconInv);
   const [icon2, setIcon2] = useState(eyeIconInv);
@@ -85,25 +85,23 @@ const RegisterPage = ({ pageName, setPageName }) => {
   const verify = (e) => {
     e.preventDefault();
     dispatch(
-      verifyCode({ phoneNumberOrEmail: phoneNumber, verificationCode: smsCode })
+      codeVerification({
+        phoneNumberOrEmail: phoneNumber,
+        verificationCode: smsCode,
+      })
     );
   };
 
   // USE EFFECTS
-  useEffect(() => {
-    if (success) {
-      setToConfirm(true);
-    }
-  }, [success]);
-
   useEffect(() => {
     if (pageName) {
       if (loading) {
         toast.loading("Loading...");
       } else if (success) {
         toast.dismiss();
+        setToConfirm(true);
         toast.success("SMS has beeen sent successfully");
-        resetRgisterState();
+        dispatch(resetRgisterState());
       } else if (error) {
         toast.dismiss();
         if (error?.message) {
@@ -111,7 +109,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
         } else {
           toast.error("Couldn't send SMS");
         }
-        resetRgisterState();
+        dispatch(resetRgisterState());
       }
     }
   }, [loading, success, error, pageName]);
@@ -124,7 +122,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
         toast.dismiss();
         toast.success("Registered Successfully");
         setPageName(null);
-        resetVerifyCodeState();
+        dispatch(resetVerifyCodeState());
       } else if (verifyE) {
         toast.dismiss();
         if (verifyE?.message) {
@@ -132,7 +130,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
         } else {
           toast.error("Couldn't register");
         }
-        resetVerifyCodeState();
+        dispatch(resetVerifyCodeState());
       }
     }
   }, [verifyL, verifyS, verifyE, pageName]);
@@ -179,7 +177,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type="text"
                 placeholder="Ad"
                 value={firstName}
-                onChange={setFirstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 required={true}
                 className="py-2"
               />
@@ -188,7 +186,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type="text"
                 placeholder="Ad Soyad"
                 value={lastName}
-                onChange={setLastName}
+                onChange={(e) => setLastName(e.target.value)}
                 required={true}
                 className="py-2"
               />
@@ -199,16 +197,16 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type="tel"
                 placeholder="Telefon"
                 value={phoneNumber}
-                onChange={setPhoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 required={true}
                 className="py-2"
               />
               <CustomInput
                 label="E-Posta"
-                type="email"
+                type="Email"
                 placeholder="E-Posta"
                 value={email}
-                onChange={setEmail}
+                onChange={(e) => setEmail(e.target.value)}
                 required={true}
                 className="py-2"
               />
@@ -228,7 +226,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type="address"
                 placeholder="Adres"
                 value={address}
-                onChange={setAddress}
+                onChange={(e) => setAddress(e.target.value)}
                 required={true}
                 className="py-2"
               />
@@ -240,7 +238,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type={inputType}
                 placeholder="Şifre"
                 value={password}
-                onChange={setPassword}
+                onChange={(e) => setPassword(e.target.value)}
                 icon={icon}
                 onClick={iconClick}
                 required={true}
@@ -251,7 +249,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type={inputType2}
                 placeholder="Şifre"
                 value={password2}
-                onChange={setPassword2}
+                onChange={(e) => setPassword2(e.target.value)}
                 icon={icon2}
                 onClick={iconClick2}
                 required={true}
@@ -316,7 +314,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
               type="text"
               placeholder="Doğrulama Codu"
               value={smsCode}
-              onChange={setSmsCode}
+              onChange={(e) => setSmsCode(e.target.value)}
               required={true}
             />
             <div className="mt-10 text-[--gr-1] font-light">

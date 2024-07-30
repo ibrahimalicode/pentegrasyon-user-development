@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { auth, clearAuth } from "../redux/api";
 import {
   resetVerifyCodeState,
-  verifyCode,
+  codeVerification,
 } from "../redux/auth/verifyCodeSlice";
 import NotFound from "./404";
 
@@ -32,7 +32,7 @@ const SetNewPassword = () => {
     loading: verifyL,
     success: verifyS,
     error: verifyE,
-  } = useSelector((state) => state.auth.verify);
+  } = useSelector((state) => state.auth.verifyCode);
 
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -106,7 +106,7 @@ const SetNewPassword = () => {
     if (email && verificationCode) {
       setCredentials({ email, verificationCode });
       dispatch(
-        verifyCode({
+        codeVerification({
           phoneNumberOrEmail: email,
           verificationCode: verificationCode,
         })
@@ -148,7 +148,7 @@ const SetNewPassword = () => {
             type={inputType}
             placeholder="Şifre"
             value={password}
-            onChange={setPassword}
+            onChange={(e) => setPassword(e.target.value)}
             icon={icon}
             onClick={iconClick}
             required={true}
@@ -159,7 +159,7 @@ const SetNewPassword = () => {
             type={inputType2}
             placeholder="Şifreyi Onayla"
             value={password2}
-            onChange={setPassword2}
+            onChange={(e) => setPassword2(e.target.value)}
             icon={icon2}
             onClick={iconClick2}
             required={true}

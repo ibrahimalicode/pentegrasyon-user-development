@@ -52,16 +52,19 @@ export const codeVerification = createAsyncThunk(
       });
 
       let data;
-      const KEY = import.meta.env.VITE_LOCAL_KEY;
-      if (res?.data?.data?.length > 0) {
-        data = JSON.parse(res.data.data);
+      if (res.data?.data?.token) {
+        const {
+          data: { token },
+          ...rest
+        } = res.data;
+        data = { token, ...rest };
       } else {
         data = res.data;
       }
+      const KEY = import.meta.env.VITE_LOCAL_KEY;
       localStorage.setItem(`${KEY}`, JSON.stringify(data));
-
       console.log(res.data);
-      return res.data;
+      return data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data?.message_TR) {

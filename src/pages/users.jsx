@@ -10,6 +10,7 @@ import CloseI from "../assets/icon/close";
 import TableSkeleton from "../components/common/tableSkeleton";
 import CustomSelect from "../components/common/CustomSelector";
 import cities from "../assets/json/cities";
+import { DeleteI, UsersI } from "../assets/icon";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -412,8 +413,30 @@ const Users = () => {
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     {formatDateString(data.createdDateTime)}
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
+                  <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal relative">
                     <MenuI className="w-full" />
+                    <span
+                      className={`absolute top-4 right-9 odd:bg-[--red-1] border-2 border-solid border-[--light-3] rounded-sm z-10 overflow-hidden ${
+                        index === 0 ? "visible" : "hidden"
+                      }`}
+                    >
+                      <ul className="bg-[--white-1] text-[--gr-1]">
+                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left border-b border-solid border-[--border-1]">
+                          <UsersI className="w-5" /> Lisanslar
+                        </li>
+                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left border-b border-solid border-[--border-1]">
+                          <UsersI className="w-5" />
+                          Transfer
+                        </li>
+                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left border-b border-solid border-[--border-1]">
+                          <UsersI className="w-5" /> Düzenle
+                        </li>
+                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left">
+                          <DeleteI className="w-5" />
+                          Sil
+                        </li>
+                      </ul>
+                    </span>
                   </td>
                 </tr>
               ))}

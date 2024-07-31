@@ -46,7 +46,7 @@ const loginSlice = createSlice({
 export const login = createAsyncThunk(
   "Auth/UserLogin",
   async (
-    { email: emailOrPhoneNumber, password, role },
+    { emailOrPhone: emailOrPhoneNumber, password, role },
     { rejectWithValue }
   ) => {
     try {

@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../components/common/CustomInput";
-import EyeI from "../assets/icon/eye";
-import EyeInv from "../assets/icon/eyeInv";
+import CustomInput from "../../components/common/CustomInput";
+import EyeI from "../../assets/icon/eye";
+import EyeInv from "../../assets/icon/eyeInv";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingI from "../assets/anim/loading";
+import LoadingI from "../../assets/anim/loading";
 import {
   changePassword,
   resetChangePassword,
-} from "../redux/auth/changePasswordSlice";
+} from "../../redux/auth/changePasswordSlice";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { auth, clearAuth } from "../redux/api";
+import { auth, clearAuth } from "../../redux/api";
 import {
   resetVerifyCodeState,
   codeVerification,
-} from "../redux/auth/verifyCodeSlice";
-import NotFound from "./404";
+} from "../../redux/auth/verifyCodeSlice";
+import NotFound from "../404";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;

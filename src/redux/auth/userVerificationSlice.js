@@ -22,18 +22,18 @@ const userVerificationSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(userVerification.pending, (state) => {
+      .addCase(sendUserVerificationCode.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.sessionId = null;
       })
-      .addCase(userVerification.fulfilled, (state) => {
+      .addCase(sendUserVerificationCode.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
       })
-      .addCase(userVerification.rejected, (state, action) => {
+      .addCase(sendUserVerificationCode.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -41,7 +41,7 @@ const userVerificationSlice = createSlice({
   },
 });
 
-export const userVerification = createAsyncThunk(
+export const sendUserVerificationCode = createAsyncThunk(
   "Auth/verifyUser",
   async ({ phoneNumber, isEmail = false }, { rejectWithValue }) => {
     const API = isEmail
@@ -53,10 +53,21 @@ export const userVerification = createAsyncThunk(
           phoneNumber,
         },
       });
-      console.log(res.data);
+
+      let data;
+      if (res.data?.data?.token) {
+        const {
+          data: { token },
+          ...rest
+        } = res.data;
+        data = { token, ...rest };
+      } else {
+        data = res.data;
+      }
       const KEY = import.meta.env.VITE_LOCAL_KEY;
-      localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
-      return res.data;
+      localStorage.setItem(`${KEY}`, JSON.stringify(data));
+      console.log(res.data);
+      return data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data?.message_TR) {

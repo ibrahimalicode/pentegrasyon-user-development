@@ -17,6 +17,7 @@ import ArrowIU from "./arrowU";
 import ArrowID from "./arrowD";
 import ArrowIR from "./arrowR";
 import ArrowIL from "./arrowL";
+import DeleteI from "./delete";
 
 export {
   DashboardI,
@@ -36,4 +37,5 @@ export {
   ArrowID,
   ArrowIR,
   ArrowIL,
+  DeleteI,
 };

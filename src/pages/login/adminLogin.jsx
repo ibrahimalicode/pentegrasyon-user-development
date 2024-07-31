@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../components/common/CustomInput";
+import CustomInput from "../../components/common/CustomInput";
 import { useDispatch, useSelector } from "react-redux";
-import { login, resetLoginState } from "../redux/auth/loginSlice";
+import { login, resetLoginState } from "../../redux/auth/loginSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 // ICONS
-import EyeI from "../assets/icon/eye";
-import EyeInv from "../assets/icon/eyeInv";
+import EyeI from "../../assets/icon/eye";
+import EyeInv from "../../assets/icon/eyeInv";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
 
-function AdminLoginPage({ setFormName }) {
+function AdminLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { success, loading, error } = useSelector((state) => state.auth.login);
-  const [email, setEmail] = useState("");
+  const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [inputType, setInputType] = useState("password");
   const [icon, setIcon] = useState(eyeIconInv);
@@ -34,8 +34,8 @@ function AdminLoginPage({ setFormName }) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (!email || !password) return;
-    dispatch(login({ email, password, role: "admin" }));
+    if (!emailOrPhone || !password) return;
+    dispatch(login({ emailOrPhone, password, role: "admin" }));
   };
 
   useEffect(() => {
@@ -44,11 +44,12 @@ function AdminLoginPage({ setFormName }) {
       toast.loading("Logging in..");
     } else if (error) {
       toast.dismiss();
-      if (error?.message) {
-        toast.error(error.message);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
       } else {
         toast.error("Something went wrong");
       }
+      dispatch(resetLoginState());
     } else if (success) {
       navigate("/dashboard");
       toast.dismiss();
@@ -73,10 +74,11 @@ function AdminLoginPage({ setFormName }) {
             label="E-posta"
             type="email"
             placeholder="E-posta"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={emailOrPhone}
+            onChange={(e) => setEmailOrPhone(e.target.value)}
             required={true}
             className="py-4"
+            autoComplete="on"
           />
           <CustomInput
             label="Şifre"
@@ -88,6 +90,7 @@ function AdminLoginPage({ setFormName }) {
             onClick={iconClick}
             required={true}
             className="py-4"
+            autoComplete="on"
           />
           <div className="flex flex-col mt-10 w-full">
             <div className="flex gap-4 text-sm leading-5 max-md:flex-wrap">
@@ -101,23 +104,11 @@ function AdminLoginPage({ setFormName }) {
             >
               Giriş
             </button>
-            {/* <div className="shrink-0 mt-10 h-px bg-slate-200 w-full" /> */}
           </div>
         </div>
-        {/*  <div className="flex flex-col mt-10 w-full">
-          <p className="text-sm leading-5 text-[--link-1] w-full text-center">
-            <a href="/">Hesabınız yok mu ?</a>
-          </p>
-          <span
-            onClick={() => setFormName("register")}
-            className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-10 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
-          >
-            Kayıt ol
-          </span>
-        </div> */}
       </form>
     </div>
   );
 }
 
-export default AdminLoginPage;
+export default AdminLogin;

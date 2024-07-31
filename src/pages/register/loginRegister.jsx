@@ -1,6 +1,6 @@
 import { useState } from "react";
-import RegisterPage from "./register";
-import LoginPage from "./login";
+import UserRegister from "./userRegister";
+import UserLogin from "../login/userLogin";
 
 const img =
   "https://cdn.builder.io/api/v1/image/assets/TEMP/709fcaeeb1a625963f5b761d2210429cb4b88bdbc0c89a30484322c82a24873d?apiKey=1f4fb250339844f88428d2cbf4e019e9&";
@@ -17,12 +17,12 @@ const LoginRegister = () => {
         >
           {/* Sign Up Form */}
           <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-in-container max-lg:w-full">
-            <LoginPage setPageName={setPageName} pageName={pageName} />
+            <UserLogin setPageName={setPageName} pageName={pageName} />
           </div>
 
           {/* Sign in Form */}
           <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-up-container max-lg:w-full">
-            <RegisterPage setPageName={setPageName} pageName={pageName} />{" "}
+            <UserRegister setPageName={setPageName} pageName={pageName} />{" "}
           </div>
 
           {/* Card Slider */}

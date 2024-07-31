@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../components/common/CustomInput";
+import CustomInput from "../../components/common/CustomInput";
 
 // ICONS
 import toast from "react-hot-toast";
-import GobackI from "../assets/icon/goback";
+import GobackI from "../../assets/icon/goback";
 import { useDispatch, useSelector } from "react-redux";
-import EyeI from "../assets/icon/eye";
-import EyeInv from "../assets/icon/eyeInv";
-import CustomSelect from "../components/common/CustomSelector";
-import cities from "../assets/json/cities";
-import LoadingI from "../assets/anim/loading";
-import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
+import EyeI from "../../assets/icon/eye";
+import EyeInv from "../../assets/icon/eyeInv";
+import CustomSelect from "../../components/common/CustomSelector";
+import cities from "../../assets/json/cities";
+import LoadingI from "../../assets/anim/loading";
+import {
+  registerUser,
+  resetRgisterState,
+} from "../../redux/auth/registerSlice";
 import {
   codeVerification,
   resetVerifyCodeState,
-} from "../redux/auth/verifyCodeSlice";
-import { PhoneUserMessage } from "../components/common/messages";
+} from "../../redux/auth/verifyCodeSlice";
+import { PhoneUserMessage } from "../../components/common/messages";
+import { useNavigate } from "react-router-dom";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
 
-const RegisterPage = ({ pageName, setPageName }) => {
+const UserRegister = ({ setPageName }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loading, success, error } = useSelector(
     (state) => state.auth.register
   );
   const {
-    loading: verifyL,
-    success: verifyS,
-    error: verifyE,
+    loading: verifyCodeLoading,
+    success: verifyCodeSuccess,
+    error: verifyCodeError,
   } = useSelector((state) => state.auth.verifyCode);
 
   const [firstName, setFirstName] = useState("");
@@ -42,7 +47,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
   const [address, setAddress] = useState("");
   const [inputType, setInputType] = useState("password");
   const [inputType2, setInputType2] = useState("password");
-  const [smsCode, setSmsCode] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [toConfirm, setToConfirm] = useState(false);
 
   const [icon, setIcon] = useState(eyeIconInv);
@@ -82,58 +87,57 @@ const RegisterPage = ({ pageName, setPageName }) => {
     }
   };
 
-  const verify = (e) => {
+  const verifyCode = (e) => {
     e.preventDefault();
     dispatch(
       codeVerification({
         phoneNumberOrEmail: phoneNumber,
-        verificationCode: smsCode,
+        verificationCode,
       })
     );
   };
 
   // USE EFFECTS
   useEffect(() => {
-    if (pageName) {
-      if (loading) {
-        toast.loading("Loading...");
-      } else if (success) {
-        toast.dismiss();
-        setToConfirm(true);
-        toast.success("SMS has beeen sent successfully");
-        dispatch(resetRgisterState());
-      } else if (error) {
-        toast.dismiss();
-        if (error?.message) {
-          toast.error(error.message);
-        } else {
-          toast.error("Couldn't send SMS");
-        }
-        dispatch(resetRgisterState());
+    if (loading) {
+      toast.loading("Loading...");
+    } else if (success) {
+      toast.dismiss();
+      setToConfirm(true);
+      toast.success("SMS has beeen sent successfully");
+      dispatch(resetRgisterState());
+    } else if (error) {
+      toast.dismiss();
+      if (error?.message) {
+        toast.error(error.message);
+      } else {
+        toast.error("Couldn't send SMS");
       }
+      dispatch(resetRgisterState());
     }
-  }, [loading, success, error, pageName]);
+  }, [loading, success, error]);
 
   useEffect(() => {
-    if (pageName) {
-      if (verifyL) {
-        toast.loading("Loading...");
-      } else if (verifyS) {
-        toast.dismiss();
-        toast.success("Registered Successfully");
-        setPageName(null);
-        dispatch(resetVerifyCodeState());
-      } else if (verifyE) {
-        toast.dismiss();
-        if (verifyE?.message) {
-          toast.error(verifyE.message);
-        } else {
-          toast.error("Couldn't register");
-        }
-        dispatch(resetVerifyCodeState());
-      }
+    if (verifyCodeLoading) {
+      toast.loading("Loading...");
     }
-  }, [verifyL, verifyS, verifyE, pageName]);
+    if (verifyCodeSuccess) {
+      toast.dismiss();
+      toast.success("Registered Successfully");
+      setPageName(null); // To the UserLogin
+      navigate("/");
+      dispatch(resetVerifyCodeState());
+    }
+    if (verifyCodeError) {
+      toast.dismiss();
+      if (verifyCodeError?.message) {
+        toast.error(verifyCodeError.message);
+      } else {
+        toast.error("Couldn't register");
+      }
+      dispatch(resetVerifyCodeState());
+    }
+  }, [verifyCodeLoading, verifyCodeSuccess, verifyCodeError]);
 
   // ICON RELATED
   const iconClick = (e) => {
@@ -202,8 +206,8 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 className="py-2"
               />
               <CustomInput
-                label="E-Posta"
-                type="Email"
+                label="email"
+                type="email"
                 placeholder="E-Posta"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -213,9 +217,9 @@ const RegisterPage = ({ pageName, setPageName }) => {
             </div>
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
               <CustomSelect
-                label="Il"
+                label="Şehir"
                 options={cities}
-                value={city ? city : { label: "Il" }}
+                value={city ? city : { label: "Şehir" }}
                 onChange={setCity}
                 className="w-full"
                 className2="container-class"
@@ -223,7 +227,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
               />
               <CustomInput
                 label="Adres"
-                type="address"
+                type="text"
                 placeholder="Adres"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
@@ -271,7 +275,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
               <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
             </div>
           </div>
-          <div className="flex flex-col mt-4 sm:mt-10 w-full">
+          <div className="flex flex-col mt-4 sm:mt-6 w-full">
             <div className="text-sm leading-5 text-[--link-1] w-full text-center">
               <p>Hesabınız var mı ?</p>
             </div>
@@ -289,7 +293,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
         /* Verify Page*/
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
-          onSubmit={verify}
+          onSubmit={verifyCode}
         >
           <div className="flex justify-center relative">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">
@@ -313,8 +317,8 @@ const RegisterPage = ({ pageName, setPageName }) => {
               label="Doğrulama Codu"
               type="text"
               placeholder="Doğrulama Codu"
-              value={smsCode}
-              onChange={(e) => setSmsCode(e.target.value)}
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
               required={true}
             />
             <div className="mt-10 text-[--gr-1] font-light">
@@ -325,7 +329,7 @@ const RegisterPage = ({ pageName, setPageName }) => {
                 type="submit"
                 className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
               >
-                {verifyL ? <LoadingI className="h-7" /> : "Devam"}
+                {verifyCodeLoading ? <LoadingI className="h-7" /> : "Devam"}
               </button>
               <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
             </div>
@@ -348,4 +352,4 @@ const RegisterPage = ({ pageName, setPageName }) => {
   );
 };
 
-export default RegisterPage;
+export default UserRegister;

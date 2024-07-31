@@ -27,15 +27,9 @@ export const clearAuth = () => {
 };
 
 export const privateApi = () => {
-  const TOKEN = auth()?.token;
-
   axiosPrivate.interceptors.request.use(
     (config) => {
-      if (!TOKEN) {
-        window.location.href = "/login";
-        return Promise.reject("No token!");
-      }
-      config.headers["Authorization"] = `Bearer ${TOKEN}`;
+      config.headers["Authorization"] = `Bearer ${auth().token}`;
       return config;
     },
     (error) => Promise.reject(error)
@@ -44,7 +38,6 @@ export const privateApi = () => {
   axiosPrivate.interceptors.response.use(
     (response) => response,
     async (error) => {
-      console.log(error);
       if (error.response?.status === 401) {
         clearAuth();
         window.location.href = "/login";

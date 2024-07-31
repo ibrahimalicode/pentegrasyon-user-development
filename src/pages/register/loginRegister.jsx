@@ -1,9 +1,7 @@
 import { useState } from "react";
 import UserRegister from "./userRegister";
 import UserLogin from "../login/userLogin";
-
-const img =
-  "https://cdn.builder.io/api/v1/image/assets/TEMP/709fcaeeb1a625963f5b761d2210429cb4b88bdbc0c89a30484322c82a24873d?apiKey=1f4fb250339844f88428d2cbf4e019e9&";
+import img from "../../assets/img/pentegrasyon.png";
 
 const LoginRegister = () => {
   const [pageName, setPageName] = useState(null);
@@ -26,7 +24,7 @@ const LoginRegister = () => {
           </div>
 
           {/* Card Slider */}
-          <div className="lg:flex flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:overflow-hidden overlay-container">
+          <div className="lg:flex flex-col w-6/12 max-md:ml-0 max-md:w-full hidden md:overflow-hidden overlay-container bg-slate-200">
             <AuthImg />
           </div>
         </div>
@@ -41,7 +39,7 @@ const AuthImg = () => {
       loading="lazy"
       src={img}
       alt="Login page illustration"
-      className="grow self-stretch w-full bg-cover"
+      className="w-full h-full object-contain"
     />
   );
 };

@@ -11,6 +11,7 @@ import TableSkeleton from "../components/common/tableSkeleton";
 import CustomSelect from "../components/common/CustomSelector";
 import cities from "../assets/json/cities";
 import { DeleteI, UsersI } from "../assets/icon";
+import UsersActions from "../components/users/usersActions";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -39,9 +40,9 @@ const Users = () => {
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
-          active: filter?.active?.value ? filter.active.value : null,
-          verify: filter?.verify?.value ? filter.verify.value : null,
-          dealer: filter?.dealer?.value ? filter.dealer.value : null,
+          active: filter?.active?.value,
+          verify: filter?.verify?.value,
+          dealer: filter?.dealer?.value,
           city: filter?.city?.value,
         })
       );
@@ -54,9 +55,9 @@ const Users = () => {
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: searchVal,
-          active: filter?.active?.value ? filter.active.value : null,
-          verify: filter?.verify?.value ? filter.verify.value : null,
-          dealer: filter?.dealer?.value ? filter.dealer.value : null,
+          active: filter?.active?.value,
+          verify: filter?.verify?.value,
+          dealer: filter?.dealer?.value,
           city: filter?.city?.value,
         })
       );
@@ -102,9 +103,9 @@ const Users = () => {
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
-        active: filter?.active?.value ? filter.active.value : null,
-        verify: filter?.verify?.value ? filter.verify.value : null,
-        dealer: filter?.dealer?.value ? filter.dealer.value : null,
+        active: filter?.active?.value,
+        verify: filter?.verify?.value,
+        dealer: filter?.dealer?.value,
         city: filter?.city?.value,
       })
     );
@@ -135,14 +136,15 @@ const Users = () => {
       } else {
         toast.error("Something went wrong");
       }
+      dispatch(resetGetUsersState());
     }
 
     if (success) {
       toast.dismiss();
       setUsersData(users.data);
       setTotalItems(users.totalCount);
+      dispatch(resetGetUsersState());
     }
-    dispatch(resetGetUsersState());
   }, [loading, success, error, users]);
 
   return (
@@ -413,30 +415,8 @@ const Users = () => {
                   <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                     {formatDateString(data.createdDateTime)}
                   </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal relative">
-                    <MenuI className="w-full" />
-                    <span
-                      className={`absolute top-4 right-9 odd:bg-[--red-1] border-2 border-solid border-[--light-3] rounded-sm z-10 overflow-hidden ${
-                        index === 0 ? "visible" : "hidden"
-                      }`}
-                    >
-                      <ul className="bg-[--white-1] text-[--gr-1]">
-                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left border-b border-solid border-[--border-1]">
-                          <UsersI className="w-5" /> Lisanslar
-                        </li>
-                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left border-b border-solid border-[--border-1]">
-                          <UsersI className="w-5" />
-                          Transfer
-                        </li>
-                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left border-b border-solid border-[--border-1]">
-                          <UsersI className="w-5" /> Düzenle
-                        </li>
-                        <li className="flex gap-2 py-2 pl-4 pr-14 text-left">
-                          <DeleteI className="w-5" />
-                          Sil
-                        </li>
-                      </ul>
-                    </span>
+                  <td className="text-center text-[--black-2] font-light first:font-normal relative">
+                    <UsersActions index={index} user={data} />
                   </td>
                 </tr>
               ))}

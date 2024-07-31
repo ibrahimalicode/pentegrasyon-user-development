@@ -9,6 +9,9 @@ import forgotPasswordSlice from "./redux/auth/forgotPasswordSlice";
 import changePasswordSlice from "./redux/auth/changePasswordSlice";
 import userVerificationSlice from "./redux/auth/userVerificationSlice";
 import getRestaurantsSlice from "./redux/restaurants/getRestaurantsSlice";
+import deleteUserSlice from "./redux/users/deleteUserSlice";
+import getUserRestaurantsSlice from "./redux/restaurants/getUserRestaurantsSlice";
+import getUserLicensesSlice from "./redux/licenses/getUserLicensesSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -22,18 +25,25 @@ const authSlice = combineReducers({
 
 const usersSlice = combineReducers({
   add: addUserSlice,
+  delete: deleteUserSlice,
   getUsers: getUsersSlice,
 });
 
 const restaurantsSlice = combineReducers({
   getRestaurants: getRestaurantsSlice,
+  getUserRestaurants: getUserRestaurantsSlice,
+});
+
+const licensesSlice = combineReducers({
+  getUserLicenses: getUserLicensesSlice,
 });
 
 const store = configureStore({
   reducer: {
     auth: authSlice,
     users: usersSlice,
-    restaurant: restaurantsSlice,
+    restaurants: restaurantsSlice,
+    licenses: licensesSlice,
   },
 });
 

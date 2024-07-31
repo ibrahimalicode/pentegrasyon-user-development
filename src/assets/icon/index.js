@@ -5,7 +5,7 @@ import RestourantI from "./restourant";
 import LicenseI from "./license";
 import PackagesI from "./packages";
 import MessagesI from "./messages";
-import RolesI from "./roles";
+import UserPlusI from "./userPlus";
 import LogI from "./log";
 import PaymentI from "./payment";
 import ParamsI from "./parameters";
@@ -18,6 +18,8 @@ import ArrowID from "./arrowD";
 import ArrowIR from "./arrowR";
 import ArrowIL from "./arrowL";
 import DeleteI from "./delete";
+import EditI from "./edit";
+import TransferI from "./transfer";
 
 export {
   DashboardI,
@@ -27,7 +29,7 @@ export {
   PackagesI,
   MessagesI,
   LogI,
-  RolesI,
+  UserPlusI,
   PaymentI,
   ParamsI,
   WarnI,
@@ -38,4 +40,6 @@ export {
   ArrowIR,
   ArrowIL,
   DeleteI,
+  EditI,
+  TransferI,
 };

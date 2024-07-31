@@ -10,13 +10,14 @@ import {
   PackagesI,
   MessagesI,
   LogI,
-  RolesI,
   PaymentI,
   ParamsI,
+  UserPlusI,
 } from "../../assets/icon/index";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ArrowR from "../../assets/icon/arrowR";
+import { usePopup } from "../../context/PopupContext";
 
 const sidebarItems = [
   {
@@ -62,7 +63,7 @@ const sidebarItems = [
     path: "activity-logs",
   },
   {
-    icon: <RolesI />,
+    icon: <UserPlusI />,
     text: "Roller",
     to: "/roles",
     path: "roles",
@@ -86,12 +87,13 @@ function Sidebar() {
   const route = Object.values(param)[0];
   const path = route.length > 1 ? route : "dashboard";
   const [hideSide, setHideSide] = useState(false);
+  const { showPopup } = usePopup();
 
   return (
     <nav
-      className={`fixed -left-[280px] lg:left-0 top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all z-[99] ${
-        hideSide && "left-[0]"
-      }`}
+      className={`fixed -left-[280px] lg:left-0 top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
+        !showPopup && "z-[99]"
+      } ${hideSide && "left-[0]"}`}
     >
       <div className="flex flex-col w-full relative">
         <div

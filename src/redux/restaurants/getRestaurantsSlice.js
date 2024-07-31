@@ -77,7 +77,9 @@ export const getRestaurants = createAsyncThunk(
       return res.data.data;
     } catch (err) {
       console.log(err);
-      toast.error(err.message);
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
+      }
       throw err.message;
     }
   }

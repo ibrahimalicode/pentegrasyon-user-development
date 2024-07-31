@@ -9,22 +9,25 @@ import AdminLogin from "./pages/login/adminLogin";
 import SetNewPassword from "./pages/userPassword/setNewPass";
 import ForgotPassword from "./pages/userPassword/forgotPassword";
 import UserVerifyLogin from "./pages/userVerify/loginVerify";
+import { PopupProvider } from "./context/PopupContext";
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route path="/login" element={<LoginRegister />} />
-        <Route path="/9007/admin" element={<AdminLogin />} />
-        <Route path="/setNewPassword" element={<SetNewPassword />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="//userVerifyLogin" element={<UserVerifyLogin />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/*" element={<Home />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-      <Toaster position="top-right" toastOptions={toastOptions} />
+      <PopupProvider>
+        <Routes>
+          <Route path="/login" element={<LoginRegister />} />
+          <Route path="/9007/admin" element={<AdminLogin />} />
+          <Route path="/setNewPassword" element={<SetNewPassword />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="//userVerifyLogin" element={<UserVerifyLogin />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/*" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+        <Toaster position="top-right" toastOptions={toastOptions} />
+      </PopupProvider>
     </>
   );
 }

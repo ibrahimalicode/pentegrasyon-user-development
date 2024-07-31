@@ -1,4 +1,4 @@
-const RolesI = ({ className }) => (
+const UserPlusI = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -15,4 +15,4 @@ const RolesI = ({ className }) => (
   </svg>
 );
 
-export default RolesI;
+export default UserPlusI;

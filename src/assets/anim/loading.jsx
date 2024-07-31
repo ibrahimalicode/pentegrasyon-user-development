@@ -1,4 +1,4 @@
-const LoadingI = ({ className = "" }) => (
+const LoadingI = ({ className }) => (
   <svg
     aria-hidden="true"
     className={`w-5 h-5 text-[var(--tx-4)] animate-spin fill-[--primary-1] ${className}`}

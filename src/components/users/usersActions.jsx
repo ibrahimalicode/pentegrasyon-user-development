@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MenuI from "../../assets/icon/menu";
 import DeleteUser from "./deleteUser";
 import EditUser from "./editUser";
@@ -6,16 +6,28 @@ import MakeADealer from "./makeADealer";
 import TransferDealer from "./transferDealer";
 import UserLicenses from "./userLicenses";
 import UserRestaurants from "./userRestaurants";
+import { usePopup } from "../../context/PopupContext";
 
 const UsersActions = ({ index, user }) => {
+  const usersMenuRef = useRef();
+  const { setContentRef, contenRef } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
     setOpenMenu((prevIndex) => (prevIndex === index ? null : index));
   };
+
+  useEffect(() => {
+    if (usersMenuRef) {
+      //setContentRef((prev) => {
+      //  return [...prev, { ref: usersMenuRef, callback: setOpenMenu }];
+      //});
+      contenRef.push({ ref: usersMenuRef, callback: setOpenMenu });
+    }
+  }, [usersMenuRef]);
   return (
     <>
-      <div className="cursor-pointer" onClick={handleClick}>
+      <div className="cursor-pointer" onClick={handleClick} ref={usersMenuRef}>
         <MenuI className="w-full" />
       </div>
       {openMenu === index && (

@@ -62,11 +62,11 @@ export const login = createAsyncThunk(
       localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
       return res.data.sessionId;
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err);
       if (err?.response?.data) {
         throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

@@ -17,7 +17,7 @@ import {
 const Restourants = () => {
   const dispatch = useDispatch();
   const { loading, success, error, restaurants } = useSelector(
-    (state) => state.restaurant.getRestaurants
+    (state) => state.restaurants.getRestaurants
   );
 
   const [searchVal, setSearchVal] = useState("");
@@ -132,12 +132,12 @@ const Restourants = () => {
   useEffect(() => {
     if (error) {
       toast.dismiss();
-
       if (error?.message) {
         toast.error(error.message);
       } else {
         toast.error("Something went wrong");
       }
+      dispatch(resetGetRestaurantsState());
     }
 
     if (success) {
@@ -145,8 +145,8 @@ const Restourants = () => {
       setRestaurantsData(restaurants.data);
       setTotalItems(restaurants.totalCount);
       console.log(restaurants);
+      dispatch(resetGetRestaurantsState());
     }
-    dispatch(resetGetRestaurantsState());
   }, [loading, success, error, restaurants]);
 
   return (

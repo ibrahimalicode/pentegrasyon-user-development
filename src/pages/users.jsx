@@ -1,5 +1,5 @@
 import CustomInput from "../components/common/CustomInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MenuI from "../assets/icon/menu";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, resetGetUsersState } from "../redux/users/getUsersSlice";
@@ -12,11 +12,16 @@ import CustomSelect from "../components/common/CustomSelector";
 import cities from "../assets/json/cities";
 import { DeleteI, UsersI } from "../assets/icon";
 import UsersActions from "../components/users/usersActions";
+import UsersTable from "../components/users/userTable";
+import { usePopup } from "../context/PopupContext";
 
 const Users = () => {
   const dispatch = useDispatch();
   const { loading, success, error, users } = useSelector(
     (state) => state.users.getUsers
+  );
+  const { success: deleteUserSuccess } = useSelector(
+    (state) => state.users.delete
   );
 
   const [searchVal, setSearchVal] = useState("");
@@ -30,7 +35,7 @@ const Users = () => {
   const [totalItems, setTotalItems] = useState(null);
   const lastItemIndex = pageNumber * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
+  //const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
 
   const handleSearch = (e) => {
     if ((!e.code && e?.target?.value === "") || typeof e === "string" || !e) {
@@ -129,8 +134,6 @@ const Users = () => {
 
   useEffect(() => {
     if (error) {
-      toast.dismiss();
-
       if (error?.message) {
         toast.error(error.message);
       } else {
@@ -140,12 +143,26 @@ const Users = () => {
     }
 
     if (success) {
-      toast.dismiss();
       setUsersData(users?.data);
       setTotalItems(users?.totalCount);
       dispatch(resetGetUsersState());
     }
   }, [loading, success, error, users]);
+
+  useEffect(() => {
+    if (deleteUserSuccess) {
+      handleFilter(true);
+    }
+  }, [deleteUserSuccess]);
+
+  //HIDE POPUP
+  const { contenRef } = usePopup();
+  const usersFilterRef = useRef();
+  useEffect(() => {
+    if (usersFilterRef) {
+      contenRef.push({ ref: usersFilterRef, callback: setOpenFilter });
+    }
+  }, [usersFilterRef]);
 
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -173,7 +190,7 @@ const Users = () => {
         </div>
 
         <div className="w-full flex justify-end">
-          <div className="flex gap-2 max-sm:order-1 ">
+          <div className="flex gap-2 max-sm:order-1 " ref={usersFilterRef}>
             <div className="w-full relative">
               <button
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
@@ -353,79 +370,10 @@ const Users = () => {
 
       {/* TABLE */}
       {usersData ? (
-        <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
-          <table className="w-full text-sm font-light min-w-[60rem]">
-            <thead>
-              <tr className="bg-[--light-3] h-8 text-left">
-                <th className="first:pl-4 font-normal">Ad Soyad</th>
-                <th className="irst:pl-4 font-normal">Rol</th>
-                <th className="irst:pl-4 font-normal">iletişim</th>
-                <th className="irst:pl-4 font-normal">Il</th>
-                <th className="irst:pl-4 font-normal">Durum</th>
-                <th className="irst:pl-4 font-normal text-center">Onaylı</th>
-                <th className="irst:pl-4 font-normal">Kayıt Tarihi</th>
-                <th className="irst:pl-4 font-normal text-center">İşlem</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {usersData.map((data, index) => (
-                <tr
-                  key={data.id}
-                  className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
-                >
-                  <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
-                    {data.fullName}
-                  </td>
-                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.isDealer ? "Bayi" : "Musteri"}
-                  </td>
-                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.phoneNumber}
-                    <br />
-                    <span className="text-xs font-light text-[--gr-1]">
-                      {data.email}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {data.city}
-                  </td>
-                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    <span
-                      className={`text-xs font-normal ${
-                        data.isActive
-                          ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
-                          : "text-[--red-1] bg-[--status-red] border-[--red-1]"
-                      } px-3 py-1 border border-solid rounded-full`}
-                    >
-                      ● {data.isActive ? "Aktif" : "Pasif"}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
-                    <span
-                      className={`text-xs font-normal ${
-                        data.isVerify
-                          ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
-                          : "text-[--black-1] bg-[--light-4]"
-                      } px-3 py-1 border border-solid rounded-full`}
-                    >
-                      {data.isVerify ? "Onaylı" : "Onlaylanmadı"}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                    {formatDateString(data.createdDateTime)}
-                  </td>
-                  <td className="text-center text-[--black-2] font-light first:font-normal relative">
-                    <UsersActions index={index} user={data} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
+        <UsersTable users={usersData} />
+      ) : loading ? (
         <TableSkeleton />
-      )}
+      ) : null}
 
       {/* PAGINATION */}
       {usersData && totalItems && (

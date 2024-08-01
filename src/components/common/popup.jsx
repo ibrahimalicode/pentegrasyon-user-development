@@ -1,6 +1,6 @@
 import { usePopup } from "../../context/PopupContext";
 
-const CustomPopup = () => {
+const Popup = () => {
   const { showPopup, popupContent } = usePopup();
   return (
     <div
@@ -19,4 +19,4 @@ const CustomPopup = () => {
   );
 };
 
-export default CustomPopup;
+export default Popup;

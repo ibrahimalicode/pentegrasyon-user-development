@@ -15,8 +15,10 @@ import {
   resetGetUserLicenses,
 } from "../../redux/licenses/getUserLicensesSlice";
 
-const DeleteUser = ({ user: data, setOpenMenu }) => {
+const DeleteUser = ({ user: data }) => {
   const dispatch = useDispatch();
+
+  const { setShowPopup, setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.users.delete
@@ -34,7 +36,6 @@ const DeleteUser = ({ user: data, setOpenMenu }) => {
   const [user, setUser] = useState(data);
   const [restorantNumber, setRestorantNumber] = useState(null);
   const [licenseNumber, setLicenseNumber] = useState(null);
-  const { setShowPopup } = usePopup();
 
   const handleDelete = () => {
     console.log(user);
@@ -42,8 +43,10 @@ const DeleteUser = ({ user: data, setOpenMenu }) => {
   };
 
   const handlePopup = () => {
-    setOpen(true);
     setShowPopup(true);
+    setPopupContent(<Delete />);
+    return;
+    setOpen(true);
 
     dispatch(getUserRestaurants({ userId: data.id })).then(() => {
       dispatch(getUserLicenses({ userId: data.id }));
@@ -54,7 +57,8 @@ const DeleteUser = ({ user: data, setOpenMenu }) => {
     if (loading) {
       toast.dismiss();
       toast.loading("Logging in..");
-    } else if (error) {
+    }
+    if (error) {
       toast.dismiss();
       if (error?.message_TR) {
         toast.error(error.message_TR);
@@ -62,7 +66,8 @@ const DeleteUser = ({ user: data, setOpenMenu }) => {
         toast.error("Something went wrong");
       }
       dispatch(resetDeleteUser());
-    } else if (success) {
+    }
+    if (success) {
       toast.dismiss();
       toast.success("Successfuly Deleted");
       dispatch(resetDeleteUser());
@@ -191,3 +196,11 @@ const DeleteUser = ({ user: data, setOpenMenu }) => {
 };
 
 export default DeleteUser;
+
+const Delete = () => {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <CustomCheckbox label="trying" checked={checked} setChecked={setChecked} />
+  );
+};

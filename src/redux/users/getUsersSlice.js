@@ -66,8 +66,8 @@ export const getUsers = createAsyncThunk(
         },
       });
 
-      //console.log(res.data);
-      return res.data.data;
+      console.log(res);
+      return res?.data?.data;
     } catch (err) {
       console.log(err);
       toast.error(err.message);

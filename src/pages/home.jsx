@@ -7,12 +7,14 @@ import Users from "./users";
 import Restourants from "./restourants";
 import Licenses from "./licenses";
 import Packages from "./packages";
+import Popup from "../components/common/popup";
 
 const Home = () => {
   return (
     <section>
       <Header />
       <Sidebar />
+      <Popup />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />

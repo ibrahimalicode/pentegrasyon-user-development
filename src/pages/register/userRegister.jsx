@@ -339,6 +339,7 @@ const UserRegister = ({ setPageName }) => {
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
               required={true}
+              className="py-3"
             />
             <div className="mt-10 text-[--gr-1] font-light">
               <PhoneUserMessage number={phoneNumber} />

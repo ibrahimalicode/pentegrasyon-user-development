@@ -141,8 +141,8 @@ const Users = () => {
 
     if (success) {
       toast.dismiss();
-      setUsersData(users.data);
-      setTotalItems(users.totalCount);
+      setUsersData(users?.data);
+      setTotalItems(users?.totalCount);
       dispatch(resetGetUsersState());
     }
   }, [loading, success, error, users]);

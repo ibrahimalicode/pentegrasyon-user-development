@@ -8,14 +8,20 @@ import LoadingI from "../../assets/anim/loading";
 import { GobackI } from "../../assets/icon";
 import CustomCheckbox from "../../components/common/customCheckbox";
 import CustomInput from "../../components/common/CustomInput";
-import { codeVerification } from "../../redux/auth/verifyCodeSlice";
+import {
+  codeVerification,
+  resetVerifyCodeState,
+} from "../../redux/auth/verifyCodeSlice";
 import {
   EmailUserMessage,
   PhoneUserMessage,
 } from "../../components/common/messages";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { success, loading, error } = useSelector(
     (state) => state.auth.forgotPassword

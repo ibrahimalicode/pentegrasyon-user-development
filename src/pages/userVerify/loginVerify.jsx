@@ -3,7 +3,7 @@ import {
   resetUserVerification,
   sendUserVerificationCode,
 } from "../../redux/auth/userVerificationSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GobackI } from "../../assets/icon";
 import CustomInput from "../../components/common/CustomInput";
 import LoadingI from "../../assets/anim/loading";
@@ -12,8 +12,13 @@ import {
   codeVerification,
   resetVerifyCodeState,
 } from "../../redux/auth/verifyCodeSlice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const UserVerifyLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { success, loading, error } = useSelector(
     (state) => state.auth.verifyUser
   );
@@ -116,6 +121,7 @@ const UserVerifyLogin = () => {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   required={true}
+                  className="py-3"
                 />
                 <div className="flex flex-col mt-10 w-full">
                   <button

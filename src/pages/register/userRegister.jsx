@@ -47,8 +47,8 @@ const UserRegister = ({ setPageName }) => {
   const [address, setAddress] = useState("");
   const [inputType, setInputType] = useState("password");
   const [inputType2, setInputType2] = useState("password");
-  const [verificationCode, setVerificationCode] = useState("");
   const [toConfirm, setToConfirm] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
 
   const [icon, setIcon] = useState(eyeIconInv);
   const [icon2, setIcon2] = useState(eyeIconInv);
@@ -95,6 +95,25 @@ const UserRegister = ({ setPageName }) => {
         verificationCode,
       })
     );
+  };
+
+  const goToLogin = () => {
+    setPageName(null);
+    setFirstName("");
+    setLastName("");
+    setPhoneNumber("");
+    setEmail("");
+    setPassword("");
+    setPassword2("");
+    setCity(null);
+    setAddress("");
+    setInputType("password");
+    setIcon(eyeIconInv);
+    setInputType2("password");
+    setIcon2(eyeIconInv);
+
+    setToConfirm(false);
+    setVerificationCode("");
   };
 
   // USE EFFECTS
@@ -188,7 +207,7 @@ const UserRegister = ({ setPageName }) => {
               <CustomInput
                 label="Soyad"
                 type="text"
-                placeholder="Ad Soyad"
+                placeholder="Soyad"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required={true}
@@ -199,7 +218,7 @@ const UserRegister = ({ setPageName }) => {
               <CustomInput
                 label="Telefon"
                 type="tel"
-                placeholder="Telefon"
+                placeholder="05"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 required={true}
@@ -282,7 +301,7 @@ const UserRegister = ({ setPageName }) => {
             <button
               type="button"
               disabled={loading}
-              onClick={() => setPageName(null)}
+              onClick={goToLogin}
               className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-1] hover:border-transparent transition-colors text-center cursor-pointer"
             >
               Giriş yap
@@ -331,20 +350,8 @@ const UserRegister = ({ setPageName }) => {
               >
                 {verifyCodeLoading ? <LoadingI className="h-7" /> : "Devam"}
               </button>
-              <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
+              <div className="shrink-0 mt-5 h-px bg-slate-200 w-full mt-24" />
             </div>
-          </div>
-          <div className="flex flex-col mt-10 w-full">
-            <p className="text-sm leading-5 text-[--link-1] w-full text-center">
-              <a href="/">Hesabınız var mı ?</a>
-            </p>
-            <button
-              type="button"
-              onClick={() => setPageName(null)}
-              className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-2] mt-5 hover:bg-[--light-4] hover:border-transparent transition-colors text-center cursor-pointer"
-            >
-              Giriş yap
-            </button>
           </div>
         </form>
       )}

@@ -19,10 +19,11 @@ const DeleteUser = ({ user, setOpenMenu }) => {
   const dispatch = useDispatch();
   const { setShowPopup, setPopupContent } = usePopup();
 
-  const handlePopup = () => {
-    setPopupContent(<DeletePopup data={user} />);
+  const handlePopup = (event) => {
+    event.stopPropagation();
     setShowPopup(true);
-    setOpenMenu(null);
+    setPopupContent(<DeletePopup data={user} />);
+    //setOpenMenu(null);
 
     dispatch(getUserRestaurants({ userId: user.id })).then(() => {
       dispatch(getUserLicenses({ userId: user.id }));

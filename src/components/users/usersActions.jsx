@@ -9,8 +9,9 @@ import UserRestaurants from "./userRestaurants";
 import { usePopup } from "../../context/PopupContext";
 
 const UsersActions = ({ index, user }) => {
+  const outRef = useRef();
   const usersMenuRef = useRef();
-  const { setContentRef, contenRef } = usePopup();
+  const { contentRef, setContentRef } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
@@ -19,20 +20,27 @@ const UsersActions = ({ index, user }) => {
 
   useEffect(() => {
     if (usersMenuRef) {
-      //setContentRef((prev) => {
-      //  return [...prev, { ref: usersMenuRef, callback: setOpenMenu }];
-      //});
-      contenRef.push({ ref: usersMenuRef, callback: setOpenMenu });
+      const refs = contentRef.filter((ref) => ref.id !== "userActions");
+      setContentRef([
+        ...refs,
+        {
+          id: "userActions",
+          outRef: outRef.current ? outRef : null,
+          ref: usersMenuRef,
+          callback: () => setOpenMenu(null),
+        },
+      ]);
     }
-  }, [usersMenuRef]);
+  }, [usersMenuRef, outRef, openMenu]);
   return (
     <>
       <div className="cursor-pointer" onClick={handleClick} ref={usersMenuRef}>
         <MenuI className="w-full" />
       </div>
       {openMenu === index && (
-        <span
+        <div
           className={`absolute top-4 right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden`}
+          ref={outRef}
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">
             <UserRestaurants user={user} setOpenMenu={setOpenMenu} />
@@ -42,7 +50,7 @@ const UsersActions = ({ index, user }) => {
             <EditUser user={user} setOpenMenu={setOpenMenu} />
             <DeleteUser user={user} setOpenMenu={setOpenMenu} />
           </ul>
-        </span>
+        </div>
       )}
     </>
   );

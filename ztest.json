@@ -1,0 +1,20 @@
+{
+  "firstName": "Ibro",
+  "lastName": "Ali",
+  "phoneNumber": "05058433855",
+  "email": "ibro.aliwa@gmail.com",
+  "city": "ANKARA",
+  "address": "Keci",
+  "password": "1",
+  "userInvoiceAddressDTO": {
+    "taxOffice": "Vergi Dairesi",
+    "taxNumber": "VTic.Sic.No",
+    "title": "Resmi Ünvan",
+    "address": "Nooooow",
+    "city": "ANKARA",
+    "district": "KEÇİÖREN",
+    "neighbourhood": "OVACIK MAHALLESİ",
+    "tradeRegistryNumber": "VKN veya TCKN",
+    "mersisNumber": "Mersis No"
+  }
+}

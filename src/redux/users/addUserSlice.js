@@ -51,6 +51,7 @@ export const addUser = createAsyncThunk(
       city,
       address,
       password,
+      dealerId,
       userInvoiceAddressDTO,
     },
     { rejectWithValue }
@@ -64,6 +65,7 @@ export const addUser = createAsyncThunk(
         city,
         address,
         password,
+        dealerId,
         userInvoiceAddressDTO,
       });
 

@@ -66,7 +66,6 @@ export const getUserRestaurants = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log(userId);
       const res = await api.get(
         `${baseURL}Restaurants/GetRestaurantsByUserId`,
         {
@@ -82,7 +81,7 @@ export const getUserRestaurants = createAsyncThunk(
         }
       );
 
-      console.log(res.data);
+      //console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);

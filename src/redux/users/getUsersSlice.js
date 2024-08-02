@@ -12,6 +12,7 @@ const initialState = {
   success: false,
   error: false,
   users: null,
+  dealers: null,
 };
 
 const getUsersSlice = createSlice({
@@ -25,6 +26,9 @@ const getUsersSlice = createSlice({
     },
     resetGetUsers: (state) => {
       state.users = null;
+    },
+    resetDealers: (state) => {
+      state.dealers = null;
     },
   },
   extraReducers: (build) => {
@@ -46,13 +50,24 @@ const getUsersSlice = createSlice({
         state.success = false;
         state.error = action.error;
         state.users = null;
+      })
+      .addCase(getDealers.fulfilled, (state, action) => {
+        state.dealers = action.payload;
       });
   },
 });
 
 export const getUsers = createAsyncThunk(
   "Users/GetUsers",
-  async ({ pageNumber, pageSize, searchKey, active, verify, dealer, city }) => {
+  async ({
+    pageNumber = 0,
+    pageSize = 0,
+    searchKey,
+    active,
+    verify,
+    dealer,
+    city,
+  }) => {
     try {
       const res = await api.get(`${baseURL}Users/GetUsers`, {
         params: {
@@ -76,5 +91,26 @@ export const getUsers = createAsyncThunk(
   }
 );
 
-export const { resetGetUsersState, resetGetUsers } = getUsersSlice.actions;
+export const getDealers = createAsyncThunk(
+  "Users/GetDealers",
+  async ({ dealer }) => {
+    try {
+      const res = await api.get(`${baseURL}Users/GetUsers`, {
+        params: {
+          dealer,
+        },
+      });
+
+      //console.log(res.data.data);
+      return res?.data?.data;
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+      throw err.message;
+    }
+  }
+);
+
+export const { resetGetUsersState, resetGetUsers, resetDealers } =
+  getUsersSlice.actions;
 export default getUsersSlice.reducer;

@@ -157,11 +157,21 @@ const Users = () => {
   }, [deleteUserSuccess]);
 
   //HIDE POPUP
-  const { contenRef, setShowPopup, setPopupContent } = usePopup();
+  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
+    usePopup();
   const usersFilterRef = useRef();
   useEffect(() => {
     if (usersFilterRef) {
-      contenRef.push({ ref: usersFilterRef, callback: setOpenFilter });
+      const refs = contentRef.filter((ref) => ref.id !== "usersFilter");
+      setContentRef([
+        ...refs,
+        {
+          id: "usersFilter",
+          outRef: null,
+          ref: usersFilterRef,
+          callback: () => setOpenFilter(false),
+        },
+      ]);
     }
   }, [usersFilterRef]);
 
@@ -365,7 +375,9 @@ const Users = () => {
                 className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                 onClick={() => {
                   setShowPopup(true);
-                  setPopupContent(<AddUser />);
+                  setPopupContent(
+                    <AddUser onSuccess={() => handleFilter(true)} />
+                  );
                 }}
               >
                 Add user

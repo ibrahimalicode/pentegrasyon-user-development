@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import LoadingI from "../../assets/anim/loading";
+import { useEffect, useRef, useState } from "react";
 import { usePopup } from "../../context/PopupContext";
 import CustomCheckbox from "../common/customCheckbox";
 import CustomInput from "../common/CustomInput";
@@ -12,14 +11,20 @@ import { getDistricts } from "../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../redux/data/getNeighsSlice";
 import toast from "react-hot-toast";
 import { addUser, resetaddUserState } from "../../redux/users/addUserSlice";
+import { formatPhoneNumber, formatSelectorData } from "../../utils/utils";
+import { getDealers, resetDealers } from "../../redux/users/getUsersSlice";
 
-const AddUser = () => {
+const AddUser = ({ onSuccess }) => {
   const dispatch = useDispatch();
-  const { setShowPopup } = usePopup();
+  const formRef = useRef();
+  const { setShowPopup, setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.users.addUser
   );
+
+  const { dealers: dealersData } = useSelector((state) => state.users.getUsers);
+
   const { cities: data, success: citiesSuccess } = useSelector(
     (state) => state.data.getCities
   );
@@ -30,13 +35,15 @@ const AddUser = () => {
     (state) => state.data.getNeighs
   );
 
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("0");
   const [city, setCity] = useState(null);
   const [district, setDistrict] = useState(null);
   const [neigh, setNeigh] = useState(null);
+  const [dealer, setDealer] = useState(null);
   const [checked, setChecked] = useState(true);
   const [openFatura, setOpenFatura] = useState(false);
 
+  const [dealers, setDealers] = useState([]);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -51,7 +58,8 @@ const AddUser = () => {
     const address = e.target[5].value;
     const password = e.target[6].value;
     const password2 = e.target[7].value;
-    const checkBox = e.target[8].checked;
+    const dealerId = dealer.value; //e.target[8].value
+    const checkBox = e.target[9].checked;
 
     let faturaCity;
     let title;
@@ -65,52 +73,66 @@ const AddUser = () => {
 
     if (openFatura) {
       faturaCity = city?.value;
-      title = e.target[9].value;
-      VKN = e.target[10].value;
-      taxOffice = e.target[11].value;
-      taxNumber = e.target[12].value;
-      mersisNumber = e.target[13].value;
-      dist = district?.value; //e.target[15].value;
-      neighbourhood = neigh?.value; //e.target[16].value;
-      billAddress = e.target[17].value;
-    } else {
-      faturaCity = null;
-      title = null;
-      VKN = null;
-      taxOffice = null;
-      taxNumber = null;
-      mersisNumber = null;
-      dist = null;
-      neighbourhood = null;
-      billAddress = null;
+      title = e.target[10].value;
+      VKN = e.target[11].value;
+      taxOffice = e.target[12].value;
+      taxNumber = e.target[13].value;
+      mersisNumber = e.target[14].value;
+      //const city = city?.value; //e.target[15].value
+      dist = district?.value; //e.target[16].value;
+      neighbourhood = neigh?.value; //e.target[17].value;
+      billAddress = e.target[18].value;
     }
 
     if (password !== password2) {
       toast.error("Şifreler eşit değil");
       return;
     }
-    dispatch(
-      addUser({
-        firstName,
-        lastName,
-        phoneNumber,
-        email,
-        city: city?.value,
-        address,
-        password,
-        userInvoiceAddressDTO: {
-          taxOffice,
-          taxNumber,
-          title,
-          address: billAddress,
-          city: faturaCity,
-          district: dist,
-          neighbourhood,
-          tradeRegistryNumber: VKN,
-          mersisNumber,
-        },
-      })
-    );
+
+    if (openFatura) {
+      dispatch(
+        addUser({
+          firstName,
+          lastName,
+          phoneNumber,
+          email,
+          city: city?.value,
+          address,
+          password,
+          dealerId,
+          userInvoiceAddressDTO: {
+            taxOffice,
+            taxNumber,
+            title,
+            address: billAddress,
+            city: faturaCity,
+            district: dist,
+            neighbourhood,
+            tradeRegistryNumber: VKN,
+            mersisNumber,
+          },
+        })
+      );
+    } else {
+      dispatch(
+        addUser({
+          firstName,
+          lastName,
+          phoneNumber,
+          email,
+          city: city?.value,
+          address,
+          password,
+          dealerId,
+        })
+      );
+    }
+  };
+
+  const clearForm = () => {
+    setPopupContent(null);
+    setShowPopup(false);
+    setDealers([]);
   };
 
   useEffect(() => {
@@ -128,6 +150,9 @@ const AddUser = () => {
       dispatch(resetaddUserState());
     } else if (success) {
       toast.dismiss();
+      onSuccess();
+      setShowPopup(false);
+      setPopupContent(null);
       toast.success("User added successfuly");
       dispatch(resetaddUserState());
     }
@@ -168,20 +193,34 @@ const AddUser = () => {
     }
   }, [neighsSuccess]);
 
+  useEffect(() => {
+    if (!dealersData && !dealers.length) {
+      dispatch(getDealers({ dealer: true }));
+    } else {
+      setDealers(formatSelectorData(dealersData));
+    }
+
+    return () => {
+      if (dealersData) {
+        dispatch(resetDealers());
+      }
+    };
+  }, [dealersData, dispatch]);
+
   return (
     <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base max-h-[90dvh] overflow-y-scroll">
       <div className="flex flex-col bg-[--white-1] relative">
         <div className="absolute -top-6 right-3">
           <div
             className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer"
-            onClick={() => setShowPopup(false)}
+            onClick={clearForm}
           >
             <CancelI />
           </div>
         </div>
         <h1 className="self-center text-2xl font-bold">Kullanıcı Ekle</h1>
         <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
-          <form onSubmit={handleAddUser}>
+          <form onSubmit={handleAddUser} ref={formRef}>
             <div className="flex gap-4">
               <CustomInput
                 required={true}
@@ -202,6 +241,9 @@ const AddUser = () => {
                 label="Telefone"
                 placeholder="Telefone"
                 className="py-[.45rem]"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(formatPhoneNumber(e))}
+                maxLength={11}
               />
               <CustomInput
                 required={true}
@@ -210,6 +252,7 @@ const AddUser = () => {
                 className="py-[.45rem]"
               />
             </div>
+
             <div className="flex gap-4">
               <CustomSelect
                 required={true}
@@ -217,8 +260,8 @@ const AddUser = () => {
                 placeholder="Ad"
                 style={{ padding: "1px 0px" }}
                 className="text-sm"
-                value={city ? city : { value: null, label: "Şehir" }}
-                options={[{ value: null, label: "Şehir" }, ...cities]}
+                value={city ? city : { value: null, label: "Şehir seç" }}
+                options={[{ value: null, label: "Şehir seç" }, ...cities]}
                 onChange={setCity}
               />
               <CustomInput
@@ -228,6 +271,7 @@ const AddUser = () => {
                 className="py-[.45rem]"
               />
             </div>
+
             <div className="flex gap-4">
               <CustomInput
                 required={true}
@@ -244,6 +288,20 @@ const AddUser = () => {
                 letIcon={true}
               />
             </div>
+
+            <div className="flex gap-4 w-1/2">
+              <CustomSelect
+                required={true}
+                label="Bayi"
+                placeholder="Ad"
+                style={{ padding: "1px 0px" }}
+                className="text-sm"
+                value={dealer ? dealer : { value: null, label: "Bayi seç" }}
+                options={[{ value: null, label: "Bayi seç" }, ...dealers]}
+                onChange={setDealer}
+              />
+            </div>
+
             <div className="w-full flex justify-between mt-8">
               <CustomCheckbox
                 label="Kayıt Bilgilendirmesi gönder"

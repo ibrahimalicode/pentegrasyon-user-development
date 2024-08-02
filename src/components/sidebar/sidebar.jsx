@@ -14,7 +14,7 @@ import {
   ParamsI,
   UserPlusI,
 } from "../../assets/icon/index";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ArrowR from "../../assets/icon/arrowR";
 import { usePopup } from "../../context/PopupContext";
@@ -84,21 +84,40 @@ const sidebarItems = [
 
 function Sidebar() {
   const param = useParams();
+  const sidebarRef = useRef();
+  const { showPopup, contentRef, setContentRef } = usePopup();
+
   const route = Object.values(param)[0];
   const path = route.length > 1 ? route : "dashboard";
-  const [hideSide, setHideSide] = useState(false);
-  const { showPopup } = usePopup();
+
+  const [openSidebar, setOpenSidebar] = useState(false);
+
+  useEffect(() => {
+    if (sidebarRef) {
+      const refs = contentRef.filter((ref) => ref.id !== "sidebar");
+      setContentRef([
+        ...refs,
+        {
+          id: "sidebar",
+          outRef: null,
+          ref: sidebarRef,
+          callback: () => setOpenSidebar(false),
+        },
+      ]);
+    }
+  }, [sidebarRef, openSidebar]);
 
   return (
     <nav
       className={`fixed -left-[280px] lg:left-0 top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
         !showPopup && "z-[99]"
-      } ${hideSide && "left-[0]"}`}
+      } ${openSidebar && "left-[0]"}`}
+      ref={sidebarRef}
     >
       <div className="flex flex-col w-full relative">
         <div
           className="absolute -right-8 top-2/3 bg-[--white-1] py-8 pr-2 border-2 border-solid border-[--light-3] border-l-0 cursor-pointer lg:hidden"
-          onClick={() => setHideSide(!hideSide)}
+          onClick={() => setOpenSidebar(!openSidebar)}
         >
           <ArrowR className="text-[--black-1] font-bold" />
         </div>
@@ -120,7 +139,7 @@ function Sidebar() {
               <Link to={item.to} key={index}>
                 <div
                   onClick={() => {
-                    setHideSide(!hideSide);
+                    setOpenSidebar(!openSidebar);
                   }}
                   className={`flex flex-col justify-center px-4 py-[10px] rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item ${
                     path.includes(item.path) &&

@@ -43,3 +43,30 @@ export const formatPhoneNumber = (e) => {
 
   return useVal;
 };
+
+export const formatSelectorData = (data) => {
+  if (!Array.isArray(data) || data.length === 0) {
+    return [];
+  }
+
+  let sortedData;
+
+  const dataCopy = [...data];
+
+  if (data[0]?.name) {
+    sortedData = dataCopy.sort((a, b) => a.name.localeCompare(b.name, "tr"));
+  } else if (data[0]?.fullName) {
+    sortedData = dataCopy.sort((a, b) =>
+      a.fullName.localeCompare(b.fullName, "tr")
+    );
+  }
+
+  const outData = sortedData.map((ent) => {
+    return {
+      value: ent.id,
+      label: ent?.name ? ent.name : ent?.fullName + " " + ent?.phoneNumber,
+      id: ent.id,
+    };
+  });
+  return outData;
+};

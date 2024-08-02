@@ -7,16 +7,24 @@ export const usePopup = () => useContext(PopupContext);
 export const PopupProvider = ({ children }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
-  const [contenRef, setContentRef] = useState([]);
+  const [contentRef, setContentRef] = useState([]);
 
   const handleClickOutside = (event) => {
-    if (contenRef.length > 0) {
-      contenRef.forEach((content) => {
-        if (
-          content.ref.current &&
-          !content.ref.current.contains(event.target)
-        ) {
-          content.callback(null);
+    if (contentRef.length > 0) {
+      contentRef.forEach((content) => {
+        if (content.ref.current) {
+          if (content.outRef?.current) {
+            if (
+              !content.ref.current.contains(event.target) &&
+              !content.outRef.current.contains(event.target)
+            ) {
+              content.callback();
+            }
+          } else {
+            if (!content.ref.current.contains(event.target)) {
+              content.callback();
+            }
+          }
         }
       });
     }
@@ -27,7 +35,7 @@ export const PopupProvider = ({ children }) => {
     return () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
-  }, [contenRef]);
+  }, [contentRef]);
 
   return (
     <PopupContext.Provider
@@ -36,7 +44,7 @@ export const PopupProvider = ({ children }) => {
         setShowPopup,
         popupContent,
         setPopupContent,
-        contenRef,
+        contentRef,
         setContentRef,
       }}
     >

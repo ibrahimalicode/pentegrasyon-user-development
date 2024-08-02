@@ -9,3 +9,37 @@ export function formatDateString(dateString, joint = "/") {
   const formattedDate = `${month}${joint}${day}${joint}${year}`;
   return formattedDate;
 }
+
+export const maxInput = (e) => {
+  const value = e.target.value;
+  const useVal = e.target.value.replace(/[^\d]/g, "");
+  const maxAllowed = e.target?.maxLength;
+
+  if (!maxAllowed) {
+    return value;
+  }
+
+  if (useVal.length > maxAllowed) {
+    return value.slice(0, maxAllowed);
+  }
+  //console.log(value);
+  return value;
+};
+
+export const formatPhoneNumber = (e) => {
+  let value = e.target.value;
+
+  if (value[0] !== "0") {
+    value = "0" + value;
+  }
+
+  // Allow only numbers
+  const useVal = value.replace(/[^\d]/g, "");
+  const maxAllowed = e.target.maxLength;
+
+  if (maxAllowed && useVal.length > maxAllowed) {
+    return useVal.slice(0, maxAllowed);
+  }
+
+  return useVal;
+};

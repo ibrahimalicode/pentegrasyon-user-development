@@ -8,11 +8,13 @@ import SetNewPassword from "./pages/userPassword/setNewPass";
 import ForgotPassword from "./pages/userPassword/forgotPassword";
 import UserVerifyLogin from "./pages/userVerify/loginVerify";
 import { PopupProvider } from "./context/PopupContext";
+import Popup from "./components/common/popup";
 
 function App() {
   return (
     <>
       <PopupProvider>
+        <Popup />
         <Routes>
           <Route path="/login" element={<LoginRegister />} />
           <Route path="/9007/admin" element={<AdminLogin />} />

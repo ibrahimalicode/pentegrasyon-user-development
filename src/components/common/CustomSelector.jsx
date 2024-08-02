@@ -15,7 +15,7 @@ const CustomSelect = ({
 }) => {
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
-      <label className="text-xs font-[600] tracking-wide text-[--black-1] max-md:max-w-full text-left">
+      <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
         {label}
       </label>
       <Select
@@ -33,7 +33,6 @@ const CustomSelect = ({
             cursor: "pointer",
             border: "1px solid var(--border-1)",
             backgroundColor: "var(--white-1)",
-            color: "--gr-1",
             borderRadius: ".375rem",
             padding: "4px 0px",
             ...style,
@@ -46,8 +45,8 @@ const CustomSelect = ({
               state.label === value.label ? "var(--black-2)" : "var(--black-1)",
           }),
           singleValue: (provided, state) => ({
+            color: "var(--black-2)",
             ...provided,
-            color: "var(--gr-1)",
           }),
           menu: (provided, state) => ({
             ...provided,

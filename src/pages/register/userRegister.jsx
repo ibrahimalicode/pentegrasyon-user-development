@@ -18,10 +18,14 @@ import {
 import { PhoneUserMessage } from "../../components/common/messages";
 import { useNavigate } from "react-router-dom";
 import { getCities } from "../../redux/data/getCitiesSlice";
+import { formatPhoneNumber } from "../../utils/utils";
+import { usePopup } from "../../context/PopupContext";
 
 const UserRegister = ({ setPageName }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { setShowPopup, setPopupContent } = usePopup();
+
   const { cities, success: citiesSuccess } = useSelector(
     (state) => state.data.getCities
   );
@@ -37,7 +41,7 @@ const UserRegister = ({ setPageName }) => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("0");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState(null);
   const [password, setPassword] = useState("");
@@ -47,23 +51,29 @@ const UserRegister = ({ setPageName }) => {
   const [verificationCode, setVerificationCode] = useState("");
   const [citiesData, setCitiesData] = useState(null);
 
-  const register = (e) => {
+  const confirmRegister = (e) => {
     e.preventDefault();
 
     if (password !== password2) {
       toast.error("Şifreler eşit değil");
       return;
     }
+    if (phoneNumber.length < 11) {
+      toast("Telefon numaranizi tamamlayin.");
+    }
+    setPopupContent(
+      <Confirm
+        phoneNumber={phoneNumber}
+        setShowPopup={setShowPopup}
+        onClick={register}
+      />
+    );
+    setShowPopup(true);
+  };
+
+  const register = () => {
+    setShowPopup(false);
     if (firstName && lastName && phoneNumber && city?.value && password) {
-      console.log(
-        email,
-        phoneNumber,
-        password,
-        firstName,
-        lastName,
-        city.value,
-        address
-      );
       dispatch(
         registerUser({
           email,
@@ -163,7 +173,7 @@ const UserRegister = ({ setPageName }) => {
         /* Register Page */
         <form
           className="flex flex-col w-full max-w-[38rem] px-12"
-          onSubmit={register}
+          onSubmit={confirmRegister}
         >
           <div className="flex justify-center">
             <h2 className="text-[2.7rem] font-bold text-black tracking-tighter">
@@ -195,11 +205,12 @@ const UserRegister = ({ setPageName }) => {
               <CustomInput
                 label="Telefon"
                 type="tel"
-                placeholder="05"
+                placeholder="0"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => setPhoneNumber(formatPhoneNumber(e))}
                 required={true}
                 className="py-[.5rem]"
+                maxLength={11}
               />
               <CustomInput
                 label="email"
@@ -334,3 +345,33 @@ const UserRegister = ({ setPageName }) => {
 };
 
 export default UserRegister;
+
+const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
+  return (
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md">
+        <div>
+          <p className="font-[350]">
+            <span className="font-bold text-[--primary-2]">{phoneNumber}</span>{" "}
+            telefon numaranıza onay kodu gönderilecektir. Telefon numaranız
+            doğru olduğundan emin misiniz ?
+          </p>
+        </div>
+        <div className="mt-10 w-full flex gap-4 justify-center">
+          <button
+            className="py-2 px-5 rounded-lg bg-[--light-3] text-[--black-1] hover:opacity-90"
+            onClick={() => setShowPopup(false)}
+          >
+            Düzelt
+          </button>
+          <button
+            className="py-2 px-6 rounded-lg bg-[--primary-1] text-[--white-1] hover:opacity-90"
+            onClick={onClick}
+          >
+            Evet
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

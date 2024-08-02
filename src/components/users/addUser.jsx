@@ -53,14 +53,37 @@ const AddUser = () => {
     const password2 = e.target[7].value;
     const checkBox = e.target[8].checked;
 
-    const title = e.target[9].value;
-    const VKN = e.target[10].value;
-    const taxOffice = e.target[11].value;
-    const taxNumber = e.target[12].value;
-    const mersisNumber = e.target[13].value;
-    //const district = district?.value; //e.target[15].value;
-    //const neighbourhood = neigh?.value; //e.target[16].value;
-    const billAddress = e.target[17].value;
+    let faturaCity;
+    let title;
+    let VKN;
+    let taxOffice;
+    let taxNumber;
+    let mersisNumber;
+    let dist;
+    let neighbourhood;
+    let billAddress;
+
+    if (openFatura) {
+      faturaCity = city?.value;
+      title = e.target[9].value;
+      VKN = e.target[10].value;
+      taxOffice = e.target[11].value;
+      taxNumber = e.target[12].value;
+      mersisNumber = e.target[13].value;
+      dist = district?.value; //e.target[15].value;
+      neighbourhood = neigh?.value; //e.target[16].value;
+      billAddress = e.target[17].value;
+    } else {
+      faturaCity = null;
+      title = null;
+      VKN = null;
+      taxOffice = null;
+      taxNumber = null;
+      mersisNumber = null;
+      dist = null;
+      neighbourhood = null;
+      billAddress = null;
+    }
 
     if (password !== password2) {
       toast.error("Şifreler eşit değil");
@@ -72,6 +95,7 @@ const AddUser = () => {
         lastName,
         phoneNumber,
         email,
+        city: city?.value,
         address,
         password,
         userInvoiceAddressDTO: {
@@ -79,9 +103,9 @@ const AddUser = () => {
           taxNumber,
           title,
           address: billAddress,
-          city: city?.value,
-          district: district?.value,
-          neighbourhood: neigh?.value,
+          city: faturaCity,
+          district: dist,
+          neighbourhood,
           tradeRegistryNumber: VKN,
           mersisNumber,
         },

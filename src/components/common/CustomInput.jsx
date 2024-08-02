@@ -14,10 +14,11 @@ const CustomInput = ({
   className,
   className2,
   className3,
+  maxLength,
   autoComplete = "new-password",
 }) => {
-  const eyeIconVis = <EyeI className="w-5" />;
-  const eyeIconInv = <EyeInv className="w-5" />;
+  const eyeIconVis = <EyeI className="w-5" strokeWidth={2} />;
+  const eyeIconInv = <EyeInv className="w-5" strokeWidth={2} />;
 
   const [icon, setIcon] = useState(eyeIconInv);
   const [inputType, setInputType] = useState("password");
@@ -35,10 +36,11 @@ const CustomInput = ({
 
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
-      <label className="text-xs font-[600] tracking-wide text-[--black-1] max-md:max-w-full text-left">
+      <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
         {label}
       </label>
       <input
+        label={label}
         type={letIcon ? inputType : type}
         value={value}
         required={required}
@@ -46,7 +48,8 @@ const CustomInput = ({
         onChange={onChange}
         onKeyDown={onKeyDown}
         autoComplete={autoComplete}
-        className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md sm:rounded-md border border-solid border-[--border-1] text-[--gr-1] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`}
+        maxLength={maxLength}
+        className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md sm:rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`}
       />
       {letIcon && (
         <div

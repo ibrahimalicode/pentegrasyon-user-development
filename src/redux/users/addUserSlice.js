@@ -27,7 +27,7 @@ const addUserSlice = createSlice({
         state.success = false;
         state.error = null;
       })
-      .addCase(addUser.fulfilled, (state, action) => {
+      .addCase(addUser.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
@@ -35,7 +35,7 @@ const addUserSlice = createSlice({
       .addCase(addUser.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });
@@ -48,6 +48,7 @@ export const addUser = createAsyncThunk(
       lastName,
       phoneNumber,
       email,
+      city,
       address,
       password,
       userInvoiceAddressDTO,
@@ -56,15 +57,14 @@ export const addUser = createAsyncThunk(
   ) => {
     try {
       const res = await api.post(`${baseURL}Users/AddUser`, {
-        params: {
-          firstName,
-          lastName,
-          phoneNumber,
-          email,
-          address,
-          password,
-          userInvoiceAddressDTO,
-        },
+        firstName,
+        lastName,
+        phoneNumber,
+        email,
+        city,
+        address,
+        password,
+        userInvoiceAddressDTO,
       });
 
       return res.data;

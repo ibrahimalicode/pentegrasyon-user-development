@@ -14,7 +14,6 @@ const Home = () => {
     <section>
       <Header />
       <Sidebar />
-      <Popup />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />

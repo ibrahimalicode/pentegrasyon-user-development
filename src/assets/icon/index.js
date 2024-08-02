@@ -20,6 +20,7 @@ import ArrowIL from "./arrowL";
 import DeleteI from "./delete";
 import EditI from "./edit";
 import TransferI from "./transfer";
+import CancelI from "./cancel";
 
 export {
   DashboardI,
@@ -42,4 +43,5 @@ export {
   DeleteI,
   EditI,
   TransferI,
+  CancelI,
 };

@@ -63,14 +63,16 @@ const CustomPagination = ({
         <div className="flex sm:gap-1">
           {getPageNumbers().map((page, index) =>
             page === "..." ? (
-              <span key={index} className="py-2 px-4 text-sm">
+              <span key={index} className="p-2 text-sm">
                 ...
               </span>
             ) : (
               <button
                 key={index}
-                className={`py-2 px-4 text-sm border border-solid border-transparent hover:border-[--border-1] rounded-md ${
-                  pageNumber === page ? "bg-[--border-1]" : ""
+                className={`py-2 px-4 text-sm border-2 border-solid hover:border-[--border-1] rounded-md ${
+                  pageNumber === page
+                    ? "border-[--border-1]"
+                    : "border-transparent"
                 }`}
                 onClick={() => {
                   setPageNumber(page);

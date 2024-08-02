@@ -1,10 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   box-sizing: border-box !important;
+  scroll-behavior: smooth;
+  scrollbar-width: 0.25rem;
 }
 
 section {
@@ -21,14 +23,15 @@ section {
 }
 
 body {
-  font-family: 'Lexend Deca', sans-serif;
+  font-family: "Lexend Deca", sans-serif;
+  overflow-x: hidden;
 }
 
 .light {
   --primary-1: #4f46e5;
   --primary-2: #7839cd;
-  
-  --gr-1: #64748B;
+
+  --gr-1: #64748b;
   --gr-2: #808080;
 
   --light-1: #eef2ff;
@@ -44,15 +47,15 @@ body {
   --black-1: #000000;
   --black-2: #232323;
   --green-1: #42a86b;
-  --green-2: #409261;  
+  --green-2: #409261;
   --red-1: #ff3753;
-  
+
   --border-1: #dfeaf2;
 
   /* TABLE */
   --table: #d9d9d9;
   --table-odd: #f9fafc;
-  
+
   /* STATUS */
   --status-green: #e9ffef;
   --status-red: #ffe9e9;
@@ -61,32 +64,31 @@ body {
   --status-primary-2: #f4eefb;
 }
 
-
 .form-container {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    transition: all 0.6s ease-in-out;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
 }
 .sign-in-container {
-    left: 0;
-    width: 50%;
-    z-index: 2;
+  left: 0;
+  width: 50%;
+  z-index: 2;
 }
 .right-panel-active .sign-in-container {
-    transform: translateX(100%);
+  transform: translateX(100%);
 }
 .sign-up-container {
-    left: 0;
-    width: 50%;
-    opacity: 0;
-    z-index: 1;
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
 }
 .right-panel-active .sign-up-container {
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
-    animation: show 0.6s;
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
 }
 .right-panel-active .sign-in-container {
   left: 0;
@@ -96,13 +98,15 @@ body {
 }
 
 @keyframes show {
-  0%, 49.99% {
-      opacity: 0;
-      z-index: 1;
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
   }
-  50%, 100% {
-      opacity: 1;
-      z-index: 5;
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
   }
 }
 
@@ -121,11 +125,10 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .sign-up-container { 
+  .sign-up-container {
     transform: none !important;
   }
 }
-
 
 /* FadeIn */
 @keyframes fadeInOutAnimation {
@@ -154,3 +157,17 @@ body {
   right: -22rem;
 }
 
+/* CUSTOM SCROLL BAR */
+::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bababa;
+  border-radius: 1rem;
+}

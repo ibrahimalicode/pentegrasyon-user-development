@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { privateApi } from "../api";
 
+const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 const initialState = {
   loading: false,
   success: false,
   error: null,
-  sessionId: null,
 };
 
 const addUserSlice = createSlice({
@@ -26,53 +26,54 @@ const addUserSlice = createSlice({
         state.loading = true;
         state.success = false;
         state.error = null;
-        state.sessionId = null;
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.sessionId = action.payload;
       })
       .addCase(addUser.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.error;
-        state.sessionId = null;
       });
   },
 });
 
 export const addUser = createAsyncThunk(
-  "Auth/UserLogin",
-  async ({ name, sirName, phone, city, address, password }) => {
+  "Auth/AddUser",
+  async (
+    {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      address,
+      password,
+      userInvoiceAddressDTO,
+    },
+    { rejectWithValue }
+  ) => {
     try {
-      const res = await axios.post(
-        `${baseURL}api/v1/Auth/addUser`,
-        {
+      const res = await api.post(`${baseURL}Users/AddUser`, {
+        params: {
+          firstName,
+          lastName,
+          phoneNumber,
           email,
-          phoneNumber: phone,
-          password,
-          firstName: name,
-          lastName: sirName,
-          city: city.value,
           address,
+          password,
+          userInvoiceAddressDTO,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const KEY = process.env.REACT_APP_LOACAL_KEY;
-      localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
-      return res.data.sessionId;
+      });
+
+      return res.data;
     } catch (err) {
       console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

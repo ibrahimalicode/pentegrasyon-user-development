@@ -1,0 +1,85 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../api";
+import toast from "react-hot-toast";
+
+const baseURL = import.meta.env.VITE_BASE_URL;
+
+const initialState = {
+  loading: false,
+  success: false,
+  error: false,
+  neighs: null,
+};
+
+const getNeighsSlice = createSlice({
+  name: "getNeighs",
+  initialState: initialState,
+  reducers: {
+    resetGetNeighsState: (state) => {
+      state.loading = false;
+      state.success = false;
+      state.error = null;
+    },
+    resetGetNeighs: (state) => {
+      state.neighs = null;
+    },
+  },
+  extraReducers: (build) => {
+    build
+      .addCase(getNeighs.pending, (state) => {
+        state.loading = true;
+        state.success = false;
+        state.error = false;
+        state.neighs = null;
+      })
+      .addCase(getNeighs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.neighs = action.payload;
+      })
+      .addCase(getNeighs.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = action.error;
+        state.neighs = null;
+      });
+  },
+});
+
+export const getNeighs = createAsyncThunk(
+  "Data/getNeighs",
+  async ({ cityId, districtId }) => {
+    try {
+      const res = await api.get(
+        `${baseURL}CityDistrictNeighbourhood/GetNeighbourhoodsByCityIdAndDistrictId`,
+        {
+          params: {
+            cityId,
+            districtId,
+          },
+        }
+      );
+
+      if (res?.data?.data) {
+        const sortedData = res.data.data.sort((a, b) =>
+          a.name.localeCompare(b.name, "tr")
+        );
+
+        const data = sortedData.map((element) => {
+          return { value: element.name, label: element.name, id: element.id };
+        });
+
+        return data;
+      }
+      return res.data.data;
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+      throw err.message;
+    }
+  }
+);
+
+export const { resetGetNeighsState, resetGetNeighs } = getNeighsSlice.actions;
+export default getNeighsSlice.reducer;

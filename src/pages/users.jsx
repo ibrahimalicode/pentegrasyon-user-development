@@ -14,6 +14,7 @@ import { DeleteI, UsersI } from "../assets/icon";
 import UsersActions from "../components/users/usersActions";
 import UsersTable from "../components/users/userTable";
 import { usePopup } from "../context/PopupContext";
+import AddUser from "../components/users/addUser";
 
 const Users = () => {
   const dispatch = useDispatch();
@@ -156,7 +157,7 @@ const Users = () => {
   }, [deleteUserSuccess]);
 
   //HIDE POPUP
-  const { contenRef } = usePopup();
+  const { contenRef, setShowPopup, setPopupContent } = usePopup();
   const usersFilterRef = useRef();
   useEffect(() => {
     if (usersFilterRef) {
@@ -165,9 +166,9 @@ const Users = () => {
   }, [usersFilterRef]);
 
   return (
-    <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
+      <div className="w-full text-[--black-2] pt-4 text-2xl font-semibold">
         <h2>Customers</h2>
       </div>
 
@@ -179,7 +180,7 @@ const Users = () => {
             onChange={(e) => handleSearch(e)}
             value={searchVal}
             placeholder="Search..."
-            className2="mt-[0px] w-full"
+            className2="sm:mt-[0px] mt-[0px]  w-full"
             className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
             icon={<CloseI className="w-4 text-[--red-1]" />}
             className3={`top-[20px] hover:bg-[--light-4] rounded-full px-2 py-1 ${
@@ -189,7 +190,7 @@ const Users = () => {
           />
         </div>
 
-        <div className="w-full flex justify-end">
+        <div className="max-sm:w-full flex justify-end">
           <div className="flex gap-2 max-sm:order-1 " ref={usersFilterRef}>
             <div className="w-full relative">
               <button
@@ -200,7 +201,7 @@ const Users = () => {
               </button>
 
               <div
-                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
+                className={`absolute right-[-100px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-50 ${
                   openFilter ? "visible" : "hidden"
                 }`}
               >
@@ -360,7 +361,13 @@ const Users = () => {
             </div>
 
             <div className="">
-              <button className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]">
+              <button
+                className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+                onClick={() => {
+                  setShowPopup(true);
+                  setPopupContent(<AddUser />);
+                }}
+              >
                 Add user
               </button>
             </div>
@@ -377,7 +384,7 @@ const Users = () => {
 
       {/* PAGINATION */}
       {usersData && totalItems && (
-        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
+        <div className="w-full self-end flex justify-center pb-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}

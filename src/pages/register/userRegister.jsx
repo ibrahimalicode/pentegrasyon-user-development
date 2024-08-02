@@ -5,10 +5,7 @@ import CustomInput from "../../components/common/CustomInput";
 import toast from "react-hot-toast";
 import GobackI from "../../assets/icon/goback";
 import { useDispatch, useSelector } from "react-redux";
-import EyeI from "../../assets/icon/eye";
-import EyeInv from "../../assets/icon/eyeInv";
 import CustomSelect from "../../components/common/CustomSelector";
-import cities from "../../assets/json/cities";
 import LoadingI from "../../assets/anim/loading";
 import {
   registerUser,
@@ -20,13 +17,14 @@ import {
 } from "../../redux/auth/verifyCodeSlice";
 import { PhoneUserMessage } from "../../components/common/messages";
 import { useNavigate } from "react-router-dom";
-
-const eyeIconVis = <EyeI className="w-5" />;
-const eyeIconInv = <EyeInv className="w-5" />;
+import { getCities } from "../../redux/data/getCitiesSlice";
 
 const UserRegister = ({ setPageName }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { cities, success: citiesSuccess } = useSelector(
+    (state) => state.data.getCities
+  );
 
   const { loading, success, error } = useSelector(
     (state) => state.auth.register
@@ -45,13 +43,9 @@ const UserRegister = ({ setPageName }) => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [address, setAddress] = useState("");
-  const [inputType, setInputType] = useState("password");
-  const [inputType2, setInputType2] = useState("password");
   const [toConfirm, setToConfirm] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
-
-  const [icon, setIcon] = useState(eyeIconInv);
-  const [icon2, setIcon2] = useState(eyeIconInv);
+  const [citiesData, setCitiesData] = useState(null);
 
   const register = (e) => {
     e.preventDefault();
@@ -107,10 +101,6 @@ const UserRegister = ({ setPageName }) => {
     setPassword2("");
     setCity(null);
     setAddress("");
-    setInputType("password");
-    setIcon(eyeIconInv);
-    setInputType2("password");
-    setIcon2(eyeIconInv);
 
     setToConfirm(false);
     setVerificationCode("");
@@ -158,27 +148,14 @@ const UserRegister = ({ setPageName }) => {
     }
   }, [verifyCodeLoading, verifyCodeSuccess, verifyCodeError]);
 
-  // ICON RELATED
-  const iconClick = (e) => {
-    e.preventDefault();
-    if (inputType === "password") {
-      setInputType("text");
-      setIcon(eyeIconVis);
-    } else {
-      setInputType("password");
-      setIcon(eyeIconInv);
+  useEffect(() => {
+    if (!cities) {
+      dispatch(getCities());
     }
-  };
-  const iconClick2 = (e) => {
-    e.preventDefault();
-    if (inputType2 === "password") {
-      setInputType2("text");
-      setIcon2(eyeIconVis);
-    } else {
-      setInputType2("password");
-      setIcon2(eyeIconInv);
+    if (citiesSuccess) {
+      setCitiesData(cities);
     }
-  };
+  }, [citiesSuccess, cities]);
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -194,7 +171,7 @@ const UserRegister = ({ setPageName }) => {
             </h2>
           </div>
           <div className="flex flex-col max-w-full">
-            <div className="flex w-full sm:gap-4 max-sm:flex-col">
+            <div className="flex w-full gap-4">
               <CustomInput
                 label="Ad"
                 type="text"
@@ -202,7 +179,7 @@ const UserRegister = ({ setPageName }) => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
               />
               <CustomInput
                 label="Soyad"
@@ -211,7 +188,7 @@ const UserRegister = ({ setPageName }) => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
               />
             </div>
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
@@ -222,7 +199,7 @@ const UserRegister = ({ setPageName }) => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
               />
               <CustomInput
                 label="email"
@@ -231,14 +208,14 @@ const UserRegister = ({ setPageName }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
               />
             </div>
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
               <CustomSelect
                 label="Şehir"
-                options={cities}
-                value={city ? city : { label: "Şehir" }}
+                options={citiesData}
+                value={city ? city : { value: null, label: "Şehir" }}
                 onChange={setCity}
                 className="w-full"
                 className2="container-class"
@@ -251,32 +228,28 @@ const UserRegister = ({ setPageName }) => {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
               />
             </div>
 
             <div>
               <CustomInput
                 label="Şifre"
-                type={inputType}
                 placeholder="Şifre"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                icon={icon}
-                onClick={iconClick}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
+                letIcon={true}
               />
               <CustomInput
                 label="Şifreyi onayla"
-                type={inputType2}
                 placeholder="Şifre"
                 value={password2}
                 onChange={(e) => setPassword2(e.target.value)}
-                icon={icon2}
-                onClick={iconClick2}
                 required={true}
-                className="py-2"
+                className="py-[.5rem]"
+                letIcon={true}
               />
             </div>
             <div className="flex flex-col mt-4 sm:mt-10 w-full">
@@ -351,7 +324,7 @@ const UserRegister = ({ setPageName }) => {
               >
                 {verifyCodeLoading ? <LoadingI className="h-7" /> : "Devam"}
               </button>
-              <div className="shrink-0 mt-5 h-px bg-slate-200 w-full mt-24" />
+              <div className="shrink-0 h-px bg-slate-200 w-full mt-24" />
             </div>
           </div>
         </form>

@@ -55,7 +55,7 @@ export const deleteUser = createAsyncThunk(
       if (err?.response?.data) {
         throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

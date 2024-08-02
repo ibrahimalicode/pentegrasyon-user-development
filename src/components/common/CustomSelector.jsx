@@ -10,6 +10,7 @@ const CustomSelect = ({
   className,
   className2,
   isDisabled,
+  required,
   style,
 }) => {
   return (
@@ -21,6 +22,7 @@ const CustomSelect = ({
         value={value}
         onChange={onChange}
         options={options}
+        required={required}
         className={`mt-1 sm:mt-2.5 text-base font-[350] ${className}`}
         isDisabled={isDisabled}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
@@ -34,10 +36,6 @@ const CustomSelect = ({
             color: "--gr-1",
             borderRadius: ".375rem",
             padding: "4px 0px",
-            "@media (min-width: 640px)": {
-              padding: "6px 0px",
-              borderRadius: ".5rem",
-            },
             ...style,
           }),
           option: (provided, state) => ({
@@ -68,6 +66,22 @@ const CustomSelect = ({
           }),
         }}
       />
+      {required && !value?.value && (
+        <input
+          type="text"
+          required={required}
+          value=""
+          onChange={() => {}}
+          style={{
+            position: "absolute",
+            top: 50,
+            left: 0,
+            opacity: 0,
+            width: "100%",
+            pointerEvents: "none",
+          }}
+        />
+      )}
     </div>
   );
 };

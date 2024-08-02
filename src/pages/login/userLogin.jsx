@@ -6,14 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 // ICONS
 import LoadingI from "../../assets/anim/loading";
-import EyeI from "../../assets/icon/eye";
-import EyeInv from "../../assets/icon/eyeInv";
 import { login, resetLoginState } from "../../redux/auth/loginSlice";
-
-// DICLARE VARS
-const eyeIconVis = <EyeI className="w-5" />;
-const eyeIconInv = <EyeInv className="w-5" />;
-// DICLARE VARS
 
 function UserLogin({ setPageName }) {
   const dispatch = useDispatch();
@@ -23,24 +16,11 @@ function UserLogin({ setPageName }) {
 
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [inputType, setInputType] = useState("password");
-  const [icon, setIcon] = useState(eyeIconInv);
 
   const handleLogin = (e) => {
     e.preventDefault();
     if (!emailOrPhone || !password) return;
     dispatch(login({ emailOrPhone, password, role: "user" }));
-  };
-
-  const iconClick = (e) => {
-    e.preventDefault();
-    if (inputType === "password") {
-      setInputType("text");
-      setIcon(eyeIconVis);
-    } else {
-      setInputType("password");
-      setIcon(eyeIconInv);
-    }
   };
 
   useEffect(() => {
@@ -90,15 +70,13 @@ function UserLogin({ setPageName }) {
           />
           <CustomInput
             label="Şifre"
-            type={inputType}
             placeholder="Şifre"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            icon={icon}
-            onClick={iconClick}
             required={true}
             className="py-4"
             autoComplete="on"
+            letIcon={true}
           />
           <div className="flex flex-col mt-10 w-full">
             <div className="flex gap-4 text-sm leading-5 max-md:flex-wrap">

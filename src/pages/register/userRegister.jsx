@@ -18,8 +18,9 @@ import {
 import { PhoneUserMessage } from "../../components/common/messages";
 import { useNavigate } from "react-router-dom";
 import { getCities } from "../../redux/data/getCitiesSlice";
-import { formatPhoneNumber } from "../../utils/utils";
+import { formatPhoneNumber, spacePhoneNumber } from "../../utils/utils";
 import { usePopup } from "../../context/PopupContext";
+import CustomCheckbox from "../../components/common/customCheckbox";
 
 const UserRegister = ({ setPageName }) => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const UserRegister = ({ setPageName }) => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [address, setAddress] = useState("");
+  const [checked, setChecked] = useState(false);
   const [toConfirm, setToConfirm] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [citiesData, setCitiesData] = useState(null);
@@ -59,7 +61,13 @@ const UserRegister = ({ setPageName }) => {
       return;
     }
     if (phoneNumber.length < 11) {
-      toast("Telefon numaranizi tamamlayin.");
+      toast("Telefon numaranızı tamamlayın.");
+      return;
+    }
+
+    if (!checked) {
+      toast.error("Lütfen kullanım şartılarını kabul edin.");
+      return;
     }
     setPopupContent(
       <Confirm
@@ -168,7 +176,7 @@ const UserRegister = ({ setPageName }) => {
   }, [citiesSuccess, cities]);
 
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="flex items-center justify-center w-full max-sm:py-24">
       {!toConfirm ? (
         /* Register Page */
         <form
@@ -201,20 +209,21 @@ const UserRegister = ({ setPageName }) => {
                 className="py-[.5rem]"
               />
             </div>
+
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
               <CustomInput
-                label="Telefon"
+                label="Cep Telefonu"
                 type="tel"
                 placeholder="0"
-                value={phoneNumber}
+                value={spacePhoneNumber(phoneNumber)}
                 onChange={(e) => setPhoneNumber(formatPhoneNumber(e))}
                 required={true}
                 className="py-[.5rem]"
                 maxLength={11}
               />
               <CustomInput
-                label="email"
-                type="email"
+                label="E-Posta"
+                type="E-Posta"
                 placeholder="E-Posta"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -222,6 +231,7 @@ const UserRegister = ({ setPageName }) => {
                 className="py-[.5rem]"
               />
             </div>
+
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
               <CustomSelect
                 label="Şehir"
@@ -263,6 +273,16 @@ const UserRegister = ({ setPageName }) => {
                 letIcon={true}
               />
             </div>
+
+            <div className="flex w-full mt-4">
+              <CustomCheckbox
+                label="<a href='/privacyPolicy' target='_blank' rel='noopener noreferrer' class='text-[--link-1]' >Kullanım Şartıları</a>nı okudum ve onaylıyorum."
+                className="text-sm"
+                checked={checked}
+                onChange={() => setChecked(!checked)}
+              />
+            </div>
+
             <div className="flex flex-col mt-4 sm:mt-10 w-full">
               <button
                 type="submit"
@@ -278,6 +298,7 @@ const UserRegister = ({ setPageName }) => {
               <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
             </div>
           </div>
+
           <div className="flex flex-col mt-4 sm:mt-6 w-full">
             <div className="text-sm leading-5 text-[--link-1] w-full text-center">
               <p>Hesabınız var mı ?</p>
@@ -326,7 +347,7 @@ const UserRegister = ({ setPageName }) => {
               className="py-3"
             />
             <div className="mt-10 text-[--gr-1] font-light">
-              <PhoneUserMessage number={phoneNumber} />
+              <PhoneUserMessage number={spacePhoneNumber(phoneNumber)} />
             </div>
             <div className="flex flex-col mt-10 w-full">
               <button
@@ -350,11 +371,16 @@ const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
   return (
     <div className="w-full flex justify-center">
       <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md">
-        <div>
+        <div className="text-center">
+          <div className="w-full flex justify-center mb-8">
+            <p className="text-[--primary-2] text-4xl">
+              {spacePhoneNumber(phoneNumber)}
+            </p>
+          </div>
           <p className="font-[350]">
-            <span className="font-bold text-[--primary-2]">{phoneNumber}</span>{" "}
-            telefon numaranıza onay kodu gönderilecektir. Telefon numaranız
-            doğru olduğundan emin misiniz ?
+            Telefon numaranıza onay kodu gönderilecektir.
+            <br />
+            Numaranızın doğru olduğundan emin misiniz ?
           </p>
         </div>
         <div className="mt-10 w-full flex gap-4 justify-center">

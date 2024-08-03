@@ -1,7 +1,8 @@
 import { formatDateString } from "../../utils/utils";
 import UsersActions from "./usersActions";
+import ChangeUsersStatus from "./usersStatus";
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({ users, itemsPerPage }) => {
   return (
     <>
       <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
@@ -41,16 +42,8 @@ const UsersTable = ({ users }) => {
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                   {data.city}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                  <span
-                    className={`text-xs font-normal ${
-                      data.isActive
-                        ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
-                        : "text-[--red-1] bg-[--status-red] border-[--red-1]"
-                    } px-3 py-1 border border-solid rounded-full`}
-                  >
-                    ● {data.isActive ? "Aktif" : "Pasif"}
-                  </span>
+                <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal relative">
+                  <ChangeUsersStatus index={index} isActive={data.isActive} />
                 </td>
                 <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
                   <span
@@ -67,7 +60,11 @@ const UsersTable = ({ users }) => {
                   {formatDateString(data.createdDateTime)}
                 </td>
                 <td className="text-center text-[--black-2] font-light first:font-normal relative">
-                  <UsersActions index={index} user={data} />
+                  <UsersActions
+                    index={index}
+                    user={data}
+                    itemsPerPage={itemsPerPage}
+                  />
                 </td>
               </tr>
             ))}

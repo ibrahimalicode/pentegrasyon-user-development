@@ -389,7 +389,7 @@ const Users = () => {
 
       {/* TABLE */}
       {usersData ? (
-        <UsersTable users={usersData} />
+        <UsersTable users={usersData} itemsPerPage={itemsPerPage} />
       ) : loading ? (
         <TableSkeleton />
       ) : null}

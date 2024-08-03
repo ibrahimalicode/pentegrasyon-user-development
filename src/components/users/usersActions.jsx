@@ -8,7 +8,7 @@ import UserLicenses from "./userLicenses";
 import UserRestaurants from "./userRestaurants";
 import { usePopup } from "../../context/PopupContext";
 
-const UsersActions = ({ index, user }) => {
+const UsersActions = ({ index, user, itemsPerPage }) => {
   const outRef = useRef();
   const usersMenuRef = useRef();
   const { contentRef, setContentRef } = usePopup();
@@ -35,11 +35,15 @@ const UsersActions = ({ index, user }) => {
   return (
     <>
       <div className="cursor-pointer" onClick={handleClick} ref={usersMenuRef}>
-        <MenuI className="w-full" />
+        <MenuI
+          className={`w-full ${openMenu === index && "text-[--primary-2]"}`}
+        />
       </div>
       {openMenu === index && (
         <div
-          className={`absolute top-4 right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden`}
+          className={`absolute right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
+            index < itemsPerPage / 2 ? "top-5" : "bottom-5"
+          }`}
           ref={outRef}
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">

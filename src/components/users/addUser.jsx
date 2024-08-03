@@ -11,7 +11,11 @@ import { getDistricts } from "../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../redux/data/getNeighsSlice";
 import toast from "react-hot-toast";
 import { addUser, resetaddUserState } from "../../redux/users/addUserSlice";
-import { formatPhoneNumber, formatSelectorData } from "../../utils/utils";
+import {
+  formatPhoneNumber,
+  formatSelectorData,
+  spacePhoneNumber,
+} from "../../utils/utils";
 import { getDealers, resetDealers } from "../../redux/users/getUsersSlice";
 
 const AddUser = ({ onSuccess }) => {
@@ -241,7 +245,7 @@ const AddUser = ({ onSuccess }) => {
                 label="Telefone"
                 placeholder="Telefone"
                 className="py-[.45rem]"
-                value={phoneNumber}
+                value={spacePhoneNumber(phoneNumber)}
                 onChange={(e) => setPhoneNumber(formatPhoneNumber(e))}
                 maxLength={11}
               />
@@ -350,7 +354,7 @@ const AddUser = ({ onSuccess }) => {
                   <CustomInput
                     required={true}
                     label="VTic.Sic.No"
-                    placeholder="VTic.Sic.No"
+                    placeholder="Tic.Sic.No"
                     className="py-[.45rem] text-sm"
                   />
                   <CustomInput

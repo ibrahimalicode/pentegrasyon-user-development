@@ -48,7 +48,7 @@ const getUsersSlice = createSlice({
       .addCase(getUsers.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.users = null;
       })
       .addCase(getDealers.fulfilled, (state, action) => {
@@ -59,15 +59,10 @@ const getUsersSlice = createSlice({
 
 export const getUsers = createAsyncThunk(
   "Users/GetUsers",
-  async ({
-    pageNumber = 0,
-    pageSize = 0,
-    searchKey,
-    active,
-    verify,
-    dealer,
-    city,
-  }) => {
+  async (
+    { pageNumber = 0, pageSize = 0, searchKey, active, verify, dealer, city },
+    { rejectWithValue }
+  ) => {
     try {
       const res = await api.get(`${baseURL}Users/GetUsers`, {
         params: {
@@ -85,15 +80,17 @@ export const getUsers = createAsyncThunk(
       return res?.data?.data;
     } catch (err) {
       console.log(err);
-      toast.error(err.message);
-      throw err.message;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
+      }
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );
 
 export const getDealers = createAsyncThunk(
   "Users/GetDealers",
-  async ({ dealer }) => {
+  async ({ dealer }, { rejectWithValue }) => {
     try {
       const res = await api.get(`${baseURL}Users/GetUsers`, {
         params: {
@@ -105,8 +102,10 @@ export const getDealers = createAsyncThunk(
       return res?.data?.data;
     } catch (err) {
       console.log(err);
-      toast.error(err.message);
-      throw err.message;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
+      }
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

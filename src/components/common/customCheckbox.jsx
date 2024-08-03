@@ -18,7 +18,12 @@ const CustomCheckbox = ({ label, checked, onChange, className }) => {
       >
         {checked && <CheckI className="h-4 text-[--white-1]" strokeWidth="4" />}
       </span>
-      {label && <span className="ml-2 text-[--gr-1]">{label}</span>}
+      {label && (
+        <span
+          className="ml-2 text-[--gr-1]"
+          dangerouslySetInnerHTML={{ __html: label }}
+        ></span>
+      )}
     </label>
   );
 };

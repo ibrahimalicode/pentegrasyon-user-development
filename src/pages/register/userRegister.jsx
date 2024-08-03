@@ -276,7 +276,7 @@ const UserRegister = ({ setPageName }) => {
 
             <div className="flex w-full mt-4">
               <CustomCheckbox
-                label="<a href='/privacyPolicy' target='_blank' rel='noopener noreferrer' class='text-[--link-1]' >Kullanım Şartıları</a>nı okudum ve onaylıyorum."
+                label="<a href='/privacyPolicy' target='_blank' rel='noopener noreferrer' class='text-[--link-1]' >Kullanım Şartları</a>nı okudum ve onaylıyorum."
                 className="text-sm"
                 checked={checked}
                 onChange={() => setChecked(!checked)}
@@ -327,7 +327,7 @@ const UserRegister = ({ setPageName }) => {
                 className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white] sm:hover:text-[--white-1] sm:hover:bg-[--primary-1]"
               >
                 <GobackI />
-                <span>Gri dön</span>
+                <span>Geri dön</span>
               </button>
             </div>
             <div className="w-max">
@@ -338,9 +338,9 @@ const UserRegister = ({ setPageName }) => {
           </div>
           <div className="flex flex-col max-w-full">
             <CustomInput
-              label="Doğrulama Codu"
+              label="Doğrulama Kodu"
               type="text"
-              placeholder="Doğrulama Codu"
+              placeholder="Doğrulama Kodu"
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
               required={true}
@@ -354,7 +354,7 @@ const UserRegister = ({ setPageName }) => {
                 type="submit"
                 className="flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
               >
-                {verifyCodeLoading ? <LoadingI className="h-7" /> : "Devam"}
+                {verifyCodeLoading ? <LoadingI className="h-7" /> : "Doğrula"}
               </button>
               <div className="shrink-0 h-px bg-slate-200 w-full mt-24" />
             </div>

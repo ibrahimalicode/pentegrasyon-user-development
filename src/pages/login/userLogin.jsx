@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 // ICONS
 import LoadingI from "../../assets/anim/loading";
 import { login, resetLoginState } from "../../redux/auth/loginSlice";
+import TurnstileWidget from "../../components/turnstileWidget";
 
-function UserLogin({ setPageName }) {
+function UserLogin({ pageName, setPageName }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,6 +17,7 @@ function UserLogin({ setPageName }) {
 
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -59,9 +61,9 @@ function UserLogin({ setPageName }) {
         </div>
         <div className="flex flex-col mt-10 max-w-full">
           <CustomInput
-            label="E-posta"
+            label="E-posta/Telefon"
             type="text"
-            placeholder="E-posta"
+            placeholder="E-posta/Telefon"
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e.target.value)}
             required={true}
@@ -84,13 +86,22 @@ function UserLogin({ setPageName }) {
                 <a href="/forgotPassword">Şifremi unuttum ?</a>
               </div>
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex justify-center px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 font-[400] disabled:opacity-90 disabled:cursor-not-allowed"
-            >
-              {loading ? <LoadingI className="h-7" /> : "Giriş"}
-            </button>
+
+            <div className="w-full">
+              {pageName === "login" && (
+                <TurnstileWidget
+                  setToken={setTurnstileToken}
+                  pageName={pageName}
+                />
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex justify-center px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 font-[400] disabled:opacity-90 disabled:cursor-not-allowed"
+              >
+                {loading ? <LoadingI className="h-7" /> : "Giriş"}
+              </button>{" "}
+            </div>
             <div className="shrink-0 mt-10 h-px bg-slate-200 w-full" />
           </div>
         </div>

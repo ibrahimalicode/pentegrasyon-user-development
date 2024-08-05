@@ -23,8 +23,11 @@ section {
 }
 
 body {
-  font-family: "Lexend Deca", sans-serif;
   overflow-x: hidden;
+  font-family: "Lexend Deca", sans-serif;
+}
+input {
+  font-family: "Lexend Deca", sans-serif;
 }
 
 .light {

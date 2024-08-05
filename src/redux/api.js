@@ -41,7 +41,7 @@ export const privateApi = () => {
       if (error.response?.status === 401) {
         clearAuth();
         window.location.href = "/login";
-        toast.error(error.message);
+        // toast.error(error.message);
       }
       return Promise.reject(error);
     }

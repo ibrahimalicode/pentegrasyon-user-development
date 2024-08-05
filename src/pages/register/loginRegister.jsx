@@ -4,13 +4,13 @@ import UserLogin from "../login/userLogin";
 import img from "../../assets/img/pentegrasyon.png";
 
 const LoginRegister = () => {
-  const [pageName, setPageName] = useState(null);
+  const [pageName, setPageName] = useState("login");
   return (
     <section className="p-0 sm:overflow-hidden">
       <div className="flex flex-col justify-center items-center h-[100vh] bg-white">
         <div
           className={`flex gap-5 w-full h-full relative ${
-            pageName && "right-panel-active"
+            pageName === "register" && "right-panel-active"
           }`}
         >
           {/* Sign Up Form */}
@@ -20,7 +20,7 @@ const LoginRegister = () => {
 
           {/* Sign in Form */}
           <div className="flex items-center justify-center w-full lg:w-6/12 form-container sign-up-container max-lg:w-full overflow-y-scroll">
-            <UserRegister setPageName={setPageName} pageName={pageName} />{" "}
+            <UserRegister setPageName={setPageName} pageName={pageName} />
           </div>
 
           {/* Card Slider */}

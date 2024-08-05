@@ -14,6 +14,7 @@ import {
 } from "../../redux/auth/verifyCodeSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import CustomPhoneInput from "../../components/common/customPhoneInput";
 
 const UserVerifyLogin = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const UserVerifyLogin = () => {
 
   const sendCode = (e) => {
     e.preventDefault();
-    dispatch(sendUserVerificationCode({ phoneNumber }));
+    dispatch(sendUserVerificationCode({ phoneNumber: phoneNumber.slice(1) }));
   };
 
   const verifyCode = (e) => {
@@ -42,7 +43,10 @@ const UserVerifyLogin = () => {
     if (phoneNumber) {
       console.log(phoneNumber, verificationCode);
       dispatch(
-        codeVerification({ phoneNumberOrEmail: phoneNumber, verificationCode })
+        codeVerification({
+          phoneNumberOrEmail: phoneNumber.slice(1),
+          verificationCode,
+        })
       );
     }
   };
@@ -114,12 +118,12 @@ const UserVerifyLogin = () => {
                 </div>
               </div>
               <div className="flex flex-col max-w-full">
-                <CustomInput
+                <CustomPhoneInput
                   label="Telefone"
                   type="number"
                   placeholder="Telefone"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={(phone) => setPhoneNumber(phone)}
                   required={true}
                   className="py-3"
                 />
@@ -171,7 +175,7 @@ const UserVerifyLogin = () => {
                   className="py-3"
                 />
                 <div className="mt-10 text-[--gr-1] font-light">
-                  <PhoneUserMessage number={phoneNumber} />
+                  <PhoneUserMessage number={phoneNumber.slice(1)} />
                   <br />
                   Teşekkür ederiz!
                 </div>

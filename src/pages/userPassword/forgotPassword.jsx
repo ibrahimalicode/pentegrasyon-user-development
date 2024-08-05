@@ -43,7 +43,9 @@ const ForgotPassword = () => {
     e.preventDefault();
     if (checked && phoneNumber) {
       console.log(phoneNumber);
-      dispatch(forgotPassword({ toAddress: phoneNumber, isEmail: false }));
+      dispatch(
+        forgotPassword({ toAddress: phoneNumber.slice(1), isEmail: false })
+      );
     } else if (email) {
       console.log(email);
       dispatch(forgotPassword({ toAddress: email, isEmail: true }));
@@ -223,7 +225,7 @@ const ForgotPassword = () => {
                 />
                 <div className="mt-10 text-[--gr-1] font-light">
                   {checked ? (
-                    <PhoneUserMessage number={phoneNumber} />
+                    <PhoneUserMessage number={phoneNumber.slice(1)} />
                   ) : (
                     <EmailUserMessage number={email} />
                   )}

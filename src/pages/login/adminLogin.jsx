@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 // ICONS
 import EyeI from "../../assets/icon/eye";
 import EyeInv from "../../assets/icon/eyeInv";
+import TurnstileWidget from "../../components/turnstileWidget";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
@@ -20,6 +21,7 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const [inputType, setInputType] = useState("password");
   const [icon, setIcon] = useState(eyeIconInv);
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const iconClick = (e) => {
     e.preventDefault();
@@ -58,6 +60,8 @@ function AdminLogin() {
     }
   }, [loading, success, error, dispatch, navigate]);
 
+  turnstileToken && console.log(turnstileToken);
+
   return (
     <div className="flex items-center justify-center w-full">
       <form
@@ -71,9 +75,9 @@ function AdminLogin() {
         </div>
         <div className="flex flex-col max-w-full">
           <CustomInput
-            label="E-posta"
-            type="email"
-            placeholder="E-posta"
+            label="E-posta/Telefon"
+            type="text"
+            placeholder="E-posta/Telefon"
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e.target.value)}
             required={true}
@@ -98,12 +102,18 @@ function AdminLogin() {
                 <a href="/">Şifremi unuttum ?</a>
               </div>
             </div>
-            <button
-              type="submit"
-              className="px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10"
-            >
-              Giriş
-            </button>
+            <div className="w-full">
+              <TurnstileWidget
+                setToken={setTurnstileToken}
+                pageName={"login"}
+              />
+              <button
+                type="submit"
+                className="w-full px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10"
+              >
+                Giriş
+              </button>
+            </div>
           </div>
         </div>
       </form>

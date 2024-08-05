@@ -26,63 +26,24 @@ export const maxInput = (e) => {
   return value;
 };
 
-export function formatPhoneNumber(inputValue, cursorPosition) {
-  let input = inputValue.replace(/\D/g, "").substring(0, 11);
-
-  if (input[0] !== "0") {
-    input = "0" + input;
-  }
-
-  const size = input.length;
-  let formattedNumber;
-  if (size === 0) {
-    formattedNumber = input;
-  } else if (size < 5) {
-    formattedNumber = input;
-  } else if (size < 8) {
-    formattedNumber = `${input.slice(0, 4)} ${input.slice(4, 7)}`;
-  } else if (size < 10) {
-    formattedNumber = `${input.slice(0, 4)} ${input.slice(4, 7)} ${input.slice(
-      7,
-      9
-    )}`;
-  } else {
-    formattedNumber = `${input.slice(0, 4)} ${input.slice(4, 7)} ${input.slice(
-      7,
-      9
-    )} ${input.slice(9, 11)}`;
-  }
-
-  let newCursorPosition = cursorPosition;
-
-  // Adjust cursor position if needed
-  if (cursorPosition > 4 && cursorPosition <= 7) {
-    newCursorPosition += 1;
-  } else if (cursorPosition > 7 && cursorPosition <= 9) {
-    newCursorPosition += 2;
-  } else if (cursorPosition > 9) {
-    newCursorPosition += 3;
-  }
-
-  // Additional adjustment for deletions
-  if (inputValue.length > formattedNumber.length) {
-    if (cursorPosition === 5 || cursorPosition === 8 || cursorPosition === 11) {
-      newCursorPosition -= 1;
-    }
-  }
-
-  return { formattedNumber, newCursorPosition };
-}
-
 export function spacePhoneNumber(phoneNumber) {
+  // console.log(phoneNumber);
   const cleaned = ("" + phoneNumber).replace(/\D/g, "");
+  const number = cleaned.replace("9", "");
+  // console.log(number);
 
-  const match = cleaned.match(/^(\d{4})(\d{3})(\d{2})(\d{2})$/);
+  const match = number.match(/^(\d{4})(\d{3})(\d{2})(\d{2})$/);
   if (match) {
     return `${match[1]} ${match[2]} ${match[3]} ${match[4]}`;
   }
-
   return phoneNumber;
+}
+
+export function formatEmail(email) {
+  const validCharsRegex = /[^\w\d@._-]/g;
+  let formattedEmail = email.replace(validCharsRegex, "");
+  formattedEmail = formattedEmail.trim().toLowerCase();
+  return formattedEmail;
 }
 
 export const formatSelectorData = (data) => {

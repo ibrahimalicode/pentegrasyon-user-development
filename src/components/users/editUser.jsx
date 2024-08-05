@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { ArrowID, ArrowIU, CancelI, EditI } from "../../assets/icon";
-import { formatPhoneNumber, spacePhoneNumber } from "../../utils/utils";
 import CustomInput from "../common/CustomInput";
 import CustomSelect from "../common/CustomSelector";
 import CustomTextarea from "../common/customTextarea";
@@ -10,6 +9,7 @@ import LoadingI from "../../assets/anim/loading";
 import LoadingI2 from "../../assets/anim/spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, resetgetUserState } from "../../redux/users/getUserSlice";
+import CustomPhoneInput from "../common/customPhoneInput";
 
 const EditUser = ({ user }) => {
   const { setShowPopup, setPopupContent } = usePopup();
@@ -177,21 +177,21 @@ const EditUserPopup = ({ user: data }) => {
               />
             </div>
             <div className="flex gap-4">
-              <CustomInput
+              <CustomPhoneInput
                 required={true}
                 label="Telefone"
                 placeholder="Telefone"
                 className="py-[.45rem] text-sm"
-                value={spacePhoneNumber(userData.phoneNumber)}
-                onChange={(e) => {
+                value={phoneNumber}
+                onChange={(phone) => {
                   setUserData((prev) => {
                     return {
                       ...prev,
-                      phoneNumber: formatPhoneNumber(e),
+                      phoneNumber: phone,
                     };
                   });
                 }}
-                maxLength={11}
+                maxLength={14}
               />
               <CustomInput
                 required={true}

@@ -3,19 +3,18 @@ import { usePopup } from "../../context/PopupContext";
 import CustomCheckbox from "../common/customCheckbox";
 import CustomInput from "../common/CustomInput";
 import CustomSelect from "../common/CustomSelector";
-import { useDispatch, useSelector } from "react-redux";
-import { getCities } from "../../redux/data/getCitiesSlice";
 import CustomTextarea from "../common/customTextarea";
 import { ArrowID, ArrowIU, CancelI } from "../../assets/icon";
+import toast from "react-hot-toast";
+import { formatSelectorData } from "../../utils/utils";
+import CustomPhoneInput from "../common/customPhoneInput";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, resetaddUserState } from "../../redux/users/addUserSlice";
+import { getCities } from "../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../redux/data/getNeighsSlice";
-import toast from "react-hot-toast";
-import { addUser, resetaddUserState } from "../../redux/users/addUserSlice";
-import {
-  formatPhoneNumber,
-  formatSelectorData,
-  spacePhoneNumber,
-} from "../../utils/utils";
 import { getDealers, resetDealers } from "../../redux/users/getUsersSlice";
 
 const AddUser = ({ onSuccess }) => {
@@ -39,7 +38,7 @@ const AddUser = ({ onSuccess }) => {
     (state) => state.data.getNeighs
   );
 
-  const [phoneNumber, setPhoneNumber] = useState("0");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState(null);
   const [district, setDistrict] = useState(null);
   const [neigh, setNeigh] = useState(null);
@@ -240,14 +239,14 @@ const AddUser = ({ onSuccess }) => {
               />
             </div>
             <div className="flex gap-4">
-              <CustomInput
+              <CustomPhoneInput
                 required={true}
                 label="Telefone"
                 placeholder="Telefone"
                 className="py-[.45rem]"
-                value={spacePhoneNumber(phoneNumber)}
-                onChange={(e) => setPhoneNumber(formatPhoneNumber(e))}
-                maxLength={11}
+                value={phoneNumber}
+                onChange={(phone) => setPhoneNumber(phone)}
+                maxLength={14}
               />
               <CustomInput
                 required={true}

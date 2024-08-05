@@ -18,19 +18,23 @@ import {
 import { PhoneUserMessage } from "../../components/common/messages";
 import { useNavigate } from "react-router-dom";
 import { getCities } from "../../redux/data/getCitiesSlice";
-import { formatPhoneNumber, spacePhoneNumber } from "../../utils/utils";
+import { formatEmail, spacePhoneNumber } from "../../utils/utils";
 import { usePopup } from "../../context/PopupContext";
 import CustomCheckbox from "../../components/common/customCheckbox";
 import CustomPhoneInput from "../../components/common/customPhoneInput";
-import TurnstileWidget from "./turnstileWidget";
+import { getDistricts } from "../../redux/data/getDistrictsSlice";
 
-const UserRegister = ({ pageName, setPageName }) => {
+const UserRegister = ({ setPageName }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setShowPopup, setPopupContent } = usePopup();
 
   const { cities, success: citiesSuccess } = useSelector(
     (state) => state.data.getCities
+  );
+
+  const { districts: districtsData, success: districtsSuccess } = useSelector(
+    (state) => state.data.getDistricts
   );
 
   const { loading, success, error } = useSelector(
@@ -47,14 +51,15 @@ const UserRegister = ({ pageName, setPageName }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState(null);
+  const [district, setDistrict] = useState(null);
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [address, setAddress] = useState("");
   const [checked, setChecked] = useState(false);
   const [toConfirm, setToConfirm] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
+
   const [citiesData, setCitiesData] = useState(null);
-  const [turnstileToken, setTurnstileToken] = useState("");
+  const [districts, setDistricts] = useState([]);
 
   const confirmRegister = (e) => {
     e.preventDefault();
@@ -63,7 +68,7 @@ const UserRegister = ({ pageName, setPageName }) => {
       toast.error("Şifreler eşit değil");
       return;
     }
-    if (phoneNumber.length < 11) {
+    if (phoneNumber.length < 12) {
       toast("Telefon numaranızı tamamlayın.");
       return;
     }
@@ -84,16 +89,23 @@ const UserRegister = ({ pageName, setPageName }) => {
 
   const register = () => {
     setShowPopup(false);
-    if (firstName && lastName && phoneNumber && city?.value && password) {
+    if (
+      firstName &&
+      lastName &&
+      phoneNumber &&
+      city?.value &&
+      district?.value &&
+      password
+    ) {
       dispatch(
         registerUser({
           email,
-          phoneNumber,
+          phoneNumber: phoneNumber.slice(1),
           password,
           firstName,
           lastName,
           city: city.value,
-          address,
+          district: district.value,
         })
       );
     } else {
@@ -106,14 +118,14 @@ const UserRegister = ({ pageName, setPageName }) => {
     e.preventDefault();
     dispatch(
       codeVerification({
-        phoneNumberOrEmail: phoneNumber,
+        phoneNumberOrEmail: phoneNumber.slice(1),
         verificationCode,
       })
     );
   };
 
   const goToLogin = () => {
-    setPageName(null);
+    setPageName("login");
     setFirstName("");
     setLastName("");
     setPhoneNumber("");
@@ -121,7 +133,7 @@ const UserRegister = ({ pageName, setPageName }) => {
     setPassword("");
     setPassword2("");
     setCity(null);
-    setAddress("");
+    setDistrict(null);
 
     setToConfirm(false);
     setVerificationCode("");
@@ -154,7 +166,7 @@ const UserRegister = ({ pageName, setPageName }) => {
     if (verifyCodeSuccess) {
       toast.dismiss();
       toast.success("Registered Successfully");
-      setPageName(null); // To the UserLogin
+      setPageName("login"); // To the UserLogin
       navigate("/");
       dispatch(resetVerifyCodeState());
     }
@@ -178,21 +190,18 @@ const UserRegister = ({ pageName, setPageName }) => {
     }
   }, [citiesSuccess, cities]);
 
-  function handlePhoneNumberChange(e) {
-    const inputElement = e.target;
-    const cursorPosition = inputElement.selectionStart;
-    const { formattedNumber, newCursorPosition } = formatPhoneNumber(
-      e.target.value,
-      cursorPosition
-    );
+  useEffect(() => {
+    if (city?.id) {
+      dispatch(getDistricts({ cityId: city.id }));
+      setDistrict(null);
+    }
+  }, [city]);
 
-    setPhoneNumber(formattedNumber);
-
-    setTimeout(() => {
-      inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
-    }, 0);
-  }
-  turnstileToken && console.log(turnstileToken);
+  useEffect(() => {
+    if (districtsSuccess) {
+      setDistricts(districtsData);
+    }
+  }, [districtsSuccess]);
 
   return (
     <div className="flex items-center justify-center w-full max-sm:py-24">
@@ -233,7 +242,7 @@ const UserRegister = ({ pageName, setPageName }) => {
               <CustomPhoneInput
                 label="Cep Telefonu"
                 type="tel"
-                placeholder="0"
+                placeholder="+90"
                 value={phoneNumber}
                 onChange={(phone) => setPhoneNumber(phone)}
                 required={true}
@@ -245,7 +254,7 @@ const UserRegister = ({ pageName, setPageName }) => {
                 type="E-Posta"
                 placeholder="E-Posta"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(formatEmail(e.target.value))}
                 required={true}
                 className="py-[.5rem]"
               />
@@ -257,18 +266,18 @@ const UserRegister = ({ pageName, setPageName }) => {
                 options={citiesData}
                 value={city ? city : { value: null, label: "Şehir" }}
                 onChange={setCity}
-                className="w-full"
+                style={{ padding: "1px 0px", fontSize: ".8rem" }}
+                className="text-sm"
                 className2="container-class"
-                style={{ padding: "2px 0px" }}
               />
-              <CustomInput
-                label="Adres"
-                type="text"
-                placeholder="Adres"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+              <CustomSelect
                 required={true}
-                className="py-[.5rem]"
+                label="İlçe"
+                style={{ padding: "1px 0px", fontSize: ".8rem" }}
+                className="text-sm"
+                value={district ? district : { value: null, label: "İlçe seç" }}
+                options={[{ value: null, label: "İlçe seç" }, ...districts]}
+                onChange={setDistrict}
               />
             </div>
 
@@ -303,17 +312,9 @@ const UserRegister = ({ pageName, setPageName }) => {
             </div>
 
             <div className="flex flex-col mt-4 sm:mt-10 w-full">
-              <TurnstileWidget
-                setToken={setTurnstileToken}
-                pageName={pageName}
-              />
               <button
                 type="submit"
-                className={`flex justify-center px-7 py-2 text-xl font-light rounded-md hover:opacity-90 ${
-                  loading
-                    ? "border border-solid border-[--light-3]"
-                    : "bg-[--primary-1] text-[--white-1]"
-                }`}
+                className={`flex justify-center px-7 py-2 text-xl font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 `}
                 disabled={loading}
               >
                 {loading ? <LoadingI className="h-7" /> : "Devam"}

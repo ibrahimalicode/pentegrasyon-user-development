@@ -58,7 +58,7 @@ export const registerUser = createAsyncThunk(
     firstName,
     lastName,
     city,
-    address,
+    district,
   }) => {
     try {
       const res = await axios.post(`${baseURL}Auth/UserRegister`, {
@@ -68,7 +68,7 @@ export const registerUser = createAsyncThunk(
         firstName,
         lastName,
         city,
-        address,
+        district,
       });
 
       console.log(res.data);

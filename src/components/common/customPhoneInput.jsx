@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -11,6 +12,21 @@ const CustomPhoneInput = ({
   className2,
   autoComplete = "new-password",
 }) => {
+  const [phone, setPhone] = useState(value);
+
+  const handleChange = (value) => {
+    if (!value.startsWith("90")) {
+      if (value.startsWith("9")) {
+        value = "90" + value.slice(1);
+      } else {
+        value = "90" + value;
+      }
+    }
+
+    setPhone(value);
+    onChange(value);
+  };
+
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
       <style>{`
@@ -28,10 +44,12 @@ const CustomPhoneInput = ({
       </label>
       <PhoneInput
         country={"tr"}
-        value={value}
-        onChange={onChange}
+        value={phone}
+        onChange={handleChange}
         placeholder={placeholder}
         containerClass="hide-flag"
+        maxlength={14}
+        minLength={14}
         inputProps={{
           required: required,
           autoComplete: autoComplete,

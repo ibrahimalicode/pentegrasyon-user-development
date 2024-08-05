@@ -21,8 +21,10 @@ import { getCities } from "../../redux/data/getCitiesSlice";
 import { formatPhoneNumber, spacePhoneNumber } from "../../utils/utils";
 import { usePopup } from "../../context/PopupContext";
 import CustomCheckbox from "../../components/common/customCheckbox";
+import CustomPhoneInput from "../../components/common/customPhoneInput";
+import TurnstileWidget from "./turnstileWidget";
 
-const UserRegister = ({ setPageName }) => {
+const UserRegister = ({ pageName, setPageName }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setShowPopup, setPopupContent } = usePopup();
@@ -42,7 +44,7 @@ const UserRegister = ({ setPageName }) => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("0");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState(null);
   const [password, setPassword] = useState("");
@@ -52,6 +54,7 @@ const UserRegister = ({ setPageName }) => {
   const [toConfirm, setToConfirm] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [citiesData, setCitiesData] = useState(null);
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const confirmRegister = (e) => {
     e.preventDefault();
@@ -175,6 +178,22 @@ const UserRegister = ({ setPageName }) => {
     }
   }, [citiesSuccess, cities]);
 
+  function handlePhoneNumberChange(e) {
+    const inputElement = e.target;
+    const cursorPosition = inputElement.selectionStart;
+    const { formattedNumber, newCursorPosition } = formatPhoneNumber(
+      e.target.value,
+      cursorPosition
+    );
+
+    setPhoneNumber(formattedNumber);
+
+    setTimeout(() => {
+      inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
+    }, 0);
+  }
+  turnstileToken && console.log(turnstileToken);
+
   return (
     <div className="flex items-center justify-center w-full max-sm:py-24">
       {!toConfirm ? (
@@ -211,15 +230,15 @@ const UserRegister = ({ setPageName }) => {
             </div>
 
             <div className="flex w-full sm:gap-4 max-sm:flex-col">
-              <CustomInput
+              <CustomPhoneInput
                 label="Cep Telefonu"
                 type="tel"
                 placeholder="0"
-                value={spacePhoneNumber(phoneNumber)}
-                onChange={(e) => setPhoneNumber(formatPhoneNumber(e))}
+                value={phoneNumber}
+                onChange={(phone) => setPhoneNumber(phone)}
                 required={true}
                 className="py-[.5rem]"
-                maxLength={11}
+                maxLength={14}
               />
               <CustomInput
                 label="E-Posta"
@@ -284,6 +303,10 @@ const UserRegister = ({ setPageName }) => {
             </div>
 
             <div className="flex flex-col mt-4 sm:mt-10 w-full">
+              <TurnstileWidget
+                setToken={setTurnstileToken}
+                pageName={pageName}
+              />
               <button
                 type="submit"
                 className={`flex justify-center px-7 py-2 text-xl font-light rounded-md hover:opacity-90 ${

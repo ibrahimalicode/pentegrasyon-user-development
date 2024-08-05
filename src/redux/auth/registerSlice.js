@@ -43,7 +43,7 @@ const registerSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.data = null;
       });
   },
@@ -51,15 +51,10 @@ const registerSlice = createSlice({
 
 export const registerUser = createAsyncThunk(
   "Auth/registerUser",
-  async ({
-    email,
-    phoneNumber,
-    password,
-    firstName,
-    lastName,
-    city,
-    district,
-  }) => {
+  async (
+    { email, phoneNumber, password, firstName, lastName, city, district },
+    { rejectWithValue }
+  ) => {
     try {
       const res = await axios.post(`${baseURL}Auth/UserRegister`, {
         email,
@@ -75,10 +70,10 @@ export const registerUser = createAsyncThunk(
       return res.data;
     } catch (err) {
       console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

@@ -11,17 +11,17 @@ const initialState = {
   data: null,
 };
 
-const updateUserDataSlice = createSlice({
-  name: "updateUserData",
+const updateUserPasswordSlice = createSlice({
+  name: "updateUserPassword",
   initialState: initialState,
   reducers: {
-    resetUpdateUser: (state) => {
+    resetUpdateUserPassword: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
       state.data = null;
     },
-    resetUpdateUserState: (state) => {
+    resetUpdateUserPasswordState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -29,19 +29,19 @@ const updateUserDataSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(updateUserData.pending, (state) => {
+      .addCase(updateUserPassword.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(updateUserData.fulfilled, (state, action) => {
+      .addCase(updateUserPassword.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(updateUserData.rejected, (state, action) => {
+      .addCase(updateUserPassword.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -50,36 +50,22 @@ const updateUserDataSlice = createSlice({
   },
 });
 
-export const updateUserData = createAsyncThunk(
-  "Users/updateUserData",
+export const updateUserPassword = createAsyncThunk(
+  "Users/updateUserPassword",
   async (
-    {
-      userId,
-      dealerId,
-      email,
-      phoneNumber,
-      firstName,
-      lastName,
-      city,
-      district,
-    },
+    { targetUserId, newPassword, newPasswordConfirm },
     { rejectWithValue }
   ) => {
     try {
       const res = await api.put(
-        `${baseURL}Users/UpdateUser`,
+        `${baseURL}Users/UpdateUserPasswordByUserId`,
         {
-          dealerId,
-          email,
-          phoneNumber,
-          firstName,
-          lastName,
-          city: city.value,
-          district: district.value,
+          newPassword,
+          newPasswordConfirm,
         },
         {
           params: {
-            userId,
+            targetUserId,
           },
         }
       );
@@ -96,6 +82,6 @@ export const updateUserData = createAsyncThunk(
   }
 );
 
-export const { resetUpdateUser, resetUpdateUserState } =
-  updateUserDataSlice.actions;
-export default updateUserDataSlice.reducer;
+export const { resetUpdateUserPassword, resetUpdateUserPasswordState } =
+  updateUserPasswordSlice.actions;
+export default updateUserPasswordSlice.reducer;

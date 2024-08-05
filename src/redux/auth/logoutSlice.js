@@ -36,14 +36,14 @@ const logoutSlice = createSlice({
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });
 
 export const logout = createAsyncThunk(
   "Auth/UserLogout",
-  async ({ userSessionId }) => {
+  async ({ userSessionId }, { rejectWithValue }) => {
     try {
       console.log(userSessionId);
       const res = await api.delete(
@@ -57,10 +57,10 @@ export const logout = createAsyncThunk(
       return res.data;
     } catch (err) {
       console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
 
     //await new Promise((resolve) => setTimeout(resolve, 1000));

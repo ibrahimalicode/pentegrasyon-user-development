@@ -34,15 +34,14 @@ const verifyCodeSlice = createSlice({
       .addCase(codeVerification.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });
 
 export const codeVerification = createAsyncThunk(
   "Auth/VerifyCode",
-  async ({ phoneNumberOrEmail, verificationCode }) => {
-    console.log(phoneNumberOrEmail, verificationCode);
+  async ({ phoneNumberOrEmail, verificationCode }, { rejectWithValue }) => {
     try {
       const res = await api.get(`${baseURL}Auth/Verify`, {
         params: {
@@ -67,10 +66,10 @@ export const codeVerification = createAsyncThunk(
       return data;
     } catch (err) {
       console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

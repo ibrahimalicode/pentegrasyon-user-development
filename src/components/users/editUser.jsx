@@ -8,21 +8,24 @@ import CustomCheckbox from "../common/customCheckbox";
 import LoadingI from "../../assets/anim/loading";
 import LoadingI2 from "../../assets/anim/spinner";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getUser,
-  resetgetUser,
-  resetgetUserState,
-} from "../../redux/users/getUserSlice";
+import { getUser, resetgetUser } from "../../redux/users/getUserSlice";
 import CustomPhoneInput from "../common/customPhoneInput";
 import { formatEmail } from "../../utils/utils";
 import { getCities } from "../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../redux/data/getNeighsSlice";
+import {
+  resetUpdateUser,
+  updateUserData,
+} from "../../redux/users/updateUserDataSlice";
+import toast from "react-hot-toast";
+import { updateUserInvoice } from "../../redux/users/updateUserInvoiceSlice";
+import { updateUserPassword } from "../../redux/users/updateUserPasswordSlice";
 
-const EditUser = ({ user }) => {
+const EditUser = ({ user, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
   const handleClick = () => {
-    setPopupContent(<EditUserPopup user={user} />);
+    setPopupContent(<EditUserPopup user={user} onSuccess={onSuccess} />);
     setShowPopup(true);
   };
   return (
@@ -38,18 +41,40 @@ const EditUser = ({ user }) => {
 export default EditUser;
 
 ////******POPUP COMPONENT*******////
-const EditUserPopup = ({ user: data }) => {
+const EditUserPopup = ({ user: inData, onSuccess }) => {
   const dispatch = useDispatch();
 
-  const { loading, success, error, user } = useSelector(
-    (state) => state.users.getUser
+  const { loading, success, error, data } = useSelector(
+    (state) => state.users.updateUser
   );
+
+  const {
+    loading: invoiceLoading,
+    success: invoiceSuccess,
+    error: invoiceError,
+  } = useSelector((state) => state.users.updateInvoice);
+
+  const {
+    loading: passwordLoading,
+    success: passwordSuccess,
+    error: passwordError,
+  } = useSelector((state) => state.users.updatePassword);
+
+  const {
+    loading: getUserLoading,
+    // success: getUserSuccess,
+    error: getUserError,
+    user,
+  } = useSelector((state) => state.users.getUser);
+
   const { cities: citiesData, success: citiesSuccess } = useSelector(
     (state) => state.data.getCities
   );
+
   const { districts: districtsData, success: districtsSuccess } = useSelector(
     (state) => state.data.getDistricts
   );
+
   const { neighs: neighsData, success: neighsSuccess } = useSelector(
     (state) => state.data.getNeighs
   );
@@ -59,26 +84,30 @@ const EditUserPopup = ({ user: data }) => {
   const [districts1, setDistricts1] = useState([]);
 
   const [openFatura, setOpenFatura] = useState(false);
+  const [openPassword, setOpenPassword] = useState(false);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
 
   const [userData, setUserData] = useState({
+    userId: "",
     dealerId: "",
     email: "",
     phoneNumber: "",
-    password: "",
     firstName: "",
     lastName: "",
     city: null,
     district: null,
-    address: "",
-    password: "",
-    password2: "",
     checked: false,
   });
 
+  const [userPassword, setUserPassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
   const [userInvoice, setUserInvoice] = useState({
+    userId: "",
     taxOffice: "",
     taxNumber: "",
     title: "",
@@ -91,24 +120,64 @@ const EditUserPopup = ({ user: data }) => {
   });
 
   const closeForm = () => {
+    setUserInvoice(null);
+    setUserData(null);
     setPopupContent(null);
     setShowPopup(false);
-    setUserData(null);
-    setUserInvoice(null);
-    dispatch(resetgetUser());
   };
 
   const handleEditUser = (e) => {
     e.preventDefault();
-    console.log("edit user");
+    if (userPassword.confirmPassword || userPassword.password) {
+      if (userPassword.confirmPassword !== userPassword.password) {
+        toast.error("Şifreler eşit değil");
+        return;
+      }
+    }
+    dispatch(updateUserData({ ...userData }));
+    if (openFatura) {
+      dispatch(updateUserInvoice({ ...userInvoice }));
+    }
+    if (openPassword) {
+      dispatch(
+        updateUserPassword({
+          targetUserId: inData.id,
+          newPassword: userPassword.password,
+          newPasswordConfirm: userPassword.confirmPassword,
+        })
+      );
+    }
   };
+
+  //UPDATE USER DATA
+  useEffect(() => {
+    if (loading) {
+      toast.dismiss();
+      toast.loading("Updating...");
+    } else if (error) {
+      toast.dismiss();
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetUpdateUser());
+    } else if (success) {
+      closeForm();
+      onSuccess();
+      toast.dismiss();
+      toast.success("Successfuly updated");
+      dispatch(resetUpdateUser());
+    }
+  }, [loading, success, error, dispatch]);
 
   // GET AND SET USER IF THERE IS NOT
   useEffect(() => {
     if (!user) {
-      dispatch(getUser({ userId: data.id }));
+      dispatch(getUser({ userId: inData.id }));
     } else {
       setUserData({
+        userId: inData.id,
         dealerId: user.dealerId,
         email: user.email,
         phoneNumber: "9" + user.phoneNumber,
@@ -121,13 +190,12 @@ const EditUserPopup = ({ user: data }) => {
           id: null,
         },
         district: { value: user.district, label: user.district, id: null },
-        password: "",
-        password2: "",
         checked: false,
       });
       if (user.userInvoiceAddressDTO) {
         const userInv = user.userInvoiceAddressDTO;
         setUserInvoice({
+          userId: inData.id,
           taxOffice: userInv.taxOffice,
           taxNumber: userInv.taxNumber,
           title: userInv.title,
@@ -147,7 +215,8 @@ const EditUserPopup = ({ user: data }) => {
 
     return () => {
       if (user) {
-        dispatch(resetgetUserState());
+        dispatch(resetgetUser());
+        console.log("out");
       }
     };
   }, [user]);
@@ -180,12 +249,6 @@ const EditUserPopup = ({ user: data }) => {
         )[0]?.id;
         if (cityId) {
           dispatch(getDistricts({ cityId: cityId }));
-          setUserData((prev) => {
-            return {
-              ...prev,
-              district: null,
-            };
-          });
         }
       }
     }
@@ -223,7 +286,19 @@ const EditUserPopup = ({ user: data }) => {
   // SET DISTRICTS ACCORDING TO USER OR INVOICE
   useEffect(() => {
     if (districtsSuccess) {
-      if (!userData.district) {
+      if (!userData.district || !userData.district?.id) {
+        const district = districtsData.filter(
+          (dist) =>
+            dist?.label.toLowerCase() === userData.district?.label.toLowerCase()
+        )[0];
+        if (district) {
+          setUserData((prev) => {
+            return {
+              ...prev,
+              district,
+            };
+          });
+        }
         setDistricts1(districtsData);
       } else {
         setDistricts(districtsData);
@@ -279,10 +354,10 @@ const EditUserPopup = ({ user: data }) => {
 
   return (
     <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base max-h-[90dvh] overflow-y-scroll relative">
-      {(loading || error) && (
-        <div className="flex justify-center items-center absolute top-24 bottom-0 left-0 right-0 bg-slate-950/5  z-10">
+      {(getUserLoading || getUserError || loading) && (
+        <div className="flex justify-center items-center absolute top-24 bottom-0 left-0 right-0 bg-slate-950/[.01]  z-10">
           <div className="pb-72">
-            <LoadingI2 className="bg-slate-200 rounded-full scale-150" />
+            <LoadingI2 className="rounded-full scale-150" />
           </div>
         </div>
       )}
@@ -411,44 +486,10 @@ const EditUserPopup = ({ user: data }) => {
                 />
               </div>
 
-              <div className="flex gap-4">
-                <CustomInput
-                  required={false}
-                  label="Şifre"
-                  placeholder="Şifre"
-                  className="py-[.45rem] text-sm"
-                  letIcon={true}
-                  value={userData.password}
-                  onChange={(e) => {
-                    setUserData((prev) => {
-                      return {
-                        ...prev,
-                        password: e.target.value,
-                      };
-                    });
-                  }}
-                />
-                <CustomInput
-                  required={false}
-                  label="Şifreyi onayla"
-                  placeholder="Şifre"
-                  className="py-[.45rem] text-sm"
-                  letIcon={true}
-                  value={userData.password2}
-                  onChange={(e) => {
-                    setUserData((prev) => {
-                      return {
-                        ...prev,
-                        password2: e.target.value,
-                      };
-                    });
-                  }}
-                />
-              </div>
-
               <div className="w-full flex justify-between mt-8">
                 <CustomCheckbox
                   label="Kayıt Bilgilendirmesi gönder"
+                  className="scale-95 font-[350]"
                   checked={userData.checked}
                   onChange={() => {
                     setUserData((prev) => {
@@ -465,14 +506,74 @@ const EditUserPopup = ({ user: data }) => {
               </div>
             </>
 
+            <>
+              <div
+                className="w-full flex border-b border-solid border-[--border-1] cursor-pointer mt-14"
+                onClick={() => setOpenPassword(!openPassword)}
+              >
+                <h1 className="w-full text-center text-lg font-normal text-[--black-3] ">
+                  Şifre Değiştir
+                </h1>
+                <span>
+                  {openPassword ? (
+                    <ArrowIU className="size-5" />
+                  ) : (
+                    <ArrowID className="size-5" />
+                  )}
+                </span>
+              </div>
+              {openPassword && (
+                <div className="flex gap-4">
+                  <CustomInput
+                    required={userPassword.confirmPassword ? true : false}
+                    label="Şifre"
+                    placeholder="Şifre"
+                    className="py-[.45rem] text-sm"
+                    letIcon={true}
+                    value={userPassword.password}
+                    onChange={(e) => {
+                      setUserPassword((prev) => {
+                        return {
+                          ...prev,
+                          password: e.target.value,
+                        };
+                      });
+                    }}
+                  />
+                  <CustomInput
+                    required={userPassword.password ? true : false}
+                    label="Şifreyi onayla"
+                    placeholder="Şifre"
+                    className="py-[.45rem] text-sm"
+                    letIcon={true}
+                    value={userPassword.confirmPassword}
+                    onChange={(e) => {
+                      setUserPassword((prev) => {
+                        return {
+                          ...prev,
+                          confirmPassword: e.target.value,
+                        };
+                      });
+                    }}
+                  />
+                </div>
+              )}
+            </>
+
             <div
               className="w-full flex border-b border-solid border-[--border-1] cursor-pointer mt-14"
               onClick={() => setOpenFatura(!openFatura)}
             >
-              <h1 className="w-full text-center text-xl font-bold ">
+              <h1 className="w-full text-center text-lg font-normal text-[--black-3]">
                 Fatura Adresi
               </h1>
-              <span>{openFatura ? <ArrowIU /> : <ArrowID />}</span>
+              <span>
+                {openFatura ? (
+                  <ArrowIU className="size-5" />
+                ) : (
+                  <ArrowID className="size-5" />
+                )}
+              </span>
             </div>
             {openFatura && (
               <>
@@ -643,6 +744,7 @@ const EditUserPopup = ({ user: data }) => {
             )}
             <div className="w-full flex justify-end mt-10">
               <button
+                disabled={loading}
                 className="py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-lg"
                 type="submit"
               >

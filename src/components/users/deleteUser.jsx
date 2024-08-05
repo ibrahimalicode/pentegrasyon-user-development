@@ -15,14 +15,14 @@ import {
   resetGetUserLicenses,
 } from "../../redux/licenses/getUserLicensesSlice";
 
-const DeleteUser = ({ user, setOpenMenu }) => {
+const DeleteUser = ({ user, setOpenMenu, onSuccess }) => {
   const dispatch = useDispatch();
   const { setShowPopup, setPopupContent } = usePopup();
 
   const handlePopup = (event) => {
     event.stopPropagation();
     setShowPopup(true);
-    setPopupContent(<DeletePopup data={user} />);
+    setPopupContent(<DeletePopup data={user} onSuccess={onSuccess} />);
     //setOpenMenu(null);
 
     dispatch(getUserRestaurants({ userId: user.id })).then(() => {
@@ -43,7 +43,7 @@ const DeleteUser = ({ user, setOpenMenu }) => {
 
 export default DeleteUser;
 
-const DeletePopup = ({ data }) => {
+const DeletePopup = ({ data, onSuccess }) => {
   const dispatch = useDispatch();
   const { setShowPopup } = usePopup();
 
@@ -82,6 +82,7 @@ const DeletePopup = ({ data }) => {
       dispatch(resetDeleteUser());
     }
     if (success) {
+      onSuccess();
       toast.dismiss();
       setChecked(false);
       setShowPopup(false);

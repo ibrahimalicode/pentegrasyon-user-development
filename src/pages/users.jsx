@@ -150,11 +150,11 @@ const Users = () => {
     }
   }, [loading, success, error, users]);
 
-  useEffect(() => {
-    if (deleteUserSuccess) {
-      handleFilter(true);
-    }
-  }, [deleteUserSuccess]);
+  // useEffect(() => {
+  //   if (deleteUserSuccess) {
+  //     handleFilter(true);
+  //   }
+  // }, [deleteUserSuccess]);
 
   //HIDE POPUP
   const { contentRef, setContentRef, setShowPopup, setPopupContent } =
@@ -389,7 +389,11 @@ const Users = () => {
 
       {/* TABLE */}
       {usersData ? (
-        <UsersTable users={usersData} itemsPerPage={itemsPerPage} />
+        <UsersTable
+          users={usersData}
+          itemsPerPage={itemsPerPage}
+          onSuccess={() => handleFilter(true)}
+        />
       ) : loading ? (
         <TableSkeleton />
       ) : null}

@@ -44,7 +44,7 @@ const getUserLicensesSlice = createSlice({
       .addCase(getUserLicenses.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.userLicenses = null;
       });
   },
@@ -72,7 +72,7 @@ export const getUserLicenses = createAsyncThunk(
       if (err?.response?.data) {
         throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

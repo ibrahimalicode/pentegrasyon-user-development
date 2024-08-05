@@ -44,7 +44,7 @@ const getUserRestaurantsSlice = createSlice({
       .addCase(getUserRestaurants.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.userRestaurants = null;
       });
   },
@@ -88,7 +88,7 @@ export const getUserRestaurants = createAsyncThunk(
       if (err?.response?.data) {
         throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

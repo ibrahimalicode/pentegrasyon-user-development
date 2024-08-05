@@ -23,6 +23,9 @@ const getUserlice = createSlice({
       state.error = null;
     },
     resetgetUser: (state) => {
+      state.loading = false;
+      state.success = false;
+      state.error = null;
       state.user = null;
     },
   },

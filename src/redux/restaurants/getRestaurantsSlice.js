@@ -44,7 +44,7 @@ const getRestaurantsSlice = createSlice({
       .addCase(getRestaurants.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.restaurants = null;
       });
   },
@@ -52,15 +52,10 @@ const getRestaurantsSlice = createSlice({
 
 export const getRestaurants = createAsyncThunk(
   "Restaurants/getRestaurants",
-  async ({
-    pageNumber,
-    pageSize,
-    searchKey,
-    status,
-    city,
-    district,
-    neighbourhood,
-  }) => {
+  async (
+    { pageNumber, pageSize, searchKey, status, city, district, neighbourhood },
+    { rejectWithValue }
+  ) => {
     try {
       const res = await api.get(`${baseURL}Restaurants/GetRestaurants`, {
         params: {
@@ -80,7 +75,7 @@ export const getRestaurants = createAsyncThunk(
       if (err?.response?.data) {
         throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

@@ -2,7 +2,7 @@ import { formatDateString } from "../../utils/utils";
 import UsersActions from "./usersActions";
 import ChangeUsersStatus from "./usersStatus";
 
-const UsersTable = ({ users, itemsPerPage }) => {
+const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
   return (
     <>
       <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
@@ -64,6 +64,7 @@ const UsersTable = ({ users, itemsPerPage }) => {
                     index={index}
                     user={data}
                     itemsPerPage={itemsPerPage}
+                    onSuccess={onSuccess}
                   />
                 </td>
               </tr>

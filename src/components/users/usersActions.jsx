@@ -8,7 +8,7 @@ import UserLicenses from "./userLicenses";
 import UserRestaurants from "./userRestaurants";
 import { usePopup } from "../../context/PopupContext";
 
-const UsersActions = ({ index, user, itemsPerPage }) => {
+const UsersActions = ({ index, user, itemsPerPage, onSuccess }) => {
   const outRef = useRef();
   const usersMenuRef = useRef();
   const { contentRef, setContentRef } = usePopup();
@@ -51,8 +51,16 @@ const UsersActions = ({ index, user, itemsPerPage }) => {
             <UserLicenses user={user} setOpenMenu={setOpenMenu} />
             <MakeADealer user={user} setOpenMenu={setOpenMenu} />
             <TransferDealer user={user} setOpenMenu={setOpenMenu} />
-            <EditUser user={user} setOpenMenu={setOpenMenu} />
-            <DeleteUser user={user} setOpenMenu={setOpenMenu} />
+            <EditUser
+              user={user}
+              setOpenMenu={setOpenMenu}
+              onSuccess={onSuccess}
+            />
+            <DeleteUser
+              user={user}
+              setOpenMenu={setOpenMenu}
+              onSuccess={onSuccess}
+            />
           </ul>
         </div>
       )}

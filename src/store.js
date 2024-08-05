@@ -17,6 +17,8 @@ import getDistrictsSlice from "./redux/data/getDistrictsSlice";
 import getNeighsSlice from "./redux/data/getNeighsSlice";
 import getUserSlice from "./redux/users/getUserSlice";
 import updateUserDataSlice from "./redux/users/updateUserDataSlice";
+import updateUserInvoiceSlice from "./redux/users/updateUserInvoiceSlice";
+import updateUserPasswordSlice from "./redux/users/updateUserPasswordSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -34,6 +36,8 @@ const usersSlice = combineReducers({
   addUser: addUserSlice,
   delete: deleteUserSlice,
   updateUser: updateUserDataSlice,
+  updateInvoice: updateUserInvoiceSlice,
+  updatePassword: updateUserPasswordSlice,
 });
 
 const restaurantsSlice = combineReducers({

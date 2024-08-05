@@ -11,17 +11,17 @@ const initialState = {
   data: null,
 };
 
-const updateUserDataSlice = createSlice({
-  name: "updateUserData",
+const updateUserInvoiceSlice = createSlice({
+  name: "updateUserInvoice",
   initialState: initialState,
   reducers: {
-    resetUpdateUser: (state) => {
+    resetUpdateUserInvoice: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
       state.data = null;
     },
-    resetUpdateUserState: (state) => {
+    resetUpdateUserInvoiceState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -29,19 +29,19 @@ const updateUserDataSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(updateUserData.pending, (state) => {
+      .addCase(updateUserInvoice.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(updateUserData.fulfilled, (state, action) => {
+      .addCase(updateUserInvoice.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(updateUserData.rejected, (state, action) => {
+      .addCase(updateUserInvoice.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -50,32 +50,36 @@ const updateUserDataSlice = createSlice({
   },
 });
 
-export const updateUserData = createAsyncThunk(
-  "Users/updateUserData",
+export const updateUserInvoice = createAsyncThunk(
+  "Users/updateUserInvoice",
   async (
     {
       userId,
-      dealerId,
-      email,
-      phoneNumber,
-      firstName,
-      lastName,
+      taxOffice,
+      taxNumber,
+      title,
+      address,
       city,
       district,
+      neighbourhood,
+      tradeRegistryNumber,
+      mersisNumber,
     },
     { rejectWithValue }
   ) => {
     try {
       const res = await api.put(
-        `${baseURL}Users/UpdateUser`,
+        `${baseURL}Invoices/UpdateUserInvoiceAddress`,
         {
-          dealerId,
-          email,
-          phoneNumber,
-          firstName,
-          lastName,
-          city: city.value,
-          district: district.value,
+          taxOffice,
+          taxNumber,
+          title,
+          address,
+          city: city.label,
+          district: district.label,
+          neighbourhood: neighbourhood.label,
+          tradeRegistryNumber,
+          mersisNumber,
         },
         {
           params: {
@@ -96,6 +100,6 @@ export const updateUserData = createAsyncThunk(
   }
 );
 
-export const { resetUpdateUser, resetUpdateUserState } =
-  updateUserDataSlice.actions;
-export default updateUserDataSlice.reducer;
+export const { resetUpdateUserInvoice, resetUpdateUserInvoiceState } =
+  updateUserInvoiceSlice.actions;
+export default updateUserInvoiceSlice.reducer;

@@ -35,14 +35,14 @@ const forgotPasswordSlice = createSlice({
       .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
       });
   },
 });
 
 export const forgotPassword = createAsyncThunk(
   "Auth/forgotPassword",
-  async ({ toAddress, isEmail }) => {
+  async ({ toAddress, isEmail }, { rejectWithValue }) => {
     const API = isEmail
       ? `${baseURL}Email/SendEmailPasswordReset`
       : `${baseURL}SMS/SendSMSPasswordReset`;
@@ -56,10 +56,10 @@ export const forgotPassword = createAsyncThunk(
       return res.data;
     } catch (err) {
       console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw err.response.data.message_TR;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
       }
-      throw err.message;
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

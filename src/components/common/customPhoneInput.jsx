@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -26,6 +26,9 @@ const CustomPhoneInput = ({
     setPhone(value);
     onChange(value);
   };
+  useEffect(() => {
+    setPhone(value);
+  }, [value]);
 
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>

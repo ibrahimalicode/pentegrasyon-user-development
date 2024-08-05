@@ -28,7 +28,7 @@ const AddUser = ({ onSuccess }) => {
 
   const { dealers: dealersData } = useSelector((state) => state.users.getUsers);
 
-  const { cities: data, success: citiesSuccess } = useSelector(
+  const { cities: citiesData, success: citiesSuccess } = useSelector(
     (state) => state.data.getCities
   );
   const { districts: districtsData, success: districtsSuccess } = useSelector(
@@ -162,13 +162,13 @@ const AddUser = ({ onSuccess }) => {
   }, [loading, success, error]);
 
   useEffect(() => {
-    if (!data) {
+    if (!citiesData) {
       dispatch(getCities());
     }
     if (citiesSuccess) {
-      setCities(data);
+      setCities(citiesData);
     }
-  }, [data, citiesSuccess]);
+  }, [citiesData, citiesSuccess]);
 
   useEffect(() => {
     if (city?.id) {

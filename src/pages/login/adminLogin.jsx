@@ -12,6 +12,7 @@ import TurnstileWidget from "../../components/turnstileWidget";
 
 const eyeIconVis = <EyeI className="w-5" />;
 const eyeIconInv = <EyeInv className="w-5" />;
+import LoadingI from "../../assets/anim/loading";
 
 function AdminLogin() {
   const dispatch = useDispatch();
@@ -108,10 +109,11 @@ function AdminLogin() {
                 pageName={"login"}
               />
               <button
+                disabled={loading}
                 type="submit"
-                className="w-full px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10"
+                className="w-full flex justify-center px-7 py-2 text-2xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 disabled:cursor-not-allowed"
               >
-                Giriş
+                {loading ? <LoadingI className="h-7 text-white" /> : "Giriş"}
               </button>
             </div>
           </div>

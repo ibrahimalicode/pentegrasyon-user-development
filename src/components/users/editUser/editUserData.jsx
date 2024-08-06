@@ -17,7 +17,7 @@ import {
 
 const EditUserdata = ({
   cities,
-  setDistricts,
+  dispatcher,
   submitData,
   setSubmitData,
   submit,
@@ -36,7 +36,7 @@ const EditUserdata = ({
     (state) => state.data.getDistricts
   );
 
-  const [districts1, setDistricts1] = useState([]);
+  const [districts, setDistricts] = useState([]);
   const [userDataBefore, setUserDataBefore] = useState(null);
   const [userData, setUserData] = useState({
     userId: "",
@@ -110,6 +110,7 @@ const EditUserdata = ({
   useEffect(() => {
     if (userData.city?.id) {
       dispatch(getDistricts({ cityId: userData.city.id }));
+      dispatcher.current = "userData";
       setUserData((prev) => {
         return {
           ...prev,
@@ -124,6 +125,7 @@ const EditUserdata = ({
         )[0]?.id;
         if (cityId) {
           dispatch(getDistricts({ cityId: cityId }));
+          dispatcher.current = "userData";
         }
       }
     }
@@ -132,29 +134,31 @@ const EditUserdata = ({
   // SET DISTRICTS ACCORDING TO USER OR INVOICE
   useEffect(() => {
     if (districtsSuccess) {
-      if (!userData.district || !userData.district?.id) {
-        const district = districtsData.filter(
-          (dist) =>
-            dist?.label.toLowerCase() === userData.district?.label.toLowerCase()
-        )[0];
-        if (district) {
-          setUserDataBefore((prev) => {
-            return {
-              ...prev,
-              district,
-            };
-          });
-          setUserData((prev) => {
-            return {
-              ...prev,
-              district,
-            };
-          });
-        }
-        setDistricts1(districtsData);
-      } else {
+      if ((dispatcher.current = "userData")) {
         setDistricts(districtsData);
       }
+      // if (!userData.district || !userData.district?.id) {
+      //   const district = districtsData.filter(
+      //     (dist) =>
+      //       dist?.label.toLowerCase() === userData.district?.label.toLowerCase()
+      //   )[0];
+      //   if (district) {
+      //     setUserDataBefore((prev) => {
+      //       return {
+      //         ...prev,
+      //         district,
+      //       };
+      //     });
+      //     setUserData((prev) => {
+      //       return {
+      //         ...prev,
+      //         district,
+      //       };
+      //     });
+      //   }
+      //   setDistricts(districtsData);
+      // } else {
+      // }
     }
   }, [districtsSuccess]);
 
@@ -273,7 +277,7 @@ const EditUserdata = ({
               ? userData.district
               : { value: null, label: "İlçe seç" }
           }
-          options={[{ value: null, label: "İlçe seç" }, ...districts1]}
+          options={[{ value: null, label: "İlçe seç" }, ...districts]}
           onChange={(selectedOption) => {
             setUserData((prev) => {
               return {

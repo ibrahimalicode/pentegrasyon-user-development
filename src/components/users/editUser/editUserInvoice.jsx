@@ -17,24 +17,30 @@ import {
 
 const EditUserInvoice = ({
   cities,
-  districts,
   submitInvoice,
   setSubmitInvoice,
   submit,
   setSubmit,
+  dispatcher,
 }) => {
   const dispatch = useDispatch();
   const toastId = useRef();
 
   const { user } = useSelector((state) => state.users.getUser);
+
   const { loading, success, error } = useSelector(
     (state) => state.users.updateInvoice
+  );
+
+  const { districts: districtsData, success: districtsSuccess } = useSelector(
+    (state) => state.data.getDistricts
   );
 
   const { neighs: neighsData, success: neighsSuccess } = useSelector(
     (state) => state.data.getNeighs
   );
 
+  const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
   const [openFatura, setOpenFatura] = useState(false);
   const [userInvoiceBefore, setUserInvoiceBefore] = useState();
@@ -50,7 +56,7 @@ const EditUserInvoice = ({
     mersisNumber: "",
   });
 
-  //UPDATE USER DATA
+  //TOAST
   useEffect(() => {
     if (loading) {
       toastId.current = toast.loading("Updating Invoice...");
@@ -122,6 +128,7 @@ const EditUserInvoice = ({
   useEffect(() => {
     if (userInvoice.city?.id) {
       dispatch(getDistricts({ cityId: userInvoice.city.id }));
+      dispatcher.current = "userInvoice";
       setUserInvoice((prev) => {
         return {
           ...prev,
@@ -136,6 +143,7 @@ const EditUserInvoice = ({
         )[0]?.id;
         if (cityId) {
           dispatch(getDistricts({ cityId: cityId }));
+          dispatcher.current = "userInvoice";
           setUserInvoice((prev) => {
             return {
               ...prev,
@@ -186,6 +194,15 @@ const EditUserInvoice = ({
       }
     }
   }, [userInvoice.district]);
+
+  // SET DISTRICTS ACCORDING TO USER OR INVOICE
+  useEffect(() => {
+    if (districtsSuccess) {
+      if ((dispatcher.current = "userInvoice")) {
+        setDistricts(districtsData);
+      }
+    }
+  }, [districtsSuccess]);
 
   // SET NEIGHBOURHOODS
   useEffect(() => {

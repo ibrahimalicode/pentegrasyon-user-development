@@ -58,6 +58,7 @@ const DeletePopup = ({ data, onSuccess }) => {
     (state) => state.licenses.getUserLicenses
   );
 
+  let toastId;
   const [checked, setChecked] = useState(false);
   const [checked2, setChecked2] = useState(true);
   const [restorantNumber, setRestorantNumber] = useState(null);
@@ -69,11 +70,10 @@ const DeletePopup = ({ data, onSuccess }) => {
 
   useEffect(() => {
     if (loading) {
-      toast.dismiss();
-      toast.loading("Logging in..");
+      toastId = toast.loading("Logging in..");
     }
     if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -82,7 +82,7 @@ const DeletePopup = ({ data, onSuccess }) => {
       dispatch(resetDeleteUser());
     }
     if (success) {
-      onSuccess();
+      onSuccess(toastId);
       toast.dismiss();
       setChecked(false);
       setShowPopup(false);

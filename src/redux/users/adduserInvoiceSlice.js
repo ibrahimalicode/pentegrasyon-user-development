@@ -11,17 +11,17 @@ const initialState = {
   data: null,
 };
 
-const updateUserInvoiceSlice = createSlice({
-  name: "updateUserInvoice",
+const addUserInvoiceSlice = createSlice({
+  name: "addUserInvoice",
   initialState: initialState,
   reducers: {
-    resetUpdateUserInvoice: (state) => {
+    resetaddUserInvoice: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
       state.data = null;
     },
-    resetUpdateUserInvoiceState: (state) => {
+    resetaddUserInvoiceState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -29,19 +29,19 @@ const updateUserInvoiceSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(updateUserInvoice.pending, (state) => {
+      .addCase(addUserInvoice.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(updateUserInvoice.fulfilled, (state, action) => {
+      .addCase(addUserInvoice.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(updateUserInvoice.rejected, (state, action) => {
+      .addCase(addUserInvoice.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -50,8 +50,8 @@ const updateUserInvoiceSlice = createSlice({
   },
 });
 
-export const updateUserInvoice = createAsyncThunk(
-  "Users/updateUserInvoice",
+export const addUserInvoice = createAsyncThunk(
+  "Users/addUserInvoice",
   async (
     {
       userId,
@@ -69,7 +69,7 @@ export const updateUserInvoice = createAsyncThunk(
   ) => {
     try {
       const res = await api.put(
-        `${baseURL}Invoices/UpdateUserInvoiceAddressByUserId`,
+        `${baseURL}Invoices/AddUserInvoiceAddress`,
         {
           taxOffice,
           taxNumber,
@@ -100,6 +100,6 @@ export const updateUserInvoice = createAsyncThunk(
   }
 );
 
-export const { resetUpdateUserInvoice, resetUpdateUserInvoiceState } =
-  updateUserInvoiceSlice.actions;
-export default updateUserInvoiceSlice.reducer;
+export const { resetaddUserInvoice, resetaddUserInvoiceState } =
+  addUserInvoiceSlice.actions;
+export default addUserInvoiceSlice.reducer;

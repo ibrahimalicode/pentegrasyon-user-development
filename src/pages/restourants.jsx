@@ -131,7 +131,6 @@ const Restourants = () => {
 
   useEffect(() => {
     if (error) {
-      toast.dismiss();
       if (error?.message) {
         toast.error(error.message);
       } else {
@@ -141,7 +140,6 @@ const Restourants = () => {
     }
 
     if (success) {
-      toast.dismiss();
       setRestaurantsData(restaurants.data);
       setTotalItems(restaurants.totalCount);
       console.log(restaurants);

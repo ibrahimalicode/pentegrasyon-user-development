@@ -46,6 +46,7 @@ const UserRegister = ({ setPageName }) => {
     error: verifyCodeError,
   } = useSelector((state) => state.auth.verifyCode);
 
+  let toastId;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -142,14 +143,14 @@ const UserRegister = ({ setPageName }) => {
   // USE EFFECTS
   useEffect(() => {
     if (loading) {
-      toast.loading("Loading...");
+      toastId = toast.loading("Loading...");
     } else if (success) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       setToConfirm(true);
       toast.success("SMS has beeen sent successfully");
       dispatch(resetRgisterState());
     } else if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (error?.message) {
         toast.error(error.message);
       } else {
@@ -161,17 +162,17 @@ const UserRegister = ({ setPageName }) => {
 
   useEffect(() => {
     if (verifyCodeLoading) {
-      toast.loading("Loading...");
+      toastId = toast.loading("Loading...");
     }
     if (verifyCodeSuccess) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.success("Registered Successfully");
       setPageName("login"); // To the UserLogin
       navigate("/");
       dispatch(resetVerifyCodeState());
     }
     if (verifyCodeError) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (verifyCodeError?.message) {
         toast.error(verifyCodeError.message);
       } else {

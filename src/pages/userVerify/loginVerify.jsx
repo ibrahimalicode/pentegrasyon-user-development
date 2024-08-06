@@ -53,13 +53,11 @@ const UserVerifyLogin = () => {
 
   useEffect(() => {
     if (success) {
-      toast.dismiss();
       toast.success("Verification has been sent");
       setOpenVerifyCode(true);
       dispatch(resetUserVerification());
     }
     if (error) {
-      toast.dismiss();
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -71,14 +69,12 @@ const UserVerifyLogin = () => {
 
   useEffect(() => {
     if (verifyCodeSuccess) {
-      toast.dismiss();
       toast.success("Code Verified");
       setOpenVerifyCode(false);
       dispatch(resetVerifyCodeState());
       navigate("/");
     }
     if (verifyCodeError) {
-      toast.dismiss();
       if (verifyCodeError?.message) {
         toast.error(verifyCodeError.message);
       } else {

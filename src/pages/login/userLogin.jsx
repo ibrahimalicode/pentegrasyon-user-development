@@ -15,6 +15,7 @@ function UserLogin({ pageName, setPageName }) {
 
   const { success, loading, error } = useSelector((state) => state.auth.login);
 
+  let toastId;
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -27,10 +28,9 @@ function UserLogin({ pageName, setPageName }) {
 
   useEffect(() => {
     if (loading) {
-      toast.dismiss();
-      toast.loading("Logging in..");
+      toastId = toast.loading("Logging in..");
     } else if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -42,7 +42,7 @@ function UserLogin({ pageName, setPageName }) {
       dispatch(resetLoginState());
     } else if (success) {
       navigate("/dashboard");
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.success("Successfuly logged in");
       dispatch(resetLoginState());
     }

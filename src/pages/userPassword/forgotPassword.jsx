@@ -32,6 +32,7 @@ const ForgotPassword = () => {
     error: verifyCodeError,
   } = useSelector((state) => state.auth.verifyCode);
 
+  let toastId;
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [checked, setChecked] = useState(true);
@@ -77,7 +78,7 @@ const ForgotPassword = () => {
       dispatch(resetForgotPassword());
     }
     if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (error?.message) {
         toast.error(error.message);
       } else {
@@ -89,16 +90,16 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (verifyCodeLoading) {
-      toast.loading("Loading...");
+      toastId = toast.loading("Loading...");
     }
     if (verifyCodeSuccess) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.success("Code verified");
       navigate("/setNewPassword");
       dispatch(resetVerifyCodeState());
     }
     if (verifyCodeError) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (verifyCodeError?.message) {
         toast.error(verifyCodeError.message);
       } else {

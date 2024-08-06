@@ -11,6 +11,7 @@ function Header() {
   const navigate = useNavigate();
   const { loading, success, error } = useSelector((state) => state.auth.logout);
 
+  let toastId;
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
@@ -22,15 +23,15 @@ function Header() {
   useEffect(() => {
     if (success) {
       clearAuth();
-      toast.dismiss();
+      toast.dismiss(toastId);
       navigate("/login");
       dispatch(resetLogoutState());
     }
     if (loading) {
-      toast.loading("Logging out...");
+      toastId = toast.loading("Logging out...");
     }
     if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.error("Something went wrong");
       dispatch(resetLogoutState());
     }

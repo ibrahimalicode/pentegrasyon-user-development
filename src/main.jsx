@@ -14,7 +14,7 @@ root.render(
     <BrowserRouter>
       <div className="light">
         <App />
-        <Toaster position="top-right" toastOptions={toastOptions} />
+        <Toaster toastOptions={toastOptions} />
       </div>
     </BrowserRouter>
   </Provider>

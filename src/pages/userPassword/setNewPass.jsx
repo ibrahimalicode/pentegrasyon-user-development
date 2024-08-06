@@ -34,6 +34,7 @@ const SetNewPassword = () => {
     error: verifyE,
   } = useSelector((state) => state.auth.verifyCode);
 
+  let toastId;
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [icon, setIcon] = useState(eyeIconInv);
@@ -78,18 +79,17 @@ const SetNewPassword = () => {
 
   useEffect(() => {
     if (success) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       dispatch(resetChangePassword());
       toast.success("Password changed successfully");
       clearAuth();
       navigate("/login");
     }
     if (loading) {
-      toast.dismiss();
-      toast.loading("Loading...");
+      toastId = toast.loading("Loading...");
     }
     if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (error?.message) {
         toast.error(error.message);
       } else {

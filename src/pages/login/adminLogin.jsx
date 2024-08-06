@@ -18,6 +18,8 @@ function AdminLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { success, loading, error } = useSelector((state) => state.auth.login);
+
+  let toastId;
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [inputType, setInputType] = useState("password");
@@ -43,10 +45,9 @@ function AdminLogin() {
 
   useEffect(() => {
     if (loading) {
-      toast.dismiss();
-      toast.loading("Logging in..");
+      toastId = toast.loading("Logging in..");
     } else if (error) {
-      toast.dismiss();
+      toast.dismiss(toastId);
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -55,7 +56,7 @@ function AdminLogin() {
       dispatch(resetLoginState());
     } else if (success) {
       navigate("/dashboard");
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.success("Successfuly logged in");
       dispatch(resetLoginState());
     }
@@ -100,7 +101,7 @@ function AdminLogin() {
           <div className="flex flex-col mt-10 w-full">
             <div className="flex gap-4 text-sm leading-5 max-md:flex-wrap">
               <div className="flex-1 text-right text-[--link-1]">
-                <a href="/">Şifremi unuttum ?</a>
+                <a href="/forgotPassword">Şifremi unuttum ?</a>
               </div>
             </div>
             <div className="w-full">

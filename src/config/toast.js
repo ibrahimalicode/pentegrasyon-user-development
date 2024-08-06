@@ -5,6 +5,8 @@ const toastOptions = {
     padding: "16px",
     color: "#000000",
   },
+  duration: 5000,
+  position: "top-right",
 };
 
 export default toastOptions;

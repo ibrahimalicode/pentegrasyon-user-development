@@ -44,6 +44,9 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   const { loading: updateInvoiceLoading, success: updateInvoiceSuccess } =
     useSelector((state) => state.users.updateInvoice);
 
+  const { loading: addInvoiceLoading, success: addInvoiceSuccess } =
+    useSelector((state) => state.users.addInvoice);
+
   const {
     loading: getUserLoading,
     error: getUserError,
@@ -77,7 +80,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   useEffect(() => {
     if (submitPass.status) {
       setSubmit(true);
-      console.log("submit");
+      // console.log("submit");
     }
   }, [submitPass.status]);
 
@@ -118,14 +121,24 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
 
   // LISTEN TO EDITUSERDATA, PASSWORD AND INVOICE
   useEffect(() => {
-    if (updateDataLoading || updatePassLoading || updateInvoiceLoading) {
+    if (
+      updateDataLoading ||
+      updatePassLoading ||
+      updateInvoiceLoading ||
+      addInvoiceLoading
+    ) {
       setUpdateUserState({ loading: true });
     } else setUpdateUserState({ loading: false });
 
     if (updateDataSuccess) {
       onSuccess(); //renew users table
     }
-    if (updateDataSuccess || updatePassSuccess || updateInvoiceSuccess) {
+    if (
+      updateDataSuccess ||
+      updatePassSuccess ||
+      updateInvoiceSuccess ||
+      addInvoiceSuccess
+    ) {
       if (!updateDataLoading && !updatePassLoading && !updateInvoiceLoading) {
         closeForm();
         // console.log("close");
@@ -135,9 +148,11 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
     updateDataLoading,
     updatePassLoading,
     updateInvoiceLoading,
+    addInvoiceLoading,
     updateDataSuccess,
     updatePassSuccess,
     updateInvoiceSuccess,
+    addInvoiceSuccess,
   ]);
 
   return (

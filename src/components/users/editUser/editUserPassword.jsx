@@ -52,7 +52,6 @@ const EditUserPassword = ({
         toast.error("Something went wrong");
       }
       setSubmit(false);
-      setSubmitPass({ status: false, submit: false });
       dispatch(resetUpdateUserPassword());
     } else if (success) {
       toastId.current && toast.remove(toastId.current);

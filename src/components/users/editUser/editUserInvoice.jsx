@@ -15,14 +15,7 @@ import {
   updateUserInvoice,
 } from "../../../redux/users/updateUserInvoiceSlice";
 
-const EditUserInvoice = ({
-  cities,
-  submitInvoice,
-  setSubmitInvoice,
-  submit,
-  setSubmit,
-  dispatcher,
-}) => {
+const EditUserInvoice = ({ cities, submit, setSubmit, dispatcher }) => {
   const dispatch = useDispatch();
   const toastId = useRef();
 
@@ -68,7 +61,6 @@ const EditUserInvoice = ({
         toast.error("Something went wrong");
       }
       setSubmit(false);
-      setSubmitInvoice({ status: false, submit: false });
       dispatch(resetUpdateUserInvoice());
     } else if (success) {
       toastId.current && toast.dismiss(toastId.current);
@@ -211,13 +203,6 @@ const EditUserInvoice = ({
     }
   }, [neighsSuccess]);
 
-  // TELL THE PARENT THE STATUS
-  useEffect(() => {
-    if (submitInvoice.submit) {
-      setSubmitInvoice({ status: true, submit: false });
-    }
-  }, [submitInvoice.submit]);
-
   useEffect(() => {
     if (submit) {
       if (openFatura) {
@@ -228,6 +213,8 @@ const EditUserInvoice = ({
           } else {
             console.log("Add Invoice");
           }
+        } else {
+          setSubmit(false);
         }
       }
     }

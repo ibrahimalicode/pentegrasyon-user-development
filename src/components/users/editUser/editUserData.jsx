@@ -61,7 +61,6 @@ const EditUserdata = ({
         toast.error("Something went wrong");
       }
       setSubmit(false);
-      setSubmitData({ status: false, submit: false });
       dispatch(resetUpdateUser());
     } else if (success) {
       toastId.current && toast.remove(toastId.current);
@@ -162,18 +161,14 @@ const EditUserdata = ({
     }
   }, [districtsSuccess]);
 
-  // TELL THE PARENT THE STATUS
-  useEffect(() => {
-    if (submitData.submit) {
-      setSubmitData({ status: true, submit: false });
-    }
-  }, [submitData.submit]);
-
   useEffect(() => {
     if (submit) {
       const equalData = isEqual(userDataBefore, userData);
       if (!equalData) {
         dispatch(updateUserData({ ...userData }));
+      } else {
+        setSubmit(false);
+        console.log("Her hangı bir deişiklik yapmadınız");
       }
     }
   }, [submit]);

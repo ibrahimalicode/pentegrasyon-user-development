@@ -59,9 +59,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   const [cities, setCities] = useState([]);
 
   const [submit, setSubmit] = useState(false);
-  const [submitData, setSubmitData] = useState({ state: false, submit: false });
   const [submitPass, setSubmitPass] = useState({ state: false, submit: false });
-  const [submitInv, setSubmitInv] = useState({ state: false, submit: false });
 
   const closeForm = () => {
     setPopupContent(null);
@@ -70,17 +68,16 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitData({ status: submitData.status, submit: true });
-    setSubmitPass({ status: submitPass.status, submit: true });
-    setSubmitInv({ status: submitInv.status, submit: true });
+    setSubmitPass({ status: false, submit: true });
   };
 
   // HANDLE SUBMIT
   useEffect(() => {
-    if (submitData.status && submitPass.status && submitInv.status) {
+    if (submitPass.status) {
       setSubmit(true);
+      console.log("submit");
     }
-  }, [submitData.status, submitPass.status, submitInv.status]);
+  }, [submitPass.status]);
 
   // GET USER IF THERE IS NOT
   useEffect(() => {
@@ -156,8 +153,6 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
               cities={cities}
               submit={submit}
               setSubmit={setSubmit}
-              submitData={submitData}
-              setSubmitData={setSubmitData}
               dispatcher={dispatcher}
             />
 
@@ -173,8 +168,6 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
               cities={cities}
               submit={submit}
               setSubmit={setSubmit}
-              submitInvoice={submitInv}
-              setSubmitInvoice={setSubmitInv}
               dispatcher={dispatcher}
             />
 

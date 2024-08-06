@@ -19,6 +19,7 @@ import getUserSlice from "./redux/users/getUserSlice";
 import updateUserDataSlice from "./redux/users/updateUserDataSlice";
 import updateUserInvoiceSlice from "./redux/users/updateUserInvoiceSlice";
 import updateUserPasswordSlice from "./redux/users/updateUserPasswordSlice";
+import adduserInvoiceSlice from "./redux/users/adduserInvoiceSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -36,6 +37,7 @@ const usersSlice = combineReducers({
   addUser: addUserSlice,
   delete: deleteUserSlice,
   updateUser: updateUserDataSlice,
+  addInvoice: adduserInvoiceSlice,
   updateInvoice: updateUserInvoiceSlice,
   updatePassword: updateUserPasswordSlice,
 });

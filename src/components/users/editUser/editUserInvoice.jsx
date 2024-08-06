@@ -14,6 +14,10 @@ import {
   resetUpdateUserInvoice,
   updateUserInvoice,
 } from "../../../redux/users/updateUserInvoiceSlice";
+import {
+  addUserInvoice,
+  resetaddUserInvoice,
+} from "../../../redux/users/adduserInvoiceSlice";
 
 const EditUserInvoice = ({
   cities,
@@ -30,6 +34,12 @@ const EditUserInvoice = ({
   const { loading, success, error } = useSelector(
     (state) => state.users.updateInvoice
   );
+
+  const {
+    loading: addInvoiceLoading,
+    success: addInvoiceSuccess,
+    error: addInvoiceError,
+  } = useSelector((state) => state.users.addInvoice);
 
   const { districts: districtsData, success: districtsSuccess } = useSelector(
     (state) => state.data.getDistricts
@@ -55,7 +65,7 @@ const EditUserInvoice = ({
     mersisNumber: "",
   });
 
-  //TOAST
+  //TOAST TO UPDATE
   useEffect(() => {
     if (loading) {
       toastId.current = toast.loading("Updating Invoice...");
@@ -74,6 +84,26 @@ const EditUserInvoice = ({
       dispatch(resetUpdateUserInvoice());
     }
   }, [loading, success, error, dispatch]);
+
+  //TOAST TO ADD INVOICE IF THERE IS NO
+  useEffect(() => {
+    if (addInvoiceLoading) {
+      toastId.current = toast.loading("Updating Invoice...");
+    } else if (addInvoiceError) {
+      toastId.current && toast.dismiss(toastId.current);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      setSubmit(false);
+      dispatch(resetaddUserInvoice());
+    } else if (addInvoiceSuccess) {
+      toastId.current && toast.dismiss(toastId.current);
+      toast.success("Invoice updated successfully");
+      dispatch(resetaddUserInvoice());
+    }
+  }, [addInvoiceLoading, success, addInvoiceError, dispatch]);
 
   // GET AND SET INVOICE IF THERE IS
   useEffect(() => {
@@ -252,7 +282,7 @@ const EditUserInvoice = ({
             dispatch(updateUserInvoice({ userId: user.id, ...userInvoice }));
             console.log({ userId: user.id, ...userInvoice });
           } else {
-            console.log("Add Invoice");
+            dispatch(addUserInvoice({ userId: user.id, ...userInvoice }));
           }
           setNoChange((prev) => {
             return {

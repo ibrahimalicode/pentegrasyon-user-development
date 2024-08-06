@@ -68,8 +68,8 @@ export const addUserInvoice = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const res = await api.put(
-        `${baseURL}Invoices/AddUserInvoiceAddress`,
+      const res = await api.post(
+        `${baseURL}Invoices/AddUserInvoiceAddressByUserId`,
         {
           taxOffice,
           taxNumber,

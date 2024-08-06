@@ -16,6 +16,7 @@ const EditUserPassword = ({
   setSubmitPass,
   submit,
   setSubmit,
+  setNoChange,
 }) => {
   const dispatch = useDispatch();
   const toastId = useRef();
@@ -72,7 +73,22 @@ const EditUserPassword = ({
         );
       }
     }
-  }, [submit]);
+    if (openPassword) {
+      setNoChange((prev) => {
+        return {
+          ...prev,
+          userPass: false,
+        };
+      });
+    } else {
+      setNoChange((prev) => {
+        return {
+          ...prev,
+          userPass: true,
+        };
+      });
+    }
+  }, [submit, openPassword]);
 
   useEffect(() => {
     if (submitPass.submit) {
@@ -100,7 +116,7 @@ const EditUserPassword = ({
       {openPassword && (
         <div className="flex gap-4 mt-4">
           <CustomInput
-            required={userPassword.confirmPassword ? true : false}
+            required={openPassword}
             label="Şifre"
             placeholder="Şifre"
             className="py-[.45rem] text-sm"
@@ -116,7 +132,7 @@ const EditUserPassword = ({
             }}
           />
           <CustomInput
-            required={userPassword.password ? true : false}
+            required={openPassword}
             label="Şifreyi onayla"
             placeholder="Şifre"
             className="py-[.45rem] text-sm"

@@ -17,9 +17,6 @@ import {
 } from "../../redux/auth/verifyCodeSlice";
 import NotFound from "../404";
 
-const eyeIconVis = <EyeI className="w-5" />;
-const eyeIconInv = <EyeInv className="w-5" />;
-
 const SetNewPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,8 +34,6 @@ const SetNewPassword = () => {
   let toastId;
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [icon, setIcon] = useState(eyeIconInv);
-  const [icon2, setIcon2] = useState(eyeIconInv);
   const [inputType, setInputType] = useState("password");
   const [inputType2, setInputType2] = useState("password");
   const [credentials, setCredentials] = useState(null);
@@ -47,34 +42,12 @@ const SetNewPassword = () => {
   const handleChangePassword = (e) => {
     e.preventDefault();
     if (password !== password2) {
-      toast.error("Şifreler eşit değil");
+      toast.error("Şifreler aynı değil !");
       return;
     }
     dispatch(
       changePassword({ newPassword: password, newPasswordConfirm: password2 })
     );
-  };
-
-  // ICON RELATED
-  const iconClick = (e) => {
-    e.preventDefault();
-    if (inputType === "password") {
-      setInputType("text");
-      setIcon(eyeIconVis);
-    } else {
-      setInputType("password");
-      setIcon(eyeIconInv);
-    }
-  };
-  const iconClick2 = (e) => {
-    e.preventDefault();
-    if (inputType2 === "password") {
-      setInputType2("text");
-      setIcon2(eyeIconVis);
-    } else {
-      setInputType2("password");
-      setIcon2(eyeIconInv);
-    }
   };
 
   useEffect(() => {
@@ -138,19 +111,18 @@ const SetNewPassword = () => {
         onSubmit={handleChangePassword}
       >
         <div className="flex justify-center">
-          <h2 className="text-[2.3rem] font-bold text-black tracking-tighter">
-            Şifre değiştirme
+          <h2 className="text-[2rem] font-bold text-black tracking-tighter">
+            Yeni şifrenizi belirleyin
           </h2>
         </div>
         <div className="flex flex-col max-w-full">
           <CustomInput
-            label="Şifre"
+            label="Yeni Şifre"
             type={inputType}
-            placeholder="Şifre"
+            placeholder="Yeni Şifre"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            icon={icon}
-            onClick={iconClick}
+            letIcon={true}
             required={true}
             className="py-4"
           />
@@ -160,17 +132,11 @@ const SetNewPassword = () => {
             placeholder="Şifreyi Onayla"
             value={password2}
             onChange={(e) => setPassword2(e.target.value)}
-            icon={icon2}
-            onClick={iconClick2}
+            letIcon={true}
             required={true}
             className="py-4"
           />
           <div className="flex flex-col mt-10 w-full">
-            <div className="flex gap-4 text-sm leading-5 max-md:flex-wrap">
-              <div className="flex-1 text-right text-[--link-1]">
-                <a href="/">Şifremi unuttum ?</a>
-              </div>
-            </div>
             <button
               disabled={loading}
               type="submit"

@@ -18,6 +18,7 @@ import {
 } from "../../components/common/messages";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import CustomPhoneInput from "../../components/common/customPhoneInput";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const ForgotPassword = () => {
     if (checked) {
       dispatch(
         codeVerification({
-          phoneNumberOrEmail: phoneNumber,
+          phoneNumberOrEmail: phoneNumber.slice(1),
           verificationCode,
         })
       );
@@ -76,11 +77,12 @@ const ForgotPassword = () => {
     if (success) {
       setOpenVerifyCode(true); /// here
       dispatch(resetForgotPassword());
+      toast.success("Onay kodu gönderildi");
     }
     if (error) {
       toast.dismiss(toastId);
-      if (error?.message) {
-        toast.error(error.message);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
       } else {
         toast.error("Something went wrong");
       }
@@ -94,14 +96,14 @@ const ForgotPassword = () => {
     }
     if (verifyCodeSuccess) {
       toast.dismiss(toastId);
-      toast.success("Code verified");
+      toast.success("Doğurulama kodu onaylandı");
       navigate("/setNewPassword");
       dispatch(resetVerifyCodeState());
     }
     if (verifyCodeError) {
       toast.dismiss(toastId);
-      if (verifyCodeError?.message) {
-        toast.error(verifyCodeError.message);
+      if (verifyCodeError?.message_TR) {
+        toast.error(verifyCodeError.message_TR);
       } else {
         toast.error("Couldn't verify");
       }
@@ -129,7 +131,7 @@ const ForgotPassword = () => {
                     className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white]"
                   >
                     <GobackI />
-                    <span>Gri dön</span>
+                    <span>Geri dön</span>
                   </button>
                 </div>
                 <div className="w-max">
@@ -157,32 +159,43 @@ const ForgotPassword = () => {
                 />
               </div>
               <div className="flex flex-col max-w-full">
-                <CustomInput
-                  label={checked ? "Telefone" : "E-Posta"}
-                  type={checked ? "number" : "email"}
-                  placeholder={checked ? "Telefone" : "E-Posta"}
-                  value={checked ? phoneNumber : email}
-                  onChange={(e) => {
-                    checked
-                      ? setPhoneNumber(e.target.value)
-                      : setEmail(e.target.value);
-                  }}
-                  required={true}
-                />
-                <div className="flex flex-col mt-10 w-full">
+                {checked ? (
+                  <CustomPhoneInput
+                    label="Telefon"
+                    placeholder="Telefon"
+                    value={phoneNumber}
+                    onChange={(phone) => setPhoneNumber(phone)}
+                  />
+                ) : (
+                  <CustomInput
+                    label="E-Posta"
+                    type="email"
+                    placeholder="E-Posta"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required={true}
+                  />
+                )}
+                <div className="flex flex-col w-full">
+                  <div className="font-[300] text-[--link-1] mt-5 text-sm">
+                    <p>
+                      Onay kodu göndermek için sistemde kayıtlı olan telefon
+                      numaranızı veya mail adresinizi giriniz.
+                    </p>
+                  </div>
                   <button
                     disabled={loading}
                     type="submit"
-                    className="flex justify-center px-7 py-2 text-lg font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
+                    className="flex justify-center px-7 py-2 mt-5 text-lg font-light rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
                   >
-                    {loading ? <LoadingI className="h-7" /> : "Devam"}
+                    {loading ? <LoadingI className="h-7" /> : "Gönder"}
                   </button>
-                  <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" />
+                  {/* <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" /> */}
                 </div>
               </div>
               <div className="flex flex-col mt-10 w-full">
                 <div className="text-sm leading-5 text-[--link-1] w-full text-center">
-                  <p>Zaten Hesabınız var mı ?</p>
+                  {/* <p>Zaten Hesabınız var mı ?</p> */}
                 </div>
                 <button
                   type="button"
@@ -206,7 +219,7 @@ const ForgotPassword = () => {
                     className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--link-1] bg-[--white] sm:hover:text-[--white-1] sm:hover:bg-[--primary-1]"
                   >
                     <GobackI />
-                    <span>Gri dön</span>
+                    <span>Geri dön</span>
                   </button>
                 </div>
                 <div className="w-max">
@@ -217,9 +230,9 @@ const ForgotPassword = () => {
               </div>
               <div className="flex flex-col max-w-full">
                 <CustomInput
-                  label="Doğrulama Codu"
+                  label="Doğrulama Kodu"
                   type="text"
-                  placeholder="Doğrulama Codu"
+                  placeholder="Doğrulama Kodu"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
                   required={true}
@@ -228,7 +241,7 @@ const ForgotPassword = () => {
                   {checked ? (
                     <PhoneUserMessage number={phoneNumber.slice(1)} />
                   ) : (
-                    <EmailUserMessage number={email} />
+                    <EmailUserMessage mail={email} />
                   )}
                 </div>
                 <div className="flex flex-col mt-10 w-full">

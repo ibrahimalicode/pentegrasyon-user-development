@@ -63,7 +63,11 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   const [cities, setCities] = useState([]);
 
   const [submit, setSubmit] = useState(false);
-  const [noChange, setNoChange] = useState({ userData: null, userInv: null });
+  const [noChange, setNoChange] = useState({
+    userData: null,
+    userInv: null,
+    userPass: true,
+  });
   const [submitPass, setSubmitPass] = useState({ state: false, submit: false });
 
   const closeForm = () => {
@@ -90,10 +94,12 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
       (noChange.userData && noChange.userInv === null) ||
       (noChange.userData === null && noChange.userInv)
     ) {
-      toast("Her hangı bir deişiklik yapmadınız");
-      setNoChange({ userData: null, userInv: null });
+      if (noChange.userPass) {
+        toast("Her hangı bir deişiklik yapmadınız");
+        setNoChange({ userData: null, userInv: null });
+      }
     }
-  }, [noChange.userData, noChange.userInv]);
+  }, [noChange.userData, noChange.userInv, noChange.userPass]);
 
   // GET USER IF THERE IS NOT
   useEffect(() => {
@@ -191,6 +197,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
               setSubmit={setSubmit}
               submitPass={submitPass}
               setSubmitPass={setSubmitPass}
+              setNoChange={setNoChange}
             />
 
             <EditUserInvoice

@@ -10,6 +10,7 @@ import EditUserInvoice from "./editUserInvoice";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, resetgetUser } from "../../../redux/users/getUserSlice";
 import { getCities } from "../../../redux/data/getCitiesSlice";
+import toast from "react-hot-toast";
 
 const EditUser = ({ user, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
@@ -59,6 +60,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   const [cities, setCities] = useState([]);
 
   const [submit, setSubmit] = useState(false);
+  const [noChange, setNoChange] = useState({ userData: null, userInv: null });
   const [submitPass, setSubmitPass] = useState({ state: false, submit: false });
 
   const closeForm = () => {
@@ -78,6 +80,17 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
       console.log("submit");
     }
   }, [submitPass.status]);
+
+  useEffect(() => {
+    if (
+      (noChange.userData && noChange.userInv) ||
+      (noChange.userData && noChange.userInv === null) ||
+      (noChange.userData === null && noChange.userInv)
+    ) {
+      toast("Her hangı bir deişiklik yapmadınız");
+      setNoChange({ userData: null, userInv: null });
+    }
+  }, [noChange.userData, noChange.userInv]);
 
   // GET USER IF THERE IS NOT
   useEffect(() => {
@@ -154,6 +167,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
               submit={submit}
               setSubmit={setSubmit}
               dispatcher={dispatcher}
+              setNoChange={setNoChange}
             />
 
             <EditUserPassword
@@ -169,6 +183,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
               submit={submit}
               setSubmit={setSubmit}
               dispatcher={dispatcher}
+              setNoChange={setNoChange}
             />
 
             <div className="w-full flex justify-end mt-10">

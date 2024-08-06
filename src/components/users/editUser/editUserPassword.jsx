@@ -60,7 +60,6 @@ const EditUserPassword = ({
     }
   }, [loading, success, error, dispatch]);
 
-  // TELL THE PARENT THE STATUS
   useEffect(() => {
     if (submit) {
       if (openPassword) {

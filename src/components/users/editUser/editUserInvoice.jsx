@@ -15,7 +15,13 @@ import {
   updateUserInvoice,
 } from "../../../redux/users/updateUserInvoiceSlice";
 
-const EditUserInvoice = ({ cities, submit, setSubmit, dispatcher }) => {
+const EditUserInvoice = ({
+  cities,
+  submit,
+  setSubmit,
+  setNoChange,
+  dispatcher,
+}) => {
   const dispatch = useDispatch();
   const toastId = useRef();
 
@@ -118,83 +124,82 @@ const EditUserInvoice = ({ cities, submit, setSubmit, dispatcher }) => {
 
   // GET DISTRICTS WHENEVER INVOICE'S CITY CHANGES
   useEffect(() => {
-    if (userInvoice.city?.id) {
-      dispatch(getDistricts({ cityId: userInvoice.city.id }));
-      dispatcher.current = "userInvoice";
-      setUserInvoice((prev) => {
-        return {
-          ...prev,
-          district: null,
-        };
-      });
-    } else if (userInvoice.city?.label) {
-      if (cities.length > 0) {
-        const cityId = cities.filter(
-          (city) =>
-            city.label.toLowerCase() === userInvoice.city.label.toLowerCase()
-        )[0]?.id;
-        if (cityId) {
-          dispatch(getDistricts({ cityId: cityId }));
-          dispatcher.current = "userInvoice";
-          setUserInvoice((prev) => {
-            return {
-              ...prev,
-              district: null,
-            };
-          });
+    if (openFatura) {
+      if (userInvoice.city?.id) {
+        dispatch(getDistricts({ cityId: userInvoice.city.id }));
+        dispatcher.current = "userInvoice";
+        setUserInvoice((prev) => {
+          return {
+            ...prev,
+            district: null,
+          };
+        });
+      } else if (userInvoice.city?.label) {
+        if (cities.length > 0) {
+          const cityId = cities.filter(
+            (city) =>
+              city.label.toLowerCase() === userInvoice.city.label.toLowerCase()
+          )[0]?.id;
+          if (cityId) {
+            dispatch(getDistricts({ cityId: cityId }));
+            dispatcher.current = "userInvoice";
+          }
         }
       }
     }
-  }, [userInvoice.city]);
+  }, [userInvoice.city, openFatura]);
 
-  // GET NEIGHBOURHOODS WHENEVER THE INVOICE DISTRICT CHANGES
-  useEffect(() => {
-    if (userInvoice.district?.id && userInvoice.city?.id) {
-      dispatch(
-        getNeighs({
-          cityId: userInvoice.city.id,
-          districtId: userInvoice.district.id,
-        })
-      );
-      setUserInvoice((prev) => {
-        return {
-          ...prev,
-          neighbourhood: null,
-        };
-      });
-    } else if (userInvoice.district?.label && userInvoice.city?.label) {
-      if (cities.length > 0 && districts.length > 0) {
-        const cityLabel = (userInvoice.city?.label).toLowerCase();
-        const districtLabel = (userInvoice.district?.label).toLowerCase();
-
-        const cityId = cities.filter(
-          (city) => city.label.toLowerCase() === cityLabel
-        )[0]?.id;
-
-        const districtId = districts.filter(
-          (district) => district.label.toLowerCase() === districtLabel
-        )[0]?.id;
-        if (cityId && districtId) {
-          dispatch(getNeighs({ cityId, districtId }));
-          setUserInvoice((prev) => {
-            return {
-              ...prev,
-              neighbourhood: null,
-            };
-          });
-        }
-      }
-    }
-  }, [userInvoice.district]);
-
-  // SET DISTRICTS ACCORDING TO USER OR INVOICE
+  // SET DISTRICTS
   useEffect(() => {
     if (districtsSuccess) {
-      if ((dispatcher.current = "userInvoice")) {
+      if (dispatcher.current === "userInvoice") {
+        console.log("set dist");
         setDistricts(districtsData);
       }
     }
   }, [districtsSuccess]);
+
+  // GET NEIGHBOURHOODS WHENEVER THE INVOICE DISTRICT CHANGES
+  useEffect(() => {
+    if (openFatura) {
+      if (userInvoice.district?.id && userInvoice.city?.id) {
+        dispatch(
+          getNeighs({
+            cityId: userInvoice.city.id,
+            districtId: userInvoice.district.id,
+          })
+        );
+        setUserInvoice((prev) => {
+          return {
+            ...prev,
+            neighbourhood: null,
+          };
+        });
+      } else if (userInvoice.district?.label && userInvoice.city?.label) {
+        if (cities.length > 0 && districts.length > 0) {
+          const cityLabel = (userInvoice.city?.label).toLowerCase();
+          const districtLabel = (userInvoice.district?.label).toLowerCase();
+
+          const cityId = cities.filter(
+            (city) => city.label.toLowerCase() === cityLabel
+          )[0]?.id;
+
+          const districtId = districts.filter(
+            (district) => district.label.toLowerCase() === districtLabel
+          )[0]?.id;
+          if (cityId && districtId) {
+            dispatch(getNeighs({ cityId, districtId }));
+            setUserInvoice((prev) => {
+              return {
+                ...prev,
+                neighbourhood: null,
+              };
+            });
+          }
+        }
+      }
+    }
+  }, [userInvoice.district, openFatura]);
 
   // SET NEIGHBOURHOODS
   useEffect(() => {
@@ -210,11 +215,25 @@ const EditUserInvoice = ({ cities, submit, setSubmit, dispatcher }) => {
         if (!equalData) {
           if (userInvoiceBefore) {
             dispatch(updateUserInvoice({ userId: user.id, ...userInvoice }));
+            console.log({ userId: user.id, ...userInvoice });
           } else {
             console.log("Add Invoice");
           }
+          setNoChange((prev) => {
+            return {
+              ...prev,
+              userInv: false,
+            };
+          });
         } else {
           setSubmit(false);
+          setNoChange((prev) => {
+            return {
+              ...prev,
+              userInv: true,
+            };
+          });
+          // console.log("Her hangı bir deişiklik yapmadınız [user invoice]");
         }
       }
     }

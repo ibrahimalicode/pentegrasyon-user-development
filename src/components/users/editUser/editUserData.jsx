@@ -18,10 +18,9 @@ import {
 const EditUserdata = ({
   cities,
   dispatcher,
-  submitData,
-  setSubmitData,
   submit,
   setSubmit,
+  setNoChange,
 }) => {
   const dispatch = useDispatch();
   const toastId = useRef();
@@ -133,31 +132,31 @@ const EditUserdata = ({
   // SET DISTRICTS ACCORDING TO USER OR INVOICE
   useEffect(() => {
     if (districtsSuccess) {
-      if ((dispatcher.current = "userData")) {
+      if (dispatcher.current === "userData") {
         setDistricts(districtsData);
+        // to set the district id in the first landing
+        if (!userData.district || !userData.district?.id) {
+          const district = districtsData.filter(
+            (dist) =>
+              dist?.label.toLowerCase() ===
+              userData.district?.label.toLowerCase()
+          )[0];
+          if (district) {
+            setUserDataBefore((prev) => {
+              return {
+                ...prev,
+                district,
+              };
+            });
+            setUserData((prev) => {
+              return {
+                ...prev,
+                district,
+              };
+            });
+          }
+        }
       }
-      // if (!userData.district || !userData.district?.id) {
-      //   const district = districtsData.filter(
-      //     (dist) =>
-      //       dist?.label.toLowerCase() === userData.district?.label.toLowerCase()
-      //   )[0];
-      //   if (district) {
-      //     setUserDataBefore((prev) => {
-      //       return {
-      //         ...prev,
-      //         district,
-      //       };
-      //     });
-      //     setUserData((prev) => {
-      //       return {
-      //         ...prev,
-      //         district,
-      //       };
-      //     });
-      //   }
-      //   setDistricts(districtsData);
-      // } else {
-      // }
     }
   }, [districtsSuccess]);
 
@@ -166,9 +165,21 @@ const EditUserdata = ({
       const equalData = isEqual(userDataBefore, userData);
       if (!equalData) {
         dispatch(updateUserData({ ...userData }));
+        setNoChange((prev) => {
+          return {
+            ...prev,
+            userData: false,
+          };
+        });
       } else {
         setSubmit(false);
-        console.log("Her hangı bir deişiklik yapmadınız");
+        setNoChange((prev) => {
+          return {
+            ...prev,
+            userData: true,
+          };
+        });
+        // console.log("Her hangı bir deişiklik yapmadınız [user data]");
       }
     }
   }, [submit]);

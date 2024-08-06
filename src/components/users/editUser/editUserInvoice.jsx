@@ -153,8 +153,28 @@ const EditUserInvoice = ({
   useEffect(() => {
     if (districtsSuccess) {
       if (dispatcher.current === "userInvoice") {
-        console.log("set dist");
         setDistricts(districtsData);
+        if (!userInvoice.district || !userInvoice.district?.id) {
+          const district = districtsData.filter(
+            (dist) =>
+              dist?.label.toLowerCase() ===
+              userInvoice.district?.label.toLowerCase()
+          )[0];
+          if (district) {
+            setUserInvoiceBefore((prev) => {
+              return {
+                ...prev,
+                district,
+              };
+            });
+            setUserInvoice((prev) => {
+              return {
+                ...prev,
+                district,
+              };
+            });
+          }
+        }
       }
     }
   }, [districtsSuccess]);
@@ -189,12 +209,6 @@ const EditUserInvoice = ({
           )[0]?.id;
           if (cityId && districtId) {
             dispatch(getNeighs({ cityId, districtId }));
-            setUserInvoice((prev) => {
-              return {
-                ...prev,
-                neighbourhood: null,
-              };
-            });
           }
         }
       }
@@ -205,6 +219,27 @@ const EditUserInvoice = ({
   useEffect(() => {
     if (neighsSuccess) {
       setNeighs(neighsData);
+      if (!userInvoice.neighbourhood?.id && userInvoice.neighbourhood?.label) {
+        const neigh = neighsData.filter(
+          (neigh) =>
+            neigh.label.toLowerCase() ===
+            userInvoice.neighbourhood.label.toLowerCase()
+        )[0];
+        if (neigh) {
+          setUserInvoice((prev) => {
+            return {
+              ...prev,
+              neighbourhood: neigh,
+            };
+          });
+          setUserInvoiceBefore((prev) => {
+            return {
+              ...prev,
+              neighbourhood: neigh,
+            };
+          });
+        }
+      }
     }
   }, [neighsSuccess]);
 

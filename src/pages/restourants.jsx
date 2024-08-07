@@ -407,7 +407,10 @@ const Restourants = () => {
 
       {/* TABLE */}
       {restaurantsData ? (
-        <RestaurantsTable inData={restaurantsData} />
+        <RestaurantsTable
+          inData={restaurantsData}
+          onSuccess={() => handleFilter(true)}
+        />
       ) : loading ? (
         <TableSkeleton />
       ) : null}

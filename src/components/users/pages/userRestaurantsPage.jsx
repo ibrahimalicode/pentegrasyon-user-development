@@ -16,7 +16,7 @@ import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { usePopup } from "../../../context/PopupContext";
-import UserRestaurantLicenses from "../userRestaurantActions/licenses";
+import UsersActions from "../userRestaurantActions/userRestaurantActions";
 
 const UserRestaurants = () => {
   const dispatch = useDispatch();
@@ -172,7 +172,7 @@ const UserRestaurants = () => {
 
     if (success) {
       setRestaurantsData(restaurants.data);
-      console.log(restaurants.data);
+      // console.log(restaurants.data);
       setTotalItems(restaurants.totalCount);
       dispatch(resetGetUserRestaurants());
     }
@@ -419,7 +419,9 @@ const UserRestaurants = () => {
       {restaurantsData ? (
         <RestaurantsTable
           inData={restaurantsData}
-          Actions={<UserRestaurantLicenses items={restaurantsData?.length} />}
+          Actions={UsersActions}
+          totalItems={restaurantsData.length}
+          onSuccess={() => handleFilter(true)}
         />
       ) : loading ? (
         /* TABLE SKELETON */

@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import CustomCheckbox from "../../common/customCheckbox";
-import CustomInput from "../../common/CustomInput";
-import CustomPhoneInput from "../../common/customPhoneInput";
-import CustomSelect from "../../common/CustomSelector";
-import { formatEmail } from "../../../utils/utils";
+import CustomCheckbox from "../../../common/customCheckbox";
+import CustomInput from "../../../common/CustomInput";
+import CustomPhoneInput from "../../../common/customPhoneInput";
+import CustomSelect from "../../../common/CustomSelector";
+import { formatEmail } from "../../../../utils/utils";
 import toast from "react-hot-toast";
 import isEqual from "lodash/isEqual";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
+import { getDistricts } from "../../../../redux/data/getDistrictsSlice";
 import {
   resetUpdateUser,
   updateUserData,
-} from "../../../redux/users/updateUserDataSlice";
+} from "../../../../redux/users/updateUserDataSlice";
 
 const EditUserdata = ({
   cities,

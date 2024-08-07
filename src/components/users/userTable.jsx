@@ -5,9 +5,9 @@ import ChangeUsersIsVerified from "./userIsVerified";
 
 const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
   return (
-    <>
-      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
-        <table className="w-full text-sm font-light min-w-[60rem]">
+    <main className="max-xl:overflow-x-scroll">
+      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
+        <table className="w-full text-sm font-light">
           <thead>
             <tr className="bg-[--light-3] h-8 text-left">
               <th className="first:pl-4 font-normal">Ad Soyad</th>
@@ -25,7 +25,9 @@ const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
             {users.map((data, index) => (
               <tr
                 key={data.id}
-                className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
+                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 ${
+                  users.length < 8 ? "" : "last:border-b-0"
+                } `}
               >
                 <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
                   {data.fullName}
@@ -65,7 +67,7 @@ const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
           </tbody>
         </table>
       </div>
-    </>
+    </main>
   );
 };
 

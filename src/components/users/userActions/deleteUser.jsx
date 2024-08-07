@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { usePopup } from "../../context/PopupContext";
-import { DeleteI } from "../../assets/icon";
-import CustomCheckbox from "../common/customCheckbox";
+import React, { useEffect, useRef, useState } from "react";
+import { usePopup } from "../../../context/PopupContext";
+import { DeleteI } from "../../../assets/icon";
+import CustomCheckbox from "../../common/customCheckbox";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, resetDeleteUser } from "../../redux/users/deleteUserSlice";
+import {
+  deleteUser,
+  resetDeleteUser,
+} from "../../../redux/users/deleteUserSlice";
 import toast from "react-hot-toast";
 import {
   getUserRestaurants,
   resetGetUserRestaurants,
-} from "../../redux/restaurants/getUserRestaurantsSlice";
-import LoadingI from "../../assets/anim/loading";
+} from "../../../redux/restaurants/getUserRestaurantsSlice";
+import LoadingI from "../../../assets/anim/loading";
 import {
   getUserLicenses,
   resetGetUserLicenses,
-} from "../../redux/licenses/getUserLicensesSlice";
+} from "../../../redux/licenses/getUserLicensesSlice";
 
 const DeleteUser = ({ user, setOpenMenu, onSuccess }) => {
   const dispatch = useDispatch();
@@ -45,6 +48,7 @@ export default DeleteUser;
 
 const DeletePopup = ({ data, onSuccess }) => {
   const dispatch = useDispatch();
+  const toastId = useRef();
   const { setShowPopup } = usePopup();
 
   const { loading, success, error } = useSelector(
@@ -58,7 +62,6 @@ const DeletePopup = ({ data, onSuccess }) => {
     (state) => state.licenses.getUserLicenses
   );
 
-  let toastId;
   const [checked, setChecked] = useState(false);
   const [checked2, setChecked2] = useState(true);
   const [restorantNumber, setRestorantNumber] = useState(null);
@@ -70,10 +73,10 @@ const DeletePopup = ({ data, onSuccess }) => {
 
   useEffect(() => {
     if (loading) {
-      toastId = toast.loading("Logging in..");
+      toastId.current = toast.loading("Logging in..");
     }
     if (error) {
-      toast.dismiss(toastId);
+      toast.dismiss(toastId.current);
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -82,7 +85,7 @@ const DeletePopup = ({ data, onSuccess }) => {
       dispatch(resetDeleteUser());
     }
     if (success) {
-      onSuccess(toastId);
+      onSuccess(toastId.current);
       toast.dismiss();
       setChecked(false);
       setShowPopup(false);
@@ -93,8 +96,8 @@ const DeletePopup = ({ data, onSuccess }) => {
 
   useEffect(() => {
     if (userRestaurantsSuccess) {
-      if (restaurants?.data) {
-        setRestorantNumber(restaurants?.data.length);
+      if (restaurants) {
+        setRestorantNumber(restaurants?.length);
       }
       dispatch(resetGetUserRestaurants());
     }
@@ -126,7 +129,7 @@ const DeletePopup = ({ data, onSuccess }) => {
               restorantNumber
             ) : (
               <span className="text-[--green-1]">
-                <LoadingI className="fill-[--red-1]" />
+                <LoadingI className="fill-[--red-1] text-[--light-4]" />
               </span>
             )}{" "}
             <p className=" text-[--red-1]">Restoran</p>
@@ -137,7 +140,7 @@ const DeletePopup = ({ data, onSuccess }) => {
               licenseNumber
             ) : (
               <span className="text-[--green-1]">
-                <LoadingI className="fill-[--red-1]" />
+                <LoadingI className="fill-[--red-1] text-[--light-4]" />
               </span>
             )}{" "}
             <p className=" text-[--red-1]">Lisans</p>

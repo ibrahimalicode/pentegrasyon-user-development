@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { CancelI, EditI } from "../../../assets/icon";
-import { usePopup } from "../../../context/PopupContext";
-import LoadingI2 from "../../../assets/anim/spinner";
+import { CancelI, EditI } from "../../../../assets/icon";
+import { usePopup } from "../../../../context/PopupContext";
+import LoadingI2 from "../../../../assets/anim/spinner";
 import EditUserdata from "./editUserData";
 import EditUserPassword from "./editUserPassword";
 import EditUserInvoice from "./editUserInvoice";
@@ -9,8 +9,8 @@ import toast from "react-hot-toast";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, resetgetUser } from "../../../redux/users/getUserSlice";
-import { getCities } from "../../../redux/data/getCitiesSlice";
+import { getUser, resetgetUser } from "../../../../redux/users/getUserSlice";
+import { getCities } from "../../../../redux/data/getCitiesSlice";
 
 const EditUser = ({ user, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();

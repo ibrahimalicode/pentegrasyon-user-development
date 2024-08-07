@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import MenuI from "../../../assets/icon/menu";
 import UserRestaurantLicenses from "./licenses";
+import { usePopup } from "../../../context/PopupContext";
+import EditRestaurant from "./edit";
+import DeleteRetaurant from "./delete";
+import TransferRestaurant from "./transfer";
 
-const UsersActions = ({ index, itemsPerPage }) => {
+const UsersActions = ({ index, restaurant, totalItems, onSuccess }) => {
   const outRef = useRef();
   const userRestaurantMenuRef = useRef();
   const { contentRef, setContentRef } = usePopup();
@@ -42,12 +46,15 @@ const UsersActions = ({ index, itemsPerPage }) => {
       {openMenu === index && (
         <div
           className={`absolute right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
-            index < itemsPerPage / 2 ? "top-5" : "bottom-5"
+            index < totalItems / 2 ? "top-5" : "bottom-5"
           }`}
           ref={outRef}
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">
             <UserRestaurantLicenses />
+            <TransferRestaurant />
+            <EditRestaurant restaurant={restaurant} onSuccess={onSuccess} />
+            <DeleteRetaurant restaurant={restaurant} onSuccess={onSuccess} />
           </ul>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import MenuI from "../../../assets/icon/menu";
-import DeleteUser from "./deleteUser";
-import EditUser from "./editUser/editUser";
+import DeleteUser from "../userActions/deleteUser";
+import EditUser from "../editUser/editUser";
 import MakeADealer from "./makeADealer";
 import TransferDealer from "./transferDealer";
 import UserLicenses from "./userLicenses";

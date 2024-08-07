@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import CustomInput from "../../common/CustomInput";
+import CustomInput from "../../../common/CustomInput";
 import toast from "react-hot-toast";
 
 // REDUX
@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   resetUpdateUserPassword,
   updateUserPassword,
-} from "../../../redux/users/updateUserPasswordSlice";
-import { ArrowID, ArrowIU } from "../../../assets/icon";
+} from "../../../../redux/users/updateUserPasswordSlice";
+import { ArrowID, ArrowIU } from "../../../../assets/icon";
 
 const EditUserPassword = ({
   targetUserId,

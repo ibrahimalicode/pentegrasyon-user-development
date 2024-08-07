@@ -22,6 +22,8 @@ import updateUserPasswordSlice from "./redux/users/updateUserPasswordSlice";
 import adduserInvoiceSlice from "./redux/users/adduserInvoiceSlice";
 import updateUserIsActiveSlice from "./redux/users/updateUserIsActiveSlice";
 import updateUserIsVerifiedSlice from "./redux/users/updateUserIsVerifiedSlice";
+import getRestaurantLicensesSlice from "./redux/licenses/getRestaurantLicensesSlice";
+import deleteRestaurantSlice from "./redux/restaurants/deleteRestaurantSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -49,10 +51,12 @@ const usersSlice = combineReducers({
 const restaurantsSlice = combineReducers({
   getRestaurants: getRestaurantsSlice,
   getUserRestaurants: getUserRestaurantsSlice,
+  deleteRestaurant: deleteRestaurantSlice,
 });
 
 const licensesSlice = combineReducers({
   getUserLicenses: getUserLicensesSlice,
+  getRestaurantLicenses: getRestaurantLicensesSlice,
 });
 
 const dataSlice = combineReducers({

@@ -1,12 +1,12 @@
 import { formatDateString } from "../../utils/utils";
-import UsersActions from "./actions/usersActions";
+import UsersActions from "./userActions/usersActions";
 import ChangeUsersStatus from "./userIsActive";
 import ChangeUsersIsVerified from "./userIsVerified";
 
 const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
   return (
     <>
-      <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
+      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
         <table className="w-full text-sm font-light min-w-[60rem]">
           <thead>
             <tr className="bg-[--light-3] h-8 text-left">

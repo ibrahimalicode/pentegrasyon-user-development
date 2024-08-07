@@ -12,6 +12,7 @@ const CustomSelect = ({
   isDisabled,
   required,
   style,
+  optionStyle,
 }) => {
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
@@ -43,6 +44,7 @@ const CustomSelect = ({
               state.label === value.label ? "var(--light-1)" : "var(--white-1)",
             color:
               state.label === value.label ? "var(--black-2)" : "var(--black-1)",
+            ...optionStyle,
           }),
           singleValue: (provided, state) => ({
             color: "var(--black-2)",

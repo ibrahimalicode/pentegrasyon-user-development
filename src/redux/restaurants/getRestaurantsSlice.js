@@ -53,7 +53,7 @@ const getRestaurantsSlice = createSlice({
 export const getRestaurants = createAsyncThunk(
   "Restaurants/getRestaurants",
   async (
-    { pageNumber, pageSize, searchKey, status, city, district, neighbourhood },
+    { pageNumber, pageSize, searchKey, active, city, district, neighbourhood },
     { rejectWithValue }
   ) => {
     try {
@@ -62,7 +62,7 @@ export const getRestaurants = createAsyncThunk(
           pageNumber,
           pageSize,
           searchKey,
-          status,
+          active,
           city,
           district,
           neighbourhood,

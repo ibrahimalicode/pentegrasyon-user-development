@@ -2,7 +2,7 @@ import MenuI from "../../assets/icon/menu";
 
 const RestaurantsTable = ({ inData }) => {
   return (
-    <div className="border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
+    <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
       <table className="w-full text-sm font-light min-w-[60rem]">
         <thead>
           <tr className="bg-[--light-3] h-8 text-left">
@@ -16,7 +16,7 @@ const RestaurantsTable = ({ inData }) => {
         </thead>
 
         <tbody>
-          {inData.map((data, index) => (
+          {inData.map((data) => (
             <tr
               key={data.id}
               className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"

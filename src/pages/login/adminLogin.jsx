@@ -92,9 +92,7 @@ function AdminLogin() {
             placeholder="Şifre"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            icon={icon}
-            onClick={iconClick}
-            required={true}
+            letIcon={true}
             className="py-4"
             autoComplete="on"
           />

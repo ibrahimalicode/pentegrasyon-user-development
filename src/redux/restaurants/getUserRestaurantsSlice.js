@@ -58,7 +58,7 @@ export const getUserRestaurants = createAsyncThunk(
       pageNumber = null,
       pageSize = null,
       searchKey = null,
-      status = null,
+      active = null,
       city = null,
       district = null,
       neighbourhood = null,
@@ -74,7 +74,7 @@ export const getUserRestaurants = createAsyncThunk(
             pageNumber,
             pageSize,
             searchKey,
-            status,
+            active,
             city,
             district,
             neighbourhood,
@@ -83,7 +83,7 @@ export const getUserRestaurants = createAsyncThunk(
       );
 
       //console.log(res.data);
-      return res.data;
+      return res.data.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {

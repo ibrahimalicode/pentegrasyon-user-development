@@ -1,32 +1,26 @@
 import CustomInput from "../../common/CustomInput";
 import { useEffect, useRef, useState } from "react";
-import MenuI from "../../../assets/icon/menu";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUsers,
   resetGetUsersState,
 } from "../../../redux/users/getUsersSlice";
 import toast from "react-hot-toast";
-import { formatDateString } from "../../../utils/utils";
 import CustomPagination from "../../common/pagination";
 import CloseI from "../../../assets/icon/close";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/CustomSelector";
-import cities from "../../../assets/json/cities";
-import { DeleteI, UsersI } from "../../../assets/icon";
-import UsersActions from "../actions/usersActions";
 import UsersTable from "../userTable";
 import { usePopup } from "../../../context/PopupContext";
 import AddUser from "../addUser";
+import { getCities } from "../../../redux/data/getCitiesSlice";
 
 const UsersPage = () => {
   const dispatch = useDispatch();
   const { loading, success, error, users } = useSelector(
     (state) => state.users.getUsers
   );
-  const { success: deleteUserSuccess } = useSelector(
-    (state) => state.users.delete
-  );
+  const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const [searchVal, setSearchVal] = useState("");
   const [usersData, setUsersData] = useState(null);
@@ -36,9 +30,10 @@ const UsersPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
+  const [cities, setCities] = useState([]);
   const [totalItems, setTotalItems] = useState(null);
-  const lastItemIndex = pageNumber * itemsPerPage;
-  const firstItemIndex = lastItemIndex - itemsPerPage;
+  // const lastItemIndex = pageNumber * itemsPerPage;
+  // const firstItemIndex = lastItemIndex - itemsPerPage;
   //const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
 
   const handleSearch = (e) => {
@@ -120,6 +115,7 @@ const UsersPage = () => {
     );
   };
 
+  // GET USERS
   useEffect(() => {
     if (!usersData) {
       dispatch(
@@ -136,6 +132,7 @@ const UsersPage = () => {
     }
   }, [usersData]);
 
+  // TOAST AND SET USERS
   useEffect(() => {
     if (error) {
       if (error?.message) {
@@ -153,11 +150,14 @@ const UsersPage = () => {
     }
   }, [loading, success, error, users]);
 
-  // useEffect(() => {
-  //   if (deleteUserSuccess) {
-  //     handleFilter(true);
-  //   }
-  // }, [deleteUserSuccess]);
+  // GET CITIES
+  useEffect(() => {
+    if (!citiesData) {
+      dispatch(getCities());
+    } else {
+      setCities(citiesData);
+    }
+  }, [citiesData]);
 
   //HIDE POPUP
   const { contentRef, setContentRef, setShowPopup, setPopupContent } =
@@ -196,10 +196,10 @@ const UsersPage = () => {
             className2="sm:mt-[0px] mt-[0px]  w-full"
             className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
             icon={<CloseI className="w-4 text-[--red-1]" />}
-            className3={`top-[20px] hover:bg-[--light-4] rounded-full px-2 py-1 ${
+            className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
               searchVal ? "block" : "hidden"
             }`}
-            onClick={() => handleSearch("")}
+            iconClick={() => handleSearch("")}
           />
         </div>
 
@@ -250,6 +250,7 @@ const UsersPage = () => {
                     className2="sm:mt-3"
                     style={{ padding: "0 !important" }}
                     options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    optionStyle={{ fontSize: ".8rem" }}
                     value={
                       filter?.city
                         ? filter.city
@@ -402,7 +403,7 @@ const UsersPage = () => {
       ) : null}
 
       {/* PAGINATION */}
-      {usersData && totalItems && (
+      {usersData && typeof totalItems === "number" && (
         <div className="w-full self-end flex justify-center pb-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}

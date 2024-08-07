@@ -6,7 +6,7 @@ const toastOptions = {
     color: "#000000",
   },
   duration: 5000,
-  position: "top-right",
+  position: "top-center",
 };
 
 export default toastOptions;

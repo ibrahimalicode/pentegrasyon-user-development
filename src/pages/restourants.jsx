@@ -1,5 +1,5 @@
 import CustomInput from "../components/common/CustomInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import CustomPagination from "../components/common/pagination";
 import CloseI from "../assets/icon/close";
@@ -14,6 +14,7 @@ import {
 } from "../redux/restaurants/getRestaurantsSlice";
 import RestaurantsTable from "../components/common/restaurantsTable";
 import { getCities } from "../redux/data/getCitiesSlice";
+import { usePopup } from "../context/PopupContext";
 
 const Restourants = () => {
   const dispatch = useDispatch();
@@ -23,23 +24,32 @@ const Restourants = () => {
   );
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
+  const { districts: districtsData, success: districtsSuccess } = useSelector(
+    (state) => state.data.getDistricts
+  );
+  const { neighs: neighsData, success: neighsSuccess } = useSelector(
+    (state) => state.data.getNeighs
+  );
+
   const [searchVal, setSearchVal] = useState("");
+  const [filter, setFilter] = useState({
+    city: null,
+    district: null,
+    neighbourhood: null,
+  });
   const [restaurantsData, setRestaurantsData] = useState(null);
-  const [filter, setFilter] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
   const [cities, setCities] = useState([]);
-  const [district, setDistrict] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [neighs, setNeighs] = useState([]);
 
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
   const [totalItems, setTotalItems] = useState(null);
-  const lastItemIndex = pageNumber * itemsPerPage;
-  const firstItemIndex = lastItemIndex - itemsPerPage;
-  // const currentItems = restaurantsData?.slice(firstItemIndex, lastItemIndex);
 
-  const handleSearch = (e) => {
+  function handleSearch(e) {
     if ((!e.code && e?.target?.value === "") || typeof e === "string" || !e) {
       setSearchVal("");
       dispatch(
@@ -47,7 +57,7 @@ const Restourants = () => {
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
-          status: filter?.status?.value,
+          active: filter?.status?.value,
           city: filter?.city?.value,
           district: filter?.district?.value,
           neighbourhood: filter?.neighbourhood?.value,
@@ -62,7 +72,7 @@ const Restourants = () => {
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: searchVal,
-          status: filter?.status?.value,
+          active: filter?.status?.value,
           city: filter?.city?.value,
           district: filter?.district?.value,
           neighbourhood: filter?.neighbourhood?.value,
@@ -70,9 +80,9 @@ const Restourants = () => {
       );
     }
     return;
-  };
+  }
 
-  const handleFilter = (bool) => {
+  function handleFilter(bool) {
     if (bool) {
       setOpenFilter(false);
       setPageNumber(1);
@@ -81,7 +91,7 @@ const Restourants = () => {
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: searchVal,
-          status: filter?.status?.value,
+          active: filter?.status?.value,
           city: filter?.city?.value,
           district: filter?.district?.value,
           neighbourhood: filter?.neighbourhood?.value,
@@ -94,32 +104,37 @@ const Restourants = () => {
             pageNumber,
             pageSize: itemsPerPage,
             searchKey: null,
-            status: null,
+            active: null,
             city: null,
             district: null,
             neighbourhood: null,
           })
         );
       }
-      setFilter(null);
+      setFilter({
+        city: null,
+        district: null,
+        neighbourhood: null,
+      });
       setOpenFilter(false);
     }
-  };
+  }
 
-  const handlePageChange = (number) => {
+  function handlePageChange(number) {
     dispatch(
       getRestaurants({
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
-        status: filter?.status?.value,
+        active: filter?.status?.value,
         city: filter?.city?.value,
         district: filter?.district?.value,
         neighbourhood: filter?.neighbourhood?.value,
       })
     );
-  };
+  }
 
+  // GET RESTAURANTS
   useEffect(() => {
     if (!restaurantsData) {
       dispatch(
@@ -127,6 +142,7 @@ const Restourants = () => {
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
+          active: null,
           city: null,
           district: null,
           neighbourhood: null,
@@ -135,10 +151,11 @@ const Restourants = () => {
     }
   }, [restaurantsData]);
 
+  // TOAST AND SET RESTAURANTS
   useEffect(() => {
     if (error) {
-      if (error?.message) {
-        toast.error(error.message);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
       } else {
         toast.error("Something went wrong");
       }
@@ -148,12 +165,11 @@ const Restourants = () => {
     if (success) {
       setRestaurantsData(restaurants.data);
       setTotalItems(restaurants.totalCount);
-      console.log(restaurants);
       dispatch(resetGetRestaurantsState());
     }
   }, [loading, success, error, restaurants]);
 
-  // GET AND SET CITIES IF THERE IS NO CITIES
+  // GET AND SET CITIES
   useEffect(() => {
     if (!citiesData) {
       dispatch(getCities());
@@ -161,6 +177,72 @@ const Restourants = () => {
       setCities(citiesData);
     }
   }, [citiesData]);
+
+  // GET DISTRICTS
+  useEffect(() => {
+    if (filter.city?.id) {
+      dispatch(getDistricts({ cityId: filter.city.id }));
+      setFilter((prev) => {
+        return {
+          ...prev,
+          district: null,
+        };
+      });
+    }
+  }, [filter.city]);
+
+  // SET DISTRICTS
+  useEffect(() => {
+    if (districtsSuccess) {
+      setDistricts(districtsData);
+    }
+  }, [districtsSuccess]);
+
+  // GET NEIGHS
+  useEffect(() => {
+    if (filter.district?.id && filter.city?.id) {
+      dispatch(
+        getNeighs({
+          cityId: filter.city.id,
+          districtId: filter.district.id,
+        })
+      );
+      setFilter((prev) => {
+        return {
+          ...prev,
+          neighbourhood: null,
+        };
+      });
+    }
+  }, [filter.district]);
+
+  // SET NEIGHS
+  useEffect(() => {
+    if (neighsSuccess) {
+      setNeighs(neighsData);
+    }
+  }, [neighsSuccess]);
+
+  //HIDE POPUP
+  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
+    usePopup();
+  const filterRestaurant = useRef();
+  useEffect(() => {
+    if (filterRestaurant) {
+      const refs = contentRef.filter(
+        (ref) => ref.id !== "usersRestaurantFilter"
+      );
+      setContentRef([
+        ...refs,
+        {
+          id: "usersRestaurantFilter",
+          outRef: null,
+          ref: filterRestaurant,
+          callback: () => setOpenFilter(false),
+        },
+      ]);
+    }
+  }, [filterRestaurant]);
 
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -180,16 +262,16 @@ const Restourants = () => {
             className2="mt-[0px] w-full"
             className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
             icon={<CloseI className="w-4 text-[--red-1]" />}
-            className3={`top-[20px] hover:bg-[--light-4] rounded-full px-2 py-1 ${
+            className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
               searchVal ? "block" : "hidden"
             }`}
-            onClick={() => handleSearch("")}
+            iconClick={() => handleSearch("")}
           />
         </div>
 
-        <div className="w-full flex justify-end">
+        <div className="max-sm:w-full flex justify-end">
           <div className="flex gap-2 max-sm:order-1 ">
-            <div className="w-full relative">
+            <div className="w-full relative" ref={filterRestaurant}>
               <button
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                 onClick={() => setOpenFilter(!openFilter)}
@@ -233,6 +315,7 @@ const Restourants = () => {
                     style={{ padding: "1px 0px" }}
                     className="text-sm"
                     options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    optionStyle={{ fontSize: ".8rem" }}
                     value={
                       filter?.city
                         ? filter.city
@@ -256,7 +339,8 @@ const Restourants = () => {
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    options={[{ value: null, label: "Hepsi" }, ...districts]}
+                    optionStyle={{ fontSize: ".8rem" }}
                     value={
                       filter?.district
                         ? filter.district
@@ -277,7 +361,8 @@ const Restourants = () => {
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    options={[{ value: null, label: "Hepsi" }, ...neighs]}
+                    optionStyle={{ fontSize: ".8rem" }}
                     value={
                       filter?.neighbourhood
                         ? filter.neighbourhood
@@ -323,12 +408,12 @@ const Restourants = () => {
       {/* TABLE */}
       {restaurantsData ? (
         <RestaurantsTable inData={restaurantsData} />
-      ) : (
+      ) : loading ? (
         <TableSkeleton />
-      )}
+      ) : null}
 
       {/* PAGINATION */}
-      {restaurantsData && totalItems && (
+      {restaurantsData && typeof totalItems === "number" && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}

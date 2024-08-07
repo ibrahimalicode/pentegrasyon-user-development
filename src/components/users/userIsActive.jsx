@@ -156,24 +156,12 @@ function EditUserStatusPopup({ user, onSuccess }) {
               />
             </div>
 
-            <div className="w-full flex gap-12 items-center">
-              <p className="min-w-28">Note:</p>
-              <CustomInput
-                placeholder="Note"
-                value={userData.note}
-                onChange={(e) => {
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      note: e.target.value,
-                    };
-                  });
-                }}
-                disabled={!userData.checked}
-                className="mt-[0] sm:mt-[0] text-sm"
-                className2="mt-[0] sm:mt-[0]"
-              />
-            </div>
+            {user.note && (
+              <div className="w-full flex gap-12 items-center">
+                <p className="min-w-28">Note:</p>
+                <p className="text-sm font-normal">{user.note}</p>
+              </div>
+            )}
 
             <div className="w-full flex gap-12 items-center">
               <p className="min-w-28">Pasif Note:</p>

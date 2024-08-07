@@ -78,7 +78,7 @@ const AddUser = ({ onSuccess }) => {
     e.preventDefault();
 
     if (userData.password !== userData.confirmPassword) {
-      toast.error("Şifreler eşit değil");
+      toast.error("Şifreler aynı değil");
       return;
     }
 
@@ -227,11 +227,11 @@ const AddUser = ({ onSuccess }) => {
   }, [neighsSuccess]);
 
   return (
-    <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base max-h-[90dvh] overflow-y-scroll">
+    <div className="w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base max-h-[90dvh] overflow-y-scroll">
       <div className="flex flex-col bg-[--white-1] relative">
         <div className="absolute -top-6 right-3">
           <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer"
+            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
             onClick={clearForm}
           >
             <CancelI />

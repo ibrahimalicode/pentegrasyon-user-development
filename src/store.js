@@ -20,6 +20,8 @@ import updateUserDataSlice from "./redux/users/updateUserDataSlice";
 import updateUserInvoiceSlice from "./redux/users/updateUserInvoiceSlice";
 import updateUserPasswordSlice from "./redux/users/updateUserPasswordSlice";
 import adduserInvoiceSlice from "./redux/users/adduserInvoiceSlice";
+import updateUserIsActiveSlice from "./redux/users/updateUserIsActiveSlice";
+import updateUserIsVerifiedSlice from "./redux/users/updateUserIsVerifiedSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -40,6 +42,8 @@ const usersSlice = combineReducers({
   addInvoice: adduserInvoiceSlice,
   updateInvoice: updateUserInvoiceSlice,
   updatePassword: updateUserPasswordSlice,
+  updateIsActive: updateUserIsActiveSlice,
+  updateIsVerified: updateUserIsVerifiedSlice,
 });
 
 const restaurantsSlice = combineReducers({

@@ -173,7 +173,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
       <div className="flex flex-col bg-[--white-1] relative">
         <div className="absolute -top-6 right-3 z-[50]">
           <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer "
+            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
             onClick={closeForm}
           >
             <CancelI />

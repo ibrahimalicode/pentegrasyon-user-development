@@ -1,6 +1,7 @@
 import { formatDateString } from "../../utils/utils";
 import UsersActions from "./usersActions";
-import ChangeUsersStatus from "./usersStatus";
+import ChangeUsersStatus from "./userIsActive";
+import ChangeUsersIsVerified from "./userIsVerified";
 
 const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
   return (
@@ -43,18 +44,10 @@ const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
                   {data.city}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal relative">
-                  <ChangeUsersStatus index={index} isActive={data.isActive} />
+                  <ChangeUsersStatus user={data} onSuccess={onSuccess} />
                 </td>
                 <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
-                  <span
-                    className={`text-xs font-normal ${
-                      data.isVerify
-                        ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
-                        : "text-[--black-1] bg-[--light-4]"
-                    } px-3 py-1 border border-solid rounded-full`}
-                  >
-                    {data.isVerify ? "Onaylı" : "Onlaylanmadı"}
-                  </span>
+                  <ChangeUsersIsVerified user={data} onSuccess={onSuccess} />
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                   {formatDateString(data.createdDateTime)}

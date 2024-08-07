@@ -1,6 +1,12 @@
 import CheckI from "../../assets/icon/check";
 
-const CustomCheckbox = ({ label, checked, onChange, className }) => {
+const CustomCheckbox = ({
+  label,
+  checked,
+  onChange,
+  className,
+  className2,
+}) => {
   return (
     <label
       className={`max-w-max flex items-center cursor-pointer ${className}`}
@@ -20,7 +26,7 @@ const CustomCheckbox = ({ label, checked, onChange, className }) => {
       </span>
       {label && (
         <span
-          className="ml-2 text-[--gr-1]"
+          className={`ml-2 text-[--gr-1] ${className2}`}
           dangerouslySetInnerHTML={{ __html: label }}
         ></span>
       )}

@@ -9,7 +9,7 @@ const Popup = () => {
       }`}
     >
       <div
-        className={`bg-[--btn-txt] w-full max-w-[45rem] rounded-xl shadow transition-all ${
+        className={`bg-[--btn-txt] w-full max-w-[45rem] rounded-xl transition-all ${
           showPopup ? "scale-100 opacity-100" : "scale-125 opacity-0"
         }`}
       >

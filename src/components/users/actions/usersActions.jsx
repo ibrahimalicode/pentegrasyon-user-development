@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import MenuI from "../../assets/icon/menu";
-import DeleteUser from "./deleteUser";
-import EditUser from "./editUser/editUser";
+import MenuI from "../../../assets/icon/menu";
+import DeleteUser from "../deleteUser";
+import EditUser from "../editUser/editUser";
 import MakeADealer from "./makeADealer";
 import TransferDealer from "./transferDealer";
 import UserLicenses from "./userLicenses";
 import UserRestaurants from "./userRestaurants";
-import { usePopup } from "../../context/PopupContext";
+import { usePopup } from "../../../context/PopupContext";
 
 const UsersActions = ({ index, user, itemsPerPage, onSuccess }) => {
   const outRef = useRef();

@@ -1,5 +1,5 @@
 import { formatDateString } from "../../utils/utils";
-import UsersActions from "./usersActions";
+import UsersActions from "./actions/usersActions";
 import ChangeUsersStatus from "./userIsActive";
 import ChangeUsersIsVerified from "./userIsVerified";
 

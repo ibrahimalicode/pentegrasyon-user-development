@@ -5,12 +5,12 @@ import LoadingI2 from "../../../assets/anim/spinner";
 import EditUserdata from "./editUserData";
 import EditUserPassword from "./editUserPassword";
 import EditUserInvoice from "./editUserInvoice";
+import toast from "react-hot-toast";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, resetgetUser } from "../../../redux/users/getUserSlice";
 import { getCities } from "../../../redux/data/getCitiesSlice";
-import toast from "react-hot-toast";
 
 const EditUser = ({ user, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
@@ -53,9 +53,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
     user,
   } = useSelector((state) => state.users.getUser);
 
-  const { cities: citiesData, success: citiesSuccess } = useSelector(
-    (state) => state.data.getCities
-  );
+  const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const { setShowPopup, setPopupContent } = usePopup();
 
@@ -119,11 +117,10 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   useEffect(() => {
     if (!citiesData) {
       dispatch(getCities());
-    }
-    if (citiesSuccess) {
+    } else {
       setCities(citiesData);
     }
-  }, [citiesData, citiesSuccess]);
+  }, [citiesData]);
 
   // LISTEN TO EDITUSERDATA, PASSWORD AND INVOICE
   useEffect(() => {

@@ -1,35 +1,30 @@
-import CustomInput from "../components/common/CustomInput";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import CustomPagination from "../components/common/pagination";
-import CloseI from "../assets/icon/close";
-import TableSkeleton from "../components/common/tableSkeleton";
-import CustomSelect from "../components/common/CustomSelector";
-
-// REDUX
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import CustomPagination from "../../common/pagination";
 import {
-  getRestaurants,
-  resetGetRestaurantsState,
-} from "../redux/restaurants/getRestaurantsSlice";
-import RestaurantsTable from "../components/common/restaurantsTable";
-import { getCities } from "../redux/data/getCitiesSlice";
+  getUserRestaurants,
+  resetGetUserRestaurants,
+} from "../../../redux/restaurants/getUserRestaurantsSlice";
+import TableSkeleton from "../../common/tableSkeleton";
+import toast from "react-hot-toast";
+import RestaurantsTable from "../../common/restaurantsTable";
+import CustomInput from "../../common/CustomInput";
+import CloseI from "../../../assets/icon/close";
+import CustomSelect from "../../common/CustomSelector";
 
-const Restourants = () => {
+const UserRestaurants = () => {
   const dispatch = useDispatch();
+  const params = useParams();
 
   const { loading, success, error, restaurants } = useSelector(
-    (state) => state.restaurants.getRestaurants
+    (state) => state.restaurants.getUserRestaurants
   );
-  const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const [searchVal, setSearchVal] = useState("");
-  const [restaurantsData, setRestaurantsData] = useState(null);
+  const [restaurantData, setRestaurantData] = useState(null);
   const [filter, setFilter] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
-
-  const [cities, setCities] = useState([]);
-  const [district, setDistrict] = useState([]);
 
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
@@ -37,13 +32,13 @@ const Restourants = () => {
   const [totalItems, setTotalItems] = useState(null);
   const lastItemIndex = pageNumber * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
-  // const currentItems = restaurantsData?.slice(firstItemIndex, lastItemIndex);
 
   const handleSearch = (e) => {
     if ((!e.code && e?.target?.value === "") || typeof e === "string" || !e) {
       setSearchVal("");
       dispatch(
-        getRestaurants({
+        getUserRestaurants({
+          userId: params.id,
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
@@ -58,7 +53,8 @@ const Restourants = () => {
     setSearchVal(e.target.value);
     if (e.code === "Enter") {
       dispatch(
-        getRestaurants({
+        getUserRestaurants({
+          userId: params.id,
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: searchVal,
@@ -72,43 +68,10 @@ const Restourants = () => {
     return;
   };
 
-  const handleFilter = (bool) => {
-    if (bool) {
-      setOpenFilter(false);
-      setPageNumber(1);
-      dispatch(
-        getRestaurants({
-          pageNumber,
-          pageSize: itemsPerPage,
-          searchKey: searchVal,
-          status: filter?.status?.value,
-          city: filter?.city?.value,
-          district: filter?.district?.value,
-          neighbourhood: filter?.neighbourhood?.value,
-        })
-      );
-    } else {
-      if (filter) {
-        dispatch(
-          getRestaurants({
-            pageNumber,
-            pageSize: itemsPerPage,
-            searchKey: null,
-            status: null,
-            city: null,
-            district: null,
-            neighbourhood: null,
-          })
-        );
-      }
-      setFilter(null);
-      setOpenFilter(false);
-    }
-  };
-
   const handlePageChange = (number) => {
     dispatch(
-      getRestaurants({
+      getUserRestaurants({
+        userId: params.id,
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
@@ -121,9 +84,10 @@ const Restourants = () => {
   };
 
   useEffect(() => {
-    if (!restaurantsData) {
+    if (!restaurantData) {
       dispatch(
-        getRestaurants({
+        getUserRestaurants({
+          userId: params.id,
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
@@ -133,7 +97,7 @@ const Restourants = () => {
         })
       );
     }
-  }, [restaurantsData]);
+  }, [params, restaurantData]);
 
   useEffect(() => {
     if (error) {
@@ -142,33 +106,27 @@ const Restourants = () => {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetRestaurantsState());
+      dispatch(resetGetUserRestaurants());
     }
 
     if (success) {
-      setRestaurantsData(restaurants.data);
+      setRestaurantData(restaurants.data.data);
       setTotalItems(restaurants.totalCount);
       console.log(restaurants);
-      dispatch(resetGetRestaurantsState());
+      dispatch(resetGetUserRestaurants());
     }
   }, [loading, success, error, restaurants]);
 
-  // GET AND SET CITIES IF THERE IS NO CITIES
-  useEffect(() => {
-    if (!citiesData) {
-      dispatch(getCities());
-    } else {
-      setCities(citiesData);
-    }
-  }, [citiesData]);
+  restaurantData && console.log(restaurantData, typeof totalItems === "number");
 
   return (
-    <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
-        <h2>Restaurants</h2>
+      <div className="w-full text-[--gr-1] pt-4 text-lg">
+        <p>Müşteriler {">"} restoranlar</p>
       </div>
 
+      {/* ACTIONS/BUTTONS */}
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
@@ -230,8 +188,9 @@ const Restourants = () => {
 
                   <CustomSelect
                     label="Şehir"
-                    style={{ padding: "1px 0px" }}
-                    className="text-sm"
+                    className="text-sm sm:mt-1"
+                    className2="sm:mt-3"
+                    style={{ padding: "0 !important" }}
                     options={[{ value: null, label: "Hepsi" }, ...cities]}
                     value={
                       filter?.city
@@ -321,14 +280,15 @@ const Restourants = () => {
       </div>
 
       {/* TABLE */}
-      {restaurantsData ? (
-        <RestaurantsTable inData={restaurantsData} />
-      ) : (
+      {restaurantData ? (
+        <RestaurantsTable inData={restaurantData} />
+      ) : loading ? (
+        /* TABLE SKELETON */
         <TableSkeleton />
-      )}
+      ) : null}
 
       {/* PAGINATION */}
-      {restaurantsData && totalItems && (
+      {restaurantData && typeof totalItems === "number" && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
@@ -343,4 +303,4 @@ const Restourants = () => {
   );
 };
 
-export default Restourants;
+export default UserRestaurants;

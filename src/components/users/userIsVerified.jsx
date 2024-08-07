@@ -110,7 +110,7 @@ function EditUserIsVerifiedPopup({ user, onSuccess }) {
   return (
     <div className="w-full flex justify-center">
       <div
-        className="w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] max-w-2xl"
+        className="w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] max-w-2xl shadow"
         ref={userStatusRef}
       >
         <div className="flex flex-col bg-[--white-1] relative">
@@ -130,7 +130,7 @@ function EditUserIsVerifiedPopup({ user, onSuccess }) {
                 className={`py-3 border border-dashed w-36 text-center rounded-md ${
                   user.isVerify
                     ? "text-[--green-1] border-[--green-1]"
-                    : "text-[--black-1] bg-[--light-4]"
+                    : "text-[--black-1] border-[--black-2]"
                 }`}
               >
                 ● {user.isVerify ? "Onaylı" : "Onlaylanmadı"}

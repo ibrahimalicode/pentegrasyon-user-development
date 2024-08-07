@@ -62,6 +62,7 @@ export const getRestaurants = createAsyncThunk(
           pageNumber,
           pageSize,
           searchKey,
+          status,
           city,
           district,
           neighbourhood,

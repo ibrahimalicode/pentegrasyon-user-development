@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  userRestaurants: null,
+  restaurants: null,
 };
 
 const getUserRestaurantsSlice = createSlice({
@@ -24,7 +24,7 @@ const getUserRestaurantsSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.userRestaurants = null;
+      state.restaurants = null;
     },
   },
   extraReducers: (build) => {
@@ -33,19 +33,19 @@ const getUserRestaurantsSlice = createSlice({
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.userRestaurants = null;
+        state.restaurants = null;
       })
       .addCase(getUserRestaurants.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.userRestaurants = action.payload;
+        state.restaurants = action.payload;
       })
       .addCase(getUserRestaurants.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.userRestaurants = null;
+        state.restaurants = null;
       });
   },
 });
@@ -74,6 +74,7 @@ export const getUserRestaurants = createAsyncThunk(
             pageNumber,
             pageSize,
             searchKey,
+            status,
             city,
             district,
             neighbourhood,

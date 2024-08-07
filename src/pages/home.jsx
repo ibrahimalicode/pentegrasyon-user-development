@@ -7,7 +7,6 @@ import Users from "./users";
 import Restourants from "./restourants";
 import Licenses from "./licenses";
 import Packages from "./packages";
-import Popup from "../components/common/popup";
 
 const Home = () => {
   return (
@@ -17,7 +16,7 @@ const Home = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/users/*" element={<Users />} />
         <Route path="/restourants" element={<Restourants />} />
         <Route path="/licenses" element={<Licenses />} />
         <Route path="/packages" element={<Packages />} />

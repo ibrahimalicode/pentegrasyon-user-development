@@ -151,8 +151,8 @@ const UserRegister = ({ setPageName }) => {
       dispatch(resetRgisterState());
     } else if (error) {
       toast.dismiss(toastId);
-      if (error?.message) {
-        toast.error(error.message);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
       } else {
         toast.error("Couldn't send SMS");
       }
@@ -173,8 +173,8 @@ const UserRegister = ({ setPageName }) => {
     }
     if (verifyCodeError) {
       toast.dismiss(toastId);
-      if (verifyCodeError?.message) {
-        toast.error(verifyCodeError.message);
+      if (verifyCodeError?.message_TR) {
+        toast.error(verifyCodeError.message_TR);
       } else {
         toast.error("Couldn't register");
       }

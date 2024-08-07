@@ -51,7 +51,7 @@ const DeletePopup = ({ data, onSuccess }) => {
     (state) => state.users.delete
   );
 
-  const { success: userRestaurantsSuccess, userRestaurants } = useSelector(
+  const { success: userRestaurantsSuccess, restaurants } = useSelector(
     (state) => state.restaurants.getUserRestaurants
   );
   const { success: userLicensesSuccess, userLicenses } = useSelector(
@@ -93,12 +93,12 @@ const DeletePopup = ({ data, onSuccess }) => {
 
   useEffect(() => {
     if (userRestaurantsSuccess) {
-      if (userRestaurants?.data) {
-        setRestorantNumber(userRestaurants?.data.length);
+      if (restaurants?.data) {
+        setRestorantNumber(restaurants?.data.length);
       }
       dispatch(resetGetUserRestaurants());
     }
-  }, [userRestaurantsSuccess, userRestaurants, dispatch]);
+  }, [userRestaurantsSuccess, restaurants, dispatch]);
 
   useEffect(() => {
     if (userLicensesSuccess) {

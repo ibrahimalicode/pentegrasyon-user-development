@@ -53,12 +53,11 @@ const updateUserIsActiveSlice = createSlice({
 export const updateUserIsActive = createAsyncThunk(
   "Users/updateUserIsActive",
   async ({ userId, isActive, passiveNote }, { rejectWithValue }) => {
-    console.log({ isActive, passiveNote });
     try {
       const res = await api.put(
         `${baseURL}Users/UpdateUserIsActive`,
-        { isActive, passiveNote },
-        { params: { userId } }
+        { userId },
+        { params: { userId, isActive, passiveNote } }
       );
 
       console.log(res.data);

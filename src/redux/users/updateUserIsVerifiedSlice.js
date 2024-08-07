@@ -57,8 +57,8 @@ export const updateUserIsVerified = createAsyncThunk(
     try {
       const res = await api.put(
         `${baseURL}Users/UpdateUserIsVerify`,
-        { isVerify },
-        { params: { userId } }
+        { userId, isVerify },
+        { params: { userId, isVerify } }
       );
 
       // console.log(res.data);

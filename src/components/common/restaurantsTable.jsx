@@ -1,6 +1,6 @@
 import MenuI from "../../assets/icon/menu";
 
-const RestaurantsTable = ({ inData }) => {
+const RestaurantsTable = ({ inData, Actions }) => {
   return (
     <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg max-xl:overflow-x-scroll">
       <table className="w-full text-sm font-light min-w-[60rem]">
@@ -16,7 +16,7 @@ const RestaurantsTable = ({ inData }) => {
         </thead>
 
         <tbody>
-          {inData.map((data) => (
+          {inData.map((data, index) => (
             <tr
               key={data.id}
               className="odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 last:border-b-0"
@@ -45,7 +45,7 @@ const RestaurantsTable = ({ inData }) => {
                 </span>
               </td>
               <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal">
-                <MenuI className="w-full" />
+                <Actions index={index} />
               </td>
             </tr>
           ))}

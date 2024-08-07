@@ -20,7 +20,7 @@ const NotFound = ({ showGoBack = true }) => {
             Aradığınız sayfa bulunmamaktadır.
           </p>
 
-          <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
+          <div className="flex items-center justify-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
             {showGoBack && (
               <button
                 onClick={goBack}

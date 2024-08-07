@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { BellI } from "../../assets/icon";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { auth, clearAuth } from "../../redux/api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -9,9 +9,10 @@ import { useNavigate } from "react-router-dom";
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastId = useRef();
+
   const { loading, success, error } = useSelector((state) => state.auth.logout);
 
-  let toastId;
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
@@ -23,16 +24,18 @@ function Header() {
   useEffect(() => {
     if (success) {
       clearAuth();
-      toast.dismiss(toastId);
       navigate("/login");
+      toast.dismiss(toastId.current);
       dispatch(resetLogoutState());
     }
     if (loading) {
-      toastId = toast.loading("Logging out...");
+      toastId.current = toast.loading("Logging out...");
     }
     if (error) {
-      toast.dismiss(toastId);
-      toast.error("Something went wrong");
+      clearAuth();
+      navigate("/login");
+      toast.dismiss(toastId.current);
+      console.log(error);
       dispatch(resetLogoutState());
     }
   }, [success, loading, error]);

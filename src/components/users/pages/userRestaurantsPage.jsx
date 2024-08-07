@@ -16,6 +16,7 @@ import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { usePopup } from "../../../context/PopupContext";
+import UserRestaurantLicenses from "../userRestaurantActions/licenses";
 
 const UserRestaurants = () => {
   const dispatch = useDispatch();
@@ -252,8 +253,6 @@ const UserRestaurants = () => {
     }
   }, [filterRestaurant]);
 
-  restaurantsData && console.log(restaurantsData);
-
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
@@ -418,7 +417,10 @@ const UserRestaurants = () => {
 
       {/* TABLE */}
       {restaurantsData ? (
-        <RestaurantsTable inData={restaurantsData} />
+        <RestaurantsTable
+          inData={restaurantsData}
+          Actions={<UserRestaurantLicenses items={restaurantsData?.length} />}
+        />
       ) : loading ? (
         /* TABLE SKELETON */
         <TableSkeleton />

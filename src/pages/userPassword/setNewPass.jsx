@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomInput from "../../components/common/CustomInput";
 import EyeI from "../../assets/icon/eye";
 import EyeInv from "../../assets/icon/eyeInv";
@@ -17,10 +17,13 @@ import {
 } from "../../redux/auth/verifyCodeSlice";
 import NotFound from "../404";
 
+const KEY = import.meta.env.VITE_LOCAL_KEY;
+
 const SetNewPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const toastId = useRef();
 
   const { loading, success, error } = useSelector(
     (state) => state.auth.changePassword
@@ -31,13 +34,11 @@ const SetNewPassword = () => {
     error: verifyE,
   } = useSelector((state) => state.auth.verifyCode);
 
-  let toastId;
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [inputType, setInputType] = useState("password");
-  const [inputType2, setInputType2] = useState("password");
   const [credentials, setCredentials] = useState(null);
   const [isError, setIsError] = useState(false);
+  const [token, setToken] = useState(null);
 
   const handleChangePassword = (e) => {
     e.preventDefault();
@@ -52,19 +53,19 @@ const SetNewPassword = () => {
 
   useEffect(() => {
     if (success) {
-      toast.dismiss(toastId);
+      toast.dismiss(toastId.current);
       dispatch(resetChangePassword());
       toast.success("Password changed successfully");
       clearAuth();
       navigate("/login");
     }
     if (loading) {
-      toastId = toast.loading("Loading...");
+      toastId.current = toast.loading("Loading...");
     }
     if (error) {
-      toast.dismiss(toastId);
-      if (error?.message) {
-        toast.error(error.message);
+      toast.dismiss(toastId.current);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
       } else {
         toast.error("Something went wrong");
       }
@@ -89,13 +90,14 @@ const SetNewPassword = () => {
 
   useEffect(() => {
     if (verifyS) {
-      toast.success("Code verified");
       setCredentials(null);
+      navigate("/setnewpassword");
+      toast.success("Code verified");
       dispatch(resetVerifyCodeState());
     }
     if (verifyE) {
-      if (verifyE?.message) {
-        toast.error(verifyE.message);
+      if (verifyE?.message_TR) {
+        toast.error(verifyE.message_TR);
       } else {
         toast.error("Something went wrong");
       }
@@ -104,7 +106,16 @@ const SetNewPassword = () => {
     }
   }, [verifyS, verifyE]);
 
-  return !credentials && !isError ? (
+  useEffect(() => {
+    try {
+      const token = JSON.parse(localStorage.getItem(KEY))?.token;
+      setToken(token);
+    } catch (error) {
+      console.log("Failed to retrieve token from local storage:", error);
+    }
+  }, [token, verifyS]);
+
+  return !credentials && token ? (
     <div className="flex items-center justify-center w-full">
       <form
         className="flex flex-col w-full max-w-[38rem] px-12 mt-40"
@@ -118,7 +129,6 @@ const SetNewPassword = () => {
         <div className="flex flex-col max-w-full">
           <CustomInput
             label="Yeni Şifre"
-            type={inputType}
             placeholder="Yeni Şifre"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -128,7 +138,6 @@ const SetNewPassword = () => {
           />
           <CustomInput
             label="Şifreyi Onayla"
-            type={inputType2}
             placeholder="Şifreyi Onayla"
             value={password2}
             onChange={(e) => setPassword2(e.target.value)}
@@ -144,17 +153,9 @@ const SetNewPassword = () => {
             >
               {loading ? <LoadingI className="h-7" /> : "Kaydet"}
             </button>
-            {/* <div className="shrink-0 mt-10 h-px bg-slate-200 w-full" /> */}
           </div>
         </div>
       </form>
-    </div>
-  ) : credentials && !isError ? (
-    <div className="flex items-center justify-center w-full">
-      <div>
-        {credentials.email}
-        {credentials.verificationCode}
-      </div>
     </div>
   ) : (
     <NotFound showGoBack={false} />

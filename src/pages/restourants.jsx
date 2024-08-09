@@ -5,6 +5,7 @@ import CustomPagination from "../components/common/pagination";
 import CloseI from "../assets/icon/close";
 import TableSkeleton from "../components/common/tableSkeleton";
 import CustomSelect from "../components/common/CustomSelector";
+import UsersActions from "../components/users/userRestaurantActions/userRestaurantActions";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -409,6 +410,8 @@ const Restourants = () => {
       {restaurantsData ? (
         <RestaurantsTable
           inData={restaurantsData}
+          Actions={UsersActions}
+          totalItems={restaurantsData.length}
           onSuccess={() => handleFilter(true)}
         />
       ) : loading ? (

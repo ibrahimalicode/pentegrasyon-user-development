@@ -72,3 +72,22 @@ export const formatSelectorData = (data) => {
   });
   return outData;
 };
+
+export function googleMap(lat, lng, setLat, setLng, zoom = 25) {
+  const position = {
+    lat: parseFloat(lat),
+    lng: parseFloat(lng),
+  };
+
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom,
+    center: position,
+    mapId: "VITE_PENTEGRASYON_MAP_ID",
+  });
+
+  map.addListener("click", (e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    return setLat(lat.toFixed(6)), setLng(lng.toFixed(6));
+  });
+}

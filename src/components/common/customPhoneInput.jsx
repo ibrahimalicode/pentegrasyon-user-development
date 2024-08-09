@@ -27,7 +27,7 @@ const CustomPhoneInput = ({
     onChange(value);
   };
   useEffect(() => {
-    setPhone(value);
+    handleChange(value);
   }, [value]);
 
   return (

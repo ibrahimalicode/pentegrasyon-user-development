@@ -596,7 +596,7 @@ const AddUser = ({ onSuccess }) => {
                       required={true}
                       label="Adres"
                       placeholder="Adres"
-                      className="pb-14 text-sm"
+                      className="text-sm"
                       value={userInvoice.address}
                       onChange={(e) =>
                         setUserInvoice((prev) => {

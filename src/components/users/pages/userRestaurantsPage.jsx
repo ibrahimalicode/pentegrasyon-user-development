@@ -151,7 +151,6 @@ const UserRestaurants = () => {
           pageSize: itemsPerPage,
           searchKey: null,
           city: null,
-          city: null,
           district: null,
           neighbourhood: null,
         })
@@ -271,7 +270,7 @@ const UserRestaurants = () => {
             className2="mt-[0px] w-full"
             className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
             icon={<CloseI className="w-4 text-[--red-1]" />}
-            className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
+            className4={`hover:bg-[--light-4] rounded-full px-2 py-1 ${
               searchVal ? "block" : "hidden"
             }`}
             iconClick={() => handleSearch("")}

@@ -51,7 +51,7 @@ const getDistrictsSlice = createSlice({
 
 export const getDistricts = createAsyncThunk(
   "Data/getDistricts",
-  async ({ cityId }) => {
+  async ({ cityId }, { rejectWithValue }) => {
     try {
       const res = await api.get(
         `${baseURL}CityDistrictNeighbourhood/GetDistrictsByCityId`,
@@ -76,8 +76,10 @@ export const getDistricts = createAsyncThunk(
       return res.data.data;
     } catch (err) {
       console.log(err);
-      toast.error(err.message);
-      throw err.message;
+      if (err?.response?.data) {
+        throw rejectWithValue(err.response.data);
+      }
+      throw rejectWithValue({ message_TR: err.message });
     }
   }
 );

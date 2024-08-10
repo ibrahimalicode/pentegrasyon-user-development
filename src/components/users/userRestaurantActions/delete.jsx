@@ -47,9 +47,8 @@ function DeleteRetaurantPopup({ restaurant, onSuccess }) {
     (state) => state.restaurants.deleteRestaurant
   );
 
-  const { success: restorantLicensesSuccess, restorantLicenses } = useSelector(
-    (state) => state.licenses.getRestaurantLicenses
-  );
+  const { success: restaurantLicensesSuccess, restaurantLicenses } =
+    useSelector((state) => state.licenses.getRestaurantLicenses);
 
   const [checked, setChecked] = useState(false);
   const [checked2, setChecked2] = useState(true);
@@ -89,14 +88,14 @@ function DeleteRetaurantPopup({ restaurant, onSuccess }) {
   }, [loading, success, error, dispatch]);
 
   useEffect(() => {
-    if (restorantLicensesSuccess) {
-      if (restorantLicenses) {
-        setLicenseNumber(restorantLicenses?.length);
+    if (restaurantLicensesSuccess) {
+      if (restaurantLicenses) {
+        setLicenseNumber(restaurantLicenses?.length);
       }
       dispatch(resetGetRestaurantLicenses());
     } else {
     }
-  }, [restorantLicensesSuccess, restorantLicenses, dispatch]);
+  }, [restaurantLicensesSuccess, restaurantLicenses, dispatch]);
 
   return (
     <>

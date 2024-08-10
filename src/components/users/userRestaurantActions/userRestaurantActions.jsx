@@ -6,7 +6,7 @@ import EditRestaurant from "./edit";
 import DeleteRetaurant from "./delete";
 import TransferRestaurant from "./transfer";
 
-const UsersActions = ({ index, restaurant, totalItems, onSuccess }) => {
+const RestaurantActions = ({ index, restaurant, totalItems, onSuccess }) => {
   const outRef = useRef();
   const userRestaurantMenuRef = useRef();
   const { contentRef, setContentRef } = usePopup();
@@ -45,14 +45,14 @@ const UsersActions = ({ index, restaurant, totalItems, onSuccess }) => {
       </div>
       {openMenu === index && (
         <div
-          className={`absolute right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
-            index < totalItems / 2 ? "top-5" : "bottom-5"
+          className={`absolute right-14 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
+            index < 5 ? "top-5" : "bottom-5"
           }`}
           ref={outRef}
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">
-            <UserRestaurantLicenses />
-            <TransferRestaurant />
+            <UserRestaurantLicenses restaurant={restaurant} />
+            <TransferRestaurant restaurant={restaurant} />
             <EditRestaurant restaurant={restaurant} onSuccess={onSuccess} />
             <DeleteRetaurant restaurant={restaurant} onSuccess={onSuccess} />
           </ul>
@@ -62,4 +62,4 @@ const UsersActions = ({ index, restaurant, totalItems, onSuccess }) => {
   );
 };
 
-export default UsersActions;
+export default RestaurantActions;

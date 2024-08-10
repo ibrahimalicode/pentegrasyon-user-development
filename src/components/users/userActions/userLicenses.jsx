@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { LicenseI } from "../../../assets/icon";
 
-const UserLicenses = () => {
+const UserLicenses = ({ user }) => {
+  const navigate = useNavigate();
   const handleClick = () => {
-    console.log("UserLicenses");
+    navigate(`/users/licenses/${user.id}`);
   };
   return (
     <button

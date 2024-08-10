@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import CustomPagination from "../../common/pagination";
 import {
   getUserRestaurants,
@@ -16,7 +16,8 @@ import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { usePopup } from "../../../context/PopupContext";
-import UsersActions from "../userRestaurantActions/userRestaurantActions";
+import RestaurantActions from "../userRestaurantActions/userRestaurantActions";
+import AddRestaurant from "../../restaurants/addRestaurant";
 
 const UserRestaurants = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,8 @@ const UserRestaurants = () => {
     (state) => state.data.getNeighs
   );
 
+  const { users } = useSelector((state) => state.users.getUsers);
+
   const [searchVal, setSearchVal] = useState("");
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [filter, setFilter] = useState({
@@ -46,44 +49,48 @@ const UserRestaurants = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
+  const [userInfo, setUserInfo] = useState(() => {
+    if (users?.data) {
+      const user = users.data.filter((data) => data.id === params?.id)[0];
+      return user;
+    }
+  });
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
   const [totalItems, setTotalItems] = useState(null);
 
+  function clearSearch() {
+    setSearchVal("");
+    dispatch(
+      getUserRestaurants({
+        userId: params.id,
+        pageNumber,
+        pageSize: itemsPerPage,
+        searchKey: null,
+        active: filter?.status?.value,
+        city: filter?.city?.value,
+        district: filter?.district?.value,
+        neighbourhood: filter?.neighbourhood?.value,
+      })
+    );
+  }
+
   function handleSearch(e) {
-    if ((!e.code && e?.target?.value === "") || typeof e === "string" || !e) {
-      setSearchVal("");
-      dispatch(
-        getUserRestaurants({
-          userId: params.id,
-          pageNumber,
-          pageSize: itemsPerPage,
-          searchKey: null,
-          active: filter?.status?.value,
-          city: filter?.city?.value,
-          district: filter?.district?.value,
-          neighbourhood: filter?.neighbourhood?.value,
-        })
-      );
-      return;
-    }
-    setSearchVal(e.target.value);
-    if (e.code === "Enter") {
-      dispatch(
-        getUserRestaurants({
-          userId: params.id,
-          pageNumber,
-          pageSize: itemsPerPage,
-          searchKey: searchVal,
-          active: filter?.status?.value,
-          city: filter?.city?.value,
-          district: filter?.district?.value,
-          neighbourhood: filter?.neighbourhood?.value,
-        })
-      );
-    }
-    return;
+    e.preventDefault();
+    if (!searchVal) return;
+    dispatch(
+      getUserRestaurants({
+        userId: params.id,
+        pageNumber,
+        pageSize: itemsPerPage,
+        searchKey: searchVal,
+        active: filter?.status?.value,
+        city: filter?.city?.value,
+        district: filter?.district?.value,
+        neighbourhood: filter?.neighbourhood?.value,
+      })
+    );
   }
 
   function handleFilter(bool) {
@@ -255,26 +262,39 @@ const UserRestaurants = () => {
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--gr-1] pt-4 text-base">
-        <a href="/users">Müşteriler {">"} restoranlar</a>
+      <div className="w-full text-[--gr-1] pt-4 text-base cursor-pointer">
+        {userInfo ? (
+          <div onClick={() => window.history.back()}>
+            {userInfo.isDealer ? "Bayi " : "Müşteri "}
+            {userInfo.fullName} {">"} Restoranlar
+          </div>
+        ) : (
+          <div onClick={() => window.history.back()}>
+            Müşteriler {">"} Restoranlar
+          </div>
+        )}
       </div>
 
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
-          <CustomInput
-            onKeyDown={(e) => handleSearch(e)}
-            onChange={(e) => handleSearch(e)}
-            value={searchVal}
-            placeholder="Search..."
-            className2="mt-[0px] w-full"
-            className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
-            icon={<CloseI className="w-4 text-[--red-1]" />}
-            className4={`hover:bg-[--light-4] rounded-full px-2 py-1 ${
-              searchVal ? "block" : "hidden"
-            }`}
-            iconClick={() => handleSearch("")}
-          />
+          <form className="w-full" onSubmit={handleSearch}>
+            <CustomInput
+              onChange={(e) => {
+                setSearchVal(e.target.value);
+                !e.target.value && clearSearch();
+              }}
+              value={searchVal}
+              placeholder="Search..."
+              className2="mt-[0px] w-full"
+              className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
+              icon={<CloseI className="w-4 text-[--red-1]" />}
+              className4={`hover:bg-[--light-4] rounded-full px-2 py-1 ${
+                searchVal ? "block" : "hidden"
+              }`}
+              iconClick={clearSearch}
+            />
+          </form>
         </div>
 
         <div className="max-sm:w-full flex justify-end">
@@ -405,10 +425,8 @@ const UserRestaurants = () => {
               </div>
             </div>
 
-            <div className="">
-              <button className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]">
-                Add Restaurant
-              </button>
+            <div>
+              <AddRestaurant onSuccess={() => handleFilter(true)} />
             </div>
           </div>
         </div>
@@ -418,7 +436,7 @@ const UserRestaurants = () => {
       {restaurantsData ? (
         <RestaurantsTable
           inData={restaurantsData}
-          Actions={UsersActions}
+          Actions={RestaurantActions}
           totalItems={restaurantsData.length}
           onSuccess={() => handleFilter(true)}
         />

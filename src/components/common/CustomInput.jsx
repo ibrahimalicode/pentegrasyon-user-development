@@ -21,6 +21,7 @@ const CustomInput = ({
   autoComplete = "new-password",
   disabled,
   onClick,
+  readOnly,
 }) => {
   const eyeIconVis = <EyeI className="w-5" strokeWidth={2} />;
   const eyeIconInv = <EyeInv className="w-5" strokeWidth={2} />;
@@ -56,7 +57,8 @@ const CustomInput = ({
         maxLength={maxLength}
         disabled={disabled}
         onClick={onClick}
-        className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md sm:rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`}
+        readOnly={readOnly}
+        className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`}
       />
       {letIcon && !icon && (
         <div

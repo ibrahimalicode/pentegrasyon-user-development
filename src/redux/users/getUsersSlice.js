@@ -76,7 +76,7 @@ export const getUsers = createAsyncThunk(
         },
       });
 
-      //console.log(res);
+      // console.log(res);
       return res?.data?.data;
     } catch (err) {
       console.log(err);

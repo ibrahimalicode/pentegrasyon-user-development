@@ -43,34 +43,41 @@ const getCitiesSlice = createSlice({
       .addCase(getCities.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.error;
+        state.error = action.payload;
         state.cities = null;
       });
   },
 });
 
-export const getCities = createAsyncThunk("Data/getCities", async () => {
-  try {
-    const res = await api.get(`${baseURL}CityDistrictNeighbourhood/GetCities`);
-
-    if (res?.data?.data) {
-      const sortedData = res.data.data.sort((a, b) =>
-        a.name.localeCompare(b.name, "tr")
+export const getCities = createAsyncThunk(
+  "Data/getCities",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get(
+        `${baseURL}CityDistrictNeighbourhood/GetCities`
       );
 
-      const data = sortedData.map((element) => {
-        return { value: element.name, label: element.name, id: element.id };
-      });
+      if (res?.data?.data) {
+        const sortedData = res.data.data.sort((a, b) =>
+          a.name.localeCompare(b.name, "tr")
+        );
 
-      return data;
+        const data = sortedData.map((element) => {
+          return { value: element.name, label: element.name, id: element.id };
+        });
+
+        return data;
+      }
+      return res.data.data;
+    } catch (err) {
+      console.log(err);
+      if (err?.response?.data) {
+        return rejectWithValue(err.response.data);
+      }
+      return rejectWithValue({ message_TR: err.message });
     }
-    return res.data.data;
-  } catch (err) {
-    console.log(err);
-    toast.error(err.message);
-    throw err.message;
   }
-});
+);
 
 export const { resetGetCitiesState, resetGetCities } = getCitiesSlice.actions;
 export default getCitiesSlice.reducer;

@@ -1,76 +1,76 @@
 import { useEffect, useRef, useState } from "react";
-import { CancelI, EditI } from "../../../assets/icon";
-import { usePopup } from "../../../context/PopupContext";
-import CustomInput from "../../common/CustomInput";
-import CustomPhoneInput from "../../common/customPhoneInput";
-import CustomSelect from "../../common/CustomSelector";
+import { CancelI, EditI } from "../../assets/icon";
+import { usePopup } from "../../context/PopupContext";
+import CustomInput from "../common/CustomInput";
+import CustomPhoneInput from "../common/customPhoneInput";
+import CustomSelect from "../common/CustomSelector";
+import CustomTextarea from "../common/customTextarea";
+import toast from "react-hot-toast";
+import { formatSelectorData, googleMap } from "../../utils/utils";
+
+// REDUX
+import { useDispatch, useSelector } from "react-redux";
+import { getCities } from "../../redux/data/getCitiesSlice";
 import {
   getDistricts,
   resetGetDistrictsState,
-} from "../../../redux/data/getDistrictsSlice";
-import { getCities } from "../../../redux/data/getCitiesSlice";
-import { useDispatch, useSelector } from "react-redux";
+} from "../../redux/data/getDistrictsSlice";
 import {
   getNeighs,
   resetGetNeighsState,
-} from "../../../redux/data/getNeighsSlice";
-import CustomTextarea from "../../common/customTextarea";
-import toast from "react-hot-toast";
-import { googleMap } from "../../../utils/utils";
-import {
-  resetUpdateRestaurant,
-  updateRestaurant,
-} from "../../../redux/restaurants/updateRestaurantSlice";
-import { isEqual } from "lodash";
+} from "../../redux/data/getNeighsSlice";
 import {
   getLocation,
   resetGetLocationState,
-} from "../../../redux/data/getLocationSlice";
+} from "../../redux/data/getLocationSlice";
+import {
+  addRestaurant,
+  resetAddRestaurantState,
+} from "../../redux/restaurants/addRestaurantSlice";
+import { isEqual } from "lodash";
+import { getUsers, resetGetUsersState } from "../../redux/users/getUsersSlice";
+import { useParams } from "react-router-dom";
 
-const EditRestaurant = ({ restaurant, onSuccess }) => {
+const AddRestaurant = ({ onSuccess }) => {
+  const params = useParams();
+  const userId = params.id;
   const { setShowPopup, setPopupContent } = usePopup();
   const handleClick = () => {
     setPopupContent(
-      <EditRestaurantPopup restaurant={restaurant} onSuccess={onSuccess} />
+      <AddRestaurantPopup onSuccess={onSuccess} userId={userId} />
     );
     setShowPopup(true);
   };
 
   return (
     <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer"
+      className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
       onClick={handleClick}
     >
-      <EditI className="w-5" strokeWidth="1.8" /> Düzenle
+      Add Restaurant
     </button>
   );
 };
 
-export default EditRestaurant;
+export default AddRestaurant;
 
 // EDIT RESTAURANT POPUP
-function EditRestaurantPopup({ restaurant, onSuccess }) {
+function AddRestaurantPopup({ onSuccess, userId }) {
   const dispatch = useDispatch();
   const toastId = useRef();
+
   const { setShowPopup, setPopupContent } = usePopup();
-  const {
-    id: restaurantId,
-    dealerId,
-    userId,
-    name,
-    phoneNumber,
-    latitude,
-    longitude,
-    city,
-    district,
-    neighbourhood,
-    address,
-    isActive,
-  } = restaurant;
 
   const { loading, success, error } = useSelector(
-    (state) => state.restaurants.updateRestaurant
+    (state) => state.restaurants.addRestaurant
   );
+
+  const {
+    loading: usersLoading,
+    success: usersSuccess,
+    error: usersError,
+    users,
+  } = useSelector((state) => state.users.getUsers);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -89,43 +89,28 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
     location,
   } = useSelector((state) => state.data.getLocation);
 
-  const [lat, setLat] = useState(restaurant.latitude);
-  const [lng, setLng] = useState(restaurant.longitude);
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
   const [locationData, setLocationData] = useState({
     location: null,
     before: null,
   });
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [usersData, setUsersData] = useState([]);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
-  const [restaurantDataBefore, setRestaurantDataBefore] = useState({
-    restaurantId,
-    dealerId,
-    userId,
-    name,
-    phoneNumber: "90" + phoneNumber,
-    latitude,
-    longitude,
-    city: { label: city, value: city, id: null },
-    district: { label: district, value: district, id: null },
-    neighbourhood: { label: neighbourhood, value: neighbourhood, id: null },
-    address,
-    isActive,
-  });
   const [restaurantData, setRestaurantData] = useState({
-    restaurantId,
-    dealerId,
-    userId,
-    name,
-    phoneNumber: "90" + phoneNumber,
-    latitude,
-    longitude,
-    city: { label: city, value: city, id: null },
-    district: { label: district, value: district, id: null },
-    neighbourhood: { label: neighbourhood, value: neighbourhood, id: null },
-    address,
-    isActive,
+    userId: { id: userId },
+    name: "",
+    phoneNumber: "90",
+    latitude: "",
+    longitude: "",
+    city: null,
+    district: null,
+    neighbourhood: null,
+    address: "",
+    isActive: true,
   });
 
   const closeForm = () => {
@@ -135,18 +120,15 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const equalData = isEqual(restaurantDataBefore, restaurantData);
-    if (equalData) {
-      toast("Hiç bir değişiklik yapmadınız.");
-      return;
-    }
-    dispatch(updateRestaurant({ ...restaurantData }));
+    dispatch(addRestaurant({ ...restaurantData }));
     // console.log(restaurantData);
   };
 
   async function handleOpenMap() {
-    setIsMapOpen(true);
-    googleMap(lat, lng, setLat, setLng, locationData.location);
+    if (locationData.location) {
+      setIsMapOpen(true);
+      googleMap(lat, lng, setLat, setLng, locationData.location);
+    }
   }
 
   function handleSetMap() {
@@ -171,16 +153,35 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetUpdateRestaurant());
+      dispatch(resetAddRestaurantState());
     } else if (success) {
       toastId.current && toast.dismiss(toastId.current);
       onSuccess();
       setShowPopup(false);
       setPopupContent(null);
-      toast.success("Restoran barıyla güncelendi 🥳🥳");
-      dispatch(resetUpdateRestaurant());
+      toast.success("Restoran barıyla eklendi 🥳🥳");
+      dispatch(resetAddRestaurantState());
     }
   }, [loading, success, error]);
+
+  // GET ALL USERS
+  useEffect(() => {
+    if (!usersData.length && !userId) {
+      dispatch(getUsers({}));
+    }
+  }, [usersData]);
+
+  // SET USERS
+  useEffect(() => {
+    if (usersSuccess) {
+      setUsersData(formatSelectorData(users));
+      dispatch(resetGetUsersState());
+    }
+    if (usersError) {
+      toast.error("Kullanıcılar alınamadı");
+      dispatch(resetGetUsersState());
+    }
+  }, [usersSuccess, usersError]);
 
   // GET AND SET CITIES IF THERE IS NO CITIES
   useEffect(() => {
@@ -188,28 +189,6 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
       dispatch(getCities());
     } else {
       setCities(citiesData);
-      if (!restaurantData.city?.id) {
-        const city = citiesData.filter(
-          (city) =>
-            city?.label.toLowerCase() ===
-            restaurantData.city.label.toLowerCase() //toLocaleLowerCase('tr-TR')
-        )[0];
-
-        if (city) {
-          setRestaurantDataBefore((prev) => {
-            return {
-              ...prev,
-              city,
-            };
-          });
-          setRestaurantData((prev) => {
-            return {
-              ...prev,
-              city,
-            };
-          });
-        }
-      }
     }
   }, [citiesData]);
 
@@ -230,28 +209,6 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
   useEffect(() => {
     if (districtsSuccess) {
       setDistricts(districtsData);
-
-      if (!restaurantData.district || !restaurantData.district?.id) {
-        const district = districtsData.filter(
-          (dist) =>
-            dist?.label.toLowerCase() ===
-            restaurantDataBefore.district?.label.toLowerCase()
-        )[0];
-        if (district) {
-          setRestaurantDataBefore((prev) => {
-            return {
-              ...prev,
-              district,
-            };
-          });
-          setRestaurantData((prev) => {
-            return {
-              ...prev,
-              district,
-            };
-          });
-        }
-      }
       dispatch(resetGetDistrictsState());
     }
   }, [districtsSuccess]);
@@ -278,27 +235,6 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
   useEffect(() => {
     if (neighsSuccess) {
       setNeighs(neighsData);
-      if (!restaurantData.neighbourhood) {
-        const neigh = neighsData.filter(
-          (neigh) =>
-            neigh.label.toLowerCase() ===
-            restaurantDataBefore.neighbourhood.label.toLowerCase()
-        )[0];
-        if (neigh) {
-          setRestaurantDataBefore((prev) => {
-            return {
-              ...prev,
-              neighbourhood: neigh,
-            };
-          });
-          setRestaurantData((prev) => {
-            return {
-              ...prev,
-              neighbourhood: neigh,
-            };
-          });
-        }
-      }
       dispatch(resetGetNeighsState());
     }
   }, [neighsSuccess]);
@@ -353,7 +289,7 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
   }, [locationSuccess]);
 
   return (
-    <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base max-h-[90dvh] overflow-visible relative">
+    <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base overflow-visible relative">
       <div className="flex flex-col bg-[--white-1] relative">
         <div className="absolute -top-6 right-3 z-[50]">
           <div
@@ -405,10 +341,10 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
           </div>
         </div>
 
-        <h1 className="self-center text-2xl font-bold">Restoran Düzenle</h1>
+        <h1 className="self-center text-2xl font-bold">Restoran Ekle</h1>
         <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
           <form onSubmit={handleSubmit}>
-            <div className="flex gap-4">
+            <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
                 required={true}
                 label="Ad"
@@ -442,11 +378,35 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
               />
             </div>
 
-            <div className="flex gap-4">
+            <div className="grid sm:grid-cols-2 gap-x-4">
+              {!userId && (
+                <CustomSelect
+                  required={true}
+                  label="Kullanıcı"
+                  style={{ padding: "1px 0px" }}
+                  className="text-sm"
+                  value={
+                    restaurantData.userId.value
+                      ? restaurantData.userId
+                      : { value: null, label: "Kullanıcı seç" }
+                  }
+                  options={[
+                    { value: null, label: "Kullanıcı seç" },
+                    ...usersData,
+                  ]}
+                  onChange={(selectedOption) => {
+                    setRestaurantData((prev) => {
+                      return {
+                        ...prev,
+                        userId: selectedOption,
+                      };
+                    });
+                  }}
+                />
+              )}
               <CustomSelect
                 required={true}
                 label="Şehir"
-                placeholder="Ad"
                 style={{ padding: "1px 0px" }}
                 className="text-sm"
                 value={
@@ -464,6 +424,7 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
                   });
                 }}
               />
+
               <CustomSelect
                 required={true}
                 label="İlçe"
@@ -485,9 +446,6 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
                   });
                 }}
               />
-            </div>
-
-            <div className="flex gap-4">
               <CustomSelect
                 required={true}
                 label="Mahalle"
@@ -509,12 +467,12 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
                   });
                 }}
               />
-
               <CustomTextarea
                 required={true}
                 label="Adres"
                 placeholder="Adres"
-                className="text-sm h-14"
+                className={`text-sm max-sm:h-14 ${userId ? "h-14" : "h-9"}`}
+                className2={`${!userId && "col-span-full"}`}
                 value={restaurantData.address}
                 onChange={(e) => {
                   setRestaurantData((prev) => {
@@ -528,7 +486,11 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
             </div>
 
             <div onClick={handleOpenMap}>
-              <div className="flex gap-4 pointer-events-none">
+              <div
+                className={`flex gap-4 pointer-events-none ${
+                  !userId && "sm:mt-4"
+                }`}
+              >
                 <CustomInput
                   required={true}
                   label="Latitude"

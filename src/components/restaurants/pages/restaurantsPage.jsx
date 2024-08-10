@@ -1,153 +1,175 @@
 import CustomInput from "../../common/CustomInput";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getUsers,
-  resetGetUsersState,
-} from "../../../redux/users/getUsersSlice";
 import toast from "react-hot-toast";
 import CustomPagination from "../../common/pagination";
 import CloseI from "../../../assets/icon/close";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/CustomSelector";
-import UsersTable from "../userTable";
 import { usePopup } from "../../../context/PopupContext";
-import AddUser from "../addUser";
+import AddRestaurant from "../addRestaurant";
+import RestaurantsTable from "../../common/restaurantsTable";
+import RestaurantActions from "../../users/userRestaurantActions/userRestaurantActions";
+
+// REDUX
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getRestaurants,
+  resetGetRestaurantsState,
+} from "../../../redux/restaurants/getRestaurantsSlice";
 import { getCities } from "../../../redux/data/getCitiesSlice";
 
-const UsersPage = () => {
+const RestaurantsPage = () => {
   const dispatch = useDispatch();
-  const { loading, success, error, users } = useSelector(
-    (state) => state.users.getUsers
+
+  const { loading, success, error, restaurants } = useSelector(
+    (state) => state.restaurants.getRestaurants
   );
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
+  const { districts: districtsData, success: districtsSuccess } = useSelector(
+    (state) => state.data.getDistricts
+  );
+  const { neighs: neighsData, success: neighsSuccess } = useSelector(
+    (state) => state.data.getNeighs
+  );
+
   const [searchVal, setSearchVal] = useState("");
-  const [usersData, setUsersData] = useState(null);
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState({
+    city: null,
+    district: null,
+    neighbourhood: null,
+  });
+  const [restaurantsData, setRestaurantsData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
+
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [neighs, setNeighs] = useState([]);
 
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
-  const [cities, setCities] = useState([]);
   const [totalItems, setTotalItems] = useState(null);
-  // const lastItemIndex = pageNumber * itemsPerPage;
-  // const firstItemIndex = lastItemIndex - itemsPerPage;
-  //const currentItems = usersData?.slice(firstItemIndex, lastItemIndex);
 
   function clearSearch() {
     setSearchVal("");
     dispatch(
-      getUsers({
+      getRestaurants({
         pageNumber,
         pageSize: itemsPerPage,
         searchKey: null,
-        active: filter?.active?.value,
-        verify: filter?.verify?.value,
-        dealer: filter?.dealer?.value,
+        active: filter?.status?.value,
         city: filter?.city?.value,
-      })
-    );
-  }
-  function handleSearch(e) {
-    e.preventDefault();
-    if (!searchVal) return;
-    dispatch(
-      getUsers({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: searchVal,
-        active: filter?.active?.value,
-        verify: filter?.verify?.value,
-        dealer: filter?.dealer?.value,
-        city: filter?.city?.value,
+        district: filter?.district?.value,
+        neighbourhood: filter?.neighbourhood?.value,
       })
     );
   }
 
-  const handleFilter = (bool) => {
+  function handleSearch(e) {
+    e.preventDefault();
+    if (!searchVal) return;
+    dispatch(
+      getRestaurants({
+        pageNumber,
+        pageSize: itemsPerPage,
+        searchKey: searchVal,
+        active: filter?.status?.value,
+        city: filter?.city?.value,
+        district: filter?.district?.value,
+        neighbourhood: filter?.neighbourhood?.value,
+      })
+    );
+  }
+
+  function handleFilter(bool) {
     if (bool) {
       setOpenFilter(false);
       setPageNumber(1);
       dispatch(
-        getUsers({
-          pageNumber: 1,
+        getRestaurants({
+          pageNumber,
           pageSize: itemsPerPage,
-          active: filter?.active?.value,
-          verify: filter?.verify?.value,
-          dealer: filter?.dealer?.value,
+          searchKey: searchVal,
+          active: filter?.status?.value,
           city: filter?.city?.value,
+          district: filter?.district?.value,
+          neighbourhood: filter?.neighbourhood?.value,
         })
       );
     } else {
       if (filter) {
         dispatch(
-          getUsers({
+          getRestaurants({
             pageNumber,
             pageSize: itemsPerPage,
+            searchKey: null,
             active: null,
-            verify: null,
-            dealer: null,
             city: null,
+            district: null,
+            neighbourhood: null,
           })
         );
       }
-      setFilter(null);
+      setFilter({
+        city: null,
+        district: null,
+        neighbourhood: null,
+      });
       setOpenFilter(false);
     }
-  };
+  }
 
-  const handlePageChange = (number) => {
+  function handlePageChange(number) {
     dispatch(
-      getUsers({
+      getRestaurants({
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
-        active: filter?.active?.value,
-        verify: filter?.verify?.value,
-        dealer: filter?.dealer?.value,
+        active: filter?.status?.value,
         city: filter?.city?.value,
+        district: filter?.district?.value,
+        neighbourhood: filter?.neighbourhood?.value,
       })
     );
-  };
+  }
 
-  // GET USERS
+  // GET RESTAURANTS
   useEffect(() => {
-    if (!usersData) {
+    if (!restaurantsData) {
       dispatch(
-        getUsers({
+        getRestaurants({
           pageNumber,
           pageSize: itemsPerPage,
-          searchKey: searchVal,
+          searchKey: null,
           active: null,
-          verify: null,
-          dealer: null,
           city: null,
+          district: null,
+          neighbourhood: null,
         })
       );
     }
-  }, [usersData]);
+  }, [restaurantsData]);
 
-  // TOAST AND SET USERS
+  // TOAST AND SET RESTAURANTS
   useEffect(() => {
     if (error) {
-      if (error?.message) {
-        toast.error(error.message);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetUsersState());
+      dispatch(resetGetRestaurantsState());
     }
 
     if (success) {
-      setUsersData(users?.data);
-      setTotalItems(users?.totalCount);
-      dispatch(resetGetUsersState());
+      setRestaurantsData(restaurants.data);
+      setTotalItems(restaurants.totalCount);
+      dispatch(resetGetRestaurantsState());
     }
-  }, [loading, success, error, users]);
+  }, [loading, success, error, restaurants]);
 
-  // GET CITIES
+  // GET AND SET CITIES
   useEffect(() => {
     if (!citiesData) {
       dispatch(getCities());
@@ -156,36 +178,83 @@ const UsersPage = () => {
     }
   }, [citiesData]);
 
+  // GET DISTRICTS
+  useEffect(() => {
+    if (filter.city?.id) {
+      dispatch(getDistricts({ cityId: filter.city.id }));
+      setFilter((prev) => {
+        return {
+          ...prev,
+          district: null,
+        };
+      });
+    }
+  }, [filter.city]);
+
+  // SET DISTRICTS
+  useEffect(() => {
+    if (districtsSuccess) {
+      setDistricts(districtsData);
+    }
+  }, [districtsSuccess]);
+
+  // GET NEIGHS
+  useEffect(() => {
+    if (filter.district?.id && filter.city?.id) {
+      dispatch(
+        getNeighs({
+          cityId: filter.city.id,
+          districtId: filter.district.id,
+        })
+      );
+      setFilter((prev) => {
+        return {
+          ...prev,
+          neighbourhood: null,
+        };
+      });
+    }
+  }, [filter.district]);
+
+  // SET NEIGHS
+  useEffect(() => {
+    if (neighsSuccess) {
+      setNeighs(neighsData);
+    }
+  }, [neighsSuccess]);
+
   //HIDE POPUP
   const { contentRef, setContentRef, setShowPopup, setPopupContent } =
     usePopup();
-  const usersFilterRef = useRef();
+  const filterRestaurant = useRef();
   useEffect(() => {
-    if (usersFilterRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "usersFilter");
+    if (filterRestaurant) {
+      const refs = contentRef.filter(
+        (ref) => ref.id !== "usersRestaurantFilter"
+      );
       setContentRef([
         ...refs,
         {
-          id: "usersFilter",
+          id: "usersRestaurantFilter",
           outRef: null,
-          ref: usersFilterRef,
+          ref: filterRestaurant,
           callback: () => setOpenFilter(false),
         },
       ]);
     }
-  }, [usersFilterRef]);
+  }, [filterRestaurant]);
 
   return (
-    <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--black-2] pt-4 text-2xl font-semibold">
-        <h2>Customers</h2>
+      <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
+        <h2>Restaurants</h2>
       </div>
 
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
-          <form className="w-full" onSubmit={(e) => handleSearch(e)}>
+          <form className="w-full" onSubmit={handleSearch}>
             <CustomInput
               onChange={(e) => {
                 setSearchVal(e.target.value);
@@ -193,10 +262,10 @@ const UsersPage = () => {
               }}
               value={searchVal}
               placeholder="Search..."
-              className2="sm:mt-[0px] mt-[0px]  w-full"
+              className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}
-              className4={`hover:bg-[--light-4] rounded-full px-2 py-1 ${
+              className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
                 searchVal ? "block" : "hidden"
               }`}
               iconClick={clearSearch}
@@ -205,8 +274,8 @@ const UsersPage = () => {
         </div>
 
         <div className="max-sm:w-full flex justify-end">
-          <div className="flex gap-2 max-sm:order-1 " ref={usersFilterRef}>
-            <div className="w-full relative">
+          <div className="flex gap-2 max-sm:order-1 ">
+            <div className="w-full relative" ref={filterRestaurant}>
               <button
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                 onClick={() => setOpenFilter(!openFilter)}
@@ -215,31 +284,31 @@ const UsersPage = () => {
               </button>
 
               <div
-                className={`absolute right-[-100px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-50 ${
+                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
                   openFilter ? "visible" : "hidden"
                 }`}
               >
                 <div className="flex gap-6">
                   <CustomSelect
-                    label="Rol"
+                    label="Durum"
                     className="text-sm sm:mt-1"
                     className2="sm:mt-3"
                     style={{ padding: "0 !important" }}
                     options={[
                       { value: null, label: "Hepsi" },
-                      { value: true, label: "Bayi" },
-                      { value: false, label: "Müşteri" },
+                      { value: true, label: "Aktif" },
+                      { value: false, label: "Pasif" },
                     ]}
                     value={
-                      filter?.dealer
-                        ? filter.dealer
+                      filter?.status
+                        ? filter.status
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          dealer: selectedOption,
+                          status: selectedOption,
                         };
                       });
                     }}
@@ -247,9 +316,8 @@ const UsersPage = () => {
 
                   <CustomSelect
                     label="Şehir"
-                    className="text-sm sm:mt-1"
-                    className2="sm:mt-3"
-                    style={{ padding: "0 !important" }}
+                    style={{ padding: "1px 0px" }}
+                    className="text-sm"
                     options={[{ value: null, label: "Hepsi" }, ...cities]}
                     optionStyle={{ fontSize: ".8rem" }}
                     value={
@@ -270,93 +338,50 @@ const UsersPage = () => {
 
                 <div className="flex gap-6">
                   <CustomSelect
-                    label="Durum"
+                    label="District"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[
-                      { value: null, label: "Hepsi" },
-                      { value: true, label: "Aktif" },
-                      { value: false, label: "Pasif" },
-                    ]}
+                    options={[{ value: null, label: "Hepsi" }, ...districts]}
+                    optionStyle={{ fontSize: ".8rem" }}
                     value={
-                      filter?.active
-                        ? filter.active
+                      filter?.district
+                        ? filter.district
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          active: selectedOption,
+                          district: selectedOption,
                         };
                       });
                     }}
                   />
                   <CustomSelect
-                    label="Onay"
+                    label="neighbourhood"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[
-                      { value: null, label: "Hepsi" },
-                      { value: true, label: "Onaylı" },
-                      { value: false, label: "Onlaylanmadı" },
-                    ]}
+                    options={[{ value: null, label: "Hepsi" }, ...neighs]}
+                    optionStyle={{ fontSize: ".8rem" }}
                     value={
-                      filter?.verify
-                        ? filter.verify
+                      filter?.neighbourhood
+                        ? filter.neighbourhood
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          verify: selectedOption,
+                          neighbourhood: selectedOption,
                         };
                       });
                     }}
                   />
                 </div>
-
-                {/* 
-                <div className="flex gap-2">
-                  <CustomDatePicker
-                    label="Başlangıç"
-                    className="sm:py-[.5rem] py-[.5rem] w-full"
-                    className2="sm:mt-[.75rem]"
-                    popperClassName="custom-popper-left"
-                    dateFormat="dd.MM.yyyy"
-                    value={filter?.startDateTime ? filter.startDateTime : null}
-                    onChange={(date) => {
-                      setFilter((prev) => {
-                        return {
-                          ...prev,
-                          startDateTime: date,
-                        };
-                      });
-                    }}
-                  />
-                  <CustomDatePicker
-                    label="Bitiş"
-                    className="sm:py-[.5rem] py-[.5rem] w-full"
-                    className2="sm:mt-[.75rem]"
-                    popperClassName="custom-popper-right"
-                    dateFormat="dd.MM.yyyy"
-                    value={filter?.endDateTime ? filter.endDateTime : null}
-                    onChange={(date) => {
-                      setFilter((prev) => {
-                        return {
-                          ...prev,
-                          endDateTime: date,
-                        };
-                      });
-                    }}
-                  />
-                </div>
-                */}
 
                 <div className="w-full flex gap-2 justify-center pt-10">
                   <button
@@ -375,28 +400,19 @@ const UsersPage = () => {
               </div>
             </div>
 
-            <div className="">
-              <button
-                className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
-                onClick={() => {
-                  setShowPopup(true);
-                  setPopupContent(
-                    <AddUser onSuccess={() => handleFilter(true)} />
-                  );
-                }}
-              >
-                Add user
-              </button>
+            <div>
+              <AddRestaurant onSuccess={() => handleFilter(true)} />
             </div>
           </div>
         </div>
       </div>
 
       {/* TABLE */}
-      {usersData ? (
-        <UsersTable
-          users={usersData}
-          itemsPerPage={itemsPerPage}
+      {restaurantsData ? (
+        <RestaurantsTable
+          inData={restaurantsData}
+          Actions={RestaurantActions}
+          totalItems={restaurantsData.length}
           onSuccess={() => handleFilter(true)}
         />
       ) : loading ? (
@@ -404,8 +420,8 @@ const UsersPage = () => {
       ) : null}
 
       {/* PAGINATION */}
-      {usersData && typeof totalItems === "number" && (
-        <div className="w-full self-end flex justify-center pb-4 text-[--black-2]">
+      {restaurantsData && typeof totalItems === "number" && (
+        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
@@ -419,4 +435,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+export default RestaurantsPage;

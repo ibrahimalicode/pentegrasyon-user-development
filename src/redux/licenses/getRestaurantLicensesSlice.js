@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  restorantLicenses: null,
+  restaurantLicenses: null,
 };
 
 const getRestaurantLicensesSlice = createSlice({
@@ -24,7 +24,7 @@ const getRestaurantLicensesSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.restorantLicenses = null;
+      state.restaurantLicenses = null;
     },
   },
   extraReducers: (build) => {
@@ -33,19 +33,19 @@ const getRestaurantLicensesSlice = createSlice({
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.restorantLicenses = null;
+        state.restaurantLicenses = null;
       })
       .addCase(getRestaurantLicenses.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.restorantLicenses = action.payload;
+        state.restaurantLicenses = action.payload;
       })
       .addCase(getRestaurantLicenses.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.restorantLicenses = null;
+        state.restaurantLicenses = null;
       });
   },
 });
@@ -68,14 +68,14 @@ export const getRestaurantLicenses = createAsyncThunk(
         }
       );
 
-      console.log(res.data);
+      // console.log(res.data);
       return res.data.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
-      throw rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );

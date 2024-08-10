@@ -35,8 +35,8 @@ const sidebarItems = [
   {
     icon: <RestourantI />,
     text: "Restoranlar",
-    to: "/restourants",
-    path: "restourants",
+    to: "/restaurants",
+    path: "restaurants",
   },
   {
     icon: <LicenseI />,
@@ -87,8 +87,9 @@ function Sidebar() {
   const sidebarRef = useRef();
   const { showPopup, contentRef, setContentRef } = usePopup();
 
-  const route = Object.values(param)[0];
+  const route = Object.values(param)[0].split("/")[0];
   const path = route.length > 1 ? route : "dashboard";
+  // console.log(route);
 
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -142,8 +143,7 @@ function Sidebar() {
                     setOpenSidebar(!openSidebar);
                   }}
                   className={`flex flex-col justify-center px-4 py-[10px] rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item ${
-                    path.includes(item.path) &&
-                    "bg-[--light-1] text-[--primary-1]"
+                    path === item.path && "bg-[--light-1] text-[--primary-1]"
                   }`}
                 >
                   <div className="flex items-center gap-3">

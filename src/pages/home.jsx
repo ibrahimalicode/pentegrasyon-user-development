@@ -6,8 +6,8 @@ import NotFound from "./404";
 import Users from "./users";
 import Restourants from "./restourants";
 import Licenses from "./licenses";
-import Packages from "./packages";
 import Parameters from "./parameters";
+import LicensePackages from "./licensePackages";
 
 const Home = () => {
   return (
@@ -20,8 +20,8 @@ const Home = () => {
         <Route path="/users/*" element={<Users />} />
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />
-        <Route path="/packages" element={<Packages />} />
-        <Route path="/parameters" element={<Parameters />} />
+        <Route path="/license-packages/*" element={<LicensePackages />} />
+        <Route path="/parameters/*" element={<Parameters />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </section>

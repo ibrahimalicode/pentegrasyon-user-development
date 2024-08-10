@@ -25,7 +25,7 @@ const UsersActions = ({ index, user, itemsPerPage, onSuccess }) => {
         ...refs,
         {
           id: "userActions",
-          outRef: outRef.current ? outRef : null,
+          outRef: /* outRef.current ? outRef : */ null,
           ref: usersMenuRef,
           callback: () => setOpenMenu(null),
         },
@@ -39,31 +39,29 @@ const UsersActions = ({ index, user, itemsPerPage, onSuccess }) => {
           className={`w-full ${openMenu === index && "text-[--primary-2]"}`}
         />
       </div>
-      {openMenu === index && (
-        <div
-          className={`absolute right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
-            index < itemsPerPage / 2 ? "top-5" : "bottom-5"
-          }`}
-          ref={outRef}
-        >
-          <ul className="bg-[--white-1] text-[--gr-1] w-48">
-            <UserRestaurants user={user} setOpenMenu={setOpenMenu} />
-            <UserLicenses user={user} setOpenMenu={setOpenMenu} />
-            <MakeADealer user={user} setOpenMenu={setOpenMenu} />
-            <TransferDealer user={user} setOpenMenu={setOpenMenu} />
-            <EditUser
-              user={user}
-              setOpenMenu={setOpenMenu}
-              onSuccess={onSuccess}
-            />
-            <DeleteUser
-              user={user}
-              setOpenMenu={setOpenMenu}
-              onSuccess={onSuccess}
-            />
-          </ul>
-        </div>
-      )}
+      <div
+        className={`absolute right-9 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
+          index < itemsPerPage / 2 ? "top-5" : "bottom-5"
+        } ${openMenu !== index && "invisible"}`}
+        /* ref={outRef} */
+      >
+        <ul className="bg-[--white-1] text-[--gr-1] w-48">
+          <UserRestaurants user={user} setOpenMenu={setOpenMenu} />
+          <UserLicenses user={user} setOpenMenu={setOpenMenu} />
+          <MakeADealer user={user} setOpenMenu={setOpenMenu} />
+          <TransferDealer user={user} setOpenMenu={setOpenMenu} />
+          <EditUser
+            user={user}
+            setOpenMenu={setOpenMenu}
+            onSuccess={onSuccess}
+          />
+          <DeleteUser
+            user={user}
+            setOpenMenu={setOpenMenu}
+            onSuccess={onSuccess}
+          />
+        </ul>
+      </div>
     </>
   );
 };

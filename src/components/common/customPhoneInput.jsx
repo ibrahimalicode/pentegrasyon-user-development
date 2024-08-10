@@ -18,6 +18,8 @@ const CustomPhoneInput = ({
     if (!value.startsWith("90")) {
       if (value.startsWith("9")) {
         value = "90" + value.slice(1);
+      } else if (value.startsWith("0")) {
+        value = "9" + value.slice(1);
       } else {
         value = "90" + value;
       }

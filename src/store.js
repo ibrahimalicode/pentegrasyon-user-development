@@ -29,6 +29,8 @@ import getLocationSlice from "./redux/data/getLocationSlice";
 import addRestaurantSlice from "./redux/restaurants/addRestaurantSlice";
 import getLicensesSlice from "./redux/licenses/getLicensesSlice";
 import addLicenseSlice from "./redux/licenses/addLicenseSlice";
+import getCurrencySlice from "./redux/data/getCurrencySlice";
+import getLicensePackagesSlice from "./redux/licensePackages/getLicensePackagesSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -68,11 +70,16 @@ const licensesSlice = combineReducers({
   addLicense: addLicenseSlice,
 });
 
+const licensePackagesSlice = combineReducers({
+  getLicensePackages: getLicensePackagesSlice,
+});
+
 const dataSlice = combineReducers({
   getCities: getCitiesSlice,
   getDistricts: getDistrictsSlice,
   getNeighs: getNeighsSlice,
   getLocation: getLocationSlice,
+  getCurrency: getCurrencySlice,
 });
 
 const store = configureStore({
@@ -81,6 +88,7 @@ const store = configureStore({
     users: usersSlice,
     restaurants: restaurantsSlice,
     licenses: licensesSlice,
+    licensePackages: licensePackagesSlice,
     data: dataSlice,
   },
 });

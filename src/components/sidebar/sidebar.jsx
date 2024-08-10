@@ -47,8 +47,8 @@ const sidebarItems = [
   {
     icon: <PackagesI />,
     text: "Lisans Paketleri",
-    to: "/packages",
-    path: "packages",
+    to: "/license-packages",
+    path: "license-packages",
   },
   {
     icon: <MessagesI />,
@@ -111,7 +111,7 @@ function Sidebar() {
   return (
     <nav
       className={`fixed -left-[280px] lg:left-0 top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
-        !showPopup && "z-[99]"
+        !showPopup && "z-[999]"
       } ${openSidebar && "left-[0]"}`}
       ref={sidebarRef}
     >

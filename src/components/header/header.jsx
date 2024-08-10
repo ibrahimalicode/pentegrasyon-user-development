@@ -40,7 +40,7 @@ function Header() {
     }
   }, [success, loading, error]);
   return (
-    <header className="fixed top-0 right-0 left-0 flex flex-col justify-center items-end h-16 py-3.5 px-[4%] bg-white border-b border-slate-200 max-md:px-5">
+    <header className="fixed top-0 right-0 left-0 flex flex-col justify-center items-end h-16 py-3.5 px-[4%] bg-white border-b border-slate-200 max-md:px-5 z-[99]">
       <nav className="flex gap-4">
         <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer">
           <BellI />

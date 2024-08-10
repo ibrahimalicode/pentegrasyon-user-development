@@ -42,7 +42,9 @@ const CustomInput = ({
 
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
-      <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
+      <label
+        className={`text-xs font-semibold tracking-wide text-[--gr-1] max-md:max-w-full text-left`}
+      >
         {label}
       </label>
       <input
@@ -58,7 +60,7 @@ const CustomInput = ({
         disabled={disabled}
         onClick={onClick}
         readOnly={readOnly}
-        className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`}
+        className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:bg-[--white-1] autofill:outline-none outline-none ${className}`}
       />
       {letIcon && !icon && (
         <div

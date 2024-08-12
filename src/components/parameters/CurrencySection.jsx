@@ -8,7 +8,7 @@ import {
 } from "../../redux/data/getCurrencySlice";
 import toast from "react-hot-toast";
 
-function CurrencySection() {
+const CurrencySection = () => {
   const dispatch = useDispatch();
   const { loading, success, error, currency } = useSelector(
     (state) => state.data.getCurrency
@@ -81,6 +81,6 @@ function CurrencySection() {
       </div>
     </section>
   );
-}
+};
 
 export default CurrencySection;

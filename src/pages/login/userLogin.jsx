@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../../components/common/CustomInput";
+import CustomInput from "../../components/common/customInput";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +65,7 @@ function UserLogin({ pageName, setPageName }) {
             type="text"
             placeholder="E-posta/Telefon"
             value={emailOrPhone}
-            onChange={(e) => setEmailOrPhone(e.target.value)}
+            onChange={(e) => setEmailOrPhone(e)}
             required={true}
             className="py-4"
             autoComplete="on"
@@ -74,7 +74,7 @@ function UserLogin({ pageName, setPageName }) {
             label="Şifre"
             placeholder="Şifre"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e)}
             required={true}
             className="py-4"
             autoComplete="on"

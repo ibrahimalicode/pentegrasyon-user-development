@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../../components/common/CustomInput";
+import CustomInput from "../../components/common/customInput";
 
 // ICONS
 import toast from "react-hot-toast";
 import GobackI from "../../assets/icon/goback";
 import { useDispatch, useSelector } from "react-redux";
-import CustomSelect from "../../components/common/CustomSelector";
+import CustomSelect from "../../components/common/customSelector";
 import LoadingI from "../../assets/anim/loading";
 import {
   registerUser,
@@ -224,7 +224,7 @@ const UserRegister = ({ setPageName }) => {
                 type="text"
                 placeholder="Ad"
                 value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) => setFirstName(e)}
                 required={true}
                 className="py-[.5rem]"
               />
@@ -233,7 +233,7 @@ const UserRegister = ({ setPageName }) => {
                 type="text"
                 placeholder="Soyad"
                 value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={(e) => setLastName(e)}
                 required={true}
                 className="py-[.5rem]"
               />
@@ -255,7 +255,7 @@ const UserRegister = ({ setPageName }) => {
                 type="E-Posta"
                 placeholder="E-Posta"
                 value={email}
-                onChange={(e) => setEmail(formatEmail(e.target.value))}
+                onChange={(e) => setEmail(formatEmail(e))}
                 required={true}
                 className="py-[.5rem]"
               />
@@ -287,7 +287,7 @@ const UserRegister = ({ setPageName }) => {
                 label="Şifre"
                 placeholder="Şifre"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e)}
                 required={true}
                 className="py-[.5rem]"
                 letIcon={true}
@@ -296,7 +296,7 @@ const UserRegister = ({ setPageName }) => {
                 label="Şifreyi onayla"
                 placeholder="Şifre"
                 value={password2}
-                onChange={(e) => setPassword2(e.target.value)}
+                onChange={(e) => setPassword2(e)}
                 required={true}
                 className="py-[.5rem]"
                 letIcon={true}
@@ -367,7 +367,7 @@ const UserRegister = ({ setPageName }) => {
               type="text"
               placeholder="Doğrulama Kodu"
               value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
+              onChange={(e) => setVerificationCode(e)}
               required={true}
               className="py-3"
             />

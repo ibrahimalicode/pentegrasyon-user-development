@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowID, ArrowIU } from "../../../../assets/icon";
-import CustomInput from "../../../common/CustomInput";
-import CustomSelect from "../../../common/CustomSelector";
+import CustomInput from "../../../common/customInput";
+import CustomSelect from "../../../common/customSelector";
 import CustomTextarea from "../../../common/customTextarea";
 import isEqual from "lodash/isEqual";
 import toast from "react-hot-toast";
@@ -334,7 +334,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    title: e.target.value,
+                    title: e,
                   };
                 });
               }}
@@ -351,7 +351,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    tradeRegistryNumber: e.target.value,
+                    tradeRegistryNumber: e,
                   };
                 });
               }}
@@ -366,7 +366,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    taxOffice: e.target.value,
+                    taxOffice: e,
                   };
                 });
               }}
@@ -384,7 +384,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    taxNumber: e.target.value,
+                    taxNumber: e,
                   };
                 });
               }}
@@ -400,7 +400,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    mersisNumber: e.target.value,
+                    mersisNumber: e,
                   };
                 });
               }}
@@ -482,7 +482,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    address: e.target.value,
+                    address: e,
                   };
                 });
               }}

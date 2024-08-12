@@ -7,7 +7,7 @@ import {
 import LoadingI from "../../assets/anim/loading";
 import { GobackI } from "../../assets/icon";
 import CustomCheckbox from "../../components/common/customCheckbox";
-import CustomInput from "../../components/common/CustomInput";
+import CustomInput from "../../components/common/customInput";
 import {
   codeVerification,
   resetVerifyCodeState,
@@ -172,7 +172,7 @@ const ForgotPassword = () => {
                     type="email"
                     placeholder="E-Posta"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e)}
                     required={true}
                   />
                 )}
@@ -234,7 +234,7 @@ const ForgotPassword = () => {
                   type="text"
                   placeholder="Doğrulama Kodu"
                   value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
+                  onChange={(e) => setVerificationCode(e)}
                   required={true}
                 />
                 <div className="mt-10 text-[--gr-1] font-light">

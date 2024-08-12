@@ -1,6 +1,7 @@
 import CheckI from "../../assets/icon/check";
 
 const CustomCheckbox = ({
+  id,
   label,
   checked,
   onChange,
@@ -12,6 +13,7 @@ const CustomCheckbox = ({
       className={`max-w-max flex items-center cursor-pointer ${className}`}
     >
       <input
+        id={id}
         type="checkbox"
         checked={checked}
         onChange={onChange}

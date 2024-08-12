@@ -1,10 +1,10 @@
-import CustomInput from "../../common/CustomInput";
+import CustomInput from "../../common/customInput";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import CustomPagination from "../../common/pagination";
 import CloseI from "../../../assets/icon/close";
 import TableSkeleton from "../../common/tableSkeleton";
-import CustomSelect from "../../common/CustomSelector";
+import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 import AddRestaurant from "../addRestaurant";
 import RestaurantsTable from "../../common/restaurantsTable";
@@ -257,8 +257,8 @@ const RestaurantsPage = () => {
           <form className="w-full" onSubmit={handleSearch}>
             <CustomInput
               onChange={(e) => {
-                setSearchVal(e.target.value);
-                !e.target.value && clearSearch();
+                setSearchVal(e);
+                !e && clearSearch();
               }}
               value={searchVal}
               placeholder="Search..."

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePopup } from "../../context/PopupContext";
 import { CancelI } from "../../assets/icon";
-import CustomInput from "../common/CustomInput";
+import CustomInput from "../common/customInput";
 import CustomCheckbox from "../common/customCheckbox";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -172,7 +172,7 @@ function EditUserStatusPopup({ user, onSuccess }) {
                   setUserData((prev) => {
                     return {
                       ...prev,
-                      passiveNote: e.target.value,
+                      passiveNote: e,
                     };
                   });
                 }}

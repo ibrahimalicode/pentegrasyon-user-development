@@ -5,7 +5,7 @@ import {
 } from "../../redux/auth/userVerificationSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { GobackI } from "../../assets/icon";
-import CustomInput from "../../components/common/CustomInput";
+import CustomInput from "../../components/common/customInput";
 import LoadingI from "../../assets/anim/loading";
 import { PhoneUserMessage } from "../../components/common/messages";
 import {
@@ -166,7 +166,7 @@ const UserVerifyLogin = () => {
                   type="text"
                   placeholder="Onay Kodu"
                   value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
+                  onChange={(e) => setVerificationCode(e)}
                   required={true}
                   className="py-3"
                 />

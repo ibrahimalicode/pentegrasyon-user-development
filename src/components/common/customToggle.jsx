@@ -1,4 +1,5 @@
 const CustomToggle = ({
+  id,
   label,
   checked,
   onChange,
@@ -9,6 +10,7 @@ const CustomToggle = ({
   return (
     <label className={`inline-flex items-center cursor-pointer ${className1}`}>
       <input
+        id={id}
         type="checkbox"
         checked={checked}
         onChange={onChange}

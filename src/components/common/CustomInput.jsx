@@ -1,6 +1,7 @@
 import { useState } from "react";
 import EyeI from "../../assets/icon/eye";
 import EyeInv from "../../assets/icon/eyeInv";
+import { maxInput } from "../../utils/utils";
 
 const CustomInput = ({
   icon,
@@ -53,7 +54,7 @@ const CustomInput = ({
         value={value}
         required={required}
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={(e) => onChange(maxInput(e))}
         onKeyDown={onKeyDown}
         autoComplete={autoComplete}
         maxLength={maxLength}

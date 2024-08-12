@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation, useParams } from "react-router-dom";
 
-import CustomInput from "../../common/CustomInput";
+import CustomInput from "../../common/customInput";
 import { usePopup } from "../../../context/PopupContext";
 import CloseI from "../../../assets/icon/close";
-import CustomSelect from "../../common/CustomSelector";
+import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
 import LicensesTable from "../../../components/common/licensesTable";
@@ -280,8 +280,8 @@ const UserLicensesPage = () => {
           <form className="w-full" onSubmit={handleSearch}>
             <CustomInput
               onChange={(e) => {
-                setSearchVal(e.target.value);
-                !e.target.value && clearSearch();
+                setSearchVal(e);
+                !e && clearSearch();
               }}
               value={searchVal}
               placeholder="Search..."

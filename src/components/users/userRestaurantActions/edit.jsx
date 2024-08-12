@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { CancelI, EditI } from "../../../assets/icon";
 import { usePopup } from "../../../context/PopupContext";
-import CustomInput from "../../common/CustomInput";
+import CustomInput from "../../common/customInput";
 import CustomPhoneInput from "../../common/customPhoneInput";
-import CustomSelect from "../../common/CustomSelector";
+import CustomSelect from "../../common/customSelector";
 import {
   getDistricts,
   resetGetDistrictsState,
@@ -419,7 +419,7 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
                   setRestaurantData((prev) => {
                     return {
                       ...prev,
-                      name: e.target.value,
+                      name: e,
                     };
                   });
                 }}
@@ -520,7 +520,7 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
                   setRestaurantData((prev) => {
                     return {
                       ...prev,
-                      address: e.target.value,
+                      address: e,
                     };
                   });
                 }}

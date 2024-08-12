@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { DeleteI, EditI } from "../../assets/icon";
 import EyeI from "../../assets/icon/eye";
 import MenuI from "../../assets/icon/menu";
-import CustomInput from "../common/CustomInput";
-import CustomSelect from "../common/CustomSelector";
+import CustomInput from "../common/customInput";
+import CustomSelect from "../common/customSelector";
 import CustomToggle from "../common/customToggle";
 import { usePopup } from "../../context/PopupContext";
 

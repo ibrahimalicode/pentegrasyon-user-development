@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import CustomInput from "../../../common/CustomInput";
+import CustomInput from "../../../common/customInput";
 import toast from "react-hot-toast";
 
 // REDUX
@@ -126,7 +126,7 @@ const EditUserPassword = ({
               setUserPassword((prev) => {
                 return {
                   ...prev,
-                  password: e.target.value,
+                  password: e,
                 };
               });
             }}
@@ -142,7 +142,7 @@ const EditUserPassword = ({
               setUserPassword((prev) => {
                 return {
                   ...prev,
-                  confirmPassword: e.target.value,
+                  confirmPassword: e,
                 };
               });
             }}

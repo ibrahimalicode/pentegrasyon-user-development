@@ -1,4 +1,4 @@
-const licensePackages = [
+const localLicensePackages = [
   {
     marketplaceId: 0,
     time: 1,
@@ -37,4 +37,4 @@ const licensePackages = [
   },
 ];
 
-export default licensePackages;
+export default localLicensePackages;

@@ -9,9 +9,9 @@ import {
 import TableSkeleton from "../../common/tableSkeleton";
 import toast from "react-hot-toast";
 import RestaurantsTable from "../../common/restaurantsTable";
-import CustomInput from "../../common/CustomInput";
+import CustomInput from "../../common/customInput";
 import CloseI from "../../../assets/icon/close";
-import CustomSelect from "../../common/CustomSelector";
+import CustomSelect from "../../common/customSelector";
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";

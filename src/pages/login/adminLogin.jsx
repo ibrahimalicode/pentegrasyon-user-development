@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../../components/common/CustomInput";
+import CustomInput from "../../components/common/customInput";
 import { useDispatch, useSelector } from "react-redux";
 import { login, resetLoginState } from "../../redux/auth/loginSlice";
 import toast from "react-hot-toast";
@@ -81,7 +81,7 @@ function AdminLogin() {
             type="text"
             placeholder="E-posta/Telefon"
             value={emailOrPhone}
-            onChange={(e) => setEmailOrPhone(e.target.value)}
+            onChange={(e) => setEmailOrPhone(e)}
             required={true}
             className="py-4"
             autoComplete="on"
@@ -91,7 +91,7 @@ function AdminLogin() {
             type={inputType}
             placeholder="Şifre"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e)}
             letIcon={true}
             className="py-4"
             autoComplete="on"

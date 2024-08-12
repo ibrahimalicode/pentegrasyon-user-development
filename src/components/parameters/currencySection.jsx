@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CustomInput from "../common/CustomInput";
+import CustomInput from "../common/customInput";
 import CustomToggle from "../common/customToggle";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -51,7 +51,7 @@ const CurrencySection = () => {
             label="Güncel USD Kur"
             className="py-3 rounded-[1rem]"
             value={dinamicUSD}
-            onChange={(e) => setDinamicUSD(e.target.value)}
+            onChange={(e) => setDinamicUSD(e)}
             readOnly
           />
           <CustomInput
@@ -59,7 +59,7 @@ const CurrencySection = () => {
             label="Sabit USD Kur"
             className="py-3 rounded-[1rem]"
             value={statticUSD}
-            onChange={(e) => setStatticUSD(e.target.value)}
+            onChange={(e) => setStatticUSD(e)}
           />
           <div className="max-sm:w-full max-sm:mt-4 flex justify-end items-end">
             <button

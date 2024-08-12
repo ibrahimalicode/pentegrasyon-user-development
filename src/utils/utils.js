@@ -30,14 +30,14 @@ export const maxInput = (e) => {
   const useVal = e.target.value.replace(/[^\d]/g, "");
   const maxAllowed = e.target?.maxLength;
 
-  if (!maxAllowed) {
+  if (!maxAllowed || maxAllowed === -1) {
     return value;
   }
 
   if (useVal.length > maxAllowed) {
     return value.slice(0, maxAllowed);
   }
-  //console.log(value);
+  // console.log(value);
   return value;
 };
 

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { CancelI, EditI } from "../../assets/icon";
 import { usePopup } from "../../context/PopupContext";
-import CustomInput from "../common/CustomInput";
+import CustomInput from "../common/customInput";
 import CustomPhoneInput from "../common/customPhoneInput";
-import CustomSelect from "../common/CustomSelector";
+import CustomSelect from "../common/customSelector";
 import CustomTextarea from "../common/customTextarea";
 import toast from "react-hot-toast";
 import { formatSelectorData, googleMap } from "../../utils/utils";
@@ -355,7 +355,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                   setRestaurantData((prev) => {
                     return {
                       ...prev,
-                      name: e.target.value,
+                      name: e,
                     };
                   });
                 }}
@@ -478,7 +478,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                   setRestaurantData((prev) => {
                     return {
                       ...prev,
-                      address: e.target.value,
+                      address: e,
                     };
                   });
                 }}

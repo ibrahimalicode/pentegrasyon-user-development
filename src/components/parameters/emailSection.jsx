@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CustomInput from "../common/CustomInput";
+import CustomInput from "../common/customInput";
 import CustomToggle from "../common/customToggle";
 import LicenseReminder from "./licenseReminder";
 import ForgotPassword from "./forgotPassword";
@@ -38,7 +38,7 @@ function EmailSection() {
                   setSmsData((prev) => {
                     return {
                       ...prev,
-                      smtp: e.target.value,
+                      smtp: e,
                     };
                   });
                 }}
@@ -53,7 +53,7 @@ function EmailSection() {
                   setSmsData((prev) => {
                     return {
                       ...prev,
-                      port: e.target.value,
+                      port: e,
                     };
                   });
                 }}
@@ -70,7 +70,7 @@ function EmailSection() {
                   setSmsData((prev) => {
                     return {
                       ...prev,
-                      userName: e.target.value,
+                      userName: e,
                     };
                   });
                 }}
@@ -84,7 +84,7 @@ function EmailSection() {
                   setSmsData((prev) => {
                     return {
                       ...prev,
-                      password: e.target.value,
+                      password: e,
                     };
                   });
                 }}
@@ -101,7 +101,7 @@ function EmailSection() {
                   setSmsData((prev) => {
                     return {
                       ...prev,
-                      senderName: e.target.value,
+                      senderName: e,
                     };
                   });
                 }}
@@ -140,7 +140,7 @@ function EmailSection() {
                     setSmsData((prev) => {
                       return {
                         ...prev,
-                        testEmail: e.target.value,
+                        testEmail: e,
                       };
                     });
                   }}

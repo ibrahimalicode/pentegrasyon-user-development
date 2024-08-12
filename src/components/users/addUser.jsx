@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { usePopup } from "../../context/PopupContext";
 import CustomCheckbox from "../common/customCheckbox";
-import CustomInput from "../common/CustomInput";
-import CustomSelect from "../common/CustomSelector";
+import CustomInput from "../common/customInput";
+import CustomSelect from "../common/customSelector";
 import CustomTextarea from "../common/customTextarea";
 import { ArrowID, ArrowIU, CancelI } from "../../assets/icon";
 import toast from "react-hot-toast";
@@ -252,7 +252,7 @@ const AddUser = ({ onSuccess }) => {
                     setUserData((prev) => {
                       return {
                         ...prev,
-                        firstName: e.target.value,
+                        firstName: e,
                       };
                     });
                   }}
@@ -267,7 +267,7 @@ const AddUser = ({ onSuccess }) => {
                     setUserData((prev) => {
                       return {
                         ...prev,
-                        lastName: e.target.value,
+                        lastName: e,
                       };
                     });
                   }}
@@ -300,7 +300,7 @@ const AddUser = ({ onSuccess }) => {
                     setUserData((prev) => {
                       return {
                         ...prev,
-                        email: formatEmail(e.target.value),
+                        email: formatEmail(e),
                       };
                     });
                   }}
@@ -367,7 +367,7 @@ const AddUser = ({ onSuccess }) => {
                     setUserData((prev) => {
                       return {
                         ...prev,
-                        password: e.target.value,
+                        password: e,
                       };
                     });
                   }}
@@ -383,7 +383,7 @@ const AddUser = ({ onSuccess }) => {
                     setUserData((prev) => {
                       return {
                         ...prev,
-                        confirmPassword: e.target.value,
+                        confirmPassword: e,
                       };
                     });
                   }}
@@ -453,7 +453,7 @@ const AddUser = ({ onSuccess }) => {
                         setUserInvoice((prev) => {
                           return {
                             ...prev,
-                            title: e.target.value,
+                            title: e,
                           };
                         });
                       }}
@@ -470,7 +470,7 @@ const AddUser = ({ onSuccess }) => {
                         setUserInvoice((prev) => {
                           return {
                             ...prev,
-                            tradeRegistryNumber: e.target.value,
+                            tradeRegistryNumber: e,
                           };
                         });
                       }}
@@ -485,7 +485,7 @@ const AddUser = ({ onSuccess }) => {
                         setUserInvoice((prev) => {
                           return {
                             ...prev,
-                            taxOffice: e.target.value,
+                            taxOffice: e,
                           };
                         });
                       }}
@@ -502,7 +502,7 @@ const AddUser = ({ onSuccess }) => {
                         setUserInvoice((prev) => {
                           return {
                             ...prev,
-                            taxNumber: e.target.value,
+                            taxNumber: e,
                           };
                         });
                       }}
@@ -517,7 +517,7 @@ const AddUser = ({ onSuccess }) => {
                         setUserInvoice((prev) => {
                           return {
                             ...prev,
-                            mersisNumber: e.target.value,
+                            mersisNumber: e,
                           };
                         });
                       }}
@@ -602,7 +602,7 @@ const AddUser = ({ onSuccess }) => {
                         setUserInvoice((prev) => {
                           return {
                             ...prev,
-                            address: e.target.value,
+                            address: e,
                           };
                         })
                       }

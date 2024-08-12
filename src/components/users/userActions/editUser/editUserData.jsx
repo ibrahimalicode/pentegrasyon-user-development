@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import CustomCheckbox from "../../../common/customCheckbox";
-import CustomInput from "../../../common/CustomInput";
+import CustomInput from "../../../common/customInput";
 import CustomPhoneInput from "../../../common/customPhoneInput";
-import CustomSelect from "../../../common/CustomSelector";
+import CustomSelect from "../../../common/customSelector";
 import { formatEmail } from "../../../../utils/utils";
 import toast from "react-hot-toast";
 import isEqual from "lodash/isEqual";
@@ -197,7 +197,7 @@ const EditUserdata = ({
             setUserData((prev) => {
               return {
                 ...prev,
-                firstName: e.target.value,
+                firstName: e,
               };
             });
           }}
@@ -212,7 +212,7 @@ const EditUserdata = ({
             setUserData((prev) => {
               return {
                 ...prev,
-                lastName: e.target.value,
+                lastName: e,
               };
             });
           }}
@@ -245,7 +245,7 @@ const EditUserdata = ({
             setUserData((prev) => {
               return {
                 ...prev,
-                email: formatEmail(e.target.value),
+                email: formatEmail(e),
               };
             });
           }}

@@ -1,5 +1,5 @@
 import MenuI from "../../assets/icon/menu";
-import MarketPalces from "../../data/marketPlaces";
+import MarketPalceIds from "../../data/marketPlaceIds";
 import { formatDateString, getRemainingDays } from "../../utils/utils";
 
 const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
@@ -31,7 +31,7 @@ const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
                   {data.name}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                  {MarketPalces[data.marketplaceId]}
+                  {MarketPalceIds[data.marketplaceId].value}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                   {formatDateString(data.startDateTime)}

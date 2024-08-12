@@ -204,7 +204,7 @@ function ChangeRestaurantStatusPopup({ restaurant, onSuccess }) {
                     setRestaurantData((prev) => {
                       return {
                         ...prev,
-                        passiveNote: e.target.value,
+                        passiveNote: e,
                       };
                     });
                   }}

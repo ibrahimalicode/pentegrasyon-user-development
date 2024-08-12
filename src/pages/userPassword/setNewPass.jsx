@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import CustomInput from "../../components/common/CustomInput";
+import CustomInput from "../../components/common/customInput";
 import EyeI from "../../assets/icon/eye";
 import EyeInv from "../../assets/icon/eyeInv";
 import { useDispatch, useSelector } from "react-redux";
@@ -131,7 +131,7 @@ const SetNewPassword = () => {
             label="Yeni Şifre"
             placeholder="Yeni Şifre"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e)}
             letIcon={true}
             required={true}
             className="py-4"
@@ -140,7 +140,7 @@ const SetNewPassword = () => {
             label="Şifreyi Onayla"
             placeholder="Şifreyi Onayla"
             value={password2}
-            onChange={(e) => setPassword2(e.target.value)}
+            onChange={(e) => setPassword2(e)}
             letIcon={true}
             required={true}
             className="py-4"

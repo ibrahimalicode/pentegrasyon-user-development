@@ -1,72 +1,80 @@
-import MenuI from "../../assets/icon/menu";
+import LicensePackagesActions from "./actions/licensePackageActions";
+
+// IMAGES
 import Getiryemek from "../../assets/img/packages/Getiryemek.png";
 import MigrosYemek from "../../assets/img/packages/MigrosYemek.png";
 import Siparisim from "../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../assets/img/packages/Yemeksepeti.png";
-import licensePackages from "../../data/licensePackages";
 
 const LicensePackagesTable = ({
   inData,
   Actions,
-  totalItems = licensePackages.length,
+  totalItems = inData.length,
   onSuccess,
+  KDV,
+  checked,
 }) => {
   const imageSRCs = [
     Getiryemek,
     MigrosYemek,
-    Siparisim,
     TrendyolYemek,
-    GoFody,
     Yemeksepeti,
+    GoFody,
+    Siparisim,
   ];
 
-  console.log(licensePackages.length);
+  // console.log(inData);
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[50rem] overflow-hidden">
         <div className="w-full text-sm font-light">
           <div className="w-full">
-            <div className="flex items-center justify-between bg-[--light-3] h-8">
-              <div className="w-40">Pazaryeri</div>
-              <div className="w-36">Lisans Süresi</div>
-              <div>Fiyat</div>
-              <div>KDV Tutari</div>
-              <div>Total</div>
-              <div className="text-center pr-2">İşlem</div>
+            <div className="flex items-center justify-between bg-[--light-3] h-8 font-normal">
+              <div className="w-40 text-center">Pazaryeri</div>
+              <div className="w-36 text-center">Lisans Süresi</div>
+              <div className="w-28 text-center">Fiyat</div>
+              <div className="w-36 text-center">KDV Tutari</div>
+              <div className="w-28 text-center">Total</div>
+              <div className="w-28 text-center pr-2">İşlem</div>
             </div>
           </div>
 
           <main>
-            {licensePackages.map((data, index) => (
+            {inData.map((data, index) => (
               <div
                 key={index}
                 className={`flex justify-between odd:bg-[--white-1] even:bg-[--table-odd] h-14 border-t last:border-b border-solid border-[--light-4] border-x-0 ${
                   totalItems < 8 ? "bg-[--red-1]" : "last:border-b-0"
                 } `}
               >
-                <div className="w-max">
+                <div className="w-40 flex items-center">
                   <img
                     src={imageSRCs[data.marketplaceId]}
                     alt="MarketPlacePhoto"
                     className="w-40"
                   />
                 </div>
-                <div className="w-max text-[--black-2] font-light first:font-normal">
-                  {data.time}
+                <div className="w-36 text-[--black-2] flex items-center justify-center">
+                  {data.time} Yıllık
                 </div>
-                <div className="w-max text-[--black-2] font-light first:font-normal">
+                <div className="w-28 text-[--black-2] flex items-center justify-center">
                   {data.price}
                 </div>
-                <div className="w-max text-[--black-2] font-light first:font-normal">
-                  20%
+                <div className="w-36 text-[--black-2] flex items-center justify-center">
+                  {KDV}%
                 </div>
-                <div className="w-max text-[--black-2] font-light first:font-normal">
-                  120
+                <div className="w-28 text-[--black-2] flex items-center justify-center">
+                  {data.price + (data.price / 100) * (checked ? KDV : 0)}
                 </div>
-                <div className="w-max text-[--black-2] relative">
-                  <MenuI />
+                <div className="w-28 text-[--black-2] flex items-center justify-center relative">
+                  <LicensePackagesActions
+                    index={index}
+                    licensePackage={data}
+                    itemsPerPage={totalItems}
+                    onSuccess={onSuccess}
+                  />
                 </div>
               </div>
             ))}

@@ -1,4 +1,4 @@
-import CustomInput from "../../common/CustomInput";
+import CustomInput from "../../common/customInput";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import CustomPagination from "../../common/pagination";
 import CloseI from "../../../assets/icon/close";
 import TableSkeleton from "../../common/tableSkeleton";
-import CustomSelect from "../../common/CustomSelector";
+import CustomSelect from "../../common/customSelector";
 import UsersTable from "../userTable";
 import { usePopup } from "../../../context/PopupContext";
 import AddUser from "../addUser";
@@ -188,8 +188,8 @@ const UsersPage = () => {
           <form className="w-full" onSubmit={(e) => handleSearch(e)}>
             <CustomInput
               onChange={(e) => {
-                setSearchVal(e.target.value);
-                !e.target.value && clearSearch();
+                setSearchVal(e);
+                !e && clearSearch();
               }}
               value={searchVal}
               placeholder="Search..."

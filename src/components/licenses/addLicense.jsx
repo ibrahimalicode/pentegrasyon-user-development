@@ -20,7 +20,7 @@ import {
 } from "../../utils/utils";
 import {
   getLicensePackages,
-  resetGetLicensePackagesState,
+  resetGetLicensePackages,
 } from "../../redux/licensePackages/getLicensePackagesSlice";
 
 const AddLicense = ({ onSuccess }) => {
@@ -136,8 +136,13 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
       dispatch(getLicensePackages());
     } else {
       setLicensePackagesData(formatLisansPackages(licensePackages.data));
-      dispatch(resetGetLicensePackagesState());
     }
+
+    return () => {
+      if (licensePackages) {
+        dispatch(resetGetLicensePackages());
+      }
+    };
   }, [licensePackages]);
 
   // SET LISANS PACKAGES
@@ -148,7 +153,7 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetLicensePackagesState());
+      dispatch(resetGetLicensePackages());
     }
   }, [licensePackagesError]);
 

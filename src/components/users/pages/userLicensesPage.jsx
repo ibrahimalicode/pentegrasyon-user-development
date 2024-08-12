@@ -433,7 +433,10 @@ const UserLicensesPage = () => {
 
       {/* TABLE */}
       {licensesData ? (
-        <LicensesTable inData={licensesData} />
+        <LicensesTable
+          inData={licensesData}
+          onSuccess={() => setLicensesData(null)}
+        />
       ) : loading ? (
         <TableSkeleton />
       ) : null}

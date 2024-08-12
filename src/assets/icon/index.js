@@ -21,6 +21,7 @@ import DeleteI from "./delete";
 import EditI from "./edit";
 import TransferI from "./transfer";
 import CancelI from "./cancel";
+import ExtendI from "./extend";
 
 export {
   DashboardI,
@@ -44,4 +45,5 @@ export {
   EditI,
   TransferI,
   CancelI,
+  ExtendI,
 };

@@ -11,7 +11,7 @@ import AddLicensePackage from "../addLicensePackage";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getLicensePackages,
-  resetGetLicensePackagesState,
+  resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import CustomInput from "../../common/customInput";
 import Button from "../../common/button";
@@ -37,10 +37,15 @@ const LicensePackagesPage = () => {
 
   // GET LICENSE PACKAGES
   useEffect(() => {
-    if (!licensesPackagesData) {
+    if (!licensePackages) {
       dispatch(getLicensePackages());
     }
-  }, [licensesPackagesData]);
+    return () => {
+      if (licensePackages) {
+        dispatch(resetGetLicensePackages());
+      }
+    };
+  }, [licensePackages]);
 
   // TOAST AND SET PACKAGES
   useEffect(() => {
@@ -50,13 +55,12 @@ const LicensePackagesPage = () => {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetLicensePackagesState());
+      dispatch(resetGetLicensePackages());
     }
 
     if (success) {
       setLicensesPackagesData(licensePackages.data);
       setTotalItems(licensePackages.totalCount);
-      dispatch(resetGetLicensePackagesState());
     }
   }, [loading, success, error, licensePackages]);
 
@@ -117,7 +121,9 @@ const LicensePackagesPage = () => {
             />
           </div>
         </div>
-        <AddLicensePackage onSuccess={() => setLicensesPackagesData(null)} />
+        <AddLicensePackage
+          onSuccess={() => dispatch(resetGetLicensePackages())}
+        />
       </div>
 
       {/* TABLE */}
@@ -126,7 +132,7 @@ const LicensePackagesPage = () => {
           inData={licensesPackagesData}
           KDV={KDV}
           checked={checked}
-          onSuccess={() => setLicensesPackagesData(null)}
+          onSuccess={() => dispatch(resetGetLicensePackages())}
         />
       ) : loading ? (
         <TableSkeleton />

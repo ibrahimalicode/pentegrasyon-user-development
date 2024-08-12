@@ -1,8 +1,12 @@
+//MODULES
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+//COMPONENTS
 import { usePopup } from "../../../context/PopupContext";
 import { CancelI, DeleteI } from "../../../assets/icon";
 import CustomCheckbox from "../../common/customCheckbox";
-
+import Button from "../../common/button";
 // IMAGES
 import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
 import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
@@ -10,13 +14,11 @@ import Siparisim from "../../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
-import { useEffect, useRef, useState } from "react";
-import Button from "../../common/button";
+//REDUX
 import {
   deleteLicensePackage,
   resetDeleteLicensePackage,
 } from "../../../redux/licensePackages/deleteLicensePackageSlice";
-import toast from "react-hot-toast";
 
 const imageSRCs = [
   Getiryemek,
@@ -129,7 +131,7 @@ const DeleteLicensePackagePopup = ({ data, onSuccess }) => {
         <div className="w-full flex justify-center mt-8 max-sm:px-3">
           <div className="w-max">
             <p className="text-[--red-1]">
-              Lisan paketi silmek istediğinizden emin misiniz ?
+              Lisans paketi silmek istediğinizden emin misiniz ?
             </p>
 
             <div className="flex justify-start gap-4 mt-4">

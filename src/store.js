@@ -33,6 +33,9 @@ import getCurrencySlice from "./redux/data/getCurrencySlice";
 import getLicensePackagesSlice from "./redux/licensePackages/getLicensePackagesSlice";
 import addLicensePackageSlice from "./redux/licensePackages/addLicensePackageSlice";
 import deleteLicensePackageSlice from "./redux/licensePackages/deleteLicensePackageSlice";
+import updateLicenseDateSlice from "./redux/licenses/updateLicenseDateSlice";
+import updateLicenseIsActiveSlice from "./redux/licenses/updateLicenseIsActiveSlice";
+import deleteLicenseSlice from "./redux/licenses/deleteLicenseSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -70,6 +73,9 @@ const licensesSlice = combineReducers({
   getUserLicenses: getUserLicensesSlice,
   getRestaurantLicenses: getRestaurantLicensesSlice,
   addLicense: addLicenseSlice,
+  updateLicenseDate: updateLicenseDateSlice,
+  updateLicenseIsActive: updateLicenseIsActiveSlice,
+  deleteLicense: deleteLicenseSlice,
 });
 
 const licensePackagesSlice = combineReducers({

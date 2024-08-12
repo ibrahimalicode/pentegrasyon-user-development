@@ -1,6 +1,8 @@
 import MenuI from "../../assets/icon/menu";
 import MarketPalceIds from "../../data/marketPlaceIds";
 import { formatDateString, getRemainingDays } from "../../utils/utils";
+import LicensesActions from "../licenses/actions/licensesActions";
+import EditLicenseIsActive from "../licenses/updateLicenseIsActive";
 
 const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
   return (
@@ -43,18 +45,18 @@ const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
                   {getRemainingDays(data.endDateTime)}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                  <span
-                    className={`text-xs font-normal cursor-pointer ${
-                      data.isActive
-                        ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
-                        : "text-[--red-1] bg-[--status-red] border-[--red-1]"
-                    } px-3 py-1 border border-solid rounded-full`}
-                  >
-                    ● {data.isActive ? "Aktif" : "Pasif"}
-                  </span>
+                  <EditLicenseIsActive
+                    licenseData={data}
+                    onSuccess={onSuccess}
+                  />
                 </td>
                 <td className="whitespace-nowrap text-center text-[--black-2] font-light first:font-normal relative">
-                  <MenuI />
+                  <LicensesActions
+                    index={index}
+                    licenseData={data}
+                    itemsPerPage={inData.length}
+                    onSuccess={onSuccess}
+                  />
                 </td>
               </tr>
             ))}

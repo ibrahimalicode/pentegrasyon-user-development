@@ -1,7 +1,7 @@
 import { useState } from "react";
 import EmailSection from "./emailSection";
 import SMSSection from "./smsSection";
-import CurrencySection from "./currencySection";
+import CurrencySection from "./temp_currency";
 
 const ParametersPage = () => {
   const tabs = ["Döviz Kuru", "E-Posta", "SMS"];

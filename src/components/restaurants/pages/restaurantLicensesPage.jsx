@@ -26,6 +26,7 @@ const RestaurantLicensesPage = () => {
   const params = useParams();
   const location = useLocation();
   const restaurantId = params.id;
+  const { userId } = location.state || {};
 
   const { loading, success, error, restaurantLicenses } = useSelector(
     (state) => state.licenses.getRestaurantLicenses
@@ -42,6 +43,10 @@ const RestaurantLicensesPage = () => {
   const { restaurants } = useSelector(
     (state) => state.restaurants.getRestaurants
   );
+  const { restaurants: userRestaurants } = useSelector(
+    (state) => state.restaurants.getUserRestaurants
+  );
+  const { users } = useSelector((state) => state.users.getUsers);
 
   const [searchVal, setSearchVal] = useState("");
   const [filter, setFilter] = useState({
@@ -57,7 +62,20 @@ const RestaurantLicensesPage = () => {
       const restaurant = restaurants.data.filter(
         (data) => data.id === restaurantId
       )[0];
-      return restaurant;
+      if (restaurant) {
+        return restaurant;
+      } else if (userRestaurants?.data) {
+        const restaurant = userRestaurants.data.filter(
+          (data) => data.id === restaurantId
+        )[0];
+        return restaurant;
+      }
+    }
+  });
+  const [userInfo, setUserInfo] = useState(() => {
+    if (users?.data) {
+      const user = users.data.filter((data) => data.id === userId)[0];
+      return user;
     }
   });
   const [cities, setCities] = useState([]);
@@ -268,17 +286,12 @@ const RestaurantLicensesPage = () => {
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
       <div className="w-full text-[--gr-1] pt-4 text-base cursor-pointer">
-        {restaurantInfo ? (
-          <div onClick={() => window.history.back()}>
-            {location.pathname.includes("users") && "Kullanıcılar > "}
-            {restaurantInfo.name} {">"} Lisanslar
-          </div>
-        ) : (
-          <div onClick={() => window.history.back()}>
-            {location.pathname.includes("users") && "Kullanıcılar > "}
-            Restoranlar {">"} Lisanslar
-          </div>
-        )}
+        <div onClick={() => window.history.back()}>
+          {location.pathname.includes("users") &&
+            (userInfo ? `${userInfo.fullName} > ` : "Kullanıcılar > ")}
+          {restaurantInfo ? `${restaurantInfo.name} > ` : "Restoranlar > "}{" "}
+          Lisanslar
+        </div>
       </div>
 
       {/* ACTIONS/BUTTONS */}
@@ -431,7 +444,7 @@ const RestaurantLicensesPage = () => {
             </div>
 
             <div>
-              <AddLicense />
+              <AddLicense onSuccess={() => setLicensesData(null)} />
             </div>
           </div>
         </div>

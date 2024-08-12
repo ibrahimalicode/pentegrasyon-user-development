@@ -14,12 +14,17 @@ const CustomSelect = ({
   style,
   optionStyle,
 }) => {
+  const formatOptionLabel = ({ label }) => (
+    <div dangerouslySetInnerHTML={{ __html: label }} />
+  );
+
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
       <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
         {label}
       </label>
       <Select
+        // menuIsOpen={true}
         value={value}
         onChange={onChange}
         options={options}
@@ -27,6 +32,7 @@ const CustomSelect = ({
         className={`mt-1 sm:mt-2.5 text-base font-[350] ${className}`}
         isDisabled={isDisabled}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
+        formatOptionLabel={formatOptionLabel}
         styles={{
           control: (provided, state) => ({
             ...provided,

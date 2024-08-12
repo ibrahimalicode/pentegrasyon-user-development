@@ -82,8 +82,8 @@ export const getUserRestaurants = createAsyncThunk(
         }
       );
 
-      //console.log(res.data);
-      return res.data.data;
+      // console.log(res.data);
+      return res.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {

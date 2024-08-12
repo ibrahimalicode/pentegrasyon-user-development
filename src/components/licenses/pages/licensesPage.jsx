@@ -17,6 +17,7 @@ import {
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import LicensesTable from "../../common/licensesTable";
+import AddLicense from "../addLicense";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -401,12 +402,7 @@ const LicensesPage = () => {
             </div>
 
             <div>
-              <button
-                className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
-                onClick={() => {}}
-              >
-                Lisans Ekle
-              </button>
+              <AddLicense onSuccess={() => setLicensesData(null)} />
             </div>
           </div>
         </div>

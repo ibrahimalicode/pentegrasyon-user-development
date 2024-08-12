@@ -19,6 +19,7 @@ import {
   getUserLicenses,
   resetGetUserLicenses,
 } from "../../../redux/licenses/getUserLicensesSlice";
+import AddLicense from "../../licenses/addLicense";
 
 const UserLicensesPage = () => {
   const dispatch = useDispatch();
@@ -424,12 +425,7 @@ const UserLicensesPage = () => {
             </div>
 
             <div>
-              <button
-                className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
-                onClick={() => {}}
-              >
-                Lisans Ekle
-              </button>
+              <AddLicense onSuccess={() => setLicensesData(null)} />
             </div>
           </div>
         </div>

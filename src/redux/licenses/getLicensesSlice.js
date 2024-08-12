@@ -59,7 +59,7 @@ export const getLicenses = createAsyncThunk(
       });
 
       //console.log(res.data);
-      return res.data.data;
+      return res.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {

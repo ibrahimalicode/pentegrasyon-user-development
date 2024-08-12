@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import MarketPalceIds from "../data/marketPlaceIds";
 
 export function formatDateString(dateString, joint = "/") {
   const date = new Date(dateString);
@@ -8,12 +9,12 @@ export function formatDateString(dateString, joint = "/") {
   const day = date.getDate();
   const year = date.getFullYear().toString().slice(-2); // Get the last 2 digits of the year
 
-  const formattedDate = `${month}${joint}${day}${joint}${year}`;
+  const formattedDate = `${day}${joint}${month}${joint}${year}`;
   return formattedDate;
 }
 
-export function getRemainingDays(startDateTime, endDateTime) {
-  const start = new Date(startDateTime);
+export function getRemainingDays(endDateTime) {
+  const start = new Date();
   const end = new Date(endDateTime);
 
   // Calculate the difference in milliseconds
@@ -61,7 +62,7 @@ export function formatEmail(email) {
   return formattedEmail;
 }
 
-export const formatSelectorData = (data) => {
+export const formatSelectorData = (data, withPhoneNumber = false) => {
   if (!Array.isArray(data) || data.length === 0) {
     return [];
   }
@@ -69,6 +70,7 @@ export const formatSelectorData = (data) => {
   let sortedData;
 
   const dataCopy = [...data];
+  let outData;
 
   if (data[0]?.name) {
     sortedData = dataCopy.sort((a, b) => a.name.localeCompare(b.name, "tr"));
@@ -77,12 +79,51 @@ export const formatSelectorData = (data) => {
       a.fullName.localeCompare(b.fullName, "tr")
     );
   }
+  if (withPhoneNumber && sortedData[0]?.phoneNumber) {
+    outData = sortedData.map((ent) => {
+      // console.log(ent.userId);
+      return {
+        value: ent.id,
+        label: (ent?.name ? ent.name : ent?.fullName) + " " + ent?.phoneNumber,
+        id: ent.id,
+        userId: ent.userId,
+      };
+    });
+  } else {
+    outData = sortedData.map((ent) => {
+      return {
+        value: ent.id,
+        label: ent?.name ? ent.name : ent?.fullName + " " + ent?.phoneNumber,
+        id: ent.id,
+      };
+    });
+  }
+  return outData;
+};
 
-  const outData = sortedData.map((ent) => {
+export const formatLisansPackages = (data) => {
+  if (!Array.isArray(data) || data.length === 0) {
+    return [];
+  }
+  function CustomLabel(label, year, price) {
+    return `
+      <div class="flex justify-between">
+        <p class='w-36'>${label}</p>
+        <p class='w-20 text-[--link-1]' > | ${year} Yıllık | </p>
+        <p class='w-12' >${price}</p>
+      </div>`;
+  }
+
+  const outData = data.map((ent) => {
     return {
-      value: ent.id,
-      label: ent?.name ? ent.name : ent?.fullName + " " + ent?.phoneNumber,
-      id: ent.id,
+      value: MarketPalceIds[ent.marketplaceId].label,
+      label: CustomLabel(
+        MarketPalceIds[ent.marketplaceId].label,
+        ent.time,
+        ent.price
+      ),
+      id: ent.marketplaceId,
+      time: ent.time,
     };
   });
   return outData;
@@ -250,4 +291,17 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 13) {
       map.panTo({ lat: parseFloat(lat), lng: parseFloat(lng) });
     }
   });
+}
+
+export function getDateRange(years) {
+  const startDateTime = new Date().toISOString();
+
+  const endDate = new Date();
+  endDate.setFullYear(endDate.getFullYear() + years);
+  const endDateTime = endDate.toISOString();
+
+  return {
+    startDateTime,
+    endDateTime,
+  };
 }

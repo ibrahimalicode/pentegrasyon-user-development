@@ -40,7 +40,7 @@ const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
                   {formatDateString(data.endDateTime)}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
-                  {getRemainingDays(data.startDateTime, data.endDateTime)}
+                  {getRemainingDays(data.endDateTime)}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                   <span

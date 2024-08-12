@@ -35,14 +35,14 @@ const LicensePackagesPage = () => {
     dispatch(getLicensePackages());
   }
 
-  // GET LICENSES
+  // GET LICENSE PACKAGES
   useEffect(() => {
     if (!licensesPackagesData) {
       dispatch(getLicensePackages());
     }
   }, [licensesPackagesData]);
 
-  // TOAST AND SET LICENSES
+  // TOAST AND SET PACKAGES
   useEffect(() => {
     if (error) {
       if (error?.message_TR) {

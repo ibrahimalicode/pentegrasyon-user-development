@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import CustomPagination from "../../common/pagination";
 import {
   getUserRestaurants,
-  resetGetUserRestaurants,
+  resetGetUserRestaurantsState,
 } from "../../../redux/restaurants/getUserRestaurantsSlice";
 import TableSkeleton from "../../common/tableSkeleton";
 import toast from "react-hot-toast";
@@ -173,14 +173,14 @@ const UserRestaurants = () => {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetUserRestaurants());
+      dispatch(resetGetUserRestaurantsState());
     }
 
     if (success) {
       setRestaurantsData(restaurants.data);
       // console.log(restaurants.data);
       setTotalItems(restaurants.totalCount);
-      dispatch(resetGetUserRestaurants());
+      dispatch(resetGetUserRestaurantsState());
     }
   }, [success, error, restaurants]);
 
@@ -281,8 +281,8 @@ const UserRestaurants = () => {
           <form className="w-full" onSubmit={handleSearch}>
             <CustomInput
               onChange={(e) => {
-                setSearchVal(e.target.value);
-                !e.target.value && clearSearch();
+                setSearchVal(e);
+                !e && clearSearch();
               }}
               value={searchVal}
               placeholder="Search..."

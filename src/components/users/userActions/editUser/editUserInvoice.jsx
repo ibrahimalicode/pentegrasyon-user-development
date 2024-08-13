@@ -482,7 +482,7 @@ const EditUserInvoice = ({
                 setUserInvoice((prev) => {
                   return {
                     ...prev,
-                    address: e,
+                    address: e.target.value,
                   };
                 });
               }}

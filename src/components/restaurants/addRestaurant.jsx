@@ -478,7 +478,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                   setRestaurantData((prev) => {
                     return {
                       ...prev,
-                      address: e,
+                      address: e.target.value,
                     };
                   });
                 }}

@@ -11,7 +11,7 @@ const initialState = {
   data: null,
 };
 
-const updateUserDataSlice = createSlice({
+const updateUserDataByIdSlice = createSlice({
   name: "updateUserData",
   initialState: initialState,
   reducers: {
@@ -67,7 +67,7 @@ export const updateUserData = createAsyncThunk(
   ) => {
     try {
       const res = await api.put(
-        `${baseURL}Users/UpdateUser`,
+        `${baseURL}Users/UpdateUserById`,
         {
           dealerId,
           email,
@@ -97,5 +97,5 @@ export const updateUserData = createAsyncThunk(
 );
 
 export const { resetUpdateUser, resetUpdateUserState } =
-  updateUserDataSlice.actions;
-export default updateUserDataSlice.reducer;
+  updateUserDataByIdSlice.actions;
+export default updateUserDataByIdSlice.reducer;

@@ -10,7 +10,7 @@ import {
 } from "../../redux/auth/changePasswordSlice";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { auth, clearAuth } from "../../redux/api";
+import { clearAuth } from "../../redux/api";
 import {
   resetVerifyCodeState,
   codeVerification,

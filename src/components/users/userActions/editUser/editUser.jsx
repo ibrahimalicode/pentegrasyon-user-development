@@ -9,7 +9,10 @@ import toast from "react-hot-toast";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, resetgetUser } from "../../../../redux/users/getUserSlice";
+import {
+  getUser,
+  resetgetUser,
+} from "../../../../redux/users/getUserByIdSlice";
 import { getCities } from "../../../../redux/data/getCitiesSlice";
 
 const EditUser = ({ user, onSuccess }) => {

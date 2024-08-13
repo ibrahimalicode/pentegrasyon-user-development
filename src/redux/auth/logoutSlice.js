@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { auth, privateApi } from "../api";
+import { privateApi } from "../api";
 
 const api = privateApi();
 

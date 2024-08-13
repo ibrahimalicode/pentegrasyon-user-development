@@ -13,6 +13,7 @@ import {
   PaymentI,
   ParamsI,
   UserPlusI,
+  BoxInI,
 } from "../../assets/icon/index";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -43,6 +44,12 @@ const sidebarItems = [
     text: "Lisanslar",
     to: "/licenses",
     path: "licenses",
+  },
+  {
+    icon: <BoxInI />,
+    text: "Siparişler",
+    to: "/orders",
+    path: "orders",
   },
   {
     icon: <PackagesI />,
@@ -135,14 +142,14 @@ function Sidebar() {
         </header>
 
         <div className="flex flex-col justify-center w-full">
-          <div className="flex flex-col px-6 pb-4 w-full">
+          <div className="flex flex-col gap-1 px-6 pb-4 w-full">
             {sidebarItems.map((item, index) => (
               <Link to={item.to} key={index}>
                 <div
                   onClick={() => {
                     setOpenSidebar(!openSidebar);
                   }}
-                  className={`flex flex-col justify-center px-4 py-[10px] rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item ${
+                  className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors ${
                     path === item.path && "bg-[--light-1] text-[--primary-1]"
                   }`}
                 >
@@ -159,7 +166,7 @@ function Sidebar() {
         </div>
       </div>
 
-      <UserProfile />
+      <UserProfile setOpenSidebar={setOpenSidebar} />
     </nav>
   );
 }

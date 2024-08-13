@@ -16,7 +16,7 @@ const axiosPrivate = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-export const auth = () => {
+export const getAuth = () => {
   const authItemString = localStorage.getItem(KEY);
   const authItem = JSON.parse(authItemString);
   return authItem;
@@ -29,7 +29,7 @@ export const clearAuth = () => {
 export const privateApi = () => {
   axiosPrivate.interceptors.request.use(
     (config) => {
-      config.headers["Authorization"] = `Bearer ${auth().token}`;
+      config.headers["Authorization"] = `Bearer ${getAuth().token}`;
       return config;
     },
     (error) => Promise.reject(error)

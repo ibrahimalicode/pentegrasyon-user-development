@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomInput from "../../components/common/customInput";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -12,10 +12,10 @@ import TurnstileWidget from "../../components/turnstileWidget";
 function UserLogin({ pageName, setPageName }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastId = useRef();
 
   const { success, loading, error } = useSelector((state) => state.auth.login);
 
-  let toastId;
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -28,9 +28,9 @@ function UserLogin({ pageName, setPageName }) {
 
   useEffect(() => {
     if (loading) {
-      toastId = toast.loading("Logging in..");
+      toastId.current = toast.loading("Logging in..");
     } else if (error) {
-      toast.dismiss(toastId);
+      toast.dismiss(toastId.current);
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -42,7 +42,7 @@ function UserLogin({ pageName, setPageName }) {
       dispatch(resetLoginState());
     } else if (success) {
       navigate("/dashboard");
-      toast.dismiss(toastId);
+      toast.dismiss(toastId.current);
       toast.success("Successfuly logged in");
       dispatch(resetLoginState());
     }

@@ -1,24 +1,31 @@
+import { Link, useParams } from "react-router-dom";
+import { UserI } from "../../assets/icon";
 import ArrowIR from "../../assets/icon/arrowR";
 
-function UserProfile() {
+function UserProfile({ setOpenSidebar }) {
+  const param = useParams();
   return (
-    <div className="flex items-center gap-3 px-6 py-4 font-normal whitespace-nowrap border-t border-neutral-200">
-      <div className="flex flex-1 gap-3">
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/40650358102fa8387818bec83e4b93414faef9e77009d0ef4df1095af33dd8c9?apiKey=1f4fb250339844f88428d2cbf4e019e9&&apiKey=1f4fb250339844f88428d2cbf4e019e9"
-          alt="User avatar"
-          className="shrink-0 self-start w-10 rounded-full aspect-square"
-        />
-        <div className="flex flex-col flex-1">
-          <div className="text-sm leading-5 text-slate-900">Liwasoft</div>
-          <div className="text-xs leading-5 text-slate-500">Admin</div>
+    <Link to="/profile">
+      <div
+        className={`flex items-center gap-3 px-6 py-4 font-normal whitespace-nowrap border-t text-[--gr-1] border-neutral-200 hover:bg-[--light-1] hover:text-[--primary-1] cursor-pointer group ${
+          param["*"] === "profile" && "bg-[--light-1] text-[--primary-1]"
+        }`}
+        onClick={() => setOpenSidebar(false)}
+      >
+        <div className="flex flex-1 gap-3">
+          <div className="flex justify-center items-center">
+            <UserI className="size-9" />
+          </div>
+          <div className="flex flex-col flex-1">
+            <div className="text-sm leading-5 text-[--black-2]">Liwasoft</div>
+            <div className="text-xs leading-5">Admin</div>
+          </div>
+        </div>
+        <div className="">
+          <ArrowIR className="font-bold group-hover:translate-x-2 transition-transform duration-300 ease-in-out" />
         </div>
       </div>
-      <div>
-        <ArrowIR className="text-[--black-1] font-bold" />
-      </div>
-    </div>
+    </Link>
   );
 }
 

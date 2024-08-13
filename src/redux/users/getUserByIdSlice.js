@@ -13,7 +13,7 @@ const initialState = {
   user: null,
 };
 
-const getUserlice = createSlice({
+const getUserByIdSlice = createSlice({
   name: "getUser",
   initialState: initialState,
   reducers: {
@@ -74,5 +74,5 @@ export const getUser = createAsyncThunk(
   }
 );
 
-export const { resetgetUserState, resetgetUser } = getUserlice.actions;
-export default getUserlice.reducer;
+export const { resetgetUserState, resetgetUser } = getUserByIdSlice.actions;
+export default getUserByIdSlice.reducer;

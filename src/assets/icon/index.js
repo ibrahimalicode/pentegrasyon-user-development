@@ -22,6 +22,9 @@ import EditI from "./edit";
 import TransferI from "./transfer";
 import CancelI from "./cancel";
 import ExtendI from "./extend";
+import UserI from "./user";
+import SettingsI from "./settings";
+import BoxInI from "./boxIn";
 
 export {
   DashboardI,
@@ -46,4 +49,7 @@ export {
   TransferI,
   CancelI,
   ExtendI,
+  UserI,
+  SettingsI,
+  BoxInI,
 };

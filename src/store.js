@@ -15,8 +15,7 @@ import getUserLicensesSlice from "./redux/licenses/getUserLicensesSlice";
 import getCitiesSlice from "./redux/data/getCitiesSlice";
 import getDistrictsSlice from "./redux/data/getDistrictsSlice";
 import getNeighsSlice from "./redux/data/getNeighsSlice";
-import getUserSlice from "./redux/users/getUserSlice";
-import updateUserDataSlice from "./redux/users/updateUserDataSlice";
+import getUserByIdSlice from "./redux/users/getUserByIdSlice";
 import updateUserInvoiceSlice from "./redux/users/updateUserInvoiceSlice";
 import updateUserPasswordSlice from "./redux/users/updateUserPasswordSlice";
 import adduserInvoiceSlice from "./redux/users/adduserInvoiceSlice";
@@ -36,6 +35,11 @@ import deleteLicensePackageSlice from "./redux/licensePackages/deleteLicensePack
 import updateLicenseDateSlice from "./redux/licenses/updateLicenseDateSlice";
 import updateLicenseIsActiveSlice from "./redux/licenses/updateLicenseIsActiveSlice";
 import deleteLicenseSlice from "./redux/licenses/deleteLicenseSlice";
+import getAdminSlice from "./redux/admin/getAdminSlice";
+import getUserSlice from "./redux/user/getUserSlice";
+import updateAdminDataSlice from "./redux/admin/updateAdminDataSlice";
+import updateUserDataByIdSlice from "./redux/users/updateUserDataByIdSlice";
+import updateUserDataSlice from "./redux/user/updateUserDataSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -47,12 +51,22 @@ const authSlice = combineReducers({
   verifyCode: verifyCodeSlice,
 });
 
+const adminSlice = combineReducers({
+  getAdmin: getAdminSlice,
+  updateAdminData: updateAdminDataSlice,
+});
+
+const userSlice = combineReducers({
+  getUser: getUserSlice,
+  updateUserData: updateUserDataSlice,
+});
+
 const usersSlice = combineReducers({
   getUsers: getUsersSlice,
-  getUser: getUserSlice,
+  getUser: getUserByIdSlice,
   addUser: addUserSlice,
   delete: deleteUserSlice,
-  updateUser: updateUserDataSlice,
+  updateUser: updateUserDataByIdSlice,
   addInvoice: adduserInvoiceSlice,
   updateInvoice: updateUserInvoiceSlice,
   updatePassword: updateUserPasswordSlice,
@@ -95,6 +109,8 @@ const dataSlice = combineReducers({
 const store = configureStore({
   reducer: {
     auth: authSlice,
+    admin: adminSlice,
+    user: userSlice,
     users: usersSlice,
     restaurants: restaurantsSlice,
     licenses: licensesSlice,

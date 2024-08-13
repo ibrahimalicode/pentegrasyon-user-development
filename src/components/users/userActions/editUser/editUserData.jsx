@@ -13,7 +13,7 @@ import { getDistricts } from "../../../../redux/data/getDistrictsSlice";
 import {
   resetUpdateUser,
   updateUserData,
-} from "../../../../redux/users/updateUserDataSlice";
+} from "../../../../redux/users/updateUserDataByIdSlice";
 
 const EditUserdata = ({
   cities,

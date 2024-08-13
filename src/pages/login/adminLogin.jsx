@@ -1,41 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomInput from "../../components/common/customInput";
 import { useDispatch, useSelector } from "react-redux";
 import { login, resetLoginState } from "../../redux/auth/loginSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
-// ICONS
-import EyeI from "../../assets/icon/eye";
-import EyeInv from "../../assets/icon/eyeInv";
 import TurnstileWidget from "../../components/turnstileWidget";
 
-const eyeIconVis = <EyeI className="w-5" />;
-const eyeIconInv = <EyeInv className="w-5" />;
 import LoadingI from "../../assets/anim/loading";
 
 function AdminLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toastId = useRef();
   const { success, loading, error } = useSelector((state) => state.auth.login);
 
-  let toastId;
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [inputType, setInputType] = useState("password");
-  const [icon, setIcon] = useState(eyeIconInv);
   const [turnstileToken, setTurnstileToken] = useState("");
-
-  const iconClick = (e) => {
-    e.preventDefault();
-    if (inputType === "password") {
-      setInputType("text");
-      setIcon(eyeIconVis);
-    } else {
-      setInputType("password");
-      setIcon(eyeIconInv);
-    }
-  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -45,9 +26,9 @@ function AdminLogin() {
 
   useEffect(() => {
     if (loading) {
-      toastId = toast.loading("Logging in..");
+      toastId.current = toast.loading("Logging in..");
     } else if (error) {
-      toast.dismiss(toastId);
+      toast.dismiss(toastId.current);
       if (error?.message_TR) {
         toast.error(error.message_TR);
       } else {
@@ -56,7 +37,7 @@ function AdminLogin() {
       dispatch(resetLoginState());
     } else if (success) {
       navigate("/dashboard");
-      toast.dismiss(toastId);
+      toast.dismiss(toastId.current);
       toast.success("Successfuly logged in");
       dispatch(resetLoginState());
     }
@@ -88,7 +69,6 @@ function AdminLogin() {
           />
           <CustomInput
             label="Şifre"
-            type={inputType}
             placeholder="Şifre"
             value={password}
             onChange={(e) => setPassword(e)}

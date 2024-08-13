@@ -83,6 +83,8 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
     marketplaceId: { value: null, label: "Lisans Paketi Seç", id: null },
     userId: null,
     time: null,
+    price: null,
+    licensePackageId: null,
   });
   const [restaurantsData, setRestaurantsData] = useState([]);
   const [licensePackagesData, setLicensePackagesData] = useState([]);
@@ -94,7 +96,17 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log({
+      restaurantId: licenseData.restaurantId.id,
+      userId: licenseData.userId,
+      marketplaceId: licenseData.marketplaceId.id,
+      startDateTime: getDateRange(licenseData.time).startDateTime,
+      endDateTime: getDateRange(licenseData.time).endDateTime,
+      isActive: true,
+      licensePackageTime: licenseData.time,
+      licensePackageTotalPrice: licenseData.price,
+      licensePackageId: licenseData.licensePackageId,
+    });
     dispatch(
       addLicense({
         restaurantId: licenseData.restaurantId.id,
@@ -103,6 +115,9 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
         startDateTime: getDateRange(licenseData.time).startDateTime,
         endDateTime: getDateRange(licenseData.time).endDateTime,
         isActive: true,
+        licensePackageTime: licenseData.time,
+        licensePackageTotalPrice: licenseData.price,
+        licensePackageId: licenseData.licensePackageId,
       })
     );
   };
@@ -130,7 +145,7 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
     }
   }, [loading, success, error]);
 
-  //GET LISANS PACKAGES
+  //GET AND SET LISANS PACKAGES
   useEffect(() => {
     if (!licensePackages) {
       dispatch(getLicensePackages());
@@ -145,7 +160,7 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
     };
   }, [licensePackages]);
 
-  // SET LISANS PACKAGES
+  // TOAST ERROR
   useEffect(() => {
     if (licensePackagesError) {
       if (error?.message_TR) {
@@ -239,6 +254,7 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
                   })
                 }
               />
+
               <CustomSelect
                 label="Lisans Paketi"
                 required={true}
@@ -250,6 +266,8 @@ function AddLicensesPopup({ onSuccess, userId, restaurantId }) {
                       ...prev,
                       marketplaceId: selectedOption,
                       time: selectedOption.time,
+                      price: selectedOption.price,
+                      licensePackageId: selectedOption.licensePackageId,
                     };
                   })
                 }

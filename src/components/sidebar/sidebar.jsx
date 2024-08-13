@@ -3,7 +3,7 @@ import logo from "../../assets/img/logo.png";
 
 // Icons
 import {
-  DashboardI,
+  //DashboardI,
   UsersI,
   RestourantI,
   LicenseI,
@@ -15,90 +15,105 @@ import {
   UserPlusI,
   BoxInI,
 } from "../../assets/icon/index";
-import { useEffect, useRef, useState } from "react";
+import { DashboardAnim } from "../../assets/anim/index";
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ArrowR from "../../assets/icon/arrowR";
 import { usePopup } from "../../context/PopupContext";
-
-const sidebarItems = [
-  {
-    icon: <DashboardI />,
-    text: "Gösterge Paneli",
-    to: "/dashboard",
-    path: "dashboard",
-  },
-  {
-    icon: <UsersI />,
-    text: "Kullanıcılar",
-    to: "/users",
-    path: "users",
-  },
-  {
-    icon: <RestourantI />,
-    text: "Restoranlar",
-    to: "/restaurants",
-    path: "restaurants",
-  },
-  {
-    icon: <LicenseI />,
-    text: "Lisanslar",
-    to: "/licenses",
-    path: "licenses",
-  },
-  {
-    icon: <BoxInI />,
-    text: "Siparişler",
-    to: "/orders",
-    path: "orders",
-  },
-  {
-    icon: <PackagesI />,
-    text: "Lisans Paketleri",
-    to: "/license-packages",
-    path: "license-packages",
-  },
-  {
-    icon: <MessagesI />,
-    text: "Mesajlar",
-    to: "/messages",
-    path: "messages",
-  },
-  {
-    icon: <LogI />,
-    text: "İşlem Kayıtları",
-    to: "/activity-logs",
-    path: "activity-logs",
-  },
-  {
-    icon: <UserPlusI />,
-    text: "Roller",
-    to: "/roles",
-    path: "roles",
-  },
-  {
-    icon: <PaymentI />,
-    text: "Ödemeler",
-    to: "/payments",
-    path: "payments",
-  },
-  {
-    icon: <ParamsI />,
-    text: "Parametreler",
-    to: "/parameters",
-    path: "parameters",
-  },
-];
+import { getAuth } from "../../redux/api";
 
 function Sidebar() {
   const param = useParams();
   const sidebarRef = useRef();
+  const localUser = useMemo(() => getAuth(), []);
   const { showPopup, contentRef, setContentRef } = usePopup();
+  const sidebarItems = [
+    {
+      icon: DashboardAnim,
+      text: "Gösterge Paneli",
+      to: "/dashboard",
+      path: "dashboard",
+      show: true,
+    },
+    {
+      icon: <UsersI />,
+      text: "Kullanıcılar",
+      to: "/users",
+      path: "users",
+      show: localUser?.isManager ? true : false,
+    },
+    {
+      icon: <RestourantI />,
+      text: "Restoranlar",
+      to: "/restaurants",
+      path: "restaurants",
+      show: true,
+    },
+    {
+      icon: <LicenseI />,
+      text: "Lisanslar",
+      to: "/licenses",
+      path: "licenses",
+      show: true,
+    },
+    {
+      icon: <BoxInI />,
+      text: "Siparişler",
+      to: "/orders",
+      path: "orders",
+      show: localUser?.isManager ? false : true,
+    },
+    {
+      icon: <PackagesI />,
+      text: "Lisans Paketleri",
+      to: "/license-packages",
+      path: "license-packages",
+      show: localUser?.isManager ? true : false,
+    },
+    {
+      icon: <MessagesI />,
+      text: "Mesajlar",
+      to: "/messages",
+      path: "messages",
+      show: localUser?.isManager ? true : false,
+    },
+    {
+      icon: <LogI />,
+      text: "İşlem Kayıtları",
+      to: "/activity-logs",
+      path: "activity-logs",
+      show: true,
+    },
+    {
+      icon: <UserPlusI />,
+      text: "Roller",
+      to: "/roles",
+      path: "roles",
+      show: localUser?.isManager ? true : false,
+    },
+    {
+      icon: <PaymentI />,
+      text: "Ödemeler",
+      to: "/payments",
+      path: "payments",
+      show: true,
+    },
+    {
+      icon: <ParamsI />,
+      text: "Parametreler",
+      to: "/parameters",
+      path: "parameters",
+      show: localUser?.isManager ? true : false,
+    },
+  ];
 
   const route = Object.values(param)[0].split("/")[0];
   const path = route.length > 1 ? route : "dashboard";
   // console.log(route);
 
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState([]);
 
   useEffect(() => {
     if (sidebarRef) {
@@ -143,25 +158,39 @@ function Sidebar() {
 
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-col gap-1 px-6 pb-4 w-full">
-            {sidebarItems.map((item, index) => (
-              <Link to={item.to} key={index}>
-                <div
-                  onClick={() => {
-                    setOpenSidebar(!openSidebar);
-                  }}
-                  className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors ${
-                    path === item.path && "bg-[--light-1] text-[--primary-1]"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex justify-center items-center p-1">
-                      {item.icon}
+            {sidebarItems
+              .filter((item) => item.show)
+              .map((item, index) => (
+                <Link to={item.to} key={index}>
+                  <div
+                    onClick={() => {
+                      setOpenSidebar(!openSidebar);
+                    }}
+                    className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors ${
+                      path === item.path && "bg-[--light-1] text-[--primary-1]"
+                    }`}
+                    onMouseEnter={() =>
+                      setHoveredIndex((pre) => {
+                        return {
+                          ...pre,
+                          [index]: Date.now(),
+                        };
+                      })
+                    }
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex justify-center items-center p-1">
+                        {index === 0 ? (
+                          <item.icon animationKey={hoveredIndex[index]} />
+                        ) : (
+                          item.icon
+                        )}
+                      </div>
+                      <div>{item.text}</div>
                     </div>
-                    <div>{item.text}</div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
           </div>
         </div>
       </div>

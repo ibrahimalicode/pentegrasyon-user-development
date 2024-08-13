@@ -152,7 +152,10 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
 
   return (
     <div className="flex flex-col items-center w-full text-base">
-      <div className="flex flex-col w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl">
+      <form
+        className="flex flex-col w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl"
+        onSubmit={handleSubmit}
+      >
         <div className="absolute top-4 right-3 z-[50]">
           <div
             className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
@@ -202,6 +205,7 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
             <div className="w-full flex flex-col justify-between max-w-56">
               <p>Lisans Paketi </p>
               <CustomSelect
+                required={true}
                 className="text-sm"
                 className2="mt-[0] sm:mt-[0]"
                 value={licenseData}
@@ -233,12 +237,12 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
         <div className="w-full flex justify-end pr-8">
           <Button
             text="Öde"
+            type="submit"
             className="px-7 text-[--white-1] bg-[--primary-1] border-[--primary-1]"
             disabled={!checked}
-            onClick={handleSubmit}
           />
         </div>
-      </div>
+      </form>
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import {
   getLicenses,
+  resetGetLicenses,
   resetGetLicensesState,
 } from "../../../redux/licenses/getLicensesSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
@@ -139,7 +140,7 @@ const LicensesPage = () => {
 
   // GET LICENSES
   useEffect(() => {
-    if (!licensesData) {
+    if (!licenses) {
       dispatch(
         getLicenses({
           pageNumber,
@@ -152,7 +153,14 @@ const LicensesPage = () => {
         })
       );
     }
-  }, [licensesData]);
+
+    return () => {
+      if (licenses) {
+        dispatch(resetGetLicenses());
+        dispatch(resetGetLicensesState());
+      }
+    };
+  }, [licenses]);
 
   // TOAST AND SET LICENSES
   useEffect(() => {
@@ -168,7 +176,6 @@ const LicensesPage = () => {
     if (success) {
       setLicensesData(licenses.data);
       setTotalItems(licenses.totalCount);
-      dispatch(resetGetLicensesState());
     }
   }, [loading, success, error, licenses]);
 

@@ -24,14 +24,14 @@ function Header() {
   };
 
   useEffect(() => {
+    if (loading) {
+      toastId.current = toast.loading("Logging out...");
+    }
     if (success) {
       clearAuth();
       navigate("/login");
       toast.dismiss(toastId.current);
       dispatch(resetLogoutState());
-    }
-    if (loading) {
-      toastId.current = toast.loading("Logging out...");
     }
     if (error) {
       clearAuth();

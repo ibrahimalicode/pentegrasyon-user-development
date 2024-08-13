@@ -60,6 +60,9 @@ export const addLicense = createAsyncThunk(
       startDateTime,
       endDateTime,
       isActive,
+      licensePackageTime,
+      licensePackageTotalPrice,
+      licensePackageId,
     },
     { rejectWithValue }
   ) => {
@@ -71,6 +74,9 @@ export const addLicense = createAsyncThunk(
         startDateTime,
         endDateTime,
         isActive,
+        licensePackageTime,
+        licensePackageTotalPrice,
+        licensePackageId,
       });
 
       // console.log(res);

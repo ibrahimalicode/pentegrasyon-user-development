@@ -124,6 +124,8 @@ export const formatLisansPackages = (data) => {
       ),
       id: ent.marketplaceId,
       time: ent.time,
+      price: ent.price,
+      licensePackageId: ent.id,
     };
   });
   return outData;

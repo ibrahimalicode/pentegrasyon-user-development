@@ -163,11 +163,13 @@ const EditUserProfile = () => {
   }, [districtsSuccess, districts]);
 
   return (
-    <section className="flex flex-col items-start pt-3.5 pr-20 pb-96 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5 max-md:pb-24">
+    <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
       <form className="w-full" onSubmit={handleSubmit}>
         <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
           <CustomInput
             label="Ad"
+            required
+            className="rounded-2xl py-3.5"
             value={userData.firstName}
             onChange={(e) => {
               setUserData((pre) => {
@@ -180,6 +182,8 @@ const EditUserProfile = () => {
           />
           <CustomInput
             label="Soyad"
+            required
+            className="rounded-2xl py-3.5"
             value={userData.lastName}
             onChange={(e) => {
               setUserData((pre) => {
@@ -194,6 +198,8 @@ const EditUserProfile = () => {
         <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
           <CustomPhoneInput
             label="Telefon"
+            required
+            className="rounded-2xl py-3.5"
             value={userData.phoneNumber}
             onChange={(e) => {
               setUserData((pre) => {
@@ -207,6 +213,8 @@ const EditUserProfile = () => {
 
           <CustomInput
             label="E-Posta"
+            required
+            className="rounded-2xl py-3.5"
             value={userData.email}
             onChange={(e) => {
               setUserData((pre) => {
@@ -221,6 +229,11 @@ const EditUserProfile = () => {
         <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
           <CustomSelect
             label="İl"
+            required
+            style={{
+              padding: ".5rem 0",
+              borderRadius: "1rem",
+            }}
             options={citiesData}
             value={userData?.city ? userData.city : { label: "Şehir seç" }}
             onChange={(selectedOption) => {
@@ -234,6 +247,11 @@ const EditUserProfile = () => {
           />
           <CustomSelect
             label="İlçe"
+            required
+            style={{
+              padding: ".5rem 0",
+              borderRadius: "1rem",
+            }}
             options={districtsData}
             value={
               userData?.district ? userData.district : { label: "İlçe seç" }
@@ -249,10 +267,10 @@ const EditUserProfile = () => {
           />
         </div>
 
-        <div className="flex justify-end mt-16">
+        <div className="flex justify-end mt-16 sm:mt-52">
           <Button
             text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1]"
+            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-0"
             type="submit"
           />
         </div>

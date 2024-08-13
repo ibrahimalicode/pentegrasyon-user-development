@@ -1,9 +1,46 @@
 import { Link, useParams } from "react-router-dom";
 import { UserI } from "../../assets/icon";
 import ArrowIR from "../../assets/icon/arrowR";
+import { useEffect, useMemo, useState } from "react";
+import { getAuth } from "../../redux/api";
+import { useDispatch, useSelector } from "react-redux";
+import { getAdmin } from "../../redux/admin/getAdminSlice";
+import { getUser } from "../../redux/user/getUserSlice";
 
 function UserProfile({ setOpenSidebar }) {
   const param = useParams();
+  const dispatch = useDispatch();
+  const localUser = useMemo(() => getAuth(), []);
+
+  const { user } = useSelector((state) => state.user.getUser);
+  const { admin } = useSelector((state) => state.admin.getAdmin);
+
+  const [userData, setUserData] = useState(null);
+
+  useState(() => {
+    if (localUser) {
+      if (localUser?.isManager) {
+        if (!admin) {
+          dispatch(getAdmin());
+        }
+      } else {
+        if (!user) {
+          dispatch(getUser());
+        }
+      }
+    }
+  }, [localUser]);
+
+  useEffect(() => {
+    if (user) {
+      setUserData({
+        ...user,
+        rol: user.isDealer ? "Dealer" : "Kullanıcı",
+      });
+    } else if (admin) {
+      setUserData({ ...admin, rol: "Admin" });
+    }
+  }, [user, admin]);
   return (
     <Link to="/profile">
       <div
@@ -17,8 +54,12 @@ function UserProfile({ setOpenSidebar }) {
             <UserI className="size-9" />
           </div>
           <div className="flex flex-col flex-1">
-            <div className="text-sm leading-5 text-[--black-2]">Liwasoft</div>
-            <div className="text-xs leading-5">Admin</div>
+            <div className="text-sm leading-5 text-[--black-2]">
+              {userData ? userData.fullName : "User"}
+            </div>
+            <div className="text-xs leading-5">
+              {userData ? userData.rol : "Kullanıcı"}
+            </div>
           </div>
         </div>
         <div className="">

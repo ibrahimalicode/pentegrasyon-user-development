@@ -62,7 +62,7 @@ export const codeVerification = createAsyncThunk(
       }
       const KEY = import.meta.env.VITE_LOCAL_KEY;
       localStorage.setItem(`${KEY}`, JSON.stringify(data));
-      console.log(res.data);
+      // console.log(res.data);
       return data;
     } catch (err) {
       console.log(err);

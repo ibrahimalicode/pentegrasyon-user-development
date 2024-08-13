@@ -53,7 +53,7 @@ export const logout = createAsyncThunk(
         }
       );
 
-      //console.log(res.data);
+      console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);

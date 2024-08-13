@@ -28,8 +28,13 @@ import {
   resetAddRestaurantState,
 } from "../../redux/restaurants/addRestaurantSlice";
 import { isEqual } from "lodash";
-import { getUsers, resetGetUsersState } from "../../redux/users/getUsersSlice";
+import {
+  getUsers,
+  resetGetUsers,
+  resetGetUsersState,
+} from "../../redux/users/getUsersSlice";
 import { useParams } from "react-router-dom";
+import { getAuth } from "../../redux/api";
 
 const AddRestaurant = ({ onSuccess }) => {
   const params = useParams();
@@ -58,6 +63,7 @@ export default AddRestaurant;
 function AddRestaurantPopup({ onSuccess, userId }) {
   const dispatch = useDispatch();
   const toastId = useRef();
+  const localUser = getAuth()?.isManager;
 
   const { setShowPopup, setPopupContent } = usePopup();
 
@@ -166,16 +172,20 @@ function AddRestaurantPopup({ onSuccess, userId }) {
 
   // GET ALL USERS
   useEffect(() => {
-    if (!usersData.length && !userId) {
+    if (!users && !userId && localUser) {
       dispatch(getUsers({}));
     }
-  }, [usersData]);
+    return () => {
+      if (users) {
+        dispatch(resetGetUsers());
+      }
+    };
+  }, [users, userId]);
 
   // SET USERS
   useEffect(() => {
-    if (usersSuccess) {
-      setUsersData(formatSelectorData(users));
-      dispatch(resetGetUsersState());
+    if (users) {
+      setUsersData(formatSelectorData(users.data));
     }
     if (usersError) {
       toast.error("Kullanıcılar alınamadı");
@@ -379,7 +389,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-x-4">
-              {!userId && (
+              {!userId && localUser && (
                 <CustomSelect
                   required={true}
                   label="Kullanıcı"
@@ -471,8 +481,10 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 required={true}
                 label="Adres"
                 placeholder="Adres"
-                className={`text-sm max-sm:h-14 ${userId ? "h-14" : "h-9"}`}
-                className2={`${!userId && "col-span-full"}`}
+                className={`text-sm max-sm:h-14 ${
+                  !userId && !localUser ? "h-14" : "h-9"
+                }`}
+                className2={`${!userId && localUser && "col-span-full"}`}
                 value={restaurantData.address}
                 onChange={(e) => {
                   setRestaurantData((prev) => {
@@ -488,7 +500,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
             <div onClick={handleOpenMap}>
               <div
                 className={`flex gap-4 pointer-events-none ${
-                  !userId && "sm:mt-4"
+                  !userId && localUser && "sm:mt-4"
                 }`}
               >
                 <CustomInput

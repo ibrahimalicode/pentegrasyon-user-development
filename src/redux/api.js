@@ -37,11 +37,15 @@ export const privateApi = () => {
 
   axiosPrivate.interceptors.response.use(
     (response) => response,
-    async (error) => {
+    async (error, response) => {
       if (error.response?.status === 401) {
         clearAuth();
         window.location.href = "/login";
-        // toast.error(error.message);
+      }
+
+      if (error.response?.status === 403) {
+        toast.dismiss();
+        toast.error("Hesabınız aktıf değil");
       }
       return Promise.reject(error);
     }

@@ -25,6 +25,8 @@ import ExtendI from "./extend";
 import UserI from "./user";
 import SettingsI from "./settings";
 import BoxInI from "./boxIn";
+import TrendDownI from "./trendDown";
+import TrendUpI from "./trendUp";
 
 export {
   DashboardI,
@@ -52,4 +54,6 @@ export {
   UserI,
   SettingsI,
   BoxInI,
+  TrendDownI,
+  TrendUpI,
 };

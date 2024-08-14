@@ -1,7 +1,7 @@
+import { Route, Routes } from "react-router-dom";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
-import Dashboard from "./dashboard";
-import { Route, Routes } from "react-router-dom";
+import DashboardPage from "./dashboard";
 import NotFound from "./404";
 import Users from "./users";
 import Restourants from "./restourants";
@@ -16,8 +16,8 @@ const Home = () => {
       <Header />
       <Sidebar />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/*" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/users/*" element={<Users />} />
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />

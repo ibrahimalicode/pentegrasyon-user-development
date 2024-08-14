@@ -13,13 +13,16 @@ const CustomSelect = ({
   required,
   style,
   optionStyle,
+  singleValueStyle,
 }) => {
   const formatOptionLabel = ({ label }) => (
     <div dangerouslySetInnerHTML={{ __html: label }} />
   );
 
   return (
-    <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
+    <div
+      className={`flex flex-col mt-3 sm:mt-6 w-full min-w-max relative ${className2}`}
+    >
       <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
         {label}
       </label>
@@ -55,6 +58,7 @@ const CustomSelect = ({
           singleValue: (provided, state) => ({
             color: "var(--black-2)",
             ...provided,
+            ...singleValueStyle,
           }),
           menu: (provided, state) => ({
             ...provided,

@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import Dashboard_ from "../components/rename/renameD";
+import Dashboard from "../components/dashboard/dashboardPage";
 
 const DashboardPage = () => {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard_ />} />
+      <Route path="/" element={<Dashboard />} />
     </Routes>
   );
 };

@@ -3,7 +3,7 @@ import SalesChart from "./salesChart";
 import RestaurantsTable from "./restaurantsTable";
 import MarketplaceChart from "./merketplaceChart";
 
-const Dashboard_ = () => {
+const Dashboard = () => {
   return (
     <section className="lg:ml-[280px] pt-16 min-h-0">
       <div className="flex flex-col px-16 pt-4 pb-1.5 max-md:px-5">
@@ -18,4 +18,4 @@ const Dashboard_ = () => {
   );
 };
 
-export default Dashboard_;
+export default Dashboard;

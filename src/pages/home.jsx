@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
-import DashboardPage from "./DashboardPage";
+import DashboardPage from "./dashboard";
 import NotFound from "./404";
 import Users from "./users";
 import Restourants from "./restourants";

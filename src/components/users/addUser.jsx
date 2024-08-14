@@ -422,7 +422,7 @@ const AddUser = ({ onSuccess }) => {
                     setUserData((prev) => {
                       return {
                         ...prev,
-                        checked: !checked,
+                        checked: !userData.checked,
                       };
                     });
                   }}

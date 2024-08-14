@@ -117,11 +117,14 @@ const SalesChart = () => {
               >
                 <div className="w-max h-full flex items-end relative group">
                   <div
-                    className="w-[3.5rem] h-full bg-[--primary-1] rounded-xl z-50 relative lg:group-hover:scale-125 transition-all duration-300 ease-out"
+                    className="w-[3.5rem] h-full bg-[--primary-1] rounded-xl z-50 relative lg:group-hover:scale-105 transition-all duration-300 ease-out"
                     style={{ maxHeight: `${calc(sales.price).mainHeight}%` }}
                   >
-                    <div className="absolute -top-10 left-0 min-w-full flex justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                    <div className="absolute -top-10 left-0 min-w-full flex justify-center opacity-0 group-hover:opacity-100 transition-all ease-in">
                       <ToolTip price={sales.price} />
+                    </div>
+                    <div className="absolute -top-6 left-0 right-0 min-w-full text-center group-hover:opacity-0">
+                      {sales.price}
                     </div>
                   </div>
                   <div

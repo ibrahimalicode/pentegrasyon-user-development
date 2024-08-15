@@ -27,6 +27,8 @@ import SettingsI from "./settings";
 import BoxInI from "./boxIn";
 import TrendDownI from "./trendDown";
 import TrendUpI from "./trendUp";
+import DownArrowI from "./downArrow";
+import CloudUI from "./cloudU";
 
 export {
   DashboardI,
@@ -56,4 +58,6 @@ export {
   BoxInI,
   TrendDownI,
   TrendUpI,
+  DownArrowI,
+  CloudUI,
 };

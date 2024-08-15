@@ -140,7 +140,7 @@ const LicensesPage = () => {
 
   // GET LICENSES
   useEffect(() => {
-    if (!licenses) {
+    if (!licensesData) {
       dispatch(
         getLicenses({
           pageNumber,
@@ -153,14 +153,7 @@ const LicensesPage = () => {
         })
       );
     }
-
-    return () => {
-      if (licenses) {
-        dispatch(resetGetLicenses());
-        dispatch(resetGetLicensesState());
-      }
-    };
-  }, [licenses]);
+  }, [licensesData]);
 
   // TOAST AND SET LICENSES
   useEffect(() => {
@@ -176,6 +169,8 @@ const LicensesPage = () => {
     if (success) {
       setLicensesData(licenses.data);
       setTotalItems(licenses.totalCount);
+      dispatch(resetGetLicenses());
+      dispatch(resetGetLicensesState());
     }
   }, [loading, success, error, licenses]);
 

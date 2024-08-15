@@ -180,8 +180,8 @@ const UserLicensesPage = () => {
     }
 
     if (success) {
-      setLicensesData(userLicenses.data.data);
-      setTotalItems(userLicenses.data.totalCount);
+      setLicensesData(userLicenses.data);
+      setTotalItems(userLicenses.totalCount);
       dispatch(resetGetUserLicenses());
     }
   }, [loading, success, error, userLicenses]);

@@ -109,18 +109,19 @@ export const formatLisansPackages = (data) => {
     return `
       <div class="flex justify-between">
         <p class='w-36'>${label}</p>
-        <p class='w-20 text-[--link-1]' > | ${year} Yıllık | </p>
+        <p class='w-20 text-[--link-1]' > ${year} Yıllık </p>
         <p class='w-12' >${price}</p>
       </div>`;
   }
 
-  const outData = data.map((ent) => {
+  const outData = data.map((ent, index) => {
     return {
       value: MarketPalceIds[ent.marketplaceId].label,
       label: CustomLabel(
         MarketPalceIds[ent.marketplaceId].label,
         ent.time,
-        ent.price
+        ent.price,
+        index
       ),
       id: ent.marketplaceId,
       time: ent.time,

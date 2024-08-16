@@ -1,6 +1,38 @@
+import { useState } from "react";
 import { CloudUI } from "../../assets/icon";
 
 const CustomFileInput = ({ onChange, value, accept, className, required }) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+
+    const file = event.dataTransfer.files[0];
+    if (file && onChange) {
+      onChange(event);
+    }
+  };
+
   const getReadableAcceptText = (accept) => {
     if (!accept) return "";
     return accept
@@ -15,10 +47,16 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
 
   return (
     <label
-      for="dropzone-file"
-      className={`flex flex-col items-center justify-center w-full h-64 text-[--gr-1] border-2 border-[--light-1] border-dashed rounded-lg cursor-pointer bg-[--white-1] ${className}`}
+      htmlFor="dropzone-file"
+      className={`flex flex-col items-center justify-center w-full h-64 text-[--gr-1] border-2 border-[--light-1] border-dashed rounded-lg cursor-pointer bg-[--white-1] ${
+        isDragging ? "border-[--primary-1] bg-[--light-3]" : ""
+      } ${className}`}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
-      <div class="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         {!value ? (
           <>
             <CloudUI className="size-[2.5rem]" strokeWidth={1.5} />
@@ -47,7 +85,7 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
       <input
         id="dropzone-file"
         type="file"
-        class="hidden"
+        className="hidden"
         onChange={onChange}
         accept={accept}
         required={required}

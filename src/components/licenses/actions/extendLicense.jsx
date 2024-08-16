@@ -249,7 +249,7 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
             type="button"
             disabled={step !== 2}
             className={`flex justify-center w-24 py-[.6rem] text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none ${
-              step !== 2 && "opacity-70"
+              step !== 2 && "hidden"
             }`}
             onClick={() => setStep(1)}
             text={
@@ -297,7 +297,7 @@ function PopupStepContent({
   function handleDoc(e) {
     e.preventDefault();
 
-    const file = e.target.files[0];
+    const file = e.dataTransfer.files[0];
     const formData = new FormData();
     formData.append("document", file);
 
@@ -344,7 +344,7 @@ function PopupStepContent({
             <CustomSelect
               required={true}
               className="text-sm"
-              className2="mt-[0] sm:mt-[0]"
+              className2="mt-[0] sm:mt-[0] min-w-52"
               value={licenseData}
               options={licensePackagesData}
               onChange={(selectedOption) => {
@@ -393,7 +393,7 @@ function PopupStepContent({
               </div>
               <div className="">
                 <CustomFileInput
-                  className="h-32 py-4"
+                  className="h-[8rem] py-4"
                   value={document}
                   onChange={handleDoc}
                   accept={"image/png, image/jpeg, image/gif, application/pdf"}

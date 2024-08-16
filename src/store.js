@@ -40,6 +40,7 @@ import getUserSlice from "./redux/user/getUserSlice";
 import updateAdminDataSlice from "./redux/admin/updateAdminDataSlice";
 import updateUserDataByIdSlice from "./redux/users/updateUserDataByIdSlice";
 import updateUserDataSlice from "./redux/user/updateUserDataSlice";
+import getRestaurantSlice from "./redux/restaurants/getRestaurantSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -75,6 +76,7 @@ const usersSlice = combineReducers({
 });
 
 const restaurantsSlice = combineReducers({
+  getRestaurant: getRestaurantSlice,
   getRestaurants: getRestaurantsSlice,
   getUserRestaurants: getUserRestaurantsSlice,
   deleteRestaurant: deleteRestaurantSlice,

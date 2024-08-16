@@ -14,6 +14,7 @@ import {
   resetgetUser,
 } from "../../../../redux/users/getUserByIdSlice";
 import { getCities } from "../../../../redux/data/getCitiesSlice";
+import ActionButton from "../../../common/actionButton";
 
 const EditUser = ({ user, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
@@ -22,12 +23,11 @@ const EditUser = ({ user, onSuccess }) => {
     setShowPopup(true);
   };
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer"
+    <ActionButton
+      element={<EditI className="w-5" strokeWidth="1.8" />}
+      element2="Düzenle"
       onClick={handleClick}
-    >
-      <EditI className="w-5" strokeWidth="1.8" /> Düzenle
-    </button>
+    />
   );
 };
 

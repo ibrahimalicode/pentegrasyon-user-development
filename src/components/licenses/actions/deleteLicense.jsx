@@ -18,6 +18,7 @@ import {
   deleteLicense,
   resetDeleteLicense,
 } from "../../../redux/licenses/deleteLicenseSlice";
+import ActionButton from "../../common/actionButton";
 
 const imageSRCs = [
   Getiryemek,
@@ -40,13 +41,12 @@ const DeleteLicense = ({ licenseData, setOpenMenu, onSuccess }) => {
   };
 
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left text-[--red-1] cursor-pointer"
+    <ActionButton
+      className="text-[--red-1]"
+      element={<DeleteI className="w-[1.1rem]" />}
+      element2="Sil"
       onClick={handlePopup}
-    >
-      <DeleteI className="w-[1.1rem]" />
-      Sil
-    </button>
+    />
   );
 };
 

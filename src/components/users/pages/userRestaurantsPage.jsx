@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CustomPagination from "../../common/pagination";
 import {
   getUserRestaurants,
@@ -18,6 +18,8 @@ import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { usePopup } from "../../../context/PopupContext";
 import RestaurantActions from "../userRestaurantActions/userRestaurantActions";
 import AddRestaurant from "../../restaurants/addRestaurant";
+import { getUser } from "../../../redux/users/getUserByIdSlice";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 const UserRestaurants = () => {
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ const UserRestaurants = () => {
     (state) => state.data.getNeighs
   );
 
-  const { users } = useSelector((state) => state.users.getUsers);
+  const { user } = useSelector((state) => state.users.getUser);
 
   const [searchVal, setSearchVal] = useState("");
   const [restaurantsData, setRestaurantsData] = useState(null);
@@ -49,12 +51,7 @@ const UserRestaurants = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
-  const [userInfo, setUserInfo] = useState(() => {
-    if (users?.data) {
-      const user = users.data.filter((data) => data.id === params?.id)[0];
-      return user;
-    }
-  });
+  const [userData, setUserData] = useState(null);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -147,6 +144,20 @@ const UserRestaurants = () => {
       })
     );
   }
+
+  // GET USER
+  useEffect(() => {
+    if (!userData && restaurantsData) {
+      dispatch(getUser({ userId: restaurantsData[0].userId }));
+    }
+  }, [userData, restaurantsData]);
+
+  //SET USER
+  useEffect(() => {
+    if (user) {
+      setUserData(user);
+    }
+  }, [user]);
 
   // GET USER RESTAURATS
   useEffect(() => {
@@ -262,15 +273,21 @@ const UserRestaurants = () => {
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--gr-1] pt-4 text-base cursor-pointer">
-        {userInfo ? (
-          <div onClick={() => window.history.back()}>
-            {userInfo.isDealer ? "Bayi " : "Müşteri "}
-            {userInfo.fullName} {">"} Restoranlar
+      <div className="w-max text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
+        {userData ? (
+          <div
+            className="flex items-center gap-1"
+            onClick={() => window.history.back()}
+          >
+            {userData.isDealer ? "Bayi " : "Müşteri "}
+            {userData.fullName} <DoubleArrowRI className="size-3" /> Restoranlar
           </div>
         ) : (
-          <div onClick={() => window.history.back()}>
-            Müşteriler {">"} Restoranlar
+          <div
+            className="flex items-center gap-1"
+            onClick={() => window.history.back()}
+          >
+            Müşteriler <DoubleArrowRI className="size-3" /> Restoranlar
           </div>
         )}
       </div>

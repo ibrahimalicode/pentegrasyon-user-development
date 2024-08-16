@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { usePopup } from "../../../context/PopupContext";
 import { TransferI } from "../../../assets/icon";
+import ActionButton from "../../common/actionButton";
 
 const TransferLicense = ({ licensePackage, setOpenMenu, onSuccess }) => {
   const dispatch = useDispatch();
@@ -15,13 +16,11 @@ const TransferLicense = ({ licensePackage, setOpenMenu, onSuccess }) => {
   };
 
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left text-[--gr-1] cursor-pointer  border-b border-solid border-[--border-1]"
+    <ActionButton
+      element={<TransferI className="w-[1.1rem]" />}
+      element2="Transfer"
       onClick={handlePopup}
-    >
-      <TransferI className="w-[1.1rem]" />
-      Transfer
-    </button>
+    />
   );
 };
 

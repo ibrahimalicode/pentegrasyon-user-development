@@ -1,5 +1,6 @@
 import { CancelI, TransferI } from "../../../assets/icon";
 import { usePopup } from "../../../context/PopupContext";
+import ActionButton from "../../common/actionButton";
 
 const TransferRestaurant = ({ restaurantsData, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
@@ -14,12 +15,11 @@ const TransferRestaurant = ({ restaurantsData, onSuccess }) => {
   };
 
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer"
+    <ActionButton
+      element={<TransferI className="w-5" strokeWidth="1.8" />}
+      element2="Transfer"
       onClick={handleClick}
-    >
-      <TransferI className="w-5" strokeWidth="1.8" /> Transfer
-    </button>
+    />
   );
 };
 

@@ -25,12 +25,12 @@ const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
             {inData.map((data, index) => (
               <tr
                 key={data.id}
-                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 ${
+                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors ${
                   totalItems < 8 ? "" : "last:border-b-0"
                 } `}
               >
                 <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
-                  {data.name}
+                  {data.restaurantName}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                   {MarketPalceIds[data.marketplaceId].value}

@@ -19,6 +19,10 @@ import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import LicensesTable from "../../common/licensesTable";
 import AddLicense from "../addLicense";
+import {
+  getLicensesRestaurant,
+  resetGetLicensesRestaurant,
+} from "../../../redux/restaurants/getRestaurantSlice";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -26,6 +30,14 @@ const LicensesPage = () => {
   const { loading, success, error, licenses } = useSelector(
     (state) => state.licenses.getLicenses
   );
+  const {
+    success: withRestaurantSucc,
+    error: withRestaurantError,
+    licenses: licensesWithRestaurant,
+  } = useSelector(
+    (state) => state.restaurants.getRestaurant.licensesRestaurant
+  );
+
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const { districts: districtsData, success: districtsSuccess } = useSelector(
@@ -47,6 +59,7 @@ const LicensesPage = () => {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
+  const [teest, setTeest] = useState([]);
 
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
@@ -165,14 +178,34 @@ const LicensesPage = () => {
       }
       dispatch(resetGetLicensesState());
     }
-
     if (success) {
-      setLicensesData(licenses.data);
+      dispatch(getLicensesRestaurant({ licenses: licenses.data }));
+    }
+  }, [success, error, licenses]);
+
+  // TOAST AND SET LICENSES
+  useEffect(() => {
+    if (withRestaurantError) {
+      if (withRestaurantError?.message_TR) {
+        toast.error(withRestaurantError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetLicensesRestaurant());
+    }
+    if (withRestaurantSucc) {
+      setLicensesData(licensesWithRestaurant);
       setTotalItems(licenses.totalCount);
       dispatch(resetGetLicenses());
       dispatch(resetGetLicensesState());
+      dispatch(resetGetLicensesRestaurant());
     }
-  }, [loading, success, error, licenses]);
+  }, [
+    withRestaurantSucc,
+    withRestaurantError,
+    licensesWithRestaurant,
+    licenses,
+  ]);
 
   // GET AND SET CITIES
   useEffect(() => {

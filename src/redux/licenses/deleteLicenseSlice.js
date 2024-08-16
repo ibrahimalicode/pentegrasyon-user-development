@@ -42,11 +42,11 @@ const deleteLicenseSlice = createSlice({
 });
 
 export const deleteLicense = createAsyncThunk(
-  "License/DeleteLicenseById",
-  async ({ licensePackageId }, { rejectWithValue }) => {
+  "Licenses/DeleteLicenseById",
+  async ({ licenseId }, { rejectWithValue }) => {
     try {
-      const res = await api.delete(`${baseURL}License/DeleteLicenseById`, {
-        params: { licensePackageId },
+      const res = await api.delete(`${baseURL}Licenses/DeleteLicenseById`, {
+        params: { licenseId },
       });
 
       //console.log(res.data);

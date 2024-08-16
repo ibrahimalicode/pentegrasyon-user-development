@@ -20,9 +20,10 @@ function StepBar({ step, steps }) {
               {num}
             </div>
             <div
-              className={`absolute left-0 top-0 w-full h-full bg-[${colors.main[0]}] transition-all delay-200 ease-in`}
+              className={`absolute left-0 top-0 w-full h-full bg-[${colors.main[0]}] transition-all ease-in`}
               style={{
                 transform: step >= num ? "translateX(0)" : "translateX(-100%)",
+                transitionDelay: step >= num ? "200ms" : "0ms",
               }}
             ></div>
           </div>
@@ -38,6 +39,7 @@ function StepBar({ step, steps }) {
               style={{
                 transform:
                   step >= num + 1 ? "translateX(0)" : "translateX(-100%)",
+                transitionDelay: step >= num + 1 ? "0ms" : "200ms",
               }}
             ></div>
           </div>

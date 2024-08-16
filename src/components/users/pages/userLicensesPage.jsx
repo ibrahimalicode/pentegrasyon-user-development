@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import CustomInput from "../../common/customInput";
 import { usePopup } from "../../../context/PopupContext";
@@ -20,6 +20,12 @@ import {
   resetGetUserLicenses,
 } from "../../../redux/licenses/getUserLicensesSlice";
 import AddLicense from "../../licenses/addLicense";
+import {
+  getLicensesRestaurant,
+  resetGetLicensesRestaurant,
+} from "../../../redux/restaurants/getRestaurantSlice";
+import { getUser } from "../../../redux/users/getUserByIdSlice";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 const UserLicensesPage = () => {
   const dispatch = useDispatch();
@@ -29,6 +35,17 @@ const UserLicensesPage = () => {
   const { loading, success, error, userLicenses } = useSelector(
     (state) => state.licenses.getUserLicenses
   );
+
+  const {
+    success: withRestaurantSucc,
+    error: withRestaurantError,
+    licenses: licensesWithRestaurant,
+  } = useSelector(
+    (state) => state.restaurants.getRestaurant.licensesRestaurant
+  );
+
+  const { user } = useSelector((state) => state.users.getUser);
+
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const { districts: districtsData, success: districtsSuccess } = useSelector(
@@ -37,8 +54,6 @@ const UserLicensesPage = () => {
   const { neighs: neighsData, success: neighsSuccess } = useSelector(
     (state) => state.data.getNeighs
   );
-
-  const { users } = useSelector((state) => state.users.getUsers);
 
   const [searchVal, setSearchVal] = useState("");
   const [filter, setFilter] = useState({
@@ -49,12 +64,7 @@ const UserLicensesPage = () => {
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const [userInfo, setUserInfo] = useState(() => {
-    if (users?.data) {
-      const user = users.data.filter((data) => data.id === params?.id)[0];
-      return user;
-    }
-  });
+  const [userData, setUserData] = useState(null);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -149,6 +159,19 @@ const UserLicensesPage = () => {
       })
     );
   }
+  // GET USER
+  useEffect(() => {
+    if (!userData) {
+      dispatch(getUser({ userId }));
+    }
+  }, [userData]);
+
+  //SET USER
+  useEffect(() => {
+    if (user) {
+      setUserData(user);
+    }
+  }, [user]);
 
   // GET LICENSES
   useEffect(() => {
@@ -180,11 +203,32 @@ const UserLicensesPage = () => {
     }
 
     if (success) {
-      setLicensesData(userLicenses.data);
+      dispatch(getLicensesRestaurant({ licenses: userLicenses.data }));
+    }
+  }, [success, error, userLicenses]);
+
+  // TOAST AND SET LICENSES
+  useEffect(() => {
+    if (withRestaurantError) {
+      if (withRestaurantError?.message_TR) {
+        toast.error(withRestaurantError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetLicensesRestaurant());
+    }
+    if (withRestaurantSucc) {
+      setLicensesData(licensesWithRestaurant);
       setTotalItems(userLicenses.totalCount);
       dispatch(resetGetUserLicenses());
+      dispatch(resetGetLicensesRestaurant());
     }
-  }, [loading, success, error, userLicenses]);
+  }, [
+    withRestaurantSucc,
+    withRestaurantError,
+    licensesWithRestaurant,
+    userLicenses,
+  ]);
 
   // GET AND SET CITIES
   useEffect(() => {
@@ -262,15 +306,21 @@ const UserLicensesPage = () => {
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--gr-1] pt-4 text-base cursor-pointer">
-        {userInfo ? (
-          <div onClick={() => window.history.back()}>
-            {userInfo.isDealer ? "Bayi " : "Müşteri "}
-            {userInfo.fullName} {">"} Lisanslar
+      <div className="w-full text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
+        {userData ? (
+          <div
+            className="flex items-center gap-1"
+            onClick={() => window.history.back()}
+          >
+            {userData.isDealer ? "Bayi " : "Müşteri "}
+            {userData.fullName} <DoubleArrowRI className="size-3" /> Lisanslar
           </div>
         ) : (
-          <div onClick={() => window.history.back()}>
-            Müşteriler {">"} Lisanslar
+          <div
+            className="flex items-center gap-1"
+            onClick={() => window.history.back()}
+          >
+            Müşteriler <DoubleArrowRI className="size-3" /> Lisanslar
           </div>
         )}
       </div>

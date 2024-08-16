@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { CloudUI } from "../../assets/icon";
+import toast from "react-hot-toast";
+
+//image/png, image/jpeg, image/gif, application/pdf
 
 const CustomFileInput = ({ onChange, value, accept, className, required }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -29,7 +32,24 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
 
     const file = event.dataTransfer.files[0];
     if (file && onChange) {
-      onChange(event);
+      handleFile(file);
+    }
+  };
+
+  const handleFile = (file) => {
+    const fileType = file.type;
+    const allowedTypes = accept.split(",").map((type) => type.trim());
+    if (!allowedTypes.includes(fileType)) {
+      toast.error("Invalid file type");
+      return;
+    }
+    onChange(file);
+  };
+
+  const handleInputChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      handleFile(file);
     }
   };
 
@@ -86,7 +106,7 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
         id="dropzone-file"
         type="file"
         className="hidden"
-        onChange={onChange}
+        onChange={handleInputChange}
         accept={accept}
         required={required}
       />

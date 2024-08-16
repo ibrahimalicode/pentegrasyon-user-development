@@ -1,17 +1,16 @@
 import { UserPlusI } from "../../../assets/icon";
+import ActionButton from "../../common/actionButton";
 
 const MakeADealer = () => {
   const handleClick = () => {
     console.log("MakeADealer");
   };
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer"
+    <ActionButton
+      element={<UserPlusI className="w-5" />}
+      element2="Bayi Yap"
       onClick={handleClick}
-    >
-      <UserPlusI className="w-5" />
-      Bayi Yap
-    </button>
+    />
   );
 };
 

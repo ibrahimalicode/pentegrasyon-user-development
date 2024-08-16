@@ -13,6 +13,7 @@ import {
   resetDeleteRestaurant,
 } from "../../../redux/restaurants/deleteRestaurantSlice";
 import toast from "react-hot-toast";
+import ActionButton from "../../common/actionButton";
 
 const DeleteRetaurant = ({ restaurant, onSuccess }) => {
   const dispatch = useDispatch();
@@ -26,13 +27,12 @@ const DeleteRetaurant = ({ restaurant, onSuccess }) => {
   };
 
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left text-[--red-1] cursor-pointer"
+    <ActionButton
+      className="text-[--red-1]"
+      element={<DeleteI className="w-[1.1rem]" />}
+      element2="Sil"
       onClick={handleClick}
-    >
-      <DeleteI className="w-[1.1rem]" />
-      Sil
-    </button>
+    />
   );
 };
 
@@ -90,7 +90,8 @@ function DeleteRetaurantPopup({ restaurant, onSuccess }) {
   useEffect(() => {
     if (restaurantLicensesSuccess) {
       if (restaurantLicenses) {
-        setLicenseNumber(restaurantLicenses?.length);
+        setLicenseNumber(restaurantLicenses.data?.length);
+        console.log(restaurantLicenses);
       }
       dispatch(resetGetRestaurantLicenses());
     } else {

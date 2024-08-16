@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import CustomInput from "../../common/customInput";
 import { usePopup } from "../../../context/PopupContext";
@@ -20,6 +20,11 @@ import {
   getRestaurantLicenses,
   resetGetRestaurantLicenses,
 } from "../../../redux/licenses/getRestaurantLicensesSlice";
+import {
+  getRestaurant,
+  resetGetRestaurant,
+} from "../../../redux/restaurants/getRestaurantSlice";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
@@ -31,6 +36,13 @@ const RestaurantLicensesPage = () => {
   const { loading, success, error, restaurantLicenses } = useSelector(
     (state) => state.licenses.getRestaurantLicenses
   );
+
+  const {
+    error: restaurantError,
+    success: restaurantSuccess,
+    restaurant,
+  } = useSelector((state) => state.restaurants.getRestaurant);
+
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const { districts: districtsData, success: districtsSuccess } = useSelector(
@@ -54,24 +66,11 @@ const RestaurantLicensesPage = () => {
     district: null,
     neighbourhood: null,
   });
+
+  const [restaurantData, setRestaurantData] = useState(null);
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const [restaurantInfo, setRestaurantInfo] = useState(() => {
-    if (restaurants?.data) {
-      const restaurant = restaurants.data.filter(
-        (data) => data.id === restaurantId
-      )[0];
-      if (restaurant) {
-        return restaurant;
-      } else if (userRestaurants?.data) {
-        const restaurant = userRestaurants.data.filter(
-          (data) => data.id === restaurantId
-        )[0];
-        return restaurant;
-      }
-    }
-  });
   const [userInfo, setUserInfo] = useState(() => {
     if (users?.data) {
       const user = users.data.filter((data) => data.id === userId)[0];
@@ -191,23 +190,63 @@ const RestaurantLicensesPage = () => {
     }
   }, [licensesData]);
 
-  // TOAST AND SET LICENSES
+  //GET RETSURANT
   useEffect(() => {
-    if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
+    if (!restaurantData) {
+      dispatch(getRestaurant({ restaurantId }));
+    }
+
+    return () => {
+      if (restaurant) {
+        dispatch(resetGetRestaurant());
+      }
+    };
+  }, [restaurantData]);
+
+  // TOAST AND SET LICENSES
+  // useEffect(() => {
+  //   if (error) {
+  //     if (error?.message_TR) {
+  //       toast.error(error.message_TR);
+  //     } else {
+  //       toast.error("Something went wrong");
+  //     }
+  //     dispatch(resetGetRestaurantLicenses());
+  //   }
+
+  //   if (success) {
+  //     setLicensesData(restaurantLicenses.data);
+  //     setTotalItems(restaurantLicenses.totalCount);
+  //     dispatch(resetGetRestaurantLicenses());
+  //   }
+  // }, [loading, success, error, restaurantLicenses]);
+
+  // TOAST AND SET LICENSES
+
+  useEffect(() => {
+    if (restaurantError) {
+      if (restaurantError?.message_TR) {
+        toast.error(restaurantError.message_TR);
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetRestaurantLicenses());
+      dispatch(resetGetRestaurant());
     }
 
-    if (success) {
-      setLicensesData(restaurantLicenses.data);
+    if (restaurantSuccess && restaurantLicenses?.data.length && restaurant) {
+      const updatedData = restaurantLicenses.data.map((license) => {
+        return {
+          ...license,
+          restaurantId: restaurant.id,
+          restaurantName: restaurant.name,
+        };
+      });
+      setRestaurantData(restaurant);
+      setLicensesData(updatedData);
       setTotalItems(restaurantLicenses.totalCount);
       dispatch(resetGetRestaurantLicenses());
     }
-  }, [loading, success, error, restaurantLicenses]);
+  }, [restaurantError, restaurantSuccess, restaurantLicenses]);
 
   // GET AND SET CITIES
   useEffect(() => {
@@ -285,11 +324,30 @@ const RestaurantLicensesPage = () => {
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--gr-1] pt-4 text-base cursor-pointer">
-        <div onClick={() => window.history.back()}>
+      <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
+        <div
+          className="flex items-center gap-1"
+          onClick={() => window.history.back()}
+        >
           {location.pathname.includes("users") &&
-            (userInfo ? `${userInfo.fullName} > ` : "Kullanıcılar > ")}
-          {restaurantInfo ? `${restaurantInfo.name} > ` : "Restoranlar > "}{" "}
+            (userInfo ? (
+              <>
+                {userInfo.fullName} <DoubleArrowRI className="size-3" />
+              </>
+            ) : (
+              <>
+                "Kullanıcılar <DoubleArrowRI className="size-3" /> "
+              </>
+            ))}
+          {restaurantData ? (
+            <>
+              {restaurantData.name} <DoubleArrowRI className="size-3" />
+            </>
+          ) : (
+            <>
+              Restoranlar <DoubleArrowRI className="size-3" />
+            </>
+          )}
           Lisanslar
         </div>
       </div>

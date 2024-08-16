@@ -45,7 +45,7 @@ const RestaurantActions = ({ index, restaurant, totalItems, onSuccess }) => {
       </div>
       {openMenu === index && (
         <div
-          className={`absolute right-14 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
+          className={`absolute right-10 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
             index < 5 ? "top-5" : "bottom-5"
           }`}
           ref={outRef}

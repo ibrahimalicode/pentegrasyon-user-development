@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { LicenseI } from "../../../assets/icon";
+import ActionButton from "../../common/actionButton";
 
 const UserRestaurantLicenses = ({ restaurant }) => {
   const navigate = useNavigate();
@@ -17,12 +18,11 @@ const UserRestaurantLicenses = ({ restaurant }) => {
   };
 
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer"
+    <ActionButton
+      element={<LicenseI className="w-5" strokeWidth="1.8" />}
+      element2="Lisanslar"
       onClick={handleClick}
-    >
-      <LicenseI className="w-5" strokeWidth="1.8" /> Lisanslar
-    </button>
+    />
   );
 };
 

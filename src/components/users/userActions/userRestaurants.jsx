@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { RestourantI } from "../../../assets/icon";
+import ActionButton from "../../common/actionButton";
 
 const UserRestaurants = ({ user }) => {
   const navigate = useNavigate();
@@ -8,12 +9,11 @@ const UserRestaurants = ({ user }) => {
     navigate(`/users/restaurants/${user.id}`);
   };
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer"
+    <ActionButton
+      element={<RestourantI className="w-5" />}
+      element2="Restaurants"
       onClick={handleClick}
-    >
-      <RestourantI className="w-5" /> Restaurants
-    </button>
+    />
   );
 };
 

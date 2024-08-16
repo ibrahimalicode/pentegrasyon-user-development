@@ -13,8 +13,7 @@ const LicensePackagesTable = ({
   Actions,
   totalItems = inData.length,
   onSuccess,
-  KDV,
-  checked,
+  /* KDV, */
 }) => {
   const imageSRCs = [
     Getiryemek,
@@ -25,7 +24,10 @@ const LicensePackagesTable = ({
     Siparisim,
   ];
 
-  // console.log(inData);
+  const KDV = (
+    ((inData[0].totalPrice - inData[0].price) / inData[0].price) *
+    100
+  ).toFixed();
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[50rem] overflow-hidden">
@@ -45,10 +47,16 @@ const LicensePackagesTable = ({
             {inData.map((data, index) => (
               <div
                 key={index}
-                className={`flex justify-between odd:bg-[--white-1] even:bg-[--table-odd] h-14 border-t last:border-b border-solid border-[--light-4] border-x-0 ${
+                className={`flex justify-between odd:bg-[--white-1] even:bg-[--table-odd] h-14 border-t last:border-b border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors relative group ${
                   totalItems < 8 ? "bg-[--red-1]" : "last:border-b-0"
                 } `}
               >
+                <div className="absolute -top-6 w-full flex justify-center text-sx invisible group-hover:visible">
+                  <div className="bg-[--white-1] py-4 px-6 rounded-lg border border-solid border-[--light-1] relative min-w-72 max-w-[30rem]">
+                    Açıklama: {data.description}
+                    <ToolTip />
+                  </div>
+                </div>
                 <div className="w-40 flex items-center">
                   <img
                     src={imageSRCs[data.marketplaceId]}
@@ -66,7 +74,9 @@ const LicensePackagesTable = ({
                   {KDV}%
                 </div>
                 <div className="w-28 text-[--black-2] flex items-center justify-center">
-                  {data.price + (data.price / 100) * (checked ? KDV : 0)}
+                  {
+                    /* {data.price + (data.price / 100) * (checked ? KDV : 0)} */ data.totalPrice
+                  }
                 </div>
                 <div className="w-28 text-[--black-2] flex items-center justify-center relative">
                   <LicensePackagesActions
@@ -86,3 +96,9 @@ const LicensePackagesTable = ({
 };
 
 export default LicensePackagesTable;
+
+function ToolTip() {
+  return (
+    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-[--light-4]"></div>
+  );
+}

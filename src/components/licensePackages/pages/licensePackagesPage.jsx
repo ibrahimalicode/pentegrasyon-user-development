@@ -12,16 +12,28 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getLicensePackages,
   resetGetLicensePackages,
+  resetGetLicensePackagesState,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import CustomInput from "../../common/customInput";
 import Button from "../../common/button";
+import {
+  resetUpdateLicensePackageKDV,
+  updateLicensePackageKDV,
+} from "../../../redux/licensePackages/updateLicensePackageSlice";
 
 const LicensePackagesPage = () => {
   const dispatch = useDispatch();
+  const kdvToastId = useRef();
 
   const { loading, success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
   );
+
+  const {
+    loading: updateKDVLoading,
+    success: updateKDVSuccess,
+    error: updateKDVError,
+  } = useSelector((state) => state.licensePackages.updateLicensePackage.kdv);
 
   const [licensesPackagesData, setLicensesPackagesData] = useState(null);
 
@@ -35,17 +47,17 @@ const LicensePackagesPage = () => {
     dispatch(getLicensePackages());
   }
 
+  function handleUpdateKDV() {
+    dispatch(updateLicensePackageKDV({ kdv: !checked }));
+    console.log("!checked", !checked);
+  }
+
   // GET LICENSE PACKAGES
   useEffect(() => {
-    if (!licensePackages) {
+    if (!licensesPackagesData) {
       dispatch(getLicensePackages());
     }
-    return () => {
-      if (licensePackages) {
-        dispatch(resetGetLicensePackages());
-      }
-    };
-  }, [licensePackages]);
+  }, [licensesPackagesData]);
 
   // TOAST AND SET PACKAGES
   useEffect(() => {
@@ -59,14 +71,45 @@ const LicensePackagesPage = () => {
     }
 
     if (success) {
+      setChecked(
+        licensePackages.data[0].totalPrice !== licensePackages.data[0].price
+      );
+      console.log(
+        licensePackages.data[0].totalPrice !== licensePackages.data[0].price
+      );
       setLicensesPackagesData(licensePackages.data);
       setTotalItems(licensePackages.totalCount);
+      dispatch(resetGetLicensePackagesState());
     }
   }, [loading, success, error, licensePackages]);
 
+  // TOAST FOR UPDATING KDV
+  useEffect(() => {
+    if (updateKDVLoading) {
+      kdvToastId.current = toast.loading("İşleniyor...");
+    }
+    if (updateKDVError) {
+      toast.dismiss(kdvToastId.current);
+      if (updateKDVError?.message_TR) {
+        toast.error(updateKDVError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetUpdateLicensePackageKDV());
+    }
+
+    if (updateKDVSuccess) {
+      toast.dismiss(kdvToastId.current);
+      toast.success(
+        `KDV başarıyla ${checked ? "hariç tutuldu" : "dahil edild"}`
+      );
+      dispatch(getLicensePackages());
+      dispatch(resetUpdateLicensePackageKDV());
+    }
+  }, [updateKDVLoading, updateKDVSuccess, updateKDVError]);
+
   //HIDE POPUP
-  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
-    usePopup();
+  const { contentRef, setContentRef } = usePopup();
   const filterLicense = useRef();
   useEffect(() => {
     if (filterLicense) {
@@ -117,7 +160,7 @@ const LicensePackagesPage = () => {
               id="CustomToggle"
               className="scale-75"
               checked={checked}
-              onChange={() => setChecked(!checked)}
+              onChange={handleUpdateKDV}
             />
           </div>
         </div>

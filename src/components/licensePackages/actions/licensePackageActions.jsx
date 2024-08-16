@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePopup } from "../../../context/PopupContext";
 import MenuI from "../../../assets/icon/menu";
 import DeleteLicensePackage from "./deleteLicensePackage";
+import EditLicensePackage from "./editLicensePackage";
 
 const LicensePackagesActions = ({
   index,
@@ -50,6 +51,10 @@ const LicensePackagesActions = ({
         } ${openMenu !== index && "invisible"}`}
       >
         <ul className="bg-[--white-1] text-[--gr-1] w-48">
+          <EditLicensePackage
+            licensePackage={licensePackage}
+            onSuccess={onSuccess}
+          />
           <DeleteLicensePackage
             licensePackage={licensePackage}
             onSuccess={onSuccess}

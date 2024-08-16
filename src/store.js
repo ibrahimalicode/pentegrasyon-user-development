@@ -41,6 +41,7 @@ import updateAdminDataSlice from "./redux/admin/updateAdminDataSlice";
 import updateUserDataByIdSlice from "./redux/users/updateUserDataByIdSlice";
 import updateUserDataSlice from "./redux/user/updateUserDataSlice";
 import getRestaurantSlice from "./redux/restaurants/getRestaurantSlice";
+import updateLicensePackageSlice from "./redux/licensePackages/updateLicensePackageSlice";
 
 const authSlice = combineReducers({
   login: loginSlice,
@@ -98,6 +99,7 @@ const licensePackagesSlice = combineReducers({
   getLicensePackages: getLicensePackagesSlice,
   addLicensePackage: addLicensePackageSlice,
   deleteLicensePackage: deleteLicensePackageSlice,
+  updateLicensePackage: updateLicensePackageSlice,
 });
 
 const dataSlice = combineReducers({

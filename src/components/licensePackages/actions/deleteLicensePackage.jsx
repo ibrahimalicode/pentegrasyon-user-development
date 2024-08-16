@@ -7,6 +7,7 @@ import { usePopup } from "../../../context/PopupContext";
 import { CancelI, DeleteI } from "../../../assets/icon";
 import CustomCheckbox from "../../common/customCheckbox";
 import Button from "../../common/button";
+import ActionButton from "../../common/actionButton";
 // IMAGES
 import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
 import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
@@ -41,13 +42,12 @@ const DeleteLicensePackage = ({ licensePackage, onSuccess }) => {
   };
 
   return (
-    <button
-      className="w-full flex items-center gap-2 py-2 pl-6 text-left text-[--red-1] cursor-pointer"
+    <ActionButton
+      className="text-[--red-1]"
+      element={<DeleteI className="w-[1.1rem]" />}
+      element2="Sil"
       onClick={handlePopup}
-    >
-      <DeleteI className="w-[1.1rem]" />
-      Sil
-    </button>
+    />
   );
 };
 

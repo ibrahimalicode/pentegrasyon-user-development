@@ -10,6 +10,7 @@ import Parameters from "./parameters";
 import LicensePackages from "./licensePackages";
 import Profile from "./profile";
 import Test from "./test";
+import Messages from "./messages";
 
 const Home = () => {
   return (
@@ -25,6 +26,7 @@ const Home = () => {
         <Route path="/license-packages/*" element={<LicensePackages />} />
         <Route path="/parameters/*" element={<Parameters />} />
         <Route path="/profile/*" element={<Profile />} />
+        <Route path="/messages/*" element={<Messages />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

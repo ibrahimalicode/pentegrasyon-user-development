@@ -9,7 +9,7 @@ const CustomSelect = ({
   onChange,
   className,
   className2,
-  isDisabled,
+  disabled,
   required,
   style,
   optionStyle,
@@ -31,7 +31,7 @@ const CustomSelect = ({
         options={options}
         required={required}
         className={`mt-1 sm:mt-2.5 text-base font-[350] ${className}`}
-        isDisabled={isDisabled}
+        isDisabled={disabled}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
         formatOptionLabel={formatOptionLabel}
         styles={{

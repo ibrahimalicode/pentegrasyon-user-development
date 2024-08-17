@@ -93,7 +93,7 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
     outData = sortedData.map((ent) => {
       return {
         value: ent.id,
-        label: ent?.name ? ent.name : ent?.fullName + " " + ent?.phoneNumber,
+        label: ent?.name ? ent.name : ent?.fullName,
         id: ent.id,
       };
     });

@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import CloseI from "../../../assets/icon/close";
-import CustomInput from "../../common/customInput";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getUsers,
-  resetGetUsersState,
-} from "../../../redux/users/getUsersSlice";
-import CustomSelect from "../../common/customSelector";
-import { formatSelectorData } from "../../../utils/utils";
-import CustomTag from "../../common/customTag";
 import toast from "react-hot-toast";
+// COMPONENTS
+import CustomSelect from "../../common/customSelector";
+import CustomTag from "../../common/customTag";
+import Button from "../../common/button";
+// REDUX
+import { useDispatch, useSelector } from "react-redux";
+import { resetGetUsersState } from "../../../redux/users/getUsersSlice";
+import { formatSelectorData } from "../../../utils/utils";
+import CloseI from "../../../assets/icon/close";
 
 const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   const dispatch = useDispatch();
@@ -24,24 +23,43 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 
   function handleSelectUser(selectedOption) {
     if (selectedOption.id === 1) {
-      setSelectedUsers([selectedOption]);
+      const unselectedUsers = usersData.filter(
+        (user) => user.id !== selectedOption.id
+      );
+      setUsersData([...selectedUsers, ...unselectedUsers]);
+      setSelectedUsers([allUsersOption]);
     } else {
       setSelectedUsers((prev) => {
         return [...prev, selectedOption];
       });
+      const unselectedUsers = usersData.filter(
+        (user) => user.id !== selectedOption.id
+      );
+      setUsersData(unselectedUsers);
     }
-    const unselectedUsers = usersData.filter(
-      (user) => user.id !== selectedOption.id
-    );
-    setUsersData(unselectedUsers);
   }
 
   function unselectUser(user) {
     const users = selectedUsers.filter((selected) => selected.id !== user.id);
     setSelectedUsers(users);
+    if (!usersData.some((prev) => prev.id === user.id)) {
+      if (user.id === 1) {
+        setUsersData((prev) => {
+          return [user, ...prev];
+        });
+      } else {
+        setUsersData((prev) => {
+          return [...prev, user];
+        });
+      }
+    }
+  }
+
+  function clearFilter() {
     setUsersData((prev) => {
-      return [user, ...prev];
+      return [...prev, ...selectedUsers];
     });
+    setSelectedUsers([]);
   }
 
   // TOAST AND SET USERS
@@ -71,20 +89,30 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   return (
     <div className="w-full">
       <div>
-        <div className="max-w-48">
-          <CustomSelect
-            value={{
-              label: `${
-                usersData.length > 0 ? "Kullanıcı Seç" : "Kullanıcı ara"
-              }`,
-              value: null,
-              id: null,
-            }}
-            options={usersData.length > 0 ? usersData : [allUsersOption]}
-            onChange={(selectedOption) => handleSelectUser(selectedOption)}
-            className="mt-[0] sm:mt-[0]"
-            className2="mt-[0] sm:mt-[0]"
-            disabled={selectedUsers[0]?.id === 1}
+        <div className="w-full flex justify-between pr-[10%]">
+          <div className="w-full max-w-48">
+            <CustomSelect
+              value={{
+                label: `${
+                  usersData.length > 0 ? "Kullanıcı Seç" : "Kullanıcı ara"
+                }`,
+                value: null,
+                id: null,
+              }}
+              options={usersData.length > 0 ? usersData : [allUsersOption]}
+              onChange={(selectedOption) => handleSelectUser(selectedOption)}
+              className="mt-[0] sm:mt-[0]"
+              className2="mt-[0] sm:mt-[0]"
+              disabled={selectedUsers[0]?.id === 1}
+            />
+          </div>
+          <Button
+            text="Temizle"
+            icon={<CloseI className="size-[15px]" />}
+            className={`border-[var(--primary-1)] text-[var(--primary-1)] text-xs h-max py-[.4rem] self-end gap-1 ${
+              selectedUsers.length > 1 ? "visible" : "invisible"
+            }`}
+            onClick={clearFilter}
           />
         </div>
         <div className="w-[90%] h-[1px] bg-[--border-1] mt-2"></div>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import MarketPalceIds from "../../../data/marketPlaceIds";
 import CustomSelect from "../../common/customSelector";
 import CustomTag from "../../common/customTag";
+import Button from "../../common/button";
+import CloseI from "../../../assets/icon/close";
 
 const SelectMarketplaces = ({
   selectedMarketplaces,
@@ -38,15 +40,32 @@ const SelectMarketplaces = ({
     });
   }
 
+  function clearFilter() {
+    setMarketplaceData((prev) => {
+      return [...prev, ...selectedMarketplaces];
+    });
+    setSelectedMarketplaces([]);
+  }
+
   return (
     <div className="w-full">
-      <div className="max-w-48">
-        <CustomSelect
-          value={{ label: "Pazaryeri Seç" }}
-          options={marketplaceData}
-          onChange={(selectedOption) => handleSelect(selectedOption)}
-          className="mt-[0] sm:mt-[0]"
-          className2="mt-[0] sm:mt-[0]"
+      <div className="w-full flex justify-between pr-[10%]">
+        <div className="max-w-48">
+          <CustomSelect
+            value={{ label: "Pazaryeri Seç" }}
+            options={marketplaceData}
+            onChange={(selectedOption) => handleSelect(selectedOption)}
+            className="mt-[0] sm:mt-[0]"
+            className2="mt-[0] sm:mt-[0]"
+          />
+        </div>
+        <Button
+          text="Temizle"
+          icon={<CloseI className="size-[15px]" />}
+          className={`border-[var(--primary-1)] text-[var(--primary-1)] text-xs h-max py-[.4rem] self-end gap-1 ${
+            selectedMarketplaces.length > 1 ? "visible" : "invisible"
+          }`}
+          onClick={clearFilter}
         />
       </div>
       <div className="w-[90%] h-[1px] bg-[--border-1] mt-2"></div>

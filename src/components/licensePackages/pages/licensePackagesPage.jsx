@@ -74,9 +74,6 @@ const LicensePackagesPage = () => {
       setChecked(
         licensePackages.data[0].totalPrice !== licensePackages.data[0].price
       );
-      console.log(
-        licensePackages.data[0].totalPrice !== licensePackages.data[0].price
-      );
       setLicensesPackagesData(licensePackages.data);
       setTotalItems(licensePackages.totalCount);
       dispatch(resetGetLicensePackagesState());
@@ -175,7 +172,7 @@ const LicensePackagesPage = () => {
           inData={licensesPackagesData}
           KDV={KDV}
           checked={checked}
-          onSuccess={() => dispatch(resetGetLicensePackages())}
+          onSuccess={() => setLicensesPackagesData(null)}
         />
       ) : loading ? (
         <TableSkeleton />

@@ -12,7 +12,7 @@ const CustomPhoneInput = ({
   className2,
   autoComplete = "new-password",
 }) => {
-  const [phone, setPhone] = useState(value);
+  // const [phone, setPhone] = useState(value);
 
   const handleChange = (value) => {
     if (!value.startsWith("90")) {
@@ -28,9 +28,10 @@ const CustomPhoneInput = ({
     setPhone(value);
     onChange(value);
   };
-  useEffect(() => {
-    handleChange(value);
-  }, [value]);
+
+  // useEffect(() => {
+  //   handleChange(value);
+  // }, [value]);
 
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
@@ -49,7 +50,7 @@ const CustomPhoneInput = ({
       </label>
       <PhoneInput
         country={"tr"}
-        value={phone}
+        value={value}
         onChange={handleChange}
         placeholder={placeholder}
         containerClass="hide-flag"

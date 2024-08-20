@@ -83,11 +83,18 @@ const updateLicensePackageSlice = createSlice({
 export const updateLicensePackage = createAsyncThunk(
   "LicensePackages/UpdateLicensePackage",
   async (
-    { licensePackageId, marketplaceId, time, price, description },
+    { licensePackageId, marketplaceId, time, price, description, isActive },
     { rejectWithValue }
   ) => {
     try {
-      console.log(licensePackageId, marketplaceId, time, price, description);
+      console.log(
+        licensePackageId,
+        marketplaceId,
+        time,
+        price,
+        description,
+        isActive
+      );
       const res = await api.put(
         `${baseURL}LicensePackages/UpdateLicensePackage`,
         {
@@ -95,6 +102,7 @@ export const updateLicensePackage = createAsyncThunk(
           time,
           price,
           description,
+          isActive,
         },
         {
           params: { licensePackageId },
@@ -106,9 +114,9 @@ export const updateLicensePackage = createAsyncThunk(
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
-      throw rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );
@@ -131,9 +139,9 @@ export const updateLicensePackageKDV = createAsyncThunk(
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
-      throw rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );

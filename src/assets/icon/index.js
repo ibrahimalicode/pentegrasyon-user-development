@@ -29,6 +29,7 @@ import TrendDownI from "./trendDown";
 import TrendUpI from "./trendUp";
 import DownArrowI from "./downArrow";
 import CloudUI from "./cloudU";
+import AsteriskI from "./asterisk";
 
 export {
   DashboardI,
@@ -60,4 +61,5 @@ export {
   TrendUpI,
   DownArrowI,
   CloudUI,
+  AsteriskI,
 };

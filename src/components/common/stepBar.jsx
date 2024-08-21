@@ -1,3 +1,5 @@
+import React from "react";
+
 function StepBar({ step, steps }) {
   const stepsArray = Array.from({ length: steps }, (_, index) => index + 1);
   const colors = {
@@ -8,10 +10,9 @@ function StepBar({ step, steps }) {
 
   return (
     <div className="w-full flex items-center px-10 py-5">
-      {stepsArray.map((num) => (
-        <>
+      {stepsArray.map((num, index) => (
+        <React.Fragment key={index}>
           <div
-            key={`BAR-${num}`}
             className={`w-full max-w-10 h-10 p-1 border border-solid border-[${colors.border[0]}] rounded-full relative overflow-hidden`}
           >
             <div
@@ -28,7 +29,6 @@ function StepBar({ step, steps }) {
             ></div>
           </div>
           <div
-            id={`BAR-${num}`}
             key={num}
             className={`w-full h-2 relative overflow-hidden border-y border-solid border-[${
               colors.border[0]
@@ -43,7 +43,7 @@ function StepBar({ step, steps }) {
               }}
             ></div>
           </div>
-        </>
+        </React.Fragment>
       ))}
     </div>
   );

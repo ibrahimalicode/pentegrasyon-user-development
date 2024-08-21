@@ -25,7 +25,7 @@ const CustomPhoneInput = ({
       }
     }
 
-    setPhone(value);
+    // setPhone(value);
     onChange(value);
   };
 

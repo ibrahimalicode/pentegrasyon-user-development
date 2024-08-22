@@ -9,9 +9,11 @@ const SecondStep = ({
   explanation,
   setExplanation,
   paymentMethod,
+  cardData,
+  setCardData,
 }) => {
   return (
-    <div>
+    <div className="flex w-full justify-center h-full overflow-y-auto">
       {paymentMethod.selectedOption.value === "bankPayment" ? (
         <BankPayment
           licenseData={licenseData}
@@ -21,7 +23,7 @@ const SecondStep = ({
           setExplanation={setExplanation}
         />
       ) : paymentMethod.selectedOption.value === "onlinePayment" ? (
-        <OnlinePayment />
+        <OnlinePayment cardData={cardData} setCardData={setCardData} />
       ) : (
         <CreditPayment />
       )}

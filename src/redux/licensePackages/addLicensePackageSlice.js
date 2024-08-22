@@ -54,6 +54,7 @@ export const addLicensePackage = createAsyncThunk(
   "LicensePackages/AddLicensePackages",
   async ({ marketplaceId, time, price, description }, { rejectWithValue }) => {
     try {
+      console.log({ marketplaceId, time, price, description });
       const res = await api.post(
         `${baseURL}LicensePackages/AddLicensePackages`,
         {
@@ -64,7 +65,7 @@ export const addLicensePackage = createAsyncThunk(
         }
       );
 
-      // console.log(res.data);
+      console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);

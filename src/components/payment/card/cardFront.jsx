@@ -1,3 +1,4 @@
+import React from "react";
 import { AsteriskI } from "../../../assets/icon";
 import mastercard_img from "../../../assets/img/card/Mastercard.png";
 import chip_img from "../../../assets/img/card/chip.png";
@@ -5,20 +6,22 @@ import chip_img from "../../../assets/img/card/chip.png";
 function CardFront({ cardData }) {
   const { userName, cardNumber, month, year, cvv } = cardData;
 
-  const firstFour = cardNumber.slice(0, 4).split("");
-  const secondFour = cardNumber.slice(4, 8).split("");
-  const thirdFour = cardNumber.slice(8, 12).split("");
-  const lastFour = cardNumber.slice(12).split("");
+  const cleanNumber = cardNumber.replace(/\D/g, "");
   // Format the card number into groups of 4 digits
-  const formattedCardNumber = cardNumber
-    .padEnd(16, "*")
-    .replace(/(.{4})/g, "$1 ");
+  const firstFour = cleanNumber.slice(0, 4).split("");
+  const secondFour = cleanNumber.slice(4, 8).split("");
+  const thirdFour = cleanNumber.slice(8, 12).split("");
+  const lastFour = cleanNumber.slice(12).split("");
 
+  function showNum(array, secondArray, index) {
+    // return index === array.length - 1 && !secondArray.length;
+    return !secondArray.length;
+  }
   return (
     <main className="flip-card-front absolute flex flex-col w-full h-full px-5 py-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-xl">
       <header className="flex justify-between items-start w-full">
         <div className="flex flex-col">
-          <p className="text-[--white-1] font-bold text-start">Kart</p>
+          <p className="text-[--white-1] font-bold text-start">Kredi Kartı</p>
           <div className="flex flex-col mt-3.5 w-full">
             <img
               loading="lazy"
@@ -45,44 +48,46 @@ function CardFront({ cardData }) {
             <>
               {firstFour.length > 0 && (
                 <span className="flex w-16 mr-3.5">
-                  {firstFour.map((num, i) =>
-                    i === firstFour.length - 1 ? (
-                      <span>{num}</span>
-                    ) : (
-                      <AsteriskI className="size-[15px]" />
-                    )
-                  )}
+                  {firstFour.map((num, i) => (
+                    <React.Fragment key={i}>
+                      {showNum(firstFour, secondFour, i) ? (
+                        <span>{num}</span>
+                      ) : (
+                        <AsteriskI className="size-[15px]" />
+                      )}
+                    </React.Fragment>
+                  ))}
                 </span>
               )}
               {secondFour.length > 0 && (
                 <span className="flex w-16 mr-3.5">
-                  {secondFour
-                    .split("")
-                    .map((num, i) =>
-                      i === secondFour.length - 1 ? (
+                  {secondFour.map((num, i) => (
+                    <React.Fragment key={i}>
+                      {showNum(secondFour, thirdFour, i) ? (
                         <span>{num}</span>
                       ) : (
                         <AsteriskI className="size-[15px]" />
-                      )
-                    )}
+                      )}
+                    </React.Fragment>
+                  ))}
                 </span>
               )}
               {thirdFour.length > 0 && (
                 <span className="flex w-16 mr-3.5">
-                  {thirdFour
-                    .split("")
-                    .map((num) =>
-                      i === thirdFour.length - 1 ? (
+                  {thirdFour.map((num, i) => (
+                    <React.Fragment key={i}>
+                      {showNum(thirdFour, lastFour, i) ? (
                         <span>{num}</span>
                       ) : (
                         <AsteriskI className="size-[15px]" />
-                      )
-                    )}
+                      )}
+                    </React.Fragment>
+                  ))}
                 </span>
               )}
               {lastFour.length > 0 && (
                 <span className="flex w-max">
-                  {lastFour.split("").map((num) => (
+                  {lastFour.map((num) => (
                     <span>{num}</span>
                   ))}
                 </span>
@@ -95,12 +100,12 @@ function CardFront({ cardData }) {
 
         <div className="flex justify-between w-full pt-1.5">
           <div className="w-full text-[14px] font-bold flex justify-start items-center">
-            {userName ? userName.toUpperCase() : "AD SOYAD"}
+            {userName ? userName.toUpperCase() : "KART SAHIBI"}
           </div>
 
           <div className="flex items-center">
             <div className="flex items-center gap-2">
-              <div className="flex flex-col text-[10px] font-bold">
+              <div className="flex flex-col text-[7px] font-bold leading-3">
                 <div>VALID</div>
                 <div>THRU</div>
               </div>

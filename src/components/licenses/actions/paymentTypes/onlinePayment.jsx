@@ -1,9 +1,30 @@
+import { useState } from "react";
 import PaymentCard from "../../../payment/card/card";
+import PaymentCardForm from "../../../payment/form/PaymentCardForm";
 
-const OnlinePayment = () => {
+const OnlinePayment = ({ cardData, setCardData }) => {
+  const [flip, setFlip] = useState(false);
+
+  const userData = {
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    city: "",
+    district: "",
+    neigh: "",
+    address: "",
+  };
+
   return (
-    <div className="flex flex-col items-center">
-      <PaymentCard className="scale-[1]" />
+    <div className="w-[325px]">
+      <PaymentCard flip={flip} cardData={cardData} />
+      <PaymentCardForm
+        setFlip={setFlip}
+        cardData={cardData}
+        setCardData={setCardData}
+        userData={userData}
+      />
     </div>
   );
 };

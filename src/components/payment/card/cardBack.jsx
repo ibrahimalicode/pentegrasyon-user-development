@@ -1,19 +1,26 @@
 import { AsteriskI } from "../../../assets/icon";
 import mastercard_img from "../../../assets/img/card/Mastercard.png";
 
-const CardBack = () => {
+const CardBack = ({ cardData }) => {
   return (
     <main className="flip-card-back  absolute w-full h-full py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-xl text-[--light-1]">
       <div className="w-full h-full flex flex-col justify-between">
-        <div className="w-full h-12 bg-[--gr-3] px-4"></div>
-
-        <div className="flex justify-between px-4">
-          <div className="flex justify-end items-center relative">
-            <AsteriskI />
-            <AsteriskI />
-            <AsteriskI />
-            <span className="absolute -top-3 left-0 text-xs">CVV</span>
+        <div className="w-full flex justify-end h-12 bg-[--gr-3] px-4">
+          <div className="flex justify-start items-center relative min-w-12">
+            {cardData.cvv ? (
+              <span>{cardData.cvv}</span>
+            ) : (
+              <>
+                <AsteriskI className="size-[15px]" />
+                <AsteriskI className="size-[15px]" />
+                <AsteriskI className="size-[15px]" />
+              </>
+            )}
+            {/*   <span className="absolute -top-0 left-0 text-xs">CVV</span> */}
           </div>
+        </div>
+
+        <div className="flex justify-end px-4">
           <img src={mastercard_img} alt="card" />
         </div>
       </div>

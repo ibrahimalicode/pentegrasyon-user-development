@@ -17,6 +17,8 @@ const ExtendLicenseSteps = ({
   setDocument,
   explanation,
   setExplanation,
+  cardData,
+  setCardData,
 }) => {
   return (
     <div className="w-full h-full bg-slate-50">
@@ -37,6 +39,8 @@ const ExtendLicenseSteps = ({
           setExplanation={setExplanation}
           document={document}
           setDocument={setDocument}
+          cardData={cardData}
+          setCardData={setCardData}
         />
       ) : (
         step === 3 && <ThirdStep step={step} />

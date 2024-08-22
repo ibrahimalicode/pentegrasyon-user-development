@@ -23,6 +23,9 @@ const CustomInput = ({
   disabled,
   onClick,
   readOnly,
+  onFocus,
+  onBlur,
+  inputRef,
 }) => {
   const eyeIconVis = <EyeI className="w-5" strokeWidth={2} />;
   const eyeIconInv = <EyeInv className="w-5" strokeWidth={2} />;
@@ -49,6 +52,7 @@ const CustomInput = ({
         {label}
       </label>
       <input
+        ref={inputRef}
         label={label}
         type={letIcon ? inputType : type}
         value={value}
@@ -61,6 +65,8 @@ const CustomInput = ({
         disabled={disabled}
         onClick={onClick}
         readOnly={readOnly}
+        onFocus={onFocus}
+        onBlur={onBlur}
         className={`px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:bg-[--white-1] autofill:outline-none outline-none ${className}`}
       />
       {letIcon && !icon && (

@@ -26,7 +26,7 @@ const LicensePackagesTable = ({
   ];
 
   function getPriceWithKDV(price) {
-    const KDV = kdvData.kdvPercentage / 100;
+    const KDV = kdvData?.kdvPercentage / 100;
     const totalPrice = price + price * KDV;
     return totalPrice;
   }
@@ -73,7 +73,7 @@ const LicensePackagesTable = ({
                   {kdvData?.kdvPercentage}%
                 </div>
                 <div className="w-28 text-[--black-2] flex items-center justify-center">
-                  {getPriceWithKDV(data.price)}
+                  {kdvData?.useKDV ? getPriceWithKDV(data.price) : data.price}
                 </div>
                 <div className="w-28 text-[--black-2] flex items-center justify-start">
                   {data.description}

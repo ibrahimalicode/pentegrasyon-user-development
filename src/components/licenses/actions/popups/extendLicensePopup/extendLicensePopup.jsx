@@ -47,8 +47,16 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
     options: [
       { label: "Banka Havale", value: "bankPayment" },
       { label: "Online Ödeme", value: "onlinePayment" },
-      { label: "Borç Yazdırma", value: "creditPayment" },
+      { label: "Açık Hesap", value: "creditPayment" },
     ],
+  });
+
+  const [cardData, setCardData] = useState({
+    userName: "",
+    cardNumber: "",
+    month: "",
+    year: "",
+    cvv: "",
   });
 
   const closeForm = () => {
@@ -161,7 +169,11 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
 
         <main className="w-full max-w-lg self-center">
           <div
-            className="w-full h-80 border-2 border-dashed border-[--light-3] rounded-sm relative"
+            className={`w-full h-80 border-2 border-dashed border-[--light-3] rounded-sm relative ${
+              paymentMethod.selectedOption.value === "onlinePayment" &&
+              step === 2 &&
+              "h-[30rem]"
+            }`}
             style={{
               clipPath: "inset(-200px 0px)",
             }}
@@ -182,6 +194,8 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
                   setDocument={setDocument}
                   explanation={explanation}
                   setExplanation={setExplanation}
+                  cardData={cardData}
+                  setCardData={setCardData}
                 />
               }
             />

@@ -28,7 +28,7 @@ const FirstStep = ({
 }) => {
   return (
     <div className="size-full flex flex-col">
-      <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
+      {/*       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
         <img
           src={imageSRCs[data.marketplaceId]}
           alt="MarketPlacePhoto"
@@ -44,7 +44,7 @@ const FirstStep = ({
         <span>
           <DownArrowI />{" "}
         </span>
-      </div>
+      </div> */}
 
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
         <img

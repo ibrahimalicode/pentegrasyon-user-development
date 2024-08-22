@@ -1,32 +1,67 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CustomInput from "../../common/customInput";
 import CustomPhoneInput from "../../common/customPhoneInput";
 import CustomTextarea from "../../common/customTextarea";
 import Button from "../../common/button";
 import { ArrowID, ArrowIU } from "../../../assets/icon";
 
-const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
-  const [openFatura, setOpenFatura] = useState(false);
-  const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    city: "",
-    district: "",
-    neigh: "",
-    address: "",
-  });
+const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
+  const yearRef = useRef(null);
+  const cvvRef = useRef(null);
+
+  const address = "Gloria Prestij Apartmanı, Esertepe Mh. 324. Cd. No:9 Ankara";
+  const city = "ANKARA";
+  const district = "Keçiören";
+  const neigh = "Ovacik";
+
+  const formatCardNumber = (value) => {
+    return value
+      .replace(/\D/g, "") // Remove non-digit characters
+      .replace(/(.{4})/g, "$1 ") // Add a space every 4 digits
+      .trim(); // Remove trailing space
+  };
+
+  const handleCardNumberChange = (e) => {
+    const formattedNumber = formatCardNumber(e);
+    setCardData((prev) => ({
+      ...prev,
+      cardNumber: formattedNumber,
+    }));
+  };
+
+  const handleMonthChange = (value) => {
+    if (value.length === 2) {
+      yearRef.current.focus();
+    }
+    setCardData((prev) => {
+      return {
+        ...prev,
+        month: value < 13 ? value : prev.month,
+      };
+    });
+  };
+
+  const handleYearChange = (value) => {
+    if (value.length === 2) {
+      cvvRef.current.focus();
+    }
+    setCardData((prev) => {
+      return {
+        ...prev,
+        year: value,
+      };
+    });
+  };
 
   return (
-    <form>
+    <div>
       {/* CARD INFO */}
       <div className="mt-4 flex flex-col gap-3">
         <div className="w-full">
           <CustomInput
-            label="Ad Soyad"
+            label="Kart Shibi"
             type="text"
-            placeholder="Ad Soyad"
+            placeholder="Kart Shibi"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
             className2="mt-[0] sm:mt-[0]"
             required
@@ -46,21 +81,14 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
         <div className="w-full">
           <CustomInput
             label="Kart No"
-            type="number"
+            type="text"
             placeholder="Kart No"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
             className2="mt-[0] sm:mt-[0]"
             required
-            maxLength={16}
+            maxLength={19}
             value={cardData.cardNumber}
-            onChange={(e) =>
-              setCardData((prev) => {
-                return {
-                  ...prev,
-                  cardNumber: e,
-                };
-              })
-            }
+            onChange={handleCardNumberChange}
             onClick={() => setFlip(false)}
           />
         </div>
@@ -74,36 +102,24 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
             required
             maxLength={2}
             value={cardData.month}
-            onChange={(e) =>
-              setCardData((prev) => {
-                return {
-                  ...prev,
-                  month: e < 13 ? e : prev.month,
-                };
-              })
-            }
+            onChange={handleMonthChange}
             onClick={() => setFlip(false)}
           />
           <CustomInput
+            inputRef={yearRef}
             label="Yıl"
-            type="number"
+            type="text"
             placeholder="Yıl"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
             className2="mt-[0] sm:mt-[0]"
             required
             maxLength={2}
             value={cardData.year}
-            onChange={(e) =>
-              setCardData((prev) => {
-                return {
-                  ...prev,
-                  year: e,
-                };
-              })
-            }
+            onChange={handleYearChange}
             onClick={() => setFlip(false)}
           />
           <CustomInput
+            inputRef={cvvRef}
             label="CVV"
             type="number"
             placeholder="CVV"
@@ -120,188 +136,22 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
                 };
               })
             }
-            onClick={() => setFlip(true)}
+            onFocus={() => setFlip(true)}
+            onBlur={() => setFlip(false)}
           />
         </div>
       </div>
 
       {/* FATURA ADDRESS */}
-      <div>
-        <div
-          className="w-full flex items-center border-b border-solid border-[--border-1] cursor-pointer mt-10"
-          onClick={() => setOpenFatura(!openFatura)}
-        >
-          <h1 className="w-full text-center text-base font-normal text-[--black-3]">
-            Fatura Bilgileriniz
-          </h1>
-          <span>
-            {openFatura ? (
-              <ArrowIU className="size-[14px]" />
-            ) : (
-              <ArrowID className="size-[14px]" />
-            )}
-          </span>
-        </div>
-
-        {openFatura && (
-          <div className="mt-4 flex flex-col gap-3">
-            <div className="w-full flex max-sm:flex-col gap-2">
-              <CustomInput
-                label="Ad"
-                placeholder="Ad"
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                type="text"
-                maxLength={20}
-                required
-                value={userData.firstName}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      firstName: e,
-                    };
-                  })
-                }
-              />
-              <CustomInput
-                label="Soyad"
-                placeholder="Soyad"
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                type="text"
-                maxLength={20}
-                required
-                value={userData.lastName}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      lastName: e,
-                    };
-                  })
-                }
-              />
-            </div>
-            <div className="w-full flex max-sm:flex-col gap-2">
-              <CustomInput
-                label="E-Posta"
-                placeholder="E-Posta"
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                type="email"
-                required
-                maxLength={30}
-                value={userData.email}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      email: e,
-                    };
-                  })
-                }
-              />
-              <CustomPhoneInput
-                label="Tel"
-                placeholder="Tel"
-                required
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                value={userData.phoneNumber}
-                onChange={(phone) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      phoneNumber: phone,
-                    };
-                  })
-                }
-              />
-            </div>
-            <div className="w-full flex max-sm:flex-col gap-2">
-              <CustomInput
-                label="İl"
-                placeholder="İl"
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                type="text"
-                required
-                maxLength={20}
-                value={userData.city}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      city: e,
-                    };
-                  })
-                }
-              />
-              <CustomInput
-                label="İlçe"
-                placeholder="İlçe"
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                type="text"
-                required
-                maxLength={20}
-                value={userData.district}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      district: e,
-                    };
-                  })
-                }
-              />
-            </div>
-            <div className="w-full flex max-sm:flex-col gap-2">
-              <CustomInput
-                label="Mahalle"
-                placeholder="Mahalle"
-                className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
-                className2="mt-[0] sm:mt-[0]"
-                type="text"
-                required
-                maxLength={20}
-                value={userData.neigh}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      neigh: e,
-                    };
-                  })
-                }
-              />
-              <CustomTextarea
-                label="Adres"
-                placeholder="Adres"
-                className="text-sm py-1 mt-1 max-sm:h-9"
-                type="text"
-                required
-                maxLength={40}
-                value={userData.address}
-                onChange={(e) =>
-                  setUserData((prev) => {
-                    return {
-                      ...prev,
-                      address: e,
-                    };
-                  })
-                }
-              />
-            </div>
-          </div>
-        )}
+      <div className="text-xs pt-2">
+        <span className="text-[--red-1]">
+          Bu ödemenin faturası aşağdaki adrese kesilecektir.
+        </span>
+        <p className="pt-1">
+          {address}, {city}/{district}/{neigh}
+        </p>
       </div>
-
-      <div className="w-full flex justify-end mt-8">
-        <Button text="Öde" className="px-5" />
-      </div>
-    </form>
+    </div>
   );
 };
 

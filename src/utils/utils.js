@@ -27,19 +27,22 @@ export function getRemainingDays(endDateTime) {
 }
 
 export const maxInput = (e) => {
-  const value = e.target.value;
-  const useVal = e.target.value.replace(/[^\d]/g, "");
+  const { value, type } = e.target;
   const maxAllowed = e.target?.maxLength;
 
-  if (!maxAllowed || maxAllowed === -1) {
-    return value;
+  let useVal = value;
+
+  // Handle different input types
+  if (type === "number") {
+    useVal = value.replace(/[^\d]/g, ""); // Only allow digits
   }
 
-  if (useVal.length > maxAllowed) {
-    return value.slice(0, maxAllowed);
+  // Enforce max length
+  if (maxAllowed && maxAllowed !== -1 && useVal.length > maxAllowed) {
+    return useVal.slice(0, maxAllowed);
   }
-  // console.log(value);
-  return value;
+
+  return useVal;
 };
 
 export function spacePhoneNumber(phoneNumber) {

@@ -25,6 +25,12 @@ const LicensePackagesTable = ({
     Siparisim,
   ];
 
+  function getPriceWithKDV(price) {
+    const KDV = kdvData.kdvPercentage / 100;
+    const totalPrice = price + price * KDV;
+    return totalPrice;
+  }
+
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[50rem] overflow-hidden">
@@ -67,7 +73,7 @@ const LicensePackagesTable = ({
                   {kdvData?.kdvPercentage}%
                 </div>
                 <div className="w-28 text-[--black-2] flex items-center justify-center">
-                  {data.totalPrice}
+                  {getPriceWithKDV(data.price)}
                 </div>
                 <div className="w-28 text-[--black-2] flex items-center justify-start">
                   {data.description}

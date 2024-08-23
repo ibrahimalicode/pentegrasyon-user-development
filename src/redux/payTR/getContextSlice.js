@@ -3,6 +3,7 @@ import { privateApi } from "../api";
 
 const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
+const PAYTRURL = import.meta.env.VITE_PAYTR_URL;
 
 const initialState = {
   loading: false,
@@ -54,7 +55,7 @@ export const getContext = createAsyncThunk(
   "PayTR/GetContext",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`http://localhost:3200/`);
+      const res = await api.get(PAYTRURL);
 
       // console.log(res.data);
       return res.data;

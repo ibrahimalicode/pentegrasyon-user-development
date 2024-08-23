@@ -1,21 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+//MODULES
 import toast from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
-import CustomInput from "../../common/customInput";
-import { usePopup } from "../../../context/PopupContext";
+//COMPONENTS
 import CloseI from "../../../assets/icon/close";
+import CustomInput from "../../common/customInput";
+import AddLicense from "../../licenses/addLicense";
 import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
+import { usePopup } from "../../../context/PopupContext";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 import LicensesTable from "../../../components/common/licensesTable";
-import AddLicense from "../../licenses/addLicense";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import { getCities } from "../../../redux/data/getCitiesSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   getRestaurantLicenses,
   resetGetRestaurantLicenses,
@@ -24,14 +27,13 @@ import {
   getRestaurant,
   resetGetRestaurant,
 } from "../../../redux/restaurants/getRestaurantSlice";
-import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const location = useLocation();
   const restaurantId = params.id;
-  const { userId } = location.state || {};
+  const { user, restaurant: restaurantInData } = location.state || {};
 
   const { loading, success, error, restaurantLicenses } = useSelector(
     (state) => state.licenses.getRestaurantLicenses
@@ -52,14 +54,6 @@ const RestaurantLicensesPage = () => {
     (state) => state.data.getNeighs
   );
 
-  const { restaurants } = useSelector(
-    (state) => state.restaurants.getRestaurants
-  );
-  const { restaurants: userRestaurants } = useSelector(
-    (state) => state.restaurants.getUserRestaurants
-  );
-  const { users } = useSelector((state) => state.users.getUsers);
-
   const [searchVal, setSearchVal] = useState("");
   const [filter, setFilter] = useState({
     city: null,
@@ -67,16 +61,11 @@ const RestaurantLicensesPage = () => {
     neighbourhood: null,
   });
 
-  const [restaurantData, setRestaurantData] = useState(null);
+  const [restaurantData, setRestaurantData] = useState(restaurantInData);
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const [userInfo, setUserInfo] = useState(() => {
-    if (users?.data) {
-      const user = users.data.filter((data) => data.id === userId)[0];
-      return user;
-    }
-  });
+  const [userInData, setuserInData] = useState(user);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -172,6 +161,19 @@ const RestaurantLicensesPage = () => {
     );
   }
 
+  function insertRestaurantsTOLicenses(inRestaurant) {
+    const updatedData = restaurantLicenses.data.map((license) => {
+      return {
+        ...license,
+        restaurantId: inRestaurant.id,
+        restaurantName: inRestaurant.name,
+      };
+    });
+    setRestaurantData(inRestaurant);
+    setLicensesData(updatedData);
+    setTotalItems(restaurantLicenses.totalCount);
+  }
+
   // GET LICENSES
   useEffect(() => {
     if (!licensesData) {
@@ -192,8 +194,11 @@ const RestaurantLicensesPage = () => {
 
   //GET RETSURANT
   useEffect(() => {
-    if (!restaurantData) {
+    if (!restaurantInData) {
+      console.log("Dispatch get restaurant, Restaurant Licenses page");
       dispatch(getRestaurant({ restaurantId }));
+    } else {
+      insertRestaurantsTOLicenses(restaurantInData);
     }
 
     return () => {
@@ -201,25 +206,7 @@ const RestaurantLicensesPage = () => {
         dispatch(resetGetRestaurant());
       }
     };
-  }, [restaurantData]);
-
-  // TOAST AND SET LICENSES
-  // useEffect(() => {
-  //   if (error) {
-  //     if (error?.message_TR) {
-  //       toast.error(error.message_TR);
-  //     } else {
-  //       toast.error("Something went wrong");
-  //     }
-  //     dispatch(resetGetRestaurantLicenses());
-  //   }
-
-  //   if (success) {
-  //     setLicensesData(restaurantLicenses.data);
-  //     setTotalItems(restaurantLicenses.totalCount);
-  //     dispatch(resetGetRestaurantLicenses());
-  //   }
-  // }, [loading, success, error, restaurantLicenses]);
+  }, [restaurantInData]);
 
   // TOAST AND SET LICENSES
 
@@ -234,16 +221,7 @@ const RestaurantLicensesPage = () => {
     }
 
     if (restaurantSuccess && restaurantLicenses?.data.length && restaurant) {
-      const updatedData = restaurantLicenses.data.map((license) => {
-        return {
-          ...license,
-          restaurantId: restaurant.id,
-          restaurantName: restaurant.name,
-        };
-      });
-      setRestaurantData(restaurant);
-      setLicensesData(updatedData);
-      setTotalItems(restaurantLicenses.totalCount);
+      insertRestaurantsTOLicenses(restaurant);
       dispatch(resetGetRestaurantLicenses());
     }
   }, [restaurantError, restaurantSuccess, restaurantLicenses]);
@@ -303,8 +281,7 @@ const RestaurantLicensesPage = () => {
   }, [neighsSuccess]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
-    usePopup();
+  const { contentRef, setContentRef } = usePopup();
   const filterLicense = useRef();
   useEffect(() => {
     if (filterLicense) {
@@ -330,9 +307,9 @@ const RestaurantLicensesPage = () => {
           onClick={() => window.history.back()}
         >
           {location.pathname.includes("users") &&
-            (userInfo ? (
+            (userInData ? (
               <>
-                {userInfo.fullName} <DoubleArrowRI className="size-3" />
+                {userInData.fullName} <DoubleArrowRI className="size-3" />
               </>
             ) : (
               <>

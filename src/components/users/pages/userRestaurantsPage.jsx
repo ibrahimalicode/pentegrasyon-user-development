@@ -1,29 +1,37 @@
+//MODULES
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+
+//COMP
+import CloseI from "../../../assets/icon/close";
+import CustomInput from "../../common/customInput";
+import CustomSelect from "../../common/customSelector";
+import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
+import { usePopup } from "../../../context/PopupContext";
+import AddRestaurant from "../../restaurants/addRestaurant";
+import RestaurantsTable from "../../common/restaurantsTable";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
+import RestaurantActions from "../userRestaurantActions/userRestaurantActions";
+
+//REDUX
+import { getCities } from "../../../redux/data/getCitiesSlice";
+import { getNeighs } from "../../../redux/data/getNeighsSlice";
+import { getUser } from "../../../redux/users/getUserByIdSlice";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   getUserRestaurants,
   resetGetUserRestaurantsState,
 } from "../../../redux/restaurants/getUserRestaurantsSlice";
-import TableSkeleton from "../../common/tableSkeleton";
-import toast from "react-hot-toast";
-import RestaurantsTable from "../../common/restaurantsTable";
-import CustomInput from "../../common/customInput";
-import CloseI from "../../../assets/icon/close";
-import CustomSelect from "../../common/customSelector";
-import { getCities } from "../../../redux/data/getCitiesSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
-import { getNeighs } from "../../../redux/data/getNeighsSlice";
-import { usePopup } from "../../../context/PopupContext";
-import RestaurantActions from "../userRestaurantActions/userRestaurantActions";
-import AddRestaurant from "../../restaurants/addRestaurant";
-import { getUser } from "../../../redux/users/getUserByIdSlice";
-import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 const UserRestaurants = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const userId = params.id;
+  const location = useLocation();
+  const { user: userInData } = location.state || {};
 
   const { loading, success, error, restaurants } = useSelector(
     (state) => state.restaurants.getUserRestaurants
@@ -51,7 +59,7 @@ const UserRestaurants = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(userInData);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -61,7 +69,7 @@ const UserRestaurants = () => {
     setSearchVal("");
     dispatch(
       getUserRestaurants({
-        userId: params.id,
+        userId,
         pageNumber,
         pageSize: itemsPerPage,
         searchKey: null,
@@ -78,7 +86,7 @@ const UserRestaurants = () => {
     if (!searchVal) return;
     dispatch(
       getUserRestaurants({
-        userId: params.id,
+        userId,
         pageNumber,
         pageSize: itemsPerPage,
         searchKey: searchVal,
@@ -96,7 +104,7 @@ const UserRestaurants = () => {
       setPageNumber(1);
       dispatch(
         getUserRestaurants({
-          userId: params.id,
+          userId,
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: searchVal,
@@ -110,7 +118,7 @@ const UserRestaurants = () => {
       if (filter) {
         dispatch(
           getUserRestaurants({
-            userId: params.id,
+            userId,
             pageNumber,
             pageSize: itemsPerPage,
             searchKey: null,
@@ -133,7 +141,7 @@ const UserRestaurants = () => {
   function handlePageChange(number) {
     dispatch(
       getUserRestaurants({
-        userId: params.id,
+        userId,
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
@@ -147,10 +155,11 @@ const UserRestaurants = () => {
 
   // GET USER
   useEffect(() => {
-    if (!userData && restaurantsData) {
-      dispatch(getUser({ userId: restaurantsData[0].userId }));
+    if (!userData) {
+      console.log("dispatch get user", userInData);
+      dispatch(getUser({ userId }));
     }
-  }, [userData, restaurantsData]);
+  }, [userData]);
 
   //SET USER
   useEffect(() => {

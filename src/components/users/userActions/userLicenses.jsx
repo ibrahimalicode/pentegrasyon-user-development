@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
+
+//COMP
 import { LicenseI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 
 const UserLicenses = ({ user }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/users/licenses/${user.id}`);
+    navigate(`/users/licenses/${user.id}`, { state: { user } });
   };
   return (
     <ActionButton

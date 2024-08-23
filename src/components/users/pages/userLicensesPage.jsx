@@ -1,36 +1,40 @@
-import { useEffect, useRef, useState } from "react";
+//MODULES
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
 
-import CustomInput from "../../common/customInput";
-import { usePopup } from "../../../context/PopupContext";
+//COMP
 import CloseI from "../../../assets/icon/close";
+import AddLicense from "../../licenses/addLicense";
+import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
+import { usePopup } from "../../../context/PopupContext";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 import LicensesTable from "../../../components/common/licensesTable";
 
 // REDUX
-import { useDispatch, useSelector } from "react-redux";
 import { getCities } from "../../../redux/data/getCitiesSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   getUserLicenses,
   resetGetUserLicenses,
 } from "../../../redux/licenses/getUserLicensesSlice";
-import AddLicense from "../../licenses/addLicense";
 import {
   getLicensesRestaurant,
   resetGetLicensesRestaurant,
 } from "../../../redux/restaurants/getRestaurantSlice";
 import { getUser } from "../../../redux/users/getUserByIdSlice";
-import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 const UserLicensesPage = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const userId = params.id;
+  const location = useLocation();
+  const { user: userInData } = location.state || {};
 
   const { loading, success, error, userLicenses } = useSelector(
     (state) => state.licenses.getUserLicenses
@@ -64,7 +68,7 @@ const UserLicensesPage = () => {
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(userInData);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -162,6 +166,7 @@ const UserLicensesPage = () => {
   // GET USER
   useEffect(() => {
     if (!userData) {
+      console.log("dipatch get user");
       dispatch(getUser({ userId }));
     }
   }, [userData]);

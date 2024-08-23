@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+
+//COMP
 import { RestourantI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 
@@ -6,7 +8,7 @@ const UserRestaurants = ({ user }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/users/restaurants/${user.id}`);
+    navigate(`/users/restaurants/${user.id}`, { state: { user } });
   };
   return (
     <ActionButton

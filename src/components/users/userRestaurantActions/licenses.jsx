@@ -1,20 +1,20 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+//COMP
 import { LicenseI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 
 const UserRestaurantLicenses = ({ restaurant }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const params = useParams();
+  const { user } = location.state || {};
 
   const handleClick = () => {
     const path = location.pathname.includes("users")
       ? "/users/restaurants/licenses/"
       : "/restaurants/licenses/";
 
-    navigate(`${path}${restaurant.id}`, {
-      state: { userId: params.id },
-    });
+    navigate(`${path}${restaurant.id}`, { state: { user, restaurant } });
   };
 
   return (

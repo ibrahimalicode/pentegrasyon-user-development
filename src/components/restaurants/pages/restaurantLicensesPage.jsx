@@ -192,13 +192,24 @@ const RestaurantLicensesPage = () => {
     }
   }, [licensesData]);
 
-  //GET RETSURANT
+  //TOAST AND SET LICENSES
   useEffect(() => {
-    if (!restaurantInData) {
-      console.log("Dispatch get restaurant, Restaurant Licenses page");
-      dispatch(getRestaurant({ restaurantId }));
-    } else {
-      insertRestaurantsTOLicenses(restaurantInData);
+    if (success) {
+      if (!restaurantInData) {
+        console.log("Dispatch get restaurant, Restaurant Licenses page");
+        dispatch(getRestaurant({ restaurantId }));
+      } else {
+        insertRestaurantsTOLicenses(restaurantInData);
+      }
+    }
+
+    if (error) {
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetRestaurantLicenses());
     }
 
     return () => {
@@ -206,10 +217,9 @@ const RestaurantLicensesPage = () => {
         dispatch(resetGetRestaurant());
       }
     };
-  }, [restaurantInData]);
+  }, [success, restaurantInData]);
 
-  // TOAST AND SET LICENSES
-
+  // TOAST AND SET RESTAURANT
   useEffect(() => {
     if (restaurantError) {
       if (restaurantError?.message_TR) {
@@ -220,11 +230,11 @@ const RestaurantLicensesPage = () => {
       dispatch(resetGetRestaurant());
     }
 
-    if (restaurantSuccess && restaurantLicenses?.data.length && restaurant) {
+    if (restaurantSuccess) {
       insertRestaurantsTOLicenses(restaurant);
       dispatch(resetGetRestaurantLicenses());
     }
-  }, [restaurantError, restaurantSuccess, restaurantLicenses]);
+  }, [restaurantError, restaurantSuccess, restaurant]);
 
   // GET AND SET CITIES
   useEffect(() => {

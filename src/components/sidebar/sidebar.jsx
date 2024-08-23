@@ -23,7 +23,7 @@ import ArrowR from "../../assets/icon/arrowR";
 import { usePopup } from "../../context/PopupContext";
 import { getAuth } from "../../redux/api";
 
-function Sidebar() {
+function Sidebar({ openSidebar, setOpenSidebar }) {
   const param = useParams();
   const sidebarRef = useRef();
   const localUser = useMemo(() => getAuth(), []);
@@ -112,7 +112,6 @@ function Sidebar() {
   const path = route.length > 1 ? route : "dashboard";
   // console.log(route);
 
-  const [openSidebar, setOpenSidebar] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState([]);
 
   useEffect(() => {
@@ -138,12 +137,12 @@ function Sidebar() {
       ref={sidebarRef}
     >
       <div className="flex flex-col w-full relative">
-        <div
+        {/* <div
           className="absolute -right-8 top-2/3 bg-[--white-1] py-8 pr-2 border-2 border-solid border-[--light-3] border-l-0 cursor-pointer lg:hidden"
           onClick={() => setOpenSidebar(!openSidebar)}
         >
           <ArrowR className="text-[--black-1] font-bold" />
-        </div>
+        </div> */}
         <header className="flex flex-col justify-center items-start p-6 w-full text-xl font-[500] leading-7 text-black whitespace-nowrap">
           <div className="flex gap-2">
             <img

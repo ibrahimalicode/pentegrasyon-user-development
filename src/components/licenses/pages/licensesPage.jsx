@@ -279,7 +279,6 @@ const LicensesPage = () => {
       ]);
     }
   }, [filterLicense]);
-
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}

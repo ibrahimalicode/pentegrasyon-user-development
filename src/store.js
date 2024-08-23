@@ -10,6 +10,7 @@ import licensesSlice from "./redux/licenses";
 import restaurantsSlice from "./redux/restaurants";
 import userSlice from "./redux/user";
 import usersSlice from "./redux/users";
+import getContextSlice from "./redux/payTR/getContextSlice";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     licensePackages: licensePackagesSlice,
     data: dataSlice,
     generalVars: generalVariablesSlice,
+    getContext: getContextSlice,
   },
 });
 

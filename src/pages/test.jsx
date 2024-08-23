@@ -16,12 +16,12 @@ const Test = () => {
   return (
     <section className="min-h-0 md:ml-[280px] px-[4%] pt-28 flex justify-center">
       <div className="w-[325px]">
-        <PaymentCard flip={flip} cardData={cardData} />
+        {/* <PaymentCard flip={flip} cardData={cardData} />
         <PaymentCardForm
           setFlip={setFlip}
           cardData={cardData}
           setCardData={setCardData}
-        />
+        /> */}
       </div>
     </section>
   );

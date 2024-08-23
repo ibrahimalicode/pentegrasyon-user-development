@@ -11,12 +11,14 @@ import LicensePackages from "./licensePackages";
 import Profile from "./profile";
 import Test from "./test";
 import Messages from "./messages";
+import { useState } from "react";
 
 const Home = () => {
+  const [openSidebar, setOpenSidebar] = useState(false);
   return (
     <section>
-      <Header />
-      <Sidebar />
+      <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+      <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Routes>
         <Route path="/*" element={<DashboardPage />} />
         <Route path="/dashboard/*" element={<DashboardPage />} />

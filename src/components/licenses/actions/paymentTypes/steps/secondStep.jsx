@@ -3,6 +3,7 @@ import OnlinePayment from "../onlinePayment";
 import CreditPayment from "../creditPayment";
 
 const SecondStep = ({
+  step,
   licenseData,
   document,
   setDocument,
@@ -11,10 +12,13 @@ const SecondStep = ({
   paymentMethod,
   cardData,
   setCardData,
+  userData,
+  setUserData,
 }) => {
+  const value = paymentMethod.selectedOption.value;
   return (
     <div className="flex w-full justify-center h-full overflow-y-auto">
-      {paymentMethod.selectedOption.value === "bankPayment" ? (
+      {value === "bankPayment" ? (
         <BankPayment
           licenseData={licenseData}
           document={document}
@@ -22,8 +26,13 @@ const SecondStep = ({
           explanation={explanation}
           setExplanation={setExplanation}
         />
-      ) : paymentMethod.selectedOption.value === "onlinePayment" ? (
-        <OnlinePayment cardData={cardData} setCardData={setCardData} />
+      ) : value === "onlinePayment" && step === 2 ? (
+        <OnlinePayment
+          cardData={cardData}
+          setCardData={setCardData}
+          userData={userData}
+          setUserData={setUserData}
+        />
       ) : (
         <CreditPayment />
       )}

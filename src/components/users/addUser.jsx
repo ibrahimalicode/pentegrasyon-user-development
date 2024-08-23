@@ -445,8 +445,8 @@ const AddUser = ({ onSuccess }) => {
                   <div className="flex gap-4">
                     <CustomInput
                       required={true}
-                      label="Resmi Ünvan"
-                      placeholder="Resmi Ünvan"
+                      label="İsim/Ünvan"
+                      placeholder="İsim/Ünvan"
                       className="py-[.45rem] text-sm"
                       value={userInvoice.title}
                       onChange={(e) => {

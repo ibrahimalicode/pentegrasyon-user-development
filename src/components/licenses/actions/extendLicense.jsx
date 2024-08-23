@@ -1,4 +1,5 @@
 // MODULES
+import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
 import { ExtendI } from "../../../assets/icon";
@@ -7,13 +8,15 @@ import ActionButton from "../../common/actionButton";
 import ExtendLicensePopup from "./popups/extendLicensePopup/extendLicensePopup";
 
 const ExtendLicense = ({ licenseData, onSuccess }) => {
+  const navigate = useNavigate();
   const { setShowPopup, setPopupContent } = usePopup();
 
   const handlePopup = (event) => {
     event.stopPropagation();
+    navigate("", { state: { currentLicense: licenseData } });
     setShowPopup(true);
     setPopupContent(
-      <ExtendLicensePopup data={licenseData} onSuccess={onSuccess} />
+      <ExtendLicensePopup currentLicense={licenseData} onSuccess={onSuccess} />
     );
   };
 

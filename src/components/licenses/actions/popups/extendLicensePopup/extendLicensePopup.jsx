@@ -1,23 +1,32 @@
+// MODULES
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+//COMP
+import StepBar from "../../../../common/stepBar";
+import StepFrame from "../../../../common/stepFrame";
+import ThirdStep from "../../paymentTypes/steps/thirdStep";
+import FirstStep from "../../paymentTypes/steps/firstStep";
+import SecondStep from "../../paymentTypes/steps/secondStep";
 import { usePopup } from "../../../../../context/PopupContext";
-import toast from "react-hot-toast";
+import { formatLisansPackages, getDateRange } from "../../../../../utils/utils";
+
+//REDUX
 import {
   resetUpdateLicenseDate,
   updateLicenseDate,
 } from "../../../../../redux/licenses/updateLicenseDateSlice";
-import { formatLisansPackages, getDateRange } from "../../../../../utils/utils";
 import {
   getLicensePackages,
   resetGetLicensePackages,
 } from "../../../../../redux/licensePackages/getLicensePackagesSlice";
-import { ArrowIL, ArrowIR, CancelI } from "../../../../../assets/icon";
-import StepBar from "../../../../common/stepBar";
-import StepFrame from "../../../../common/stepFrame";
-import ExtendLicenseSteps from "../../paymentTypes/steps/steps";
-import Button from "../../../../common/button";
+import BackButton from "./backButton";
+import ForwardButton from "./forwardButton";
+import CancelButton from "./cancelButton";
+import PayTRForm from "../../../../payment/form/PayTRForm";
 
-const ExtendLicensePopup = ({ data, onSuccess }) => {
+const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
@@ -50,13 +59,14 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
       { label: "Açık Hesap", value: "creditPayment" },
     ],
   });
-
+  const selectedMethod = paymentMethod.selectedOption.value || "";
+  const [userData, setUserData] = useState(null);
   const [cardData, setCardData] = useState({
-    userName: "",
-    cardNumber: "",
-    month: "",
-    year: "",
-    cvv: "",
+    userName: "PAYTR TEST",
+    cardNumber: "4355084355084358",
+    month: "12",
+    year: "24",
+    cvv: "000",
   });
 
   const closeForm = () => {
@@ -66,32 +76,36 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (
-      licenseData.id === null ||
-      licenseData.id === undefined ||
-      !paymentMethod.selectedOption.value
-    ) {
-      toast.error("Lütfen seçimleri tamamlayınız 😟");
-      return;
-    }
+
     if (step !== 2) {
       handleStep();
       return;
     }
-    if (!document) {
+    if (selectedMethod === "bankPayment" && !document) {
       toast.error("Lütfen seçimleri tamamlayınız 😟");
       return;
     }
+    return;
+    const formData = new FormData(e.target);
+    const action = "https://www.paytr.com/odeme";
+    fetch(action, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Payment Success:", data))
+      .catch((error) => console.error("Payment Error:", error));
 
     // MAKE THE PAMENT OR CHECK THE DOCUMENT
-    dispatch(
-      updateLicenseDate({
-        licenseId: data.id,
-        startDateTime: getDateRange(licenseData.time).startDateTime,
-        endDateTime: getDateRange(licenseData.time).endDateTime,
-      })
-    );
+    // dispatch(
+    //   updateLicenseDate({
+    //     licenseId: currentLicense.id,
+    //     startDateTime: getDateRange(licenseData.time).startDateTime,
+    //     endDateTime: getDateRange(licenseData.time).endDateTime,
+    //   })
+    // );
   }
+
   function handleStep() {
     setStep(step === 1 ? 2 : step === 2 ? 3 : 1);
   }
@@ -143,96 +157,78 @@ const ExtendLicensePopup = ({ data, onSuccess }) => {
 
     if (licensePackagesSuccess) {
       const currentMarketplace = licensePackages.data.filter(
-        (pack) => pack.marketplaceId === data.marketplaceId
+        (pack) => pack.marketplaceId === currentLicense.marketplaceId
       );
       setLicensePackagesData(formatLisansPackages(currentMarketplace));
     }
   }, [licensePackagesSuccess, licensePackagesError, licensePackages]);
 
+  const [inp, setInp] = useState("");
+
   return (
     <div className="flex flex-col items-center w-full text-base">
       <form
-        className="flex flex-col w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl"
-        onSubmit={handleSubmit}
+        className="flex flex-col w-full pt-12 pb-4 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl"
+        onSubmit={selectedMethod === "onlinePayment" ? undefined : handleSubmit}
+        action={
+          selectedMethod === "onlinePayment"
+            ? "https://www.paytr.com/odeme"
+            : undefined
+        }
+        method="post"
       >
-        <div className="absolute top-4 right-3 z-[50]">
-          <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
-            onClick={closeForm}
-          >
-            <CancelI />
-          </div>
-        </div>
+        <CancelButton closeForm={closeForm} />
 
         <h1 className="self-center text-xl font-bold">Lisans paketi uzat</h1>
         <StepBar step={step} steps={steps} />
 
-        <main className="w-full max-w-lg self-center">
+        <div className="w-full max-w-lg self-center">
           <div
             className={`w-full h-80 border-2 border-dashed border-[--light-3] rounded-sm relative ${
               paymentMethod.selectedOption.value === "onlinePayment" &&
               step === 2 &&
-              "h-[30rem]"
+              "h-[31rem]"
             }`}
             style={{
               clipPath: "inset(-200px 0px)",
             }}
           >
-            <StepFrame
-              step={step}
-              steps={steps}
-              component={
-                <ExtendLicenseSteps
-                  data={data}
-                  licenseData={licenseData}
-                  licensePackagesData={licensePackagesData}
-                  setLicenseData={setLicenseData}
-                  setPaymentMethod={setPaymentMethod}
-                  paymentMethod={paymentMethod}
-                  step={step}
-                  document={document}
-                  setDocument={setDocument}
-                  explanation={explanation}
-                  setExplanation={setExplanation}
-                  cardData={cardData}
-                  setCardData={setCardData}
-                />
-              }
-            />
+            <div className="w-full h-full bg-slate-50">
+              <StepFrame
+                step={step}
+                steps={steps}
+                component={[
+                  <FirstStep
+                    licenseData={licenseData}
+                    setLicenseData={setLicenseData}
+                    paymentMethod={paymentMethod}
+                    setPaymentMethod={setPaymentMethod}
+                    licensePackagesData={licensePackagesData}
+                  />,
+                  <SecondStep
+                    step={step}
+                    paymentMethod={paymentMethod}
+                    licenseData={licenseData}
+                    explanation={explanation}
+                    setExplanation={setExplanation}
+                    document={document}
+                    setDocument={setDocument}
+                    cardData={cardData}
+                    setCardData={setCardData}
+                    userData={userData}
+                    setUserData={setUserData}
+                  />,
+                  <ThirdStep step={step} />,
+                ]}
+              />
+            </div>
           </div>
-        </main>
-
-        <div className="w-full flex justify-end gap-2 pr-8 mt-8">
-          <Button
-            icon="Geri"
-            type="button"
-            // disabled={step !== 2}
-            className={`flex justify-center w-24 py-[.6rem] text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none ${
-              step === 1 && "hidden"
-            }`}
-            onClick={() => setStep(step - 1)}
-            text={
-              <div
-                className={`-translate-x-1 transition-transform duration-200 ease-in-out group-hover:-translate-x-2`}
-              >
-                <ArrowIL className="size-[16px]" />
-              </div>
-            }
-          />
-          <Button
-            text={step === 2 ? "Tamamla" : "Devam"}
-            type="submit"
-            className="flex justify-center w-24 py-[.6rem] text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none"
-            onClick={handleSubmit}
-            icon={
-              step === 2 ? null : (
-                <div className="translate-x-1 transition-transform duration-200 ease-in-out group-hover:translate-x-2">
-                  <ArrowIR className="size-[16px]" />
-                </div>
-              )
-            }
-          />
         </div>
+        <div className="w-full flex justify-end gap-2 pr-8 mt-8">
+          <BackButton step={step} setStep={setStep} />
+          <ForwardButton step={step} />
+        </div>
+        <PayTRForm cardData={cardData} />
       </form>
     </div>
   );

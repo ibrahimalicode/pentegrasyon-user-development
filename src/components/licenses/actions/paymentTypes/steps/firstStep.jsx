@@ -8,6 +8,7 @@ import Siparisim from "../../../../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../../../assets/img/packages/Yemeksepeti.png";
+import { useLocation } from "react-router-dom";
 
 const imageSRCs = [
   Getiryemek,
@@ -19,36 +20,19 @@ const imageSRCs = [
 ];
 
 const FirstStep = ({
-  data,
   licenseData,
   setLicenseData,
   paymentMethod,
   setPaymentMethod,
   licensePackagesData,
 }) => {
+  const location = useLocation();
+  const { currentLicense } = location?.state;
   return (
     <div className="size-full flex flex-col">
-      {/*       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
-        <img
-          src={imageSRCs[data.marketplaceId]}
-          alt="MarketPlacePhoto"
-          className="w-32 rounded-sm"
-        />
-
-        <p className="">{data.licensePackageTime} Yıllık</p>
-        <p className="">{data.licensePackageTotalPrice}</p>
-      </div>
-
-      <div className="w-full py-4 text-[--gr-1] flex justify-center">
-        <p className="sr-only">Alınacak lisans</p>
-        <span>
-          <DownArrowI />{" "}
-        </span>
-      </div> */}
-
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
         <img
-          src={imageSRCs[data.marketplaceId]}
+          src={imageSRCs[currentLicense.marketplaceId]}
           alt="MarketPlacePhoto"
           className="w-32 rounded-sm"
         />
@@ -57,7 +41,7 @@ const FirstStep = ({
         <p className="">{licenseData.price ? licenseData.price : "00.00"}</p>
       </div>
 
-      <div className="px-4 flex justify-between items-center pt-2 gap-4">
+      <div className="px-0 flex justify-between items-center pt-2 gap-4">
         <CustomSelect
           required={true}
           className="text-sm"

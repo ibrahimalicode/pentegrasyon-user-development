@@ -326,8 +326,8 @@ const EditUserInvoice = ({
           <div className="flex gap-4">
             <CustomInput
               required={true}
-              label="Resmi Ünvan"
-              placeholder="Resmi Ünvan"
+              label="İsim/Ünvan"
+              placeholder="İsim/Ünvan"
               className="py-[.45rem] text-sm"
               value={userInvoice.title}
               onChange={(e) => {
@@ -376,8 +376,8 @@ const EditUserInvoice = ({
             <CustomInput
               required={true}
               type="number"
-              label="VTic.Sic.No"
-              placeholder="VTic.Sic.No"
+              label="Tic.Sic.No"
+              placeholder="Tic.Sic.No"
               className="py-[.45rem] text-sm"
               value={userInvoice.taxNumber}
               onChange={(e) => {

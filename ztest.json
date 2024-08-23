@@ -8,8 +8,8 @@
   "password": "1",
   "userInvoiceAddressDTO": {
     "taxOffice": "Vergi Dairesi",
-    "taxNumber": "VTic.Sic.No",
-    "title": "Resmi Ünvan",
+    "taxNumber": "Tic.Sic.No",
+    "title": "İsim/Ünvan",
     "address": "Nooooow",
     "city": "ANKARA",
     "district": "KEÇİÖREN",

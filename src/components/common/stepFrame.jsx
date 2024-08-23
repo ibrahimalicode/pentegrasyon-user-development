@@ -1,7 +1,7 @@
 const StepFrame = ({ step, steps, component }) => {
   const stepsArray = Array.from({ length: steps }, (_, index) => index + 1);
 
-  return stepsArray.map((num) => (
+  return stepsArray.map((num, index) => (
     <div
       key={num}
       className={`absolute left-1 right-1 top-1 bottom-1 transition-transform duration-500 ease-in-out ${
@@ -14,7 +14,7 @@ const StepFrame = ({ step, steps, component }) => {
             : `translateX(${(num - step) * 40}rem)`,
       }}
     >
-      {component}
+      {component[index]}
     </div>
   ));
 };

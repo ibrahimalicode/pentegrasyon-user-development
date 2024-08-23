@@ -1,14 +1,32 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomInput from "../../common/customInput";
-import CustomPhoneInput from "../../common/customPhoneInput";
-import CustomTextarea from "../../common/customTextarea";
-import Button from "../../common/button";
-import { ArrowID, ArrowIU } from "../../../assets/icon";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getUser,
+  resetgetUser,
+  resetgetUserState,
+} from "../../../redux/users/getUserByIdSlice";
+import { useLocation } from "react-router-dom";
 
-const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
+const PaymentCardForm = ({
+  setFlip,
+  cardData,
+  setCardData,
+  userData,
+  setUserData,
+}) => {
+  const dispatch = useDispatch();
   const yearRef = useRef(null);
   const cvvRef = useRef(null);
+  const location = useLocation();
+  const { currentLicense } = location?.state;
+  const userId = currentLicense?.userId;
 
+  const { loading, success, error, user } = useSelector(
+    (state) => state.users.getUser
+  );
+
+  const [userInvData, setUserInvData] = useState(null);
   const address = "Gloria Prestij Apartmanı, Esertepe Mh. 324. Cd. No:9 Ankara";
   const city = "ANKARA";
   const district = "Keçiören";
@@ -53,15 +71,32 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
     });
   };
 
+  useEffect(() => {
+    if (!userData) {
+      dispatch(getUser({ userId }));
+      console.log("get user");
+    }
+    return () => {
+      if (user) dispatch(resetgetUser());
+    };
+  }, [userData]);
+
+  useEffect(() => {
+    if (success) {
+      setUserData(user);
+      setUserInvData(user.userInvoiceAddressDTO);
+      dispatch(resetgetUserState());
+    }
+  }, [user, success]);
   return (
-    <div>
+    <div className="w-full">
       {/* CARD INFO */}
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="mt-4 flex flex-col gap-3 max-w-[325px]">
         <div className="w-full">
           <CustomInput
-            label="Kart Shibi"
+            // label="Kart Sahibi"
             type="text"
-            placeholder="Kart Shibi"
+            placeholder="Kart Sahibi"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
             className2="mt-[0] sm:mt-[0]"
             required
@@ -80,7 +115,7 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
         </div>
         <div className="w-full">
           <CustomInput
-            label="Kart No"
+            // label="Kart No"
             type="text"
             placeholder="Kart No"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
@@ -94,7 +129,7 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
         </div>
         <div className="w-full flex gap-2">
           <CustomInput
-            label="Ay"
+            // label="Ay"
             type="number"
             placeholder="Ay"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
@@ -107,7 +142,7 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
           />
           <CustomInput
             inputRef={yearRef}
-            label="Yıl"
+            // label="Yıl"
             type="text"
             placeholder="Yıl"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
@@ -120,7 +155,7 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
           />
           <CustomInput
             inputRef={cvvRef}
-            label="CVV"
+            // label="CVV"
             type="number"
             placeholder="CVV"
             className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
@@ -143,13 +178,29 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData, userData }) => {
       </div>
 
       {/* FATURA ADDRESS */}
-      <div className="text-xs pt-2">
+      <div className="text-xs pt-2 w-full">
         <span className="text-[--red-1]">
           Bu ödemenin faturası aşağdaki adrese kesilecektir.
         </span>
         <p className="pt-1">
-          {address}, {city}/{district}/{neigh}
+          {userData && userData.fullName}, {userInvData && userInvData.title}
         </p>
+        {userInvData && (
+          <>
+            <p className="pt-1">{userInvData.taxNumber},</p>
+            <p>{userInvData.taxOffice},</p>
+            <p>
+              {userInvData.tradeRegistryNumber &&
+                userInvData.tradeRegistryNumber}
+              ,
+            </p>
+            <p>{userInvData.mersisNumber && userInvData.mersisNumber}</p>
+            <p>
+              {userInvData.address}/{userInvData.city}/{userInvData.district}/
+              {userInvData.neighbourhood}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

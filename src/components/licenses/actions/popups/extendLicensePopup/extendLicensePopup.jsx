@@ -85,7 +85,7 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
       toast.error("Lütfen seçimleri tamamlayınız 😟");
       return;
     }
-    return;
+
     const formData = new FormData(e.target);
     const action = "https://www.paytr.com/odeme";
     fetch(action, {
@@ -169,12 +169,13 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
     <div className="flex flex-col items-center w-full text-base">
       <form
         className="flex flex-col w-full pt-12 pb-4 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl"
-        onSubmit={selectedMethod === "onlinePayment" ? undefined : handleSubmit}
-        action={
-          selectedMethod === "onlinePayment"
-            ? "https://www.paytr.com/odeme"
-            : undefined
-        }
+        onSubmit={handleSubmit}
+        // onSubmit={selectedMethod === "onlinePayment" ? undefined : handleSubmit}
+        // action={
+        //   selectedMethod === "onlinePayment"
+        //     ? "https://www.paytr.com/odeme"
+        //     : undefined
+        // }
         method="post"
       >
         <CancelButton closeForm={closeForm} />

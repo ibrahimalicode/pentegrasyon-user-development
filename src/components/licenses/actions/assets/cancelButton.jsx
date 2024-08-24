@@ -1,4 +1,4 @@
-import { CancelI } from "../../../../../assets/icon";
+import { CancelI } from "../../../../assets/icon";
 
 const CancelButton = ({ closeForm }) => {
   return (

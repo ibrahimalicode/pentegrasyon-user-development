@@ -98,6 +98,7 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
         value: ent.id,
         label: ent?.name ? ent.name : ent?.fullName,
         id: ent.id,
+        userId: ent?.userId,
       };
     });
   }

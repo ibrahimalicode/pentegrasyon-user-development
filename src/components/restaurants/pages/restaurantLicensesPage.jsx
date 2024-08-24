@@ -6,7 +6,7 @@ import { useLocation, useParams } from "react-router-dom";
 //COMPONENTS
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
-import AddLicense from "../../licenses/addLicense";
+import AddLicense from "../../licenses/actions/addLicense";
 import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
@@ -25,7 +25,7 @@ import {
 } from "../../../redux/licenses/getRestaurantLicensesSlice";
 import {
   getRestaurant,
-  resetGetRestaurant,
+  resetGetRestaurantState,
 } from "../../../redux/restaurants/getRestaurantSlice";
 
 const RestaurantLicensesPage = () => {
@@ -196,7 +196,6 @@ const RestaurantLicensesPage = () => {
   useEffect(() => {
     if (success) {
       if (!restaurantInData) {
-        console.log("Dispatch get restaurant, Restaurant Licenses page");
         dispatch(getRestaurant({ restaurantId }));
       } else {
         insertRestaurantsTOLicenses(restaurantInData);
@@ -211,15 +210,9 @@ const RestaurantLicensesPage = () => {
       }
       dispatch(resetGetRestaurantLicenses());
     }
-
-    return () => {
-      if (restaurant) {
-        dispatch(resetGetRestaurant());
-      }
-    };
   }, [success, restaurantInData]);
 
-  // TOAST AND SET RESTAURANT
+  // TOAST AND SET RESTAURANT BY ID
   useEffect(() => {
     if (restaurantError) {
       if (restaurantError?.message_TR) {
@@ -227,11 +220,12 @@ const RestaurantLicensesPage = () => {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetRestaurant());
+      dispatch(resetGetRestaurantState());
     }
 
     if (restaurantSuccess) {
       insertRestaurantsTOLicenses(restaurant);
+      dispatch(resetGetRestaurantState());
       dispatch(resetGetRestaurantLicenses());
     }
   }, [restaurantError, restaurantSuccess, restaurant]);

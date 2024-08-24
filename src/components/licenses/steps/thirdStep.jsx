@@ -1,8 +1,8 @@
 import Lottie from "lottie-react";
 import { useEffect, useState } from "react";
 // ANIMATIONS
-import checkAnim from "../../../../../assets/anim/lottie/check_anim.json";
-import congraAnim from "../../../../../assets/anim/lottie/congra_anim.json";
+import checkAnim from "../../../assets/anim/lottie/check_anim.json";
+import congraAnim from "../../../assets/anim/lottie/congra_anim.json";
 
 const ThirdStep = ({ step }) => {
   const [playAnimation, setPlayAnimation] = useState(false);

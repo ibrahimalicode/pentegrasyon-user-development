@@ -356,7 +356,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
           <form onSubmit={handleSubmit}>
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
-                required={true}
+                required
                 label="Ad"
                 placeholder="Ad"
                 className="py-[.45rem] text-sm"
@@ -371,7 +371,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 }}
               />
               <CustomPhoneInput
-                required={true}
+                required
                 label="Telefone"
                 placeholder="Telefone"
                 className="py-[.45rem] text-sm"
@@ -391,7 +391,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
             <div className="grid sm:grid-cols-2 gap-x-4">
               {!userId && localUser && (
                 <CustomSelect
-                  required={true}
+                  required
                   label="Kullanıcı"
                   style={{ padding: "1px 0px" }}
                   className="text-sm"
@@ -415,7 +415,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 />
               )}
               <CustomSelect
-                required={true}
+                required
                 label="Şehir"
                 style={{ padding: "1px 0px" }}
                 className="text-sm"
@@ -436,7 +436,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
               />
 
               <CustomSelect
-                required={true}
+                required
                 label="İlçe"
                 placeholder="Ad"
                 style={{ padding: "1px 0px" }}
@@ -457,7 +457,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 }}
               />
               <CustomSelect
-                required={true}
+                required
                 label="Mahalle"
                 placeholder="Ad"
                 style={{ padding: "1px 0px" }}
@@ -478,7 +478,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 }}
               />
               <CustomTextarea
-                required={true}
+                required
                 label="Adres"
                 placeholder="Adres"
                 className={`text-sm max-sm:h-14 ${
@@ -504,7 +504,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 }`}
               >
                 <CustomInput
-                  required={true}
+                  required
                   label="Latitude"
                   placeholder="Latitude"
                   className="py-[.45rem] text-sm"
@@ -515,7 +515,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                   readOnly={true}
                 />
                 <CustomInput
-                  required={true}
+                  required
                   label="Longitude"
                   placeholder="Longitude"
                   className="py-[.45rem] text-sm"

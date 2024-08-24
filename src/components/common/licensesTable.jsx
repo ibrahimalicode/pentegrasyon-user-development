@@ -1,10 +1,9 @@
-import MenuI from "../../assets/icon/menu";
 import MarketPalceIds from "../../data/marketPlaceIds";
-import { formatDateString, getRemainingDays } from "../../utils/utils";
 import LicensesActions from "../licenses/actions/licensesActions";
-import EditLicenseIsActive from "../licenses/updateLicenseIsActive";
+import { formatDateString, getRemainingDays } from "../../utils/utils";
+import EditLicenseIsActive from "../licenses/actions/updateLicenseIsActive";
 
-const LicensesTable = ({ inData, Actions, totalItems, onSuccess }) => {
+const LicensesTable = ({ inData, totalItems, onSuccess }) => {
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">

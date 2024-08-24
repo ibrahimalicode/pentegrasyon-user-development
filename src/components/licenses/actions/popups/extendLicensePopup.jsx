@@ -4,48 +4,42 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import StepBar from "../../../../common/stepBar";
-import StepFrame from "../../../../common/stepFrame";
-import ThirdStep from "../../paymentTypes/steps/thirdStep";
-import FirstStep from "../../paymentTypes/steps/firstStep";
-import SecondStep from "../../paymentTypes/steps/secondStep";
-import { usePopup } from "../../../../../context/PopupContext";
-import { formatLisansPackages, getDateRange } from "../../../../../utils/utils";
+import BackButton from "../assets/backButton";
+import StepBar from "../../../common/stepBar";
+import ThirdStep from "../../steps/thirdStep";
+import FirstStep from "../../steps/firstStep";
+import SecondStep from "../../steps/secondStep";
+import StepFrame from "../../../common/stepFrame";
+import CancelButton from "../assets/cancelButton";
+import ForwardButton from "../assets/forwardButton";
+import PayTRForm from "../../../payment/form/PayTRForm";
+import { usePopup } from "../../../../context/PopupContext";
+
+//FUNC
+import { formatLisansPackages, getDateRange } from "../../../../utils/utils";
 
 //REDUX
 import {
   resetUpdateLicenseDate,
   updateLicenseDate,
-} from "../../../../../redux/licenses/updateLicenseDateSlice";
-import {
-  getLicensePackages,
-  resetGetLicensePackages,
-} from "../../../../../redux/licensePackages/getLicensePackagesSlice";
-import BackButton from "./backButton";
-import ForwardButton from "./forwardButton";
-import CancelButton from "./cancelButton";
-import PayTRForm from "../../../../payment/form/PayTRForm";
+} from "../../../../redux/licenses/updateLicenseDateSlice";
+import { extendByOnlinePay } from "../../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
-const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
+const ExtendLicensePopup = ({ onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
     (state) => state.licenses.updateLicenseDate
   );
-  const {
-    success: licensePackagesSuccess,
-    error: licensePackagesError,
-    licensePackages,
-  } = useSelector((state) => state.licensePackages.getLicensePackages);
+
   const { setShowPopup, setPopupContent } = usePopup();
 
   const steps = 3;
   const [step, setStep] = useState(1);
   const [document, setDocument] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [licensePackagesData, setLicensePackagesData] = useState([]);
-  const [licenseData, setLicenseData] = useState({
+  const [licensePackageData, setLicensePackageData] = useState({
     value: null,
     label: "Lisans Paketi Seç",
     id: null,
@@ -74,6 +68,10 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
     setShowPopup(false);
   };
 
+  function handleStep() {
+    setStep(step === 1 ? 2 : step === 2 ? 3 : 1);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -86,29 +84,21 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
       return;
     }
 
-    const formData = new FormData(e.target);
-    const action = "https://www.paytr.com/odeme";
-    fetch(action, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("Payment Success:", data))
-      .catch((error) => console.error("Payment Error:", error));
+    if (selectedMethod === "onlinePayment") {
+      const formData = new FormData(e.target);
+      dispatch(extendByOnlinePay({ formData }));
+    }
 
     // MAKE THE PAMENT OR CHECK THE DOCUMENT
     // dispatch(
     //   updateLicenseDate({
     //     licenseId: currentLicense.id,
-    //     startDateTime: getDateRange(licenseData.time).startDateTime,
-    //     endDateTime: getDateRange(licenseData.time).endDateTime,
+    //     startDateTime: getDateRange(licensePackageData.time).startDateTime,
+    //     endDateTime: getDateRange(licensePackageData.time).endDateTime,
     //   })
     // );
   }
 
-  function handleStep() {
-    setStep(step === 1 ? 2 : step === 2 ? 3 : 1);
-  }
   // TOAST
   useEffect(() => {
     if (loading) {
@@ -132,39 +122,6 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
     }
   }, [loading, success, error]);
 
-  // GET LICENSE PACKAGES
-  useEffect(() => {
-    if (!licensePackages) {
-      dispatch(getLicensePackages());
-    }
-    return () => {
-      if (licensePackages) {
-        dispatch(resetGetLicensePackages());
-      }
-    };
-  }, [licensePackages]);
-
-  // TOAST AND SET PACKAGES
-  useEffect(() => {
-    if (licensePackagesError) {
-      if (licensePackagesError?.message_TR) {
-        toast.error(licensePackagesError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetGetLicensePackages());
-    }
-
-    if (licensePackagesSuccess) {
-      const currentMarketplace = licensePackages.data.filter(
-        (pack) => pack.marketplaceId === currentLicense.marketplaceId
-      );
-      setLicensePackagesData(formatLisansPackages(currentMarketplace));
-    }
-  }, [licensePackagesSuccess, licensePackagesError, licensePackages]);
-
-  const [inp, setInp] = useState("");
-
   return (
     <div className="flex flex-col items-center w-full text-base">
       <form
@@ -176,7 +133,7 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
         //     ? "https://www.paytr.com/odeme"
         //     : undefined
         // }
-        method="post"
+        // method="post"
       >
         <CancelButton closeForm={closeForm} />
 
@@ -186,9 +143,7 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
         <div className="w-full max-w-lg self-center">
           <div
             className={`w-full h-80 border-2 border-dashed border-[--light-3] rounded-sm relative ${
-              paymentMethod.selectedOption.value === "onlinePayment" &&
-              step === 2 &&
-              "h-[31rem]"
+              selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
             }`}
             style={{
               clipPath: "inset(-200px 0px)",
@@ -200,16 +155,15 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
                 steps={steps}
                 component={[
                   <FirstStep
-                    licenseData={licenseData}
-                    setLicenseData={setLicenseData}
+                    licensePackageData={licensePackageData}
+                    setLicensePackageData={setLicensePackageData}
                     paymentMethod={paymentMethod}
                     setPaymentMethod={setPaymentMethod}
-                    licensePackagesData={licensePackagesData}
                   />,
                   <SecondStep
                     step={step}
                     paymentMethod={paymentMethod}
-                    licenseData={licenseData}
+                    licensePackageData={licensePackageData}
                     explanation={explanation}
                     setExplanation={setExplanation}
                     document={document}
@@ -229,7 +183,9 @@ const ExtendLicensePopup = ({ currentLicense, onSuccess }) => {
           <BackButton step={step} setStep={setStep} />
           <ForwardButton step={step} />
         </div>
-        <PayTRForm cardData={cardData} />
+        {selectedMethod === "onlinePayment" && step === 2 && (
+          <PayTRForm cardData={cardData} />
+        )}
       </form>
     </div>
   );

@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { usePopup } from "../../context/PopupContext";
+import { usePopup } from "../../../context/PopupContext";
 import { useEffect, useRef, useState } from "react";
-import CustomCheckbox from "../common/customCheckbox";
+import CustomCheckbox from "../../common/customCheckbox";
 import toast from "react-hot-toast";
 import {
   resetUpdateLicenseIsActiveState,
   updateLicenseIsActive,
-} from "../../redux/licenses/updateLicenseIsActiveSlice";
-import { CancelI } from "../../assets/icon";
+} from "../../../redux/licenses/updateLicenseIsActiveSlice";
+import { CancelI } from "../../../assets/icon";
 
 const EditLicenseIsActive = ({ licenseData, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();

@@ -1,22 +1,26 @@
-import CustomInput from "../../common/customInput";
-import { useEffect, useRef, useState } from "react";
+//MODULES
 import toast from "react-hot-toast";
-import CustomPagination from "../../common/pagination";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
+import AddRestaurant from "../addRestaurant";
 import CloseI from "../../../assets/icon/close";
+import CustomInput from "../../common/customInput";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
+import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
-import AddRestaurant from "../addRestaurant";
 import RestaurantsTable from "../../common/restaurantsTable";
 import RestaurantActions from "../../users/userRestaurantActions/userRestaurantActions";
 
 // REDUX
-import { useDispatch, useSelector } from "react-redux";
 import {
   getRestaurants,
   resetGetRestaurantsState,
 } from "../../../redux/restaurants/getRestaurantsSlice";
 import { getCities } from "../../../redux/data/getCitiesSlice";
+import { getNeighs } from "../../../redux/data/getNeighsSlice";
 
 const RestaurantsPage = () => {
   const dispatch = useDispatch();

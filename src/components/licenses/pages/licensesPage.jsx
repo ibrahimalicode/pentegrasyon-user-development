@@ -18,7 +18,7 @@ import {
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import LicensesTable from "../../common/licensesTable";
-import AddLicense from "../addLicense";
+import AddLicense from "../actions/addLicense";
 import {
   getLicensesRestaurant,
   resetGetLicensesRestaurant,

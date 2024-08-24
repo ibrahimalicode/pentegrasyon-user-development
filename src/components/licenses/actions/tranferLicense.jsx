@@ -1,10 +1,8 @@
-import { useDispatch } from "react-redux";
 import { usePopup } from "../../../context/PopupContext";
 import { TransferI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 
 const TransferLicense = ({ licensePackage, setOpenMenu, onSuccess }) => {
-  const dispatch = useDispatch();
   const { setShowPopup, setPopupContent } = usePopup();
 
   const handlePopup = (event) => {

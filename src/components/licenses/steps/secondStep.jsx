@@ -1,10 +1,10 @@
-import BankPayment from "../bankPayment";
-import OnlinePayment from "../onlinePayment";
-import CreditPayment from "../creditPayment";
+import OnlinePayment from "../paymentTypes/onlinePayment";
+import CreditPayment from "../paymentTypes/creditPayment";
+import BankPayment from "../paymentTypes/bankPayment";
 
 const SecondStep = ({
   step,
-  licenseData,
+  licensePackageData,
   document,
   setDocument,
   explanation,
@@ -18,9 +18,9 @@ const SecondStep = ({
   const value = paymentMethod.selectedOption.value;
   return (
     <div className="flex w-full justify-center h-full overflow-y-auto">
-      {value === "bankPayment" ? (
+      {value === "bankPayment" && step === 2 ? (
         <BankPayment
-          licenseData={licenseData}
+          licensePackageData={licensePackageData}
           document={document}
           setDocument={setDocument}
           explanation={explanation}

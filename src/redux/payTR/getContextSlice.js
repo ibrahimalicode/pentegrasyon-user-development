@@ -55,7 +55,7 @@ export const getContext = createAsyncThunk(
   "PayTR/GetContext",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(PAYTRURL);
+      const res = await api.get(`${PAYTRURL}context`);
 
       // console.log(res.data);
       return res.data;

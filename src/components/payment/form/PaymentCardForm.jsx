@@ -19,7 +19,7 @@ const PaymentCardForm = ({
   const yearRef = useRef(null);
   const cvvRef = useRef(null);
   const location = useLocation();
-  const { currentLicense } = location?.state;
+  const { currentLicense } = location?.state || {};
   const userId = currentLicense?.userId;
 
   const { loading, success, error, user } = useSelector(

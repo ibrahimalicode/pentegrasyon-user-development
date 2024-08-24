@@ -1,4 +1,4 @@
-import { ArrowIL } from "../../../../../assets/icon";
+import { ArrowIL } from "../../../../assets/icon";
 
 const BackButton = ({ step, setStep }) => {
   return (

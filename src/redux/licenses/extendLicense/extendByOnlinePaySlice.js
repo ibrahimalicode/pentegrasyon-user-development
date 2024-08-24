@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { privateApi } from "../api";
+import { privateApi } from "../../api";
 
 const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -43,13 +43,13 @@ const extendByOnlinePaySlice = createSlice({
 
 export const extendByOnlinePay = createAsyncThunk(
   "Licenses/Extend/extendByOnlinePay",
-  async ({ licenseId, paymentData }, { rejectWithValue }) => {
+  async ({ formData }, { rejectWithValue }) => {
     try {
-      const res = await api.put(
-        `${PAYTRURL}Licenses/Extend/extendByOnlinePay`,
-        {},
-        { params: { licenseId, paymentData } }
-      );
+      const res = await api.post("https://www.paytr.com/odeme", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log(res);
       return res.data;

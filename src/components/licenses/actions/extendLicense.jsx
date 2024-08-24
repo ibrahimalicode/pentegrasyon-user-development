@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
 import { ExtendI } from "../../../assets/icon";
-import { usePopup } from "../../../context/PopupContext";
 import ActionButton from "../../common/actionButton";
-import ExtendLicensePopup from "./popups/extendLicensePopup/extendLicensePopup";
+import { usePopup } from "../../../context/PopupContext";
+import ExtendLicensePopup from "./popups/extendLicensePopup";
 
 const ExtendLicense = ({ licenseData, onSuccess }) => {
   const navigate = useNavigate();

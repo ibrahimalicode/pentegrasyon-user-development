@@ -6,7 +6,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 //COMP
 import CloseI from "../../../assets/icon/close";
-import AddLicense from "../../licenses/addLicense";
+import AddLicense from "../../licenses/actions/addLicense";
 import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import PaymentCard from "../../../payment/card/card";
-import PaymentCardForm from "../../../payment/form/PaymentCardForm";
+import PaymentCard from "../../payment/card/card";
+import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 const OnlinePayment = ({ cardData, setCardData, userData, setUserData }) => {
   const [flip, setFlip] = useState(false);

@@ -87,8 +87,10 @@ function CardFront({ cardData }) {
               )}
               {lastFour.length > 0 && (
                 <span className="flex w-max">
-                  {lastFour.map((num) => (
-                    <span>{num}</span>
+                  {lastFour.map((num, index) => (
+                    <React.Fragment key={index}>
+                      <span>{num}</span>
+                    </React.Fragment>
                   ))}
                 </span>
               )}

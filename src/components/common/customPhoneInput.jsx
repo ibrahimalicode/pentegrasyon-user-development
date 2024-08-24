@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -11,6 +11,7 @@ const CustomPhoneInput = ({
   className,
   className2,
   autoComplete = "new-password",
+  pattern,
 }) => {
   // const [phone, setPhone] = useState(value);
 
@@ -58,6 +59,7 @@ const CustomPhoneInput = ({
         minLength={14}
         inputProps={{
           required: required,
+          pattern: "\\+90\\s[0-9]{3}\\s[0-9]{3}\\s[0-9]{2}\\s[0-9]{2}",
           autoComplete: autoComplete,
           className: `px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`,
         }}

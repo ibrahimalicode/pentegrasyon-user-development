@@ -27,10 +27,6 @@ const PaymentCardForm = ({
   );
 
   const [userInvData, setUserInvData] = useState(null);
-  const address = "Gloria Prestij Apartmanı, Esertepe Mh. 324. Cd. No:9 Ankara";
-  const city = "ANKARA";
-  const district = "Keçiören";
-  const neigh = "Ovacik";
 
   const formatCardNumber = (value) => {
     return value

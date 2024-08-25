@@ -61,12 +61,12 @@ function Header({ openSidebar, setOpenSidebar }) {
 
   return (
     <header className="fixed top-0 right-0 left-0 flex flex-col justify-center h-16 py-3.5 px-[4%] bg-white border-b border-slate-200 max-md:px-5 z-[99]">
-      <nav className="w-full flex justify-between items-center lg:hidden">
+      <nav className="w-full flex justify-between items-center">
         <div
           className="text-[--gr-1] cursor-pointer"
           onClick={() => setOpenSidebar(!openSidebar)}
         >
-          <MenuI />
+          <MenuI className="lg:hidden" />
         </div>
         <div className="flex gap-4">
           <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer">

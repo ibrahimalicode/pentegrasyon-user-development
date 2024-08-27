@@ -243,14 +243,10 @@ function AddLicensesPopup({ onSuccess }) {
     <div className="flex flex-col items-center w-full text-base">
       <form
         className="flex flex-col w-full pt-12 pb-4 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl"
-        onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         // onSubmit={selectedMethod === "onlinePayment" ? undefined : handleSubmit}
-        // action={
-        //   selectedMethod === "onlinePayment"
-        //     ? "https://www.paytr.com/odeme"
-        //     : undefined
-        // }
-        // method="post"
+        action="https://www.paytr.com/odeme"
+        method="post"
       >
         <CancelButton closeForm={closeForm} />
 
@@ -310,14 +306,3 @@ function AddLicensesPopup({ onSuccess }) {
 }
 
 export default AddLicensesPopup;
-
-{
-  /* <CustomSelect
-  label="Restoran"
-  required={true}
-  disabled={restaurantsLoading || restaurant}
-  value={restaurantData}
-  options={restaurantsData}
-  onChange={(selectedOption) => setRestaurantsData(selectedOption)}
-/>; */
-}

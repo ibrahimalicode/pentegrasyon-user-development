@@ -24,6 +24,7 @@ import {
   updateLicenseDate,
 } from "../../../../redux/licenses/updateLicenseDateSlice";
 import { extendByOnlinePay } from "../../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
+import axios from "axios";
 
 const ExtendLicensePopup = ({ onSuccess }) => {
   const toastId = useRef();
@@ -72,7 +73,7 @@ const ExtendLicensePopup = ({ onSuccess }) => {
     setStep(step === 1 ? 2 : step === 2 ? 3 : 1);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (step !== 2) {

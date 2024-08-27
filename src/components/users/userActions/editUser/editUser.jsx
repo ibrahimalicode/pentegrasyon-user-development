@@ -1,11 +1,11 @@
+import toast from "react-hot-toast";
+import EditUserdata from "./editUserData";
+import EditUserInvoice from "./editUserInvoice";
+import EditUserPassword from "./editUserPassword";
 import { useEffect, useRef, useState } from "react";
+import LoadingI2 from "../../../../assets/anim/spinner";
 import { CancelI, EditI } from "../../../../assets/icon";
 import { usePopup } from "../../../../context/PopupContext";
-import LoadingI2 from "../../../../assets/anim/spinner";
-import EditUserdata from "./editUserData";
-import EditUserPassword from "./editUserPassword";
-import EditUserInvoice from "./editUserInvoice";
-import toast from "react-hot-toast";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -125,7 +125,7 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
     }
   }, [citiesData]);
 
-  // LISTEN TO EDITUSERDATA, PASSWORD AND INVOICE
+  // LISTEN TO EDIT USERDATA, PASSWORD AND INVOICE
   useEffect(() => {
     if (
       updateDataLoading ||

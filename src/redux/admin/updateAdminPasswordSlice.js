@@ -11,17 +11,17 @@ const initialState = {
   data: null,
 };
 
-const addUserInvoiceSlice = createSlice({
-  name: "addUserInvoice",
+const updateAdminPasswordSlice = createSlice({
+  name: "updateAdminPassword",
   initialState: initialState,
   reducers: {
-    resetaddUserInvoice: (state) => {
+    resetUpdateAdminPassword: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
       state.data = null;
     },
-    resetaddUserInvoiceState: (state) => {
+    resetUpdateAdminPasswordState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -29,19 +29,19 @@ const addUserInvoiceSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(addUserInvoice.pending, (state) => {
+      .addCase(updateAdminPassword.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(addUserInvoice.fulfilled, (state, action) => {
+      .addCase(updateAdminPassword.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(addUserInvoice.rejected, (state, action) => {
+      .addCase(updateAdminPassword.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -50,43 +50,14 @@ const addUserInvoiceSlice = createSlice({
   },
 });
 
-export const addUserInvoice = createAsyncThunk(
-  "Users/addUserInvoice",
-  async (
-    {
-      userId,
-      taxOffice,
-      taxNumber,
-      title,
-      address,
-      city,
-      district,
-      neighbourhood,
-      tradeRegistryNumber,
-      mersisNumber,
-    },
-    { rejectWithValue }
-  ) => {
+export const updateAdminPassword = createAsyncThunk(
+  "Managers/UpdateManagerPassword",
+  async ({ newPassword, newPasswordConfirm }, { rejectWithValue }) => {
     try {
-      const res = await api.post(
-        `${baseURL}Invoices/AddUserInvoiceAddressByUserId`,
-        {
-          taxOffice,
-          taxNumber,
-          title,
-          address,
-          city: city.label,
-          district: district.label,
-          neighbourhood: neighbourhood.label,
-          tradeRegistryNumber,
-          mersisNumber,
-        },
-        {
-          params: {
-            userId,
-          },
-        }
-      );
+      const res = await api.put(`${baseURL}Managers/UpdateManagerPassword`, {
+        newPassword,
+        newPasswordConfirm,
+      });
 
       // console.log(res.data);
       return res.data;
@@ -100,6 +71,6 @@ export const addUserInvoice = createAsyncThunk(
   }
 );
 
-export const { resetaddUserInvoice, resetaddUserInvoiceState } =
-  addUserInvoiceSlice.actions;
-export default addUserInvoiceSlice.reducer;
+export const { resetUpdateAdminPassword, resetUpdateAdminPasswordState } =
+  updateAdminPasswordSlice.actions;
+export default updateAdminPasswordSlice.reducer;

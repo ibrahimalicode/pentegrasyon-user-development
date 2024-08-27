@@ -1,40 +1,34 @@
+//MODULE
 import toast from "react-hot-toast";
 import isEqual from "lodash/isEqual";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import CustomInput from "../../../common/customInput";
-import CustomSelect from "../../../common/customSelector";
-import { ArrowID, ArrowIU } from "../../../../assets/icon";
-import CustomTextarea from "../../../common/customTextarea";
+import Button from "../../common/button";
+import CustomInput from "../../common/customInput";
+import CustomSelect from "../../common/customSelector";
+import CustomTextarea from "../../common/customTextarea";
 
 //REDUX
-import { getDistricts } from "../../../../redux/data/getDistrictsSlice";
-import { getNeighs } from "../../../../redux/data/getNeighsSlice";
 import {
-  resetUpdateUserInvoice,
-  updateUserInvoiceById,
-} from "../../../../redux/users/updateUserInvoiceByIdSlice";
-import {
-  addUserInvoiceById,
+  addUserInvoice,
   resetaddUserInvoice,
-} from "../../../../redux/users/addUserInvoiceByIdSlice";
+} from "../../../redux/user/addUserInvoiceSlice";
+import {
+  updateUserInvoice,
+  resetUpdateUserInvoice,
+} from "../../../redux/user/updateUserInvoiceSlice";
+import { getNeighs } from "../../../redux/data/getNeighsSlice";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
+import { getUser } from "../../../redux/user/getUserSlice";
 
-const EditUserInvoice = ({
-  cities,
-  submit,
-  setSubmit,
-  setNoChange,
-  dispatcher,
-}) => {
-  const dispatch = useDispatch();
+const EditUserInvoice = ({ cities, user }) => {
   const toastId = useRef();
-
-  const { user } = useSelector((state) => state.users.getUser);
+  const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
-    (state) => state.users.updateInvoice
+    (state) => state.user.updateInvoice
   );
 
   const {
@@ -51,9 +45,8 @@ const EditUserInvoice = ({
     (state) => state.data.getNeighs
   );
 
-  const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
-  const [openFatura, setOpenFatura] = useState(false);
+  const [districts, setDistricts] = useState([]);
   const [userInvoiceBefore, setUserInvoiceBefore] = useState();
   const [userInvoice, setUserInvoice] = useState({
     taxOffice: "",
@@ -78,12 +71,12 @@ const EditUserInvoice = ({
       } else {
         toast.error("Something went wrong");
       }
-      setSubmit(false);
       dispatch(resetUpdateUserInvoice());
     } else if (success) {
       toastId.current && toast.dismiss(toastId.current);
       toast.success("Invoice updated successfully");
       dispatch(resetUpdateUserInvoice());
+      dispatch(getUser());
     }
   }, [loading, success, error, dispatch]);
 
@@ -93,17 +86,17 @@ const EditUserInvoice = ({
       toastId.current = toast.loading("Updating Invoice...");
     } else if (addInvoiceError) {
       toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
+      if (addInvoiceError?.message_TR) {
+        toast.error(addInvoiceError.message_TR);
       } else {
         toast.error("Something went wrong");
       }
-      setSubmit(false);
       dispatch(resetaddUserInvoice());
     } else if (addInvoiceSuccess) {
       toastId.current && toast.dismiss(toastId.current);
       toast.success("Invoice updated successfully");
       dispatch(resetaddUserInvoice());
+      dispatch(getUser());
     }
   }, [addInvoiceLoading, success, addInvoiceError, dispatch]);
 
@@ -156,56 +149,50 @@ const EditUserInvoice = ({
 
   // GET DISTRICTS WHENEVER INVOICE'S CITY CHANGES
   useEffect(() => {
-    if (openFatura) {
-      if (userInvoice.city?.id) {
-        dispatch(getDistricts({ cityId: userInvoice.city.id }));
-        dispatcher.current = "userInvoice";
-        setUserInvoice((prev) => {
-          return {
-            ...prev,
-            district: null,
-          };
-        });
-      } else if (userInvoice.city?.label) {
-        if (cities.length > 0) {
-          const cityId = cities.filter(
-            (city) =>
-              city.label.toLowerCase() === userInvoice.city.label.toLowerCase()
-          )[0]?.id;
-          if (cityId) {
-            dispatch(getDistricts({ cityId: cityId }));
-            dispatcher.current = "userInvoice";
-          }
+    if (userInvoice.city?.id) {
+      dispatch(getDistricts({ cityId: userInvoice.city.id }));
+      setUserInvoice((prev) => {
+        return {
+          ...prev,
+          district: null,
+        };
+      });
+    } else if (userInvoice.city?.label) {
+      if (cities.length > 0) {
+        const cityId = cities.filter(
+          (city) =>
+            city.label.toLowerCase() === userInvoice.city.label.toLowerCase()
+        )[0]?.id;
+        if (cityId) {
+          dispatch(getDistricts({ cityId: cityId }));
         }
       }
     }
-  }, [userInvoice.city, openFatura]);
+  }, [userInvoice.city]);
 
   // SET DISTRICTS
   useEffect(() => {
     if (districtsSuccess) {
-      if (dispatcher.current === "userInvoice") {
-        setDistricts(districtsData);
-        if (!userInvoice.district || !userInvoice.district?.id) {
-          const district = districtsData.filter(
-            (dist) =>
-              dist?.label.toLowerCase() ===
-              userInvoice.district?.label.toLowerCase()
-          )[0];
-          if (district) {
-            setUserInvoiceBefore((prev) => {
-              return {
-                ...prev,
-                district,
-              };
-            });
-            setUserInvoice((prev) => {
-              return {
-                ...prev,
-                district,
-              };
-            });
-          }
+      setDistricts(districtsData);
+      if (!userInvoice.district || !userInvoice.district?.id) {
+        const district = districtsData.filter(
+          (dist) =>
+            dist?.label.toLowerCase() ===
+            userInvoice.district?.label.toLowerCase()
+        )[0];
+        if (district) {
+          setUserInvoiceBefore((prev) => {
+            return {
+              ...prev,
+              district,
+            };
+          });
+          setUserInvoice((prev) => {
+            return {
+              ...prev,
+              district,
+            };
+          });
         }
       }
     }
@@ -213,39 +200,37 @@ const EditUserInvoice = ({
 
   // GET NEIGHBOURHOODS WHENEVER THE INVOICE DISTRICT CHANGES
   useEffect(() => {
-    if (openFatura) {
-      if (userInvoice.district?.id && userInvoice.city?.id) {
-        dispatch(
-          getNeighs({
-            cityId: userInvoice.city.id,
-            districtId: userInvoice.district.id,
-          })
-        );
-        setUserInvoice((prev) => {
-          return {
-            ...prev,
-            neighbourhood: null,
-          };
-        });
-      } else if (userInvoice.district?.label && userInvoice.city?.label) {
-        if (cities.length > 0 && districts.length > 0) {
-          const cityLabel = (userInvoice.city?.label).toLowerCase();
-          const districtLabel = (userInvoice.district?.label).toLowerCase();
+    if (userInvoice.district?.id && userInvoice.city?.id) {
+      dispatch(
+        getNeighs({
+          cityId: userInvoice.city.id,
+          districtId: userInvoice.district.id,
+        })
+      );
+      setUserInvoice((prev) => {
+        return {
+          ...prev,
+          neighbourhood: null,
+        };
+      });
+    } else if (userInvoice.district?.label && userInvoice.city?.label) {
+      if (cities.length > 0 && districts.length > 0) {
+        const cityLabel = (userInvoice.city?.label).toLowerCase();
+        const districtLabel = (userInvoice.district?.label).toLowerCase();
 
-          const cityId = cities.filter(
-            (city) => city.label.toLowerCase() === cityLabel
-          )[0]?.id;
+        const cityId = cities.filter(
+          (city) => city.label.toLowerCase() === cityLabel
+        )[0]?.id;
 
-          const districtId = districts.filter(
-            (district) => district.label.toLowerCase() === districtLabel
-          )[0]?.id;
-          if (cityId && districtId) {
-            dispatch(getNeighs({ cityId, districtId }));
-          }
+        const districtId = districts.filter(
+          (district) => district.label.toLowerCase() === districtLabel
+        )[0]?.id;
+        if (cityId && districtId) {
+          dispatch(getNeighs({ cityId, districtId }));
         }
       }
     }
-  }, [userInvoice.district, openFatura]);
+  }, [userInvoice.district]);
 
   // SET NEIGHBOURHOODS
   useEffect(() => {
@@ -275,59 +260,28 @@ const EditUserInvoice = ({
     }
   }, [neighsSuccess]);
 
-  useEffect(() => {
-    if (submit) {
-      if (openFatura) {
-        const equalData = isEqual(userInvoiceBefore, userInvoice);
-        if (!equalData) {
-          if (userInvoiceBefore) {
-            dispatch(
-              updateUserInvoiceById({ userId: user.id, ...userInvoice })
-            );
-            console.log({ userId: user.id, ...userInvoice });
-          } else {
-            dispatch(addUserInvoiceById({ userId: user.id, ...userInvoice }));
-          }
-          setNoChange((prev) => {
-            return {
-              ...prev,
-              userInv: false,
-            };
-          });
-        } else {
-          setSubmit(false);
-          setNoChange((prev) => {
-            return {
-              ...prev,
-              userInv: true,
-            };
-          });
-          // console.log("Her hangı bir deişiklik yapmadınız [user invoice]");
-        }
+  // SUBMIT
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const equalData = isEqual(userInvoiceBefore, userInvoice);
+
+    if (!equalData) {
+      if (userInvoiceBefore) {
+        dispatch(updateUserInvoice({ userId: user.id, ...userInvoice }));
+      } else {
+        dispatch(addUserInvoice({ userId: user.id, ...userInvoice }));
       }
+    } else {
+      toast.error("Hiç bir geğişiklik yapmadınız");
     }
-  }, [submit]);
+  }
 
   return (
-    <>
-      <div
-        className="w-full flex border-b border-solid border-[--border-1] cursor-pointer mt-14"
-        onClick={() => setOpenFatura(!openFatura)}
-      >
-        <h1 className="w-full text-center text-lg font-normal text-[--black-3]">
-          Fatura Adresi
-        </h1>
-        <span>
-          {openFatura ? (
-            <ArrowIU className="size-5" />
-          ) : (
-            <ArrowID className="size-5" />
-          )}
-        </span>
-      </div>
-      {openFatura && (
+    <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
+      <form className="w-full" onSubmit={handleSubmit}>
         <>
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-sm:flex-col mt-4">
             <CustomInput
               required={true}
               label="İsim/Ünvan"
@@ -344,7 +298,7 @@ const EditUserInvoice = ({
               }}
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-sm:flex-col">
             <CustomInput
               required={true}
               label="VKN veya TCKN"
@@ -376,7 +330,7 @@ const EditUserInvoice = ({
               }}
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-sm:flex-col">
             <CustomInput
               required={true}
               type="number"
@@ -410,7 +364,7 @@ const EditUserInvoice = ({
               }}
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-sm:flex-col">
             <CustomSelect
               required={true}
               label="Şehir"
@@ -454,7 +408,7 @@ const EditUserInvoice = ({
               }}
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-sm:flex-col">
             <CustomSelect
               required={true}
               label="Mahalle"
@@ -493,8 +447,16 @@ const EditUserInvoice = ({
             />
           </div>
         </>
-      )}
-    </>
+
+        <div className="flex justify-end mt-16">
+          <Button
+            text="Kaydet"
+            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+            type="submit"
+          />
+        </div>
+      </form>
+    </section>
   );
 };
 

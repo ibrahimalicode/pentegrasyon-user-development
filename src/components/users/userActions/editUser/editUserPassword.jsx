@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetUpdateUserPassword,
-  updateUserPassword,
-} from "../../../../redux/users/updateUserPasswordSlice";
+  updateUserPasswordById,
+} from "../../../../redux/users/updateUserPasswordByIdSlice";
 import { ArrowID, ArrowIU } from "../../../../assets/icon";
 
 const EditUserPassword = ({
@@ -65,7 +65,7 @@ const EditUserPassword = ({
     if (submit) {
       if (openPassword) {
         dispatch(
-          updateUserPassword({
+          updateUserPasswordById({
             targetUserId,
             newPassword: userPassword.password,
             newPasswordConfirm: userPassword.confirmPassword,

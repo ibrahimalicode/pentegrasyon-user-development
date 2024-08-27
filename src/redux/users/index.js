@@ -6,11 +6,11 @@ import getUserByIdSlice from "./getUserByIdSlice";
 import addUserSlice from "./addUserSlice";
 import deleteUserSlice from "./deleteUserSlice";
 import updateUserDataByIdSlice from "./updateUserDataByIdSlice";
-import adduserInvoiceSlice from "./adduserInvoiceSlice";
-import updateUserInvoiceSlice from "./updateUserInvoiceSlice";
-import updateUserPasswordSlice from "./updateUserPasswordSlice";
+import adduserInvoiceSlice from "./addUserInvoiceByIdSlice";
 import updateUserIsActiveSlice from "./updateUserIsActiveSlice";
 import updateUserIsVerifiedSlice from "./updateUserIsVerifiedSlice";
+import updateUserInvoiceByIdSlice from "./updateUserInvoiceByIdSlice";
+import updateUserPasswordByIdSlice from "./updateUserPasswordByIdSlice";
 
 const usersSlice = combineReducers({
   getUsers: getUsersSlice,
@@ -19,8 +19,8 @@ const usersSlice = combineReducers({
   delete: deleteUserSlice,
   updateUser: updateUserDataByIdSlice,
   addInvoice: adduserInvoiceSlice,
-  updateInvoice: updateUserInvoiceSlice,
-  updatePassword: updateUserPasswordSlice,
+  updateInvoice: updateUserInvoiceByIdSlice,
+  updatePassword: updateUserPasswordByIdSlice,
   updateIsActive: updateUserIsActiveSlice,
   updateIsVerified: updateUserIsVerifiedSlice,
 });

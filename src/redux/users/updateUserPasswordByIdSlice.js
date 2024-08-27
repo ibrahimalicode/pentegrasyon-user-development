@@ -11,7 +11,7 @@ const initialState = {
   data: null,
 };
 
-const updateUserPasswordSlice = createSlice({
+const updateUserPasswordByIdSlice = createSlice({
   name: "updateUserPassword",
   initialState: initialState,
   reducers: {
@@ -29,19 +29,19 @@ const updateUserPasswordSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(updateUserPassword.pending, (state) => {
+      .addCase(updateUserPasswordById.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(updateUserPassword.fulfilled, (state, action) => {
+      .addCase(updateUserPasswordById.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(updateUserPassword.rejected, (state, action) => {
+      .addCase(updateUserPasswordById.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -50,7 +50,7 @@ const updateUserPasswordSlice = createSlice({
   },
 });
 
-export const updateUserPassword = createAsyncThunk(
+export const updateUserPasswordById = createAsyncThunk(
   "Users/updateUserPassword",
   async (
     { targetUserId, newPassword, newPasswordConfirm },
@@ -83,5 +83,5 @@ export const updateUserPassword = createAsyncThunk(
 );
 
 export const { resetUpdateUserPassword, resetUpdateUserPasswordState } =
-  updateUserPasswordSlice.actions;
-export default updateUserPasswordSlice.reducer;
+  updateUserPasswordByIdSlice.actions;
+export default updateUserPasswordByIdSlice.reducer;

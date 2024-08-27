@@ -1,37 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
-import CustomInput from "../../common/customInput";
-import { getAuth } from "../../../redux/api";
-import CustomPhoneInput from "../../common/customPhoneInput";
-import { formatEmail } from "../../../utils/utils";
-import Button from "../../common/button";
-import CustomSelect from "../../common/customSelector";
-import toast from "react-hot-toast";
+//MOD
 import { isEqual } from "lodash";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
+import Button from "../../common/button";
+import CustomInput from "../../common/customInput";
+import { formatEmail } from "../../../utils/utils";
+import CustomSelect from "../../common/customSelector";
+import CustomPhoneInput from "../../common/customPhoneInput";
 
 // REDUX
-import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../../redux/user/getUserSlice";
-import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   resetUpdateUserData,
   updateUserData,
 } from "../../../redux/user/updateUserDataSlice";
 
-const EditUserProfile = () => {
+const EditUserProfile = ({ user, cities }) => {
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
     (state) => state.user.updateUserData
   );
-  const {
-    loading: getUserLoading,
-    success: getUserSuccess,
-    error: getUserError,
-    user,
-  } = useSelector((state) => state.user.getUser);
 
-  const { cities } = useSelector((state) => state.data.getCities);
   const { success: districtsSuccess, districts } = useSelector(
     (state) => state.data.getDistricts
   );
@@ -85,15 +79,9 @@ const EditUserProfile = () => {
     }
   }, [loading, success, error]);
 
-  // GET THE ADMIN OR THE USER
+  // SET USER
   useEffect(() => {
-    if (!user) {
-      dispatch(getUser());
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (getUserSuccess) {
+    if (user) {
       setUserDataBefore((pre) => {
         return {
           ...pre,
@@ -119,13 +107,11 @@ const EditUserProfile = () => {
         };
       });
     }
-  }, [getUserSuccess]);
+  }, [user]);
 
-  // GET CITIES IF THERE IS NOT
+  // GET AND SET CITIES IF THERE IS NOT
   useEffect(() => {
-    if (!cities) {
-      dispatch(getCities());
-    } else if (cities) {
+    if (cities) {
       setCitiesData(cities);
       if (!userData?.city?.id && userData?.city?.label) {
         const city = cities.filter(
@@ -156,121 +142,140 @@ const EditUserProfile = () => {
     }
   }, [userData.city]);
 
+  // SET DISTRICTS
   useEffect(() => {
     if (districtsSuccess) {
       setDistrictsData(districts);
+      if (!userData?.district?.id && userData?.district?.label) {
+        const district = districts.filter(
+          (district) => district.label === userData.district.label
+        )[0];
+        if (district) {
+          setUserDataBefore((pre) => {
+            return {
+              ...pre,
+              district,
+            };
+          });
+          setUserData((pre) => {
+            return {
+              ...pre,
+              district,
+            };
+          });
+        }
+      }
     }
   }, [districtsSuccess, districts]);
 
   return (
     <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
       <form className="w-full" onSubmit={handleSubmit}>
-        <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
-          <CustomInput
-            label="Ad"
-            required
-            className="rounded-2xl py-3.5"
-            value={userData.firstName}
-            onChange={(e) => {
-              setUserData((pre) => {
-                return {
-                  ...pre,
-                  firstName: e,
-                };
-              });
-            }}
-          />
-          <CustomInput
-            label="Soyad"
-            required
-            className="rounded-2xl py-3.5"
-            value={userData.lastName}
-            onChange={(e) => {
-              setUserData((pre) => {
-                return {
-                  ...pre,
-                  lastName: e,
-                };
-              });
-            }}
-          />
-        </div>
-        <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
-          <CustomPhoneInput
-            label="Telefon"
-            required
-            className="rounded-2xl py-3.5"
-            value={userData.phoneNumber}
-            onChange={(e) => {
-              setUserData((pre) => {
-                return {
-                  ...pre,
-                  phoneNumber: e,
-                };
-              });
-            }}
-          />
+        <>
+          <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
+            <CustomInput
+              label="Ad"
+              required
+              className="py-3.5"
+              value={userData.firstName}
+              onChange={(e) => {
+                setUserData((pre) => {
+                  return {
+                    ...pre,
+                    firstName: e,
+                  };
+                });
+              }}
+            />
+            <CustomInput
+              label="Soyad"
+              required
+              className="rounded-2xl py-3.5"
+              value={userData.lastName}
+              onChange={(e) => {
+                setUserData((pre) => {
+                  return {
+                    ...pre,
+                    lastName: e,
+                  };
+                });
+              }}
+            />
+          </div>
+          <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
+            <CustomPhoneInput
+              label="Telefon"
+              required
+              className="py-3.5"
+              value={userData.phoneNumber}
+              onChange={(e) => {
+                setUserData((pre) => {
+                  return {
+                    ...pre,
+                    phoneNumber: e,
+                  };
+                });
+              }}
+            />
 
-          <CustomInput
-            label="E-Posta"
-            required
-            className="rounded-2xl py-3.5"
-            value={userData.email}
-            onChange={(e) => {
-              setUserData((pre) => {
-                return {
-                  ...pre,
-                  email: formatEmail(e),
-                };
-              });
-            }}
-          />
-        </div>
-        <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
-          <CustomSelect
-            label="İl"
-            required
-            style={{
-              padding: ".5rem 0",
-              borderRadius: "1rem",
-            }}
-            options={citiesData}
-            value={userData?.city ? userData.city : { label: "Şehir seç" }}
-            onChange={(selectedOption) => {
-              setUserData((pre) => {
-                return {
-                  ...pre,
-                  city: selectedOption,
-                };
-              });
-            }}
-          />
-          <CustomSelect
-            label="İlçe"
-            required
-            style={{
-              padding: ".5rem 0",
-              borderRadius: "1rem",
-            }}
-            options={districtsData}
-            value={
-              userData?.district ? userData.district : { label: "İlçe seç" }
-            }
-            onChange={(selectedOption) => {
-              setUserData((pre) => {
-                return {
-                  ...pre,
-                  district: selectedOption,
-                };
-              });
-            }}
-          />
-        </div>
-
+            <CustomInput
+              label="E-Posta"
+              required
+              className="py-3.5"
+              value={userData.email}
+              onChange={(e) => {
+                setUserData((pre) => {
+                  return {
+                    ...pre,
+                    email: formatEmail(e),
+                  };
+                });
+              }}
+            />
+          </div>
+          <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
+            <CustomSelect
+              label="İl"
+              required
+              style={{
+                padding: ".5rem 0",
+              }}
+              options={citiesData}
+              value={userData?.city ? userData.city : { label: "Şehir seç" }}
+              onChange={(selectedOption) => {
+                setUserData((pre) => {
+                  return {
+                    ...pre,
+                    city: selectedOption,
+                  };
+                });
+              }}
+            />
+            <CustomSelect
+              label="İlçe"
+              required
+              style={{
+                padding: ".5rem 0",
+              }}
+              options={districtsData}
+              value={
+                userData?.district ? userData.district : { label: "İlçe seç" }
+              }
+              onChange={(selectedOption) => {
+                setUserData((pre) => {
+                  return {
+                    ...pre,
+                    district: selectedOption,
+                  };
+                });
+              }}
+            />
+          </div>
+        </>
         <div className="flex justify-end mt-16 sm:mt-52">
           <Button
             text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-0"
+            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-[0]"
             type="submit"
           />
         </div>

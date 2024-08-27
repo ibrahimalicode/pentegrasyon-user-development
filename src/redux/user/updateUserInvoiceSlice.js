@@ -68,34 +68,26 @@ export const updateUserInvoice = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const res = await api.put(
-        `${baseURL}Invoices/UpdateUserInvoiceAddressByUserId`,
-        {
-          taxOffice,
-          taxNumber,
-          title,
-          address,
-          city: city.label,
-          district: district.label,
-          neighbourhood: neighbourhood.label,
-          tradeRegistryNumber,
-          mersisNumber,
-        },
-        {
-          params: {
-            userId,
-          },
-        }
-      );
+      const res = await api.put(`${baseURL}Invoices/UpdateUserInvoiceAddress`, {
+        taxOffice,
+        taxNumber,
+        title,
+        address,
+        city: city.label,
+        district: district.label,
+        neighbourhood: neighbourhood.label,
+        tradeRegistryNumber,
+        mersisNumber,
+      });
 
       // console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
-      throw rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );

@@ -3,9 +3,13 @@ import EditUserProfile from "./editUserProfile";
 import EditAdminProfile from "./editAdminProfile";
 import { getAuth } from "../../../redux/api";
 
-const EditProfile = () => {
+const EditProfile = ({ user, cities }) => {
   const localUser = useMemo(() => getAuth(), []);
-  return localUser?.isManager ? <EditAdminProfile /> : <EditUserProfile />;
+  return localUser?.isManager ? (
+    <EditAdminProfile />
+  ) : (
+    <EditUserProfile user={user} cities={cities} />
+  );
 };
 
 export default EditProfile;

@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import CustomCheckbox from "../../../common/customCheckbox";
-import CustomInput from "../../../common/customInput";
-import CustomPhoneInput from "../../../common/customPhoneInput";
-import CustomSelect from "../../../common/customSelector";
-import { formatEmail } from "../../../../utils/utils";
+// MODULES
 import toast from "react-hot-toast";
 import isEqual from "lodash/isEqual";
+import { useEffect, useRef, useState } from "react";
+
+// COMP
+import CustomInput from "../../../common/customInput";
+import CustomSelect from "../../../common/customSelector";
+import CustomCheckbox from "../../../common/customCheckbox";
+import CustomPhoneInput from "../../../common/customPhoneInput";
+
+// FUNC
+import { formatEmail } from "../../../../utils/utils";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -22,8 +27,8 @@ const EditUserdata = ({
   setSubmit,
   setNoChange,
 }) => {
-  const dispatch = useDispatch();
   const toastId = useRef();
+  const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
     (state) => state.users.updateUser
@@ -68,7 +73,7 @@ const EditUserdata = ({
     }
   }, [loading, success, error, dispatch]);
 
-  // GET AND SET USER IF THERE IS NOT
+  // SET USER
   useEffect(() => {
     if (user) {
       setUserDataBefore({

@@ -15,7 +15,7 @@ const extendByOnlinePaySlice = createSlice({
   name: "extendByOnlinePay",
   initialState: initialState,
   reducers: {
-    resetextendByOnlinePay: (state) => {
+    resetExtendByOnlinePay: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -44,11 +44,15 @@ export const extendByOnlinePay = createAsyncThunk(
   "Licenses/Extend/extendByOnlinePay",
   async ({ formData }, { rejectWithValue }) => {
     try {
-      const res = await api.post("https://www.paytr.com/odeme", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await api.post(
+        `${PAYTRURL}Licenses/Extend/extendByOnlinePay`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log(res);
       return res.data;
@@ -62,5 +66,5 @@ export const extendByOnlinePay = createAsyncThunk(
   }
 );
 
-export const { resetextendByOnlinePay } = extendByOnlinePaySlice.actions;
+export const { resetExtendByOnlinePay } = extendByOnlinePaySlice.actions;
 export default extendByOnlinePaySlice.reducer;

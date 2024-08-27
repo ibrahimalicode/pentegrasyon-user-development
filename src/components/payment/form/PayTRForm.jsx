@@ -40,10 +40,9 @@ const PayTRForm = ({ cardData }) => {
   });
 
   useEffect(() => {
-    if (!context) {
-      dispatch(getContext());
-    }
-  }, [context]);
+    dispatch(getContext());
+    console.log("first");
+  }, []);
 
   useEffect(() => {
     if (success) {

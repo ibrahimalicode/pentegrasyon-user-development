@@ -6,12 +6,12 @@ import { useLocation, useParams } from "react-router-dom";
 
 //COMP
 import CloseI from "../../../assets/icon/close";
-import AddLicense from "../../licenses/actions/addLicense";
 import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
+import AddLicense from "../../licenses/actions/addLicense";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 import LicensesTable from "../../../components/common/licensesTable";
 
@@ -290,8 +290,7 @@ const UserLicensesPage = () => {
   }, [neighsSuccess]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
-    usePopup();
+  const { contentRef, setContentRef } = usePopup();
   const filterLicense = useRef();
   useEffect(() => {
     if (filterLicense) {

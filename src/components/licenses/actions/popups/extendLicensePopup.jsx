@@ -24,14 +24,13 @@ import {
   updateLicenseDate,
 } from "../../../../redux/licenses/updateLicenseDateSlice";
 import { extendByOnlinePay } from "../../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
-import axios from "axios";
 
 const ExtendLicensePopup = ({ onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
-    (state) => state.licenses.updateLicenseDate
+    (state) => state.licenses.extendByPay
   );
 
   const { setShowPopup, setPopupContent } = usePopup();
@@ -89,15 +88,6 @@ const ExtendLicensePopup = ({ onSuccess }) => {
       const formData = new FormData(e.target);
       dispatch(extendByOnlinePay({ formData }));
     }
-
-    // MAKE THE PAMENT OR CHECK THE DOCUMENT
-    // dispatch(
-    //   updateLicenseDate({
-    //     licenseId: currentLicense.id,
-    //     startDateTime: getDateRange(licensePackageData.time).startDateTime,
-    //     endDateTime: getDateRange(licensePackageData.time).endDateTime,
-    //   })
-    // );
   }
 
   // TOAST
@@ -112,14 +102,10 @@ const ExtendLicensePopup = ({ onSuccess }) => {
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetUpdateLicenseDate());
     } else if (success) {
       toastId.current && toast.dismiss(toastId.current);
-      onSuccess();
       handleStep();
-      setTimeout(() => closeForm(), 4000);
-      toast.success("Lisans barıyla uzatıldı 🥳🥳");
-      dispatch(resetUpdateLicenseDate());
+      // setTimeout(() => closeForm(), 4000);
     }
   }, [loading, success, error]);
 

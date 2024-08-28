@@ -2,7 +2,6 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
-import toast from "react-hot-toast";
 
 const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -53,7 +52,15 @@ const getRestaurantsSlice = createSlice({
 export const getRestaurants = createAsyncThunk(
   "Restaurants/getRestaurants",
   async (
-    { pageNumber, pageSize, searchKey, active, city, district, neighbourhood },
+    {
+      pageNumber = 0,
+      pageSize = 0,
+      searchKey = null,
+      active = null,
+      city = null,
+      district = null,
+      neighbourhood = null,
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -74,9 +81,9 @@ export const getRestaurants = createAsyncThunk(
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
-      throw rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );

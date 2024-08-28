@@ -5,7 +5,7 @@ const DoubleArrowRI = ({ className, strokeWidth = 2.5 }) => (
     viewBox="0 0 24 24"
     stroke="currentColor"
     strokeWidth={strokeWidth}
-    className={`size-6 ${className}`}
+    className={`size-3.5 ${className}`}
   >
     <path
       strokeLinecap="round"

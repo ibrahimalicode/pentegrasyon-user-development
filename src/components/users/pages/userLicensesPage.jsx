@@ -30,9 +30,9 @@ import {
 import { getUser } from "../../../redux/users/getUserByIdSlice";
 
 const UserLicensesPage = () => {
-  const dispatch = useDispatch();
   const params = useParams();
   const userId = params.id;
+  const dispatch = useDispatch();
   const location = useLocation();
   const { user: userInData } = location.state || {};
 

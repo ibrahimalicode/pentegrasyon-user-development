@@ -11,13 +11,13 @@ const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
           <thead>
             <tr className="bg-[--light-3] h-8 text-left">
               <th className="first:pl-4 font-normal">Ad Soyad</th>
-              <th className="irst:pl-4 font-normal">Rol</th>
-              <th className="irst:pl-4 font-normal">iletişim</th>
-              <th className="irst:pl-4 font-normal">Il</th>
-              <th className="irst:pl-4 font-normal">Durum</th>
-              <th className="irst:pl-4 font-normal text-center">Onaylı</th>
-              <th className="irst:pl-4 font-normal">Kayıt Tarihi</th>
-              <th className="irst:pl-4 font-normal text-center">İşlem</th>
+              <th className="font-normal">Rol</th>
+              <th className="font-normal">iletişim</th>
+              <th className="font-normal">Il</th>
+              <th className="font-normal">Durum</th>
+              <th className="font-normal text-center">Onaylı</th>
+              <th className="font-normal">Kayıt Tarihi</th>
+              <th className="font-normal text-center">İşlem</th>
             </tr>
           </thead>
 
@@ -54,7 +54,7 @@ const UsersTable = ({ users, itemsPerPage, onSuccess }) => {
                 <td className="whitespace-nowrap text-[--black-2] font-light first:font-normal">
                   {formatDateString(data.createdDateTime)}
                 </td>
-                <td className="text-center text-[--black-2] font-light first:font-normal relative">
+                <td className="w-14 text-[--black-2] font-light first:font-normal relative">
                   <UsersActions
                     index={index}
                     user={data}

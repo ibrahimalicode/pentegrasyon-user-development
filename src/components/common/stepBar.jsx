@@ -9,7 +9,7 @@ function StepBar({ step, steps }) {
   };
 
   return (
-    <div className="w-full flex items-center px-10 py-5">
+    <div className="w-full flex items-center py-5">
       {stepsArray.map((num, index) => (
         <React.Fragment key={index}>
           <div

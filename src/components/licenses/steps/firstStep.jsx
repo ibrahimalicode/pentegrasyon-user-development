@@ -14,8 +14,9 @@ import {
   resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import toast from "react-hot-toast";
-import { formatLisansPackages } from "../../../utils/utils";
+import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
+import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 
 const imageSRCs = [
   Getiryemek,
@@ -35,12 +36,20 @@ const FirstStep = ({
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { currentLicense } = location?.state || {};
+  const { currentLicense, restaurant } = location?.state || {};
 
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
   );
+  const { restaurants } = useSelector(
+    (state) => state.restaurants.getRestaurants
+  );
 
+  const restData = restaurant
+    ? { label: restaurant.name, value: restaurant.id }
+    : { label: "Restoran Seç" };
+  const [restaurantData, setRestaurantData] = useState(restData);
+  const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
   // GET LICENSE PACKAGES
@@ -76,13 +85,28 @@ const FirstStep = ({
     }
   }, [success, error, licensePackages]);
 
+  // GET RESTAURANTS
+  useEffect(() => {
+    if (!restaurant && !restaurantsData) {
+      dispatch(getRestaurants({}));
+    }
+  }, [restaurant, restaurantsData]);
+
+  //SET RESTAURANTS
+  useEffect(() => {
+    if (restaurants) {
+      console.log(restaurants.data);
+      setRestaurantsData(formatSelectorData(restaurants.data, false));
+    }
+  }, [restaurants]);
+
   return (
     <div className="size-full flex flex-col">
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
         <img
           src={imageSRCs[licensePackageData?.id]}
           alt="Pazaryeri"
-          className="w-32 rounded-sm"
+          className="w-32 h-10 rounded-sm"
         />
 
         <p className="">
@@ -93,7 +117,18 @@ const FirstStep = ({
         </p>
       </div>
 
-      <div className="px-0 flex justify-between items-center pt-2 gap-4">
+      <div className="px-0 grid grid-cols-2 justify-between items-center pt-2 gap-4">
+        <CustomSelect
+          required={true}
+          className="text-sm"
+          className2="mt-[0] sm:mt-[0] min-w-52"
+          value={restaurantData}
+          disabled={restData.value}
+          options={restaurantsData}
+          onChange={(selectedOption) => {
+            setRestaurantData(selectedOption);
+          }}
+        />
         <CustomSelect
           required={true}
           className="text-sm"
@@ -107,7 +142,7 @@ const FirstStep = ({
         <CustomSelect
           required={true}
           className="text-sm"
-          className2="mt-[0] sm:mt-[0]"
+          className2="mt-[0] sm:mt-[0] w-1/2"
           value={paymentMethod.selectedOption}
           options={paymentMethod.options}
           onChange={(selectedOption) => {

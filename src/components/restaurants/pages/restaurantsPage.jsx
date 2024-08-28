@@ -145,11 +145,6 @@ const RestaurantsPage = () => {
         getRestaurants({
           pageNumber,
           pageSize: itemsPerPage,
-          searchKey: null,
-          active: null,
-          city: null,
-          district: null,
-          neighbourhood: null,
         })
       );
     }

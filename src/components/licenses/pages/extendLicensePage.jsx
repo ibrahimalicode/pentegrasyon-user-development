@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import BackButton from "./assets/backButton";
+import BackButton from "../actions/assets/backButton";
 import StepBar from "../../common/stepBar";
-import ThirdStep from "../../steps/thirdStep";
-import FirstStep from "../../steps/firstStep";
-import SecondStep from "../../steps/secondStep";
+import ThirdStep from "../steps/thirdStep";
+import FirstStep from "../steps/firstStep";
+import SecondStep from "../steps/secondStep";
 import StepFrame from "../../common/stepFrame";
-import CancelButton from "./assets/cancelButton";
-import ForwardButton from "./assets/forwardButton";
+import CancelButton from "../actions/assets/cancelButton";
+import ForwardButton from "../actions/assets/forwardButton";
 import PayTRForm from "../../payment/form/PayTRForm";
 import { usePopup } from "../../../context/PopupContext";
 
@@ -25,16 +25,21 @@ import {
 } from "../../../redux/licenses/updateLicenseDateSlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
+import { useLocation } from "react-router-dom";
 
 const ExtendLicensePage = ({ onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { user, restaurant } = location.state || {};
 
   const { loading, success, error } = useSelector(
     (state) => state.licenses.updateLicenseDate
   );
 
   const { setShowPopup, setPopupContent } = usePopup();
+  const [restaurantData, setRestaurantData] = useState(restaurant);
+  const [userInData, setuserInData] = useState(user);
 
   const steps = 3;
   const [step, setStep] = useState(1);
@@ -89,15 +94,6 @@ const ExtendLicensePage = ({ onSuccess }) => {
       const formData = new FormData(e.target);
       dispatch(extendByOnlinePay({ formData }));
     }
-
-    // MAKE THE PAMENT OR CHECK THE DOCUMENT
-    // dispatch(
-    //   updateLicenseDate({
-    //     licenseId: currentLicense.id,
-    //     startDateTime: getDateRange(licensePackageData.time).startDateTime,
-    //     endDateTime: getDateRange(licensePackageData.time).endDateTime,
-    //   })
-    // );
   }
 
   // TOAST
@@ -118,7 +114,7 @@ const ExtendLicensePage = ({ onSuccess }) => {
       onSuccess();
       handleStep();
       setTimeout(() => closeForm(), 4000);
-      toast.success("Lisans barıyla uzatıldı 🥳🥳");
+      toast.success("Lisans başarıyla uzatıldı 🥳🥳");
       dispatch(resetUpdateLicenseDate());
     }
   }, [loading, success, error]);
@@ -126,37 +122,54 @@ const ExtendLicensePage = ({ onSuccess }) => {
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-full text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
-        Lisanslar <DoubleArrowRI className="size-3" /> Lisans uzatma
+      <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
+        <div
+          className="flex items-center gap-1"
+          onClick={() => window.history.back()}
+        >
+          {location.pathname.includes("users") &&
+            (userInData ? (
+              <>
+                {userInData.fullName} <DoubleArrowRI />
+              </>
+            ) : (
+              <>
+                "Kullanıcılar <DoubleArrowRI /> "
+              </>
+            ))}
+          {location.pathname.includes("restaurants") &&
+            (restaurantData ? (
+              <>
+                {restaurantData.name} <DoubleArrowRI />
+              </>
+            ) : (
+              <>
+                Restoranlar <DoubleArrowRI />
+              </>
+            ))}
+          Lisanslar
+          <DoubleArrowRI />
+          Lisansı Uzat
+        </div>
       </div>
 
       <div className="flex flex-col items-center w-full text-base">
         <form
-          className="flex flex-col w-full pt-12 pb-4 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative max-w-xl"
+          className="flex flex-col w-full pt-4 pb-4 text-[--black-2] relative max-w-xl"
           onSubmit={handleSubmit}
-          // onSubmit={selectedMethod === "onlinePayment" ? undefined : handleSubmit}
-          // action={
-          //   selectedMethod === "onlinePayment"
-          //     ? "https://www.paytr.com/odeme"
-          //     : undefined
-          // }
-          // method="post"
         >
-          <CancelButton closeForm={closeForm} />
-
-          <h1 className="self-center text-xl font-bold">Lisans paketi uzat</h1>
           <StepBar step={step} steps={steps} />
 
-          <div className="w-full max-w-lg self-center">
+          <div className="w-full self-center">
             <div
-              className={`w-full h-80 border-2 border-dashed border-[--light-3] rounded-sm relative ${
+              className={`w-full h-[31rem] border-2 border-dashed border-[--light-3] rounded-sm relative ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
               style={{
                 clipPath: "inset(-200px 0px)",
               }}
             >
-              <div className="w-full h-full bg-slate-50">
+              <div className="w-full h-full">
                 <StepFrame
                   step={step}
                   steps={steps}
@@ -186,12 +199,14 @@ const ExtendLicensePage = ({ onSuccess }) => {
               </div>
             </div>
           </div>
-          <div className="w-full flex justify-end gap-2 pr-8 mt-8">
+          <div className="w-full flex justify-end gap-2 mt-8">
             <BackButton step={step} setStep={setStep} />
-            <ForwardButton step={step} />
+            {step !== 3 && (
+              <ForwardButton step={step} selectedMethod={selectedMethod} />
+            )}
           </div>
           {selectedMethod === "onlinePayment" && step === 2 && (
-            <PayTRForm cardData={cardData} />
+            <PayTRForm cardData={cardData} setStep={setStep} />
           )}
         </form>
       </div>

@@ -51,7 +51,7 @@ const PayTRForm = ({ cardData, setStep }) => {
 
   useEffect(() => {
     if (success) {
-      setStep(3);
+      // setStep(3);
       setContextData(context);
       dispatch(resetGetContextState());
     }

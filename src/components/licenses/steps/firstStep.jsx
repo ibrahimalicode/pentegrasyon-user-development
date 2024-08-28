@@ -95,7 +95,6 @@ const FirstStep = ({
   //SET RESTAURANTS
   useEffect(() => {
     if (restaurants) {
-      console.log(restaurants.data);
       setRestaurantsData(formatSelectorData(restaurants.data, false));
     }
   }, [restaurants]);

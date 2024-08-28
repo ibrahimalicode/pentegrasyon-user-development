@@ -23,7 +23,10 @@ import {
   resetUpdateLicenseDate,
   updateLicenseDate,
 } from "../../../redux/licenses/updateLicenseDateSlice";
-import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
+import {
+  extendByOnlinePay,
+  resetExtendByOnlinePay,
+} from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 import { useLocation } from "react-router-dom";
 
@@ -35,6 +38,9 @@ const ExtendLicensePage = ({ onSuccess }) => {
 
   const { loading, success, error } = useSelector(
     (state) => state.licenses.updateLicenseDate
+  );
+  const { loading: extendLoading, success: extendSuccess } = useSelector(
+    (state) => state.licenses.extendByPay
   );
 
   const { setShowPopup, setPopupContent } = usePopup();
@@ -119,6 +125,13 @@ const ExtendLicensePage = ({ onSuccess }) => {
     }
   }, [loading, success, error]);
 
+  // EXTEND SUCCESS
+  useEffect(() => {
+    if (extendSuccess) {
+      setStep(3);
+    }
+  }, [extendSuccess]);
+
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
@@ -202,7 +215,11 @@ const ExtendLicensePage = ({ onSuccess }) => {
           <div className="w-full flex justify-end gap-2 mt-8">
             <BackButton step={step} setStep={setStep} />
             {step !== 3 && (
-              <ForwardButton step={step} selectedMethod={selectedMethod} />
+              <ForwardButton
+                step={step}
+                selectedMethod={selectedMethod}
+                disabled={extendLoading}
+              />
             )}
           </div>
           {selectedMethod === "onlinePayment" && step === 2 && (

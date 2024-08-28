@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContext } from "../../../redux/payTR/getContextSlice";
+import {
+  getContext,
+  resetGetContextState,
+} from "../../../redux/payTR/getContextSlice";
 
 const className =
   "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2";
@@ -13,6 +16,7 @@ const PayTRForm = ({ cardData }) => {
   );
 
   const [contextData, setContextData] = useState({
+    fetched: false,
     merchant_id: "",
     user_ip: "",
     merchant_oid: "",
@@ -40,19 +44,17 @@ const PayTRForm = ({ cardData }) => {
   });
 
   useEffect(() => {
-    dispatch(getContext());
-    console.log("first");
+    if (!contextData.fetched) {
+      dispatch(getContext());
+    }
   }, []);
 
   useEffect(() => {
     if (success) {
       setContextData(context);
+      dispatch(resetGetContextState());
     }
   }, [success]);
-
-  // className="space-y-4 max-w-max"
-  // action="https://www.paytr.com/odeme"
-  // method="post"
 
   return (
     <>

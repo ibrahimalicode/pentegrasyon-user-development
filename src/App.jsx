@@ -10,6 +10,7 @@ import UserVerifyLogin from "./pages/userVerify/loginVerify";
 import { PopupProvider } from "./context/PopupContext";
 import Popup from "./components/common/popup";
 import PrivacyPolicy from "./pages/privacyPolicy";
+import Test from "./pages/test";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/userVerifyLogin" element={<UserVerifyLogin />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/payment-success" element={<Test />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/*" element={<Home />} />
             <Route path="*" element={<NotFound />} />

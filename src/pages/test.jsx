@@ -1,27 +1,37 @@
-import { useState } from "react";
-import PaymentCard from "../components/payment/card/card";
-import PaymentCardForm from "../components/payment/form/PaymentCardForm";
+import Lottie from "lottie-react";
+import checkAnim from "../assets/anim/lottie/check_anim.json";
+import congraAnim from "../assets/anim/lottie/congra_anim.json";
+import { useEffect, useState } from "react";
 
 const Test = () => {
-  const [flip, setFlip] = useState(false);
+  const [playAnimation, setPlayAnimation] = useState(false);
 
-  const [cardData, setCardData] = useState({
-    userName: "",
-    cardNumber: "",
-    month: "",
-    year: "",
-    cvv: "",
-  });
+  useEffect(() => {
+    let timer;
+    timer = setTimeout(() => {
+      setPlayAnimation(true);
+    }, 2000);
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+        setPlayAnimation(false);
+      }
+    };
+  }, []);
 
   return (
-    <section className="min-h-0 md:ml-[280px] px-[4%] pt-28 flex justify-center">
-      <div className="w-[325px]">
-        {/* <PaymentCard flip={flip} cardData={cardData} />
-        <PaymentCardForm
-          setFlip={setFlip}
-          cardData={cardData}
-          setCardData={setCardData}
-        /> */}
+    <section className="px-[4%] pt-28 flex justify-center items-start">
+      <div className="w-[325px] overflow-visible">
+        <div className="w-full h-full bg-[--white-1] flex justify-center items-center relative overflow-visible">
+          <div className="absolute w-full h-full top-0 left-0 overflow-visible">
+            {playAnimation && (
+              <Lottie animationData={congraAnim} loop={false} />
+            )}
+          </div>
+          <div className="w-60">
+            <Lottie animationData={checkAnim} loop={false} />
+          </div>
+        </div>
       </div>
     </section>
   );

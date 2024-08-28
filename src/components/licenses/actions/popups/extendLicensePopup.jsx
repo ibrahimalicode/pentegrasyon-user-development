@@ -105,7 +105,6 @@ const ExtendLicensePopup = ({ onSuccess }) => {
     } else if (success) {
       toastId.current && toast.dismiss(toastId.current);
       handleStep();
-      // setTimeout(() => closeForm(), 4000);
     }
   }, [loading, success, error]);
 
@@ -130,7 +129,9 @@ const ExtendLicensePopup = ({ onSuccess }) => {
         <div className="w-full max-w-lg self-center">
           <div
             className={`w-full h-80 border-2 border-dashed border-[--light-3] rounded-sm relative ${
-              selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
+              selectedMethod === "onlinePayment" &&
+              (step === 2 || step === 3) &&
+              "h-[31rem]"
             }`}
             style={{
               clipPath: "inset(-200px 0px)",

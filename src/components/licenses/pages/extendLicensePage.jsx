@@ -58,7 +58,7 @@ const ExtendLicensePage = ({ onSuccess }) => {
     time: null,
   });
   const [paymentMethod, setPaymentMethod] = useState({
-    selectedOption: { label: "Ödeme Yöntemi Seç", value: null },
+    selectedOption: { label: "Online Ödeme", value: "onlinePayment" },
     options: [
       { label: "Banka Havale", value: "bankPayment" },
       { label: "Online Ödeme", value: "onlinePayment" },
@@ -175,12 +175,12 @@ const ExtendLicensePage = ({ onSuccess }) => {
 
           <div className="w-full self-center">
             <div
-              className={`w-full h-[31rem] border-2 border-dashed border-[--light-3] rounded-sm relative ${
+              className={`w-full h-[31rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow-hidden ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
-              style={{
-                clipPath: "inset(-200px 0px)",
-              }}
+              // style={{
+              //   clipPath: "inset(-200px 0px)",
+              // }}
             >
               <div className="w-full h-full">
                 <StepFrame

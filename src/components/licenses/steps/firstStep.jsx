@@ -1,4 +1,10 @@
+//MOD
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
 import CustomSelect from "../../common/customSelector";
 
 // IMAGES
@@ -8,14 +14,14 @@ import Siparisim from "../../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
-import { useEffect, useState } from "react";
+import DefaultMarketplace from "../../../assets/img/packages/Default-Marketplace.png";
+
+// REDUX
 import {
   getLicensePackages,
   resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
-import toast from "react-hot-toast";
 import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
-import { useDispatch, useSelector } from "react-redux";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 
 const imageSRCs = [
@@ -102,11 +108,24 @@ const FirstStep = ({
   return (
     <div className="size-full flex flex-col">
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
-        <img
-          src={imageSRCs[licensePackageData?.id]}
-          alt="Pazaryeri"
-          className="w-32 h-10 rounded-sm"
-        />
+        {licensePackageData?.id !== null ? (
+          <img
+            src={imageSRCs[licensePackageData?.id]}
+            alt="Pazaryeri"
+            className="w-32 h-10 rounded-sm"
+          />
+        ) : (
+          <div className="relative">
+            <img
+              src={DefaultMarketplace}
+              alt="Pazaryeri"
+              className="w-32 h-10 rounded-sm"
+            />
+            <span className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+              Pazaryeri
+            </span>
+          </div>
+        )}
 
         <p className="">
           {licensePackageData.time ? licensePackageData.time : "0"} Yıllık
@@ -116,32 +135,34 @@ const FirstStep = ({
         </p>
       </div>
 
-      <div className="px-0 grid grid-cols-2 justify-between items-center pt-2 gap-4">
+      <div className="flex flex-col pt-2 gap-4 md:px-4">
+        <div className="flex justify-between gap-4">
+          <CustomSelect
+            required={true}
+            className="text-sm"
+            className2="mt-[0] sm:mt-[0] max-w-80"
+            value={restaurantData}
+            disabled={restData.value}
+            options={restaurantsData}
+            onChange={(selectedOption) => {
+              setRestaurantData(selectedOption);
+            }}
+          />
+          <CustomSelect
+            required={true}
+            className="text-sm"
+            className2="mt-[0] sm:mt-[0] max-w-80"
+            value={licensePackageData}
+            options={licensePackagesData}
+            onChange={(selectedOption) => {
+              setLicensePackageData(selectedOption);
+            }}
+          />
+        </div>
         <CustomSelect
           required={true}
           className="text-sm"
-          className2="mt-[0] sm:mt-[0] min-w-52"
-          value={restaurantData}
-          disabled={restData.value}
-          options={restaurantsData}
-          onChange={(selectedOption) => {
-            setRestaurantData(selectedOption);
-          }}
-        />
-        <CustomSelect
-          required={true}
-          className="text-sm"
-          className2="mt-[0] sm:mt-[0] min-w-52"
-          value={licensePackageData}
-          options={licensePackagesData}
-          onChange={(selectedOption) => {
-            setLicensePackageData(selectedOption);
-          }}
-        />
-        <CustomSelect
-          required={true}
-          className="text-sm"
-          className2="mt-[0] sm:mt-[0] w-1/2"
+          className2="mt-[0] sm:mt-[0] w-[50%]"
           value={paymentMethod.selectedOption}
           options={paymentMethod.options}
           onChange={(selectedOption) => {

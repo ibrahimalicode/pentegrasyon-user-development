@@ -84,6 +84,8 @@ const PaymentCardForm = ({
       dispatch(resetgetUserState());
     }
   }, [user, success]);
+
+  console.log(userId);
   return (
     <div className="w-full">
       {/* CARD INFO */}
@@ -178,11 +180,10 @@ const PaymentCardForm = ({
         <span className="text-[--red-1]">
           Bu ödemenin faturası aşağdaki adrese kesilecektir.
         </span>
-        <p className="pt-1">
-          {userData && userData.fullName}, {userInvData && userInvData.title}
-        </p>
-        {userInvData && (
+        <p className="pt-1"></p>
+        {userInvData ? (
           <>
+            {userData && userData.fullName}, {userInvData && userInvData.title}
             <p className="pt-1">{userInvData.taxNumber},</p>
             <p>{userInvData.taxOffice},</p>
             <p>
@@ -196,6 +197,8 @@ const PaymentCardForm = ({
               {userInvData.neighbourhood}
             </p>
           </>
+        ) : (
+          <div>ekle</div>
         )}
       </div>
     </div>

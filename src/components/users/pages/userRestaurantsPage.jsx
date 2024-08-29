@@ -282,7 +282,7 @@ const UserRestaurants = () => {
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
-      <div className="w-max text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
+      <div className="w-max text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer max-sm:pb-8">
         {userData ? (
           <div
             className="flex items-center gap-1"

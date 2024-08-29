@@ -29,6 +29,7 @@ import {
 } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 import { useLocation } from "react-router-dom";
+import FourthStep from "../steps/fourthStep";
 
 const ExtendLicensePage = ({ onSuccess }) => {
   const toastId = useRef();
@@ -47,7 +48,7 @@ const ExtendLicensePage = ({ onSuccess }) => {
   const [restaurantData, setRestaurantData] = useState(restaurant);
   const [userInData, setuserInData] = useState(user);
 
-  const steps = 3;
+  const steps = 4;
   const [step, setStep] = useState(1);
 
   const [document, setDocument] = useState("");
@@ -177,7 +178,8 @@ const ExtendLicensePage = ({ onSuccess }) => {
                       document={document}
                       setDocument={setDocument}
                     />,
-                    <ThirdStep step={step} />,
+                    <ThirdStep setStep={setStep} />,
+                    <FourthStep step={step} />,
                   ]}
                 />
               </div>

@@ -8,7 +8,7 @@ import {
 const className =
   "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2";
 
-const PayTRForm = ({ cardData, setStep }) => {
+const PayTRForm = ({ cardData }) => {
   const dispatch = useDispatch();
 
   const { loading, success, error, context } = useSelector(
@@ -51,7 +51,6 @@ const PayTRForm = ({ cardData, setStep }) => {
 
   useEffect(() => {
     if (success) {
-      // setStep(3);
       setContextData(context);
       dispatch(resetGetContextState());
     }
@@ -79,7 +78,7 @@ const PayTRForm = ({ cardData, setStep }) => {
         <input
           type="hidden"
           name="card_number"
-          value={cardData.cardNumber}
+          value={cardData.cardNumber.replace(/\s/g, "")}
           className={className}
           onChange={() => {}}
         />

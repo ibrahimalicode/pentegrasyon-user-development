@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import LoadingI2 from "../../../../assets/anim/spinner";
 import { CancelI, EditI } from "../../../../assets/icon";
 import { usePopup } from "../../../../context/PopupContext";
+import ActionButton from "../../../common/actionButton";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,6 @@ import {
   resetgetUser,
 } from "../../../../redux/users/getUserByIdSlice";
 import { getCities } from "../../../../redux/data/getCitiesSlice";
-import ActionButton from "../../../common/actionButton";
 
 const EditUser = ({ user, onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
@@ -106,10 +106,11 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
   useEffect(() => {
     if (!user) {
       dispatch(getUser({ userId: inData.id }));
+      console.log("dispatch get user");
     }
 
     return () => {
-      if (user) {
+      if (user && !updateUserState.loading) {
         dispatch(resetgetUser());
         console.log("out");
       }
@@ -182,42 +183,45 @@ const EditUserPopup = ({ user: inData, onSuccess }) => {
 
         <h1 className="self-center text-2xl font-bold">Kullanıcı Düzenle</h1>
         <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
-          <form onSubmit={handleSubmit}>
-            <EditUserdata
-              cities={cities}
-              submit={submit}
-              setSubmit={setSubmit}
-              dispatcher={dispatcher}
-              setNoChange={setNoChange}
-            />
+          {user && !getUserError && (
+            <form onSubmit={handleSubmit}>
+              <EditUserdata
+                cities={cities}
+                submit={submit}
+                setSubmit={setSubmit}
+                dispatcher={dispatcher}
+                setNoChange={setNoChange}
+              />
 
-            <EditUserPassword
-              targetUserId={inData.id}
-              submit={submit}
-              setSubmit={setSubmit}
-              submitPass={submitPass}
-              setSubmitPass={setSubmitPass}
-              setNoChange={setNoChange}
-            />
+              <EditUserPassword
+                targetUserId={inData.id}
+                submit={submit}
+                setSubmit={setSubmit}
+                submitPass={submitPass}
+                setSubmitPass={setSubmitPass}
+                setNoChange={setNoChange}
+              />
 
-            <EditUserInvoice
-              cities={cities}
-              submit={submit}
-              setSubmit={setSubmit}
-              dispatcher={dispatcher}
-              setNoChange={setNoChange}
-            />
+              <EditUserInvoice
+                user={user}
+                cities={cities}
+                submit={submit}
+                setSubmit={setSubmit}
+                dispatcher={dispatcher}
+                setNoChange={setNoChange}
+              />
 
-            <div className="w-full flex justify-end mt-10">
-              <button
-                disabled={updateUserState.loading}
-                className="py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-lg"
-                type="submit"
-              >
-                Kaydet
-              </button>
-            </div>
-          </form>
+              <div className="w-full flex justify-end mt-10">
+                <button
+                  disabled={updateUserState.loading}
+                  className="py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-lg"
+                  type="submit"
+                >
+                  Kaydet
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>

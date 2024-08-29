@@ -11,6 +11,7 @@ import { PopupProvider } from "./context/PopupContext";
 import Popup from "./components/common/popup";
 import PrivacyPolicy from "./pages/privacyPolicy";
 import PaymentSuccess from "./pages/paymentSuccess";
+import PaymentFailed from "./pages/paymentFailed";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/userVerifyLogin" element={<UserVerifyLogin />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/*" element={<Home />} />
             <Route path="*" element={<NotFound />} />

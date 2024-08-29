@@ -23,6 +23,7 @@ import {
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
+import ForwardButton from "../actions/assets/forwardButton";
 
 const imageSRCs = [
   Getiryemek,
@@ -39,11 +40,15 @@ const FirstStep = ({
   paymentMethod,
   setPaymentMethod,
   actionType,
+  setStep,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { currentLicense, restaurant } = location?.state || {};
-
+  const { currentLicense } = location?.state || {};
+  const restaurant = {
+    name: currentLicense.restaurantName,
+    id: currentLicense.restaurantId,
+  };
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
   );
@@ -51,10 +56,12 @@ const FirstStep = ({
     (state) => state.restaurants.getRestaurants
   );
 
-  const restData = restaurant
-    ? { label: restaurant.name, value: restaurant.id }
-    : { label: "Restoran Seç" };
-  const [restaurantData, setRestaurantData] = useState(restData);
+  const [restaurantData, setRestaurantData] = useState({
+    label: currentLicense.restaurantName
+      ? currentLicense.restaurantName
+      : "Restoran Seç",
+    value: currentLicense.restaurantId ? currentLicense.restaurantId : null,
+  });
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
@@ -105,8 +112,13 @@ const FirstStep = ({
     }
   }, [restaurants]);
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    setStep(2);
+  }
+
   return (
-    <div className="size-full flex flex-col">
+    <form className="size-full flex flex-col" onSubmit={handleSubmit}>
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
         {licensePackageData?.id !== null ? (
           <img
@@ -142,7 +154,7 @@ const FirstStep = ({
             className="text-sm"
             className2="mt-[0] sm:mt-[0] max-w-80"
             value={restaurantData}
-            disabled={restData.value}
+            disabled={currentLicense.restaurantId}
             options={restaurantsData}
             onChange={(selectedOption) => {
               setRestaurantData(selectedOption);
@@ -159,23 +171,35 @@ const FirstStep = ({
             }}
           />
         </div>
-        <CustomSelect
-          required={true}
-          className="text-sm"
-          className2="mt-[0] sm:mt-[0] w-[50%]"
-          value={paymentMethod.selectedOption}
-          options={paymentMethod.options}
-          onChange={(selectedOption) => {
-            setPaymentMethod((prev) => {
-              return {
-                ...prev,
-                selectedOption,
-              };
-            });
-          }}
+
+        <div className="w-1/2 pr-2">
+          <CustomSelect
+            required={true}
+            className="text-sm"
+            className2="mt-[0] sm:mt-[0]"
+            value={paymentMethod.selectedOption}
+            options={paymentMethod.options}
+            onChange={(selectedOption) => {
+              setPaymentMethod((prev) => {
+                return {
+                  ...prev,
+                  selectedOption,
+                };
+              });
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="h-full flex justify-end items-end relative">
+        <ForwardButton
+          text="Devam"
+          letIcon={true}
+          type="submit"
+          className="absolute -bottom-16 -right-1"
         />
       </div>
-    </div>
+    </form>
   );
 };
 

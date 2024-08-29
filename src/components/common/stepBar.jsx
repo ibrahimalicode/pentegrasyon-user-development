@@ -1,6 +1,6 @@
 import React from "react";
 
-function StepBar({ step, steps }) {
+function StepBar({ step, steps, className }) {
   const stepsArray = Array.from({ length: steps }, (_, index) => index + 1);
   const colors = {
     main: ["--primary-1"],
@@ -9,7 +9,7 @@ function StepBar({ step, steps }) {
   };
 
   return (
-    <div className="w-full flex items-center py-5">
+    <div className={`w-full flex items-center py-5 ${className}`}>
       {stepsArray.map((num, index) => (
         <React.Fragment key={index}>
           <div

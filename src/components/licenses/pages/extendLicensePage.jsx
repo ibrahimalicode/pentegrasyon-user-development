@@ -49,8 +49,10 @@ const ExtendLicensePage = ({ onSuccess }) => {
 
   const steps = 3;
   const [step, setStep] = useState(1);
+
   const [document, setDocument] = useState("");
   const [explanation, setExplanation] = useState("");
+
   const [licensePackageData, setLicensePackageData] = useState({
     value: null,
     label: "Lisans Paketi Seç",
@@ -66,14 +68,6 @@ const ExtendLicensePage = ({ onSuccess }) => {
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
-  const [userData, setUserData] = useState(null);
-  const [cardData, setCardData] = useState({
-    userName: "PAYTR TEST",
-    cardNumber: "4355084355084358",
-    month: "12",
-    year: "24",
-    cvv: "000",
-  });
 
   const closeForm = () => {
     setPopupContent(null);
@@ -82,24 +76,6 @@ const ExtendLicensePage = ({ onSuccess }) => {
 
   function handleStep() {
     setStep(step === 1 ? 2 : step === 2 ? 3 : 1);
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    if (step !== 2) {
-      handleStep();
-      return;
-    }
-    if (selectedMethod === "bankPayment" && !document) {
-      toast.error("Lütfen seçimleri tamamlayınız 😟");
-      return;
-    }
-
-    if (selectedMethod === "onlinePayment") {
-      const formData = new FormData(e.target);
-      dispatch(extendByOnlinePay({ formData }));
-    }
   }
 
   // TOAST
@@ -167,20 +143,17 @@ const ExtendLicensePage = ({ onSuccess }) => {
       </div>
 
       <div className="flex flex-col items-center w-full text-base">
-        <form
-          className="flex flex-col w-full pt-4 pb-4 text-[--black-2] relative max-w-xl"
-          onSubmit={handleSubmit}
-        >
-          <StepBar step={step} steps={steps} />
+        <div className="flex flex-col w-full pt-4 pb-4 text-[--black-2] relative max-w-xl">
+          <StepBar step={step} steps={steps} className="px-10" />
 
           <div className="w-full self-center">
             <div
-              className={`w-full h-[31rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow-hidden ${
+              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow--hidden ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
-              // style={{
-              //   clipPath: "inset(-200px 0px)",
-              // }}
+              style={{
+                clipPath: "inset(-200px 0px)",
+              }}
             >
               <div className="w-full h-full">
                 <StepFrame
@@ -192,19 +165,17 @@ const ExtendLicensePage = ({ onSuccess }) => {
                       setLicensePackageData={setLicensePackageData}
                       paymentMethod={paymentMethod}
                       setPaymentMethod={setPaymentMethod}
+                      setStep={setStep}
                     />,
                     <SecondStep
                       step={step}
+                      setStep={setStep}
                       paymentMethod={paymentMethod}
                       licensePackageData={licensePackageData}
                       explanation={explanation}
                       setExplanation={setExplanation}
                       document={document}
                       setDocument={setDocument}
-                      cardData={cardData}
-                      setCardData={setCardData}
-                      userData={userData}
-                      setUserData={setUserData}
                     />,
                     <ThirdStep step={step} />,
                   ]}
@@ -212,20 +183,7 @@ const ExtendLicensePage = ({ onSuccess }) => {
               </div>
             </div>
           </div>
-          <div className="w-full flex justify-end gap-2 mt-8">
-            <BackButton step={step} setStep={setStep} />
-            {step !== 3 && (
-              <ForwardButton
-                step={step}
-                selectedMethod={selectedMethod}
-                disabled={extendLoading}
-              />
-            )}
-          </div>
-          {selectedMethod === "onlinePayment" && step === 2 && (
-            <PayTRForm cardData={cardData} setStep={setStep} />
-          )}
-        </form>
+        </div>
       </div>
     </section>
   );

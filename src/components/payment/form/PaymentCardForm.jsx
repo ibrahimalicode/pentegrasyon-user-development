@@ -1,32 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import CustomInput from "../../common/customInput";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getUser,
-  resetgetUser,
-  resetgetUserState,
-} from "../../../redux/users/getUserByIdSlice";
-import { useLocation } from "react-router-dom";
 
-const PaymentCardForm = ({
-  setFlip,
-  cardData,
-  setCardData,
-  userData,
-  setUserData,
-}) => {
-  const dispatch = useDispatch();
+const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
   const yearRef = useRef(null);
   const cvvRef = useRef(null);
-  const location = useLocation();
-  const { currentLicense } = location?.state || {};
-  const userId = currentLicense?.userId;
-
-  const { loading, success, error, user } = useSelector(
-    (state) => state.users.getUser
-  );
-
-  const [userInvData, setUserInvData] = useState(null);
 
   const formatCardNumber = (value) => {
     return value
@@ -67,28 +44,8 @@ const PaymentCardForm = ({
     });
   };
 
-  useEffect(() => {
-    if (!userData) {
-      dispatch(getUser({ userId }));
-      console.log("get user");
-    }
-    return () => {
-      if (user) dispatch(resetgetUser());
-    };
-  }, [userData]);
-
-  useEffect(() => {
-    if (success) {
-      setUserData(user);
-      setUserInvData(user.userInvoiceAddressDTO);
-      dispatch(resetgetUserState());
-    }
-  }, [user, success]);
-
-  console.log(userId);
   return (
-    <div className="w-full">
-      {/* CARD INFO */}
+    <div className="w-max">
       <div className="mt-4 flex flex-col gap-3 max-w-[325px]">
         <div className="w-full">
           <CustomInput
@@ -173,33 +130,6 @@ const PaymentCardForm = ({
             onBlur={() => setFlip(false)}
           />
         </div>
-      </div>
-
-      {/* FATURA ADDRESS */}
-      <div className="text-xs pt-2 w-full">
-        <span className="text-[--red-1]">
-          Bu ödemenin faturası aşağdaki adrese kesilecektir.
-        </span>
-        <p className="pt-1"></p>
-        {userInvData ? (
-          <>
-            {userData && userData.fullName}, {userInvData && userInvData.title}
-            <p className="pt-1">{userInvData.taxNumber},</p>
-            <p>{userInvData.taxOffice},</p>
-            <p>
-              {userInvData.tradeRegistryNumber &&
-                userInvData.tradeRegistryNumber}
-              ,
-            </p>
-            <p>{userInvData.mersisNumber && userInvData.mersisNumber}</p>
-            <p>
-              {userInvData.address}/{userInvData.city}/{userInvData.district}/
-              {userInvData.neighbourhood}
-            </p>
-          </>
-        ) : (
-          <div>ekle</div>
-        )}
       </div>
     </div>
   );

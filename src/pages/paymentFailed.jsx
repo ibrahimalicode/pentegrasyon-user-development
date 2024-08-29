@@ -8,11 +8,17 @@ const PaymentFailed = () => {
       </div>
 
       <div className="pt-8 text-center">
-        <p className="text-3xl mb-4">Ödeme Başarısız !</p>
-        <p>
+        <p className="text-3xl mb-4 text-[--black-2]">Ödeme Başarısız !</p>
+        <p className="text-[--gr-1]">
           İşleminiz teknik bir hata nedeniyle başarısız oldu. Lütfen tekrar
           deneyin.
         </p>
+      </div>
+
+      <div className="w-full flex justify-center pt-14">
+        <button className="flex items-center py-2.5 whitespace-nowrap px-4 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none">
+          Geri dön
+        </button>
       </div>
     </section>
   );

@@ -36,7 +36,7 @@ const PaymentSuccess = () => {
 
   return (
     <section className="min-h-0 flex justify-center items-start">
-      <div className="w-[325px] overflow-visible">
+      <div className="w-[325px] overflow-visible relative">
         <div className="w-full h-full bg-[--white-1] flex justify-center items-center relative overflow-visible">
           <div className="absolute w-full h-full top-0 left-0">
             {playAnimation && (
@@ -55,6 +55,12 @@ const PaymentSuccess = () => {
               delay={4000}
             />
           </div>
+        </div>
+
+        <div className="absolute -bottom-28 right-14">
+          <button className="flex items-center py-2.5 whitespace-nowrap px-4 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none">
+            Lisanslara git
+          </button>
         </div>
       </div>
     </section>

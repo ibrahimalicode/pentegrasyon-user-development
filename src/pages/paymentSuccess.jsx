@@ -57,7 +57,7 @@ const PaymentSuccess = () => {
           </div>
         </div>
 
-        <div className="absolute -bottom-28 right-14">
+        <div className="w-full flex justify-center pt-16">
           <button className="flex items-center py-2.5 whitespace-nowrap px-4 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none">
             Lisanslara git
           </button>

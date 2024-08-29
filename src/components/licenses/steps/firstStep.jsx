@@ -45,10 +45,8 @@ const FirstStep = ({
   const dispatch = useDispatch();
   const location = useLocation();
   const { currentLicense } = location?.state || {};
-  const restaurant = {
-    name: currentLicense.restaurantName,
-    id: currentLicense.restaurantId,
-  };
+  const { restaurantName, restaurantId } = currentLicense || {};
+
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
   );
@@ -57,10 +55,8 @@ const FirstStep = ({
   );
 
   const [restaurantData, setRestaurantData] = useState({
-    label: currentLicense.restaurantName
-      ? currentLicense.restaurantName
-      : "Restoran Seç",
-    value: currentLicense.restaurantId ? currentLicense.restaurantId : null,
+    label: restaurantName ? restaurantName : "Restoran Seç",
+    value: restaurantId ? restaurantId : null,
   });
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
@@ -100,10 +96,10 @@ const FirstStep = ({
 
   // GET RESTAURANTS
   useEffect(() => {
-    if (!restaurant && !restaurantsData) {
+    if (!currentLicense && !restaurantsData) {
       dispatch(getRestaurants({}));
     }
-  }, [restaurant, restaurantsData]);
+  }, [currentLicense, restaurantsData]);
 
   //SET RESTAURANTS
   useEffect(() => {
@@ -154,7 +150,7 @@ const FirstStep = ({
             className="text-sm"
             className2="mt-[0] sm:mt-[0] max-w-80"
             value={restaurantData}
-            disabled={currentLicense.restaurantId}
+            disabled={restaurantId}
             options={restaurantsData}
             onChange={(selectedOption) => {
               setRestaurantData(selectedOption);

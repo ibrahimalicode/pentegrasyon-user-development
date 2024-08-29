@@ -162,6 +162,7 @@ const RestaurantLicensesPage = () => {
   }
 
   function insertRestaurantsTOLicenses(inRestaurant) {
+    if (!restaurantLicenses) return;
     const updatedData = restaurantLicenses.data.map((license) => {
       return {
         ...license,

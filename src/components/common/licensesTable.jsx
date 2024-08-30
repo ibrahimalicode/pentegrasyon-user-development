@@ -10,9 +10,9 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
         <table className="w-full text-sm font-light">
           <thead>
             <tr className="bg-[--light-3] h-8 text-left">
-              <th className="first:pl-4 font-normal">Restoran</th>
-              <th className="font-normal">Pazaryeri</th>
-              <th className="font-normal">Başlangıç Tarihi</th>
+              <th className="pl-4 font-normal">Pazaryeri</th>
+              <th className="font-normal">Restoran</th>
+              <th className="font-normal">Kullanıcı</th>
               <th className="font-normal">Bitiş Tarihi</th>
               <th className="font-normal">Kalan Gün</th>
               <th className="font-normal">Durum</th>
@@ -28,14 +28,14 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                   totalItems < 8 ? "" : "last:border-b-0"
                 } `}
               >
-                <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
-                  {data.restaurantName}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
                   {MarketPalceIds[data.marketplaceId].value}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {formatDateString(data.startDateTime)}
+                  {data.restaurantName}
+                </td>
+                <td className="whitespace-nowrap text-[--black-2] font-light">
+                  {data.userName}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {formatDateString(data.endDateTime)}

@@ -23,6 +23,10 @@ import {
   getLicensesRestaurant,
   resetGetLicensesRestaurant,
 } from "../../../redux/restaurants/getRestaurantSlice";
+import {
+  getMergedUsers,
+  resetGetMergedUsers,
+} from "../../../redux/users/getUserByIdSlice";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -37,6 +41,11 @@ const LicensesPage = () => {
   } = useSelector(
     (state) => state.restaurants.getRestaurant.licensesRestaurant
   );
+  const {
+    success: mergedUsersSucc,
+    error: mergedUsersError,
+    users,
+  } = useSelector((state) => state.users.getUser.mergedUsers);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -168,7 +177,7 @@ const LicensesPage = () => {
     }
   }, [licensesData]);
 
-  // TOAST AND SET LICENSES
+  // TOAST GET AND SET LICENSES OR LICENSES RESTAURANT
   useEffect(() => {
     if (error) {
       if (error?.message_TR) {
@@ -183,7 +192,7 @@ const LicensesPage = () => {
     }
   }, [success, error, licenses]);
 
-  // TOAST AND SET LICENSES
+  // TOAST AND GET MERGED USERS
   useEffect(() => {
     if (withRestaurantError) {
       if (withRestaurantError?.message_TR) {
@@ -194,11 +203,9 @@ const LicensesPage = () => {
       dispatch(resetGetLicensesRestaurant());
     }
     if (withRestaurantSucc) {
-      setLicensesData(licensesWithRestaurant);
-      setTotalItems(licenses.totalCount);
-      dispatch(resetGetLicenses());
-      dispatch(resetGetLicensesState());
-      dispatch(resetGetLicensesRestaurant());
+      dispatch(getMergedUsers(licensesWithRestaurant));
+      // setLicensesData(licensesWithRestaurant);
+      // setTotalItems(licenses.totalCount);
     }
   }, [
     withRestaurantSucc,
@@ -206,6 +213,26 @@ const LicensesPage = () => {
     licensesWithRestaurant,
     licenses,
   ]);
+
+  //SET MERGED USERS
+  useEffect(() => {
+    if (mergedUsersError) {
+      if (mergedUsersError?.message_TR) {
+        toast.error(mergedUsersError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetMergedUsers());
+    }
+    if (mergedUsersSucc) {
+      setLicensesData(users);
+      setTotalItems(licenses.totalCount);
+      dispatch(resetGetLicenses());
+      dispatch(resetGetMergedUsers());
+      dispatch(resetGetLicensesState());
+      dispatch(resetGetLicensesRestaurant());
+    }
+  }, [mergedUsersError, mergedUsersSucc]);
 
   // GET AND SET CITIES
   useEffect(() => {

@@ -11,6 +11,12 @@ const initialState = {
   success: false,
   error: false,
   user: null,
+  mergedUsers: {
+    loading: false,
+    success: false,
+    error: false,
+    users: null,
+  },
 };
 
 const getUserByIdSlice = createSlice({
@@ -27,6 +33,12 @@ const getUserByIdSlice = createSlice({
       state.success = false;
       state.error = null;
       state.user = null;
+    },
+    resetGetMergedUsers: (state) => {
+      state.mergedUsers.loading = false;
+      state.mergedUsers.success = false;
+      state.mergedUsers.error = false;
+      state.mergedUsers.users = null;
     },
   },
   extraReducers: (build) => {
@@ -48,6 +60,24 @@ const getUserByIdSlice = createSlice({
         state.success = false;
         state.error = action.payload;
         state.user = null;
+      })
+      .addCase(getMergedUsers.pending, (state) => {
+        state.mergedUsers.loading = true;
+        state.mergedUsers.success = false;
+        state.mergedUsers.error = null;
+        state.mergedUsers.users = null;
+      })
+      .addCase(getMergedUsers.fulfilled, (state, action) => {
+        state.mergedUsers.loading = false;
+        state.mergedUsers.success = true;
+        state.mergedUsers.error = null;
+        state.mergedUsers.users = action.payload;
+      })
+      .addCase(getMergedUsers.rejected, (state, action) => {
+        state.mergedUsers.loading = false;
+        state.mergedUsers.success = false;
+        state.mergedUsers.error = action.payload;
+        state.mergedUsers.users = null;
       });
   },
 });
@@ -74,5 +104,48 @@ export const getUser = createAsyncThunk(
   }
 );
 
-export const { resetgetUserState, resetgetUser } = getUserByIdSlice.actions;
+export const getMergedUsers = createAsyncThunk(
+  "Users/GetUsersForRestaurants",
+  async (data, { rejectWithValue }) => {
+    try {
+      const uniqueUserIds = [...new Set(data.map((user) => user.userId))];
+
+      const userPromises = uniqueUserIds.map((userId) =>
+        api
+          .get(`${baseURL}Users/GetUserById`, {
+            params: {
+              userId,
+            },
+          })
+          .then((response) => response.data.data)
+      );
+
+      const users = await Promise.all(userPromises);
+
+      const userMap = users.reduce((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+      }, {});
+
+      const updatedData = data.map((entity) => {
+        const user = userMap[entity.userId];
+        return {
+          ...entity,
+          userName: user.fullName ? user.fullName : "Unknown User",
+        };
+      });
+
+      return updatedData;
+    } catch (err) {
+      console.error(err);
+      if (err?.response?.data) {
+        return rejectWithValue(err.response.data);
+      }
+      return rejectWithValue({ message_TR: err.message });
+    }
+  }
+);
+
+export const { resetgetUserState, resetgetUser, resetGetMergedUsers } =
+  getUserByIdSlice.actions;
 export default getUserByIdSlice.reducer;

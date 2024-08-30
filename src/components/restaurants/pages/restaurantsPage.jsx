@@ -22,6 +22,10 @@ import {
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
+import {
+  getMergedUsers,
+  resetGetMergedUsers,
+} from "../../../redux/users/getUserByIdSlice";
 
 const RestaurantsPage = () => {
   const dispatch = useDispatch();
@@ -29,6 +33,12 @@ const RestaurantsPage = () => {
   const { loading, success, error, restaurants } = useSelector(
     (state) => state.restaurants.getRestaurants
   );
+  const {
+    success: mergedUsersSucc,
+    error: mergedUsersError,
+    users,
+  } = useSelector((state) => state.users.getUser.mergedUsers);
+
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
   const { districts: districtsData, success: districtsSuccess } = useSelector(
@@ -151,7 +161,7 @@ const RestaurantsPage = () => {
     }
   }, [restaurantsData]);
 
-  // TOAST AND SET RESTAURANTS
+  // TOAST AND GET MERGED USERS
   useEffect(() => {
     if (error) {
       if (error?.message_TR) {
@@ -163,11 +173,28 @@ const RestaurantsPage = () => {
     }
 
     if (success) {
-      setRestaurantsData(restaurants.data);
-      setTotalItems(restaurants.totalCount);
-      dispatch(resetGetRestaurantsState());
+      dispatch(getMergedUsers(restaurants.data));
     }
   }, [loading, success, error, restaurants]);
+
+  // TOAST AND SET MERGED USERS
+  useEffect(() => {
+    if (mergedUsersError) {
+      if (mergedUsersError?.message_TR) {
+        toast.error(mergedUsersError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetMergedUsers());
+    }
+
+    if (mergedUsersSucc) {
+      setRestaurantsData(users);
+      setTotalItems(restaurants.totalCount);
+      dispatch(resetGetMergedUsers());
+      dispatch(resetGetRestaurantsState());
+    }
+  }, [mergedUsersSucc, mergedUsersError]);
 
   // GET AND SET CITIES
   useEffect(() => {

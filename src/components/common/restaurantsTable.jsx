@@ -8,7 +8,8 @@ const RestaurantsTable = ({ inData, Actions, totalItems, onSuccess }) => {
         <table className="w-full text-sm font-light">
           <thead>
             <tr className="bg-[--light-3] h-8 text-left">
-              <th className="first:pl-4 font-normal">Restoran Adı</th>
+              <th className="first:pl-4 font-normal">Restoran</th>
+              <th className="font-normal">Kullanıcı </th>
               <th className="font-normal">Adres</th>
               <th className="font-normal">Telefon</th>
               <th className="font-normal">Il</th>
@@ -27,6 +28,9 @@ const RestaurantsTable = ({ inData, Actions, totalItems, onSuccess }) => {
               >
                 <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
                   {data.name}
+                </td>
+                <td className="whitespace-nowrap text-[--black-2] font-light">
+                  {data.userName}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {data.address}

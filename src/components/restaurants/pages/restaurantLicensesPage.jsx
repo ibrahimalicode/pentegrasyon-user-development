@@ -27,23 +27,25 @@ import {
   getRestaurant,
   resetGetRestaurantState,
 } from "../../../redux/restaurants/getRestaurantSlice";
+import {
+  getMergedUsers,
+  resetGetMergedUsers,
+} from "../../../redux/users/getUserByIdSlice";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
-  const params = useParams();
   const location = useLocation();
-  const restaurantId = params.id;
-  const { user, restaurant: restaurantInData } = location.state || {};
+  const { user, restaurant } = location.state || {};
 
   const { loading, success, error, restaurantLicenses } = useSelector(
     (state) => state.licenses.getRestaurantLicenses
   );
 
   const {
-    error: restaurantError,
-    success: restaurantSuccess,
-    restaurant,
-  } = useSelector((state) => state.restaurants.getRestaurant);
+    success: mergedUsersSucc,
+    error: mergedUsersError,
+    users,
+  } = useSelector((state) => state.users.getUser.mergedUsers);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -61,7 +63,6 @@ const RestaurantLicensesPage = () => {
     neighbourhood: null,
   });
 
-  const [restaurantData, setRestaurantData] = useState(restaurantInData);
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -149,7 +150,7 @@ const RestaurantLicensesPage = () => {
   function handlePageChange(number) {
     dispatch(
       getRestaurantLicenses({
-        restaurantId,
+        restaurantId: restaurant.id,
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
@@ -161,18 +162,17 @@ const RestaurantLicensesPage = () => {
     );
   }
 
-  function insertRestaurantsTOLicenses(inRestaurant) {
+  function insertRestaurantsTOLicenses() {
     if (!restaurantLicenses) return;
     const updatedData = restaurantLicenses.data.map((license) => {
       return {
         ...license,
-        restaurantId: inRestaurant.id,
-        restaurantName: inRestaurant.name,
+        restaurantId: restaurant.id,
+        restaurantName: restaurant.name,
       };
     });
-    setRestaurantData(inRestaurant);
-    setLicensesData(updatedData);
-    setTotalItems(restaurantLicenses.totalCount);
+
+    dispatch(getMergedUsers(updatedData));
   }
 
   // GET LICENSES
@@ -180,7 +180,7 @@ const RestaurantLicensesPage = () => {
     if (!licensesData) {
       dispatch(
         getRestaurantLicenses({
-          restaurantId,
+          restaurantId: restaurant.id,
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
@@ -196,11 +196,7 @@ const RestaurantLicensesPage = () => {
   //TOAST AND SET LICENSES
   useEffect(() => {
     if (success) {
-      if (!restaurantInData) {
-        dispatch(getRestaurant({ restaurantId }));
-      } else {
-        insertRestaurantsTOLicenses(restaurantInData);
-      }
+      insertRestaurantsTOLicenses(restaurant);
     }
 
     if (error) {
@@ -211,25 +207,26 @@ const RestaurantLicensesPage = () => {
       }
       dispatch(resetGetRestaurantLicenses());
     }
-  }, [success, restaurantInData]);
+  }, [success]);
 
-  // TOAST AND SET RESTAURANT BY ID
+  //SET MERGED USERS
   useEffect(() => {
-    if (restaurantError) {
-      if (restaurantError?.message_TR) {
-        toast.error(restaurantError.message_TR);
+    if (mergedUsersSucc) {
+      setLicensesData(users);
+      setTotalItems(restaurantLicenses.totalCount);
+      dispatch(resetGetRestaurantLicenses());
+    }
+
+    if (mergedUsersError) {
+      if (mergedUsersError?.message_TR) {
+        toast.error(mergedUsersError.message_TR);
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetRestaurantState());
-    }
-
-    if (restaurantSuccess) {
-      insertRestaurantsTOLicenses(restaurant);
-      dispatch(resetGetRestaurantState());
+      dispatch(resetGetMergedUsers());
       dispatch(resetGetRestaurantLicenses());
     }
-  }, [restaurantError, restaurantSuccess, restaurant]);
+  }, [mergedUsersSucc, mergedUsersError]);
 
   // GET AND SET CITIES
   useEffect(() => {
@@ -321,9 +318,9 @@ const RestaurantLicensesPage = () => {
                 Kullanıcılar <DoubleArrowRI className="size-3" />
               </>
             ))}
-          {restaurantData ? (
+          {restaurant ? (
             <>
-              {restaurantData.name} <DoubleArrowRI className="size-3" />
+              {restaurant.name} <DoubleArrowRI className="size-3" />
             </>
           ) : (
             <>

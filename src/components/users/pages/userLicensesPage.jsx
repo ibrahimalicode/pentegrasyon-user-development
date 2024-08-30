@@ -27,14 +27,13 @@ import {
   getLicensesRestaurant,
   resetGetLicensesRestaurant,
 } from "../../../redux/restaurants/getRestaurantSlice";
-import { getUser } from "../../../redux/users/getUserByIdSlice";
 
 const UserLicensesPage = () => {
   const params = useParams();
   const userId = params.id;
   const dispatch = useDispatch();
   const location = useLocation();
-  const { user: userInData } = location.state || {};
+  const { user } = location.state || {};
 
   const { loading, success, error, userLicenses } = useSelector(
     (state) => state.licenses.getUserLicenses
@@ -47,8 +46,6 @@ const UserLicensesPage = () => {
   } = useSelector(
     (state) => state.restaurants.getRestaurant.licensesRestaurant
   );
-
-  const { user } = useSelector((state) => state.users.getUser);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -68,7 +65,6 @@ const UserLicensesPage = () => {
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const [userData, setUserData] = useState(userInData);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -163,20 +159,22 @@ const UserLicensesPage = () => {
       })
     );
   }
-  // GET USER
-  useEffect(() => {
-    if (!userData) {
-      console.log("dipatch get user");
-      dispatch(getUser({ userId }));
-    }
-  }, [userData]);
 
-  //SET USER
-  useEffect(() => {
-    if (user) {
-      setUserData(user);
-    }
-  }, [user]);
+  function insertusersTOLicenses(licenses) {
+    if (!licenses) return;
+    const updatedData = licenses.map((license) => {
+      return {
+        ...license,
+        userId,
+        userName: user?.fullName,
+      };
+    });
+
+    setLicensesData(updatedData);
+    setTotalItems(userLicenses.totalCount);
+    dispatch(resetGetUserLicenses());
+    dispatch(resetGetLicensesRestaurant());
+  }
 
   // GET LICENSES
   useEffect(() => {
@@ -222,11 +220,8 @@ const UserLicensesPage = () => {
       }
       dispatch(resetGetLicensesRestaurant());
     }
-    if (withRestaurantSucc) {
-      setLicensesData(licensesWithRestaurant);
-      setTotalItems(userLicenses.totalCount);
-      dispatch(resetGetUserLicenses());
-      dispatch(resetGetLicensesRestaurant());
+    if (withRestaurantSucc && licensesWithRestaurant) {
+      insertusersTOLicenses(licensesWithRestaurant);
     }
   }, [
     withRestaurantSucc,
@@ -311,13 +306,13 @@ const UserLicensesPage = () => {
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
       <div className="w-full text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer max-sm:pb-8">
-        {userData ? (
+        {user ? (
           <div
             className="flex items-center gap-1"
             onClick={() => window.history.back()}
           >
-            {userData.isDealer ? "Bayi " : "Müşteri "}
-            {userData.fullName} <DoubleArrowRI className="size-3" /> Lisanslar
+            {user.isDealer ? "Bayi " : "Müşteri "}
+            {user.fullName} <DoubleArrowRI className="size-3" /> Lisanslar
           </div>
         ) : (
           <div

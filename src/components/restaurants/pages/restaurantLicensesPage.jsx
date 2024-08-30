@@ -318,7 +318,7 @@ const RestaurantLicensesPage = () => {
               </>
             ) : (
               <>
-                "Kullanıcılar <DoubleArrowRI className="size-3" /> "
+                Kullanıcılar <DoubleArrowRI className="size-3" />
               </>
             ))}
           {restaurantData ? (

@@ -1,7 +1,7 @@
 // MODULES
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 //COMP
 import StepBar from "../../common/stepBar";
@@ -15,22 +15,18 @@ import ThirdStep from "../steps/thirdStep";
 import FourthStep from "../steps/fourthStep";
 
 const ExtendLicensePage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { user, restaurant } = location.state || {};
+  const currentPath = location.pathname;
 
   const { success: extendSuccess } = useSelector(
     (state) => state.licenses.extendByPay
   );
 
-  const [restaurantData, setRestaurantData] = useState(restaurant);
-  const [userInData, setuserInData] = useState(user);
-
   const steps = 4;
   const [step, setStep] = useState(1);
   const [paymentStatus, setPaymentStatus] = useState(null);
-
-  const [document, setDocument] = useState("");
-  const [explanation, setExplanation] = useState("");
 
   const [licensePackageData, setLicensePackageData] = useState({
     value: null,
@@ -61,22 +57,22 @@ const ExtendLicensePage = () => {
       <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
         <div
           className="flex items-center gap-1"
-          onClick={() => window.history.back()}
+          onClick={() => navigate(currentPath.replace("/extend-license", ""))}
         >
-          {location.pathname.includes("users") &&
-            (userInData ? (
+          {currentPath.includes("users") &&
+            (user ? (
               <>
-                {userInData.fullName} <DoubleArrowRI />
+                {user.fullName} <DoubleArrowRI />
               </>
             ) : (
               <>
                 Kullanıcılar <DoubleArrowRI />
               </>
             ))}
-          {location.pathname.includes("restaurants") &&
-            (restaurantData ? (
+          {currentPath.includes("restaurants") &&
+            (restaurant ? (
               <>
-                {restaurantData.name} <DoubleArrowRI />
+                {restaurant.name} <DoubleArrowRI />
               </>
             ) : (
               <>
@@ -118,11 +114,7 @@ const ExtendLicensePage = () => {
                       step={step}
                       setStep={setStep}
                       paymentMethod={paymentMethod}
-                      licensePackageData={licensePackageData}
-                      explanation={explanation}
-                      setExplanation={setExplanation}
-                      document={document}
-                      setDocument={setDocument}
+                      licenseData={licensePackageData}
                     />,
                     <ThirdStep
                       setStep={setStep}

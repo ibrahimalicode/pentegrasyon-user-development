@@ -102,15 +102,17 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
           </>
         )}
       </div>
-      <input
-        id="dropzone-file"
-        name="dropzone-file"
-        type="file"
-        className="opacity-0"
-        onChange={handleInputChange}
-        accept={accept}
-        required={required}
-      />
+      {!value && (
+        <input
+          id="dropzone-file"
+          name="dropzone-file"
+          type="file"
+          className="opacity-0"
+          onChange={handleInputChange}
+          accept={accept}
+          required={required}
+        />
+      )}
     </label>
   );
 };

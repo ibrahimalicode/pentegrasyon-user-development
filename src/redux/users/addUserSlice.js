@@ -41,7 +41,7 @@ const addUserSlice = createSlice({
 });
 
 export const addUser = createAsyncThunk(
-  "Auth/AddUser",
+  "Users/AddUser",
   async (
     {
       firstName,

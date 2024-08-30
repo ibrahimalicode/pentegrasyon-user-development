@@ -1,13 +1,16 @@
-//COMP
-// import AddLicensesPopup from "./popups/addLicensePopup";
-import { usePopup } from "../../../context/PopupContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const AddLicense = ({ onSuccess }) => {
-  const { setShowPopup, setPopupContent } = usePopup();
+const AddLicense = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, restaurant } = location.state || {};
 
-  const handleClick = () => {
-    // setPopupContent(<AddLicensesPopup onSuccess={onSuccess} />);
-    setShowPopup(true);
+  const handleClick = (event) => {
+    event.stopPropagation();
+    const currentPath = location.pathname;
+    navigate(`${currentPath}/add-license`, {
+      state: { user, restaurant },
+    });
   };
 
   return (

@@ -1,7 +1,7 @@
 //MOD
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -17,12 +17,14 @@ import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import DefaultMarketplace from "../../../assets/img/packages/Default-Marketplace.png";
 
+//FUNC
+import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
+
 // REDUX
 import {
   getLicensePackages,
   resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
-import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 
 const imageSRCs = [
@@ -35,17 +37,20 @@ const imageSRCs = [
 ];
 
 const FirstStep = ({
+  restaurantData,
+  setRestaurantData,
   licensePackageData,
   setLicensePackageData,
   paymentMethod,
   setPaymentMethod,
-  actionType,
   setStep,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { currentLicense } = location?.state || {};
   const { restaurantName, restaurantId } = currentLicense || {};
+  const pathArray = location.pathname.split("/");
+  const actionType = pathArray[pathArray.length - 1];
 
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
@@ -54,10 +59,9 @@ const FirstStep = ({
     (state) => state.restaurants.getRestaurants
   );
 
-  const [restaurantData, setRestaurantData] = useState({
-    label: restaurantName ? restaurantName : "Restoran Seç",
-    value: restaurantId ? restaurantId : null,
-  });
+  restaurantId &&
+    setRestaurantData({ label: restaurantName, value: restaurantId });
+
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
@@ -80,19 +84,20 @@ const FirstStep = ({
     }
 
     if (success) {
-      if (actionType === "addLicense") {
+      if (actionType === "add-license") {
         setLicensePackagesData(formatLisansPackages(licensePackages.data));
       } else {
         const currentLicensePackage = licensePackages.data.filter(
           (pack) => pack?.marketplaceId === currentLicense?.marketplaceId
         );
+
         if (currentLicensePackage.length) {
           setLicensePackagesData(formatLisansPackages(currentLicensePackage));
-        }
+        } else setLicensePackagesData(currentLicensePackage);
       }
       dispatch(resetGetLicensePackages());
     }
-  }, [success, error, licensePackages]);
+  }, [success, error, licensePackages, actionType]);
 
   // GET RESTAURANTS
   useEffect(() => {

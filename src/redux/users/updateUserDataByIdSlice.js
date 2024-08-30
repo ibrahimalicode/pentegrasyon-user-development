@@ -89,9 +89,9 @@ export const updateUserData = createAsyncThunk(
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
-      throw rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );

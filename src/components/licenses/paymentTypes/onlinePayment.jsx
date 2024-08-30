@@ -19,12 +19,9 @@ import {
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 import toast from "react-hot-toast";
 
-const OnlinePayment = ({ setStep }) => {
+const OnlinePayment = ({ setStep, userId }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { currentLicense } = location?.state || {};
-  const userId = currentLicense.userId;
 
   const { success: getUserSucc, user } = useSelector(
     (state) => state.users.getUser
@@ -70,13 +67,14 @@ const OnlinePayment = ({ setStep }) => {
     }
   }, [loading, success, error]);
 
+  //GET USER
   useEffect(() => {
     if (!userData) {
       dispatch(getUser({ userId }));
-      console.log("get user");
     }
   }, [userData]);
 
+  //SET USER AND INVOICE
   useEffect(() => {
     if (getUserSucc) {
       setUserData(user);

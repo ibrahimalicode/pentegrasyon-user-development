@@ -10,6 +10,7 @@ const SecondStep = ({ step, setStep, licenseData, paymentMethod, userId }) => {
   const location = useLocation();
   const pathArray = location.pathname.split("/");
   const actionType = pathArray[pathArray.length - 1];
+  console.log(userId);
 
   const value = paymentMethod.selectedOption.value;
   return (

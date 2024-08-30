@@ -48,7 +48,7 @@ const FirstStep = ({
   const dispatch = useDispatch();
   const location = useLocation();
   const { currentLicense } = location?.state || {};
-  const { restaurantName, restaurantId } = currentLicense || {};
+  const { restaurantName, restaurantId, userId } = currentLicense || {};
   const pathArray = location.pathname.split("/");
   const actionType = pathArray[pathArray.length - 1];
 
@@ -59,8 +59,9 @@ const FirstStep = ({
     (state) => state.restaurants.getRestaurants
   );
 
-  restaurantId &&
-    setRestaurantData({ label: restaurantName, value: restaurantId });
+  if (restaurantId && !restaurantData?.value) {
+    setRestaurantData({ label: restaurantName, value: restaurantId, userId });
+  }
 
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);

@@ -28,6 +28,9 @@ const ExtendLicensePage = () => {
   const [step, setStep] = useState(1);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
+  const [restaurantData, setRestaurantData] = useState({
+    label: "Restoran Seç",
+  });
   const [licensePackageData, setLicensePackageData] = useState({
     value: null,
     label: "Lisans Paketi Seç",
@@ -104,6 +107,8 @@ const ExtendLicensePage = () => {
                   steps={steps}
                   component={[
                     <FirstStep
+                      restaurantData={restaurantData}
+                      setRestaurantData={setRestaurantData}
                       licensePackageData={licensePackageData}
                       setLicensePackageData={setLicensePackageData}
                       paymentMethod={paymentMethod}
@@ -113,6 +118,7 @@ const ExtendLicensePage = () => {
                     <SecondStep
                       step={step}
                       setStep={setStep}
+                      userId={restaurantData?.userId}
                       paymentMethod={paymentMethod}
                       licenseData={licensePackageData}
                     />,

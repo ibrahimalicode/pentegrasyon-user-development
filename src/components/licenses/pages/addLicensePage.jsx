@@ -118,7 +118,7 @@ const AddLicensePage = () => {
                     <SecondStep
                       step={step}
                       setStep={setStep}
-                      userId={restaurantData.userId}
+                      userId={restaurantData?.userId}
                       paymentMethod={paymentMethod}
                       licenseData={licensePackageData}
                     />,

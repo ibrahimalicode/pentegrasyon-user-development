@@ -8,7 +8,7 @@ const FailurePage = ({ currentPath }) => {
       </div>
 
       <div className="pt-8 text-center">
-        <p className="text-3xl mb-4 text-[--black-2]">Ödeme Başarısız !</p>
+        <p className="text-3xl mb-4 text-[--black-2]">Ödeme Başarısız ! 😔</p>
         <p className="text-[--gr-1] px-4">
           İşleminiz teknik bir hata nedeniyle başarısız oldu. Lütfen tekrar
           deneyin.

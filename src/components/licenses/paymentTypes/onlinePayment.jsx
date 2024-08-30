@@ -84,7 +84,7 @@ const OnlinePayment = ({ setStep, userId }) => {
   }, [user, getUserSucc]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="w-full">
       <div className="full flex justify-center">
         <div className="w-[325px] flex flex-col">
           <PaymentCard flip={flip} cardData={cardData} />
@@ -97,7 +97,7 @@ const OnlinePayment = ({ setStep, userId }) => {
         </div>
       </div>
 
-      <div className="w-[325px]">
+      <div className="w-full">
         {userData && (
           <InvoiceData
             user={userData}

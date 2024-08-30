@@ -11,6 +11,7 @@ function UserProfile({ setOpenSidebar }) {
   const param = useParams();
   const dispatch = useDispatch();
   const localUser = useMemo(() => getAuth(), []);
+  const isAdmin = localUser?.isManager;
 
   const { user } = useSelector((state) => state.user.getUser);
   const { admin } = useSelector((state) => state.admin.getAdmin);
@@ -18,26 +19,25 @@ function UserProfile({ setOpenSidebar }) {
   const [userData, setUserData] = useState(null);
 
   useState(() => {
-    if (localUser) {
-      if (localUser?.isManager) {
-        if (!admin) {
-          dispatch(getAdmin());
-        }
-      } else {
-        if (!user) {
-          dispatch(getUser());
-        }
+    if (isAdmin) {
+      if (!admin) {
+        dispatch(getAdmin());
+      }
+    } else {
+      if (!user) {
+        dispatch(getUser());
       }
     }
-  }, [localUser]);
+  }, [localUser, isAdmin]);
 
   useEffect(() => {
-    if (user) {
+    if (user && !isAdmin) {
       setUserData({
         ...user,
         rol: user.isDealer ? "Dealer" : "Kullanıcı",
       });
-    } else if (admin) {
+    }
+    if (admin && isAdmin) {
       setUserData({ ...admin, rol: "Admin" });
     }
   }, [user, admin]);

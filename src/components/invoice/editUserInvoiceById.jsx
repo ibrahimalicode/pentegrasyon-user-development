@@ -103,7 +103,7 @@ const EditUserInvoiceById = ({
           style={{ padding: "1px 0px" }}
           className="text-sm"
           value={
-            userInvoice.city
+            userInvoice.city?.value
               ? userInvoice.city
               : { value: null, label: "Şehir seç" }
           }
@@ -124,7 +124,7 @@ const EditUserInvoiceById = ({
           style={{ padding: "1px 0px" }}
           className="text-sm"
           value={
-            userInvoice.district
+            userInvoice.district?.value
               ? userInvoice.district
               : { value: null, label: "İlçe seç" }
           }
@@ -147,7 +147,7 @@ const EditUserInvoiceById = ({
           style={{ padding: "1px 0px" }}
           className="text-sm"
           value={
-            userInvoice.neighbourhood
+            userInvoice.neighbourhood?.value
               ? userInvoice.neighbourhood
               : { value: null, label: "Mahalle Seç" }
           }

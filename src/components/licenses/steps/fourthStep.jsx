@@ -10,13 +10,15 @@ const FourthStep = ({ step, paymentStatus }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const pathArray = location.pathname.split("/");
+  const actionType = pathArray[pathArray.length - 1];
 
   useEffect(() => {
     let goToLicenses;
 
     if (step === 4) {
       goToLicenses = setTimeout(
-        () => navigate(currentPath?.replace("/extend-license", "")),
+        () => navigate(currentPath?.replace(`/${actionType}`, "")),
         7000
       );
     }
@@ -31,9 +33,13 @@ const FourthStep = ({ step, paymentStatus }) => {
   return (
     step === 4 &&
     (paymentStatus === "success" ? (
-      <SuccessPage step={step} currentPath={currentPath} />
+      <SuccessPage
+        step={step}
+        currentPath={currentPath}
+        actionType={actionType}
+      />
     ) : (
-      <FailurePage currentPath={currentPath} />
+      <FailurePage currentPath={currentPath} actionType={actionType} />
     ))
   );
 };

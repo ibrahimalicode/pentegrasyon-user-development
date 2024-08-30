@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import failed_card from "../../../assets/img/failed_card.png";
-const FailurePage = ({ currentPath }) => {
+const FailurePage = ({ currentPath, actionType }) => {
   return (
     <main className="flex flex-col justify-start items-center pt-16">
       <div className="w-[25rem] overflow-visible">
@@ -17,7 +17,7 @@ const FailurePage = ({ currentPath }) => {
 
       <div className="w-full flex justify-center pt-8">
         <Link
-          to={currentPath?.replace("/extend-license", "")}
+          to={currentPath?.replace(`/${actionType}`, "")}
           className="flex items-center py-2.5 whitespace-nowrap px-4 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none"
         >
           Lisanslara git

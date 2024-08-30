@@ -21,6 +21,7 @@ import {
 } from "../../../redux/restaurants/getRestaurantsSlice";
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 
 const RestaurantsPage = () => {
   const dispatch = useDispatch();

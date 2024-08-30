@@ -7,7 +7,7 @@ import TypingEffect from "../../common/typingEffect";
 import checkAnim from "../../../assets/anim/lottie/check_anim.json";
 import congraAnim from "../../../assets/anim/lottie/congra_anim.json";
 
-const SuccessPage = ({ step, currentPath }) => {
+const SuccessPage = ({ step, currentPath, actionType }) => {
   const [playAnimation, setPlayAnimation] = useState(false);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const SuccessPage = ({ step, currentPath }) => {
 
         <div className="w-full flex justify-center pb-8">
           <Link
-            to={currentPath?.replace("/extend-license", "")}
+            to={currentPath?.replace(`/${actionType}`, "")}
             className="flex items-center py-2.5 whitespace-nowrap px-4 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none"
           >
             Lisanslara git

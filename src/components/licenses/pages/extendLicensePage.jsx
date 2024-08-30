@@ -1,55 +1,33 @@
 // MODULES
-import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 //COMP
-import BackButton from "../actions/assets/backButton";
 import StepBar from "../../common/stepBar";
-import ThirdStep from "../steps/thirdStep";
+import StepFrame from "../../common/stepFrame";
+import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
+
+//STEPS
 import FirstStep from "../steps/firstStep";
 import SecondStep from "../steps/secondStep";
-import StepFrame from "../../common/stepFrame";
-import CancelButton from "../actions/assets/cancelButton";
-import ForwardButton from "../actions/assets/forwardButton";
-import PayTRForm from "../../payment/form/PayTRForm";
-import { usePopup } from "../../../context/PopupContext";
-
-//FUNC
-import { formatLisansPackages, getDateRange } from "../../../utils/utils";
-
-//REDUX
-import {
-  resetUpdateLicenseDate,
-  updateLicenseDate,
-} from "../../../redux/licenses/updateLicenseDateSlice";
-import {
-  extendByOnlinePay,
-  resetExtendByOnlinePay,
-} from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
-import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
-import { useLocation } from "react-router-dom";
+import ThirdStep from "../steps/thirdStep";
 import FourthStep from "../steps/fourthStep";
 
-const ExtendLicensePage = ({ onSuccess }) => {
-  const toastId = useRef();
-  const dispatch = useDispatch();
+const ExtendLicensePage = () => {
   const location = useLocation();
   const { user, restaurant } = location.state || {};
 
-  const { loading, success, error } = useSelector(
-    (state) => state.licenses.updateLicenseDate
-  );
-  const { loading: extendLoading, success: extendSuccess } = useSelector(
+  const { success: extendSuccess } = useSelector(
     (state) => state.licenses.extendByPay
   );
 
-  const { setShowPopup, setPopupContent } = usePopup();
   const [restaurantData, setRestaurantData] = useState(restaurant);
   const [userInData, setuserInData] = useState(user);
 
   const steps = 4;
   const [step, setStep] = useState(1);
+  const [paymentStatus, setPaymentStatus] = useState(null);
 
   const [document, setDocument] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -69,38 +47,6 @@ const ExtendLicensePage = ({ onSuccess }) => {
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
-
-  const closeForm = () => {
-    setPopupContent(null);
-    setShowPopup(false);
-  };
-
-  function handleStep() {
-    setStep(step === 1 ? 2 : step === 2 ? 3 : 1);
-  }
-
-  // TOAST
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
-    }
-    if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetUpdateLicenseDate());
-    } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
-      onSuccess();
-      handleStep();
-      setTimeout(() => closeForm(), 4000);
-      toast.success("Lisans başarıyla uzatıldı 🥳🥳");
-      dispatch(resetUpdateLicenseDate());
-    }
-  }, [loading, success, error]);
 
   // EXTEND SUCCESS
   useEffect(() => {
@@ -124,7 +70,7 @@ const ExtendLicensePage = ({ onSuccess }) => {
               </>
             ) : (
               <>
-                "Kullanıcılar <DoubleArrowRI /> "
+                Kullanıcılar <DoubleArrowRI />
               </>
             ))}
           {location.pathname.includes("restaurants") &&
@@ -149,7 +95,7 @@ const ExtendLicensePage = ({ onSuccess }) => {
 
           <div className="w-full self-center">
             <div
-              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow--hidden ${
+              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow-x-clip ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
               style={{
@@ -178,8 +124,11 @@ const ExtendLicensePage = ({ onSuccess }) => {
                       document={document}
                       setDocument={setDocument}
                     />,
-                    <ThirdStep setStep={setStep} />,
-                    <FourthStep step={step} />,
+                    <ThirdStep
+                      setStep={setStep}
+                      setPaymentStatus={setPaymentStatus}
+                    />,
+                    <FourthStep step={step} paymentStatus={paymentStatus} />,
                   ]}
                 />
               </div>

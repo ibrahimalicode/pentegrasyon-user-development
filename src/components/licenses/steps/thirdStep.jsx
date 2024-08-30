@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 //REDUX
 import { resetExtendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
-const ThirdStep = ({ setStep }) => {
+const ThirdStep = ({ setStep, setPaymentStatus }) => {
   const dispatch = useDispatch();
+
   const [htmlResponse, setHtmlResponse] = useState(null);
   const { data } = useSelector((state) => state.licenses.extendByPay);
 
@@ -20,8 +21,13 @@ const ThirdStep = ({ setStep }) => {
     const handleMessage = (event) => {
       // Verify the origin here if necessary
       if (event.data.status === "success") {
-        toast.success("Ödeme başarılı 😃", { id: "payment_success" });
         setStep(4);
+        setPaymentStatus("success");
+        toast.success("Ödeme başarılı 😃", { id: "payment_success" });
+      } else if (event.data.status === "failed") {
+        setStep(4);
+        setPaymentStatus("failure");
+        toast.error("Ödeme başarısız 😞", { id: "payment_failed" });
       }
     };
     window.addEventListener("message", handleMessage);

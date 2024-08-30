@@ -3,10 +3,10 @@ import isEqual from "lodash/isEqual";
 import { useEffect, useRef, useState } from "react";
 
 //HOOKS
-import { useEditUserInvoiceById } from "../../../../../hooks/useEditUserInvoiceById";
+import { useEditUserInvoiceById } from "../../../../hooks/useEditUserInvoiceById";
 
 //REDUX
-import EditUserInvoiceById from "../../../invoice/editUserInvoiceById";
+import EditUserInvoiceById from "../../invoice/editUserInvoiceById";
 
 const InvoiceData = ({ user, submit, title, userInvData, userData }) => {
   const dispatcher = useRef();

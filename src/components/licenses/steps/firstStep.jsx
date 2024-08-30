@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import CustomSelect from "../../common/customSelector";
+import ForwardButton from "../stepsAssets/forwardButton";
 
 // IMAGES
 import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
@@ -23,7 +24,6 @@ import {
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
-import ForwardButton from "../actions/assets/forwardButton";
 
 const imageSRCs = [
   Getiryemek,

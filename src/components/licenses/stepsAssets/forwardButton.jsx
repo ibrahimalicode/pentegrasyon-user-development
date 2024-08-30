@@ -1,4 +1,4 @@
-import { ArrowIR } from "../../../../assets/icon";
+import { ArrowIR } from "../../../assets/icon";
 
 const ForwardButton = ({
   type = "button",

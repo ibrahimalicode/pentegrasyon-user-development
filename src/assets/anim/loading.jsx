@@ -1,9 +1,8 @@
 const LoadingI = ({ className }) => (
   <svg
     aria-hidden="true"
-    className={`w-5 h-5 text-[--white-1] animate-spin fill-[--primary-1] ${className}`}
+    className={`size-5 text-[--white-1] animate-spin fill-[--primary-1] ${className}`}
     viewBox="0 0 100 101"
-    fill="none"
     strokeWidth={4}
     xmlns="http://www.w3.org/2000/svg"
   >

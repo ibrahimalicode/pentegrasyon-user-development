@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 // COMP
 import PaymentCard from "../../payment/card/card";
 import PayTRForm from "../../payment/form/PayTRForm";
-import BackButton from "../actions/assets/backButton";
-import InvoiceData from "../actions/assets/invoiceData";
-import ForwardButton from "../actions/assets/forwardButton";
+import BackButton from "../stepsAssets/backButton";
+import InvoiceData from "../stepsAssets/invoiceData";
+import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 // REDUX

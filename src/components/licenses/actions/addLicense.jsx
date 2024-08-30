@@ -1,12 +1,12 @@
 //COMP
-import AddLicensesPopup from "./popups/addLicensePopup";
+// import AddLicensesPopup from "./popups/addLicensePopup";
 import { usePopup } from "../../../context/PopupContext";
 
 const AddLicense = ({ onSuccess }) => {
   const { setShowPopup, setPopupContent } = usePopup();
 
   const handleClick = () => {
-    setPopupContent(<AddLicensesPopup onSuccess={onSuccess} />);
+    // setPopupContent(<AddLicensesPopup onSuccess={onSuccess} />);
     setShowPopup(true);
   };
 

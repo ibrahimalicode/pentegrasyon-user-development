@@ -19,7 +19,6 @@ import RestaurantActions from "../userRestaurantActions/userRestaurantActions";
 //REDUX
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
-import { getUser } from "../../../redux/users/getUserByIdSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   getUserRestaurants,
@@ -31,7 +30,7 @@ const UserRestaurants = () => {
   const params = useParams();
   const userId = params.id;
   const location = useLocation();
-  const { user: userInData } = location.state || {};
+  const { user } = location.state || {};
 
   const { loading, success, error, restaurants } = useSelector(
     (state) => state.restaurants.getUserRestaurants
@@ -45,8 +44,6 @@ const UserRestaurants = () => {
     (state) => state.data.getNeighs
   );
 
-  const { user } = useSelector((state) => state.users.getUser);
-
   const [searchVal, setSearchVal] = useState("");
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [filter, setFilter] = useState({
@@ -59,7 +56,6 @@ const UserRestaurants = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const itemsPerPage = 8;
 
-  const [userData, setUserData] = useState(userInData);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -153,20 +149,20 @@ const UserRestaurants = () => {
     );
   }
 
-  // GET USER
-  useEffect(() => {
-    if (!userData) {
-      console.log("dispatch get user", userInData);
-      dispatch(getUser({ userId }));
-    }
-  }, [userData]);
+  function insertusersTOrestaurants(licenses) {
+    if (!licenses) return;
+    const updatedData = licenses.map((license) => {
+      return {
+        ...license,
+        userId,
+        userName: user?.fullName,
+      };
+    });
 
-  //SET USER
-  useEffect(() => {
-    if (user) {
-      setUserData(user);
-    }
-  }, [user]);
+    setRestaurantsData(updatedData);
+    setTotalItems(restaurants.totalCount);
+    dispatch(resetGetUserRestaurantsState());
+  }
 
   // GET USER RESTAURATS
   useEffect(() => {
@@ -197,10 +193,7 @@ const UserRestaurants = () => {
     }
 
     if (success) {
-      setRestaurantsData(restaurants.data);
-      // console.log(restaurants.data);
-      setTotalItems(restaurants.totalCount);
-      dispatch(resetGetUserRestaurantsState());
+      insertusersTOrestaurants(restaurants.data);
     }
   }, [success, error, restaurants]);
 
@@ -283,13 +276,13 @@ const UserRestaurants = () => {
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
       <div className="w-max text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer max-sm:pb-8">
-        {userData ? (
+        {user ? (
           <div
             className="flex items-center gap-1"
             onClick={() => window.history.back()}
           >
-            {userData.isDealer ? "Bayi " : "Müşteri "}
-            {userData.fullName} <DoubleArrowRI className="size-3" /> Restoranlar
+            {user?.isDealer ? "Bayi " : "Müşteri "}
+            {user?.fullName} <DoubleArrowRI className="size-3" /> Restoranlar
           </div>
         ) : (
           <div

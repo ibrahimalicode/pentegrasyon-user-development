@@ -196,7 +196,8 @@ const RestaurantLicensesPage = () => {
   //TOAST AND SET LICENSES
   useEffect(() => {
     if (success) {
-      insertRestaurantsTOLicenses(restaurant);
+      insertRestaurantsTOLicenses();
+      setTotalItems(restaurantLicenses.totalCount);
     }
 
     if (error) {
@@ -213,7 +214,6 @@ const RestaurantLicensesPage = () => {
   useEffect(() => {
     if (mergedUsersSucc) {
       setLicensesData(users);
-      setTotalItems(restaurantLicenses.totalCount);
       dispatch(resetGetRestaurantLicenses());
     }
 

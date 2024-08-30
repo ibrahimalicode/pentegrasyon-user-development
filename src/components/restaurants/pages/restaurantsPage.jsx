@@ -173,6 +173,7 @@ const RestaurantsPage = () => {
     }
 
     if (success) {
+      setTotalItems(restaurants.totalCount);
       dispatch(getMergedUsers(restaurants.data));
     }
   }, [loading, success, error, restaurants]);
@@ -188,9 +189,8 @@ const RestaurantsPage = () => {
       dispatch(resetGetMergedUsers());
     }
 
-    if (mergedUsersSucc) {
+    if (mergedUsersSucc && users) {
       setRestaurantsData(users);
-      setTotalItems(restaurants.totalCount);
       dispatch(resetGetMergedUsers());
       dispatch(resetGetRestaurantsState());
     }

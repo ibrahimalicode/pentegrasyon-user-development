@@ -203,9 +203,8 @@ const LicensesPage = () => {
       dispatch(resetGetLicensesRestaurant());
     }
     if (withRestaurantSucc) {
+      setTotalItems(licenses.totalCount);
       dispatch(getMergedUsers(licensesWithRestaurant));
-      // setLicensesData(licensesWithRestaurant);
-      // setTotalItems(licenses.totalCount);
     }
   }, [
     withRestaurantSucc,
@@ -226,7 +225,6 @@ const LicensesPage = () => {
     }
     if (mergedUsersSucc) {
       setLicensesData(users);
-      setTotalItems(licenses.totalCount);
       dispatch(resetGetLicenses());
       dispatch(resetGetMergedUsers());
       dispatch(resetGetLicensesState());

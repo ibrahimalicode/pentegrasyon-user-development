@@ -165,7 +165,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
       onSuccess();
       setShowPopup(false);
       setPopupContent(null);
-      toast.success("Restoran barıyla eklendi 🥳🥳");
+      toast.success("Restoran başarıyla eklendi 🥳🥳");
       dispatch(resetAddRestaurantState());
     }
   }, [loading, success, error]);

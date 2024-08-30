@@ -91,7 +91,7 @@ function EditPackageIsActivesPopup({ onSuccess, package_ }) {
       onSuccess();
       closeForm();
       toast.success(
-        `Lisans Paketi barıyla ${
+        `Lisans Paketi başarıyla ${
           package_.isActive ? "Pasifleştirildi" : "Aktifleştirildi"
         } 🥳🥳`
       );

@@ -177,7 +177,7 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
       onSuccess();
       setShowPopup(false);
       setPopupContent(null);
-      toast.success("Restoran barıyla güncelendi 🥳🥳");
+      toast.success("Restoran başarıyla güncelendi 🥳🥳");
       dispatch(resetUpdateRestaurant());
     }
   }, [loading, success, error]);

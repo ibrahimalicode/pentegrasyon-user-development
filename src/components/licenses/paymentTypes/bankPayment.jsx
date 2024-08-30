@@ -1,13 +1,10 @@
-import { useLocation } from "react-router-dom";
 import CustomFileInput from "../../common/customFileInput";
 import CustomInput from "../../common/customInput";
 import BackButton from "../stepsAssets/backButton";
 import ForwardButton from "../stepsAssets/forwardButton";
 import { useState } from "react";
 
-const BankPayment = ({ setStep, licenseData }) => {
-  const location = useLocation();
-  const { currentLicense } = location?.state;
+const BankPayment = ({ setStep, licenseData, restaurantData }) => {
   const licensePackageData = licenseData;
 
   const [document, setDocument] = useState("");
@@ -20,15 +17,12 @@ const BankPayment = ({ setStep, licenseData }) => {
   return (
     <form className="px-4 pt-4" onSubmit={handleSubmit}>
       <p>
-        <span className="text-[--primary-1]">
-          {" "}
-          {currentLicense.restaurantName}{" "}
-        </span>
+        <span className="text-[--primary-1]"> {restaurantData?.label} </span>
         <span>Restoran'a</span>
       </p>
       <p className="py-3">
-        <span className="text-[--primary-1]">{licensePackageData.value}</span>
-        <span className="text-[--primary-1]"> {licensePackageData.time} </span>
+        <span className="text-[--primary-1]">{licensePackageData?.value}</span>
+        <span className="text-[--primary-1]"> {licensePackageData?.time} </span>
         <span>yıllık Lisans eklenecek.</span>
       </p>
       <div>

@@ -88,7 +88,7 @@ function EditLicenseIsActivesPopup({ onSuccess, license }) {
       setShowPopup(false);
       setPopupContent(null);
       toast.success(
-        `Lisans barıyla ${
+        `Lisans başarıyla ${
           license.isActive ? "Pasifleştirildi" : "Aktifleştirildi"
         } 🥳🥳`
       );

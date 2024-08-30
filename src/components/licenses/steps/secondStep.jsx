@@ -6,7 +6,13 @@ import CreditPayment from "../paymentTypes/creditPayment";
 import BankPayment from "../paymentTypes/bankPayment";
 import { useLocation } from "react-router-dom";
 
-const SecondStep = ({ step, setStep, licenseData, paymentMethod, userId }) => {
+const SecondStep = ({
+  step,
+  setStep,
+  licenseData,
+  paymentMethod,
+  restaurantData,
+}) => {
   const location = useLocation();
   const pathArray = location.pathname.split("/");
   const actionType = pathArray[pathArray.length - 1];
@@ -20,12 +26,13 @@ const SecondStep = ({ step, setStep, licenseData, paymentMethod, userId }) => {
             <BankPayment
               setStep={setStep}
               licenseData={licenseData}
+              restaurantData={restaurantData}
               actionType={actionType}
             />
           ) : value === "onlinePayment" ? (
             <OnlinePayment
               setStep={setStep}
-              userId={userId}
+              userId={restaurantData?.userId}
               actionType={actionType}
             />
           ) : (

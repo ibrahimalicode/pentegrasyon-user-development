@@ -112,7 +112,7 @@ function ChangeRestaurantStatusPopup({ restaurant, onSuccess }) {
       setShowPopup(false);
       setPopupContent(null);
       toast.success(
-        `Restoran barıyla ${
+        `Restoran başarıyla ${
           restaurant.isActive ? "Pasifleştirildi" : "Aktifleştirildi"
         } 🥳🥳`
       );

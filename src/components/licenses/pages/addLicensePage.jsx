@@ -60,7 +60,7 @@ const AddLicensePage = () => {
       <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
         <div
           className="flex items-center gap-1"
-          onClick={() => navigate(currentPath.replace("/extend-license", ""))}
+          onClick={() => navigate(currentPath.replace("/add-license", ""))}
         >
           {currentPath.includes("users") &&
             (user ? (
@@ -84,7 +84,7 @@ const AddLicensePage = () => {
             ))}
           Lisanslar
           <DoubleArrowRI />
-          Lisansı Uzat
+          Lisans Ekle
         </div>
       </div>
 
@@ -118,7 +118,7 @@ const AddLicensePage = () => {
                     <SecondStep
                       step={step}
                       setStep={setStep}
-                      userId={restaurantData?.userId}
+                      restaurantData={restaurantData}
                       paymentMethod={paymentMethod}
                       licenseData={licensePackageData}
                     />,

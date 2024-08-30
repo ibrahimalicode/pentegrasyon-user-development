@@ -53,6 +53,7 @@ const ExtendLicensePage = () => {
       setStep(3);
     }
   }, [extendSuccess]);
+  console.log(restaurantData);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -118,7 +119,7 @@ const ExtendLicensePage = () => {
                     <SecondStep
                       step={step}
                       setStep={setStep}
-                      userId={restaurantData?.userId}
+                      restaurantData={restaurantData}
                       paymentMethod={paymentMethod}
                       licenseData={licensePackageData}
                     />,

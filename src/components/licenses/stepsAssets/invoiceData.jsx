@@ -47,7 +47,7 @@ const InvoiceData = ({ user, submit, title, userInvData, userData }) => {
       </div>
 
       {userInvData && !openFatura ? (
-        <div className="w-full flex justify-center mt-4">
+        <div className="w-[325px] flex justify-start mt-4">
           <div>
             {userData && userData.fullName}, {userInvData && userInvData.title}
             <p className="pt-1">{userInvData.taxNumber},</p>

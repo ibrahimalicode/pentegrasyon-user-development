@@ -13,8 +13,12 @@ const BankPayment = ({ setStep, licenseData }) => {
   const [document, setDocument] = useState("");
   const [explanation, setExplanation] = useState("");
 
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
+
   return (
-    <form className="px-4 pt-4">
+    <form className="px-4 pt-4" onSubmit={handleSubmit}>
       <p>
         <span className="text-[--primary-1]">
           {" "}

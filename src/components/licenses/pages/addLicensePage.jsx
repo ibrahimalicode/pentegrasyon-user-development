@@ -9,11 +9,11 @@ import StepFrame from "../../common/stepFrame";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 //STEPS
-import FirstStep from "../addLicenseSteps/firstStep";
-import SecondStep from "../addLicenseSteps/secondStep";
-import ThirdStep from "../addLicenseSteps/thirdStep";
-import FourthStep from "../addLicenseSteps/fourthStep";
-import FifthStep from "../addLicenseSteps/fifthStep";
+import FirstStep from "../addLicenseSteps/1stStep";
+import SecondStep from "../addLicenseSteps/2ndStep";
+import ThirdStep from "../addLicenseSteps/3rdStep";
+import FourthStep from "../addLicenseSteps/4thStep";
+import FifthStep from "../addLicenseSteps/5thStep";
 
 //REDUX
 import { clearCart } from "../../../redux/cart/cartSlice";

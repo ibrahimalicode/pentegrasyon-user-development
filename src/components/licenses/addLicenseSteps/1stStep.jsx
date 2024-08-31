@@ -138,8 +138,8 @@ const FirstStep = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="w-full px-4">
+    <form onSubmit={handleSubmit} className="h-full overflow-y-auto">
+      <div className="w-full sm:px-4">
         <div className="w-full flex justify-center pt-2">
           <CustomSelect
             required={true}
@@ -163,14 +163,14 @@ const FirstStep = ({
             licensePackagesData.map((licensePkg, i) => (
               <div
                 key={i}
-                className="flex items-center gap-8 even:bg-[--white-1] odd:bg-[--table-odd]"
+                className="flex max-sm:flex-col sm:items-center gap-2 sm:gap-8 max-sm:mb-6 even:bg-[--white-1] odd:bg-[--table-odd]"
               >
                 <img
                   src={imageSRCs[licensePkg[0].marketplaceId]?.src}
                   alt="Pazaryeri"
                   className="w-36 h-full rounded-sm"
                 />
-                <div className="flex gap-4 py-1">
+                <div className="max-sm:w-full flex gap-4 py-1 overflow-x-auto">
                   {licensePkg.map((pkg) => {
                     const isSelected = cartItems.some(
                       (item) =>
@@ -194,9 +194,9 @@ const FirstStep = ({
                             })
                           }
                         >
-                          <p className="">{pkg.time} Yıllık</p>
+                          <p className="whitespace-nowrap">{pkg.time} Yıllık</p>
                           <p
-                            className={`text-sm ${
+                            className={`text-sm whitespace-nowrap ${
                               isSelected ? "text-[--white-1]" : "text-[--gr-1]"
                             }`}
                           >

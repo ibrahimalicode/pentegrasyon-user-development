@@ -6,6 +6,7 @@ import TypingEffect from "../../common/typingEffect";
 //COMP
 import checkAnim from "../../../assets/anim/lottie/check_anim.json";
 import congraAnim from "../../../assets/anim/lottie/congra_anim.json";
+import toast from "react-hot-toast";
 
 const SuccessPage = ({ step, currentPath, actionType }) => {
   const [playAnimation, setPlayAnimation] = useState(false);
@@ -14,7 +15,7 @@ const SuccessPage = ({ step, currentPath, actionType }) => {
     let timer;
     let clearAnim;
 
-    if (step === 4) {
+    if (step === 5) {
       timer = setTimeout(() => {
         setPlayAnimation(true);
       }, 2000);
@@ -37,7 +38,7 @@ const SuccessPage = ({ step, currentPath, actionType }) => {
     <main className="w-full h-full flex justify-center">
       <div className="w-[325px] overflow-visible relative">
         <div className="w-full bg-[--white-1] flex justify-center items-center relative overflow-visible">
-          <div className="absolute w-full top-0 left-0">
+          <div className="absolute w-full top-0 left-0 z-[999]">
             {playAnimation && (
               <Lottie animationData={congraAnim} loop={false} />
             )}

@@ -50,7 +50,7 @@ const BankPayment = ({ setStep }) => {
                   Restoran'a
                 </p>
 
-                <div className="flex gap-4 pb-2">
+                <div className="flex flex-wrap gap-x-4 gap-y-2 pb-2">
                   {pkg.map((item, i) => (
                     <div className="flex text-sm">
                       <p className="mt-1 pr-2">

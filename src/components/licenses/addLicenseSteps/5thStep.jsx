@@ -17,10 +17,10 @@ const FifthStep = ({ step, paymentStatus }) => {
     let goToLicenses;
 
     if (step === 5) {
-      // goToLicenses = setTimeout(
-      //   () => navigate(currentPath?.replace(`/${actionType}`, "")),
-      //   7000
-      // );
+      goToLicenses = setTimeout(
+        () => navigate(currentPath?.replace(`/${actionType}`, "")),
+        7000
+      );
     }
 
     return () => {

@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-const AddLicense = () => {
+const AddLicense = ({ user, restaurant }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, restaurant } = location.state || {};
 
   const handleClick = (event) => {
     event.stopPropagation();

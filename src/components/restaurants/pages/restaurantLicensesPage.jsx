@@ -34,12 +34,21 @@ import {
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
+  const params = useParams();
   const location = useLocation();
-  const { user, restaurant } = location.state || {};
+  const restaurantId = params.id;
+  const { user: userInData, restaurant: restaurantInData } =
+    location.state || {};
 
   const { loading, success, error, restaurantLicenses } = useSelector(
     (state) => state.licenses.getRestaurantLicenses
   );
+
+  const {
+    error: restaurantError,
+    success: restaurantSuccess,
+    restaurant,
+  } = useSelector((state) => state.restaurants.getRestaurant);
 
   const {
     success: mergedUsersSucc,
@@ -63,10 +72,11 @@ const RestaurantLicensesPage = () => {
     neighbourhood: null,
   });
 
+  const [restaurantData, setRestaurantData] = useState(restaurantInData);
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const [userInData, setuserInData] = useState(user);
+  const [userData, setuserData] = useState(userInData);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
@@ -162,25 +172,26 @@ const RestaurantLicensesPage = () => {
     );
   }
 
-  function insertRestaurantsTOLicenses() {
+  function insertRestaurantsToLicenses(inRestaurant) {
     if (!restaurantLicenses) return;
     const updatedData = restaurantLicenses.data.map((license) => {
       return {
         ...license,
-        restaurantId: restaurant.id,
-        restaurantName: restaurant.name,
+        restaurantId: inRestaurant?.id,
+        restaurantName: inRestaurant?.name,
       };
     });
-
+    setRestaurantData(inRestaurant);
+    setTotalItems(restaurantLicenses.totalCount);
     dispatch(getMergedUsers(updatedData));
   }
 
-  // GET LICENSES
+  // GET LICENSES WITH RESTAURANT
   useEffect(() => {
     if (!licensesData) {
       dispatch(
         getRestaurantLicenses({
-          restaurantId: restaurant.id,
+          restaurantId,
           pageNumber,
           pageSize: itemsPerPage,
           searchKey: null,
@@ -196,8 +207,11 @@ const RestaurantLicensesPage = () => {
   //TOAST AND SET LICENSES
   useEffect(() => {
     if (success) {
-      insertRestaurantsTOLicenses();
-      setTotalItems(restaurantLicenses.totalCount);
+      if (!restaurantInData) {
+        dispatch(getRestaurant({ restaurantId }));
+      } else {
+        insertRestaurantsToLicenses(restaurantInData);
+      }
     }
 
     if (error) {
@@ -208,12 +222,31 @@ const RestaurantLicensesPage = () => {
       }
       dispatch(resetGetRestaurantLicenses());
     }
-  }, [success]);
+  }, [success, restaurantInData]);
 
-  //SET MERGED USERS
+  useEffect(() => {
+    if (restaurantError) {
+      if (restaurantError?.message_TR) {
+        toast.error(restaurantError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetRestaurantState());
+    }
+
+    if (restaurantSuccess) {
+      insertRestaurantsToLicenses(restaurant);
+      dispatch(resetGetRestaurantState());
+    }
+  }, [restaurantError, restaurantSuccess, restaurant]);
+
+  //SET MERGED USERS AND USERS DATA
   useEffect(() => {
     if (mergedUsersSucc) {
       setLicensesData(users);
+      const { userId, userName } = users[0];
+      if (location.pathname.includes("users"))
+        setuserData({ id: userId, fullName: userName });
       dispatch(resetGetRestaurantLicenses());
     }
 
@@ -309,18 +342,18 @@ const RestaurantLicensesPage = () => {
           onClick={() => window.history.back()}
         >
           {location.pathname.includes("users") &&
-            (userInData ? (
+            (userData ? (
               <>
-                {userInData.fullName} <DoubleArrowRI className="size-3" />
+                {userData.fullName} <DoubleArrowRI className="size-3" />
               </>
             ) : (
               <>
                 Kullanıcılar <DoubleArrowRI className="size-3" />
               </>
             ))}
-          {restaurant ? (
+          {restaurantData ? (
             <>
-              {restaurant.name} <DoubleArrowRI className="size-3" />
+              {restaurantData.name} <DoubleArrowRI className="size-3" />
             </>
           ) : (
             <>
@@ -481,7 +514,11 @@ const RestaurantLicensesPage = () => {
             </div>
 
             <div>
-              <AddLicense onSuccess={() => setLicensesData(null)} />
+              <AddLicense
+                onSuccess={() => setLicensesData(null)}
+                user={userData}
+                restaurant={restaurantData}
+              />
             </div>
           </div>
         </div>

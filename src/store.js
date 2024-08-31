@@ -11,6 +11,7 @@ import restaurantsSlice from "./redux/restaurants";
 import userSlice from "./redux/user";
 import usersSlice from "./redux/users";
 import getContextSlice from "./redux/payTR/getContextSlice";
+import cartSlice from "./redux/cart/cartSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     data: dataSlice,
     generalVars: generalVariablesSlice,
     getContext: getContextSlice,
+    cart: cartSlice,
   },
 });
 

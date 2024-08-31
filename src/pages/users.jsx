@@ -11,6 +11,7 @@ const Users = () => {
   const addLicense = "licenses/:id/add-license";
   const licenseExtend = "licenses/:id/extend-license";
   const restaurantLicense = "restaurants/licenses/:id";
+  const restaurantAdd = "restaurants/licenses/:id/add-license";
   const restaurantExtend = "restaurants/licenses/:id/extend-license";
   return (
     <Routes>
@@ -21,6 +22,7 @@ const Users = () => {
       <Route path={restaurantLicense} element={<RestaurantLicensesPage />} />
       <Route path={restaurantExtend} element={<ExtendLicensePage />} />
       <Route path={addLicense} element={<AddLicensePage />} />
+      <Route path={restaurantAdd} element={<AddLicensePage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

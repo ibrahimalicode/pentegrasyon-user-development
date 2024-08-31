@@ -1,6 +1,6 @@
 //MODULES
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // COMP
@@ -17,7 +17,6 @@ import {
   resetgetUserState,
 } from "../../../redux/users/getUserByIdSlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
-import toast from "react-hot-toast";
 
 const OnlinePayment = ({ setStep, userId }) => {
   const toastId = useRef();
@@ -30,6 +29,7 @@ const OnlinePayment = ({ setStep, userId }) => {
   const { loading, success, error } = useSelector(
     (state) => state.licenses.extendByPay
   );
+  const cartItems = useSelector((state) => state.cart.items);
 
   const [flip, setFlip] = useState(false);
   const [submit, setSubmit] = useState(false);
@@ -45,7 +45,7 @@ const OnlinePayment = ({ setStep, userId }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    console.log(cartItems);
     const formData = new FormData(e.target);
     dispatch(extendByOnlinePay({ formData }));
     if (!userInvData) setSubmit(true);
@@ -114,7 +114,7 @@ const OnlinePayment = ({ setStep, userId }) => {
         <BackButton
           text="Geri"
           letIcon={true}
-          onClick={() => setStep(1)}
+          onClick={() => setStep(2)}
           disabled={loading}
         />
         <ForwardButton
@@ -125,7 +125,7 @@ const OnlinePayment = ({ setStep, userId }) => {
         />
       </div>
 
-      <PayTRForm cardData={cardData} setStep={setStep} />
+      <PayTRForm cardData={cardData} />
     </form>
   );
 };

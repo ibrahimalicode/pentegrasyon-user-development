@@ -136,6 +136,24 @@ export const formatLisansPackages = (data) => {
   return outData;
 };
 
+export function groupedLicensePackages(data) {
+  const groupedData = data.reduce((result, item) => {
+    if (!result[item.marketplaceId]) {
+      result[item.marketplaceId] = [];
+    }
+
+    result[item.marketplaceId].push(item);
+
+    return result;
+  }, {});
+
+  const sortedArray = Object.values(groupedData).map((group) =>
+    group.sort((a, b) => a.time - b.time)
+  );
+
+  return sortedArray;
+}
+
 // let marker = null;
 // export function googleMap(lat, lng, setLat, setLng, zoom = 25, bounds) {
 //   const position = {
@@ -311,4 +329,30 @@ export function getDateRange(years) {
     startDateTime,
     endDateTime,
   };
+}
+
+export function sumCartPrices(data) {
+  const formattedNumber = new Intl.NumberFormat("tr-TR", {
+    style: "decimal",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(data.reduce((acc, item) => acc + item.price, 0));
+  return formattedNumber;
+}
+
+export function groupByRestaurantId(data) {
+  const groupedData = data.reduce((result, item) => {
+    // If restaurantId doesn't exist in the result, create a new array for it
+    if (!result[item.restaurantId]) {
+      result[item.restaurantId] = [];
+    }
+
+    // Push the current item into the corresponding restaurantId array
+    result[item.restaurantId].push(item);
+
+    return result;
+  }, {});
+
+  // Convert the grouped data object into an array
+  return Object.values(groupedData);
 }

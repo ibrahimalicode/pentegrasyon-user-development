@@ -18,7 +18,11 @@ import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import DefaultMarketplace from "../../../assets/img/packages/Default-Marketplace.png";
 
 //FUNC
-import { formatLisansPackages, formatSelectorData } from "../../../utils/utils";
+import {
+  formatLisansPackages,
+  formatSelectorData,
+  groupedLicensePackages,
+} from "../../../utils/utils";
 
 // REDUX
 import {
@@ -28,12 +32,12 @@ import {
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 
 const imageSRCs = [
-  Getiryemek,
-  MigrosYemek,
-  TrendyolYemek,
-  Yemeksepeti,
-  GoFody,
-  Siparisim,
+  { src: Getiryemek, name: "Getiryemek" },
+  { src: MigrosYemek, name: "MigrosYemek" },
+  { src: TrendyolYemek, name: "TrendyolYemek" },
+  { src: Yemeksepeti, name: "Yemeksepeti" },
+  { src: GoFody, name: "GoFody" },
+  { src: Siparisim, name: "Siparisim" },
 ];
 
 const FirstStep = ({
@@ -44,13 +48,12 @@ const FirstStep = ({
   paymentMethod,
   setPaymentMethod,
   setStep,
+  actionType,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { currentLicense } = location?.state || {};
+  const { currentLicense, restaurant } = location?.state || {};
   const { restaurantName, restaurantId, userId } = currentLicense || {};
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
 
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
@@ -59,10 +62,17 @@ const FirstStep = ({
     (state) => state.restaurants.getRestaurants
   );
 
-  if (restaurantId && !restaurantData?.value) {
-    setRestaurantData({ label: restaurantName, value: restaurantId, userId });
+  if ((restaurantId || restaurant) && !restaurantData?.value) {
+    if (restaurant) {
+      setRestaurantData({
+        label: restaurant.name,
+        value: restaurant.id,
+        userId: restaurant.userId,
+      });
+    } else {
+      setRestaurantData({ label: restaurantName, value: restaurantId, userId });
+    }
   }
-
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
@@ -86,7 +96,7 @@ const FirstStep = ({
 
     if (success) {
       if (actionType === "add-license") {
-        setLicensePackagesData(formatLisansPackages(licensePackages.data));
+        setLicensePackagesData(groupedLicensePackages(licensePackages.data));
       } else {
         const currentLicensePackage = licensePackages.data.filter(
           (pack) => pack?.marketplaceId === currentLicense?.marketplaceId
@@ -118,13 +128,12 @@ const FirstStep = ({
     e.preventDefault();
     setStep(2);
   }
-
   return (
     <form className="size-full flex flex-col" onSubmit={handleSubmit}>
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
         {licensePackageData?.id !== null ? (
           <img
-            src={imageSRCs[licensePackageData?.id]}
+            src={imageSRCs[licensePackageData?.id]?.src}
             alt="Pazaryeri"
             className="w-32 h-10 rounded-sm"
           />

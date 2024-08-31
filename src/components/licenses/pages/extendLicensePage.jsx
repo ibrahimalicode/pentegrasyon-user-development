@@ -19,6 +19,8 @@ const ExtendLicensePage = () => {
   const location = useLocation();
   const { user, restaurant } = location.state || {};
   const currentPath = location.pathname;
+  const pathArray = currentPath.split("/");
+  const actionType = pathArray[pathArray.length - 1];
 
   const { success: extendSuccess } = useSelector(
     (state) => state.licenses.extendByPay
@@ -53,7 +55,6 @@ const ExtendLicensePage = () => {
       setStep(3);
     }
   }, [extendSuccess]);
-  console.log(restaurantData);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -61,7 +62,8 @@ const ExtendLicensePage = () => {
       <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
         <div
           className="flex items-center gap-1"
-          onClick={() => navigate(currentPath.replace("/extend-license", ""))}
+          // onClick={() => navigate(currentPath.replace("/extend-license", ""))}
+          onClick={() => window.history.back()}
         >
           {currentPath.includes("users") &&
             (user ? (
@@ -115,6 +117,7 @@ const ExtendLicensePage = () => {
                       paymentMethod={paymentMethod}
                       setPaymentMethod={setPaymentMethod}
                       setStep={setStep}
+                      actionType={actionType}
                     />,
                     <SecondStep
                       step={step}

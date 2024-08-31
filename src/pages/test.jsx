@@ -1,38 +1,11 @@
-import Lottie from "lottie-react";
-import checkAnim from "../assets/anim/lottie/check_anim.json";
-import congraAnim from "../assets/anim/lottie/congra_anim.json";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import CustomRadiobox from "../components/common/customRadiobox";
 
 const Test = () => {
-  const [playAnimation, setPlayAnimation] = useState(false);
-
-  useEffect(() => {
-    let timer;
-    timer = setTimeout(() => {
-      setPlayAnimation(true);
-    }, 2000);
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-        setPlayAnimation(false);
-      }
-    };
-  }, []);
-
+  const [checked, setChecked] = useState(false);
   return (
     <section className="px-[4%] pt-28 flex justify-center items-start">
-      <div className="w-[325px] overflow-visible">
-        <div className="w-full h-full bg-[--white-1] flex justify-center items-center relative overflow-visible">
-          <div className="absolute w-full h-full top-0 left-0 overflow-visible">
-            {playAnimation && (
-              <Lottie animationData={congraAnim} loop={false} />
-            )}
-          </div>
-          <div className="w-60">
-            <Lottie animationData={checkAnim} loop={false} />
-          </div>
-        </div>
-      </div>
+      <CustomRadiobox checked={checked} onClick={() => setChecked(!checked)} />
     </section>
   );
 };

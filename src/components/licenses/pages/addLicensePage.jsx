@@ -1,5 +1,5 @@
 // MODULES
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -9,22 +9,30 @@ import StepFrame from "../../common/stepFrame";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 //STEPS
-import FirstStep from "../steps/firstStep";
-import SecondStep from "../steps/secondStep";
-import ThirdStep from "../steps/thirdStep";
-import FourthStep from "../steps/fourthStep";
+import FirstStep from "../addLicenseSteps/firstStep";
+import SecondStep from "../addLicenseSteps/secondStep";
+import ThirdStep from "../addLicenseSteps/thirdStep";
+import FourthStep from "../addLicenseSteps/fourthStep";
+import FifthStep from "../addLicenseSteps/fifthStep";
+
+//REDUX
+import { clearCart } from "../../../redux/cart/cartSlice";
 
 const AddLicensePage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const { user, restaurant } = location.state || {};
   const currentPath = location.pathname;
+  const pathArray = currentPath.split("/");
+  const actionType = pathArray[pathArray.length - 1];
 
   const { success: extendSuccess } = useSelector(
     (state) => state.licenses.extendByPay
   );
 
-  const steps = 4;
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const steps = 5;
   const [step, setStep] = useState(1);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
@@ -47,11 +55,29 @@ const AddLicensePage = () => {
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
 
+  //SET RESTAURANT DATA
+  useEffect(() => {
+    if (restaurant) {
+      setRestaurantData({
+        label: restaurant?.name,
+        value: restaurant?.id,
+        userId: restaurant?.userId,
+        id: restaurant.id,
+      });
+    }
+  }, [restaurant]);
+
   // EXTEND SUCCESS
   useEffect(() => {
     if (extendSuccess) {
-      setStep(3);
+      setStep(4);
     }
+
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
   }, [extendSuccess]);
 
   return (
@@ -60,7 +86,8 @@ const AddLicensePage = () => {
       <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
         <div
           className="flex items-center gap-1"
-          onClick={() => navigate(currentPath.replace("/add-license", ""))}
+          // onClick={() => navigate(currentPath.replace("/add-license", ""))}
+          onClick={() => window.history.back()}
         >
           {currentPath.includes("users") &&
             (user ? (
@@ -89,8 +116,8 @@ const AddLicensePage = () => {
       </div>
 
       <div className="flex flex-col items-center w-full text-base">
-        <div className="flex flex-col w-full pt-4 pb-4 text-[--black-2] relative max-w-xl">
-          <StepBar step={step} steps={steps} className="px-10" />
+        <div className="flex flex-col items-center w-full pt-4 pb-4 text-[--black-2] relative ">
+          <StepBar step={step} steps={steps} className="max-w-2xl" />
 
           <div className="w-full self-center">
             <div
@@ -105,6 +132,8 @@ const AddLicensePage = () => {
                 <StepFrame
                   step={step}
                   steps={steps}
+                  percent={100}
+                  measure="%"
                   component={[
                     <FirstStep
                       restaurantData={restaurantData}
@@ -114,19 +143,28 @@ const AddLicensePage = () => {
                       paymentMethod={paymentMethod}
                       setPaymentMethod={setPaymentMethod}
                       setStep={setStep}
+                      actionType={actionType}
+                      restaurant={restaurant}
                     />,
                     <SecondStep
+                      step={step}
+                      setStep={setStep}
+                      paymentMethod={paymentMethod}
+                      setPaymentMethod={setPaymentMethod}
+                      restaurantData={restaurantData}
+                    />,
+                    <ThirdStep
                       step={step}
                       setStep={setStep}
                       restaurantData={restaurantData}
                       paymentMethod={paymentMethod}
                       licenseData={licensePackageData}
                     />,
-                    <ThirdStep
+                    <FourthStep
                       setStep={setStep}
                       setPaymentStatus={setPaymentStatus}
                     />,
-                    <FourthStep step={step} paymentStatus={paymentStatus} />,
+                    <FifthStep step={step} paymentStatus={paymentStatus} />,
                   ]}
                 />
               </div>

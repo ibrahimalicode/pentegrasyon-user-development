@@ -1,4 +1,4 @@
-const StepFrame = ({ step, steps, component }) => {
+const StepFrame = ({ step, steps, component, percent, measure }) => {
   const stepsArray = Array.from({ length: steps }, (_, index) => index + 1);
 
   return stepsArray.map((num, index) => (
@@ -11,7 +11,7 @@ const StepFrame = ({ step, steps, component }) => {
         transform:
           step === num
             ? "translateX(0)"
-            : `translateX(${(num - step) * 40}rem)`,
+            : `translateX(${(num - step) * percent}${measure})`,
       }}
     >
       {component[index]}

@@ -108,6 +108,8 @@ const ExtendLicensePage = () => {
                 <StepFrame
                   step={step}
                   steps={steps}
+                  percent={40}
+                  measure="rem"
                   component={[
                     <FirstStep
                       restaurantData={restaurantData}

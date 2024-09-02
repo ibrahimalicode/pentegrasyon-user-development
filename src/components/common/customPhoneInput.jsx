@@ -11,7 +11,7 @@ const CustomPhoneInput = ({
   className,
   className2,
   autoComplete = "new-password",
-  pattern,
+  className5,
 }) => {
   // const [phone, setPhone] = useState(value);
 
@@ -46,7 +46,9 @@ const CustomPhoneInput = ({
           padding-left: 0;
         }
       `}</style>
-      <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
+      <label
+        className={`text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left ${className5}`}
+      >
         {label}
       </label>
       <PhoneInput

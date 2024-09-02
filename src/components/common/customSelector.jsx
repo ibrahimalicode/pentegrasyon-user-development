@@ -12,6 +12,7 @@ const CustomSelect = ({
   disabled,
   required,
   style,
+  inputStyle,
   optionStyle,
   singleValueStyle,
 }) => {
@@ -73,6 +74,7 @@ const CustomSelect = ({
           input: (provided, state) => ({
             ...provided,
             color: "var(--black-1)",
+            ...inputStyle,
           }),
         }}
       />

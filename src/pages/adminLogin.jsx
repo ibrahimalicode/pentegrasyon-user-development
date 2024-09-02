@@ -1,14 +1,55 @@
-import { useState } from "react";
-import CustomInput from "../components/common/customInput";
+// MODULES
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
 import LoadingI from "../assets/anim/loading";
-import { useSelector } from "react-redux";
+import CustomInput from "../components/common/customInput";
+import TurnstileWidget from "../components/turnstileWidget";
+import { login, resetLoginState } from "../redux/auth/loginSlice";
+
+// ASSETS
 import imgUrl from "../assets/img/hero-bg.jpg";
 
-const Test = () => {
+function AdminLogin() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const toastId = useRef();
   const { success, loading, error } = useSelector((state) => state.auth.login);
 
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!emailOrPhone || !password) return;
+    dispatch(login({ emailOrPhone, password, role: "admin" }));
+  };
+
+  useEffect(() => {
+    if (loading) {
+      toastId.current = toast.loading("Logging in..");
+    } else if (error) {
+      toast.dismiss(toastId.current);
+      if (error?.message_TR) {
+        toast.error(error.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetLoginState());
+    } else if (success) {
+      navigate("/dashboard");
+      toast.dismiss(toastId.current);
+      toast.success("Successfuly logged in");
+      dispatch(resetLoginState());
+    }
+  }, [loading, success, error, dispatch, navigate]);
+
+  // turnstileToken && console.log(turnstileToken);
+
   return (
     <section
       className="px-[4%] pt-36 bg-no-repeat"
@@ -19,7 +60,7 @@ const Test = () => {
       }}
     >
       <div className="max-w-md mx-auto p-6 pt-10 text-[--white-1] bg-gray-400 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1]">
-        <form>
+        <form onSubmit={handleLogin}>
           <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
           <CustomInput
             label="E-posta/Telefon"
@@ -45,6 +86,9 @@ const Test = () => {
           <div className="text-right text-[--link-1] mt-4">
             <a href="/forgotPassword">Şifremi unuttum ?</a>
           </div>
+
+          <TurnstileWidget setToken={setTurnstileToken} pageName={"login"} />
+
           <button
             disabled={loading}
             type="submit"
@@ -63,6 +107,6 @@ const Test = () => {
       </div>
     </section>
   );
-};
+}
 
-export default Test;
+export default AdminLogin;

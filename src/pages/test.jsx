@@ -2,7 +2,7 @@ import { useState } from "react";
 import CustomInput from "../components/common/customInput";
 import LoadingI from "../assets/anim/loading";
 import { useSelector } from "react-redux";
-import imgUrl from "../assets/img/hero-bg.jpg";
+import imgUrl from "../assets/img/pentegrasyon.png";
 
 const Test = () => {
   const { success, loading, error } = useSelector((state) => state.auth.login);

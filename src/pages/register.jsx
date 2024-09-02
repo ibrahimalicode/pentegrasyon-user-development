@@ -20,8 +20,9 @@ import { getDistricts } from "../redux/data/getDistrictsSlice";
 import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
 
 // ASSETS
-import imgUrl from "../assets/img/hero-bg.jpg";
+import imgUrl from "../assets/img/pentegrasyon.png";
 import VerifyCode from "../components/common/verifyCode";
+import GlassFrame from "../components/common/glassFrame";
 
 const Register = () => {
   const toastId = useRef();
@@ -150,16 +151,10 @@ const Register = () => {
   }, [districtsSuccess]);
 
   return (
-    <section
-      className="px-[4%] pt-10 bg-no-repeat"
-      style={{
-        backgroundImage: `url(${imgUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="max-w-lg mx-auto p-6 pt-10 text-[--white-1] bg-gray-400 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1]">
-        {!toConfirm ? (
+    <GlassFrame
+      className="pt-[2.5rem]"
+      component={
+        !toConfirm ? (
           /* Register Page */
           <form onSubmit={confirmRegister}>
             <div className="flex justify-center">
@@ -205,7 +200,7 @@ const Register = () => {
                 />
                 <CustomInput
                   label="E-Posta"
-                  type="E-Posta"
+                  type="email"
                   placeholder="E-Posta"
                   value={email}
                   onChange={(e) => setEmail(formatEmail(e))}
@@ -306,9 +301,9 @@ const Register = () => {
         ) : (
           /* Verify Page*/
           <VerifyCode phoneNumber={phoneNumber} setToConfirm={setToConfirm} />
-        )}
-      </div>
-    </section>
+        )
+      }
+    />
   );
 };
 
@@ -317,7 +312,10 @@ export default Register;
 const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
   return (
     <div className="w-full flex justify-center">
-      <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md">
+      <div
+        className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400
+bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--white-1]"
+      >
         <div className="text-center">
           <div className="w-full flex justify-center mb-8">
             <p className="text-[--primary-2] text-4xl">

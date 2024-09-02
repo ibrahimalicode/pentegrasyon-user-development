@@ -1,12 +1,11 @@
 //MODULES
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { GobackI } from "../../assets/icon";
-import { PhoneUserMessage } from "./messages";
+import { EmailUserMessage, PhoneUserMessage } from "./messages";
 import MinuteCountdown from "./minuteCountdown";
 import LoadingI from "../../assets/anim/loading";
 import VerificationInputs from "./customVerificationInputs";
@@ -24,9 +23,14 @@ import {
   sendUserVerificationCode,
 } from "../../redux/auth/userVerificationSlice";
 
-const VerifyCode = ({ setToConfirm, phoneNumber, numInputs = 4 }) => {
+const VerifyCode = ({
+  reSend,
+  onSuccess,
+  setToConfirm,
+  phoneNumber,
+  numInputs = 4,
+}) => {
   const toastId = useRef();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
@@ -39,29 +43,39 @@ const VerifyCode = ({ setToConfirm, phoneNumber, numInputs = 4 }) => {
     error: sendError,
   } = useSelector((state) => state.auth.verifyUser);
 
+  const { success: sendForgotSucc } = useSelector(
+    (state) => state.auth.forgotPassword
+  );
+
+  const isEmail = !/^\d+$/.test(phoneNumber);
+  let phoneNumberOrEmail = !isEmail ? phoneNumber.slice(1) : phoneNumber;
   const [minutes, setMinutes] = useState(2);
   const [verificationCode, setVerificationCode] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
     if (minutes === 0) {
-      sendCode();
+      sendCode(e);
     } else {
-      verifyCode();
+      verifyCode(e);
     }
   }
 
-  function verifyCode() {
+  function verifyCode(e) {
     dispatch(
       codeVerification({
-        phoneNumberOrEmail: phoneNumber.slice(1),
+        phoneNumberOrEmail,
         verificationCode,
       })
     );
   }
 
-  function sendCode() {
-    dispatch(sendUserVerificationCode({ phoneNumber: phoneNumber.slice(1) }));
+  function sendCode(e) {
+    if (reSend) {
+      reSend(e);
+      return;
+    }
+    dispatch(sendUserVerificationCode({ phoneNumber: phoneNumberOrEmail }));
   }
 
   // TOAST AND ACTION FOR VERIFY CODE
@@ -70,7 +84,7 @@ const VerifyCode = ({ setToConfirm, phoneNumber, numInputs = 4 }) => {
       toastId.current = toast.loading("Loading...");
     }
     if (success) {
-      navigate("/login");
+      onSuccess();
       toast.dismiss(toastId.current);
       toast.success("Verified Successfully");
       dispatch(resetVerifyCodeState());
@@ -86,7 +100,7 @@ const VerifyCode = ({ setToConfirm, phoneNumber, numInputs = 4 }) => {
     }
   }, [loading, success, error]);
 
-  //TOAST AND ACTION FOR SEND CODE
+  //TOAST AND ACTION FOR SEND VERIFICATION CODE
   useEffect(() => {
     if (sendSuccess) {
       toast.success("Verification has been sent");
@@ -103,8 +117,15 @@ const VerifyCode = ({ setToConfirm, phoneNumber, numInputs = 4 }) => {
     }
   }, [sendSuccess, sendLoading]);
 
+  //TOAST AND ACTION FOR SEND FORGOT CODE
+  useEffect(() => {
+    if (sendForgotSucc) {
+      setMinutes(2);
+    }
+  }, [sendForgotSucc]);
+
   return (
-    <form className="px-12" onSubmit={handleSubmit}>
+    <form className="" onSubmit={handleSubmit}>
       <div className="flex justify-center relative">
         <div className="absolute left-0 top-0 bottom-0 flex items-center">
           <button
@@ -138,7 +159,11 @@ const VerifyCode = ({ setToConfirm, phoneNumber, numInputs = 4 }) => {
         />
 
         <div className="mt-10 text-[--white-1]">
-          <PhoneUserMessage number={spacePhoneNumber(phoneNumber)} />
+          {isEmail ? (
+            <EmailUserMessage mail={phoneNumber} />
+          ) : (
+            <PhoneUserMessage number={spacePhoneNumber(phoneNumber)} />
+          )}
         </div>
 
         <div className="flex flex-col mt-10 w-full">

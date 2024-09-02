@@ -9,8 +9,8 @@ import LoadingI from "../assets/anim/loading";
 import { login, resetLoginState } from "../redux/auth/loginSlice";
 import TurnstileWidget from "../components/turnstileWidget";
 
-// ASSETS
-import imgUrl from "../assets/img/hero-bg.jpg";
+// COMP
+import GlassFrame from "../components/common/glassFrame";
 
 function Login() {
   const dispatch = useDispatch();
@@ -52,15 +52,8 @@ function Login() {
   }, [loading, success, error, dispatch, navigate]);
 
   return (
-    <section
-      className="px-[4%] pt-36 bg-no-repeat"
-      style={{
-        backgroundImage: `url(${imgUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="max-w-md mx-auto p-6 pt-10 text-[--white-1] bg-gray-400 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1]">
+    <GlassFrame
+      component={
         <form onSubmit={handleLogin}>
           <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
           <CustomInput
@@ -105,8 +98,8 @@ function Login() {
             </a>
           </div>
         </form>
-      </div>
-    </section>
+      }
+    />
   );
 }
 

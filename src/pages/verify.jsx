@@ -1,11 +1,13 @@
 import { useState } from "react";
-import imgUrl from "../assets/img/hero-bg.jpg";
+import imgUrl from "../assets/img/pentegrasyon.png";
 import SendCode from "../components/common/sendCode";
 import VerifyCode from "../components/common/verifyCode";
+import { useNavigate } from "react-router-dom";
 
 const Verify = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const navigate = useNavigate();
   const [toVerify, setToVerify] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   return (
     <section
@@ -26,7 +28,11 @@ const Verify = () => {
           />
         ) : (
           /* Code Verify Page */
-          <VerifyCode setToConfirm={setToVerify} phoneNumber={phoneNumber} />
+          <VerifyCode
+            setToConfirm={setToVerify}
+            phoneNumber={phoneNumber}
+            onSuccess={() => navigate("/login")}
+          />
         )}
       </div>
     </section>

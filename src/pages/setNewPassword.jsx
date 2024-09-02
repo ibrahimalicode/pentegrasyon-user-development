@@ -1,21 +1,30 @@
+//MODULES
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import CustomInput from "../../components/common/customInput";
-import EyeI from "../../assets/icon/eye";
-import EyeInv from "../../assets/icon/eyeInv";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingI from "../../assets/anim/loading";
+import { useLocation, useNavigate } from "react-router-dom";
+
+//COMP
+import NotFound from "./404";
+import LoadingI from "../assets/anim/loading";
+import CustomInput from "../components/common/customInput";
+
+//FUNC
+import { clearAuth } from "../redux/api";
+
+//ASSETS
+import imgUrl from "../assets/img/pentegrasyon.png";
+
+//REDUX
 import {
   changePassword,
   resetChangePassword,
-} from "../../redux/auth/changePasswordSlice";
-import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import { clearAuth } from "../../redux/api";
+} from "../redux/auth/changePasswordSlice";
 import {
   resetVerifyCodeState,
   codeVerification,
-} from "../../redux/auth/verifyCodeSlice";
-import NotFound from "../404";
+} from "../redux/auth/verifyCodeSlice";
+import GlassFrame from "../components/common/glassFrame";
 
 const KEY = import.meta.env.VITE_LOCAL_KEY;
 
@@ -116,47 +125,48 @@ const SetNewPassword = () => {
   }, [token, verifyS]);
 
   return !credentials && token ? (
-    <div className="flex items-center justify-center w-full">
-      <form
-        className="flex flex-col w-full max-w-[38rem] px-12 mt-40"
-        onSubmit={handleChangePassword}
-      >
-        <div className="flex justify-center">
-          <h2 className="text-[2rem] font-bold text-black tracking-tighter">
-            Yeni şifrenizi belirleyin
-          </h2>
-        </div>
-        <div className="flex flex-col max-w-full">
-          <CustomInput
-            label="Yeni Şifre"
-            placeholder="Yeni Şifre"
-            value={password}
-            onChange={(e) => setPassword(e)}
-            letIcon={true}
-            required={true}
-            className="py-4"
-          />
-          <CustomInput
-            label="Şifreyi Onayla"
-            placeholder="Şifreyi Onayla"
-            value={password2}
-            onChange={(e) => setPassword2(e)}
-            letIcon={true}
-            required={true}
-            className="py-4"
-          />
-          <div className="flex flex-col mt-10 w-full">
-            <button
-              disabled={loading}
-              type="submit"
-              className="flex justify-center font-[350] px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 disabled:opacity-90 disabled:cursor-not-allowed"
-            >
-              {loading ? <LoadingI className="h-7" /> : "Kaydet"}
-            </button>
+    <GlassFrame
+      component={
+        <form className="" onSubmit={handleChangePassword}>
+          <div className="flex justify-center">
+            <h2 className="text-[2rem] font-bold text-[--white-1] tracking-tighter whitespace-nowrap">
+              Yeni şifreniz
+            </h2>
           </div>
-        </div>
-      </form>
-    </div>
+          <div className="flex flex-col max-w-full">
+            <CustomInput
+              label="Yeni Şifre"
+              placeholder="Yeni Şifre"
+              value={password}
+              onChange={(e) => setPassword(e)}
+              letIcon={true}
+              required={true}
+              className="py-2 bg-transparent text-[var(--white-1)]"
+              className5="text-[var(--white-1)]"
+            />
+            <CustomInput
+              label="Şifreyi Onayla"
+              placeholder="Şifreyi Onayla"
+              value={password2}
+              onChange={(e) => setPassword2(e)}
+              letIcon={true}
+              required={true}
+              className="py-2 bg-transparent text-[var(--white-1)]"
+              className5="text-[var(--white-1)]"
+            />
+            <div className="flex flex-col w-full mb-8">
+              <button
+                disabled={loading}
+                type="submit"
+                className="flex justify-center font-[350] px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 disabled:opacity-90 disabled:cursor-not-allowed"
+              >
+                {loading ? <LoadingI className="h-7" /> : "Kaydet"}
+              </button>
+            </div>
+          </div>
+        </form>
+      }
+    />
   ) : (
     <NotFound showGoBack={false} />
   );

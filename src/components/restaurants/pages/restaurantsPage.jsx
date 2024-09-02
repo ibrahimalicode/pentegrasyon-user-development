@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import AddRestaurant from "../addRestaurant";
+import AddRestaurant from "../actions/addRestaurant";
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
 import TableSkeleton from "../../common/tableSkeleton";
@@ -12,7 +12,7 @@ import CustomSelect from "../../common/customSelector";
 import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
 import RestaurantsTable from "../../common/restaurantsTable";
-import RestaurantActions from "../../users/userRestaurantActions/userRestaurantActions";
+import Actions from "../actions/actions";
 
 // REDUX
 import {
@@ -22,10 +22,6 @@ import {
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
-import {
-  getMergedUsers,
-  resetGetMergedUsers,
-} from "../../../redux/users/getUserByIdSlice";
 
 const RestaurantsPage = () => {
   const dispatch = useDispatch();
@@ -33,11 +29,6 @@ const RestaurantsPage = () => {
   const { loading, success, error, restaurants } = useSelector(
     (state) => state.restaurants.getRestaurants
   );
-  const {
-    success: mergedUsersSucc,
-    error: mergedUsersError,
-    users,
-  } = useSelector((state) => state.users.getUser.mergedUsers);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -174,27 +165,9 @@ const RestaurantsPage = () => {
 
     if (success) {
       setTotalItems(restaurants.totalCount);
-      dispatch(getMergedUsers(restaurants.data));
+      setRestaurantsData(restaurants.data);
     }
   }, [loading, success, error, restaurants]);
-
-  // TOAST AND SET MERGED USERS
-  useEffect(() => {
-    if (mergedUsersError) {
-      if (mergedUsersError?.message_TR) {
-        toast.error(mergedUsersError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetGetMergedUsers());
-    }
-
-    if (mergedUsersSucc && users) {
-      setRestaurantsData(users);
-      dispatch(resetGetMergedUsers());
-      dispatch(resetGetRestaurantsState());
-    }
-  }, [mergedUsersSucc, mergedUsersError]);
 
   // GET AND SET CITIES
   useEffect(() => {
@@ -438,7 +411,7 @@ const RestaurantsPage = () => {
       {restaurantsData ? (
         <RestaurantsTable
           inData={restaurantsData}
-          Actions={RestaurantActions}
+          Actions={Actions}
           totalItems={restaurantsData.length}
           onSuccess={() => handleFilter(true)}
         />

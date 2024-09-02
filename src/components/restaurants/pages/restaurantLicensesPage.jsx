@@ -172,20 +172,6 @@ const RestaurantLicensesPage = () => {
     );
   }
 
-  function insertRestaurantsToLicenses(inRestaurant) {
-    if (!restaurantLicenses) return;
-    const updatedData = restaurantLicenses.data.map((license) => {
-      return {
-        ...license,
-        restaurantId: inRestaurant?.id,
-        restaurantName: inRestaurant?.name,
-      };
-    });
-    setRestaurantData(inRestaurant);
-    setTotalItems(restaurantLicenses.totalCount);
-    dispatch(getMergedUsers(updatedData));
-  }
-
   // GET LICENSES WITH RESTAURANT
   useEffect(() => {
     if (!licensesData) {
@@ -210,7 +196,8 @@ const RestaurantLicensesPage = () => {
       if (!restaurantInData) {
         dispatch(getRestaurant({ restaurantId }));
       } else {
-        insertRestaurantsToLicenses(restaurantInData);
+        setLicensesData(restaurantLicenses.data);
+        setTotalItems(restaurantLicenses.totalCount);
       }
     }
 
@@ -235,31 +222,10 @@ const RestaurantLicensesPage = () => {
     }
 
     if (restaurantSuccess) {
-      insertRestaurantsToLicenses(restaurant);
-      dispatch(resetGetRestaurantState());
+      setLicensesData(restaurantLicenses.data);
+      setTotalItems(restaurantLicenses.totalCount);
     }
   }, [restaurantError, restaurantSuccess, restaurant]);
-
-  //SET MERGED USERS AND USERS DATA
-  useEffect(() => {
-    if (mergedUsersSucc) {
-      setLicensesData(users);
-      const { userId, userName } = users[0];
-      if (location.pathname.includes("users"))
-        setuserData({ id: userId, fullName: userName });
-      dispatch(resetGetRestaurantLicenses());
-    }
-
-    if (mergedUsersError) {
-      if (mergedUsersError?.message_TR) {
-        toast.error(mergedUsersError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetGetMergedUsers());
-      dispatch(resetGetRestaurantLicenses());
-    }
-  }, [mergedUsersSucc, mergedUsersError]);
 
   // GET AND SET CITIES
   useEffect(() => {
@@ -341,16 +307,6 @@ const RestaurantLicensesPage = () => {
           className="flex items-center gap-1"
           onClick={() => window.history.back()}
         >
-          {location.pathname.includes("users") &&
-            (userData ? (
-              <>
-                {userData.fullName} <DoubleArrowRI className="size-3" />
-              </>
-            ) : (
-              <>
-                Kullanıcılar <DoubleArrowRI className="size-3" />
-              </>
-            ))}
           {restaurantData ? (
             <>
               {restaurantData.name} <DoubleArrowRI className="size-3" />

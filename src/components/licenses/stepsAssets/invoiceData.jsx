@@ -3,10 +3,10 @@ import isEqual from "lodash/isEqual";
 import { useEffect, useRef, useState } from "react";
 
 //HOOKS
-import { useEditUserInvoiceById } from "../../../../hooks/useEditUserInvoiceById";
+import { useEditUserInvoice } from "../../../../hooks/useEditUserInvoice";
 
 //REDUX
-import EditUserInvoiceById from "../../invoice/editUserInvoiceById";
+import EditUserInvoice from "../../invoice/editUserInvoice";
 
 const InvoiceData = ({ user, submit, title, userInvData, userData }) => {
   const dispatcher = useRef();
@@ -20,7 +20,7 @@ const InvoiceData = ({ user, submit, title, userInvData, userData }) => {
     userInvoiceBefore,
     setUserInvoice,
     handleSubmit,
-  } = useEditUserInvoiceById(dispatcher, user);
+  } = useEditUserInvoice(dispatcher, user);
 
   useEffect(() => {
     const equalInv = isEqual(userInvoice, userInvoiceBefore);
@@ -66,7 +66,7 @@ const InvoiceData = ({ user, submit, title, userInvData, userData }) => {
         </div>
       ) : (
         <div className="w-full px-4">
-          <EditUserInvoiceById
+          <EditUserInvoice
             cities={cities ? cities : []}
             districts={districts}
             neighs={neighs}

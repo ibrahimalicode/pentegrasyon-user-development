@@ -53,11 +53,16 @@ const getContextSlice = createSlice({
 
 export const getContext = createAsyncThunk(
   "PayTR/GetContext",
-  async (_, { rejectWithValue }) => {
+  async ({ payment_amount, user_basket }, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${PAYTRURL}context`);
+      const res = await api.get(`${PAYTRURL}context`, {
+        params: {
+          payment_amount,
+          user_basket,
+        },
+      });
 
-      // console.log(res.data);
+      console.log(res.data);
       return res.data;
     } catch (err) {
       console.log(err);

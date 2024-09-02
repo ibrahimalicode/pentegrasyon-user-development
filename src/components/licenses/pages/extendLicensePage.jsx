@@ -44,17 +44,9 @@ const ExtendLicensePage = () => {
     options: [
       { label: "Banka Havale", value: "bankPayment" },
       { label: "Online Ödeme", value: "onlinePayment" },
-      { label: "Açık Hesap", value: "creditPayment" },
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
-
-  // EXTEND SUCCESS
-  useEffect(() => {
-    if (extendSuccess) {
-      setStep(3);
-    }
-  }, [extendSuccess]);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">

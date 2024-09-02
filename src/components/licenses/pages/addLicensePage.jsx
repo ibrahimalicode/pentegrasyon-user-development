@@ -1,7 +1,7 @@
 // MODULES
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import StepBar from "../../common/stepBar";
@@ -50,7 +50,6 @@ const AddLicensePage = () => {
     options: [
       { label: "Banka Havale", value: "bankPayment" },
       { label: "Online Ödeme", value: "onlinePayment" },
-      { label: "Açık Hesap", value: "creditPayment" },
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
@@ -69,10 +68,6 @@ const AddLicensePage = () => {
 
   // EXTEND SUCCESS
   useEffect(() => {
-    if (extendSuccess) {
-      setStep(4);
-    }
-
     return () => {
       if (cartItems) {
         dispatch(clearCart());
@@ -132,7 +127,7 @@ const AddLicensePage = () => {
                 <StepFrame
                   step={step}
                   steps={steps}
-                  percent={100}
+                  percent={101}
                   measure="%"
                   component={[
                     <FirstStep

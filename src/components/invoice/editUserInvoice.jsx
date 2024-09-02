@@ -3,7 +3,7 @@ import CustomInput from "../common/customInput";
 import CustomSelect from "../common/customSelector";
 import CustomTextarea from "../common/customTextarea";
 
-const EditUserInvoiceById = ({
+const EditUserInvoice = ({
   cities,
   districts,
   neighs,
@@ -181,4 +181,4 @@ const EditUserInvoiceById = ({
   );
 };
 
-export default EditUserInvoiceById;
+export default EditUserInvoice;

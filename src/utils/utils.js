@@ -331,8 +331,8 @@ export function getDateRange(years) {
   };
 }
 
-export function sumCartPrices(data) {
-  const formattedNumber = new Intl.NumberFormat("tr-TR", {
+export function sumCartPrices(data, format = "tr-TR") {
+  const formattedNumber = new Intl.NumberFormat(format, {
     style: "decimal",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

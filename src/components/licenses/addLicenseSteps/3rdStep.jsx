@@ -2,7 +2,6 @@
 
 //COMP
 import OnlinePayment from "../paymentTypes/onlinePayment";
-import CreditPayment from "../paymentTypes/creditPayment";
 import BankPayment from "../paymentTypes/bankPayment";
 import { useLocation } from "react-router-dom";
 
@@ -28,14 +27,14 @@ const ThirdStep = ({
             restaurantData={restaurantData}
             actionType={actionType}
           />
-        ) : value === "onlinePayment" ? (
-          <OnlinePayment
-            setStep={setStep}
-            userId={restaurantData?.userId}
-            actionType={actionType}
-          />
         ) : (
-          <CreditPayment setStep={setStep} actionType={actionType} />
+          value === "onlinePayment" && (
+            <OnlinePayment
+              setStep={setStep}
+              userId={restaurantData?.userId}
+              actionType={actionType}
+            />
+          )
         )}
       </div>
     )

@@ -19,9 +19,9 @@ import {
   updateUserInvoice,
   resetUpdateUserInvoice,
 } from "../../../redux/user/updateUserInvoiceSlice";
+import { getUser } from "../../../redux/user/getUserSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
-import { getUser } from "../../../redux/user/getUserSlice";
 
 const EditUserInvoice = ({ cities, user }) => {
   const toastId = useRef();
@@ -451,7 +451,7 @@ const EditUserInvoice = ({ cities, user }) => {
         <div className="flex justify-end mt-16">
           <Button
             text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+            className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
           />
         </div>

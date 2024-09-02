@@ -3,108 +3,58 @@ import logo from "../../assets/img/logo.png";
 
 // Icons
 import {
-  //DashboardI,
-  UsersI,
+  DashboardI,
   RestourantI,
   LicenseI,
-  PackagesI,
-  MessagesI,
   LogI,
   PaymentI,
-  ParamsI,
-  UserPlusI,
   BoxInI,
 } from "../../assets/icon/index";
-import { DashboardAnim } from "../../assets/anim/index";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import ArrowR from "../../assets/icon/arrowR";
 import { usePopup } from "../../context/PopupContext";
-import { getAuth } from "../../redux/api";
 
 function Sidebar({ openSidebar, setOpenSidebar }) {
   const param = useParams();
   const sidebarRef = useRef();
-  const localUser = useMemo(() => getAuth(), []);
   const { showPopup, contentRef, setContentRef } = usePopup();
   const sidebarItems = [
     {
-      icon: DashboardAnim,
+      icon: <DashboardI />,
       text: "Gösterge Paneli",
       to: "/dashboard",
       path: "dashboard",
-      show: true,
-    },
-    {
-      icon: <UsersI />,
-      text: "Kullanıcılar",
-      to: "/users",
-      path: "users",
-      show: localUser?.isManager ? true : false,
     },
     {
       icon: <RestourantI />,
       text: "Restoranlar",
       to: "/restaurants",
       path: "restaurants",
-      show: true,
     },
     {
       icon: <LicenseI />,
       text: "Lisanslar",
       to: "/licenses",
       path: "licenses",
-      show: true,
     },
     {
       icon: <BoxInI />,
       text: "Siparişler",
       to: "/orders",
       path: "orders",
-      show: localUser?.isManager ? false : true,
-    },
-    {
-      icon: <PackagesI />,
-      text: "Lisans Paketleri",
-      to: "/license-packages",
-      path: "license-packages",
-      show: localUser?.isManager ? true : false,
-    },
-    {
-      icon: <MessagesI />,
-      text: "Mesajlar",
-      to: "/messages",
-      path: "messages",
-      show: localUser?.isManager ? true : false,
     },
     {
       icon: <LogI />,
       text: "İşlem Kayıtları",
       to: "/activity-logs",
       path: "activity-logs",
-      show: true,
-    },
-    {
-      icon: <UserPlusI />,
-      text: "Roller",
-      to: "/roles",
-      path: "roles",
-      show: localUser?.isManager ? true : false,
     },
     {
       icon: <PaymentI />,
       text: "Ödemeler",
       to: "/payments",
       path: "payments",
-      show: true,
-    },
-    {
-      icon: <ParamsI />,
-      text: "Parametreler",
-      to: "/parameters",
-      path: "parameters",
-      show: localUser?.isManager ? true : false,
     },
   ];
 
@@ -157,39 +107,25 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-col gap-1 px-6 pb-4 w-full">
-            {sidebarItems
-              .filter((item) => item.show)
-              .map((item, index) => (
-                <Link to={item.to} key={index}>
-                  <div
-                    onClick={() => {
-                      setOpenSidebar(!openSidebar);
-                    }}
-                    className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors ${
-                      path === item.path && "bg-[--light-1] text-[--primary-1]"
-                    }`}
-                    onMouseEnter={() =>
-                      setHoveredIndex((pre) => {
-                        return {
-                          ...pre,
-                          [index]: Date.now(),
-                        };
-                      })
-                    }
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex justify-center items-center p-1">
-                        {index === 0 ? (
-                          <item.icon animationKey={hoveredIndex[index]} />
-                        ) : (
-                          item.icon
-                        )}
-                      </div>
-                      <div>{item.text}</div>
+            {sidebarItems.map((item, index) => (
+              <Link to={item.to} key={index}>
+                <div
+                  onClick={() => {
+                    setOpenSidebar(!openSidebar);
+                  }}
+                  className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors ${
+                    path === item.path && "bg-[--light-1] text-[--primary-1]"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex justify-center items-center p-1">
+                      {item.icon}
                     </div>
+                    <div>{item.text}</div>
                   </div>
-                </Link>
-              ))}
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

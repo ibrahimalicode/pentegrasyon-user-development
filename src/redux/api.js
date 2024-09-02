@@ -38,10 +38,10 @@ export const privateApi = () => {
   axiosPrivate.interceptors.response.use(
     (response) => response,
     async (error, response) => {
-      if (error.response?.status === 401) {
-        clearAuth();
-        window.location.href = "/login";
-      }
+      // if (error.response?.status === 401) {
+      //   clearAuth();
+      //   window.location.href = "/login";
+      // }
 
       if (error.response?.status === 403) {
         toast.dismiss();

@@ -3,23 +3,21 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import EditProfile from "./pages/editProfile";
+import EditUserProfile from "./pages/editUserProfile";
 import EditUserInvoice from "./pages/editUserInvoice";
+import EditUserPassword from "./pages/editUserPassword";
 
 //REDUX
-import { getUser } from "../../redux/user/getUserSlice";
+import { getUser, resetGetUserState } from "../../redux/user/getUserSlice";
 import { getCities } from "../../redux/data/getCitiesSlice";
-import { getAuth } from "../../redux/api";
-import EditUserPassword from "./pages/editUserPassword";
-import EditAdminPassword from "./pages/editAdminPassword";
 
 //VAR
 const tabs = ["Profili Düzenle", "Fatura Bilgileri", "Güvenlik"];
 
 const ProfilePage = () => {
-  const localUser = getAuth();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user.getUser);
+
+  const { user, success } = useSelector((state) => state.user.getUser);
   const { cities } = useSelector((state) => state.data.getCities);
 
   const [selected, setSelected] = useState(0);
@@ -27,10 +25,8 @@ const ProfilePage = () => {
 
   // GET THE USER
   useEffect(() => {
-    if (!user) {
+    if (!userData) {
       dispatch(getUser());
-    } else {
-      setUserData(user);
     }
   }, [user]);
 
@@ -40,6 +36,14 @@ const ProfilePage = () => {
       dispatch(getCities());
     }
   }, [cities]);
+
+  //SET USER AND INVOICE
+  useEffect(() => {
+    if (success) {
+      setUserData(user);
+      dispatch(resetGetUserState());
+    }
+  }, [user, success]);
 
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -77,12 +81,11 @@ const ProfilePage = () => {
       </nav>
 
       {selected === 0 ? (
-        <EditProfile user={userData} cities={cities} />
+        <EditUserProfile user={userData} cities={cities} />
       ) : selected === 1 ? (
         <EditUserInvoice user={userData} cities={cities} />
       ) : (
-        selected === 2 &&
-        (localUser?.isManager ? <EditAdminPassword /> : <EditUserPassword />)
+        selected === 2 && <EditUserPassword />
       )}
     </section>
   );

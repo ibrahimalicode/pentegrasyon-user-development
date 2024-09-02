@@ -13,11 +13,11 @@ import CustomPhoneInput from "../../common/customPhoneInput";
 
 // REDUX
 import { getUser } from "../../../redux/user/getUserSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   resetUpdateUserData,
   updateUserData,
 } from "../../../redux/user/updateUserDataSlice";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 
 const EditUserProfile = ({ user, cities }) => {
   const dispatch = useDispatch();
@@ -275,7 +275,7 @@ const EditUserProfile = ({ user, cities }) => {
         <div className="flex justify-end mt-16 sm:mt-52">
           <Button
             text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-[0]"
+            className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
           />
         </div>

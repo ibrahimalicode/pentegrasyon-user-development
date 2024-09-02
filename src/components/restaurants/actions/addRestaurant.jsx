@@ -1,40 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import { CancelI, EditI } from "../../assets/icon";
-import { usePopup } from "../../context/PopupContext";
-import CustomInput from "../common/customInput";
-import CustomPhoneInput from "../common/customPhoneInput";
-import CustomSelect from "../common/customSelector";
-import CustomTextarea from "../common/customTextarea";
+import { CancelI } from "../../../assets/icon";
+import { usePopup } from "../../../context/PopupContext";
+import CustomInput from "../../common/customInput";
+import CustomPhoneInput from "../../common/customPhoneInput";
+import CustomSelect from "../../common/customSelector";
+import CustomTextarea from "../../common/customTextarea";
 import toast from "react-hot-toast";
-import { formatSelectorData, googleMap } from "../../utils/utils";
+import { formatSelectorData, googleMap } from "../../../utils/utils";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { getCities } from "../../redux/data/getCitiesSlice";
+import { getCities } from "../../../redux/data/getCitiesSlice";
 import {
   getDistricts,
   resetGetDistrictsState,
-} from "../../redux/data/getDistrictsSlice";
+} from "../../../redux/data/getDistrictsSlice";
 import {
   getNeighs,
   resetGetNeighsState,
-} from "../../redux/data/getNeighsSlice";
+} from "../../../redux/data/getNeighsSlice";
 import {
   getLocation,
   resetGetLocationState,
-} from "../../redux/data/getLocationSlice";
+} from "../../../redux/data/getLocationSlice";
 import {
   addRestaurant,
   resetAddRestaurantState,
-} from "../../redux/restaurants/addRestaurantSlice";
+} from "../../../redux/restaurants/addRestaurantSlice";
 import { isEqual } from "lodash";
 import {
   getUsers,
   resetGetUsers,
   resetGetUsersState,
-} from "../../redux/users/getUsersSlice";
+} from "../../../redux/users/getUsersSlice";
 import { useParams } from "react-router-dom";
-import { getAuth } from "../../redux/api";
+import { getAuth } from "../../../redux/api";
 
 const AddRestaurant = ({ onSuccess }) => {
   const params = useParams();

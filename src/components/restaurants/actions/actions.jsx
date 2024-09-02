@@ -6,9 +6,9 @@ import EditRestaurant from "./edit";
 import DeleteRetaurant from "./delete";
 import TransferRestaurant from "./transfer";
 
-const RestaurantActions = ({ index, restaurant, totalItems, onSuccess }) => {
+const Actions = ({ index, restaurant, onSuccess }) => {
   const outRef = useRef();
-  const userRestaurantMenuRef = useRef();
+  const restaurantMenuRef = useRef();
   const { contentRef, setContentRef } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
@@ -17,27 +17,25 @@ const RestaurantActions = ({ index, restaurant, totalItems, onSuccess }) => {
   };
 
   useEffect(() => {
-    if (userRestaurantMenuRef) {
-      const refs = contentRef.filter(
-        (ref) => ref.id !== "userRestaurantActions"
-      );
+    if (restaurantMenuRef) {
+      const refs = contentRef.filter((ref) => ref.id !== "restaurantActions");
       setContentRef([
         ...refs,
         {
-          id: "userRestaurantActions",
+          id: "restaurantActions",
           outRef: outRef.current ? outRef : null,
-          ref: userRestaurantMenuRef,
+          ref: restaurantMenuRef,
           callback: () => setOpenMenu(null),
         },
       ]);
     }
-  }, [userRestaurantMenuRef, outRef, openMenu]);
+  }, [restaurantMenuRef, outRef, openMenu]);
   return (
     <>
       <div
         className="cursor-pointer"
         onClick={handleClick}
-        ref={userRestaurantMenuRef}
+        ref={restaurantMenuRef}
       >
         <MenuI
           className={`w-full ${openMenu === index && "text-[--primary-2]"}`}
@@ -62,4 +60,4 @@ const RestaurantActions = ({ index, restaurant, totalItems, onSuccess }) => {
   );
 };
 
-export default RestaurantActions;
+export default Actions;

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
+import Button from "../../common/button";
 import CustomInput from "../../common/customInput";
 
 // REDUX
@@ -11,7 +12,6 @@ import {
   resetUpdateUserPassword,
   updateUserPassword,
 } from "../../../redux/user/updateUserPasswordSlice";
-import Button from "../../common/button";
 
 const EditUserPassword = () => {
   const toastId = useRef();
@@ -21,7 +21,6 @@ const EditUserPassword = () => {
     (state) => state.user.updatePassword
   );
 
-  const [openPassword, setOpenPassword] = useState(false);
   const [userPassword, setUserPassword] = useState({
     password: "",
     confirmPassword: "",
@@ -29,7 +28,7 @@ const EditUserPassword = () => {
 
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Updating user password...");
+      toastId.current = toast.loading("Updating password...");
     } else if (error) {
       toast.dismiss(toastId.current);
       if (error?.message_TR) {
@@ -40,7 +39,11 @@ const EditUserPassword = () => {
       dispatch(resetUpdateUserPassword());
     } else if (success) {
       toast.dismiss(toastId.current);
-      toast.success("User password updated");
+      toast.success("Password updated");
+      setUserPassword({
+        password: "",
+        confirmPassword: "",
+      });
       dispatch(resetUpdateUserPassword());
     }
   }, [loading, success, error, dispatch]);
@@ -66,7 +69,7 @@ const EditUserPassword = () => {
       <form className="w-full" onSubmit={handleSubmit}>
         <div className="flex gap-4 mt-4 max-sm:flex-col">
           <CustomInput
-            required={openPassword}
+            required
             label="Şifre"
             placeholder="Şifre"
             className="py-3.5 text-sm"
@@ -82,7 +85,7 @@ const EditUserPassword = () => {
             }}
           />
           <CustomInput
-            required={openPassword}
+            required
             label="Şifreyi onayla"
             placeholder="Şifre"
             className="py-3.5 text-sm"
@@ -102,7 +105,7 @@ const EditUserPassword = () => {
         <div className="flex justify-end mt-16">
           <Button
             text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1] text-[1.1rem] font-light rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+            className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
           />
         </div>

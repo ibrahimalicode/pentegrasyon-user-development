@@ -7,29 +7,29 @@ import { useDispatch, useSelector } from "react-redux";
 //REDUX
 import { getDistricts } from "../src/redux/data/getDistrictsSlice";
 import { getNeighs } from "../src/redux/data/getNeighsSlice";
-import {
-  addUserInvoiceById,
-  resetaddUserInvoice,
-} from "../src/redux/users/addUserInvoiceByIdSlice";
+import { getCities } from "../src/redux/data/getCitiesSlice";
 import {
   resetUpdateUserInvoice,
-  updateUserInvoiceById,
-} from "../src/redux/users/updateUserInvoiceByIdSlice";
-import { getCities } from "../src/redux/data/getCitiesSlice";
+  updateUserInvoice,
+} from "../src/redux/user/updateUserInvoiceSlice";
+import {
+  addUserInvoice,
+  resetaddUserInvoice,
+} from "../src/redux/user/addUserInvoiceSlice";
 
-export const useEditUserInvoiceById = (dispatcher, user) => {
+export const useEditUserInvoice = (dispatcher, user) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
-    (state) => state.users.updateInvoice
+    (state) => state.user.updateInvoice
   );
 
   const {
     loading: addInvoiceLoading,
     success: addInvoiceSuccess,
     error: addInvoiceError,
-  } = useSelector((state) => state.users.addInvoice);
+  } = useSelector((state) => state.user.addInvoice);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -272,10 +272,9 @@ export const useEditUserInvoiceById = (dispatcher, user) => {
     const equalData = isEqual(userInvoiceBefore, userInvoice);
     if (!equalData && user) {
       if (userInvoiceBefore) {
-        dispatch(updateUserInvoiceById({ userId: user?.id, ...userInvoice }));
-        console.log({ userId: user?.id, ...userInvoice });
+        dispatch(updateUserInvoice({ ...userInvoice }));
       } else {
-        dispatch(addUserInvoiceById({ userId: user?.id, ...userInvoice }));
+        dispatch(addUserInvoice({ ...userInvoice }));
       }
     }
   }

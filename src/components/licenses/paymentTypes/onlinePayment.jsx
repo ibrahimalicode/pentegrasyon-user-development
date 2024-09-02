@@ -12,24 +12,22 @@ import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 // REDUX
-import {
-  getUser,
-  resetgetUserState,
-} from "../../../redux/users/getUserByIdSlice";
+import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
-const OnlinePayment = ({ setStep, userId }) => {
+const OnlinePayment = ({ setStep }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
   const { success: getUserSucc, user } = useSelector(
-    (state) => state.users.getUser
+    (state) => state.user.getUser
   );
 
   const { loading, success, error } = useSelector(
     (state) => state.licenses.extendByPay
   );
-  const cartItems = useSelector((state) => state.cart.items);
+
+  const { loading: contextLoading } = useSelector((state) => state.getContext);
 
   const [flip, setFlip] = useState(false);
   const [submit, setSubmit] = useState(false);
@@ -45,10 +43,9 @@ const OnlinePayment = ({ setStep, userId }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(cartItems);
     const formData = new FormData(e.target);
     dispatch(extendByOnlinePay({ formData }));
-    if (!userInvData) setSubmit(true);
+    setSubmit(true);
   }
 
   //TOAST PAYMENT
@@ -56,11 +53,12 @@ const OnlinePayment = ({ setStep, userId }) => {
     if (loading) {
       toastId.current = toast.loading("Loading...");
     } else if (success) {
+      setStep(4);
       toast.remove(toastId.current);
     } else if (error) {
       toast.remove(toastId.current);
       if (error.message_TR) {
-        toast.error(message_TR);
+        toast.error(error.message_TR);
       } else {
         toast.error("Something went wrong");
       }
@@ -70,7 +68,7 @@ const OnlinePayment = ({ setStep, userId }) => {
   //GET USER
   useEffect(() => {
     if (!userData) {
-      dispatch(getUser({ userId }));
+      dispatch(getUser());
     }
   }, [userData]);
 
@@ -79,7 +77,7 @@ const OnlinePayment = ({ setStep, userId }) => {
     if (getUserSucc) {
       setUserData(user);
       setUserInvData(user.userInvoiceAddressDTO);
-      dispatch(resetgetUserState());
+      dispatch(resetGetUserState());
     }
   }, [user, getUserSucc]);
 
@@ -97,7 +95,7 @@ const OnlinePayment = ({ setStep, userId }) => {
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full max-w-3xl mx-auto">
         {userData && (
           <InvoiceData
             user={userData}
@@ -121,7 +119,7 @@ const OnlinePayment = ({ setStep, userId }) => {
           text="Devam"
           letIcon={true}
           type="submit"
-          disabled={loading}
+          disabled={loading || contextLoading}
         />
       </div>
 

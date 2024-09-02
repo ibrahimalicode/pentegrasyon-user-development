@@ -12,7 +12,7 @@ import TurnstileWidget from "../components/turnstileWidget";
 // ASSETS
 import imgUrl from "../assets/img/hero-bg.jpg";
 
-function UserLogin() {
+function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toastId = useRef();
@@ -110,4 +110,4 @@ function UserLogin() {
   );
 }
 
-export default UserLogin;
+export default Login;

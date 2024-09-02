@@ -4,16 +4,16 @@ import {
   getContext,
   resetGetContextState,
 } from "../../../redux/payTR/getContextSlice";
+import toast from "react-hot-toast";
 
 const className =
   "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2";
 
 const PayTRForm = ({ cardData }) => {
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
-  const { loading, success, error, context } = useSelector(
-    (state) => state.getContext
-  );
+  const { success, error, context } = useSelector((state) => state.getContext);
 
   const [contextData, setContextData] = useState({
     fetched: false,
@@ -44,17 +44,31 @@ const PayTRForm = ({ cardData }) => {
   });
 
   useEffect(() => {
-    if (!contextData.fetched) {
-      dispatch(getContext());
+    if (!contextData.fetched && cartItems.length > 0) {
+      const payment_amount = cartItems.reduce(
+        (acc, item) => acc + item.price,
+        0
+      );
+      const user_basket = cartItems.map((item) => {
+        return [item.marketplaceId, item.price];
+      });
+      dispatch(getContext({ payment_amount, user_basket }));
     }
   }, []);
 
+  //TOAST PAYMENT
   useEffect(() => {
     if (success) {
       setContextData(context);
       dispatch(resetGetContextState());
+    } else if (error) {
+      if (error.message_TR) {
+        toast.error(error.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
-  }, [success]);
+  }, [success, error]);
 
   return (
     <>

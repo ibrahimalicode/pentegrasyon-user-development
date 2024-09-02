@@ -1,20 +1,22 @@
-import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
-import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
-import Siparisim from "../../../assets/img/packages/Siparisim.png";
-import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
-import GoFody from "../../../assets/img/packages/GoFody.png";
-import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
-import { useDispatch, useSelector } from "react-redux";
+//MODULES
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
+//COMP
+import BackButton from "../stepsAssets/backButton";
 import CustomSelect from "../../common/customSelector";
 import ForwardButton from "../stepsAssets/forwardButton";
+
+//IMG
+import GoFody from "../../../assets/img/packages/GoFody.png";
+import Siparisim from "../../../assets/img/packages/Siparisim.png";
+import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
+import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
+import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
+import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
+
+//FUNC
 import { groupedLicensePackages, sumCartPrices } from "../../../utils/utils";
-import { useEffect, useState } from "react";
-import {
-  addItemToCart,
-  removeItemFromCart,
-} from "../../../redux/cart/cartSlice";
-import toast from "react-hot-toast";
-import BackButton from "../stepsAssets/backButton";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -25,14 +27,7 @@ const imageSRCs = [
   { src: Siparisim, name: "Siparisim" },
 ];
 
-const SecondStep = ({
-  paymentMethod,
-  setPaymentMethod,
-  restaurantData,
-  step,
-  setStep,
-}) => {
-  const dispatch = useDispatch();
+const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const [licensePackagesData, setLicensePackagesData] = useState();
 
@@ -40,33 +35,6 @@ const SecondStep = ({
     e.preventDefault();
     setStep(3);
   }
-
-  const handleAddToCart = (pkg) => {
-    if (!pkg.restaurantId) {
-      toast.error("Lütfen restoran seçın 😊", { id: "choose_restaurant" });
-      return;
-    }
-    if (cartItems.length <= 1) {
-      toast.error("En az bir tane lisans paketi kalması lazım", {
-        id: "remove_item",
-      });
-      return;
-    }
-    const existingPackage = cartItems.find(
-      (item) =>
-        item.marketplaceId === pkg.marketplaceId &&
-        item.restaurantId === pkg.restaurantId
-    );
-
-    if (existingPackage) {
-      dispatch(
-        removeItemFromCart({
-          id: existingPackage.id,
-          restaurantId: pkg.restaurantId,
-        })
-      );
-    }
-  };
 
   useEffect(() => {
     if (cartItems) {
@@ -77,7 +45,7 @@ const SecondStep = ({
   return (
     step === 2 && (
       <form onSubmit={handleSubmit}>
-        <div className="w-full px-4 ">
+        <div className="w-full px-4 font-normal">
           <div className="w-full flex justify-center pt-2">
             <CustomSelect
               required={true}
@@ -117,24 +85,20 @@ const SecondStep = ({
                       const isSelected = true;
 
                       return (
-                        <div key={pkg.id} className="flex items-center">
+                        <div key={pkg.restaurantId} className="flex flex-col">
+                          <p className="text-xs">{pkg.restaurantName}</p>
                           <div
-                            className={`py-1 px-6 rounded cursor-pointer ${
+                            className={`py-1 px-6 rounded w-28 ${
                               isSelected
                                 ? "bg-[--primary-1] text-[--white-1]"
                                 : "bg-gray-200"
                             }`}
-                            onClick={() =>
-                              handleAddToCart({
-                                ...pkg,
-                                restaurantId: restaurantData.id,
-                                restaurantName: restaurantData.label,
-                              })
-                            }
                           >
-                            <p className="">{pkg.time} Yıllık</p>
+                            <p className="whitespace-nowrap">
+                              {pkg.time} Yıllık
+                            </p>
                             <p
-                              className={`text-sm ${
+                              className={`text-sm whitespace-nowrap ${
                                 isSelected
                                   ? "text-[--white-1]"
                                   : "text-[--gr-1]"

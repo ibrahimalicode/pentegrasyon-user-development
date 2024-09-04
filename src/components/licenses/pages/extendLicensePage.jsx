@@ -1,7 +1,7 @@
 // MODULES
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 //COMP
 import StepBar from "../../common/stepBar";
@@ -9,22 +9,17 @@ import StepFrame from "../../common/stepFrame";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 //STEPS
-import FirstStep from "../steps/firstStep";
-import SecondStep from "../steps/secondStep";
-import ThirdStep from "../steps/thirdStep";
-import FourthStep from "../steps/fourthStep";
+import FirstStep from "../extendLicenseSteps/1stStep";
+import SecondStep from "../extendLicenseSteps/2ndStep";
+import ThirdStep from "../extendLicenseSteps/3rdStep";
+import FourthStep from "../extendLicenseSteps/4thStep";
 
 const ExtendLicensePage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const { user, restaurant } = location.state || {};
   const currentPath = location.pathname;
   const pathArray = currentPath.split("/");
   const actionType = pathArray[pathArray.length - 1];
-
-  const { success: extendSuccess } = useSelector(
-    (state) => state.licenses.extendByPay
-  );
 
   const steps = 4;
   const [step, setStep] = useState(1);

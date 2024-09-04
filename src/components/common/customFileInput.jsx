@@ -68,7 +68,7 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
   return (
     <label
       htmlFor="dropzone-file"
-      className={`flex flex-col items-center justify-center w-full h-64 text-[--gr-1] border-2 border-[--light-1] border-dashed rounded-lg cursor-pointer bg-[--white-1] ${
+      className={`flex flex-col items-center justify-center w-full h-64 text-[--gr-1] border-2 border-[--light-1] border-dashed rounded-lg cursor-pointer bg-[--white-1] relative ${
         isDragging ? "border-[--primary-1] bg-[--light-3]" : ""
       } ${className}`}
       onDragOver={handleDragOver}
@@ -102,17 +102,15 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
           </>
         )}
       </div>
-      {!value && (
-        <input
-          id="dropzone-file"
-          name="dropzone-file"
-          type="file"
-          className="opacity-0"
-          onChange={handleInputChange}
-          accept={accept}
-          required={required}
-        />
-      )}
+      <input
+        id="dropzone-file"
+        name="dropzone-file"
+        type="file"
+        className="absolute top-0 inset-0 opacity-0 cursor-pointer"
+        onChange={handleInputChange}
+        accept={accept}
+        required={required}
+      />
     </label>
   );
 };

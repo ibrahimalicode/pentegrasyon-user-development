@@ -23,9 +23,11 @@ import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
 import imgUrl from "../assets/img/pentegrasyon.png";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const toastId = useRef();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { setShowPopup, setPopupContent } = usePopup();
 
@@ -300,7 +302,11 @@ const Register = () => {
           </form>
         ) : (
           /* Verify Page*/
-          <VerifyCode phoneNumber={phoneNumber} setToConfirm={setToConfirm} />
+          <VerifyCode
+            phoneNumber={phoneNumber}
+            setToConfirm={setToConfirm}
+            onSuccess={() => navigate("/login")}
+          />
         )
       }
     />
@@ -312,10 +318,7 @@ export default Register;
 const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
   return (
     <div className="w-full flex justify-center">
-      <div
-        className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400
-bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--white-1]"
-      >
+      <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--white-1]">
         <div className="text-center">
           <div className="w-full flex justify-center mb-8">
             <p className="text-[--primary-2] text-4xl">

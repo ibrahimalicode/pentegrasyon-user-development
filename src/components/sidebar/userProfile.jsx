@@ -1,46 +1,38 @@
+//MODULES
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
 import { UserI } from "../../assets/icon";
 import ArrowIR from "../../assets/icon/arrowR";
-import { useEffect, useMemo, useState } from "react";
-import { getAuth } from "../../redux/api";
-import { useDispatch, useSelector } from "react-redux";
-import { getAdmin } from "../../redux/admin/getAdminSlice";
+
+//REDUX
 import { getUser } from "../../redux/user/getUserSlice";
 
 function UserProfile({ setOpenSidebar }) {
   const param = useParams();
   const dispatch = useDispatch();
-  const localUser = useMemo(() => getAuth(), []);
-  const isAdmin = localUser?.isManager;
 
   const { user } = useSelector((state) => state.user.getUser);
-  const { admin } = useSelector((state) => state.admin.getAdmin);
 
   const [userData, setUserData] = useState(null);
 
   useState(() => {
-    if (isAdmin) {
-      if (!admin) {
-        dispatch(getAdmin());
-      }
-    } else {
-      if (!user) {
-        dispatch(getUser());
-      }
+    if (!user) {
+      dispatch(getUser());
     }
-  }, [localUser, isAdmin]);
+  }, [user]);
 
   useEffect(() => {
-    if (user && !isAdmin) {
+    if (user) {
       setUserData({
         ...user,
         rol: user.isDealer ? "Dealer" : "Kullanıcı",
       });
     }
-    if (admin && isAdmin) {
-      setUserData({ ...admin, rol: "Admin" });
-    }
-  }, [user, admin]);
+  }, [user]);
+
   return (
     <Link to="/profile">
       <div

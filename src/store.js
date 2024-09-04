@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 // INDEX
 import authSlice from "./redux/auth";
 import dataSlice from "./redux/data";
-import adminSlice from "./redux/admin";
 import generalVariablesSlice from "./redux/generalVars";
 import licensePackagesSlice from "./redux/licensePackages";
 import licensesSlice from "./redux/licenses";
@@ -16,7 +15,6 @@ import cartSlice from "./redux/cart/cartSlice";
 const store = configureStore({
   reducer: {
     auth: authSlice,
-    admin: adminSlice,
     user: userSlice,
     users: usersSlice,
     restaurants: restaurantsSlice,

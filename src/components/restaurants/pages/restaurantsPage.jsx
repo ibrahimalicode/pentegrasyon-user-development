@@ -77,7 +77,7 @@ const RestaurantsPage = () => {
     if (!searchVal) return;
     dispatch(
       getRestaurants({
-        pageNumber,
+        pageNumber: 1,
         pageSize: itemsPerPage,
         searchKey: searchVal,
         active: filter?.status?.value,
@@ -86,6 +86,7 @@ const RestaurantsPage = () => {
         neighbourhood: filter?.neighbourhood?.value,
       })
     );
+    setPageNumber(1);
   }
 
   function handleFilter(bool) {

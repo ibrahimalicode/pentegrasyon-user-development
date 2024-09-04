@@ -3,7 +3,7 @@ import CustomInput from "../common/customInput";
 import CustomSelect from "../common/customSelector";
 import CustomTextarea from "../common/customTextarea";
 
-const EditUserInvoice = ({
+const EditUserInvoiceById = ({
   cities,
   districts,
   neighs,
@@ -19,6 +19,7 @@ const EditUserInvoice = ({
           placeholder="İsim/Ünvan"
           className="py-[.45rem] text-sm"
           value={userInvoice.title}
+          maxLength={100}
           onChange={(e) => {
             setUserInvoice((prev) => {
               return {
@@ -35,6 +36,7 @@ const EditUserInvoice = ({
           label="VKN veya TCKN"
           placeholder="VKN veya TCKN"
           className="py-[.45rem] text-sm"
+          maxLength={20}
           value={userInvoice.tradeRegistryNumber}
           onChange={(e) => {
             setUserInvoice((prev) => {
@@ -50,6 +52,7 @@ const EditUserInvoice = ({
           label="Vergi Dairesi"
           placeholder="Vergi Dairesi"
           className="py-[.45rem] text-sm"
+          maxLength={30}
           value={userInvoice.taxOffice}
           onChange={(e) => {
             setUserInvoice((prev) => {
@@ -63,11 +66,11 @@ const EditUserInvoice = ({
       </div>
       <div className="flex gap-4">
         <CustomInput
-          required={true}
-          type="number"
+          type="text"
           label="Tic.Sic.No"
           placeholder="Tic.Sic.No"
           className="py-[.45rem] text-sm"
+          maxLength={20}
           value={userInvoice.taxNumber}
           onChange={(e) => {
             setUserInvoice((prev) => {
@@ -80,10 +83,11 @@ const EditUserInvoice = ({
         />
         <CustomInput
           required={true}
-          type="number"
+          type="text"
           label="Mersis No"
           placeholder="Mersis No"
           className="py-[.45rem] text-sm"
+          maxLength={20}
           value={userInvoice.mersisNumber}
           onChange={(e) => {
             setUserInvoice((prev) => {
@@ -181,4 +185,4 @@ const EditUserInvoice = ({
   );
 };
 
-export default EditUserInvoice;
+export default EditUserInvoiceById;

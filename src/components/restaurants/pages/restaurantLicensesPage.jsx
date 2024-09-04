@@ -27,10 +27,6 @@ import {
   getRestaurant,
   resetGetRestaurantState,
 } from "../../../redux/restaurants/getRestaurantSlice";
-import {
-  getMergedUsers,
-  resetGetMergedUsers,
-} from "../../../redux/users/getUserByIdSlice";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
@@ -49,12 +45,6 @@ const RestaurantLicensesPage = () => {
     success: restaurantSuccess,
     restaurant,
   } = useSelector((state) => state.restaurants.getRestaurant);
-
-  const {
-    success: mergedUsersSucc,
-    error: mergedUsersError,
-    users,
-  } = useSelector((state) => state.users.getUser.mergedUsers);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -198,6 +188,7 @@ const RestaurantLicensesPage = () => {
       } else {
         setLicensesData(restaurantLicenses.data);
         setTotalItems(restaurantLicenses.totalCount);
+        dispatch(resetGetRestaurantLicenses());
       }
     }
 
@@ -222,8 +213,11 @@ const RestaurantLicensesPage = () => {
     }
 
     if (restaurantSuccess) {
+      setRestaurantData(restaurant);
       setLicensesData(restaurantLicenses.data);
       setTotalItems(restaurantLicenses.totalCount);
+      dispatch(resetGetRestaurantState());
+      dispatch(resetGetRestaurantLicenses());
     }
   }, [restaurantError, restaurantSuccess, restaurant]);
 

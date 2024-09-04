@@ -333,21 +333,28 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
         location.reduce((sum, loc) => sum + loc.lng, 0) / location.length
       ).toFixed(6);
 
-      setRestaurantData((prev) => {
-        return {
-          ...prev,
-          latitude: averageLat,
-          longitude: averageLng,
-        };
-      });
+      const neighbourhood = restaurantData.neighbourhood;
+      if (neighbourhood?.id) {
+        //CHECK THE ORIGINAL VALUE
+        setRestaurantData((prev) => {
+          return {
+            ...prev,
+            latitude: averageLat,
+            longitude: averageLng,
+          };
+        });
+        setLat(averageLat);
+        setLng(averageLng);
+      } else {
+        setLat(latitude);
+        setLng(longitude);
+      }
       setLocationData((prev) => {
         return {
           ...prev,
           location,
         };
       });
-      setLat(averageLat);
-      setLng(averageLng);
       dispatch(resetGetLocationState());
     }
   }, [locationSuccess]);

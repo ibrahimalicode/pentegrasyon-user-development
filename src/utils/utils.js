@@ -235,7 +235,7 @@ export function groupedLicensePackages(data) {
 
 let marker = null;
 
-export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 13) {
+export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
   const position = {
     lat: parseFloat(lat),
     lng: parseFloat(lng),

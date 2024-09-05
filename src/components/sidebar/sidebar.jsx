@@ -1,7 +1,15 @@
+//MODULES
+import { useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
+import { usePopup } from "../../context/PopupContext";
+
+//COMP
 import UserProfile from "./userProfile";
+
+//ASSETS
 import logo from "../../assets/img/logo.png";
 
-// Icons
+// ICONS
 import {
   DashboardI,
   RestourantI,
@@ -10,10 +18,6 @@ import {
   PaymentI,
   BoxInI,
 } from "../../assets/icon/index";
-
-import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { usePopup } from "../../context/PopupContext";
 
 function Sidebar({ openSidebar, setOpenSidebar }) {
   const param = useParams();
@@ -62,8 +66,6 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   const path = route.length > 1 ? route : "dashboard";
   // console.log(route);
 
-  const [hoveredIndex, setHoveredIndex] = useState([]);
-
   useEffect(() => {
     if (sidebarRef) {
       const refs = contentRef.filter((ref) => ref.id !== "sidebar");
@@ -93,16 +95,16 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
         >
           <ArrowR className="text-[--black-1] font-bold" />
         </div> */}
-        <header className="flex flex-col justify-center items-start p-6 w-full text-xl font-[500] leading-7 text-black whitespace-nowrap">
-          <div className="flex gap-2">
+        <header className="flex items-center justify-center p-6 w-full text-xl font-[500] leading-7 text-[--black-2]">
+          <Link to="/" className="flex gap-1 w-max mr-6">
             <img
               loading="lazy"
               src={logo}
               alt=""
-              className="shrink-0 w-8 aspect-square"
+              className="shrink-0 w-7 aspect-square"
             />
-            <p>Pentegrasyon</p>
-          </div>
+            <p className="whitespace-nowrap">entegrasyon</p>
+          </Link>
         </header>
 
         <div className="flex flex-col justify-center w-full">

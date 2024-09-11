@@ -158,6 +158,7 @@ const Register = () => {
       className2="pt-[0rem] pb-[1rem]"
       component={
         !toConfirm ? (
+          // Privacy Policy
           /* Register Page */
           <form onSubmit={confirmRegister}>
             <div className="flex justify-center">
@@ -230,7 +231,7 @@ const Register = () => {
                   }}
                   inputStyle={{ color: "var(--white-1)" }}
                   singleValueStyle={{ color: "white" }}
-                  className="text-sm"
+                  className="text-sm mt-[5px] sm:mt-[5px]"
                   className2="container-class mt-[0px] sm:mt-[0px]"
                 />
                 <CustomSelect
@@ -248,7 +249,7 @@ const Register = () => {
                   }}
                   inputStyle={{ color: "var(--white-1)" }}
                   singleValueStyle={{ color: "white" }}
-                  className="text-sm"
+                  className="text-sm mt-[5px] sm:mt-[5px]"
                   className2="container-class mt-[0px] sm:mt-[0px]"
                 />
               </div>

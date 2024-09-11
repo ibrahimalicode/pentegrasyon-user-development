@@ -372,16 +372,18 @@ function PrivacyBtn() {
 
   const PrivacyPopup = () => {
     return (
-      <div className="pt-8 bg-[--white-1] overflow-y-auto h-screen">
-        <div className="absolute top-2 right-3 z-[50]">
-          <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
-            onClick={closeForm}
-          >
-            <CancelI />
+      <div className="pt-8 bg-[--white-1] rounded-lg overflow-clip">
+        <div className="overflow-y-auto h-[95dvh]">
+          <div className="absolute top-2 right-3 z-[50]">
+            <div
+              className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
+              onClick={closeForm}
+            >
+              <CancelI />
+            </div>
           </div>
+          <PrivacyPolicy />
         </div>
-        <PrivacyPolicy />
       </div>
     );
   };

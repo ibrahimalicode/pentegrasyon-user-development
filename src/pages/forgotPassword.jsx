@@ -59,6 +59,7 @@ const ForgotPassword = () => {
 
   return (
     <GlassFrame
+      className="pt-[4rem]"
       component={
         !toVerify ? (
           /* Send code via Email or PhoneNumber */

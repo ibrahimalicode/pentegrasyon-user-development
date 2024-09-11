@@ -53,6 +53,7 @@ function Login() {
 
   return (
     <GlassFrame
+      className="pt-[4rem]"
       component={
         <form onSubmit={handleLogin}>
           <h1 className="text-4xl font-bold text-center mb-8">Login</h1>

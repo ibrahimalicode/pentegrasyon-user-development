@@ -20,7 +20,7 @@ const GlassFrame = ({ component, className, className2 }) => {
       >
         {component}
       </div>
-      <div className="absolute bottom-0 left-0 right-0 z-[999] text-white text-center font-light py-3 px-[4%] text-sm bg-indigo-500/60">
+      <div className="absolute bottom-0 left-0 right-0 z-[999] text-white font-extralight p-1 text-xs bg-indigo-500/60 max-sm:text-center">
         Pentegrasyon bir LiwaSoft iştirakidir.{" "}
         <span className="max-sm:hidden">- </span>
         <span className="max-sm:block">

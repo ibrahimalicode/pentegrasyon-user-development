@@ -168,54 +168,58 @@ const Register = () => {
             <div className="flex flex-col max-w-full">
               <div className="flex w-full gap-4">
                 <CustomInput
-                  label="Ad"
+                  // label="Ad"
                   type="text"
                   placeholder="Ad"
                   value={firstName}
                   onChange={(e) => setFirstName(e)}
                   required={true}
-                  className="py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className2="mt-[5px] sm:mt-[5px]"
                   className5="text-[var(--white-1)]"
                 />
                 <CustomInput
-                  label="Soyad"
+                  // label="Soyad"
                   type="text"
                   placeholder="Soyad"
                   value={lastName}
                   onChange={(e) => setLastName(e)}
                   required={true}
-                  className="py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className2="mt-[5px] sm:mt-[5px]"
                   className5="text-[var(--white-1)]"
                 />
               </div>
 
               <div className="flex w-full sm:gap-4 max-sm:flex-col">
                 <CustomPhoneInput
-                  label="Cep Telefonu"
+                  // label="Cep Telefonu"
                   type="tel"
                   placeholder="+90"
                   value={phoneNumber}
                   onChange={(phone) => setPhoneNumber(phone)}
                   required={true}
-                  className="py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className2="mt-[5px] sm:mt-[5px]"
                   className5="text-[var(--white-1)]"
                   maxLength={14}
                 />
                 <CustomInput
-                  label="E-Posta"
+                  // label="E-Posta"
                   type="email"
                   placeholder="E-Posta"
                   value={email}
                   onChange={(e) => setEmail(formatEmail(e))}
                   required={true}
-                  className="py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className2="mt-[5px] sm:mt-[5px]"
                   className5="text-[var(--white-1)]"
                 />
               </div>
 
               <div className="flex w-full sm:gap-4 max-sm:flex-col">
                 <CustomSelect
-                  label="Şehir"
+                  // label="Şehir"
                   options={citiesData}
                   value={city ? city : { value: null, label: "Şehir" }}
                   onChange={setCity}
@@ -227,11 +231,11 @@ const Register = () => {
                   inputStyle={{ color: "var(--white-1)" }}
                   singleValueStyle={{ color: "white" }}
                   className="text-sm"
-                  className2="container-class"
+                  className2="container-class mt-[0px] sm:mt-[0px]"
                 />
                 <CustomSelect
                   required={true}
-                  label="İlçe"
+                  // label="İlçe"
                   value={
                     district ? district : { value: null, label: "İlçe seç" }
                   }
@@ -245,28 +249,32 @@ const Register = () => {
                   inputStyle={{ color: "var(--white-1)" }}
                   singleValueStyle={{ color: "white" }}
                   className="text-sm"
-                  className2="container-class"
+                  className2="container-class mt-[0px] sm:mt-[0px]"
                 />
               </div>
 
               <div>
                 <CustomInput
-                  label="Şifre"
+                  // label="Şifre"
                   placeholder="Şifre"
                   value={password}
                   onChange={(e) => setPassword(e)}
                   required={true}
-                  className="py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className2="mt-[5px] sm:mt-[5px]"
+                  className3="top-[25%]"
                   className5="text-[var(--white-1)]"
                   letIcon={true}
                 />
                 <CustomInput
-                  label="Şifreyi onayla"
-                  placeholder="Şifre"
+                  // label="Şifreyi onayla"
+                  placeholder="Şifre Tekrar"
                   value={password2}
                   onChange={(e) => setPassword2(e)}
                   required={true}
-                  className="py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className2="mt-[5px] sm:mt-[5px]"
+                  className3="top-[25%]"
                   className5="text-[var(--white-1)]"
                   letIcon={true}
                 />

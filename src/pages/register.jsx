@@ -154,7 +154,8 @@ const Register = () => {
 
   return (
     <GlassFrame
-      className="pt-[2.5rem]"
+      className="pt-[3.5rem] sm:pt-[4.5rem]"
+      className2="pt-[0rem] pb-[1rem]"
       component={
         !toConfirm ? (
           /* Register Page */

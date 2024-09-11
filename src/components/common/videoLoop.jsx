@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import videoSRC from "../../assets/video/pentevideo.mp4";
+// import videoSRC from "../../assets/video/pentevideo.mp4";
 
 const VideoLoop = () => {
   const videoRef = useRef(null);
@@ -17,7 +17,10 @@ const VideoLoop = () => {
         muted
         // controls
       >
-        <source src={videoSRC} type="video/mp4" />
+        <source
+          src="https://liwapos.com/lws/Pentegrasyonback.mp4"
+          type="video/mp4"
+        />
         Your browser does not support the video tag.
       </video>
       {/* <div class="absolute inset-0 bg-gradient-to-t from-indigo-600 via-indigo-500 to-transparent opacity-70 h-16"></div> */}

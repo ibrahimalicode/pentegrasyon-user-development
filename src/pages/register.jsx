@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
+import PrivacyPolicy from "./privacyPolicy";
 import LoadingI from "../assets/anim/loading";
 import CustomInput from "../components/common/customInput";
 import CustomSelect from "../components/common/customSelector";
@@ -24,6 +25,7 @@ import imgUrl from "../assets/img/pentegrasyon.png";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
 import { useNavigate } from "react-router-dom";
+import { CancelI } from "../assets/icon";
 
 const Register = () => {
   const toastId = useRef();
@@ -158,7 +160,6 @@ const Register = () => {
       className2="pt-[0rem] pb-[1rem]"
       component={
         !toConfirm ? (
-          // Privacy Policy
           /* Register Page */
           <form onSubmit={confirmRegister}>
             <div className="flex justify-center">
@@ -282,8 +283,9 @@ const Register = () => {
               </div>
 
               <div className="flex w-full mt-4">
+                {/* /privacyPolicy target='_blank' rel='noopener noreferrer */}
                 <CustomCheckbox
-                  label="<a href='/privacyPolicy' target='_blank' rel='noopener noreferrer' class='text-[--link-1]' >Kullanım Şartları</a>nı okudum ve onaylıyorum."
+                  label={<PrivacyBtn />}
                   className="text-sm"
                   checked={checked}
                   onChange={() => setChecked(!checked)}
@@ -305,7 +307,7 @@ const Register = () => {
               <div className="flex justify-center gap-2">
                 <p>Hesabınız var mı ?</p>
                 <a href="/login" className="text-[--link-1]">
-                  Login
+                  Giriş Yapın
                 </a>
               </div>
             </div>
@@ -359,3 +361,44 @@ const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
     </div>
   );
 };
+
+function PrivacyBtn() {
+  const { setShowPopup, setPopupContent } = usePopup();
+
+  const closeForm = () => {
+    setPopupContent(null);
+    setShowPopup(false);
+  };
+
+  const PrivacyPopup = () => {
+    return (
+      <div className="pt-8 bg-[--white-1] overflow-y-auto h-screen">
+        <div className="absolute top-2 right-3 z-[50]">
+          <div
+            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
+            onClick={closeForm}
+          >
+            <CancelI />
+          </div>
+        </div>
+        <PrivacyPolicy />
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <button
+        className="text-[--link-1]"
+        type="button"
+        onClick={() => {
+          setShowPopup(true);
+          setPopupContent(<PrivacyPopup />);
+        }}
+      >
+        Kullanım Şartları
+      </button>
+      nı okudum ve onaylıyorum.
+    </div>
+  );
+}

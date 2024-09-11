@@ -30,8 +30,10 @@ const CustomCheckbox = ({
       {label && (
         <span
           className={`ml-2 text-[--gr-1] ${className2}`}
-          dangerouslySetInnerHTML={{ __html: label }}
-        ></span>
+          // dangerouslySetInnerHTML={{ __html: label }}
+        >
+          {label}
+        </span>
       )}
     </label>
   );

@@ -1,6 +1,7 @@
 // MODULES
-import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -17,8 +18,10 @@ import FifthStep from "../addLicenseSteps/5thStep";
 
 //REDUX
 import { clearCart } from "../../../redux/cart/cartSlice";
+import { resetAddByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 
 const AddLicensePage = () => {
+  const toastId = useRef();
   const location = useLocation();
   const dispatch = useDispatch();
   const { user, restaurant } = location.state || {};
@@ -26,11 +29,10 @@ const AddLicensePage = () => {
   const pathArray = currentPath.split("/");
   const actionType = pathArray[pathArray.length - 1];
 
-  const { success: extendSuccess } = useSelector(
-    (state) => state.licenses.extendByPay
-  );
-
   const cartItems = useSelector((state) => state.cart.items);
+  const { success, loading, error } = useSelector(
+    (state) => state.licenses.addByPay
+  );
 
   const steps = 5;
   const [step, setStep] = useState(1);
@@ -66,14 +68,29 @@ const AddLicensePage = () => {
     }
   }, [restaurant]);
 
-  // EXTEND SUCCESS
+  // ADD SUCCESS
   useEffect(() => {
+    if (loading) {
+      toastId.current = toast.loading("Loading...");
+    } else if (success) {
+      toast.remove(toastId.current);
+      if (success) {
+        setStep(4);
+      }
+      dispatch(resetAddByOnlinePay());
+    } else if (error) {
+      toast.remove(toastId.current);
+      setStep(5);
+      window.parent.postMessage({ status: "failed" }, "*");
+      dispatch(resetAddByOnlinePay());
+    }
+
     return () => {
       if (cartItems) {
         dispatch(clearCart());
       }
     };
-  }, [extendSuccess]);
+  }, [loading, success, error, dispatch]);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">

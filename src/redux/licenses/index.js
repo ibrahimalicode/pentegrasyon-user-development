@@ -9,6 +9,7 @@ import updateLicenseDateSlice from "./updateLicenseDateSlice";
 import updateLicenseIsActiveSlice from "./updateLicenseIsActiveSlice";
 import deleteLicenseSlice from "./deleteLicenseSlice";
 import extendByOnlinePaySlice from "./extendLicense/extendByOnlinePaySlice";
+import addByOnlinePaySlice from "./addLicense/addByOnlinePaySlice";
 
 const licensesSlice = combineReducers({
   getLicenses: getLicensesSlice,
@@ -18,6 +19,7 @@ const licensesSlice = combineReducers({
   updateLicenseDate: updateLicenseDateSlice,
   updateLicenseIsActive: updateLicenseIsActiveSlice,
   deleteLicense: deleteLicenseSlice,
+  addByPay: addByOnlinePaySlice,
   extendByPay: extendByOnlinePaySlice,
 });
 

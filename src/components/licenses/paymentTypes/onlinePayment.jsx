@@ -1,30 +1,25 @@
 //MODULES
-import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // COMP
 import PaymentCard from "../../payment/card/card";
-import PayTRForm from "../../payment/form/PayTRForm";
 import BackButton from "../stepsAssets/backButton";
 import InvoiceData from "../stepsAssets/invoiceData";
+import PayTRForm from "../../payment/form/PayTRForm";
 import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 // REDUX
 import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
+import { addByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
 const OnlinePayment = ({ setStep }) => {
-  const toastId = useRef();
   const dispatch = useDispatch();
 
   const { success: getUserSucc, user } = useSelector(
     (state) => state.user.getUser
-  );
-
-  const { loading, success, error } = useSelector(
-    (state) => state.licenses.extendByPay
   );
 
   const { loading: contextLoading } = useSelector((state) => state.getContext);
@@ -43,27 +38,51 @@ const OnlinePayment = ({ setStep }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    dispatch(extendByOnlinePay({ formData }));
+    const { userName, cardNumber, month, year, cvv } = cardData;
+    const { email, fullName, phoneNumber } = userData;
+    const address = `${userInvData.city}/${userInvData.district}/${userInvData.neighbourhood}`;
+
+    const paymentAmount = cartItems.reduce((acc, item) => acc + item.price, 0);
+    const userBasket = cartItems.reduce((result, item) => {
+      const existingRestaurant = result.find(
+        (restaurant) => restaurant.restaurantId === item.restaurantId
+      );
+
+      if (existingRestaurant) {
+        existingRestaurant.licenseIds.push(item.id);
+      } else {
+        result.push({
+          restaurantId: item.restaurantId,
+          licensePackageIds: [item.id],
+        });
+      }
+
+      return result;
+    }, []);
+
+    const data = {
+      userName: fullName,
+      userEmail: email,
+      userPhoneNumber: phoneNumber,
+      userAddress: address,
+      ccOwner: userName,
+      cardNumber,
+      expiryMonth: month,
+      expiryYear: year,
+      cvv,
+      userBasket: JSON.stringify(userBasket),
+      paymentType: "card",
+      paymentAmount,
+    };
+
+    if (actionType === "extend-license") {
+      const formData = new FormData(e.target);
+      dispatch(extendByOnlinePay({ formData }));
+    } else {
+      dispatch(addByOnlinePay(data));
+    }
     setSubmit(true);
   }
-
-  //TOAST PAYMENT
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("Loading...");
-    } else if (success) {
-      setStep(4);
-      toast.remove(toastId.current);
-    } else if (error) {
-      toast.remove(toastId.current);
-      if (error.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
-    }
-  }, [loading, success, error]);
 
   //GET USER
   useEffect(() => {

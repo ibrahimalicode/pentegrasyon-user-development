@@ -1,7 +1,7 @@
 import MarketPalceIds from "../../data/marketPlaceIds";
-import LicensesActions from "../licenses/actions/licensesActions";
+import LicensesActions from "./actions/licensesActions";
 import { formatDateString, getRemainingDays } from "../../utils/utils";
-import EditLicenseIsActive from "../licenses/actions/updateLicenseIsActive";
+import EditLicenseIsActive from "./actions/updateLicenseIsActive";
 
 const LicensesTable = ({ inData, totalItems, onSuccess }) => {
   return (
@@ -12,7 +12,6 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
             <tr className="bg-[--light-3] h-8 text-left">
               <th className="pl-4 font-normal">Pazaryeri</th>
               <th className="font-normal">Restoran</th>
-              <th className="font-normal">Kullanıcı</th>
               <th className="font-normal">Bitiş Tarihi</th>
               <th className="font-normal">Kalan Gün</th>
               <th className="font-normal">Durum</th>
@@ -33,9 +32,6 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {data.restaurantName}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.userName}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {formatDateString(data.endDateTime)}

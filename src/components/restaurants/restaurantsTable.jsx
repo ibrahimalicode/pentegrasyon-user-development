@@ -1,7 +1,19 @@
-import MenuI from "../../assets/icon/menu";
-import ChangeRestaurantStatus from "../restaurants/actions/restaurantIsActive";
+import { useLocation, useNavigate } from "react-router-dom";
+import ChangeRestaurantStatus from "./actions/restaurantIsActive";
 
 const RestaurantsTable = ({ inData, Actions, totalItems, onSuccess }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state || {};
+
+  const handleClick = (restaurant) => {
+    const path = location.pathname.includes("users")
+      ? "/users/restaurants/licenses/"
+      : "/restaurants/licenses/";
+
+    navigate(`${path}${restaurant.id}`, { state: { user, restaurant } });
+  };
+
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
@@ -24,13 +36,22 @@ const RestaurantsTable = ({ inData, Actions, totalItems, onSuccess }) => {
                   totalItems < 8 ? "" : "last:border-b-0"
                 } `}
               >
-                <td className="whitespace-nowrap text-[--black-2] pl-4 font-light first:font-normal">
+                <td
+                  onClick={() => handleClick(data)}
+                  className="whitespace-nowrap text-[--black-2] pl-4 font-normal cursor-pointer"
+                >
                   {data.name}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td
+                  onClick={() => handleClick(data)}
+                  className="whitespace-nowrap text-[--black-2] font-light cursor-pointer"
+                >
                   {data.phoneNumber}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td
+                  onClick={() => handleClick(data)}
+                  className="whitespace-nowrap text-[--black-2] font-light cursor-pointer"
+                >
                   {data.city}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">

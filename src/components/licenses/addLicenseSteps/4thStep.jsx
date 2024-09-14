@@ -4,18 +4,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //REDUX
-import { resetExtendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
 const FourthStep = ({ setStep, setPaymentStatus }) => {
   const dispatch = useDispatch();
 
   const [htmlResponse, setHtmlResponse] = useState(null);
-  const { data } = useSelector((state) => state.licenses.extendByPay);
+  const { data } = useSelector((state) => state.licenses.addByPay);
 
   useEffect(() => {
     if (data) {
       setHtmlResponse(data);
-      dispatch(resetExtendByOnlinePay());
     }
 
     const handleMessage = (event) => {

@@ -1,5 +1,4 @@
 //MODULES
-import isEqual from "lodash/isEqual";
 import { useEffect, useRef, useState } from "react";
 
 //HOOKS
@@ -7,27 +6,62 @@ import { useEditUserInvoice } from "../../../../hooks/useEditUserInvoice";
 
 //REDUX
 import EditUserInvoice from "../../invoice/editUserInvoice";
+import { useSelector } from "react-redux";
 
-const InvoiceData = ({ user, submit, title, userInvData, userData }) => {
+const InvoiceData = ({
+  user,
+  onSubmit,
+  title,
+  userInvData,
+  setUserInvData,
+  userData,
+  openFatura,
+  setOpenFatura,
+}) => {
   const dispatcher = useRef();
-  const [openFatura, setOpenFatura] = useState(false);
+  const { error: updateInvError, success: updateInvSucc } = useSelector(
+    (state) => state.user.updateInvoice
+  );
+
+  const { error: addInvError, success: addInvSucc } = useSelector(
+    (state) => state.user.addInvoice
+  );
 
   const {
     cities,
     districts,
     neighs,
     userInvoice,
-    userInvoiceBefore,
     setUserInvoice,
     handleSubmit,
   } = useEditUserInvoice(dispatcher, user);
 
   useEffect(() => {
-    const equalInv = isEqual(userInvoice, userInvoiceBefore);
-    if (submit && !equalInv) {
-      handleSubmit();
+    if (userInvData) {
+      const city = userInvoice.city?.label;
+      const district = userInvoice.district?.label;
+      const neighbourhood = userInvoice.neighbourhood?.label;
+      setUserInvData({ ...userInvoice, city, district, neighbourhood });
+    } else {
+      setOpenFatura(true);
     }
-  }, [submit]);
+
+    onSubmit(handleSubmit);
+  }, [userInvoice]);
+
+  //ADD OR UPDATE USER INV
+  useEffect(() => {
+    if (updateInvSucc) {
+      setOpenFatura(false);
+    }
+    if (addInvSucc) {
+      setOpenFatura(false);
+      const city = userInvoice.city?.label;
+      const district = userInvoice.district?.label;
+      const neighbourhood = userInvoice.neighbourhood?.label;
+      setUserInvData({ ...userInvoice, city, district, neighbourhood });
+    }
+  }, [addInvError, updateInvError, addInvSucc, updateInvSucc]);
 
   return (
     <div className="text-xs pt-2 w-full flex flex-col items-center pb-8">

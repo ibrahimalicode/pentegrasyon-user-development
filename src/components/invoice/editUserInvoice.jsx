@@ -37,12 +37,12 @@ const EditUserInvoiceById = ({
           placeholder="VKN veya TCKN"
           className="py-[.45rem] text-sm"
           maxLength={20}
-          value={userInvoice.tradeRegistryNumber}
+          value={userInvoice.taxNumber}
           onChange={(e) => {
             setUserInvoice((prev) => {
               return {
                 ...prev,
-                tradeRegistryNumber: e,
+                taxNumber: e,
               };
             });
           }}
@@ -71,18 +71,17 @@ const EditUserInvoiceById = ({
           placeholder="Tic.Sic.No"
           className="py-[.45rem] text-sm"
           maxLength={20}
-          value={userInvoice.taxNumber}
+          value={userInvoice.tradeRegistryNumber}
           onChange={(e) => {
             setUserInvoice((prev) => {
               return {
                 ...prev,
-                taxNumber: e,
+                tradeRegistryNumber: e,
               };
             });
           }}
         />
         <CustomInput
-          required={true}
           type="text"
           label="Mersis No"
           placeholder="Mersis No"

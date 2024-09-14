@@ -1,32 +1,30 @@
-import CustomInput from "../../common/customInput";
-import { useEffect, useRef, useState } from "react";
+//MODULES
 import toast from "react-hot-toast";
-import CustomPagination from "../../common/pagination";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
+import LicensesTable from "../licensesTable";
+import AddLicense from "../actions/addLicense";
 import CloseI from "../../../assets/icon/close";
+import CustomInput from "../../common/customInput";
+import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 
 // REDUX
-import { useDispatch, useSelector } from "react-redux";
-import { getCities } from "../../../redux/data/getCitiesSlice";
 import {
   getLicenses,
-  resetGetLicenses,
   resetGetLicensesState,
 } from "../../../redux/licenses/getLicensesSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
+import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
-import LicensesTable from "../../common/licensesTable";
-import AddLicense from "../actions/addLicense";
+import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
-  getLicensesRestaurant,
-  resetGetLicensesRestaurant,
-} from "../../../redux/restaurants/getRestaurantSlice";
-import {
-  getMergedUsers,
-  resetGetMergedUsers,
-} from "../../../redux/users/getUserByIdSlice";
+  getRestaurantsForLicenses,
+  resetGetRestaurantsForLicenses,
+} from "../../../redux/restaurants/getRestaurantsForLicensesSlice";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -34,18 +32,12 @@ const LicensesPage = () => {
   const { loading, success, error, licenses } = useSelector(
     (state) => state.licenses.getLicenses
   );
+
   const {
-    success: withRestaurantSucc,
-    error: withRestaurantError,
-    licenses: licensesWithRestaurant,
-  } = useSelector(
-    (state) => state.restaurants.getRestaurant.licensesRestaurant
-  );
-  const {
-    success: mergedUsersSucc,
-    error: mergedUsersError,
-    users,
-  } = useSelector((state) => state.users.getUser.mergedUsers);
+    loading: restaurantsLoading,
+    error: restaurantsError,
+    restaurants,
+  } = useSelector((state) => state.restaurants.getForLicenses);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -68,94 +60,16 @@ const LicensesPage = () => {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
-  const [teest, setTeest] = useState([]);
 
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
-
-  function clearSearch() {
-    setSearchVal("");
-    return;
-    dispatch(
-      getLicenses({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: null,
-        active: filter?.status?.value,
-        city: filter?.city?.value,
-        district: filter?.district?.value,
-        neighbourhood: filter?.neighbourhood?.value,
-      })
-    );
-  }
-
-  function handleSearch(e) {
-    e.preventDefault();
-    return;
-    if (!searchVal) return;
-    dispatch(
-      getLicenses({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: searchVal,
-        active: filter?.status?.value,
-        city: filter?.city?.value,
-        district: filter?.district?.value,
-        neighbourhood: filter?.neighbourhood?.value,
-      })
-    );
-  }
-
-  function handleFilter(bool) {
-    return;
-    if (bool) {
-      setOpenFilter(false);
-      setPageNumber(1);
-      dispatch(
-        getLicenses({
-          pageNumber,
-          pageSize: itemsPerPage,
-          searchKey: searchVal,
-          active: filter?.status?.value,
-          city: filter?.city?.value,
-          district: filter?.district?.value,
-          neighbourhood: filter?.neighbourhood?.value,
-        })
-      );
-    } else {
-      if (filter) {
-        dispatch(
-          getLicenses({
-            pageNumber,
-            pageSize: itemsPerPage,
-            searchKey: null,
-            active: null,
-            city: null,
-            district: null,
-            neighbourhood: null,
-          })
-        );
-      }
-      setFilter({
-        city: null,
-        district: null,
-        neighbourhood: null,
-      });
-      setOpenFilter(false);
-    }
-  }
 
   function handlePageChange(number) {
     dispatch(
       getLicenses({
         pageNumber: number,
         pageSize: itemsPerPage,
-        searchKey: searchVal,
-        active: filter?.status?.value,
-        city: filter?.city?.value,
-        district: filter?.district?.value,
-        neighbourhood: filter?.neighbourhood?.value,
       })
     );
   }
@@ -167,17 +81,12 @@ const LicensesPage = () => {
         getLicenses({
           pageNumber,
           pageSize: itemsPerPage,
-          searchKey: null,
-          active: null,
-          city: null,
-          district: null,
-          neighbourhood: null,
         })
       );
     }
   }, [licensesData]);
 
-  // TOAST GET AND SET LICENSES OR LICENSES RESTAURANT
+  // TOAST AND GET LICENSES
   useEffect(() => {
     if (error) {
       if (error?.message_TR) {
@@ -188,49 +97,26 @@ const LicensesPage = () => {
       dispatch(resetGetLicensesState());
     }
     if (success) {
-      dispatch(getLicensesRestaurant({ licenses: licenses.data }));
+      dispatch(getRestaurantsForLicenses(licenses.data));
+      dispatch(resetGetLicensesState());
     }
   }, [success, error, licenses]);
 
-  // TOAST AND GET MERGED USERS
+  // TOAST GET AND SET RESTAURANTS
   useEffect(() => {
-    if (withRestaurantError) {
-      if (withRestaurantError?.message_TR) {
-        toast.error(withRestaurantError.message_TR);
+    if (restaurantsError) {
+      if (restaurantsError?.message_TR) {
+        toast.error(restaurantsError.message_TR);
       } else {
         toast.error("Something went wrong");
       }
-      dispatch(resetGetLicensesRestaurant());
+      dispatch(resetGetRestaurantsForLicenses());
     }
-    if (withRestaurantSucc) {
-      setTotalItems(licenses.totalCount);
-      dispatch(getMergedUsers(licensesWithRestaurant));
+    if (restaurants) {
+      setLicensesData(restaurants);
+      dispatch(resetGetRestaurantsForLicenses());
     }
-  }, [
-    withRestaurantSucc,
-    withRestaurantError,
-    licensesWithRestaurant,
-    licenses,
-  ]);
-
-  //SET MERGED USERS
-  useEffect(() => {
-    if (mergedUsersError) {
-      if (mergedUsersError?.message_TR) {
-        toast.error(mergedUsersError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetGetMergedUsers());
-    }
-    if (mergedUsersSucc) {
-      setLicensesData(users);
-      dispatch(resetGetLicenses());
-      dispatch(resetGetMergedUsers());
-      dispatch(resetGetLicensesState());
-      dispatch(resetGetLicensesRestaurant());
-    }
-  }, [mergedUsersError, mergedUsersSucc]);
+  }, [restaurants, restaurantsError, licenses]);
 
   // GET AND SET CITIES
   useEffect(() => {
@@ -314,11 +200,11 @@ const LicensesPage = () => {
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
-          <form className="w-full" onSubmit={handleSearch}>
+          <form className="w-full" onSubmit={() => {}}>
             <CustomInput
               onChange={(e) => {
                 setSearchVal(e);
-                !e && clearSearch();
+                // !e && clearSearch();
               }}
               value={searchVal}
               placeholder="Search..."
@@ -328,7 +214,7 @@ const LicensesPage = () => {
               className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
                 searchVal ? "block" : "hidden"
               }`}
-              iconClick={clearSearch}
+              // iconClick={clearSearch}
             />
           </form>
         </div>
@@ -446,13 +332,13 @@ const LicensesPage = () => {
                 <div className="w-full flex gap-2 justify-center pt-10">
                   <button
                     className="text-[--white-1] bg-[--red-1] py-2 px-12 rounded-lg hover:opacity-90"
-                    onClick={() => handleFilter(false)}
+                    // onClick={() => handleFilter(false)}
                   >
                     Temizle
                   </button>
                   <button
                     className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
-                    onClick={() => handleFilter(true)}
+                    // onClick={() => handleFilter(true)}
                   >
                     Filter
                   </button>
@@ -473,7 +359,7 @@ const LicensesPage = () => {
           inData={licensesData}
           onSuccess={() => setLicensesData(null)}
         />
-      ) : loading ? (
+      ) : loading || restaurantsLoading ? (
         <TableSkeleton />
       ) : null}
 

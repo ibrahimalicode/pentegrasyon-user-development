@@ -206,6 +206,7 @@ const EditUserProfile = ({ user, cities }) => {
             <CustomPhoneInput
               label="Telefon"
               required
+              disabled
               className="py-3.5"
               value={userData.phoneNumber}
               onChange={(e) => {
@@ -221,6 +222,7 @@ const EditUserProfile = ({ user, cities }) => {
             <CustomInput
               label="E-Posta"
               required
+              disabled
               className="py-3.5"
               value={userData.email}
               onChange={(e) => {

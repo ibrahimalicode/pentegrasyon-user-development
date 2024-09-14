@@ -48,9 +48,15 @@ export const addByOnlinePay = createAsyncThunk(
         ...data,
       });
 
-      // if (JSON.parse(res.data.data)?.status === "failed") {
-      //   throw new Error({ message_TR: JSON.parse(res.data.data)?.reason });
-      // }
+      if (res.data.data.includes("html")) {
+        return res.data.data;
+      }
+
+      const parsedData = JSON.parse(res.data.data);
+      if (parsedData.status === "failed") {
+        throw new Error({ message_TR: parsedData.reason });
+      }
+
       return res.data.data;
     } catch (err) {
       console.log(err);

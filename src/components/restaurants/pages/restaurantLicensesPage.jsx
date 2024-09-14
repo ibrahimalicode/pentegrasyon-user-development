@@ -12,7 +12,6 @@ import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
-import LicensesTable from "../../../components/common/licensesTable";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +26,7 @@ import {
   getRestaurant,
   resetGetRestaurantState,
 } from "../../../redux/restaurants/getRestaurantSlice";
+import LicensesTable from "../../licenses/licensesTable";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();

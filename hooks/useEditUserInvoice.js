@@ -90,7 +90,7 @@ export const useEditUserInvoice = (dispatcher, user) => {
       dispatch(resetaddUserInvoice());
     } else if (addInvoiceSuccess) {
       toastId.current && toast.dismiss(toastId.current);
-      toast.success("Invoice updated successfully");
+      toast.success("Invoice added successfully");
       dispatch(resetaddUserInvoice());
     }
   }, [addInvoiceLoading, success, addInvoiceError, dispatch]);

@@ -357,8 +357,8 @@ function AddRestaurantPopup({ onSuccess, userId }) {
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
                 required
-                label="Ad"
-                placeholder="Ad"
+                label="Restauran Adı"
+                placeholder="Restauran Adı"
                 className="py-[.45rem] text-sm"
                 value={restaurantData.name}
                 onChange={(e) => {

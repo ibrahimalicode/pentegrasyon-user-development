@@ -7,6 +7,7 @@ import getUserRestaurantsSlice from "./getUserRestaurantsSlice";
 import deleteRestaurantSlice from "./deleteRestaurantSlice";
 import updateRestaurantSlice from "./updateRestaurantSlice";
 import addRestaurantSlice from "./addRestaurantSlice";
+import getRestaurantsForLicensesSlice from "./getRestaurantsForLicensesSlice";
 
 const restaurantsSlice = combineReducers({
   getRestaurant: getRestaurantSlice,
@@ -15,6 +16,7 @@ const restaurantsSlice = combineReducers({
   deleteRestaurant: deleteRestaurantSlice,
   updateRestaurant: updateRestaurantSlice,
   addRestaurant: addRestaurantSlice,
+  getForLicenses: getRestaurantsForLicensesSlice,
 });
 
 export default restaurantsSlice;

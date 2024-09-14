@@ -30,6 +30,10 @@ import {
   resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
+import {
+  addItemToCart,
+  removeItemFromCart,
+} from "../../../redux/cart/cartSlice";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -55,6 +59,8 @@ const FirstStep = ({
   const { currentLicense, restaurant } = location?.state || {};
   const { restaurantName, restaurantId, userId } = currentLicense || {};
 
+  const cartItems = useSelector((state) => state.cart.items);
+
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
   );
@@ -62,17 +68,6 @@ const FirstStep = ({
     (state) => state.restaurants.getRestaurants
   );
 
-  if ((restaurantId || restaurant) && !restaurantData?.value) {
-    if (restaurant) {
-      setRestaurantData({
-        label: restaurant.name,
-        value: restaurant.id,
-        userId: restaurant.userId,
-      });
-    } else {
-      setRestaurantData({ label: restaurantName, value: restaurantId, userId });
-    }
-  }
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
@@ -124,10 +119,57 @@ const FirstStep = ({
     }
   }, [restaurants]);
 
+  //SET RESTAURANT DATA
+  useEffect(() => {
+    if ((restaurantId || restaurant) && !restaurantData?.value) {
+      if (restaurant) {
+        setRestaurantData({
+          label: restaurant.name,
+          value: restaurant.id,
+          userId: restaurant.userId,
+        });
+      } else {
+        setRestaurantData({
+          label: restaurantName,
+          value: restaurantId,
+          userId,
+        });
+      }
+    }
+  }, [restaurantId, restaurant, restaurantData]);
+
   function handleSubmit(e) {
     e.preventDefault();
     setStep(2);
   }
+
+  const handleAddToCart = (pkg) => {
+    if (!pkg.restaurantId) {
+      toast.error("Lütfen restoran seçın 😊", { id: "choose_restaurant" });
+      return;
+    }
+    const existingPackage = cartItems.find(
+      (item) =>
+        item.marketplaceId === pkg.marketplaceId &&
+        item.restaurantId === pkg.restaurantId
+    );
+
+    if (existingPackage) {
+      dispatch(
+        removeItemFromCart({
+          id: existingPackage.id,
+          restaurantId: pkg.restaurantId,
+        })
+      );
+      if (
+        existingPackage.id === pkg.id &&
+        existingPackage.restaurantId == pkg.restaurantId
+      )
+        return;
+    }
+    dispatch(addItemToCart(pkg));
+  };
+
   return (
     <form className="size-full flex flex-col" onSubmit={handleSubmit}>
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
@@ -179,6 +221,17 @@ const FirstStep = ({
             options={licensePackagesData}
             onChange={(selectedOption) => {
               setLicensePackageData(selectedOption);
+              if (
+                selectedOption?.licensePackageId !==
+                licensePackageData?.licensePackageId
+              ) {
+                handleAddToCart({
+                  ...selectedOption,
+                  marketplaceId: selectedOption.id,
+                  restaurantId: restaurantData.value,
+                  restaurantName: restaurantData.label,
+                });
+              }
             }}
           />
         </div>

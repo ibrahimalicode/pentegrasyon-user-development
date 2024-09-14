@@ -11,7 +11,7 @@ import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
-import RestaurantsTable from "../../common/restaurantsTable";
+import RestaurantsTable from "../restaurantsTable";
 import Actions from "../actions/actions";
 
 // REDUX

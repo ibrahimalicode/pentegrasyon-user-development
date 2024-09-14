@@ -1,5 +1,6 @@
 //MODULES
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // COMP
@@ -15,18 +16,39 @@ import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
 import { addByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
-const OnlinePayment = ({ setStep }) => {
+const OnlinePayment = ({ setStep, actionType }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  let invoiceHandleSubmit = useRef(null);
+  const { currentLicense } = location?.state || {};
+  const isPageExtend = actionType === "extend-license";
 
   const { success: getUserSucc, user } = useSelector(
     (state) => state.user.getUser
   );
 
-  const { loading: contextLoading } = useSelector((state) => state.getContext);
+  const { loading: addLoading } = useSelector(
+    (state) => state.licenses.addByPay
+  );
+
+  const { loading: extendLoading } = useSelector(
+    (state) => state.licenses.extendByPay
+  );
+
+  const { loading: updateInvLoading } = useSelector(
+    (state) => state.user.updateInvoice
+  );
+
+  const { loading: addInvLoading } = useSelector(
+    (state) => state.user.addInvoice
+  );
+
+  const cartItems = useSelector((state) => state.cart.items);
 
   const [flip, setFlip] = useState(false);
-  const [submit, setSubmit] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [openFatura, setOpenFatura] = useState(false);
   const [userInvData, setUserInvData] = useState(null);
   const [cardData, setCardData] = useState({
     userName: "PAYTR TEST",
@@ -38,12 +60,19 @@ const OnlinePayment = ({ setStep }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (openFatura) {
+      if (invoiceHandleSubmit.current) {
+        invoiceHandleSubmit.current();
+      }
+      return;
+    }
+
     const { userName, cardNumber, month, year, cvv } = cardData;
     const { email, fullName, phoneNumber } = userData;
     const address = `${userInvData.city}/${userInvData.district}/${userInvData.neighbourhood}`;
 
     const paymentAmount = cartItems.reduce((acc, item) => acc + item.price, 0);
-    const userBasket = cartItems.reduce((result, item) => {
+    const addLicenseBasket = cartItems.reduce((result, item) => {
       const existingRestaurant = result.find(
         (restaurant) => restaurant.restaurantId === item.restaurantId
       );
@@ -60,6 +89,13 @@ const OnlinePayment = ({ setStep }) => {
       return result;
     }, []);
 
+    const { licensePackageId, restaurantId } = cartItems[0];
+    const extendLicenseBasket = {
+      licensePackageId,
+      restaurantId,
+      licenseId: currentLicense?.id,
+    };
+
     const data = {
       userName: fullName,
       userEmail: email,
@@ -70,18 +106,18 @@ const OnlinePayment = ({ setStep }) => {
       expiryMonth: month,
       expiryYear: year,
       cvv,
-      userBasket: JSON.stringify(userBasket),
+      userBasket: isPageExtend
+        ? JSON.stringify(extendLicenseBasket)
+        : JSON.stringify(addLicenseBasket),
       paymentType: "card",
       paymentAmount,
     };
 
-    if (actionType === "extend-license") {
-      const formData = new FormData(e.target);
-      dispatch(extendByOnlinePay({ formData }));
+    if (isPageExtend) {
+      dispatch(extendByOnlinePay(data));
     } else {
       dispatch(addByOnlinePay(data));
     }
-    setSubmit(true);
   }
 
   //GET USER
@@ -118,10 +154,15 @@ const OnlinePayment = ({ setStep }) => {
         {userData && (
           <InvoiceData
             user={userData}
-            submit={submit}
             title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
             userInvData={userInvData}
+            setUserInvData={setUserInvData}
+            openFatura={openFatura}
+            setOpenFatura={setOpenFatura}
             userData={userData}
+            onSubmit={(submitFn) => {
+              invoiceHandleSubmit.current = submitFn;
+            }}
           />
         )}
       </div>
@@ -132,13 +173,17 @@ const OnlinePayment = ({ setStep }) => {
           text="Geri"
           letIcon={true}
           onClick={() => setStep(2)}
-          disabled={loading}
+          disabled={
+            addLoading || extendLoading || updateInvLoading || addInvLoading
+          }
         />
         <ForwardButton
           text="Devam"
           letIcon={true}
           type="submit"
-          disabled={loading || contextLoading}
+          disabled={
+            addLoading || extendLoading || updateInvLoading || addInvLoading
+          }
         />
       </div>
 

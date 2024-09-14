@@ -12,6 +12,7 @@ const CustomPhoneInput = ({
   className2,
   autoComplete = "new-password",
   className5,
+  disabled,
 }) => {
   // const [phone, setPhone] = useState(value);
 
@@ -59,6 +60,7 @@ const CustomPhoneInput = ({
         containerClass="hide-flag"
         maxlength={14}
         minLength={14}
+        disabled={disabled}
         inputProps={{
           required: required,
           pattern: "\\+90\\s[0-9]{3}\\s[0-9]{3}\\s[0-9]{2}\\s[0-9]{2}",

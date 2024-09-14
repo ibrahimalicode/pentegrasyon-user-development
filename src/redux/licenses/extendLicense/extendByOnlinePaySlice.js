@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../api";
+import { privateApi } from "../../api";
 
+const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
-const PAYTRURL = import.meta.env.VITE_PAYTR_URL;
 
 const initialState = {
   loading: false,
@@ -41,21 +41,24 @@ const extendByOnlinePaySlice = createSlice({
 });
 
 export const extendByOnlinePay = createAsyncThunk(
-  "Licenses/Extend/extendByOnlinePay",
-  async ({ formData }, { rejectWithValue }) => {
+  "PayTR/ExtendLicenseByPay",
+  async (data, { rejectWithValue }) => {
     try {
-      const res = await api.post(
-        `${PAYTRURL}Licenses/Extend/extendByOnlinePay`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await api.post(`${baseURL}PayTR/ExtendLicenseByPay`, {
+        ...data,
+      });
 
-      console.log(res);
-      return res.data;
+      console.log(res.data);
+      if (res.data.data.includes("html")) {
+        return res.data.data;
+      }
+
+      const parsedData = JSON.parse(res.data.data);
+      if (parsedData.status === "failed") {
+        throw new Error({ message_TR: parsedData.reason });
+      }
+
+      return res.data.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {

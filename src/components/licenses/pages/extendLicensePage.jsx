@@ -1,6 +1,6 @@
 // MODULES
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
 //COMP
@@ -13,13 +13,23 @@ import FirstStep from "../extendLicenseSteps/1stStep";
 import SecondStep from "../extendLicenseSteps/2ndStep";
 import ThirdStep from "../extendLicenseSteps/3rdStep";
 import FourthStep from "../extendLicenseSteps/4thStep";
+import toast from "react-hot-toast";
+import { clearCart } from "../../../redux/cart/cartSlice";
+import { resetExtendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
 const ExtendLicensePage = () => {
+  const toastId = useRef();
+  const dispatch = useDispatch();
   const location = useLocation();
   const { user, restaurant } = location.state || {};
   const currentPath = location.pathname;
   const pathArray = currentPath.split("/");
   const actionType = pathArray[pathArray.length - 1];
+
+  const { success, loading, error } = useSelector(
+    (state) => state.licenses.extendByPay
+  );
+  const cartItems = useSelector((state) => state.cart.items);
 
   const steps = 4;
   const [step, setStep] = useState(1);
@@ -42,6 +52,28 @@ const ExtendLicensePage = () => {
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
+
+  // EXTEND SUCCESS
+  useEffect(() => {
+    if (loading) {
+      toastId.current = toast.loading("Loading...");
+    } else if (success) {
+      setStep(3);
+      toast.remove(toastId.current);
+      dispatch(resetExtendByOnlinePay());
+    } else if (error) {
+      toast.remove(toastId.current);
+      setStep(4);
+      window.parent.postMessage({ status: "failed" }, "*");
+      dispatch(resetExtendByOnlinePay());
+    }
+
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
+  }, [loading, success, error]);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">

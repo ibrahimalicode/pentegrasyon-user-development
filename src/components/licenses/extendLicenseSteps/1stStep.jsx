@@ -21,6 +21,7 @@ import DefaultMarketplace from "../../../assets/img/packages/Default-Marketplace
 import {
   formatLisansPackages,
   formatSelectorData,
+  getPriceWithKDV,
   groupedLicensePackages,
 } from "../../../utils/utils";
 
@@ -34,6 +35,10 @@ import {
   addItemToCart,
   removeItemFromCart,
 } from "../../../redux/cart/cartSlice";
+import {
+  getKDVParameters,
+  resetGetKDVParameters,
+} from "../../../redux/generalVars/KDVParameters/getKDVParametersSlice";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -68,6 +73,10 @@ const FirstStep = ({
     (state) => state.restaurants.getRestaurants
   );
 
+  const { KDVParameters, error: kdvError } = useSelector(
+    (state) => state.generalVars.getKDVParams
+  );
+
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
@@ -90,20 +99,38 @@ const FirstStep = ({
     }
 
     if (success) {
-      if (actionType === "add-license") {
-        setLicensePackagesData(groupedLicensePackages(licensePackages.data));
-      } else {
-        const currentLicensePackage = licensePackages.data.filter(
-          (pack) => pack?.marketplaceId === currentLicense?.marketplaceId
-        );
+      dispatch(getKDVParameters());
+    }
+  }, [success, error]);
 
-        if (currentLicensePackage.length) {
-          setLicensePackagesData(formatLisansPackages(currentLicensePackage));
-        } else setLicensePackagesData(currentLicensePackage);
+  //GET KDV VALUE
+  useEffect(() => {
+    if (kdvError) {
+      if (kdvError?.message_TR) {
+        toast.error(kdvError.message_TR);
+      } else {
+        toast.error("Something went wrong");
       }
+      dispatch(resetGetKDVParameters());
+    }
+
+    if (KDVParameters && success) {
+      const updatedData = licensePackages.data.map((pkg) => {
+        return { ...pkg, price: getPriceWithKDV(pkg.price, KDVParameters) };
+      });
+
+      const sameMarketplacePKGS = updatedData.filter(
+        (pack) => pack?.marketplaceId === currentLicense?.marketplaceId
+      );
+
+      if (sameMarketplacePKGS.length) {
+        setLicensePackagesData(formatLisansPackages(sameMarketplacePKGS));
+      } else setLicensePackagesData(sameMarketplacePKGS);
+
+      dispatch(resetGetKDVParameters());
       dispatch(resetGetLicensePackages());
     }
-  }, [success, error, licensePackages, actionType]);
+  }, [kdvError, KDVParameters]);
 
   // GET RESTAURANTS
   useEffect(() => {

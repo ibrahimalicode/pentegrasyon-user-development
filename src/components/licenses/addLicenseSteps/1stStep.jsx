@@ -18,6 +18,7 @@ import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 //FUNC
 import {
   formatSelectorData,
+  getPriceWithKDV,
   groupedLicensePackages,
   sumCartPrices,
 } from "../../../utils/utils";
@@ -32,6 +33,10 @@ import {
   addItemToCart,
   removeItemFromCart,
 } from "../../../redux/cart/cartSlice";
+import {
+  getKDVParameters,
+  resetGetKDVParameters,
+} from "../../../redux/generalVars/KDVParameters/getKDVParametersSlice";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -55,6 +60,10 @@ const FirstStep = ({
   );
   const { restaurants } = useSelector(
     (state) => state.restaurants.getRestaurants
+  );
+
+  const { KDVParameters, error: kdvError } = useSelector(
+    (state) => state.generalVars.getKDVParams
   );
 
   const cartItems = useSelector((state) => state.cart.items);
@@ -81,10 +90,31 @@ const FirstStep = ({
     }
 
     if (success) {
-      setLicensePackagesData(groupedLicensePackages(licensePackages.data));
-      dispatch(resetGetLicensePackages());
+      dispatch(getKDVParameters());
     }
-  }, [success, error, licensePackages]);
+  }, [success, error]);
+
+  //GET KDV AND SET VALUE
+  useEffect(() => {
+    if (kdvError) {
+      if (kdvError?.message_TR) {
+        toast.error(kdvError.message_TR);
+      } else {
+        toast.error("Something went wrong");
+      }
+      dispatch(resetGetKDVParameters());
+    }
+
+    if (KDVParameters && success) {
+      console.log(licensePackages.data);
+      const updatedData = licensePackages.data.map((pkg) => {
+        return { ...pkg, price: getPriceWithKDV(pkg.price, KDVParameters) };
+      });
+      setLicensePackagesData(groupedLicensePackages(updatedData));
+      dispatch(resetGetLicensePackages());
+      dispatch(resetGetKDVParameters());
+    }
+  }, [kdvError, KDVParameters]);
 
   // GET RESTAURANTS
   useEffect(() => {

@@ -154,87 +154,13 @@ export function groupedLicensePackages(data) {
   return sortedArray;
 }
 
-// let marker = null;
-// export function googleMap(lat, lng, setLat, setLng, zoom = 25, bounds) {
-//   const position = {
-//     lat: parseFloat(lat),
-//     lng: parseFloat(lng),
-//   };
-
-//   console.log(bounds);
-//   const map = new google.maps.Map(document.getElementById("map"), {
-//     zoom,
-//     center: position,
-//     mapId: "VITE_PENTEGRASYON_MAP_ID",
-//   });
-
-//   // Define the allowed bounds (replace with actual boundary coordinates)
-//   const allowedBounds = bounds;
-
-//   // Helper function to check if a position is within the allowed bounds
-//   function isPositionWithinBounds(lat, lng) {
-//     return (
-//       lat >= allowedBounds.minLat &&
-//       lat <= allowedBounds.maxLat &&
-//       lng >= allowedBounds.minLng &&
-//       lng <= allowedBounds.maxLng
-//     );
-//   }
-
-//   // Create a marker when the map initially loads
-//   marker = new google.maps.marker.AdvancedMarkerElement({
-//     map,
-//     position,
-//     title: "Uluru",
-//     draggable: true,
-//   });
-
-//   // Update latitude and longitude state on marker drag end
-//   marker.addListener("dragend", (e) => {
-//     const newLat = e.latLng.lat();
-//     const newLng = e.latLng.lng();
-
-//     if (isPositionWithinBounds(newLat, newLng)) {
-//       setLat(newLat.toFixed(6));
-//       setLng(newLng.toFixed(6));
-//       map.panTo({ lat: newLat, lng: newLng });
-//     } else {
-//       // If the position is outside the bounds, reset the marker to the previous position
-//       marker.setPosition(position);
-//       map.panTo({ lat: position.lat, lng: position.lng });
-//     }
-//   });
-
-//   map.addListener("click", (e) => {
-//     const latitude = e.latLng.lat();
-//     const longitude = e.latLng.lng();
-//     if (isPositionWithinBounds(latitude, longitude)) {
-//       if (marker) {
-//         marker.setMap(null);
-//       }
-
-//       marker = new google.maps.marker.AdvancedMarkerElement({
-//         map,
-//         position: { lat: latitude, lng: longitude },
-//         title: "Uluru",
-//         draggable: true,
-//       });
-
-//       // Center the map on the new marker's position
-//       map.panTo({ lat: latitude, lng: longitude });
-//       setLat(latitude.toFixed(6));
-//       setLng(longitude.toFixed(6));
-//     } else {
-//       toast("You cannot place the marker outside the specified boundaries.");
-//       console.log(latitude, longitude);
-//       console.log(parseFloat(lat), parseFloat(lng));
-//       map.panTo({ lat: parseFloat(lat), lng: parseFloat(lng) });
-//     }
-//   });
-// }
+export function getPriceWithKDV(price, kdv) {
+  const KDV = kdv?.kdvPercentage / 100;
+  const totalPrice = price + price * KDV;
+  return totalPrice.toFixed(2);
+}
 
 let marker = null;
-
 export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
   const position = {
     lat: parseFloat(lat),
@@ -336,7 +262,7 @@ export function sumCartPrices(data, format = "tr-TR") {
     style: "decimal",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(data.reduce((acc, item) => acc + item.price, 0));
+  }).format(data.reduce((acc, item) => acc + parseFloat(item.price), 0));
   return formattedNumber;
 }
 

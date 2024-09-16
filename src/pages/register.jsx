@@ -157,7 +157,7 @@ const Register = () => {
   return (
     <GlassFrame
       className="pt-[3.5rem] sm:pt-[4.5rem]"
-      className2="pt-[0rem] pb-[1rem]"
+      className2="pt-[0rem] pb-[1rem] sm:max-w-[34rem]"
       component={
         !toConfirm ? (
           /* Register Page */
@@ -168,7 +168,7 @@ const Register = () => {
               </h2>
             </div>
             <div className="flex flex-col max-w-full">
-              <div className="flex w-full gap-4">
+              <div className="flex max-sm:flex-col w-full sm:gap-2">
                 <CustomInput
                   // label="Ad"
                   type="text"
@@ -193,7 +193,7 @@ const Register = () => {
                 />
               </div>
 
-              <div className="flex w-full sm:gap-4 max-sm:flex-col">
+              <div className="flex w-full sm:gap-2 max-sm:flex-col">
                 <CustomPhoneInput
                   // label="Cep Telefonu"
                   type="tel"
@@ -219,7 +219,7 @@ const Register = () => {
                 />
               </div>
 
-              <div className="flex w-full sm:gap-4 max-sm:flex-col">
+              <div className="flex w-full sm:gap-2 max-sm:flex-col">
                 <CustomSelect
                   // label="Şehir"
                   options={citiesData}

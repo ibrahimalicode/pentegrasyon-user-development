@@ -59,8 +59,6 @@ const FirstStep = ({
   const { currentLicense, restaurant } = location?.state || {};
   const { restaurantName, restaurantId, userId } = currentLicense || {};
 
-  const cartItems = useSelector((state) => state.cart.items);
-
   const { success, error, licensePackages } = useSelector(
     (state) => state.licensePackages.getLicensePackages
   );

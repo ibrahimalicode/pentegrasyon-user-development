@@ -155,7 +155,10 @@ export function groupedLicensePackages(data) {
 }
 
 export function getPriceWithKDV(price, kdv) {
-  const KDV = kdv?.kdvPercentage / 100;
+  let KDV = 0;
+  if (kdv.useKDV) {
+    KDV = kdv?.kdvPercentage / 100;
+  }
   const totalPrice = price + price * KDV;
   return totalPrice.toFixed(2);
 }

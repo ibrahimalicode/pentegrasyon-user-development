@@ -44,7 +44,7 @@ const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
 
   return (
     step === 2 && (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="max-h-full overflow-y-auto">
         <div className="w-full px-4 font-normal">
           <div className="w-full flex justify-center pt-2">
             <CustomSelect

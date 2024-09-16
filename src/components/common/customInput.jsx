@@ -27,6 +27,7 @@ const CustomInput = ({
   onBlur,
   inputRef,
   className5,
+  pattern,
 }) => {
   const eyeIconVis = <EyeI className="w-5" strokeWidth={2} />;
   const eyeIconInv = <EyeInv className="w-5" strokeWidth={2} />;
@@ -68,6 +69,7 @@ const CustomInput = ({
         readOnly={readOnly}
         onFocus={onFocus}
         onBlur={onBlur}
+        pattern={pattern}
         className={`px-4 py-2.5 mt-1 sm:mt-2.5 font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:bg-inherit autofill:outline-none outline-none ${className}`}
       />
       {letIcon && !icon && (

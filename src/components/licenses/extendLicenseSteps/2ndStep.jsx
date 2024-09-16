@@ -19,7 +19,7 @@ const SecondStep = ({
   const value = paymentMethod.selectedOption.value;
   return (
     step === 2 && (
-      <div className=" h-full">
+      <div className="h-full">
         <div className="flex flex-col w-full items-center h-full overflow-y-auto">
           {value === "bankPayment" ? (
             <BankPayment

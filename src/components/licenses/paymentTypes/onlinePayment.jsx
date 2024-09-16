@@ -52,7 +52,7 @@ const OnlinePayment = ({ setStep, actionType }) => {
   const [userInvData, setUserInvData] = useState(null);
   const [cardData, setCardData] = useState({
     userName: "PAYTR TEST",
-    cardNumber: "4355084355084358",
+    cardNumber: "4355 0843 5508 4358",
     month: "12",
     year: "24",
     cvv: "000",
@@ -105,7 +105,7 @@ const OnlinePayment = ({ setStep, actionType }) => {
       userPhoneNumber: phoneNumber,
       userAddress: address,
       ccOwner: userName,
-      cardNumber,
+      cardNumber: cardNumber.replace(/\D/g, ""),
       expiryMonth: month,
       expiryYear: year,
       cvv,

@@ -282,3 +282,53 @@ export function groupByRestaurantId(data) {
   // Convert the grouped data object into an array
   return Object.values(groupedData);
 }
+
+export function isValidCardNumber(cardNumber) {
+  const cleaned = cardNumber.replace(/\D/g, "");
+  let sum = 0;
+  let shouldDouble = false;
+  if (cleaned.length !== 16) {
+    return true;
+  }
+
+  for (let i = cleaned.length - 1; i >= 0; i--) {
+    let digit = parseInt(cleaned[i]);
+
+    if (shouldDouble) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+
+    sum += digit;
+    shouldDouble = !shouldDouble;
+  }
+
+  return sum % 10 === 0;
+}
+
+export function getCardProvider(cardNumber, src) {
+  const cleaned = cardNumber.replace(/\D/g, ""); // Remove non-numeric characters
+
+  // Get the first 4 or 6 digits to identify the provider
+  const firstFourDigits = cleaned.substring(0, 4);
+  const firstSixDigits = cleaned.substring(0, 6);
+
+  // Known provider patterns based on IIN range
+  if (/^4/.test(firstFourDigits)) {
+    return { name: "Visa", ...src[1] }; // Visa starts with 4
+  } else if (/^5[1-5]/.test(firstFourDigits)) {
+    return { name: "MasterCard", ...src[2] }; // MasterCard starts with 51-55
+  } else if (/^3[47]/.test(firstFourDigits)) {
+    return { name: "AmericanExpress", ...src[3] }; // AmEx starts with 34 or 37
+  } else if (/^6(?:011|5)/.test(firstSixDigits)) {
+    return { name: "Discover", ...src[4] }; // Discover starts with 6011 or 65
+  } else if (/^3(?:0[0-5]|[68])/.test(firstFourDigits)) {
+    return { name: "DinersClub", ...src[5] }; // Diners Club starts with 300-305, 36, or 38
+  } else if (/^(2131|1800|35)/.test(firstSixDigits)) {
+    return { name: "JCB", ...src[6] }; // JCB starts with 2131, 1800, or 35
+  } else if (/^9792/.test(firstFourDigits)) {
+    return { name: "Troy", ...src[7] }; // Troy starts with 9792
+  }
+
+  return { name: "Default", ...src[0] };
+}

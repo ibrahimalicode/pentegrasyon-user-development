@@ -1,7 +1,22 @@
-import React from "react";
+//MODULES
+import React, { useState } from "react";
+
+//COMP
 import { AsteriskI } from "../../../assets/icon";
-import mastercard_img from "../../../assets/img/card/Mastercard.png";
+
+//UTILS
+import { getCardProvider } from "../../../utils/utils";
+
+//IMAGES
 import chip_img from "../../../assets/img/card/chip.png";
+import Default from "../../../assets/img/card/Default.png";
+import Visa from "../../../assets/img/card/Visa.png";
+import Mastercard from "../../../assets/img/card/Mastercard.png";
+import AmericanExpress from "../../../assets/img/card/AmericanExpress.png";
+import Discover from "../../../assets/img/card/Discover.png";
+import DinersClub from "../../../assets/img/card/DinersClub.png";
+import JCB from "../../../assets/img/card/JCB.png";
+import Troy from "../../../assets/img/card/Troy.png";
 
 function CardFront({ cardData }) {
   const { userName, cardNumber, month, year, cvv } = cardData;
@@ -13,10 +28,29 @@ function CardFront({ cardData }) {
   const thirdFour = cleanNumber.slice(8, 12).split("");
   const lastFour = cleanNumber.slice(12).split("");
 
+  const [provider, setProvider] = useState(Default);
+
   function showNum(array, secondArray, index) {
     // return index === array.length - 1 && !secondArray.length;
     return !secondArray.length;
   }
+
+  const imageData = [
+    { src: Default },
+    { src: Visa },
+    { src: Mastercard },
+    { src: AmericanExpress },
+    { src: Discover },
+    { src: DinersClub },
+    { src: JCB },
+    { src: Troy },
+  ];
+
+  useEffect(() => {
+    const provider_ = getCardProvider(cardNumber, imageData);
+    setProvider(provider_);
+  }, [cardNumber]);
+
   return (
     <main className="flip-card-front absolute flex flex-col w-full h-full px-5 py-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-xl">
       <header className="flex justify-between items-start w-full">
@@ -35,7 +69,7 @@ function CardFront({ cardData }) {
         <div className="flex flex-col w-[67px]">
           <img
             loading="lazy"
-            src={mastercard_img}
+            src={provider.src}
             alt="Card issuer logo"
             className="object-contain aspect-[1.68] w-[67px]"
           />

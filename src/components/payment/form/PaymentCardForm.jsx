@@ -1,9 +1,12 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomInput from "../../common/customInput";
+import { isValidCardNumber } from "../../../utils/utils";
 
 const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
   const yearRef = useRef(null);
   const cvvRef = useRef(null);
+
+  const [invalidCardNumber, setInvalidCardNumber] = useState(true);
 
   const formatCardNumber = (value) => {
     return value
@@ -44,6 +47,10 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
     });
   };
 
+  useEffect(() => {
+    setInvalidCardNumber(isValidCardNumber(cardData.cardNumber));
+  }, [cardData.cardNumber]);
+
   return (
     <div className="w-max">
       <div className="mt-4 flex flex-col gap-3 max-w-[325px]">
@@ -70,16 +77,26 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
         </div>
         <div className="w-full">
           <CustomInput
-            // label="Kart No"
+            label={invalidCardNumber === false && "Hatalı kart numarası"}
+            className5="text-[--red-1] text-[.7rem]"
             type="text"
             placeholder="Kart No"
-            className="text-[13px] py-[6px] sm:mt-[4px] mt-[4px]"
+            className={`text-[13px] py-[6px] sm:mt-[4px] mt-[4px] z-10 ${
+              !invalidCardNumber && "border-[--red-1]"
+            }`}
             className2="mt-[0] sm:mt-[0]"
             required
+            const
+            pattern="[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}"
             maxLength={19}
             value={cardData.cardNumber}
             onChange={handleCardNumberChange}
             onClick={() => setFlip(false)}
+          />
+          <CustomInput
+            required
+            value={invalidCardNumber ? "valid" : ""}
+            className="opacity-0 absolute -top-16 z-0"
           />
         </div>
         <div className="w-full flex gap-2">

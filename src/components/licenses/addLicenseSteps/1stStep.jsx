@@ -48,10 +48,11 @@ const imageSRCs = [
 ];
 
 const FirstStep = ({
+  setStep,
+  licenses,
+  restaurant,
   restaurantData,
   setRestaurantData,
-  setStep,
-  restaurant,
 }) => {
   const dispatch = useDispatch();
 
@@ -144,6 +145,22 @@ const FirstStep = ({
       toast.error("Lütfen restoran seçın 😊", { id: "choose_restaurant" });
       return;
     }
+    if (!licenses) return;
+    const existingLicenses = licenses.filter(
+      (license) => license.restaurantId === pkg.restaurantId
+    );
+    const marketPlaceExistes = existingLicenses.some(
+      (license) => license.marketplaceId === pkg.marketplaceId
+    );
+    if (marketPlaceExistes) {
+      toast(
+        `${pkg.restaurantName} restoranına ${
+          imageSRCs[pkg.marketplaceId].name
+        } lisansı var. Uzatmak isterseniz uzatma sayfasından uzatabılırsınız.`
+      );
+      return;
+    }
+
     const existingPackage = cartItems.find(
       (item) =>
         item.marketplaceId === pkg.marketplaceId &&

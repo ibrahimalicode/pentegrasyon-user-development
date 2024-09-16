@@ -347,7 +347,10 @@ const LicensesPage = () => {
             </div>
 
             <div>
-              <AddLicense onSuccess={() => setLicensesData(null)} />
+              <AddLicense
+                onSuccess={() => setLicensesData(null)}
+                licenses={licensesData}
+              />
             </div>
           </div>
         </div>

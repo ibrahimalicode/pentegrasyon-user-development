@@ -24,7 +24,7 @@ const AddLicensePage = () => {
   const toastId = useRef();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { user, restaurant } = location.state || {};
+  const { user, restaurant, licenses } = location.state || {};
   const currentPath = location.pathname;
   const pathArray = currentPath.split("/");
   const actionType = pathArray[pathArray.length - 1];
@@ -157,6 +157,7 @@ const AddLicensePage = () => {
                       setStep={setStep}
                       actionType={actionType}
                       restaurant={restaurant}
+                      licenses={licenses}
                     />,
                     <SecondStep
                       step={step}

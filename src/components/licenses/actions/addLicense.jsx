@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-const AddLicense = ({ user, restaurant }) => {
+const AddLicense = ({ user, restaurant, licenses }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -8,7 +8,7 @@ const AddLicense = ({ user, restaurant }) => {
     event.stopPropagation();
     const currentPath = location.pathname;
     navigate(`${currentPath}/add-license`, {
-      state: { user, restaurant },
+      state: { user, restaurant, licenses },
     });
   };
 

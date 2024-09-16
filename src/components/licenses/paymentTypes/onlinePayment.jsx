@@ -71,7 +71,10 @@ const OnlinePayment = ({ setStep, actionType }) => {
     const { email, fullName, phoneNumber } = userData;
     const address = `${userInvData.city}/${userInvData.district}/${userInvData.neighbourhood}`;
 
-    const paymentAmount = cartItems.reduce((acc, item) => acc + item.price, 0);
+    const paymentAmount = cartItems.reduce(
+      (acc, item) => acc + parseFloat(item.price),
+      0
+    );
     const addLicenseBasket = cartItems.reduce((result, item) => {
       const existingRestaurant = result.find(
         (restaurant) => restaurant.restaurantId === item.restaurantId

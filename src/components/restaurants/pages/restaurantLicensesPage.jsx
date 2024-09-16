@@ -468,6 +468,7 @@ const RestaurantLicensesPage = () => {
                 onSuccess={() => setLicensesData(null)}
                 user={userData}
                 restaurant={restaurantData}
+                licenses={licensesData}
               />
             </div>
           </div>

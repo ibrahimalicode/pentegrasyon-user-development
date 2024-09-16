@@ -22,7 +22,6 @@ import {
   formatLisansPackages,
   formatSelectorData,
   getPriceWithKDV,
-  groupedLicensePackages,
 } from "../../../utils/utils";
 
 // REDUX
@@ -31,10 +30,7 @@ import {
   resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
-import {
-  addItemToCart,
-  removeItemFromCart,
-} from "../../../redux/cart/cartSlice";
+import { addItemToCart } from "../../../redux/cart/cartSlice";
 import {
   getKDVParameters,
   resetGetKDVParameters,
@@ -50,14 +46,13 @@ const imageSRCs = [
 ];
 
 const FirstStep = ({
+  setStep,
+  paymentMethod,
   restaurantData,
+  setPaymentMethod,
   setRestaurantData,
   licensePackageData,
   setLicensePackageData,
-  paymentMethod,
-  setPaymentMethod,
-  setStep,
-  actionType,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -175,25 +170,7 @@ const FirstStep = ({
       toast.error("Lütfen restoran seçın 😊", { id: "choose_restaurant" });
       return;
     }
-    const existingPackage = cartItems.find(
-      (item) =>
-        item.marketplaceId === pkg.marketplaceId &&
-        item.restaurantId === pkg.restaurantId
-    );
-
-    if (existingPackage) {
-      dispatch(
-        removeItemFromCart({
-          id: existingPackage.id,
-          restaurantId: pkg.restaurantId,
-        })
-      );
-      if (
-        existingPackage.id === pkg.id &&
-        existingPackage.restaurantId == pkg.restaurantId
-      )
-        return;
-    }
+    dispatch(clearCart());
     dispatch(addItemToCart(pkg));
   };
 

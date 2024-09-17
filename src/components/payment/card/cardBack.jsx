@@ -20,7 +20,7 @@ const CardBack = ({ cardData }) => {
           </div>
         </div>
 
-        <div className="flex justify-end px-4">
+        <div className="flex justify-end px-4 w-[77px]">
           <img src={mastercard_img} alt="card" />
         </div>
       </div>

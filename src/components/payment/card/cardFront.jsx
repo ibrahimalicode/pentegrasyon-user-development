@@ -11,7 +11,7 @@ import { getCardProvider } from "../../../utils/utils";
 import chip_img from "../../../assets/img/card/chip.png";
 import Default from "../../../assets/img/card/Default.png";
 import Visa from "../../../assets/img/card/Visa.png";
-import Mastercard from "../../../assets/img/card/Mastercard.png";
+import Mastercard from "../../../assets/img/card/MC.png";
 import AmericanExpress from "../../../assets/img/card/AmericanExpress.png";
 import Discover from "../../../assets/img/card/Discover.png";
 import DinersClub from "../../../assets/img/card/DinersClub.png";

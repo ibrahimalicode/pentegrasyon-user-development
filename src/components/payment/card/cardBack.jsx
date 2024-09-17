@@ -1,5 +1,5 @@
 import { AsteriskI } from "../../../assets/icon";
-import mastercard_img from "../../../assets/img/card/Mastercard.png";
+import mastercard_img from "../../../assets/img/card/MC.png";
 
 const CardBack = ({ cardData }) => {
   return (

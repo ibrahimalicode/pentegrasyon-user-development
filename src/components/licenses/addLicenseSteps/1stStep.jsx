@@ -191,8 +191,8 @@ const FirstStep = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="h-full overflow-y-auto">
-      <div className="w-full sm:px-4">
+    <form onSubmit={handleSubmit} className="h-full">
+      <div className="w-full h-full sm:px-4">
         <div className="w-full flex justify-center pt-2">
           <CustomSelect
             required={true}
@@ -221,7 +221,7 @@ const FirstStep = ({
           </div>
         </div>
 
-        <div className="mt-5 flex flex-col gap-1">
+        <div className="h-[85%] flex flex-col gap-1 mt-5 overflow-y-auto">
           {licensePackagesData &&
             licensePackagesData.map((licensePkg, i) => (
               <div
@@ -264,6 +264,9 @@ const FirstStep = ({
                             }`}
                           >
                             {pkg.price} tl
+                          </p>
+                          <p className="text-sm font-normal">
+                            {pkg.description}
                           </p>
                         </div>
                       </div>

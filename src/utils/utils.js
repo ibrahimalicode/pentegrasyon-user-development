@@ -45,6 +45,36 @@ export const maxInput = (e) => {
   return useVal;
 };
 
+export function formatToPrice(value) {
+  if (!value) return;
+
+  // Convert value to a string to ensure replace method works
+  let useVal = String(value).replace(/[^0-9,]/g, ""); // Allow only digits and a comma
+
+  // Ensure there's only one comma
+  const commaIndex = useVal.indexOf(",");
+  if (commaIndex !== -1) {
+    // If there is a comma, ensure all other commas are removed
+    useVal =
+      useVal.slice(0, commaIndex + 1) +
+      useVal.slice(commaIndex + 1).replace(/,/g, "");
+  }
+
+  // Split the value into integer and decimal parts
+  const parts = useVal.split(",");
+
+  // Format the integer part
+  let formattedValue = new Intl.NumberFormat("tr-TR").format(parts[0]);
+
+  // Add the decimal part back, if it exists
+  if (parts[1] !== undefined) {
+    formattedValue += "," + parts[1].slice(0, 2); // Keep only two decimal places
+  }
+
+  // console.log(formattedValue);
+  return formattedValue;
+}
+
 export function spacePhoneNumber(phoneNumber) {
   // console.log(phoneNumber);
   const cleaned = ("" + phoneNumber).replace(/\D/g, "");

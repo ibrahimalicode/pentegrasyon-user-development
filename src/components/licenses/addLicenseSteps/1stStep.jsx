@@ -20,7 +20,7 @@ import {
   formatSelectorData,
   getPriceWithKDV,
   groupedLicensePackages,
-  sumCartPrices,
+  formatToPrice,
 } from "../../../utils/utils";
 
 // REDUX
@@ -69,8 +69,23 @@ const FirstStep = ({
 
   const cartItems = useSelector((state) => state.cart.items);
 
+  const [kdvData, setKdvData] = useState(null);
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
+
+  function getTotalPrice() {
+    const result = cartItems.reduce(
+      (acc, item) => acc + parseFloat(item.price),
+      0
+    );
+    const kdv = cartItems.reduce(
+      (acc, item) => acc + (parseFloat(item.price) / 100) * item.kdvPercentage,
+      0
+    );
+    const kdvTotal = formatToPrice(kdv);
+    const total = formatToPrice(result);
+    return { total, kdvTotal };
+  }
 
   // GET LICENSE PACKAGES
   useEffect(() => {
@@ -100,6 +115,7 @@ const FirstStep = ({
       const updatedData = licensePackages.data.map((pkg) => {
         return { ...pkg, price: getPriceWithKDV(pkg.price, KDVParameters) };
       });
+      setKdvData(KDVParameters);
       setLicensePackagesData(groupedLicensePackages(updatedData));
       dispatch(resetGetLicensePackages());
       dispatch(resetGetKDVParameters());
@@ -169,7 +185,8 @@ const FirstStep = ({
       )
         return;
     }
-    dispatch(addItemToCart(pkg));
+    const data = kdvData ? kdvData : {};
+    dispatch(addItemToCart({ ...pkg, ...data }));
     toast.success(`${pkg.time} Yıllık lısans sepete eklendi`);
   };
 
@@ -188,9 +205,19 @@ const FirstStep = ({
               setRestaurantData(selectedOption);
             }}
           />
-          <div className=" flex flex-col justify-cente px-6">
-            <p className="text-sm">Toplam</p>
-            <p>{sumCartPrices(cartItems)}</p>
+          <div className="flex px-6 gap-4">
+            <div className="flex flex-col">
+              <p className="text-sm">Toplam</p>
+              <p>{getTotalPrice().total}</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="text-sm">KDV</p>
+              {kdvData && kdvData.useKDV ? (
+                <p>{getTotalPrice().kdvTotal}</p>
+              ) : (
+                <p>0.00</p>
+              )}
+            </div>
           </div>
         </div>
 

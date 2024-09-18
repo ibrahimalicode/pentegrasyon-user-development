@@ -16,7 +16,7 @@ import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 
 //FUNC
-import { groupedLicensePackages, sumCartPrices } from "../../../utils/utils";
+import { groupedLicensePackages, formatToPrice } from "../../../utils/utils";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -30,6 +30,21 @@ const imageSRCs = [
 const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const [licensePackagesData, setLicensePackagesData] = useState();
+
+  function getTotalPrice() {
+    const result = cartItems.reduce(
+      (acc, item) => acc + parseFloat(item.price),
+      0
+    );
+    const kdv = cartItems.reduce(
+      (acc, item) => acc + (parseFloat(item.price) / 100) * item.kdvPercentage,
+      0
+    );
+    const useKDV = cartItems[0]?.useKDV;
+    const kdvTotal = formatToPrice(kdv);
+    const total = formatToPrice(result);
+    return { total, kdvTotal, useKDV };
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -62,9 +77,19 @@ const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
                 });
               }}
             />
-            <div className=" flex flex-col justify-cente px-6">
-              <p className="text-sm">Toplam</p>
-              <p>{sumCartPrices(cartItems)}</p>
+            <div className="flex px-6 gap-4">
+              <div className="flex flex-col">
+                <p className="text-sm">Toplam</p>
+                <p>{getTotalPrice().total}</p>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-sm">KDV</p>
+                {getTotalPrice().useKDV ? (
+                  <p>{getTotalPrice().kdvTotal}</p>
+                ) : (
+                  <p>0.00</p>
+                )}
+              </div>
             </div>
           </div>
 

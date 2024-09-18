@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import imgUrl from "../../assets/img/pentegrasyon.png";
 import VideoLoop from "./videoLoop";
 
@@ -11,9 +12,12 @@ const GlassFrame = ({ component, className, className2 }) => {
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute top-0 left-0 right-0  bg-gradient-to-r from-[--primary-1] to-indigo- inline-block text-transparent bg-clip-text text-2xl p-4 font-[conthrax] text-center text-white z-[999]">
+      <Link
+        to="/"
+        className="absolute top-0 left-0 right-0  bg-gradient-to-r from-[--primary-1] to-indigo- inline-block text-transparent bg-clip-text text-2xl p-4 font-[conthrax] text-center text-white z-[999]"
+      >
         Pentegrasyon
-      </div>
+      </Link>
       <VideoLoop />
       <div
         className={`max-w-md mx-auto p-6 pt-10 text-[--white-1] bg-gray-400 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] ${className2}`}

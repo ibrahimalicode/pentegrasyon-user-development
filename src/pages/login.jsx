@@ -11,12 +11,14 @@ import TurnstileWidget from "../components/turnstileWidget";
 
 // COMP
 import GlassFrame from "../components/common/glassFrame";
+import { getAuth } from "../redux/api";
 
 function Login() {
+  const toastId = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const toastId = useRef();
 
+  const token = getAuth()?.token;
   const { success, loading, error } = useSelector((state) => state.auth.login);
 
   const [emailOrPhone, setEmailOrPhone] = useState("");
@@ -26,30 +28,32 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     if (!emailOrPhone || !password) return;
-    dispatch(login({ emailOrPhone, password, role: "user" }));
+    dispatch(login({ emailOrPhone, password }));
   };
 
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Logging in..");
+      toastId.current = toast.loading("Giriş Yalıpıyor...");
     } else if (error) {
-      toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       if (error?.statusCode == 422) {
+        toast.dismiss(toastId.current);
+        toast.error(error.message);
         navigate("/verify");
       }
       dispatch(resetLoginState());
     } else if (success) {
-      navigate("/dashboard");
+      navigate("/orders");
       toast.dismiss(toastId.current);
-      toast.success("Successfuly logged in");
+      toast.success("Başarıyla Giriş Yapıldı");
       dispatch(resetLoginState());
     }
   }, [loading, success, error, dispatch, navigate]);
+
+  useEffect(() => {
+    if (token) {
+      navigate("/orders");
+    }
+  }, [token]);
 
   return (
     <GlassFrame

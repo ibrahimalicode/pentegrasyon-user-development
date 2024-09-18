@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { GobackI } from "../../assets/icon";
-import { EmailUserMessage, PhoneUserMessage } from "./messages";
 import MinuteCountdown from "./minuteCountdown";
 import LoadingI from "../../assets/anim/loading";
 import VerificationInputs from "./customVerificationInputs";
+import { EmailUserMessage, PhoneUserMessage } from "./messages";
 
 //FUNC
 import { spacePhoneNumber } from "../../utils/utils";
@@ -81,21 +81,15 @@ const VerifyCode = ({
   // TOAST AND ACTION FOR VERIFY CODE
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Loading...");
+      toastId.current = toast.loading("İşleniyor...");
     }
     if (success) {
       onSuccess();
       toast.dismiss(toastId.current);
-      toast.success("Verified Successfully");
+      toast.success("Onay Kodu Doğrulandı");
       dispatch(resetVerifyCodeState());
     }
     if (error) {
-      toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Couldn't verify");
-      }
       dispatch(resetVerifyCodeState());
     }
   }, [loading, success, error]);
@@ -103,19 +97,14 @@ const VerifyCode = ({
   //TOAST AND ACTION FOR SEND VERIFICATION CODE
   useEffect(() => {
     if (sendSuccess) {
-      toast.success("Verification has been sent");
+      toast.success("Onay Kodu Gönderildi");
       setMinutes(2);
       dispatch(resetUserVerification());
     }
     if (sendError) {
-      if (sendError?.message_TR) {
-        toast.error(sendError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetUserVerification());
     }
-  }, [sendSuccess, sendLoading]);
+  }, [sendSuccess, sendLoading, sendError]);
 
   //TOAST AND ACTION FOR SEND FORGOT CODE
   useEffect(() => {

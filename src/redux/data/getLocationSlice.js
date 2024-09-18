@@ -125,7 +125,7 @@ export const getLocation = createAsyncThunk(
 
       if (data.status === "OK") {
         const result = data.results[0];
-        const bounds = result.geometry.bounds; // Use bounds for more accurate boundaries
+        const bounds = result.geometry.bounds;
 
         if (bounds) {
           const boundaryCoords = [
@@ -159,7 +159,7 @@ export const getLocation = createAsyncThunk(
             { lat: viewport.northeast.lat, lng: viewport.southwest.lng },
           ];
 
-          console.log(boundaryCoords);
+          // console.log(boundaryCoords);
           return boundaryCoords;
         }
       } else {
@@ -167,10 +167,7 @@ export const getLocation = createAsyncThunk(
       }
     } catch (err) {
       console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message: err.message });
     }
   }
 );

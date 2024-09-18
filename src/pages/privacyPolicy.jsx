@@ -47,8 +47,8 @@ const PrivacyPolicy = () => {
             Tic. Ltd. Şti.'ne ("LİWA YAZILIM") aktarılan kişisel verilerin
             korunması konusundaki temel bilgilere yer verileceği gibi, Liwa
             Yazılıma ait{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com{" "}
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net{" "}
             </a>
             web sitesi ziyaretçilerine, çerez politikası ve politikanın nasıl
             yönetilebileceği konularında bilgilendirme yapılacaktır. Web
@@ -61,8 +61,8 @@ const PrivacyPolicy = () => {
             LİWASOFT Yazılım, 6698 sayılı Kişisel Verilerin Korunması Kanunu
             ("6698 sayılı Kanun") m. 10'da belirtilen aydınlatma yükümlülüğünü
             yerine getirmek amacıyla aşağıdaki sunulan açıklamaları{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com{" "}
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net{" "}
             </a>
             web-sitemizi ve/veya mobil uygulamalarımızı kullanan 3. kişilerin
             dikkatine sunar.
@@ -97,8 +97,8 @@ const PrivacyPolicy = () => {
           </h3>
           <p className="mb-4">
             {" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             web sitesinden veya mobil uygulamalardan işlem yapan
             müşterilerimizin kişisel verileri, müşterilerimizin açık rızaları ve
@@ -120,44 +120,44 @@ const PrivacyPolicy = () => {
             üzere, kişisel verilerinizi toplamamıza, kullanmamıza, gerektiğinde
             üçüncü kişilerle paylaşmamıza, muhafaza etmemize ve korumamıza rıza
             göstermektesiniz. Liwa Yazılıma ait olan{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             web sitesi çerez (cookie) kullanan bir sitedir. Çerez; kullanılmakta
             olan cihazın internet tarayıcısına ya da sabit diskine depolanarak
             söz konusu cihazın tespit edilmesine imkân tanıyan, çoğunlukla harf
             ve sayılardan oluşan bir dosyadır.
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>
             ziyaretçilerine daha iyi hizmet verebilmek amacıyla ve yasal
             yükümlülüğü çerçevesinde, işbu Kişisel Verilerin Korunması Hakkında
             Açıklama metninde belirlenen amaçlar ve kapsam dışında kullanılmamak
             kaydı ile gezinme bilgilerinizi toplayacak, işleyecek, üçüncü
             kişilerle paylaşacak ve güvenli olarak saklayacaktır.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             çerezleri; günlük dosyaları, boş gif dosyaları ve/veya üçüncü taraf
             kaynakları yoluyla topladığı bilgileri tercihlerinizle ilgili bir
             özet oluşturmak amacıyla depolar.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             size özel tanıtım yapmak, promosyonlar ve pazarlama teklifleri
             sunmak, web sitesinin veya mobil uygulamanın içeriğini size göre
             iyileştirmek ve/veya tercihlerinizi belirlemek amacıyla; site
             üzerinde gezinme bilgilerinizi ve/veya site üzerindeki kullanım
             geçmişinizi izleyebilmektedir.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             çevrimiçi ve çevrimdışı olarak toplanan bilgiler gibi farklı
             yöntemlerle veya farklı zamanlarda site üzerinde sizden toplanan
             bilgileri eşleştirebilir ve bu bilgileri üçüncü taraflar gibi başka
             kaynaklardan alınan bilgilerle birlikte kullanabilir.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             mobil uygulamasında oturum çerezleri ve kalıcı çerezler
             kullanmaktadır. Oturum kimliği çerezi, tarayıcınızı kapattığınızda
@@ -170,20 +170,20 @@ const PrivacyPolicy = () => {
             reddederseniz, web sitesini, mobil uygulamayı kullanmaya devam
             edebilirsiniz fakat web sitesinin, mobil uygulamanın tüm işlevlerine
             erişemeyebilirsiniz veya erişiminiz sınırlı olabilir.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>
             , internet sayfasını kullanan kullanıcıların istatistiksel bilgileri
             ve yaptığı işlemler sistem tarafından kayıt altında tutulur.
             Kullanıcı, sistem kayıtlarındaki hareketlerinden sorumludur.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             web sitesinde sunulan hizmetlerden yararlananlar bütün bu şartları
             okumuş ve kabul etmiş sayılırlar. Liwa Yazılım San. Tic. Ltd. Şti.
             ait{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>
             , Gizlilik Politikası hükümlerini önceden haber vermeksizin
             değiştirme hakkını saklı tutar. Güncel Gizlilik Politikası,
@@ -198,15 +198,15 @@ const PrivacyPolicy = () => {
           </h3>
           <p className="mb-4">
             Liwa Yazılıma ait olan{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             web sitesi çerez (cookie) kullanan bir sitedir. Çerez; kullanılmakta
             olan cihazın internet tarayıcısına ya da sabit diskine depolanarak
             söz konusu cihazın tespit edilmesine olanak tanıyan, çoğunlukla harf
             ve sayılardan oluşan bir dosyadır.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             çerezleri; günlük dosyaları, boş gif dosyaları ve/veya üçüncü taraf
             kaynakları yoluyla topladığı bilgileri tercihlerinizle ilgili bir
@@ -217,8 +217,8 @@ const PrivacyPolicy = () => {
             Kalıcı çerezler siz silinceye veya süreleri doluncaya (bu şekilde
             çerezlerin cihazında ne kadar kalacağı, çerezlerin "kullanım
             ömürlerine" bağlı olacaktır) kadar sabit diskinizde kalırlar.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             çerezleri; yaptığınız tercihleri hatırlamak ve web sitesi/mobil
             uygulama kullanımınızı kişiselleştirmek için kullanır. Bu kullanım
@@ -227,16 +227,16 @@ const PrivacyPolicy = () => {
             fazla kez parola girme zahmetinden kurtaran çerezleri ve web
             sitesi/mobil uygulamaya daha sonraki ziyaretlerinizde sizi
             hatırlayan ve tanıyan çerezleri içerir.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             web sitesine nereden bağlandığınız, web sitesi/mobil uygulama
             üzerinde hangi içeriği görüntülediğiniz ve ziyaretinizin süresi gibi
             web sitesini/mobil uygulamayı nasıl kullandığınızın ölçümlenmesi
             dahil olmak üzere web sitesini/mobil uygulamayı nasıl kullandığınızı
             tespit etmek için kullanır.{" "}
-            <a href="https://www.liwasoft.com" className="text-[--link-1]">
-              www.liwasoft.com
+            <a href="https://www.pentegrasyon.net" className="text-[--link-1]">
+              www.pentegrasyon.net
             </a>{" "}
             web sitesi çerezleri ayrıca; arama motorlarını, web sitesi, mobil
             uygulamasını ve/veya web sitesinin reklam verdiği internet
@@ -466,7 +466,7 @@ const PrivacyPolicy = () => {
           </h3>
           <p className="mb-4">
             Kişisel verilerinizle ilgili her türlü soru ve görüşleriniz için
-            support@liwasoft.com posta adresinden dilediğiniz zaman bize
+            support@pentegrasyon.net posta adresinden dilediğiniz zaman bize
             ulaşabilirsiniz.
           </p>
         </section>

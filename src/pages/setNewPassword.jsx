@@ -9,13 +9,8 @@ import NotFound from "./404";
 import LoadingI from "../assets/anim/loading";
 import CustomInput from "../components/common/customInput";
 
-//FUNC
-import { clearAuth } from "../redux/api";
-
-//ASSETS
-import imgUrl from "../assets/img/pentegrasyon.png";
-
 //REDUX
+import { clearAuth } from "../redux/api";
 import {
   changePassword,
   resetChangePassword,
@@ -29,10 +24,10 @@ import GlassFrame from "../components/common/glassFrame";
 const KEY = import.meta.env.VITE_LOCAL_KEY;
 
 const SetNewPassword = () => {
+  const toastId = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const toastId = useRef();
 
   const { loading, success, error } = useSelector(
     (state) => state.auth.changePassword
@@ -64,20 +59,14 @@ const SetNewPassword = () => {
     if (success) {
       toast.dismiss(toastId.current);
       dispatch(resetChangePassword());
-      toast.success("Password changed successfully");
+      toast.success("Şifreniz başarıyla güncelendi");
       clearAuth();
       navigate("/login");
     }
     if (loading) {
-      toastId.current = toast.loading("Loading...");
+      toastId.current = toast.loading("İşleniyor...");
     }
     if (error) {
-      toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetChangePassword());
     }
   }, [success, error, loading]);
@@ -101,15 +90,10 @@ const SetNewPassword = () => {
     if (verifyS) {
       setCredentials(null);
       navigate("/setnewpassword");
-      toast.success("Code verified");
+      toast.success("Onay Kodu Doğrulandı");
       dispatch(resetVerifyCodeState());
     }
     if (verifyE) {
-      if (verifyE?.message_TR) {
-        toast.error(verifyE.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       setIsError(true);
       dispatch(resetVerifyCodeState());
     }

@@ -93,9 +93,9 @@ export const getRestaurant = createAsyncThunk(
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
+        return rejectWithValue({ message: err.response.data.message_TR });
       }
-      return rejectWithValue({ message_TR: err.message });
+      return rejectWithValue({ message: err.message });
     }
   }
 );
@@ -136,11 +136,8 @@ export const getLicensesRestaurant = createAsyncThunk(
 
       return updatedLicenses;
     } catch (err) {
-      console.error(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
+      const errorMessage = err.message;
+      return rejectWithValue({ message: errorMessage });
     }
   }
 );

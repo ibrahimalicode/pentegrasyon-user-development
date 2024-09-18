@@ -1,16 +1,21 @@
-import { useDispatch, useSelector } from "react-redux";
-import { BellI, SettingsI, MenuI } from "../../assets/icon";
-import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
-import { useEffect, useRef, useState } from "react";
-import { getAuth, clearAuth } from "../../redux/api";
+//MODULES
 import toast from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
 import { usePopup } from "../../context/PopupContext";
+import { BellI, SettingsI, MenuI } from "../../assets/icon";
+
+//REDUX
+import { getAuth, clearAuth } from "../../redux/api";
+import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
 
 function Header({ openSidebar, setOpenSidebar }) {
+  const toastId = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const toastId = useRef();
   const headerSettingsRef = useRef();
 
   const { loading, success, error } = useSelector((state) => state.auth.logout);
@@ -25,7 +30,7 @@ function Header({ openSidebar, setOpenSidebar }) {
 
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Logging out...");
+      toastId.current = toast.loading("Çıkış Yapılıyor...");
     }
     if (success) {
       clearAuth();
@@ -36,8 +41,6 @@ function Header({ openSidebar, setOpenSidebar }) {
     if (error) {
       clearAuth();
       navigate("/login");
-      toast.dismiss(toastId.current);
-      console.log(error);
       dispatch(resetLogoutState());
     }
   }, [success, loading, error]);

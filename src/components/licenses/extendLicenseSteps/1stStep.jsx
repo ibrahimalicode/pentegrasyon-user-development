@@ -83,11 +83,6 @@ const FirstStep = ({
   // TOAST AND SET PACKAGES
   useEffect(() => {
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetGetLicensePackages());
     }
 
@@ -99,11 +94,6 @@ const FirstStep = ({
   //GET KDV VALUE
   useEffect(() => {
     if (kdvError) {
-      if (kdvError?.message_TR) {
-        toast.error(kdvError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetGetKDVParameters());
     }
 

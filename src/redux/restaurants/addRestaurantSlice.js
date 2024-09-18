@@ -54,7 +54,6 @@ export const addRestaurant = createAsyncThunk(
   "Restaurants/AddRestaurant",
   async (
     {
-      userId,
       name,
       phoneNumber,
       latitude,
@@ -68,30 +67,23 @@ export const addRestaurant = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const res = await api.post(
-        `${baseURL}Restaurants/AddRestaurant`,
-        {
-          name,
-          phoneNumber,
-          latitude,
-          longitude,
-          city: city.value,
-          district: district.value,
-          neighbourhood: neighbourhood.value,
-          address,
-          isActive,
-        },
-        { params: { userId: userId.id } }
-      );
+      const res = await api.post(`${baseURL}Restaurants/AddRestaurant`, {
+        name,
+        phoneNumber,
+        latitude,
+        longitude,
+        city: city.value,
+        district: district.value,
+        neighbourhood: neighbourhood.value,
+        address,
+        isActive,
+      });
 
       // console.log(res);
       return res.data;
     } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
-      }
-      throw rejectWithValue({ message_TR: err.message });
+      const errorMessage = err.message;
+      return rejectWithValue({ message: errorMessage });
     }
   }
 );

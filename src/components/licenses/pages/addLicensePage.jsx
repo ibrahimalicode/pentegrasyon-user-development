@@ -71,7 +71,7 @@ const AddLicensePage = () => {
   // ADD SUCCESS
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Loading...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (success) {
       toast.remove(toastId.current);
       if (success) {
@@ -79,8 +79,8 @@ const AddLicensePage = () => {
       }
       dispatch(resetAddByOnlinePay());
     } else if (error) {
-      toast.remove(toastId.current);
       setStep(5);
+      toast.dismiss(toastId.current);
       window.parent.postMessage({ status: "failed" }, "*");
       dispatch(resetAddByOnlinePay());
     }

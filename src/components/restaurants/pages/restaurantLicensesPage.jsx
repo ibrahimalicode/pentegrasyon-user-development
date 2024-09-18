@@ -193,22 +193,14 @@ const RestaurantLicensesPage = () => {
     }
 
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(error.message);
       dispatch(resetGetRestaurantLicenses());
     }
   }, [success, restaurantInData]);
 
   useEffect(() => {
     if (restaurantError) {
-      if (restaurantError?.message_TR) {
-        toast.error(restaurantError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(restaurantError.message);
       dispatch(resetGetRestaurantState());
     }
 

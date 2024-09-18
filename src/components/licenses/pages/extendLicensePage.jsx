@@ -56,13 +56,13 @@ const ExtendLicensePage = () => {
   // EXTEND SUCCESS
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Loading...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (success) {
       setStep(3);
-      toast.remove(toastId.current);
+      toast.dismiss(toastId.current);
       dispatch(resetExtendByOnlinePay());
     } else if (error) {
-      toast.remove(toastId.current);
+      toast.dismiss(toastId.current);
       setStep(4);
       window.parent.postMessage({ status: "failed" }, "*");
       dispatch(resetExtendByOnlinePay());

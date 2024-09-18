@@ -28,7 +28,7 @@ function UserProfile({ setOpenSidebar }) {
     if (user) {
       setUserData({
         ...user,
-        rol: user.isDealer ? "Dealer" : "Kullanıcı",
+        rol: user.isDealer ? "Bayi" : "Kullanıcı",
       });
     }
   }, [user]);

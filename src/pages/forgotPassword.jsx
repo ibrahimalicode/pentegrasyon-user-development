@@ -10,7 +10,6 @@ import CustomInput from "../components/common/customInput";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CustomPhoneInput from "../components/common/customPhoneInput";
-import imgUrl from "../assets/img/pentegrasyon.png";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
 
@@ -47,12 +46,6 @@ const ForgotPassword = () => {
       toast.success("Onay kodu gönderildi");
     }
     if (error) {
-      toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetForgotPassword());
     }
   }, [success, error]);

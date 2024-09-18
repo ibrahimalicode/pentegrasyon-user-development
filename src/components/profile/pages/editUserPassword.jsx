@@ -28,18 +28,12 @@ const EditUserPassword = () => {
 
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Updating password...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (error) {
-      toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetUpdateUserPassword());
     } else if (success) {
       toast.dismiss(toastId.current);
-      toast.success("Password updated");
+      toast.success("Şifrenız başarıyla güncelendi");
       setUserPassword({
         password: "",
         confirmPassword: "",
@@ -107,6 +101,7 @@ const EditUserPassword = () => {
             text="Kaydet"
             className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
+            disabled={loading}
           />
         </div>
       </form>

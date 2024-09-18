@@ -29,19 +29,14 @@ const SendCode = ({ phoneNumber, setPhoneNumber, setToVerify }) => {
   //TOAST AND ACTION FOR SEND CODE
   useEffect(() => {
     if (success) {
-      toast.success("Verification has been sent");
+      toast.success("Doğrulama Kodu Gönderildi");
       setToVerify(true);
       dispatch(resetUserVerification());
     }
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetUserVerification());
     }
-  }, [success, loading]);
+  }, [success, error, loading]);
 
   return (
     <form
@@ -82,7 +77,7 @@ const SendCode = ({ phoneNumber, setPhoneNumber, setToVerify }) => {
           <button
             disabled={loading}
             type="submit"
-            className="flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
+            className="flex justify-center px-7 py-2 text-md rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
           >
             {loading ? <LoadingI className="h-7" /> : "Devam"}
           </button>

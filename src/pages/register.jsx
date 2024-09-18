@@ -63,16 +63,16 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password2) {
-      toast.error("Şifreler eşit değil");
+      toast.error("Şifreler aynı değil");
       return;
     }
     if (phoneNumber.length < 12) {
-      toast("Telefon numaranızı tamamlayın.");
+      toast("Lütfen telefon numaranızı tamamlayın");
       return;
     }
 
     if (!checked) {
-      toast.error("Lütfen kullanım şartılarını kabul edin.");
+      toast.error("Lütfen kullanım şartılarını kabul edin");
       return;
     }
     setPopupContent(
@@ -107,27 +107,20 @@ const Register = () => {
         })
       );
     } else {
-      console.log("Fill all the inputs");
-      toast("Fill all the inputs");
+      toast("Tüm alanları doldurunuz");
     }
   };
 
   // USE EFFECTS
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Loading...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (success) {
-      toast.dismiss(toastId.current);
       setToConfirm(true);
-      toast.success("SMS has beeen sent successfully");
+      toast.dismiss(toastId.current);
+      toast.success("Doğrulama Kodu Gönderildi");
       dispatch(resetRgisterState());
     } else if (error) {
-      toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Couldn't send SMS");
-      }
       dispatch(resetRgisterState());
     }
   }, [loading, success, error]);

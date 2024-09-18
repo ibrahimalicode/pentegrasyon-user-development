@@ -53,7 +53,6 @@ function AddLicensesPopup({ onSuccess }) {
   );
 
   const {
-    loading: licensePackagesLoading,
     success: licensePackagesSuccess,
     error: licensePackagesError,
     licensePackages,
@@ -121,18 +120,6 @@ function AddLicensesPopup({ onSuccess }) {
       const formData = new FormData(e.target);
       dispatch(extendByOnlinePay({ formData }));
     }
-
-    console.log({
-      restaurantId: restaurantData.id,
-      userId: restaurantData.userId,
-      marketplaceId: licensePackageData.id,
-      startDateTime: getDateRange(licensePackageData.time).startDateTime,
-      endDateTime: getDateRange(licensePackageData.time).endDateTime,
-      isActive: true,
-      licensePackageTime: licensePackageData.time,
-      licensePackageTotalPrice: licensePackageData.price,
-      licensePackageId: licensePackageData.licensePackageId,
-    });
     dispatch(
       addLicense({
         restaurantId: restaurantData.id,
@@ -151,22 +138,19 @@ function AddLicensesPopup({ onSuccess }) {
   // TOAST
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
+      toastId.current = toast.loading("İşleniyor...");
     }
     if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.dismiss(toastId.current);
+      toast.error(error.message);
       dispatch(resetAddLicenseState());
-    } else if (success) {
+    }
+    if (success) {
       toastId.current && toast.dismiss(toastId.current);
       onSuccess();
       setShowPopup(false);
       setPopupContent(null);
-      toast.success("Lisans bşarıyla eklendi 🥳🥳");
+      toast.success("Lisans bşarıyla eklendi");
       dispatch(resetAddLicenseState());
     }
   }, [loading, success, error]);
@@ -187,19 +171,14 @@ function AddLicensesPopup({ onSuccess }) {
       );
     } else {
       const { id, name, userId } = restaurant;
-      console.log(restaurant);
       setRestaurantData({ value: id, label: name, id, userId });
     }
   }, [restaurant]);
 
-  // SET RESTAURANTS
+  // TOAST AND SET RESTAURANTS
   useEffect(() => {
     if (restaurantsError) {
-      if (restaurantsError?.message_TR) {
-        toast.error(restaurantsError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(restaurantsError.message);
       dispatch(resetGetRestaurantsState());
     }
 
@@ -226,11 +205,7 @@ function AddLicensesPopup({ onSuccess }) {
   // SET LICENSE PACKAGES
   useEffect(() => {
     if (licensePackagesError) {
-      if (error?.message_TR) {
-        toast.error(licensePackagesError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(licensePackagesError.message);
       dispatch(resetGetLicensePackages());
     }
     if (licensePackagesSuccess) {

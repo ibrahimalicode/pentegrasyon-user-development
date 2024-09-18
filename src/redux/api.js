@@ -38,16 +38,45 @@ export const privateApi = () => {
   axiosPrivate.interceptors.response.use(
     (response) => response,
     async (error, response) => {
+      let errorMessage = "";
       // if (error.response?.status === 401) {
       //   clearAuth();
       //   window.location.href = "/login";
       // }
 
+      toast.dismiss();
       if (error.response?.status === 403) {
-        toast.dismiss();
-        toast.error("Hesabınız aktıf değil");
+        errorMessage = "Hesabınız aktif değil";
+        toast.error(errorMessage, { id: "403" });
+      } else if (error.response) {
+        const resErr = error?.response?.data?.message_TR || null;
+        if (resErr) {
+          errorMessage = resErr;
+        } else {
+          switch (error.response.status) {
+            case 400:
+              errorMessage = "İstek başarısız oldu, durum kodu 400";
+              break;
+            case 404:
+              errorMessage = "Kaynak bulunamadı, durum kodu 404";
+              break;
+            case 500:
+              errorMessage = "Sunucu hatası, durum kodu 500";
+              break;
+            default:
+              errorMessage = `Beklenmedik hata, durum kodu ${error.response.status}`;
+          }
+        }
+        toast.error(errorMessage, { id: "api-error" });
+      } else if (error.request) {
+        errorMessage = "İstek sunucuya ulaşamadı";
+        toast.error(errorMessage, { id: "no-server-error" });
+      } else {
+        errorMessage = "Bir hata oluştu: " + error.message;
+        toast.error(errorMessage, { id: "random-error" });
       }
-      return Promise.reject(error);
+
+      return Promise.reject({ ...error, message: errorMessage });
     }
   );
 

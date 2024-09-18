@@ -66,11 +66,8 @@ export const updateLicenseIsActive = createAsyncThunk(
       console.log(res);
       return res.data;
     } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
+      const errorMessage = err.message;
+      return rejectWithValue({ message: errorMessage });
     }
   }
 );

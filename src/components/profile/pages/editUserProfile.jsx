@@ -1,7 +1,7 @@
 //MOD
 import { isEqual } from "lodash";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -20,6 +20,7 @@ import {
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 
 const EditUserProfile = ({ user, cities }) => {
+  const toastId = useRef();
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
@@ -65,17 +66,17 @@ const EditUserProfile = ({ user, cities }) => {
 
   // TOAST
   useEffect(() => {
+    if (loading) {
+      toastId.current = toast.loading("İşleniyor...");
+    }
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong 🙁");
-      }
       dispatch(resetUpdateUserData());
-    } else if (success) {
+    }
+    if (success) {
       dispatch(getUser());
       dispatch(resetUpdateUserData());
-      toast.success("Profiliniz başarıyla güncelendi🤩");
+      toast.dismiss(toastId.current);
+      toast.success("Profiliniz başarıyla güncelendi");
     }
   }, [loading, success, error]);
 
@@ -279,6 +280,7 @@ const EditUserProfile = ({ user, cities }) => {
             text="Kaydet"
             className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
+            disabled={loading}
           />
         </div>
       </form>

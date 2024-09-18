@@ -156,11 +156,7 @@ const RestaurantsPage = () => {
   // TOAST AND GET MERGED USERS
   useEffect(() => {
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(error.message);
       dispatch(resetGetRestaurantsState());
     }
 
@@ -168,7 +164,7 @@ const RestaurantsPage = () => {
       setTotalItems(restaurants.totalCount);
       setRestaurantsData(restaurants.data);
     }
-  }, [loading, success, error, restaurants]);
+  }, [success, error, restaurants]);
 
   // GET AND SET CITIES
   useEffect(() => {

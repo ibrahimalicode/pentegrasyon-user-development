@@ -35,7 +35,7 @@ const EditUserInvoice = ({ cities, user }) => {
     loading: addInvoiceLoading,
     success: addInvoiceSuccess,
     error: addInvoiceError,
-  } = useSelector((state) => state.users.addInvoice);
+  } = useSelector((state) => state.user.addInvoice);
 
   const { districts: districtsData, success: districtsSuccess } = useSelector(
     (state) => state.data.getDistricts
@@ -63,18 +63,12 @@ const EditUserInvoice = ({ cities, user }) => {
   //TOAST TO UPDATE
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Updating Invoice...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetUpdateUserInvoice());
     } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
-      toast.success("Invoice updated successfully");
+      toast.dismiss(toastId.current);
+      toast.success("Fatura adresi başarıyla düzenlendi");
       dispatch(resetUpdateUserInvoice());
       dispatch(getUser());
     }
@@ -83,18 +77,14 @@ const EditUserInvoice = ({ cities, user }) => {
   //TOAST TO ADD INVOICE IF THERE IS NO
   useEffect(() => {
     if (addInvoiceLoading) {
-      toastId.current = toast.loading("Updating Invoice...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (addInvoiceError) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (addInvoiceError?.message_TR) {
-        toast.error(addInvoiceError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.dismiss(toastId.current);
+      toast.error(addInvoiceError.message);
       dispatch(resetaddUserInvoice());
     } else if (addInvoiceSuccess) {
       toastId.current && toast.dismiss(toastId.current);
-      toast.success("Invoice updated successfully");
+      toast.success("Fatura adresi başarıyla eklendi");
       dispatch(resetaddUserInvoice());
       dispatch(getUser());
     }
@@ -453,6 +443,7 @@ const EditUserInvoice = ({ cities, user }) => {
             text="Kaydet"
             className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
+            disabled={loading}
           />
         </div>
       </form>

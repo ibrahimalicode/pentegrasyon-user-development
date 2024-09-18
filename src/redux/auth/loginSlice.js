@@ -46,27 +46,22 @@ const loginSlice = createSlice({
 export const login = createAsyncThunk(
   "Auth/UserLogin",
   async (
-    { emailOrPhone: emailOrPhoneNumber, password, role },
+    { emailOrPhone: emailOrPhoneNumber, password },
     { rejectWithValue }
   ) => {
     try {
-      const res = await api.post(
-        `${baseURL}Auth/${role === "admin" ? "ManagerLogin" : "UserLogin"}`,
-        {
-          emailOrPhoneNumber,
-          password,
-        }
-      );
-      //console.log(res.data);
+      const res = await api.post(`${baseURL}Auth/UserLogin`, {
+        emailOrPhoneNumber,
+        password,
+      });
+      console.log(res.data);
       const KEY = import.meta.env.VITE_LOCAL_KEY;
       localStorage.setItem(`${KEY}`, JSON.stringify(res.data));
       return res.data.sessionId;
     } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        throw rejectWithValue(err.response.data);
-      }
-      throw rejectWithValue({ message_TR: err.message });
+      const errorMessage = err?.response?.data?.message_TR || err.message;
+      const statusCode = err?.response?.data?.statusCode;
+      return rejectWithValue({ message: errorMessage, statusCode });
     }
   }
 );

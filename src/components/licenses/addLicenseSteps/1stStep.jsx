@@ -82,11 +82,6 @@ const FirstStep = ({
   // TOAST AND SET PACKAGES
   useEffect(() => {
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetGetLicensePackages());
     }
 
@@ -98,16 +93,10 @@ const FirstStep = ({
   //GET KDV AND SET VALUE
   useEffect(() => {
     if (kdvError) {
-      if (kdvError?.message_TR) {
-        toast.error(kdvError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetGetKDVParameters());
     }
 
     if (KDVParameters && success) {
-      console.log(licensePackages.data);
       const updatedData = licensePackages.data.map((pkg) => {
         return { ...pkg, price: getPriceWithKDV(pkg.price, KDVParameters) };
       });

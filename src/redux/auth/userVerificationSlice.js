@@ -69,11 +69,8 @@ export const sendUserVerificationCode = createAsyncThunk(
       // console.log(res.data);
       return data;
     } catch (err) {
-      console.log(err);
-      if (err?.response?.data?.message_TR) {
-        throw rejectWithValue(err.response.data);
-      }
-      throw err.message;
+      const errorMessage = err.message;
+      return rejectWithValue({ message: errorMessage });
     }
   }
 );

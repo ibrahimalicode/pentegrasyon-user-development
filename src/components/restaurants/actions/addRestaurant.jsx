@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { CancelI } from "../../../assets/icon";
-import { usePopup } from "../../../context/PopupContext";
-import CustomInput from "../../common/customInput";
-import CustomPhoneInput from "../../common/customPhoneInput";
-import CustomSelect from "../../common/customSelector";
-import CustomTextarea from "../../common/customTextarea";
+//MODULES
+import { isEqual } from "lodash";
 import toast from "react-hot-toast";
-import { formatSelectorData, googleMap } from "../../../utils/utils";
+import { useEffect, useRef, useState } from "react";
+
+//COMP
+import { CancelI } from "../../../assets/icon";
+import { googleMap } from "../../../utils/utils";
+import CustomInput from "../../common/customInput";
+import CustomSelect from "../../common/customSelector";
+import { usePopup } from "../../../context/PopupContext";
+import CustomTextarea from "../../common/customTextarea";
+import CustomPhoneInput from "../../common/customPhoneInput";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
@@ -27,23 +31,11 @@ import {
   addRestaurant,
   resetAddRestaurantState,
 } from "../../../redux/restaurants/addRestaurantSlice";
-import { isEqual } from "lodash";
-import {
-  getUsers,
-  resetGetUsers,
-  resetGetUsersState,
-} from "../../../redux/users/getUsersSlice";
-import { useParams } from "react-router-dom";
-import { getAuth } from "../../../redux/api";
 
 const AddRestaurant = ({ onSuccess }) => {
-  const params = useParams();
-  const userId = params.id;
   const { setShowPopup, setPopupContent } = usePopup();
   const handleClick = () => {
-    setPopupContent(
-      <AddRestaurantPopup onSuccess={onSuccess} userId={userId} />
-    );
+    setPopupContent(<AddRestaurantPopup onSuccess={onSuccess} />);
     setShowPopup(true);
   };
 
@@ -60,23 +52,15 @@ const AddRestaurant = ({ onSuccess }) => {
 export default AddRestaurant;
 
 // EDIT RESTAURANT POPUP
-function AddRestaurantPopup({ onSuccess, userId }) {
-  const dispatch = useDispatch();
+function AddRestaurantPopup({ onSuccess }) {
   const toastId = useRef();
-  const localUser = getAuth()?.isManager;
+  const dispatch = useDispatch();
 
   const { setShowPopup, setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.restaurants.addRestaurant
   );
-
-  const {
-    loading: usersLoading,
-    success: usersSuccess,
-    error: usersError,
-    users,
-  } = useSelector((state) => state.users.getUsers);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -102,12 +86,10 @@ function AddRestaurantPopup({ onSuccess, userId }) {
     before: null,
   });
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const [usersData, setUsersData] = useState([]);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
   const [restaurantData, setRestaurantData] = useState({
-    userId: { id: userId },
     name: "",
     phoneNumber: "90",
     latitude: "",
@@ -150,48 +132,19 @@ function AddRestaurantPopup({ onSuccess, userId }) {
   // TOAST
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
+      toastId.current = toast.loading("İşleniyor...");
     }
     if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetAddRestaurantState());
     } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
       onSuccess();
       setShowPopup(false);
       setPopupContent(null);
-      toast.success("Restoran başarıyla eklendi 🥳🥳");
+      toast.dismiss(toastId.current);
+      toast.success("Restoran başarıyla eklendi");
       dispatch(resetAddRestaurantState());
     }
   }, [loading, success, error]);
-
-  // GET ALL USERS
-  useEffect(() => {
-    if (!users && !userId && localUser) {
-      dispatch(getUsers({}));
-    }
-    return () => {
-      if (users) {
-        dispatch(resetGetUsers());
-      }
-    };
-  }, [users, userId]);
-
-  // SET USERS
-  useEffect(() => {
-    if (users) {
-      setUsersData(formatSelectorData(users.data));
-    }
-    if (usersError) {
-      toast.error("Kullanıcılar alınamadı");
-      dispatch(resetGetUsersState());
-    }
-  }, [usersSuccess, usersError]);
 
   // GET AND SET CITIES IF THERE IS NO CITIES
   useEffect(() => {
@@ -389,31 +342,6 @@ function AddRestaurantPopup({ onSuccess, userId }) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-x-4">
-              {!userId && localUser && (
-                <CustomSelect
-                  required
-                  label="Kullanıcı"
-                  style={{ padding: "1px 0px" }}
-                  className="text-sm"
-                  value={
-                    restaurantData.userId.value
-                      ? restaurantData.userId
-                      : { value: null, label: "Kullanıcı seç" }
-                  }
-                  options={[
-                    { value: null, label: "Kullanıcı seç" },
-                    ...usersData,
-                  ]}
-                  onChange={(selectedOption) => {
-                    setRestaurantData((prev) => {
-                      return {
-                        ...prev,
-                        userId: selectedOption,
-                      };
-                    });
-                  }}
-                />
-              )}
               <CustomSelect
                 required
                 label="Şehir"
@@ -481,10 +409,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
                 required
                 label="Adres"
                 placeholder="Adres"
-                className={`text-sm max-sm:h-14 ${
-                  !userId && !localUser ? "h-14" : "h-9"
-                }`}
-                className2={`${!userId && localUser && "col-span-full"}`}
+                className={`text-sm max-sm:h-14`}
                 value={restaurantData.address}
                 onChange={(e) => {
                   setRestaurantData((prev) => {
@@ -498,11 +423,7 @@ function AddRestaurantPopup({ onSuccess, userId }) {
             </div>
 
             <div onClick={handleOpenMap}>
-              <div
-                className={`flex gap-4 pointer-events-none ${
-                  !userId && localUser && "sm:mt-4"
-                }`}
-              >
+              <div className="flex gap-4 pointer-events-none">
                 <CustomInput
                   required
                   label="Latitude"

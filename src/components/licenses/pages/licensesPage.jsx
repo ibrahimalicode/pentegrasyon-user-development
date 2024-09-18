@@ -89,11 +89,7 @@ const LicensesPage = () => {
   // TOAST AND GET LICENSES
   useEffect(() => {
     if (error) {
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(error.message);
       dispatch(resetGetLicensesState());
     }
     if (success) {
@@ -105,11 +101,7 @@ const LicensesPage = () => {
   // TOAST GET AND SET RESTAURANTS
   useEffect(() => {
     if (restaurantsError) {
-      if (restaurantsError?.message_TR) {
-        toast.error(restaurantsError.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(restaurantsError.message);
       dispatch(resetGetRestaurantsForLicenses());
     }
     if (restaurants) {
@@ -190,6 +182,7 @@ const LicensesPage = () => {
       ]);
     }
   }, [filterLicense]);
+
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}

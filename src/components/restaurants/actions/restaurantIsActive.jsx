@@ -96,21 +96,15 @@ function ChangeRestaurantStatusPopup({ restaurant, onSuccess }) {
   // TOAST
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
+      toastId.current = toast.loading("İşleniyor...");
     }
     if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetUpdateRestaurant());
     } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
       onSuccess();
       setShowPopup(false);
       setPopupContent(null);
+      toast.dismiss(toastId.current);
       toast.success(
         `Restoran başarıyla ${
           restaurant.isActive ? "Pasifleştirildi" : "Aktifleştirildi"

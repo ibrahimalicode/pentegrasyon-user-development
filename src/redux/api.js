@@ -39,12 +39,14 @@ export const privateApi = () => {
     (response) => response,
     async (error, response) => {
       let errorMessage = "";
+      toast.dismiss();
+
       if (error.response?.status === 401) {
         clearAuth();
+        errorMessage = "Yetkili Değılziniz.";
         window.location.href = "/login";
       }
 
-      toast.dismiss();
       if (error.response?.status === 403) {
         errorMessage = "Hesabınız aktif değil";
         toast.error(errorMessage, { id: "403" });

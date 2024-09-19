@@ -39,10 +39,10 @@ export const privateApi = () => {
     (response) => response,
     async (error, response) => {
       let errorMessage = "";
-      // if (error.response?.status === 401) {
-      //   clearAuth();
-      //   window.location.href = "/login";
-      // }
+      if (error.response?.status === 401) {
+        clearAuth();
+        window.location.href = "/login";
+      }
 
       toast.dismiss();
       if (error.response?.status === 403) {

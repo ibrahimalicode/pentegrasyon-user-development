@@ -33,11 +33,11 @@ function Login() {
 
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Giriş Yalıpıyor...");
+      toastId.current = toast.loading("Giriş Yapılıyor...");
     } else if (error) {
+      toast.dismiss(toastId.current);
+      toast.error(error.message);
       if (error?.statusCode == 422) {
-        toast.dismiss(toastId.current);
-        toast.error(error.message);
         navigate("/verify");
       }
       dispatch(resetLoginState());

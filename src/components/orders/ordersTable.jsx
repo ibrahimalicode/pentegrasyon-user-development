@@ -7,6 +7,7 @@ import GoFody from "../../assets/img/orders/GoFody.png";
 import Yemeksepeti from "../../assets/img/orders/Yemeksepeti.png";
 import { formatDateString } from "../../utils/utils";
 import { PrinterI } from "../../assets/icon";
+import orderStatuses from "../../data/orderStatuses";
 
 const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
   const imageSRCs = [
@@ -42,7 +43,7 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
             {inData.map((data) => (
               <tr
                 key={data.id}
-                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors ${
+                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors text-[--black-1] font-normal ${
                   totalItems < 8 ? "" : "last:border-b-0"
                 } `}
               >
@@ -53,32 +54,29 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                     className="size-10"
                   />
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.confirmationId}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.restaurant.name}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className="whitespace-nowrap">{data.confirmationId}</td>
+                <td className="whitespace-nowrap">{data.restaurant.name}</td>
+                <td className="whitespace-nowrap">
                   {formatDateString(data.checkoutDate)}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.client.name}
+                <td className="whitespace-nowrap">{data.client.name}</td>
+                <td className="whitespace-nowrap">
+                  <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+                    {data.client.deliveryAddress.district}
+                  </button>
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.client.deliveryAddress.district}
+                <td className="whitespace-nowrap">{data.courier.name}</td>
+                <td className="whitespace-nowrap">{data.totalPrice}</td>
+                <td className="whitespace-nowrap">
+                  <button className="bg-[--status-yellow] py-3.5 px-2 rounded-md border border-[--yellow-1]">
+                    {
+                      orderStatuses.filter((stat) => stat.id === data.status)[0]
+                        ?.label
+                    }
+                  </button>
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.courier.name}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.totalPrice}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.status}
-                </td>
-                <td className="w-14 text-[--black-2] relative">
-                  <div className="flex justify-center w-full">
+                <td className="w-14 relative">
+                  <div className="flex justify-center w-full bg-[--light-1] py-2 rounded-md">
                     <PrinterI />
                   </div>
                 </td>

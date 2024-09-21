@@ -31,6 +31,7 @@ import DownArrowI from "./downArrow";
 import CloudUI from "./cloudU";
 import AsteriskI from "./asterisk";
 import MenuI from "./menu";
+import PrinterI from "./printer";
 
 export {
   DashboardI,
@@ -64,4 +65,5 @@ export {
   CloudUI,
   AsteriskI,
   MenuI,
+  PrinterI,
 };

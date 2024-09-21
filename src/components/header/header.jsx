@@ -1,8 +1,8 @@
 //MODULES
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 //COMP
 import { usePopup } from "../../context/PopupContext";
@@ -14,6 +14,7 @@ import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const toastId = useRef();
+  const param = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const headerSettingsRef = useRef();
@@ -69,7 +70,7 @@ function Header({ openSidebar, setOpenSidebar }) {
           className="text-[--gr-1] cursor-pointer"
           onClick={() => setOpenSidebar(!openSidebar)}
         >
-          <MenuI className="lg:hidden" />
+          <MenuI className={`${param["*"] === "orders" ? "" : "lg:hidden"}`} />
         </div>
         <div className="flex gap-4">
           <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer">

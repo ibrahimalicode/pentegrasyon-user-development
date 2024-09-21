@@ -83,18 +83,14 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
   return (
     <nav
-      className={`fixed -left-[280px] lg:left-0 top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
+      className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
         !showPopup && "z-[999]"
-      } ${openSidebar && "left-[0]"}`}
+      } ${openSidebar && "left-[0]"} ${
+        path === "orders" && !openSidebar ? "lg:-left-[280px]" : "lg:left-[0px]"
+      }`}
       ref={sidebarRef}
     >
       <div className="flex flex-col w-full relative">
-        {/* <div
-          className="absolute -right-8 top-2/3 bg-[--white-1] py-8 pr-2 border-2 border-solid border-[--light-3] border-l-0 cursor-pointer lg:hidden"
-          onClick={() => setOpenSidebar(!openSidebar)}
-        >
-          <ArrowR className="text-[--black-1] font-bold" />
-        </div> */}
         <header className="flex items-center justify-center p-6 w-full text-xl font-[500] leading-7 text-[--black-2]">
           <Link to="/" className="flex gap-1 w-max mr-6">
             <img
@@ -113,7 +109,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
               <Link to={item.to} key={index}>
                 <div
                   onClick={() => {
-                    setOpenSidebar(!openSidebar);
+                    setOpenSidebar(false);
                   }}
                   className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors ${
                     path === item.path && "bg-[--light-1] text-[--primary-1]"

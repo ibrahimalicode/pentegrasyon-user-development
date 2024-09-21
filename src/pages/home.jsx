@@ -8,6 +8,7 @@ import Licenses from "./licenses";
 import Profile from "./profile";
 import Test from "./test";
 import { useState } from "react";
+import Orders from "./orders";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -21,6 +22,7 @@ const Home = () => {
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />
         <Route path="/profile/*" element={<Profile />} />
+        <Route path="/orders/*" element={<Orders />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

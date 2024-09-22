@@ -82,6 +82,11 @@ input[type="number"] {
   --yellow-1: #fdba8c;
   --red-1: #ff3753;
   --red-2: #e74694;
+  --blue-1: #3478f6;
+  --purple-1: #a459d1;
+  --orange-1: #ff7b3d;
+  --pink-1: #ff5da2;
+  --brown-1: #8b5e34;
 
   --border-1: #dfeaf2;
 
@@ -94,6 +99,11 @@ input[type="number"] {
   --status-red: #ffe9e9;
   --status-yellow: #fff6d6;
   --status-gray: #e4e4e4;
+  --status-blue: #e7f0ff;
+  --status-purple: #f4e6ff;
+  --status-orange: #ffece4;
+  --status-pink: #ffe7f1;
+  --status-brown: #f7ede7;
   --status-primary-2: #f4eefb;
 }
 .form-container {

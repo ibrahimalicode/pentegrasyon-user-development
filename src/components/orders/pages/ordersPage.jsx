@@ -13,6 +13,9 @@ import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 import orders from "../../../data/order";
 
+//UTILS
+import minutes from "../../../data/minutes";
+
 // REDUX
 
 const OrdersPage = () => {
@@ -54,7 +57,7 @@ const OrdersPage = () => {
   return (
     <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* ACTIONS/BUTTONS */}
-      <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2 overflow-x-auto overflow-y-visible">
+      <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2 min-h-max">
         <div className="flex items-center w-full max-w-80">
           <form className="w-full" onSubmit={() => {}}>
             <CustomInput
@@ -74,7 +77,7 @@ const OrdersPage = () => {
             />
           </form>
         </div>
-        <main className="flex items-center gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start min-w-[32rem]">
+        <main className="flex items-center gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2">
             <div className="border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
               <p>Restoran Durumu</p>
@@ -104,6 +107,8 @@ const OrdersPage = () => {
                   className="mt-[0px] sm:mt-[0px] text-xs"
                   className2="mt-[0px] sm:mt-[0px]"
                   style={{ padding: "0px 0px" }}
+                  value={{ label: "Zaman Seç" }}
+                  options={minutes}
                 />
               </div>
               <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2">
@@ -112,9 +117,11 @@ const OrdersPage = () => {
                   className="mt-[0px] sm:mt-[0px] text-xs"
                   className2="mt-[0px] sm:mt-[0px]"
                   style={{ padding: "0px 0px" }}
+                  value={{ label: "Zaman Seç" }}
+                  options={minutes}
                 />
               </div>
-              <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
+              <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
                 <p>Toplam Tutarı</p>
                 <p className=" py-1.5 px-4">15.162,00</p>
               </div>
@@ -131,7 +138,7 @@ const OrdersPage = () => {
                   </button>
 
                   <div
-                    className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
+                    className={`absolute right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-[999] ${
                       openFilter ? "visible" : "hidden"
                     }`}
                   >

@@ -1,15 +1,64 @@
 import toast from "react-hot-toast";
 import MarketPalceIds from "../data/marketPlaceIds";
 
-export function formatDateString(dateString, joint = "/") {
+export function formatDateString(
+  dateString,
+  letDay = true,
+  letMonth = true,
+  letYear = true,
+  hour = false,
+  min = false,
+  sec = false,
+  joint = "-"
+) {
   const date = new Date(dateString);
 
   // Extract the month, day, and year
-  const month = date.getMonth() + 1; // getMonth() returns 0-based month
   const day = date.getDate();
-  const year = date.getFullYear().toString().slice(-2); // Get the last 2 digits of the year
+  const month = date.getMonth() + 1; // getMonth() returns 0-based month
+  const year = date.getFullYear().toString(); //.slice(-2); // Get the last 2 digits of the year
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
 
-  const formattedDate = `${day}${joint}${month}${joint}${year}`;
+  let formattedDate = "";
+
+  if (letDay || letMonth || letYear) {
+    let dateString = "";
+
+    if (letDay) {
+      dateString = day;
+    }
+
+    if (letMonth) {
+      dateString += joint + month + joint;
+    }
+
+    if (letYear) {
+      dateString += year;
+    }
+    formattedDate = dateString;
+  }
+
+  if (hour || min || sec) {
+    let timeString = "";
+
+    if (hour) {
+      timeString += `${hours.toString().padStart(2, "0")}`;
+    }
+
+    if (min) {
+      timeString += `:${minutes.toString().padStart(2, "0")}`;
+    }
+
+    if (sec) {
+      timeString += `:${seconds.toString().padStart(2, "0")}`;
+    }
+
+    // Append the time to the date
+    formattedDate += ` ${timeString.trim()}`;
+  }
+
   return formattedDate;
 }
 
@@ -364,4 +413,25 @@ export function getCardProvider(cardNumber, src) {
   }
 
   return { name: "Default", ...src[0] };
+}
+
+export function compareWithCurrentDateTime(givenDateTime, now) {
+  // Get the current date and time
+
+  // Parse the given datetime string
+  const targetDateTime = new Date(givenDateTime);
+
+  // Check if the target datetime is in the future
+
+  const remainingTime = targetDateTime - now; // Difference in milliseconds
+
+  // Convert remaining time to total minutes
+  const remainingMinutes = Math.floor(remainingTime / (1000 * 60)); // Convert ms to minutes
+  const isTimePassed = targetDateTime < now;
+
+  if (isTimePassed) {
+    return "";
+  } else {
+    return remainingMinutes;
+  }
 }

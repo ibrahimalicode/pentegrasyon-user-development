@@ -11,10 +11,13 @@ import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
-import orders from "../../../data/order";
 
 //UTILS
 import minutes from "../../../data/minutes";
+import {
+  getOrders,
+  resetGetOrdersState,
+} from "../../../redux/orders/getOrdersSlice";
 
 // REDUX
 
@@ -22,13 +25,17 @@ const OrdersPage = () => {
   const dispatch = useDispatch();
   const { contentRef, setContentRef } = usePopup();
 
+  const { loading, success, error, orders } = useSelector(
+    (state) => state.orders.get
+  );
+
   const [searchVal, setSearchVal] = useState("");
   const [filter, setFilter] = useState({
     date: null,
     status: null,
     MarketPalce: null,
   });
-  const [ordersData, setOrdersData] = useState(orders);
+  const [ordersData, setOrdersData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
   const itemsPerPage = 8;
@@ -36,6 +43,23 @@ const OrdersPage = () => {
   const [totalItems, setTotalItems] = useState(null);
 
   function handlePageChange(number) {}
+
+  useEffect(() => {
+    if (!ordersData) {
+      dispatch(getOrders());
+    }
+  }, [ordersData]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message);
+      dispatch(resetGetOrdersState());
+    }
+    if (success) {
+      setOrdersData(orders.data);
+      dispatch(resetGetOrdersState());
+    }
+  }, [success, error, orders]);
 
   //HIDE POPUP
   const filterOrders = useRef();

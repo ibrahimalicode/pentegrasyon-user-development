@@ -32,7 +32,10 @@ export const privateApi = () => {
       config.headers["Authorization"] = `Bearer ${getAuth().token}`;
       return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+      Promise.reject(error);
+      console.log(error);
+    }
   );
 
   axiosPrivate.interceptors.response.use(

@@ -63,8 +63,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   ];
 
   const route = Object.values(param)[0].split("/")[0];
-  const path = route.length > 1 ? route : "dashboard";
-  // console.log(route);
+  const path = route.length > 1 ? route : "orders";
 
   useEffect(() => {
     if (sidebarRef) {

@@ -17,7 +17,7 @@ const Home = () => {
       <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Routes>
-        <Route path="/*" element={<DashboardPage />} />
+        <Route path="/*" element={<Orders />} />
         <Route path="/dashboard/*" element={<DashboardPage />} />
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />

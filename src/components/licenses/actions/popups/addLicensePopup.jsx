@@ -46,7 +46,7 @@ function AddLicensesPopup({ onSuccess }) {
   const location = useLocation();
   const { user, restaurant } = location.state || {};
 
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.licenses.addLicense
@@ -97,7 +97,6 @@ function AddLicensesPopup({ onSuccess }) {
 
   const closeForm = () => {
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   function handleStep() {
@@ -148,7 +147,6 @@ function AddLicensesPopup({ onSuccess }) {
     if (success) {
       toastId.current && toast.dismiss(toastId.current);
       onSuccess();
-      setShowPopup(false);
       setPopupContent(null);
       toast.success("Lisans bşarıyla eklendi");
       dispatch(resetAddLicenseState());

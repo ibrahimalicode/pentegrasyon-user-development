@@ -30,11 +30,10 @@ const imageSRCs = [
 ];
 
 const DeleteLicense = ({ licenseData, setOpenMenu, onSuccess }) => {
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const handlePopup = (event) => {
     event.stopPropagation();
-    setShowPopup(true);
     setPopupContent(
       <DeleteLicensePopup data={licenseData} onSuccess={onSuccess} />
     );
@@ -58,13 +57,12 @@ const DeleteLicensePopup = ({ data, onSuccess }) => {
   const { loading, success, error } = useSelector(
     (state) => state.licenses.deleteLicense
   );
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const [checked, setChecked] = useState(false);
 
   const closeForm = () => {
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   function handleDelete() {

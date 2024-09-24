@@ -22,7 +22,7 @@ import {
 function Sidebar({ openSidebar, setOpenSidebar }) {
   const param = useParams();
   const sidebarRef = useRef();
-  const { showPopup, contentRef, setContentRef } = usePopup();
+  const { popupContent, contentRef, setContentRef } = usePopup();
   const sidebarItems = [
     {
       icon: <DashboardI />,
@@ -83,7 +83,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   return (
     <nav
       className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
-        !showPopup && "z-[999]"
+        !popupContent && "z-[999]"
       } ${openSidebar && "left-[0]"} ${
         path === "orders" && !openSidebar ? "lg:-left-[280px]" : "lg:left-[0px]"
       }`}

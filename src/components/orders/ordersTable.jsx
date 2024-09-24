@@ -46,7 +46,17 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
   }
 
   function cellClicked(data) {
-    setSlideBarContent(<GetirYemekOrderDetails data={data} />);
+    // console.log(data);
+    // console.log(data.scheduledDate);
+    // console.log(checkDate(data.scheduledDate));
+    setSlideBarContent(
+      <GetirYemekOrderDetails
+        data={{
+          ...data,
+          checkedScheduledDate: checkDate(data.scheduledDate),
+        }}
+      />
+    );
   }
   // console.log(inData);
 
@@ -103,7 +113,7 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                   onClick={() => cellClicked(data)}
                   className="whitespace-nowrap"
                 >
-                  <p>{checkDate(data.createdDateTime)}</p>
+                  <p>{checkDate(data.checkoutDate)}</p>
                   {data.isScheduled && (
                     <RemainingMinutes date={data.scheduledDate} />
                   )}

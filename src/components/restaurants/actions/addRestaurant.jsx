@@ -33,10 +33,9 @@ import {
 } from "../../../redux/restaurants/addRestaurantSlice";
 
 const AddRestaurant = ({ onSuccess }) => {
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
   const handleClick = () => {
     setPopupContent(<AddRestaurantPopup onSuccess={onSuccess} />);
-    setShowPopup(true);
   };
 
   return (
@@ -56,7 +55,7 @@ function AddRestaurantPopup({ onSuccess }) {
   const toastId = useRef();
   const dispatch = useDispatch();
 
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.restaurants.addRestaurant
@@ -103,7 +102,6 @@ function AddRestaurantPopup({ onSuccess }) {
 
   const closeForm = () => {
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   const handleSubmit = (e) => {
@@ -138,7 +136,6 @@ function AddRestaurantPopup({ onSuccess }) {
       dispatch(resetAddRestaurantState());
     } else if (success) {
       onSuccess();
-      setShowPopup(false);
       setPopupContent(null);
       toast.dismiss(toastId.current);
       toast.success("Restoran başarıyla eklendi");

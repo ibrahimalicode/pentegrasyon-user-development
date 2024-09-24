@@ -31,7 +31,7 @@ const Register = () => {
   const toastId = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { popupContent, setPopupContent } = usePopup();
 
   const { cities, success: citiesSuccess } = useSelector(
     (state) => state.data.getCities
@@ -78,15 +78,14 @@ const Register = () => {
     setPopupContent(
       <Confirm
         phoneNumber={phoneNumber}
-        setShowPopup={setShowPopup}
+        popupContent={popupContent}
         onClick={register}
       />
     );
-    setShowPopup(true);
   };
 
   const register = () => {
-    setShowPopup(false);
+    setPopupContent(null);
     if (
       firstName &&
       lastName &&
@@ -320,7 +319,7 @@ const Register = () => {
 
 export default Register;
 
-const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
+const Confirm = ({ phoneNumber, setPopupContent, onClick }) => {
   return (
     <div className="w-full flex justify-center">
       <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--white-1]">
@@ -339,7 +338,7 @@ const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
         <div className="mt-10 w-full flex gap-4 justify-center">
           <button
             className="py-2 px-5 rounded-lg bg-[--light-3] text-[--black-1] hover:opacity-90"
-            onClick={() => setShowPopup(false)}
+            onClick={() => setPopupContent(null)}
           >
             Düzelt
           </button>
@@ -356,11 +355,10 @@ const Confirm = ({ phoneNumber, setShowPopup, onClick }) => {
 };
 
 function PrivacyBtn() {
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const closeForm = () => {
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   const PrivacyPopup = () => {
@@ -387,7 +385,6 @@ function PrivacyBtn() {
         className="text-[--link-1]"
         type="button"
         onClick={() => {
-          setShowPopup(true);
           setPopupContent(<PrivacyPopup />);
         }}
       >

@@ -165,8 +165,7 @@ const LicensesPage = () => {
   }, [neighsSuccess]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
-    usePopup();
+  const { contentRef, setContentRef } = usePopup();
   const filterLicense = useRef();
   useEffect(() => {
     if (filterLicense) {

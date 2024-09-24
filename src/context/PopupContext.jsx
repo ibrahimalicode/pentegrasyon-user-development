@@ -5,7 +5,6 @@ const PopupContext = createContext();
 export const usePopup = () => useContext(PopupContext);
 
 export const PopupProvider = ({ children }) => {
-  const [showPopup, setShowPopup] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [contentRef, setContentRef] = useState([]);
 
@@ -40,8 +39,6 @@ export const PopupProvider = ({ children }) => {
   return (
     <PopupContext.Provider
       value={{
-        showPopup,
-        setShowPopup,
         popupContent,
         setPopupContent,
         contentRef,

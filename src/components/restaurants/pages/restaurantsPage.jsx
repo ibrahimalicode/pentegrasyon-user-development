@@ -221,8 +221,7 @@ const RestaurantsPage = () => {
   }, [neighsSuccess]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef, setShowPopup, setPopupContent } =
-    usePopup();
+  const { contentRef, setContentRef } = usePopup();
   const filterRestaurant = useRef();
   useEffect(() => {
     if (filterRestaurant) {

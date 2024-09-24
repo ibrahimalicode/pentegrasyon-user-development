@@ -17,12 +17,11 @@ import ActionButton from "../../common/actionButton";
 
 const DeleteRetaurant = ({ restaurant, onSuccess }) => {
   const dispatch = useDispatch();
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
   const handleClick = () => {
     setPopupContent(
       <DeleteRetaurantPopup restaurant={restaurant} onSuccess={onSuccess} />
     );
-    setShowPopup(true);
     dispatch(getRestaurantLicenses({ restaurantId: restaurant.id }));
   };
 
@@ -41,7 +40,7 @@ export default DeleteRetaurant;
 function DeleteRetaurantPopup({ restaurant, onSuccess }) {
   const dispatch = useDispatch();
   const toastId = useRef();
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.restaurants.deleteRestaurant
@@ -61,7 +60,6 @@ function DeleteRetaurantPopup({ restaurant, onSuccess }) {
   const closeForm = () => {
     setChecked(false);
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   useEffect(() => {
@@ -73,7 +71,6 @@ function DeleteRetaurantPopup({ restaurant, onSuccess }) {
     }
     if (success) {
       onSuccess();
-      setShowPopup(false);
       setChecked(false);
       toast.dismiss(toastId.current);
       toast.success("Başarıyla Silindi");

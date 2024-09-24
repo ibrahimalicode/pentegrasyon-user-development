@@ -3,11 +3,10 @@ import { TransferI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 
 const TransferLicense = ({ licensePackage, setOpenMenu, onSuccess }) => {
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const handlePopup = (event) => {
     event.stopPropagation();
-    setShowPopup(true);
     setPopupContent(
       <TransferLicensePopup data={licensePackage} onSuccess={onSuccess} />
     );

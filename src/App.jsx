@@ -25,8 +25,8 @@ function App() {
     <>
       <PopupProvider>
         <SlideBarProvider>
-          <Popup />
           <SlideBar />
+          <Popup />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

@@ -3,7 +3,7 @@ import { usePopup } from "../../../context/PopupContext";
 import ActionButton from "../../common/actionButton";
 
 const TransferRestaurant = ({ restaurantsData, onSuccess }) => {
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
   const handleClick = () => {
     setPopupContent(
       <TransferRestaurantPopup
@@ -11,7 +11,6 @@ const TransferRestaurant = ({ restaurantsData, onSuccess }) => {
         onSuccess={onSuccess}
       />
     );
-    setShowPopup(true);
   };
 
   return (
@@ -26,11 +25,10 @@ const TransferRestaurant = ({ restaurantsData, onSuccess }) => {
 export default TransferRestaurant;
 
 function TransferRestaurantPopup({ restaurantsData, onSuccess }) {
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const closeForm = () => {
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   const handleSubmit = (e) => {

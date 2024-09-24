@@ -11,6 +11,7 @@ import { formatDateString } from "../../../utils/utils";
 import { useSlideBar } from "../../../context/SlideBarContext";
 import StatusButtons from "../getirYemek/statusButtons";
 import orderStatuses from "../../../data/orderStatuses";
+import RemainingMinutes from "./remainingMinutes";
 
 const marketPlaceColors = [
   { bg: "--getiryemek", color: "--white-1" },
@@ -23,7 +24,6 @@ const marketPlaceColors = [
 
 const GetirYemekOrderDetails = ({ data }) => {
   const { setSlideBarContent } = useSlideBar();
-
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div
@@ -135,15 +135,17 @@ const GetirYemekOrderDetails = ({ data }) => {
       </div>
 
       <div className="bg-white p-2 rounded-md flex flex-col gap-3">
-        {!data.isScheduled && (
+        {data.isScheduled && (
           <div className="flex border border-[--gr-1] rounded-md overflow-clip">
-            <div className="bg-[--red-1] text-[--gr-1] px-3 flex items-center">
+            <div className="bg-[--red-3] text-[--gr-3] px-4 flex items-center">
               🕑
             </div>
-            <div className="w-full p-2 text-xs italic flex flex-col gap-1">
-              {data.clientNote && <p>{data.clientNote}</p>}
-              {data.doNotKnock && <p>Lütfen zil çalmayın.</p>}
-              {data.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
+            <div className="w-full p-2 text-xs flex gap-4">
+              <p>Teslimat Zamanı:</p>
+              <p>
+                {data.checkedScheduledDate}{" "}
+                <RemainingMinutes date={data.scheduledDate} />
+              </p>
             </div>
           </div>
         )}
@@ -229,9 +231,9 @@ const GetirYemekOrderDetails = ({ data }) => {
           </tbody>
         </table>
 
-        <div className="w-full flex justify-end gap-2 border-t border-[--gr-1]">
+        <div className="w-full flex items-center justify-end gap-2 border-t border-[--gr-1]">
           <p>Toplam:</p>
-          <p>{data.totalPrice}</p>
+          <p className="font-bold text-base">{data.totalPrice}</p>
         </div>
       </div>
 

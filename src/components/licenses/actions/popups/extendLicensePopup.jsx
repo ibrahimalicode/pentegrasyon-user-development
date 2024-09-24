@@ -33,7 +33,7 @@ const ExtendLicensePopup = ({ onSuccess }) => {
     (state) => state.licenses.extendByPay
   );
 
-  const { setShowPopup, setPopupContent } = usePopup();
+  const { setPopupContent } = usePopup();
 
   const steps = 3;
   const [step, setStep] = useState(1);
@@ -65,7 +65,6 @@ const ExtendLicensePopup = ({ onSuccess }) => {
 
   const closeForm = () => {
     setPopupContent(null);
-    setShowPopup(false);
   };
 
   function handleStep() {

@@ -59,8 +59,12 @@ export const getOrders = createAsyncThunk(
       // console.log(res.data);
       return res.data;
     } catch (err) {
+      // console.log(err);
       const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
+      return rejectWithValue({
+        message: errorMessage,
+        status: err?.response?.status,
+      });
     }
   }
 );

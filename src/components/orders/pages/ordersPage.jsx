@@ -14,12 +14,12 @@ import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
 import minutes from "../../../data/minutes";
+
+// REDUX
 import {
   getOrders,
   resetGetOrdersState,
 } from "../../../redux/orders/getOrdersSlice";
-
-// REDUX
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const OrdersPage = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message);
+      setOrdersData([]);
       dispatch(resetGetOrdersState());
     }
     if (success) {

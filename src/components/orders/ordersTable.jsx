@@ -1,5 +1,5 @@
 //MODULES
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // IMAGES
 import GetirYemek from "../../assets/img/orders/GetirYemek.png";
@@ -10,16 +10,14 @@ import GoFody from "../../assets/img/orders/GoFody.png";
 import Yemeksepeti from "../../assets/img/orders/Yemeksepeti.png";
 
 //UTILS
-import {
-  compareWithCurrentDateTime,
-  formatDateString,
-} from "../../utils/utils";
+import { formatDateString } from "../../utils/utils";
 
 //COMP
 import { PrinterI } from "../../assets/icon";
 import orderStatuses from "../../data/orderStatuses";
 import { useSlideBar } from "../../context/SlideBarContext";
 import GetirYemekOrderDetails from "./components/getirYemekOrderDetails_";
+import RemainingMinutes from "./components/remainingMinutes";
 
 const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
   const imageSRCs = [
@@ -33,7 +31,6 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
   const { setSlideBarContent } = useSlideBar();
 
   const [selected, setSelected] = useState(null);
-  const [minNow, setMinNow] = useState(new Date());
 
   function changeSelected(i) {
     setSelected(selected === i ? null : i);
@@ -67,7 +64,7 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
               <th>Bölge</th>
               <th>Kurye</th>
               <th>Tutar</th>
-              <th>Durum</th>
+              <th className="w-28">Durum</th>
               <th className="pr-2">Yazdır</th>
             </tr>
           </thead>
@@ -106,17 +103,10 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                   onClick={() => cellClicked(data)}
                   className="whitespace-nowrap"
                 >
-                  <p>
-                    {formatDateString(
-                      data.checkoutDate,
-                      true,
-                      true,
-                      true,
-                      true,
-                      true
-                    )}
-                  </p>
-                  {data.isScheduled && <p>🕑</p>}
+                  <p>{checkDate(data.createdDateTime)}</p>
+                  {data.isScheduled && (
+                    <RemainingMinutes date={data.scheduledDate} />
+                  )}
                 </td>
                 <td
                   onClick={() => cellClicked(data)}
@@ -140,7 +130,7 @@ const OrdersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                 </td>
                 <td onClick={() => {}} className="whitespace-nowrap">
                   <button
-                    className="py-3.5 px-2 rounded-md border"
+                    className="w-24 py-3.5 px-2 rounded-md border"
                     style={{
                       backgroundColor: `var(${
                         orderStatuses.filter((col) => col.id === data.status)[0]

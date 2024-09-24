@@ -9,6 +9,8 @@ import { formatDateString } from "../../../utils/utils";
 
 //CONTEXT
 import { useSlideBar } from "../../../context/SlideBarContext";
+import StatusButtons from "../getirYemek/statusButtons";
+import orderStatuses from "../../../data/orderStatuses";
 
 const marketPlaceColors = [
   { bg: "--getiryemek", color: "--white-1" },
@@ -21,9 +23,9 @@ const marketPlaceColors = [
 
 const GetirYemekOrderDetails = ({ data }) => {
   const { setSlideBarContent } = useSlideBar();
-  // console.log(data);
+
   return (
-    <main className="w-full h-screen bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
+    <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div
         className="flex items-center -mx-4 text-base"
         style={{
@@ -44,8 +46,20 @@ const GetirYemekOrderDetails = ({ data }) => {
 
       <div className="bg-white p-2 rounded-md flex flex-col gap-1">
         <div className="w-full flex justify-between">
+          <p>İşletme</p>
+          <p>{data.marketplaceTicketRestaurantName}</p>
+        </div>
+        <div className="w-full flex justify-between">
           <p>Sipariş durumu</p>
-          <p className="text-[--green-2]">{data.status}</p>
+          <p
+            style={{
+              color: `var(${
+                orderStatuses.filter((col) => col.id === data.status)[0]?.color
+              })`,
+            }}
+          >
+            {orderStatuses.filter((stat) => stat.id === data.status)[0]?.label}
+          </p>
         </div>
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
@@ -89,10 +103,16 @@ const GetirYemekOrderDetails = ({ data }) => {
         <div className="flex">
           <p className="w-1/2">Telefon Numarası</p>
           <p className="w-1/2 text-end">
-            {data.client.clientUnmaskedPhoneNumber}
-            <span className="bg-[--border-1] text-xs ml-2 p-1">
-              Dahili: {data.client.clientPhoneNumber.split("/")[1]}
-            </span>
+            {data.client.clientUnmaskedPhoneNumber ? (
+              `${data.client.clientUnmaskedPhoneNumber}`
+            ) : (
+              <>
+                {data.client.clientPhoneNumber.split("/")[0]}
+                <span className="bg-[--border-1] text-xs ml-2 p-1">
+                  Dahili: {data.client.clientPhoneNumber.split("/")[1]}
+                </span>
+              </>
+            )}
           </p>
         </div>
         <div className="flex justify-between">
@@ -115,12 +135,24 @@ const GetirYemekOrderDetails = ({ data }) => {
       </div>
 
       <div className="bg-white p-2 rounded-md flex flex-col gap-3">
+        {!data.isScheduled && (
+          <div className="flex border border-[--gr-1] rounded-md overflow-clip">
+            <div className="bg-[--red-1] text-[--gr-1] px-3 flex items-center">
+              🕑
+            </div>
+            <div className="w-full p-2 text-xs italic flex flex-col gap-1">
+              {data.clientNote && <p>{data.clientNote}</p>}
+              {data.doNotKnock && <p>Lütfen zil çalmayın.</p>}
+              {data.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
+            </div>
+          </div>
+        )}
+
         <div className="flex border border-[--gr-1] rounded-md overflow-clip">
           <div className="bg-[--gr-1] text-[--gr-1] px-3 flex items-center">
             <InfoI fill="white" />
           </div>
           <div className="w-full p-2 text-xs italic flex flex-col gap-1">
-            <p className="not-italic">Ticket Note</p>
             {data.clientNote && <p>{data.clientNote}</p>}
             {data.doNotKnock && <p>Lütfen zil çalmayın.</p>}
             {data.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
@@ -163,8 +195,11 @@ const GetirYemekOrderDetails = ({ data }) => {
                                   : "text-[--red-1]"
                               }`}
                             >
-                              {opt.price > 0 ? "+" : opt.price < 0 ? "-" : ""}
-                              {opt.price}
+                              {opt.price > 0
+                                ? `+${opt.price * order.count}`
+                                : opt.price < 0
+                                ? `-${opt.price * order.count}`
+                                : ""}
                             </span>
                           </div>
                         ))}
@@ -172,12 +207,12 @@ const GetirYemekOrderDetails = ({ data }) => {
                     ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
-                    {order.price}
+                    {order.price * order.count}
                   </td>
                 </tr>
                 {order.note && (
-                  <tr className="relative text-xs">
-                    <td>
+                  <tr>
+                    <td className="relative text-xs">
                       <p className="invisible px-2 py-1 flex gap-1">
                         <InfoI className="size-[16px]" strokeWidth={2} />{" "}
                         {order.note}
@@ -200,23 +235,7 @@ const GetirYemekOrderDetails = ({ data }) => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 right-0 left-0 flex gap-4 p-2 py-3.5 bg-white border-t border-[--light-4] text-xs whitespace-nowrap">
-        <button className="bg-[--status-green] py-2 px-4 rounded-md text-[--black-1] border border-[--green-1]">
-          Onayla
-        </button>
-        <button className="bg-[--status-blue] py-2 px-4 rounded-md text-[--black-1] border border-[--blue-1]">
-          Hazırlanıyor
-        </button>
-        <button className="bg-[--status-purple] py-2 px-4 rounded-md text-[--black-1] border border-[--purple-1]">
-          Yola Çıkar
-        </button>
-        <button className="bg-[--status-brown] py-2 px-4 rounded-md text-[--black-1] border border-[--brown-1]">
-          Teslim Et
-        </button>
-        <button className="bg-[--status-red] py-2 px-4 rounded-md text-[--black-1] border border-[--red-1]">
-          İptal Et
-        </button>
-      </div>
+      <StatusButtons order={data} />
     </main>
   );
 };

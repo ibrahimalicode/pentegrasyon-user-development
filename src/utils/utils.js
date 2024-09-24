@@ -416,12 +416,8 @@ export function getCardProvider(cardNumber, src) {
 }
 
 export function compareWithCurrentDateTime(givenDateTime, now) {
-  // Get the current date and time
-
   // Parse the given datetime string
   const targetDateTime = new Date(givenDateTime);
-
-  // Check if the target datetime is in the future
 
   const remainingTime = targetDateTime - now; // Difference in milliseconds
 
@@ -432,6 +428,6 @@ export function compareWithCurrentDateTime(givenDateTime, now) {
   if (isTimePassed) {
     return "";
   } else {
-    return remainingMinutes;
+    return `${remainingMinutes} Dk. Kaldı`;
   }
 }

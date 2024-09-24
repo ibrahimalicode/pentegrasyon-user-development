@@ -1,15 +1,29 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSlideBar } from "../../context/SlideBarContext";
 
 const SlideBar = () => {
   const slideBarRef = useRef();
 
   const { slideBarContent, setSlideBarContent } = useSlideBar();
+
   function handleClickOutside(e) {
     if (!slideBarRef.current.contains(e.target)) {
       setSlideBarContent(null);
     }
   }
+
+  useEffect(() => {
+    if (slideBarContent) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
+
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  }, [slideBarContent]);
+
   return (
     <div
       onClick={handleClickOutside}

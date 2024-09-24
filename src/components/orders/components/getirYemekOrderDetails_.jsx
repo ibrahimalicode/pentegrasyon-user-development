@@ -1,42 +1,42 @@
+import React from "react";
+
+//COMP
 import { InfoI } from "../../../assets/icon";
 import CloseI from "../../../assets/icon/close";
-import { useSlideBar } from "../../../context/SlideBarContext";
+
+//UTILS
 import { formatDateString } from "../../../utils/utils";
 
-// IMAGES
-import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
-import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
-import Siparisim from "../../../assets/img/orders/Siparisim.png";
-import TrendyolYemek from "../../../assets/img/orders/TrendyolYemek.png";
-import GoFody from "../../../assets/img/orders/GoFody.png";
-import Yemeksepeti from "../../../assets/img/orders/Yemeksepeti.png";
+//CONTEXT
+import { useSlideBar } from "../../../context/SlideBarContext";
 
-const imageSRCs = [
-  GetirYemek,
-  MigrosYemek,
-  TrendyolYemek,
-  Yemeksepeti,
-  GoFody,
-  Siparisim,
+const marketPlaceColors = [
+  { bg: "--getiryemek", color: "--white-1" },
+  { bg: "--migrosyemek", color: "--white-1" },
+  { bg: "--trendyol", color: "--white-1" },
+  { bg: "--yemeksepeti", color: "--white-1" },
+  { bg: "--gofody", color: "--white-1" },
+  { bg: "--siparisim", color: "--white-1" },
 ];
 
 const GetirYemekOrderDetails = ({ data }) => {
   const { setSlideBarContent } = useSlideBar();
   // console.log(data);
   return (
-    <main className="w-full min-h-screen bg-gray-100 text-slate-700 overflow-y-auto px-4 text-sm font-normal flex flex-col gap-2 relative">
-      <div className="flex items-center py-4">
+    <main className="w-full h-screen bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
+      <div
+        className="flex items-center -mx-4 text-base"
+        style={{
+          backgroundColor: `var(${marketPlaceColors[data.marketplaceId]?.bg})`,
+          color: `var(${marketPlaceColors[data.marketplaceId]?.color})`,
+        }}
+      >
         <div className="w-full flex justify-center items-center gap-2">
-          <img
-            className="size-7"
-            src={imageSRCs[data.marketplaceId]} /* BG to MKP */
-            alt="pentegrasyon-marketplace-logo"
-          />
-          <p className="text-[--primary-1]">Siparis Detayi</p>
+          <p>Sipariș Detayı</p>
         </div>
         <span
           onClick={() => setSlideBarContent(null)}
-          className="p-2 bg-[--light-1] rounded-md cursor-pointer"
+          className="p-2 cursor-pointer"
         >
           <CloseI />
         </span>
@@ -73,6 +73,12 @@ const GetirYemekOrderDetails = ({ data }) => {
             {data.courier.name}
           </p>
         </div>
+        <div className="w-full flex justify-between">
+          <p>Onay Kodu</p>
+          <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
+            {data.confirmationId}
+          </p>
+        </div>
       </div>
 
       <div className="bg-white p-2 rounded-md flex flex-col gap-1">
@@ -81,8 +87,13 @@ const GetirYemekOrderDetails = ({ data }) => {
           <p className="w-1/2 text-end">{data.client.name}</p>
         </div>
         <div className="flex">
-          <p className="w-1/2">Onay Kodu</p>
-          <p className="w-1/2 text-end">{data.confirmationId}</p>
+          <p className="w-1/2">Telefon Numarası</p>
+          <p className="w-1/2 text-end">
+            {data.client.clientUnmaskedPhoneNumber}
+            <span className="bg-[--border-1] text-xs ml-2 p-1">
+              Dahili: {data.client.clientPhoneNumber.split("/")[1]}
+            </span>
+          </p>
         </div>
         <div className="flex justify-between">
           <p>Adres</p>
@@ -91,32 +102,15 @@ const GetirYemekOrderDetails = ({ data }) => {
             <p>
               {data.client.aptNo && <span>Apt No: {data.client.aptNo}</span>}
               {data.client.doorNo && (
-                <span>Daire No: {data.client.doorNo}</span>
+                <span> Daire No: {data.client.doorNo}</span>
               )}
-              {data.client.floor && <span>Kat: {data.client.floor}</span>}
+              {data.client.floor && <span> Kat: {data.client.floor}</span>}
             </p>
           </div>
         </div>
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
-          <p className="w-1/2 text-end">Boşver tarifi</p>
-        </div>
-      </div>
-
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
-        <div className="flex">
-          <p className="w-1/2">Müşteri iletişim</p>
-          <p className="w-1/2 text-end">
-            +90 (850) 346-9382
-            <span className="bg-[--border-1] text-xs ml-2 p-1">
-              Pin kodu: 543294
-            </span>
-          </p>
-        </div>
-
-        <div className="flex">
-          <p className="w-1/2">Getir Destek</p>
-          <p className="w-1/2 text-end">+90 (850) 215-1500</p>
+          <p className="w-1/2 text-end">{data.client.description}</p>
         </div>
       </div>
 
@@ -127,12 +121,13 @@ const GetirYemekOrderDetails = ({ data }) => {
           </div>
           <div className="w-full p-2 text-xs italic flex flex-col gap-1">
             <p className="not-italic">Ticket Note</p>
-            <p>Lütfen plastik, çatal, bıçak, peçete göndermeyin.</p>
-            <p>Lütfen zil çalmayın.</p>
+            {data.clientNote && <p>{data.clientNote}</p>}
+            {data.doNotKnock && <p>Lütfen zil çalmayın.</p>}
+            {data.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
           </div>
         </div>
 
-        <table className="rounded-md overflow-clip">
+        <table className="rounded-md overflow-clip h-max">
           <thead className="bg-[--light-3]">
             <tr>
               <th className="p-2 font-normal text-left">Ürün</th>
@@ -141,44 +136,68 @@ const GetirYemekOrderDetails = ({ data }) => {
           </thead>
 
           <tbody>
-            <tr>
-              <td className="p-2 text-left">
-                <div>
-                  <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
-                    3
-                  </span>
-                  Sarma
-                </div>
+            {data.orders.map((order) => (
+              <React.Fragment key={order.id}>
+                <tr>
+                  <td className="p-2 text-left">
+                    <div>
+                      <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
+                        {order.count}
+                      </span>
+                      {order.name}
+                    </div>
+                    {order.optionCategories.map((cat) => (
+                      <div key={cat.id} className="text-xs mt-1">
+                        <span>{cat.name}</span>
 
-                <div className="text-xs mt-1">
-                  <span>Category Name</span>
-
-                  <div className="flex justify-between max-w-44">
-                    <span>▸ Tuzlu</span>
-                    <span
-                      className={`${
-                        1 > 0 ? "text-[--green-1]" : "text-[--red-1]"
-                      }`}
-                    >
-                      2
-                    </span>
-                  </div>
-                </div>
-              </td>
-              <td className="p-2 text-right">₺36</td>
-            </tr>
-            <tr className="relative text-xs">
-              <td>
-                <p className="invisible px-2 py-1 flex gap-1">
-                  <InfoI className="size-4" strokeWidth={2} /> product note
-                </p>
-                <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                  <InfoI className="size-4" strokeWidth={2} /> product note
-                </span>
-              </td>
-            </tr>
+                        {cat.options.map((opt) => (
+                          <div
+                            key={opt.id}
+                            className="flex justify-between max-w-44"
+                          >
+                            <span>▸ {opt.name}</span>
+                            <span
+                              className={`${
+                                opt.price > 0
+                                  ? "text-[--green-1]"
+                                  : "text-[--red-1]"
+                              }`}
+                            >
+                              {opt.price > 0 ? "+" : opt.price < 0 ? "-" : ""}
+                              {opt.price}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </td>
+                  <td className="p-2 flex justify-end items-start">
+                    {order.price}
+                  </td>
+                </tr>
+                {order.note && (
+                  <tr className="relative text-xs">
+                    <td>
+                      <p className="invisible px-2 py-1 flex gap-1">
+                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
+                        {order.note}
+                      </p>
+                      <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
+                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
+                        {order.note}
+                      </span>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
           </tbody>
         </table>
+
+        <div className="w-full flex justify-end gap-2 border-t border-[--gr-1]">
+          <p>Toplam:</p>
+          <p>{data.totalPrice}</p>
+        </div>
       </div>
 
       <div className="fixed bottom-0 right-0 left-0 flex gap-4 p-2 py-3.5 bg-white border-t border-[--light-4] text-xs whitespace-nowrap">

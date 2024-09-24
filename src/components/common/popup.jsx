@@ -1,7 +1,21 @@
+import { useEffect } from "react";
 import { usePopup } from "../../context/PopupContext";
 
 const Popup = () => {
   const { showPopup, popupContent } = usePopup();
+
+  useEffect(() => {
+    if (showPopup) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "auto";
+    }
+
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  }, [showPopup]);
+
   return (
     <div
       className={`fixed top-0 left-0 right-0 bottom-0 justify-center items-center transition-colors p-[2%] z-[9999] ${

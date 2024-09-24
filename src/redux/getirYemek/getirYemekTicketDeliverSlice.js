@@ -46,11 +46,11 @@ const getirYemekTicketDeliverSlice = createSlice({
 });
 
 export const getirYemekTicketDeliver = createAsyncThunk(
-  "GetirYemek/TicketPrepare",
+  "GetirYemek/TicketDeliver",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.post(
-        `${baseURL}GetirYemek/TicketPrepare`,
+        `${baseURL}GetirYemek/TicketDeliver`,
         {},
         { params: { ...data } }
       );

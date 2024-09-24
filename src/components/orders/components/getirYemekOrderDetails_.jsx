@@ -24,6 +24,7 @@ const marketPlaceColors = [
 
 const GetirYemekOrderDetails = ({ data }) => {
   const { setSlideBarContent } = useSlideBar();
+  console.log(data);
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div
@@ -142,10 +143,10 @@ const GetirYemekOrderDetails = ({ data }) => {
             </div>
             <div className="w-full p-2 text-xs flex gap-4">
               <p>Teslimat Zamanı:</p>
-              <p>
-                {data.checkedScheduledDate}{" "}
+              <div className="flex gap-4">
+                {data.checkedScheduledDate}
                 <RemainingMinutes date={data.scheduledDate} />
-              </p>
+              </div>
             </div>
           </div>
         )}
@@ -158,6 +159,9 @@ const GetirYemekOrderDetails = ({ data }) => {
             {data.clientNote && <p>{data.clientNote}</p>}
             {data.doNotKnock && <p>Lütfen zil çalmayın.</p>}
             {data.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
+            {data.isEcoFriendly && (
+              <p>Doğayı seviyorum. Plastik çatal, bıçak, peçete istemiyorum.</p>
+            )}
           </div>
         </div>
 

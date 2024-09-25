@@ -13,6 +13,8 @@ import OrderDetails from "./components/orderDetails";
 import RemainingMinutes from "./components/remainingMinutes";
 import { PrinterI } from "../../assets/icon";
 import { useState } from "react";
+import GoogleRoute from "./components/googleRoute";
+import { usePopup } from "../../context/PopupContext";
 
 const marketPlaceAssets = [
   { src: GetirYemek, statusButton: GetirYemekStatusButton },
@@ -24,7 +26,9 @@ const marketPlaceAssets = [
 ];
 
 const OrdersTableBody = ({ data, totalItems }) => {
+  const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
+
   const [order, setOrder] = useState(data);
 
   function getButtonComponent() {
@@ -83,7 +87,21 @@ const OrdersTableBody = ({ data, totalItems }) => {
         <td onClick={cellClicked} className="whitespace-nowrap">
           {data.client.name}
         </td>
-        <td onClick={() => {}} className="whitespace-nowrap">
+        <td
+          onClick={() =>
+            setPopupContent(
+              <GoogleRoute
+                data={{
+                  lat1: order.restaurantLatitude,
+                  lng1: order.restaurantLongitude,
+                  lat2: order.client.latitude,
+                  lng2: order.client.longitude,
+                }}
+              />
+            )
+          }
+          className="whitespace-nowrap"
+        >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
             {data.client.district}
           </button>

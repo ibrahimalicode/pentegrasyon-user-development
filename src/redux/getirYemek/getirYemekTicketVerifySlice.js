@@ -49,7 +49,6 @@ export const getirYemekTicketVerify = createAsyncThunk(
   "GetirYemek/TicketVerify",
   async (data, { rejectWithValue }) => {
     try {
-      console.log(data);
       const res = await api.post(
         `${baseURL}GetirYemek/TicketVerify`,
         {},

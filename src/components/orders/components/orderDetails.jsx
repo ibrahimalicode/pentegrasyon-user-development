@@ -34,7 +34,6 @@ const OrderDetails = ({ order, setOrder }) => {
     />,
   ];
 
-  console.log(order);
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div
@@ -245,9 +244,29 @@ const OrderDetails = ({ order, setOrder }) => {
           </tbody>
         </table>
 
-        <div className="w-full flex items-center justify-end gap-2 border-t border-[--gr-1]">
-          <p>Toplam:</p>
-          <p className="font-bold text-base">{order.totalPrice}</p>
+        <div className="w-full border-t border-[--gr-1]">
+          {order.totalDiscountedPrice ? (
+            <>
+              <div className="w-full flex items-center justify-end gap-2">
+                <p>Toplam:</p>
+                <p className="text-base">{order.totalPrice}</p>
+              </div>
+              <div className="w-full flex items-center justify-end gap-2">
+                <p>İndirim:</p>
+                <p className="text-base">
+                  {order.totalPrice - order.totalDiscountedPrice}
+                </p>
+              </div>
+            </>
+          ) : null}
+          <div className="w-full flex items-center justify-end gap-2">
+            <p>Ödenecek Tutar:</p>
+            <p className="font-bold text-base">
+              {order.totalDiscountedPrice
+                ? order.totalDiscountedPrice
+                : order.totalPrice}
+            </p>
+          </div>
         </div>
       </div>
 

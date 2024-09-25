@@ -5,6 +5,8 @@ import getirYemekTicketDeliverSlice from "./getirYemekTicketDeliverSlice";
 import getirYemekTicketPrepareSlice from "./getirYemekTicketPrepareSlice";
 import getTicketCancelOptionsSlice from "./getTicketCancelOptionsSlice";
 import getirYemekGetRestaurantsSlice from "./getirYemekGetRestaurantsSlice";
+import getirYemekUpdateRestaurantStatusSlice from "./getirYemekUpdateRestaurantStatusSlice";
+import getirYemekUpdateRestaurantCourierStatusSlice from "./getirYemekUpdateRestaurantCourierStatusSlice";
 
 // Slices
 const getirYemekSlice = combineReducers({
@@ -14,6 +16,8 @@ const getirYemekSlice = combineReducers({
   cancelOptions: getTicketCancelOptionsSlice,
   cancelTicket: getirYemekTicketCancelSlice,
   getRestaurants: getirYemekGetRestaurantsSlice,
+  updateRestaurants: getirYemekUpdateRestaurantStatusSlice,
+  updateRestaurantsCourier: getirYemekUpdateRestaurantCourierStatusSlice,
 });
 
 export default getirYemekSlice;

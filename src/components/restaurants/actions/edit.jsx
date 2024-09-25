@@ -182,8 +182,8 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
       if (!restaurantData.city?.id) {
         const city = citiesData.filter(
           (city) =>
-            city?.label.toLowerCase() ===
-            restaurantData.city.label.toLowerCase() //toLocaleLowerCase('tr-TR')
+            city?.label?.toLowerCase() ===
+            restaurantData.city.label?.toLowerCase() //toLocaleLowerCase('tr-TR')
         )[0];
 
         if (city) {
@@ -225,8 +225,8 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
       if (!restaurantData.district || !restaurantData.district?.id) {
         const district = districtsData.filter(
           (dist) =>
-            dist?.label.toLowerCase() ===
-            restaurantDataBefore.district?.label.toLowerCase()
+            dist?.label?.toLowerCase() ===
+            restaurantDataBefore.district?.label?.toLowerCase()
         )[0];
         if (district) {
           setRestaurantDataBefore((prev) => {
@@ -272,8 +272,8 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
       if (!restaurantData.neighbourhood) {
         const neigh = neighsData.filter(
           (neigh) =>
-            neigh.label.toLowerCase() ===
-            restaurantDataBefore.neighbourhood.label.toLowerCase()
+            neigh.label?.toLowerCase() ===
+            restaurantDataBefore.neighbourhood.label?.toLowerCase()
         )[0];
         if (neigh) {
           setRestaurantDataBefore((prev) => {

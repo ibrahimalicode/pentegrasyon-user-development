@@ -6,6 +6,7 @@ const CustomToggle = ({
   className1,
   className,
   className2,
+  disabled,
 }) => {
   return (
     <label className={`inline-flex items-center cursor-pointer ${className1}`}>
@@ -14,6 +15,7 @@ const CustomToggle = ({
         type="checkbox"
         checked={checked}
         onChange={onChange}
+        disabled={disabled}
         className="sr-only peer"
       />
       <div

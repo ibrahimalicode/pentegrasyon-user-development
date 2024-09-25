@@ -11,11 +11,11 @@ const initialState = {
   data: null,
 };
 
-const getirYemekGetRestaurantsSlice = createSlice({
-  name: "getirYemekGetRestaurants",
+const getirYemekUpdateRestaurantStatusSlice = createSlice({
+  name: "getirYemekUpdateRestaurantStatus",
   initialState: initialState,
   reducers: {
-    resetGetirYemekGetRestaurants: (state) => {
+    resetGetirYemekUpdateRestaurantStatus: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const getirYemekGetRestaurantsSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(getirYemekGetRestaurants.pending, (state) => {
+      .addCase(getirYemekUpdateRestaurantStatus.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(getirYemekGetRestaurants.fulfilled, (state, action) => {
+      .addCase(getirYemekUpdateRestaurantStatus.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(getirYemekGetRestaurants.rejected, (state, action) => {
+      .addCase(getirYemekUpdateRestaurantStatus.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,14 +45,18 @@ const getirYemekGetRestaurantsSlice = createSlice({
   },
 });
 
-export const getirYemekGetRestaurants = createAsyncThunk(
-  "GetirYemek/GetRestaurants",
-  async (_, { rejectWithValue }) => {
+export const getirYemekUpdateRestaurantStatus = createAsyncThunk(
+  "GetirYemek/UpdateRestaurantStatus",
+  async (data, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${baseURL}GetirYemek/GetRestaurants`);
+      const res = await api.put(
+        `${baseURL}GetirYemek/UpdateRestaurantStatus`,
+        { ...data },
+        { params: { ...data } }
+      );
 
       // console.log(res);
-      return res.data.data;
+      return res.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
@@ -63,6 +67,6 @@ export const getirYemekGetRestaurants = createAsyncThunk(
   }
 );
 
-export const { resetGetirYemekGetRestaurants } =
-  getirYemekGetRestaurantsSlice.actions;
-export default getirYemekGetRestaurantsSlice.reducer;
+export const { resetGetirYemekUpdateRestaurantStatus } =
+  getirYemekUpdateRestaurantStatusSlice.actions;
+export default getirYemekUpdateRestaurantStatusSlice.reducer;

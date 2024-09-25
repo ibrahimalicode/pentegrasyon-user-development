@@ -11,7 +11,7 @@ const OrdersTable = ({ inData }) => {
           <thead>
             <tr className="bg-[--light-3] h-10 text-left">
               <th></th>
-              <th>Sip. No</th>
+              <th>Onay Kodu</th>
               <th>Restoran</th>
               <th>Tarih</th>
               <th>Müşteri Adı</th>

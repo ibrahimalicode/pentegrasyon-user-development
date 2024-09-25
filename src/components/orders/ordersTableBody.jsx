@@ -59,6 +59,7 @@ const OrdersTableBody = ({ data, totalItems }) => {
       />
     );
   }
+  // console.log(order);
 
   return (
     order && (
@@ -74,7 +75,7 @@ const OrdersTableBody = ({ data, totalItems }) => {
             className="size-10"
           />
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
           {data.confirmationId}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
@@ -97,6 +98,8 @@ const OrdersTableBody = ({ data, totalItems }) => {
                   lat2: order.client.latitude,
                   lng2: order.client.longitude,
                 }}
+                name1={order.marketplaceTicketRestaurantName}
+                name2={order.client.name}
               />
             )
           }
@@ -106,8 +109,26 @@ const OrdersTableBody = ({ data, totalItems }) => {
             {data.client.district}
           </button>
         </td>
-        <td onClick={() => {}} className="whitespace-nowrap">
-          {data.courier.name}
+        <td
+          onClick={() =>
+            setPopupContent(
+              <GoogleRoute
+                data={{
+                  lat1: order.courier.latitude,
+                  lng1: order.courier.longitude,
+                  lat2: order.client.latitude,
+                  lng2: order.client.longitude,
+                }}
+                name1={order.courier.name}
+                name2={order.client.name}
+              />
+            )
+          }
+          className="whitespace-nowrap"
+        >
+          <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+            {data.courier.name}
+          </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {data.totalPrice}

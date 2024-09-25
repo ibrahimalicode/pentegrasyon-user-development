@@ -1,4 +1,9 @@
+//MODULES
+import toast from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+//REDUX
 import {
   getirYemekTicketVerify,
   resetGetirYemekTicketVerify,
@@ -15,36 +20,39 @@ import {
   getirYemekTicketCancel,
   resetGetirYemekTicketCancel,
 } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
-import { useEffect, useRef } from "react";
-import toast from "react-hot-toast";
+import orderStatuses from "../../../data/orderStatuses";
 
-const StatusButtons = ({ order }) => {
+const GetirYemekStatusButtons = ({ order, setOrder, setOrderStatus }) => {
   const toastId = useRef();
-  const dispatch = useDispatch();
   const ticketId = order.id;
+  const dispatch = useDispatch();
 
   const {
     loading: verifyLoading,
     success: verifySuccess,
     error: verifyErr,
+    data: verifyData,
   } = useSelector((state) => state.getirYemek.verifyTicket);
 
   const {
     loading: prepareLoading,
     success: prepareSuccess,
     error: prepareErr,
+    data: prepareData,
   } = useSelector((state) => state.getirYemek.prepareTicket);
 
   const {
     loading: deliverLoading,
     success: deliverSuccess,
     error: deliverErr,
+    data: deliverData,
   } = useSelector((state) => state.getirYemek.deliverTicket);
 
   const {
     loading: cancelLoading,
     success: cancelSuccess,
     error: cancelErr,
+    data: cancelData,
   } = useSelector((state) => state.getirYemek.cancelTicket);
 
   function verifyOrder() {
@@ -72,6 +80,8 @@ const StatusButtons = ({ order }) => {
       dispatch(resetGetirYemekTicketVerify());
     }
     if (verifySuccess) {
+      setOrderStatus(verifyData.data);
+      setOrder({ ...order, status: verifyData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketVerify());
@@ -87,6 +97,8 @@ const StatusButtons = ({ order }) => {
       dispatch(resetGetirYemekTicketPrepare());
     }
     if (prepareSuccess) {
+      setOrderStatus(prepareData.data);
+      setOrder({ ...order, status: prepareData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketPrepare());
@@ -102,6 +114,8 @@ const StatusButtons = ({ order }) => {
       dispatch(resetGetirYemekTicketDeliver());
     }
     if (deliverSuccess) {
+      setOrderStatus(deliverData.data);
+      setOrder({ ...order, status: deliverData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketDeliver());
@@ -117,14 +131,16 @@ const StatusButtons = ({ order }) => {
       dispatch(resetGetirYemekTicketCancel());
     }
     if (cancelSuccess) {
+      setOrderStatus(cancelData.data);
+      setOrder({ ...order, status: cancelData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketCancel());
     }
   }, [cancelLoading, cancelSuccess, cancelErr]);
 
-  // console.log(order);
-  const btnClass = "py-2 px-1 sm:px-4 rounded-md border text-[--black-1] ";
+  const btnClass =
+    "py-2 px-1 sm:px-4 rounded-md border text-[--black-1] disabled:cursor-not-allowed";
   const disabled =
     verifyLoading || prepareLoading || deliverLoading || cancelLoading;
   return (
@@ -167,4 +183,25 @@ const StatusButtons = ({ order }) => {
   );
 };
 
-export default StatusButtons;
+export default GetirYemekStatusButtons;
+
+export function GetirYemekStatusButton({ order }) {
+  return (
+    <button
+      className="w-24 py-3.5 px-2 rounded-md border"
+      style={{
+        backgroundColor: `var(${
+          orderStatuses.filter((col) => col.id === order.status)[0]?.bg
+        })`,
+        color: `var(${
+          orderStatuses.filter((col) => col.id === order.status)[0]?.color
+        })`,
+        borderColor: `var(${
+          orderStatuses.filter((col) => col.id === order.status)[0]?.color
+        })`,
+      }}
+    >
+      {orderStatuses.filter((stat) => stat.id === order.status)[0]?.label}
+    </button>
+  );
+}

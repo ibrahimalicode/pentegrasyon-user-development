@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
-import { InfoI } from "../../../assets/icon";
 
 const RemainingMinutes = ({ date }) => {
   const comparedMin = (now = new Date()) => {

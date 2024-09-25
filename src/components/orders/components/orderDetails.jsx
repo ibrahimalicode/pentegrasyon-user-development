@@ -1,17 +1,17 @@
-import React from "react";
-
-//COMP
-import { InfoI } from "../../../assets/icon";
-import CloseI from "../../../assets/icon/close";
+import React, { useState } from "react";
 
 //UTILS
 import { formatDateString } from "../../../utils/utils";
 
 //CONTEXT
 import { useSlideBar } from "../../../context/SlideBarContext";
-import StatusButtons from "../getirYemek/statusButtons";
-import orderStatuses from "../../../data/orderStatuses";
+
+//COMP
+import { InfoI } from "../../../assets/icon";
+import CloseI from "../../../assets/icon/close";
 import RemainingMinutes from "./remainingMinutes";
+import orderStatuses from "../../../data/orderStatuses";
+import GetirYemekStatusButtons from "../getirYemek/getirYemekStatusButtons";
 
 const marketPlaceColors = [
   { bg: "--getiryemek", color: "--white-1" },
@@ -22,16 +22,24 @@ const marketPlaceColors = [
   { bg: "--siparisim", color: "--white-1" },
 ];
 
-const GetirYemekOrderDetails = ({ data }) => {
+const OrderDetails = ({ order, setOrder }) => {
   const { setSlideBarContent } = useSlideBar();
-  console.log(data);
+  const [orderStatus, setOrderStatus] = useState(order.status);
+
+  const orderStatusButtons = [
+    <GetirYemekStatusButtons
+      order={order}
+      setOrder={setOrder}
+      setOrderStatus={setOrderStatus}
+    />,
+  ];
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div
         className="flex items-center -mx-4 text-base"
         style={{
-          backgroundColor: `var(${marketPlaceColors[data.marketplaceId]?.bg})`,
-          color: `var(${marketPlaceColors[data.marketplaceId]?.color})`,
+          backgroundColor: `var(${marketPlaceColors[order.marketplaceId]?.bg})`,
+          color: `var(${marketPlaceColors[order.marketplaceId]?.color})`,
         }}
       >
         <div className="w-full flex justify-center items-center gap-2">
@@ -48,29 +56,29 @@ const GetirYemekOrderDetails = ({ data }) => {
       <div className="bg-white p-2 rounded-md flex flex-col gap-1">
         <div className="w-full flex justify-between">
           <p>İşletme</p>
-          <p>{data.marketplaceTicketRestaurantName}</p>
+          <p>{order.marketplaceTicketRestaurantName}</p>
         </div>
         <div className="w-full flex justify-between">
           <p>Sipariş durumu</p>
           <p
             style={{
               color: `var(${
-                orderStatuses.filter((col) => col.id === data.status)[0]?.color
+                orderStatuses.filter((col) => col.id === orderStatus)[0]?.color
               })`,
             }}
           >
-            {orderStatuses.filter((stat) => stat.id === data.status)[0]?.label}
+            {orderStatuses.filter((stat) => stat.id === orderStatus)[0]?.label}
           </p>
         </div>
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
-          <p>{data.marketplaceTicketPaymentMethodName}</p>
+          <p>{order.marketplaceTicketPaymentMethodName}</p>
         </div>
         <div className="w-full flex justify-between">
           <p>Sipariş Tarihi</p>
           <p>
             {formatDateString(
-              data.createdDateTime,
+              order.createdDateTime,
               true,
               true,
               true,
@@ -83,15 +91,15 @@ const GetirYemekOrderDetails = ({ data }) => {
           <p>Kurye</p>
           <p className="flex items-center">
             <span className="flex justify-center items-center text-xs size-4 bg-[--green-2] text-[--white-1] rounded-full mr-1">
-              {data.courier.name.slice(0, 1)}
+              {order.courier.name.slice(0, 1)}
             </span>
-            {data.courier.name}
+            {order.courier.name}
           </p>
         </div>
         <div className="w-full flex justify-between">
           <p>Onay Kodu</p>
           <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
-            {data.confirmationId}
+            {order.confirmationId}
           </p>
         </div>
       </div>
@@ -99,18 +107,18 @@ const GetirYemekOrderDetails = ({ data }) => {
       <div className="bg-white p-2 rounded-md flex flex-col gap-1">
         <div className="flex">
           <p className="w-1/2">Müşteri</p>
-          <p className="w-1/2 text-end">{data.client.name}</p>
+          <p className="w-1/2 text-end">{order.client.name}</p>
         </div>
         <div className="flex">
           <p className="w-1/2">Telefon Numarası</p>
           <p className="w-1/2 text-end">
-            {data.client.clientUnmaskedPhoneNumber ? (
-              `${data.client.clientUnmaskedPhoneNumber}`
+            {order.client.clientUnmaskedPhoneNumber ? (
+              `${order.client.clientUnmaskedPhoneNumber}`
             ) : (
               <>
-                {data.client.clientPhoneNumber.split("/")[0]}
+                {order.client.clientPhoneNumber.split("/")[0]}
                 <span className="bg-[--border-1] text-xs ml-2 p-1">
-                  Dahili: {data.client.clientPhoneNumber.split("/")[1]}
+                  Dahili: {order.client.clientPhoneNumber.split("/")[1]}
                 </span>
               </>
             )}
@@ -119,24 +127,24 @@ const GetirYemekOrderDetails = ({ data }) => {
         <div className="flex justify-between">
           <p>Adres</p>
           <div className="w-full max-w-[65%] text-end text-[--primary-2]">
-            <p>{data.client.address}</p>
+            <p>{order.client.address}</p>
             <p>
-              {data.client.aptNo && <span>Apt No: {data.client.aptNo}</span>}
-              {data.client.doorNo && (
-                <span> Daire No: {data.client.doorNo}</span>
+              {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
+              {order.client.doorNo && (
+                <span> Daire No: {order.client.doorNo}</span>
               )}
-              {data.client.floor && <span> Kat: {data.client.floor}</span>}
+              {order.client.floor && <span> Kat: {order.client.floor}</span>}
             </p>
           </div>
         </div>
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
-          <p className="w-1/2 text-end">{data.client.description}</p>
+          <p className="w-1/2 text-end">{order.client.description}</p>
         </div>
       </div>
 
       <div className="bg-white p-2 rounded-md flex flex-col gap-3">
-        {data.isScheduled && (
+        {order.isScheduled && (
           <div className="flex border border-[--gr-1] rounded-md overflow-clip">
             <div className="bg-[--red-3] text-[--gr-3] px-4 flex items-center">
               🕑
@@ -144,8 +152,8 @@ const GetirYemekOrderDetails = ({ data }) => {
             <div className="w-full p-2 text-xs flex gap-4">
               <p>Teslimat Zamanı:</p>
               <div className="flex gap-4">
-                {data.checkedScheduledDate}
-                <RemainingMinutes date={data.scheduledDate} />
+                {order.checkedScheduledDate}
+                <RemainingMinutes date={order.scheduledDate} />
               </div>
             </div>
           </div>
@@ -156,10 +164,10 @@ const GetirYemekOrderDetails = ({ data }) => {
             <InfoI fill="white" />
           </div>
           <div className="w-full p-2 text-xs italic flex flex-col gap-1">
-            {data.clientNote && <p>{data.clientNote}</p>}
-            {data.doNotKnock && <p>Lütfen zil çalmayın.</p>}
-            {data.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
-            {data.isEcoFriendly && (
+            {order.clientNote && <p>{order.clientNote}</p>}
+            {order.doNotKnock && <p>Lütfen zil çalmayın.</p>}
+            {order.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
+            {order.isEcoFriendly && (
               <p>Doğayı seviyorum. Plastik çatal, bıçak, peçete istemiyorum.</p>
             )}
           </div>
@@ -174,7 +182,7 @@ const GetirYemekOrderDetails = ({ data }) => {
           </thead>
 
           <tbody>
-            {data.orders.map((order) => (
+            {order.orders.map((order) => (
               <React.Fragment key={order.id}>
                 <tr>
                   <td className="p-2 text-left">
@@ -237,13 +245,13 @@ const GetirYemekOrderDetails = ({ data }) => {
 
         <div className="w-full flex items-center justify-end gap-2 border-t border-[--gr-1]">
           <p>Toplam:</p>
-          <p className="font-bold text-base">{data.totalPrice}</p>
+          <p className="font-bold text-base">{order.totalPrice}</p>
         </div>
       </div>
 
-      <StatusButtons order={data} />
+      {orderStatusButtons[order.marketplaceId]}
     </main>
   );
 };
 
-export default GetirYemekOrderDetails;
+export default OrderDetails;

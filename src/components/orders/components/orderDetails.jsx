@@ -22,15 +22,15 @@ const marketPlaceColors = [
   { bg: "--siparisim", color: "--white-1" },
 ];
 
-const OrderDetails = ({ order, setOrder }) => {
+const OrderDetails = ({ order, setOrdersData }) => {
   const { setSlideBarContent } = useSlideBar();
-  const [orderStatus, setOrderStatus] = useState(order.status);
+  const [sideOrder, setSideOrder] = useState(order);
 
   const orderStatusButtons = [
     <GetirYemekStatusButtons
       order={order}
-      setOrder={setOrder}
-      setOrderStatus={setOrderStatus}
+      setOrdersData={setOrdersData}
+      setSideOrder={setSideOrder}
     />,
   ];
 
@@ -64,11 +64,15 @@ const OrderDetails = ({ order, setOrder }) => {
           <p
             style={{
               color: `var(${
-                orderStatuses.filter((col) => col.id === orderStatus)[0]?.color
+                orderStatuses.filter((col) => col.id === sideOrder.status)[0]
+                  ?.color
               })`,
             }}
           >
-            {orderStatuses.filter((stat) => stat.id === orderStatus)[0]?.label}
+            {
+              orderStatuses.filter((stat) => stat.id === sideOrder.status)[0]
+                ?.label
+            }
           </p>
         </div>
         <div className="w-full flex justify-between">

@@ -12,9 +12,10 @@ import { formatDateString } from "../../utils/utils";
 import OrderDetails from "./components/orderDetails";
 import RemainingMinutes from "./components/remainingMinutes";
 import { PrinterI } from "../../assets/icon";
-import { useState } from "react";
+import { useEffect } from "react";
 import GoogleRoute from "./components/googleRoute";
 import { usePopup } from "../../context/PopupContext";
+import { useSignalR } from "../../context/SignalRContext";
 
 const marketPlaceAssets = [
   { src: GetirYemek, statusButton: GetirYemekStatusButton },
@@ -25,11 +26,10 @@ const marketPlaceAssets = [
   { src: Siparisim, statusButton: GetirYemekStatusButton },
 ];
 
-const OrdersTableBody = ({ data, totalItems }) => {
+const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
+  const { orderData } = useSignalR();
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
-
-  const [order, setOrder] = useState(data);
 
   function getButtonComponent() {
     const StatusButtonComponent =
@@ -53,12 +53,22 @@ const OrdersTableBody = ({ data, totalItems }) => {
       <OrderDetails
         order={{
           ...order,
-          checkedScheduledDate: checkDate(data.scheduledDate),
+          checkedScheduledDate: checkDate(order.scheduledDate),
         }}
-        setOrder={setOrder}
+        setOrdersData={setOrdersData}
       />
     );
   }
+
+  useEffect(() => {
+    if (orderData) {
+      console.log(orderData);
+      // if (orderData.id === order.id) {
+      //   setOrder({ ...order, status: orderData.status });
+      //   // setOrder(orderData);
+      // }
+    }
+  }, [orderData]);
   // console.log(order);
 
   return (
@@ -71,22 +81,22 @@ const OrdersTableBody = ({ data, totalItems }) => {
         <td onClick={cellClicked} className="pl-4">
           <img
             alt="perntegrasyon-marketplace"
-            src={marketPlaceAssets[data.marketplaceId]?.src}
+            src={marketPlaceAssets[order.marketplaceId]?.src}
             className="size-10"
           />
         </td>
         <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
-          {data.confirmationId}
+          {order.confirmationId}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {data.marketplaceTicketRestaurantName}
+          {order.marketplaceTicketRestaurantName}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          <p>{checkDate(data.checkoutDate)}</p>
-          {data.isScheduled && <RemainingMinutes date={data.scheduledDate} />}
+          <p>{checkDate(order.checkoutDate)}</p>
+          {order.isScheduled && <RemainingMinutes date={order.scheduledDate} />}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {data.client.name}
+          {order.client.name}
         </td>
         <td
           onClick={() =>
@@ -106,7 +116,7 @@ const OrdersTableBody = ({ data, totalItems }) => {
           className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {data.client.district}
+            {order.client.district}
           </button>
         </td>
         <td
@@ -127,14 +137,14 @@ const OrdersTableBody = ({ data, totalItems }) => {
           className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {data.courier.name}
+            {order.courier.name}
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {data.totalPrice}
+          {order.totalPrice}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
-          {getButtonComponent(data)}
+          {getButtonComponent(order)}
         </td>
         <td className="w-14 relative">
           <div className="flex justify-center w-full bg-[--light-1] py-2 rounded-md">

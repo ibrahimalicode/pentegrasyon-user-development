@@ -12,6 +12,10 @@ import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 
+//SOUND
+import newOrderSoundPath from "../../../assets/sound/newordersound.mp3";
+const newOrderSound = new Audio(newOrderSoundPath);
+
 //UTILS
 import minutes from "../../../data/minutes";
 
@@ -21,22 +25,26 @@ import {
   resetGetOrdersState,
 } from "../../../redux/orders/getOrdersSlice";
 import RestaurantsStatus from "../components/restaurantsStatus";
+import { useSignalR } from "../../../context/SignalRContext";
+import oneOrder from "../../../data/orderTest";
+import { formatOrders } from "../../../utils/utils";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
+  const { newOrder, setNewOrder } = useSignalR();
   const { contentRef, setContentRef, setPopupContent } = usePopup();
 
   const { loading, success, error, orders } = useSelector(
     (state) => state.orders.get
   );
 
+  const [ordersData, setOrdersData] = useState(null);
   const [searchVal, setSearchVal] = useState("");
   const [filter, setFilter] = useState({
     date: null,
     status: null,
     MarketPalce: null,
   });
-  const [ordersData, setOrdersData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
 
   const itemsPerPage = 8;
@@ -53,7 +61,6 @@ const OrdersPage = () => {
 
   useEffect(() => {
     if (error) {
-      setOrdersData([]);
       dispatch(resetGetOrdersState());
     }
     if (success) {
@@ -78,6 +85,22 @@ const OrdersPage = () => {
       ]);
     }
   }, [filterOrders]);
+
+  useEffect(() => {
+    if (newOrder) {
+      console.log("we have got a new order", newOrder);
+      newOrderSound.play().catch((error) => {
+        console.error("Failed to play audio:", error);
+      });
+
+      if (ordersData) {
+        setOrdersData(formatOrders([newOrder, ...ordersData]));
+      } else {
+        setOrdersData([newOrder]);
+      }
+      setNewOrder(null);
+    }
+  }, [newOrder]);
 
   return (
     <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -246,7 +269,8 @@ const OrdersPage = () => {
       {/* TABLE */}
       {ordersData ? (
         <OrdersTable
-          inData={ordersData}
+          ordersData={ordersData}
+          setOrdersData={setOrdersData}
           onSuccess={() => setOrdersData(null)}
         />
       ) : true ? (

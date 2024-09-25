@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
 import DashboardPage from "./dashboard";
@@ -17,7 +17,7 @@ const Home = () => {
       <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Routes>
-        <Route path="/*" element={<Orders />} />
+        <Route path="/*" element={<Navigate to="/orders" />} />
         <Route path="/dashboard/*" element={<DashboardPage />} />
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />

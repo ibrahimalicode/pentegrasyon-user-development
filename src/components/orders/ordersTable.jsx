@@ -3,7 +3,7 @@
 //COMP
 import OrdersTableBody from "./ordersTableBody";
 
-const OrdersTable = ({ inData }) => {
+const OrdersTable = ({ ordersData, setOrdersData }) => {
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
@@ -24,8 +24,13 @@ const OrdersTable = ({ inData }) => {
           </thead>
 
           <tbody>
-            {inData.map((data, i) => (
-              <OrdersTableBody data={data} key={i} totalItems={inData.length} />
+            {ordersData.map((order, i) => (
+              <OrdersTableBody
+                key={i}
+                order={order}
+                totalItems={ordersData.length}
+                setOrdersData={setOrdersData}
+              />
             ))}
           </tbody>
         </table>

@@ -431,3 +431,12 @@ export function compareWithCurrentDateTime(givenDateTime, now) {
     return `${remainingMinutes} Dk. Kaldı`;
   }
 }
+
+//ORDERS
+export const formatOrders = (ordersData) => {
+  return ordersData.sort((a, b) => {
+    const dateA = new Date(a.checkoutDate);
+    const dateB = new Date(b.checkoutDate);
+    return dateB - dateA;
+  });
+};

@@ -21,8 +21,9 @@ import {
   resetGetirYemekTicketCancel,
 } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
 import orderStatuses from "../../../data/orderStatuses";
+import { formatOrders } from "../../../utils/utils";
 
-const GetirYemekStatusButtons = ({ order, setOrder, setOrderStatus }) => {
+const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const toastId = useRef();
   const ticketId = order.id;
   const dispatch = useDispatch();
@@ -80,8 +81,15 @@ const GetirYemekStatusButtons = ({ order, setOrder, setOrderStatus }) => {
       dispatch(resetGetirYemekTicketVerify());
     }
     if (verifySuccess) {
-      setOrderStatus(verifyData.data);
-      setOrder({ ...order, status: verifyData.data });
+      setOrdersData((prev) => {
+        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
+        const updatedData = [
+          ...unChangedOrders,
+          { ...order, status: verifyData.data },
+        ];
+        return formatOrders(updatedData);
+      });
+      setSideOrder({ ...order, status: verifyData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketVerify());
@@ -97,8 +105,15 @@ const GetirYemekStatusButtons = ({ order, setOrder, setOrderStatus }) => {
       dispatch(resetGetirYemekTicketPrepare());
     }
     if (prepareSuccess) {
-      setOrderStatus(prepareData.data);
-      setOrder({ ...order, status: prepareData.data });
+      setOrdersData((prev) => {
+        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
+        const updatedData = [
+          ...unChangedOrders,
+          { ...order, status: prepareData.data },
+        ];
+        return formatOrders(updatedData);
+      });
+      setSideOrder({ ...order, status: prepareData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketPrepare());
@@ -114,8 +129,15 @@ const GetirYemekStatusButtons = ({ order, setOrder, setOrderStatus }) => {
       dispatch(resetGetirYemekTicketDeliver());
     }
     if (deliverSuccess) {
-      setOrderStatus(deliverData.data);
-      setOrder({ ...order, status: deliverData.data });
+      setOrdersData((prev) => {
+        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
+        const updatedData = [
+          ...unChangedOrders,
+          { ...order, status: deliverData.data },
+        ];
+        return formatOrders(updatedData);
+      });
+      setSideOrder({ ...order, status: updatedData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketDeliver());
@@ -131,8 +153,15 @@ const GetirYemekStatusButtons = ({ order, setOrder, setOrderStatus }) => {
       dispatch(resetGetirYemekTicketCancel());
     }
     if (cancelSuccess) {
-      setOrderStatus(cancelData.data);
-      setOrder({ ...order, status: cancelData.data });
+      setOrdersData((prev) => {
+        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
+        const updatedData = [
+          ...unChangedOrders,
+          { ...order, status: cancelData.data },
+        ];
+        return formatOrders(updatedData);
+      });
+      setSideOrder({ ...order, status: cancelData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı");
       dispatch(resetGetirYemekTicketCancel());

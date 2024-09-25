@@ -10,15 +10,18 @@ import "./index.css";
 import App from "./App";
 import store from "./store";
 import toastOptions from "./config/toast";
+import { SignalRProvider } from "./context/SignalRContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-      <div className="light">
-        <App />
-        <Toaster toastOptions={toastOptions} />
-      </div>
+      <SignalRProvider>
+        <div className="light">
+          <App />
+          <Toaster toastOptions={toastOptions} />
+        </div>
+      </SignalRProvider>
     </BrowserRouter>
   </Provider>
 );

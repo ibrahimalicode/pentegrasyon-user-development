@@ -162,24 +162,20 @@ const GetirYemekRestaurantsStatus = () => {
                     <td className="text-center">
                       <CustomToggle
                         className="scale-75"
-                        className1={`${
-                          updateRestaurantLoading && "cursor-not-allowed"
-                        }`}
                         onChange={() => updateRestaurantStatus(key)}
                         checked={statusData[key].status}
                         disabled={updateRestaurantLoading}
                       />
                     </td>
                     <td className="text-end pr-6">
-                      <CustomToggle
-                        className="scale-75"
-                        className1={`${
-                          updateCourierLoading && "cursor-not-allowed"
-                        }`}
-                        onChange={() => updateRestaurantCourierStatus(key)}
-                        checked={restaurant.isCourierAvailable}
-                        disabled={updateCourierLoading}
-                      />
+                      {statusData[key].status && (
+                        <CustomToggle
+                          className="scale-75"
+                          onChange={() => updateRestaurantCourierStatus(key)}
+                          checked={restaurant.isCourierAvailable}
+                          disabled={updateCourierLoading}
+                        />
+                      )}
                     </td>
                   </tr>
                 );

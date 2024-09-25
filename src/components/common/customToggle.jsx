@@ -9,7 +9,11 @@ const CustomToggle = ({
   disabled,
 }) => {
   return (
-    <label className={`inline-flex items-center cursor-pointer ${className1}`}>
+    <label
+      className={`inline-flex items-center ${
+        disabled ? "cursor-not-allowed" : "cursor-pointer"
+      } ${className1}`}
+    >
       <input
         id={id}
         type="checkbox"

@@ -92,7 +92,7 @@ export const useOrderActions = (
 
       setSideOrder && setSideOrder({ ...order, status: verifyData.data });
       toast.dismiss(toastId.current);
-      toast.success("İşlem başarılı");
+      toast.success("İşlem başarılı", { id: "order-stat-success" });
       dispatch(resetGetirYemekTicketVerify());
     }
   }, [verifyLoading, verifySuccess, verifyErr]);
@@ -116,7 +116,7 @@ export const useOrderActions = (
       });
       setSideOrder && setSideOrder({ ...order, status: prepareData.data });
       toast.dismiss(toastId.current);
-      toast.success("İşlem başarılı");
+      toast.success("İşlem başarılı", { id: "order-stat-success" });
       dispatch(resetGetirYemekTicketPrepare());
     }
   }, [prepareLoading, prepareSuccess, prepareErr]);
@@ -139,7 +139,7 @@ export const useOrderActions = (
         return formatOrders(updatedData);
       });
       toast.dismiss(toastId.current);
-      toast.success("İşlem başarılı");
+      toast.success("İşlem başarılı", { id: "order-stat-success" });
       setSideOrder && setSideOrder({ ...order, status: deliverData.data });
       dispatch(resetGetirYemekTicketDeliver());
     }
@@ -164,7 +164,7 @@ export const useOrderActions = (
       });
       setSideOrder && setSideOrder({ ...order, status: cancelData.data });
       toast.dismiss(toastId.current);
-      toast.success("İşlem başarılı");
+      toast.success("İşlem başarılı", { id: "order-stat-success" });
       dispatch(resetGetirYemekTicketCancel());
     }
   }, [cancelLoading, cancelSuccess, cancelErr]);

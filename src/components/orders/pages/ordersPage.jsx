@@ -13,8 +13,21 @@ import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 
 //SOUND
-import newOrderSoundPath from "../../../assets/sound/newordersound.mp3";
-const newOrderSound = new Audio(newOrderSoundPath);
+import getirYemekNewOrderSoundPath from "../../../assets/sound/getiryemekneworder.mp3";
+import migrosYemekNewOrderSoundPath from "../../../assets/sound/migrosyemekneworder.mp3";
+import trendyolYemekNewOrderSoundPath from "../../../assets/sound/trendyolyemekneworder.mp3";
+import yemekSepetiNewOrderSoundPath from "../../../assets/sound/yemeksepetineworder.mp3";
+import goFodyNewOrderSoundPath from "../../../assets/sound/gofodyneworder.mp3";
+import siparisimPlusNewOrderSoundPath from "../../../assets/sound/siparisimplus.mp3";
+
+const newOrderSounds = [
+  new Audio(getirYemekNewOrderSoundPath),
+  new Audio(migrosYemekNewOrderSoundPath),
+  new Audio(trendyolYemekNewOrderSoundPath),
+  new Audio(yemekSepetiNewOrderSoundPath),
+  new Audio(goFodyNewOrderSoundPath),
+  new Audio(siparisimPlusNewOrderSoundPath),
+];
 
 //UTILS
 import minutes from "../../../data/minutes";
@@ -89,6 +102,7 @@ const OrdersPage = () => {
   useEffect(() => {
     if (newOrder) {
       console.log("we have got a new order", newOrder);
+      const newOrderSound = newOrderSounds[newOrder.marketplaceId];
       newOrderSound.play().catch((error) => {
         console.error("Failed to play audio:", error);
       });

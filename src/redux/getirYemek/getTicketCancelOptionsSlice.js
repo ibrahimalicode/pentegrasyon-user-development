@@ -8,7 +8,7 @@ const initialState = {
   loading: false,
   success: false,
   error: null,
-  data: null,
+  options: null,
 };
 
 const getTicketCancelOptionsSlice = createSlice({
@@ -19,7 +19,7 @@ const getTicketCancelOptionsSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.data = null;
+      state.options = null;
     },
   },
   extraReducers: (build) => {
@@ -28,19 +28,19 @@ const getTicketCancelOptionsSlice = createSlice({
         state.loading = true;
         state.success = false;
         state.error = null;
-        state.data = null;
+        state.options = null;
       })
       .addCase(getTicketCancelOptions.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.data = action.payload;
+        state.options = action.payload;
       })
       .addCase(getTicketCancelOptions.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.data = null;
+        state.options = null;
       });
   },
 });
@@ -49,14 +49,12 @@ export const getTicketCancelOptions = createAsyncThunk(
   "GetirYemek/TicketCancelOptions",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.get(
-        `${baseURL}GetirYemek/TicketCancelOptions`,
-        { ...data },
-        { params: { ...data } }
-      );
+      const res = await api.get(`${baseURL}GetirYemek/TicketCancelOptions`, {
+        params: { ...data },
+      });
 
       // console.log(res);
-      return res.data;
+      return res.data.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {

@@ -5,6 +5,7 @@ const orderStatuses = [
     label: "Bekliyor", // Forward Order Pending Approval
     value: true,
     id: 325,
+    nextId: 350,
   },
   {
     bg: "--status-yellow",
@@ -12,6 +13,7 @@ const orderStatuses = [
     label: "Bekliyor", // Waiting Restaurant Approval
     value: true,
     id: 400,
+    nextId: 350,
   },
   {
     bg: "--status-green",
@@ -19,6 +21,8 @@ const orderStatuses = [
     label: "Onaylandı", // Forward Order Approved
     value: true,
     id: 350,
+    nextId: 500,
+    text: "Onayla",
   },
   {
     bg: "--status-yellow",
@@ -26,6 +30,8 @@ const orderStatuses = [
     label: "Hazırlanıyor", // Order In Preparation
     value: true,
     id: 500,
+    nextId: 700,
+    text: "Hazırlan",
   },
   {
     bg: "--status-orange",
@@ -33,6 +39,7 @@ const orderStatuses = [
     label: "Hazırlandı", // Order Prepared
     value: true,
     id: 550,
+    nextId: 700,
   },
   {
     bg: "--status-orange",
@@ -40,13 +47,16 @@ const orderStatuses = [
     label: "Kurye'ye verildi", // Delivered To Courier
     value: true,
     id: 600,
+    nextId: 700,
   },
   {
     bg: "--status-purple",
     color: "--purple-1",
-    label: "Yolda", // Courier On The Way
+    label: "Yola Çıktı", // Courier On The Way
     value: true,
     id: 700,
+    nextId: 900,
+    text: "Yola Çıkart",
   },
   {
     bg: "--status-purple",
@@ -61,6 +71,7 @@ const orderStatuses = [
     label: "Teslim Edildi", //Order Delivered
     value: true,
     id: 900,
+    text: "Teslim Et",
   },
   {
     bg: "--status-red",

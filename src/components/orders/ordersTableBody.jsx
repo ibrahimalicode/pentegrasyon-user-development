@@ -1,5 +1,5 @@
 import { useSlideBar } from "../../context/SlideBarContext";
-import { GetirYemekStatusButton } from "./getirYemek/getirYemekStatusButtons";
+import GetirYemekStatusButton from "./getirYemek/getirYemekStatusButton";
 
 // IMAGES
 import GetirYemek from "../../assets/img/orders/GetirYemek.png";
@@ -8,7 +8,7 @@ import Siparisim from "../../assets/img/orders/Siparisim.png";
 import TrendyolYemek from "../../assets/img/orders/TrendyolYemek.png";
 import GoFody from "../../assets/img/orders/GoFody.png";
 import Yemeksepeti from "../../assets/img/orders/Yemeksepeti.png";
-import { formatDateString } from "../../utils/utils";
+import { formatDateString, formatOrders } from "../../utils/utils";
 import OrderDetails from "./components/orderDetails";
 import RemainingMinutes from "./components/remainingMinutes";
 import { PrinterI } from "../../assets/icon";
@@ -27,15 +27,15 @@ const marketPlaceAssets = [
 ];
 
 const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
-  const { orderData } = useSignalR();
   const { setPopupContent } = usePopup();
+  const { statusChangedOrder } = useSignalR();
   const { setSlideBarContent } = useSlideBar();
 
   function getButtonComponent() {
     const StatusButtonComponent =
       marketPlaceAssets[order.marketplaceId]?.statusButton;
     return StatusButtonComponent ? (
-      <StatusButtonComponent order={order} />
+      <StatusButtonComponent order={order} setOrdersData={setOrdersData} />
     ) : null;
   }
 
@@ -61,15 +61,16 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
   }
 
   useEffect(() => {
-    if (orderData) {
-      console.log(orderData);
-      // if (orderData.id === order.id) {
-      //   setOrder({ ...order, status: orderData.status });
-      //   // setOrder(orderData);
-      // }
+    if (statusChangedOrder) {
+      if (statusChangedOrder.id === order.id && statusChangedOrder) {
+        console.log(statusChangedOrder);
+        setOrdersData((prev) => {
+          const updatedOrder = prev.filter((O) => O.id !== order.id);
+          return formatOrders([...updatedOrder, statusChangedOrder]);
+        });
+      }
     }
-  }, [orderData]);
-  // console.log(order);
+  }, [statusChangedOrder]);
 
   return (
     order && (

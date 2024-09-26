@@ -13,7 +13,7 @@ const getirYemekSlice = combineReducers({
   verifyTicket: getirYemekTicketVerifySlice,
   prepareTicket: getirYemekTicketPrepareSlice,
   deliverTicket: getirYemekTicketDeliverSlice,
-  cancelOptions: getTicketCancelOptionsSlice,
+  ticketCancelOptions: getTicketCancelOptionsSlice,
   cancelTicket: getirYemekTicketCancelSlice,
   getRestaurants: getirYemekGetRestaurantsSlice,
   updateRestaurants: getirYemekUpdateRestaurantStatusSlice,

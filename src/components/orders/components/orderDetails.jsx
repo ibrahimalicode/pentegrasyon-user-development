@@ -34,6 +34,7 @@ const OrderDetails = ({ order, setOrdersData }) => {
     />,
   ];
 
+  // console.log(order);
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div
@@ -164,19 +165,26 @@ const OrderDetails = ({ order, setOrdersData }) => {
           </div>
         )}
 
-        <div className="flex border border-[--gr-1] rounded-md overflow-clip">
-          <div className="bg-[--gr-1] text-[--gr-1] px-3 flex items-center">
-            <InfoI fill="white" />
+        {(order.clientNote ||
+          order.doNotKnock ||
+          order.dropOffAtDoor ||
+          order.isEcoFriendly) && (
+          <div className="flex border border-[--gr-1] rounded-md overflow-clip">
+            <div className="bg-[--gr-1] text-[--gr-1] px-3 flex items-center">
+              <InfoI fill="white" />
+            </div>
+            <div className="w-full p-2 text-xs italic flex flex-col gap-1">
+              {order.clientNote && <p>{order.clientNote}</p>}
+              {order.doNotKnock && <p>Lütfen zil çalmayın.</p>}
+              {order.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
+              {order.isEcoFriendly && (
+                <p>
+                  Doğayı seviyorum. Plastik çatal, bıçak, peçete istemiyorum.
+                </p>
+              )}
+            </div>
           </div>
-          <div className="w-full p-2 text-xs italic flex flex-col gap-1">
-            {order.clientNote && <p>{order.clientNote}</p>}
-            {order.doNotKnock && <p>Lütfen zil çalmayın.</p>}
-            {order.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
-            {order.isEcoFriendly && (
-              <p>Doğayı seviyorum. Plastik çatal, bıçak, peçete istemiyorum.</p>
-            )}
-          </div>
-        </div>
+        )}
 
         <table className="rounded-md overflow-clip h-max">
           <thead className="bg-[--light-3]">

@@ -16,7 +16,7 @@ export const SignalRProvider = ({ children }) => {
 
   const [userId, setUserId] = useState(user?.id || null);
   const [restaurantsId, setRestaurantsId] = useState([]);
-  const [orderData, setOrderData] = useState(null);
+  const [statusChangedOrder, setStatusChangedOrder] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newOrder, setNewOrder] = useState(null);
 
@@ -55,13 +55,13 @@ export const SignalRProvider = ({ children }) => {
       });
 
       connectionGeneralHub.on("ReceiveTicketStatus", function (ticket) {
-        setOrderData(ticket);
+        setStatusChangedOrder(ticket);
         console.log("New status Received: ", ticket);
       });
 
       connectionGeneralHub.on("ReceiveTicketCancellation", function (ticket) {
-        setOrderData(ticket);
-        console.log("Ticket Cancelled: ", ticket);
+        setStatusChangedOrder(ticket);
+        // console.log("Ticket Cancelled: ", ticket);
       });
 
       connectionGeneralHub.on(
@@ -77,31 +77,50 @@ export const SignalRProvider = ({ children }) => {
       });
 
       // Start the connection and join groups for each restaurant
-      connectionGeneralHub
-        .start()
-        .then(() => {
-          console.log("SignalR connection established");
+      async function startConnection() {
+        try {
+          connectionGeneralHub.start().then(() => {
+            console.log("SignalR connection established");
 
-          // Join group for each restaurant ID
-          restaurantsId.forEach((restaurantId) => {
+            // Join group for each restaurant ID
+            restaurantsId.forEach((restaurantId) => {
+              connectionGeneralHub
+                .invoke("JoinRestaurantGroup", restaurantId)
+                .catch((err) => {
+                  console.error(
+                    `Error joining restaurant group ${restaurantId}:`,
+                    err
+                  );
+                });
+            });
+
+            // Join user group
             connectionGeneralHub
-              .invoke("JoinRestaurantGroup", restaurantId)
+              .invoke("JoinUserGroup", userId)
               .catch((err) => {
-                console.error(
-                  `Error joining restaurant group ${restaurantId}:`,
-                  err
-                );
+                console.error(`Error joining user group ${userId}:`, err);
               });
           });
+        } catch (err) {
+          console.log("Error in SignalR connection:", err);
+          setTimeout(startConnection, 5000);
+        }
+      }
 
-          // Join user group
-          connectionGeneralHub.invoke("JoinUserGroup", userId).catch((err) => {
-            console.error(`Error joining user group ${userId}:`, err);
-          });
-        })
-        .catch((err) => {
-          console.error("SignalR connection error: ", err);
-        });
+      // Handle automatic reconnect
+      connectionGeneralHub.onreconnecting((error) => {
+        console.log(
+          `Connection lost. Attempting to reconnect... Error: ${error}`
+        );
+        // Optionally show reconnection attempt message to the user
+      });
+
+      connectionGeneralHub.onreconnected((connectionId) => {
+        console.log(
+          `Connection reestablished. Connected with connectionId: ${connectionId}`
+        );
+        // Optionally notify user of successful reconnection
+      });
 
       // Reconnect on close
       connectionGeneralHub.onclose((error) => {
@@ -109,6 +128,18 @@ export const SignalRProvider = ({ children }) => {
         connectionGeneralHub.start().catch((err) => {
           console.error("Error restarting SignalR connection: ", err);
         });
+      });
+      startConnection();
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          if (
+            connectionGeneralHub.state ===
+            signalR.HubConnectionState.Disconnected
+          ) {
+            startConnection();
+          }
+        }
       });
     }
   }, [userId, restaurantsId]);
@@ -122,8 +153,8 @@ export const SignalRProvider = ({ children }) => {
         setRestaurantsId,
         newOrder,
         setNewOrder,
-        orderData,
-        setOrderData,
+        statusChangedOrder,
+        setStatusChangedOrder,
         messages,
         setMessages,
       }}

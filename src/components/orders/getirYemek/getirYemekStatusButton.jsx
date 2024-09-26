@@ -4,8 +4,11 @@ import { useOrderActions } from "./useOrderActions";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
-  const { verifyOrder, prepareOrder, deliverOrder, cancelOrder } =
-    useOrderActions(ticketId, setOrdersData);
+  const { verifyOrder, prepareOrder, deliverOrder } = useOrderActions(
+    order,
+    ticketId,
+    setOrdersData
+  );
 
   const { loading: verifyLoading } = useSelector(
     (state) => state.getirYemek.verifyTicket

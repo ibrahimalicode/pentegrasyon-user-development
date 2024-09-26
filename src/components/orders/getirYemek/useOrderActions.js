@@ -11,10 +11,7 @@ import {
   getirYemekTicketDeliver,
   resetGetirYemekTicketDeliver,
 } from "../../../redux/getirYemek/getirYemekTicketDeliverSlice";
-import {
-  getirYemekTicketCancel,
-  resetGetirYemekTicketCancel,
-} from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
+import { resetGetirYemekTicketCancel } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
 
 //MODULES
 import toast from "react-hot-toast";
@@ -26,7 +23,12 @@ import { formatOrders } from "../../../utils/utils";
 
 //COMP
 
-export const useOrderActions = (ticketId, setOrdersData, setSideOrder) => {
+export const useOrderActions = (
+  order,
+  ticketId,
+  setOrdersData,
+  setSideOrder
+) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 

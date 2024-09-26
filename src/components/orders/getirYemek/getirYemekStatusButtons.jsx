@@ -16,6 +16,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   const ticketId = order.id;
   const { verifyOrder, prepareOrder, deliverOrder } = useOrderActions(
+    order,
     ticketId,
     setOrdersData,
     setSideOrder

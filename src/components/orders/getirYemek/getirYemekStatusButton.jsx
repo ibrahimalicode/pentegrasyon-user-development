@@ -31,7 +31,7 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
   if (nextId) {
     orderStat = orderStatuses.filter((s) => s.id === nextId)[0];
   } else {
-    orderStat = { ...orderStat, text: orderStat.label };
+    orderStat = { ...orderStat, text: orderStat?.label };
   }
 
   function handleClick() {

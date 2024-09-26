@@ -61,15 +61,57 @@ export const useOrderActions = (
   } = useSelector((state) => state.getirYemek.cancelTicket);
 
   const verifyOrder = () => {
-    dispatch(getirYemekTicketVerify({ ticketId }));
+    dispatch(getirYemekTicketVerify({ ticketId })).then((res) => {
+      if (res?.meta?.requestStatus === "fulfilled") {
+        setOrdersData((prev) => {
+          const unChangedOrders = prev.filter(
+            (p) => p.id !== res.meta.arg.ticketId
+          );
+          const updatedData = [
+            ...unChangedOrders,
+            { ...order, status: res.payload.data },
+          ];
+          return formatOrders(updatedData);
+        });
+        setSideOrder && setSideOrder({ ...order, status: res.payload.data });
+      }
+    });
   };
 
   const prepareOrder = () => {
-    dispatch(getirYemekTicketPrepare({ ticketId }));
+    dispatch(getirYemekTicketPrepare({ ticketId })).then((res) => {
+      if (res?.meta?.requestStatus === "fulfilled") {
+        setOrdersData((prev) => {
+          const unChangedOrders = prev.filter(
+            (p) => p.id !== res.meta.arg.ticketId
+          );
+          const updatedData = [
+            ...unChangedOrders,
+            { ...order, status: res.payload.data },
+          ];
+          return formatOrders(updatedData);
+        });
+        setSideOrder && setSideOrder({ ...order, status: res.payload.data });
+      }
+    });
   };
 
   const deliverOrder = () => {
-    dispatch(getirYemekTicketDeliver({ ticketId }));
+    dispatch(getirYemekTicketDeliver({ ticketId })).then((res) => {
+      if (res?.meta?.requestStatus === "fulfilled") {
+        setOrdersData((prev) => {
+          const unChangedOrders = prev.filter(
+            (p) => p.id !== res.meta.arg.ticketId
+          );
+          const updatedData = [
+            ...unChangedOrders,
+            { ...order, status: res.payload.data },
+          ];
+          return formatOrders(updatedData);
+        });
+        setSideOrder && setSideOrder({ ...order, status: res.payload.data });
+      }
+    });
   };
 
   // VERIFY TOAST
@@ -81,16 +123,6 @@ export const useOrderActions = (
       dispatch(resetGetirYemekTicketVerify());
     }
     if (verifySuccess) {
-      setOrdersData((prev) => {
-        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
-        const updatedData = [
-          ...unChangedOrders,
-          { ...order, status: verifyData.data },
-        ];
-        return formatOrders(updatedData);
-      });
-
-      setSideOrder && setSideOrder({ ...order, status: verifyData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
       dispatch(resetGetirYemekTicketVerify());
@@ -106,15 +138,6 @@ export const useOrderActions = (
       dispatch(resetGetirYemekTicketPrepare());
     }
     if (prepareSuccess) {
-      setOrdersData((prev) => {
-        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
-        const updatedData = [
-          ...unChangedOrders,
-          { ...order, status: prepareData.data },
-        ];
-        return formatOrders(updatedData);
-      });
-      setSideOrder && setSideOrder({ ...order, status: prepareData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
       dispatch(resetGetirYemekTicketPrepare());
@@ -130,17 +153,8 @@ export const useOrderActions = (
       dispatch(resetGetirYemekTicketDeliver());
     }
     if (deliverSuccess) {
-      setOrdersData((prev) => {
-        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
-        const updatedData = [
-          ...unChangedOrders,
-          { ...order, status: deliverData.data },
-        ];
-        return formatOrders(updatedData);
-      });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      setSideOrder && setSideOrder({ ...order, status: deliverData.data });
       dispatch(resetGetirYemekTicketDeliver());
     }
   }, [deliverLoading, deliverSuccess, deliverErr]);
@@ -154,15 +168,6 @@ export const useOrderActions = (
       dispatch(resetGetirYemekTicketCancel());
     }
     if (cancelSuccess) {
-      setOrdersData((prev) => {
-        const unChangedOrders = prev.filter((p) => p.id !== ticketId);
-        const updatedData = [
-          ...unChangedOrders,
-          { ...order, status: cancelData.data },
-        ];
-        return formatOrders(updatedData);
-      });
-      setSideOrder && setSideOrder({ ...order, status: cancelData.data });
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
       dispatch(resetGetirYemekTicketCancel());

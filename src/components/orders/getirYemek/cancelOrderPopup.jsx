@@ -29,7 +29,20 @@ function CancelOrderPopup({ ticketId }) {
 
   function handleCancel(e) {
     e.preventDefault();
-    dispatch(getirYemekTicketCancel({ selectedData }));
+    dispatch(getirYemekTicketCancel({ selectedData })).then((res) => {
+      if (res?.meta?.requestStatus === "fulfilled") {
+        setOrdersData((prev) => {
+          const unChangedOrders = prev.filter(
+            (p) => p.id !== res.meta.arg.ticketId
+          );
+          const updatedData = [
+            ...unChangedOrders,
+            { ...order, status: res.payload.data },
+          ];
+          return formatOrders(updatedData);
+        });
+      }
+    });
   }
 
   useEffect(() => {

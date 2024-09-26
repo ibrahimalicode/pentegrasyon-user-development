@@ -37,7 +37,7 @@ const GetirYemekRestaurantsStatus = () => {
     };
     dispatch(getirYemekUpdateRestaurantStatus({ ...updatedStat[id] })).then(
       (res) => {
-        if (res.meta.requestStatus === "fulfilled") {
+        if (res?.meta?.requestStatus === "fulfilled") {
           toast.dismiss(toastId.current);
           const text = updatedStat[id].status === true ? "Açıldı" : "Kapandı";
           const className =
@@ -69,7 +69,7 @@ const GetirYemekRestaurantsStatus = () => {
     dispatch(
       getirYemekUpdateRestaurantCourierStatus({ ...updatedStat[id] })
     ).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
+      if (res?.meta?.requestStatus === "fulfilled") {
         toast.dismiss(toastId.current);
         const text =
           updatedStat[id].isCourierAvailable === true ? "Açıldı" : "Kapandı";

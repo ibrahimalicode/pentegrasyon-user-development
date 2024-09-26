@@ -34,7 +34,7 @@ const OrderDetails = ({ order, setOrdersData }) => {
     />,
   ];
 
-  // console.log(order);
+  console.log(order);
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div

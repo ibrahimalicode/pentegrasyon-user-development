@@ -29,7 +29,7 @@ function CancelOrderPopup({ ticketId }) {
 
   function handleCancel(e) {
     e.preventDefault();
-    dispatch(getirYemekTicketCancel({ selectedData })).then((res) => {
+    dispatch(getirYemekTicketCancel(selectedData)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
@@ -62,6 +62,7 @@ function CancelOrderPopup({ ticketId }) {
           value: opt.id,
           cancelReasonId: opt.id,
           cancelNote: opt.message,
+          productId: ticketId,
         };
       });
       console.log(formattedOptions);
@@ -86,6 +87,7 @@ function CancelOrderPopup({ ticketId }) {
             required
             label="Cancel Note"
             value={selectedData}
+            options={optionsData}
             onChange={(selectedOption) => setSelectedData(selectedOption)}
           />
         </div>

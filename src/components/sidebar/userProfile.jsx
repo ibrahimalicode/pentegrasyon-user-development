@@ -1,28 +1,18 @@
 //MODULES
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { UserI } from "../../assets/icon";
 import ArrowIR from "../../assets/icon/arrowR";
 
 //REDUX
-import { getUser } from "../../redux/user/getUserSlice";
 
 function UserProfile({ setOpenSidebar }) {
   const param = useParams();
-  const dispatch = useDispatch();
-
   const { user } = useSelector((state) => state.user.getUser);
-
   const [userData, setUserData] = useState(null);
-
-  useState(() => {
-    if (!user) {
-      dispatch(getUser());
-    }
-  }, [user]);
 
   useEffect(() => {
     if (user) {

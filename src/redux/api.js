@@ -29,7 +29,17 @@ export const clearAuth = () => {
 export const privateApi = () => {
   axiosPrivate.interceptors.request.use(
     (config) => {
-      config.headers["Authorization"] = `Bearer ${getAuth().token}`;
+      const token = getAuth()?.token;
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      } else {
+        return Promise.reject({
+          response: {
+            status: 401,
+            message: "No token provided. Unauthorized.",
+          },
+        });
+      }
       return config;
     },
     (error) => {
@@ -77,7 +87,11 @@ export const privateApi = () => {
         errorMessage = "İstek sunucuya ulaşamadı";
         toast.error(errorMessage, { id: "no-server-error" });
       } else {
-        errorMessage = "Bir hata oluştu: " + error.message;
+        if (!error.message.includes("Bir hata oluştu")) {
+          errorMessage = "Bir hata oluştu: " + error.message;
+        } else {
+          errorMessage = error.message; // Prevent duplication
+        }
         toast.error(errorMessage, { id: "random-error" });
       }
 

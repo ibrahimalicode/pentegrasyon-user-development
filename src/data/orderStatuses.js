@@ -21,7 +21,7 @@ const orderStatuses = [
     label: "Onaylandı", // Forward Order Approved
     value: true,
     id: 350,
-    nextId: 500,
+    nextId: 700,
     text: "Onayla",
   },
   {

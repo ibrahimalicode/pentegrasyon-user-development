@@ -53,6 +53,33 @@ export const SignalRProvider = ({ children }) => {
     }
   }, [restaurants]);
 
+  // Start the connection and join groups for each restaurant
+  async function startConnection(conn) {
+    try {
+      conn.start().then(() => {
+        console.log("SignalR connection established");
+
+        // Join group for each restaurant ID
+        restaurantsId.forEach((restaurantId) => {
+          conn.invoke("JoinRestaurantGroup", restaurantId).catch((err) => {
+            console.error(
+              `Error joining restaurant group ${restaurantId}:`,
+              err
+            );
+          });
+        });
+
+        // Join user group
+        conn.invoke("JoinUserGroup", userId).catch((err) => {
+          console.error(`Error joining user group ${userId}:`, err);
+        });
+      });
+    } catch (err) {
+      console.log("Error in SignalR connection:", err);
+      setTimeout(() => startConnection(conn), 5000);
+    }
+  }
+
   useEffect(() => {
     if (userId && restaurantsId.length > 0) {
       // Initialize the SignalR connection
@@ -79,33 +106,6 @@ export const SignalRProvider = ({ children }) => {
         console.log("New Message Received: ", message);
       });
 
-      // Start the connection and join groups for each restaurant
-      async function startConnection() {
-        try {
-          conn.start().then(() => {
-            console.log("SignalR connection established");
-
-            // Join group for each restaurant ID
-            restaurantsId.forEach((restaurantId) => {
-              conn.invoke("JoinRestaurantGroup", restaurantId).catch((err) => {
-                console.error(
-                  `Error joining restaurant group ${restaurantId}:`,
-                  err
-                );
-              });
-            });
-
-            // Join user group
-            conn.invoke("JoinUserGroup", userId).catch((err) => {
-              console.error(`Error joining user group ${userId}:`, err);
-            });
-          });
-        } catch (err) {
-          console.log("Error in SignalR connection:", err);
-          setTimeout(startConnection, 5000);
-        }
-      }
-
       // Handle automatic reconnect
       conn.onreconnecting((error) => {
         console.log(
@@ -128,16 +128,25 @@ export const SignalRProvider = ({ children }) => {
           console.error("Error restarting SignalR connection: ", err);
         });
       });
-      startConnection();
+      startConnection(conn);
 
       const handleVisibilityChange = () => {
         if (
           document.visibilityState === "visible" &&
           conn.state === signalR.HubConnectionState.Disconnected
         ) {
-          startConnection();
+          startConnection(conn);
         }
       };
+
+      // setInterval(() => {
+      //   if (conn.state === signalR.HubConnectionState.Disconnected) {
+      //     console.log("Connection lost. Attempting to reconnect...");
+      //     startConnection(conn);
+      //   }
+      //   console.log("Connection Checked");
+      // }, 1000);
+
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }
   }, [userId, restaurantsId]);

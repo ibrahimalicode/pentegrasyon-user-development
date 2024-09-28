@@ -11,7 +11,7 @@ const ForwardButton = ({
     <button
       type={type}
       disabled={disabled}
-      className={`flex items-center py-2.5 whitespace-nowrap px-3 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center w-24 text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none ${className}`}
+      className={`flex items-center h-max py-2.5 whitespace-nowrap px-3 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center w-24 text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none ${className}`}
     >
       {text}
       {letIcon && (

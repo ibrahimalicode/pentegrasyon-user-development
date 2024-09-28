@@ -30,7 +30,7 @@ import {
   resetGetLicensePackages,
 } from "../../../redux/licensePackages/getLicensePackagesSlice";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
-import { addItemToCart } from "../../../redux/cart/cartSlice";
+import { addItemToCart, clearCart } from "../../../redux/cart/cartSlice";
 import {
   getKDVParameters,
   resetGetKDVParameters,
@@ -184,12 +184,21 @@ const FirstStep = ({
           </div>
         )}
 
-        <p className="">
-          {licensePackageData.time ? licensePackageData.time : "0"} Yıllık
-        </p>
-        <p className="">
-          {licensePackageData.price ? licensePackageData.price : "00.00"}
-        </p>
+        <div className="h-full text-center flex flex-col justify-between pb-3">
+          <p>KDV%{licensePackageData.kdvPercentage}</p>
+          <p className="">
+            {licensePackageData.price && licensePackageData.kdvPercentage
+              ? (licensePackageData.price / 100) *
+                  licensePackageData.kdvPercentage +
+                " ₺"
+              : " ₺"}
+          </p>
+        </div>
+
+        <div className="h-full text-center flex flex-col justify-between pb-3">
+          <p>Toplam</p>
+          <p className="">{licensePackageData.kdvPrice} ₺</p>
+        </div>
       </div>
 
       <div className="flex flex-col pt-2 gap-4 md:px-4">

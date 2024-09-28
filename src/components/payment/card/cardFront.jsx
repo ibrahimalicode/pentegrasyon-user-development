@@ -1,5 +1,5 @@
 //MODULES
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //COMP
 import { AsteriskI } from "../../../assets/icon";

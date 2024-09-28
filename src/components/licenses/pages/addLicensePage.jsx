@@ -50,8 +50,8 @@ const AddLicensePage = () => {
   const [paymentMethod, setPaymentMethod] = useState({
     selectedOption: { label: "Online Ödeme", value: "onlinePayment" },
     options: [
-      { label: "Banka Havale", value: "bankPayment" },
       { label: "Online Ödeme", value: "onlinePayment" },
+      { label: "Banka Havale", value: "bankPayment" },
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
@@ -131,9 +131,9 @@ const AddLicensePage = () => {
         <div className="flex flex-col items-center w-full pt-4 pb-4 text-[--black-2] relative ">
           <StepBar step={step} steps={steps} className="max-w-2xl" />
 
-          <div className="w-full self-center">
+          <div className="w-full self-center overflow-x-clip">
             <div
-              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow-x-clip ${
+              className={`w-full h-[32rem] border-0 border-dashed border-[--light-3] rounded-sm relative ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
               style={{

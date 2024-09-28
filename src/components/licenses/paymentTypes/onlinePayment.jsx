@@ -153,7 +153,7 @@ const OnlinePayment = ({ setStep, actionType }) => {
         </div>
       </div>
 
-      <div className="w-full max-w-3xl mx-auto">
+      <div className="w-full">
         {userData && (
           <InvoiceData
             user={userData}
@@ -171,17 +171,17 @@ const OnlinePayment = ({ setStep, actionType }) => {
       </div>
 
       {/* BTNS */}
-      <div className="flex gap-3 absolute -bottom-16 -right-0">
+      <div className="flex gap-3 absolute -bottom-20 -right-0 h-12">
         <BackButton
           text="Geri"
           letIcon={true}
-          onClick={() => setStep(2)}
+          onClick={() => setStep(steps - 3)}
           disabled={
             addLoading || extendLoading || updateInvLoading || addInvLoading
           }
         />
         <ForwardButton
-          text="Devam"
+          text={openFatura ? "Kaydet" : "Devam"}
           letIcon={true}
           type="submit"
           disabled={

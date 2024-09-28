@@ -94,7 +94,7 @@ const FirstStep = ({
     }
   }, [licensePackagesData]);
 
-  // TOAST AND SET PACKAGES
+  // TOAST AND GET KDV PARAMS
   useEffect(() => {
     if (error) {
       dispatch(resetGetLicensePackages());
@@ -113,7 +113,14 @@ const FirstStep = ({
 
     if (KDVParameters && success) {
       const updatedData = licensePackages.data.map((pkg) => {
-        return { ...pkg, price: getPriceWithKDV(pkg.price, KDVParameters) };
+        return {
+          ...pkg,
+          price: pkg.price,
+          kdvPrice: getPriceWithKDV(pkg.price, KDVParameters).replace(
+            ".00",
+            ""
+          ),
+        };
       });
       setKdvData(KDVParameters);
       setLicensePackagesData(groupedLicensePackages(updatedData));
@@ -191,7 +198,10 @@ const FirstStep = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="h-full">
+    <form
+      onSubmit={handleSubmit}
+      className="min-h-full flex flex-col justify-between mb-7"
+    >
       <div className="w-full h-full sm:px-4">
         <div className="w-full flex justify-center pt-2">
           <CustomSelect
@@ -210,18 +220,10 @@ const FirstStep = ({
               <p className="text-sm">Toplam</p>
               <p>{getTotalPrice().total}</p>
             </div>
-            <div className="flex flex-col">
-              <p className="text-sm">KDV</p>
-              {kdvData && kdvData.useKDV ? (
-                <p>{getTotalPrice().kdvTotal}</p>
-              ) : (
-                <p>0.00</p>
-              )}
-            </div>
           </div>
         </div>
 
-        <div className="h-[85%] flex flex-col gap-1 mt-5 overflow-y-auto">
+        <div className="h-[85%] flex flex-col gap-1 mt-5 overflow-y-visible">
           {licensePackagesData &&
             licensePackagesData.map((licensePkg, i) => (
               <div
@@ -231,7 +233,7 @@ const FirstStep = ({
                 <img
                   src={imageSRCs[licensePkg[0].marketplaceId]?.src}
                   alt="Pazaryeri"
-                  className="w-36 h-full rounded-sm"
+                  className="w-36 rounded-sm"
                 />
                 <div className="max-sm:w-full flex gap-4 py-1 overflow-x-auto">
                   {licensePkg.map((pkg) => {
@@ -242,9 +244,12 @@ const FirstStep = ({
                     );
 
                     return (
-                      <div key={pkg.id} className="flex items-center">
+                      <div
+                        key={pkg.id}
+                        className="flex items-center text-[12px] leading-snug"
+                      >
                         <div
-                          className={`py-1 px-6 rounded cursor-pointer ${
+                          className={`flex flex-col justify-center py-1.5 px-6 rounded cursor-pointer ${
                             isSelected
                               ? "bg-[--primary-1] text-[--white-1]"
                               : "bg-gray-200"
@@ -254,20 +259,28 @@ const FirstStep = ({
                               ...pkg,
                               restaurantId: restaurantData.id,
                               restaurantName: restaurantData.label,
+                              marketPlaceName:
+                                imageSRCs[licensePkg[0]?.marketplaceId]?.name,
                             })
                           }
                         >
-                          <p className="whitespace-nowrap">{pkg.time} Yıllık</p>
-                          <p
-                            className={`text-sm whitespace-nowrap ${
-                              isSelected ? "text-[--white-1]" : "text-[--gr-1]"
-                            }`}
-                          >
-                            {pkg.price} tl
-                          </p>
-                          <p className="text-sm font-normal">
-                            {pkg.description}
-                          </p>
+                          <div>
+                            <span className="whitespace-nowrap">
+                              {pkg.time} Yıllık{" "}
+                            </span>
+                            <span
+                              className={`whitespace-nowrap ${
+                                isSelected && "text-[--white-1]"
+                              }`}
+                            >
+                              {pkg.price} tl
+                            </span>
+                          </div>
+                          <div>
+                            <span className="font-normal whitespace-nowrap">
+                              {pkg.description}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     );
@@ -278,7 +291,7 @@ const FirstStep = ({
         </div>
       </div>
 
-      <div className="absolute -bottom-16 -right-1">
+      <div className="flex justify-end items-end h-full">
         <ForwardButton text="Devam" letIcon={true} type="submit" />
       </div>
     </form>

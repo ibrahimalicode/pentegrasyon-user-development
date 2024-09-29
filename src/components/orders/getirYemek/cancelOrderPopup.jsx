@@ -11,6 +11,7 @@ import { getirYemekTicketCancel } from "../../../redux/getirYemek/getirYemekTick
 
 //COMP
 import CloseI from "../../../assets/icon/close";
+import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 
 //CONTEXT
@@ -26,10 +27,15 @@ function CancelOrderPopup({ ticketId }) {
 
   const [optionsData, setOptionsData] = useState(null);
   const [selectedData, setSelectedData] = useState({ label: "Sebep Seç" });
+  const [cancelOrderData, setCancelOrderData] = useState({
+    cancelReasonId: selectedData.cancelReasonId,
+    cancelNote: "",
+    ticketId,
+  });
 
   function handleCancel(e) {
     e.preventDefault();
-    dispatch(getirYemekTicketCancel(selectedData)).then((res) => {
+    dispatch(getirYemekTicketCancel(cancelOrderData)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
@@ -55,6 +61,7 @@ function CancelOrderPopup({ ticketId }) {
 
   useEffect(() => {
     if (error) {
+      setOptionsData([]);
       dispatch(resetGetTicketCancelOptions());
     }
     if (options) {
@@ -63,11 +70,9 @@ function CancelOrderPopup({ ticketId }) {
           label: opt.message,
           value: opt.id,
           cancelReasonId: opt.id,
-          cancelNote: opt.message,
-          productId: ticketId,
         };
       });
-      console.log(formattedOptions);
+      // console.log(formattedOptions);
       setOptionsData(formattedOptions);
       dispatch(resetGetTicketCancelOptions());
     }
@@ -87,10 +92,33 @@ function CancelOrderPopup({ ticketId }) {
         <div>
           <CustomSelect
             required
-            label="Cancel Note"
+            label="İptal Opsiyonları"
             value={selectedData}
             options={optionsData}
-            onChange={(selectedOption) => setSelectedData(selectedOption)}
+            onChange={(selectedOption) => {
+              setSelectedData(selectedOption);
+              setCancelOrderData((prev) => {
+                return {
+                  ...prev,
+                  cancelReasonId: selectedOption.cancelReasonId,
+                };
+              });
+            }}
+          />
+        </div>
+
+        <div>
+          <CustomInput
+            label="İptal Notu"
+            value={cancelOrderData.cancelNote}
+            onChange={(e) =>
+              setCancelOrderData((pre) => {
+                return {
+                  ...pre,
+                  cancelNote: e,
+                };
+              })
+            }
           />
         </div>
         <div className="flex justify-end mt-8">

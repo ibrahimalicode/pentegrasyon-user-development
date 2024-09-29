@@ -32,16 +32,17 @@ const GetirYemekRestaurantsStatus = () => {
       ...statusData,
       [id]: {
         ...statusData[id],
-        status: !statusData[id].status,
+        restaurantStatus: !statusData[id].restaurantStatus,
       },
     };
     dispatch(getirYemekUpdateRestaurantStatus({ ...updatedStat[id] })).then(
       (res) => {
         if (res?.meta?.requestStatus === "fulfilled") {
           toast.dismiss(toastId.current);
-          const text = updatedStat[id].status === true ? "Açıldı" : "Kapandı";
+          const text =
+            updatedStat[id].restaurantStatus === true ? "Açıldı" : "Kapandı";
           const className =
-            updatedStat[id].status === true
+            updatedStat[id].restaurantStatus === true
               ? "text-[--green-1]"
               : "text-[--red-1]";
           const comp = (
@@ -63,7 +64,7 @@ const GetirYemekRestaurantsStatus = () => {
       ...statusData,
       [id]: {
         ...statusData[id],
-        isCourierAvailable: !statusData[id].isCourierAvailable,
+        courierStatus: !statusData[id].courierStatus,
       },
     };
 
@@ -73,9 +74,9 @@ const GetirYemekRestaurantsStatus = () => {
       if (res?.meta?.requestStatus === "fulfilled") {
         toast.dismiss(toastId.current);
         const text =
-          updatedStat[id].isCourierAvailable === true ? "Açıldı" : "Kapandı";
+          updatedStat[id].courierStatus === true ? "Açıldı" : "Kapandı";
         const className =
-          updatedStat[id].isCourierAvailable === true
+          updatedStat[id].courierStatus === true
             ? "text-[--green-1]"
             : "text-[--red-1]";
         const comp = (
@@ -108,7 +109,8 @@ const GetirYemekRestaurantsStatus = () => {
       data.map((res) => {
         formattedData[res.id] = {
           ...res,
-          status: res.status == 100 ? true : false,
+          restaurantStatus: res.status == 100 ? true : false,
+          courierStatus: res.isCourierAvailable,
         };
       });
       setStatusData(formattedData);
@@ -166,16 +168,16 @@ const GetirYemekRestaurantsStatus = () => {
                       <CustomToggle
                         className="scale-75"
                         onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].status}
+                        checked={statusData[key].restaurantStatus}
                         disabled={updateRestaurantLoading}
                       />
                     </td>
                     <td className="w-44 text-end pr-6">
-                      {statusData[key].status && (
+                      {statusData[key].courierStatus && (
                         <CustomToggle
                           className="scale-75"
                           onChange={() => updateRestaurantCourierStatus(key)}
-                          checked={restaurant.isCourierAvailable}
+                          checked={restaurant.courierStatus}
                           disabled={updateCourierLoading}
                         />
                       )}

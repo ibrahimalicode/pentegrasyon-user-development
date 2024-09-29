@@ -101,8 +101,10 @@ const YemekSepetiRestaurantsStatus = () => {
           <thead>
             <tr>
               <th className="font-medium pb-3 text-start">İşletme</th>
-              <th className="font-medium pb-3 text-center">Restoran Durumu</th>
-              <th className="font-medium pb-3 text-end">Kurye Durumu</th>
+              <th className="font-medium pb-3 w-44 text-center">
+                Restoran Durumu
+              </th>
+              <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
             </tr>
           </thead>
 
@@ -113,7 +115,7 @@ const YemekSepetiRestaurantsStatus = () => {
                 return (
                   <tr key={i}>
                     <td className="text-start">{restaurant.name}</td>
-                    <td className="text-center">
+                    <td className="w-44 text-center">
                       <CustomToggle
                         className="scale-75"
                         className1={`${
@@ -124,7 +126,7 @@ const YemekSepetiRestaurantsStatus = () => {
                         disabled={updateRestaurantLoading}
                       />
                     </td>
-                    <td className="text-end pr-6">
+                    <td className="w-44 text-end pr-6">
                       <CustomToggle
                         className="scale-75"
                         className1={`${

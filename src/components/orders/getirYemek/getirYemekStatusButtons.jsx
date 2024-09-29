@@ -81,6 +81,13 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const [deliverDisabled, setDeliverDisabled] = useState(
     disabled || !nextId || xMinWait(order.preparationDate)
   );
+  const [cancelDisabled, setCancelDisabled] = useState(
+    disabled ||
+      order.status == 900 ||
+      order.status == 1500 ||
+      order.status == 1600 ||
+      order.cancelDate
+  );
 
   useEffect(() => {
     const nextId = orderStatuses.filter((s) => s.id === order.status)[0]
@@ -199,15 +206,27 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       </button>
       <button
         onClick={cancelOrder}
-        disabled={
-          disabled ||
-          order.status == 900 ||
-          order.status == 1500 ||
-          order.status == 1600
-        }
+        disabled={cancelDisabled}
         className={`bg-[--status-red] border-[--red-1] ${btnClass}`}
       >
-        İptal Et
+        {order.cancelDate ? (
+          <>
+            <p>İptal Edildi</p>
+            <p>
+              {formatDateString(
+                order.cancelDate,
+                false,
+                false,
+                false,
+                true,
+                true,
+                false
+              )}
+            </p>
+          </>
+        ) : (
+          "İptal Et"
+        )}
       </button>
     </div>
   );

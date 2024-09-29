@@ -73,6 +73,14 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             }
           </p>
         </div>
+        {checkDate(sideOrder.cancelDate) && (
+          <div className="w-full flex justify-between">
+            <p>İptal notu</p>
+            <p>
+              {sideOrder.cancelMessage}, {sideOrder.cancelNote}
+            </p>
+          </div>
+        )}
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
           <p>{order.marketplaceTicketPaymentMethodName}</p>

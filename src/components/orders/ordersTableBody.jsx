@@ -81,7 +81,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
   useEffect(() => {
     if (statusChangedOrder) {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
-        // console.log(statusChangedOrder);
+        console.log(statusChangedOrder);
         setOrdersData((prev) => {
           const updatedOrder = prev.filter((O) => O.id !== order.id);
           return formatOrders([...updatedOrder, statusChangedOrder]);

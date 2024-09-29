@@ -173,7 +173,7 @@ const GetirYemekRestaurantsStatus = () => {
                       />
                     </td>
                     <td className="w-44 text-end pr-6">
-                      {statusData[key].courierStatus && (
+                      {statusData[key].restaurantStatus && (
                         <CustomToggle
                           className="scale-75"
                           onChange={() => updateRestaurantCourierStatus(key)}

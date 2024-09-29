@@ -31,13 +31,15 @@ function CancelOrderPopup({ ticketId }) {
     e.preventDefault();
     dispatch(getirYemekTicketCancel(selectedData)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
+        const currentDate = new Date().toLocaleString();
+
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
           );
           const updatedData = [
             ...unChangedOrders,
-            { ...order, status: res.payload.data },
+            { ...order, status: res.payload.data, cancelDate: currentDate },
           ];
           return formatOrders(updatedData);
         });

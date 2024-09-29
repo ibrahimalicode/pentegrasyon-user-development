@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
-import DashboardPage from "./dashboard";
+import Dashboard from "./dashboard";
 import NotFound from "./404";
 import Restourants from "./restourants";
 import Licenses from "./licenses";
@@ -18,7 +18,7 @@ const Home = () => {
       <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Routes>
         <Route path="/*" element={<Navigate to="/orders" />} />
-        <Route path="/dashboard/*" element={<DashboardPage />} />
+        <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />
         <Route path="/profile/*" element={<Profile />} />

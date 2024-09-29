@@ -1,26 +1,9 @@
 import CustomSelector from "../common/customSelector";
 import TotalSales from "../../data/totalSales";
-import { useState } from "react";
+import months from "../../data/months";
+import years from "../../data/years";
 
 const SalesChart = () => {
-  const years = [
-    { label: "2024", value: 2024 },
-    { label: "2025", value: 2025 },
-  ];
-  const months = [
-    { label: "Jan", value: 1 },
-    { label: "Feb", value: 2 },
-    { label: "Mar", value: 3 },
-    { label: "Apr", value: 4 },
-    { label: "May", value: 5 },
-    { label: "Jun", value: 6 },
-    { label: "Jul", value: 7 },
-    { label: "Aug", value: 8 },
-    { label: "Sep", value: 9 },
-    { label: "Oct", value: 10 },
-    { label: "Nov", value: 11 },
-    { label: "Dec", value: 12 },
-  ];
   const rates = ["100", "80", "60", "40", "20", "0"];
 
   function calc(price) {

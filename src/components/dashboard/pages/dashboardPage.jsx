@@ -1,9 +1,9 @@
-import StatCard from "./statCard";
-import SalesChart from "./salesChart";
-import RestaurantsTable from "./restaurantsTable";
-import MarketplaceChart from "./merketplaceChart";
+import StatCard from "../statCard";
+import SalesChart from "../salesChart";
+import RestaurantsTable from "../restaurantsTable";
+import MarketplaceChart from "../merketplaceChart";
 
-const Dashboard = () => {
+const DashboardPage = () => {
   return (
     <section className="lg:ml-[280px] pt-20 min-h-0">
       <div className="flex flex-col px-16 max-md:px-5">
@@ -18,4 +18,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

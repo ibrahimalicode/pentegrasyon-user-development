@@ -160,7 +160,9 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {order.totalPrice}
+          {order.totalDiscountedPrice
+            ? order.totalDiscountedPrice
+            : order.totalPrice}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
           {getButtonComponent(order)}

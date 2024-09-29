@@ -39,6 +39,7 @@ function CancelOrderPopup({ ticketId }) {
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
+        setPopupContent(null);
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId

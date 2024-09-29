@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSlideBar } from "../../context/SlideBarContext";
 import GetirYemekStatusButton from "./getirYemek/getirYemekStatusButton";
 
@@ -8,12 +9,17 @@ import Siparisim from "../../assets/img/orders/Siparisim.png";
 import TrendyolYemek from "../../assets/img/orders/TrendyolYemek.png";
 import GoFody from "../../assets/img/orders/GoFody.png";
 import Yemeksepeti from "../../assets/img/orders/Yemeksepeti.png";
+
+//UTILS
 import { formatDateString, formatOrders } from "../../utils/utils";
-import OrderDetails from "./components/orderDetails";
-import RemainingMinutes from "./components/remainingMinutes";
+
+//COMP
 import { PrinterI } from "../../assets/icon";
-import { useEffect } from "react";
 import GoogleRoute from "./components/googleRoute";
+import RemainingMinutes from "./components/remainingMinutes";
+import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
+
+//CONTEXT
 import { usePopup } from "../../context/PopupContext";
 import { useSignalR } from "../../context/SignalRContext";
 
@@ -24,6 +30,15 @@ const marketPlaceAssets = [
   { src: Yemeksepeti, statusButton: GetirYemekStatusButton },
   { src: GoFody, statusButton: GetirYemekStatusButton },
   { src: Siparisim, statusButton: GetirYemekStatusButton },
+];
+
+const orderDetails = [
+  { src: GetirYemek, orderDetailsComp: GetirYemekOrderDetails },
+  { src: MigrosYemek, orderDetailsComp: GetirYemekOrderDetails },
+  { src: TrendyolYemek, orderDetailsComp: GetirYemekOrderDetails },
+  { src: Yemeksepeti, orderDetailsComp: GetirYemekOrderDetails },
+  { src: GoFody, orderDetailsComp: GetirYemekOrderDetails },
+  { src: Siparisim, orderDetailsComp: GetirYemekOrderDetails },
 ];
 
 const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
@@ -49,8 +64,11 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
   }
 
   function cellClicked() {
+    const OrderDetailsComponent =
+      orderDetails[order.marketplaceId]?.orderDetailsComp;
+
     setSlideBarContent(
-      <OrderDetails
+      <OrderDetailsComponent
         order={{
           ...order,
           checkedScheduledDate: checkDate(order.scheduledDate),
@@ -63,7 +81,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
   useEffect(() => {
     if (statusChangedOrder) {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
-        console.log(statusChangedOrder);
+        // console.log(statusChangedOrder);
         setOrdersData((prev) => {
           const updatedOrder = prev.filter((O) => O.id !== order.id);
           return formatOrders([...updatedOrder, statusChangedOrder]);

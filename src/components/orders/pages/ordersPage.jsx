@@ -101,7 +101,6 @@ const OrdersPage = () => {
 
   useEffect(() => {
     if (newOrder) {
-      console.log("we have got a new order", newOrder);
       const newOrderSound = newOrderSounds[newOrder.marketplaceId];
       newOrderSound.play().catch((error) => {
         console.error("Failed to play audio:", error);

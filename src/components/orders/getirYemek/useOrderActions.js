@@ -63,17 +63,24 @@ export const useOrderActions = (
   const verifyOrder = () => {
     dispatch(getirYemekTicketVerify({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
+        const currentDate = new Date().toLocaleString();
+
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
           );
           const updatedData = [
             ...unChangedOrders,
-            { ...order, status: res.payload.data },
+            { ...order, status: res.payload.data, approvalDate: currentDate },
           ];
           return formatOrders(updatedData);
         });
-        setSideOrder && setSideOrder({ ...order, status: res.payload.data });
+        setSideOrder &&
+          setSideOrder({
+            ...order,
+            status: res.payload.data,
+            approvalDate: currentDate,
+          });
       }
     });
   };
@@ -81,17 +88,28 @@ export const useOrderActions = (
   const prepareOrder = () => {
     dispatch(getirYemekTicketPrepare({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
+        const currentDate = new Date().toLocaleString();
+
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
           );
           const updatedData = [
             ...unChangedOrders,
-            { ...order, status: res.payload.data },
+            {
+              ...order,
+              status: res.payload.data,
+              preparationDate: currentDate,
+            },
           ];
           return formatOrders(updatedData);
         });
-        setSideOrder && setSideOrder({ ...order, status: res.payload.data });
+        setSideOrder &&
+          setSideOrder({
+            ...order,
+            status: res.payload.data,
+            preparationDate: currentDate,
+          });
       }
     });
   };
@@ -99,17 +117,24 @@ export const useOrderActions = (
   const deliverOrder = () => {
     dispatch(getirYemekTicketDeliver({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
+        const currentDate = new Date().toLocaleString();
+
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
           );
           const updatedData = [
             ...unChangedOrders,
-            { ...order, status: res.payload.data },
+            { ...order, status: res.payload.data, deliveryDate: currentDate },
           ];
           return formatOrders(updatedData);
         });
-        setSideOrder && setSideOrder({ ...order, status: res.payload.data });
+        setSideOrder &&
+          setSideOrder({
+            ...order,
+            status: res.payload.data,
+            deliveryDate: currentDate,
+          });
       }
     });
   };

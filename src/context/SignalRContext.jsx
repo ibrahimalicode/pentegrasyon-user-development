@@ -93,9 +93,9 @@ export const SignalRProvider = ({ children }) => {
 
       conn.on("ReceiveNewTicket", (ticket) => setNewOrder(ticket));
       conn.on("ReceiveTicketStatus", (ticket) => setStatusChangedOrder(ticket));
-      conn.on("ReceiveTicketCancellation", (ticket) =>
-        setStatusChangedOrder(ticket)
-      );
+      conn.on("ReceiveTicketCancellation", (ticket) => {
+        setStatusChangedOrder(ticket);
+      });
 
       conn.on("ReceiveTicketCourierLocation", (ticket) => {
         console.log("Courier Location for Ticket ID: ", ticket);
@@ -139,13 +139,13 @@ export const SignalRProvider = ({ children }) => {
         }
       };
 
-      // setInterval(() => {
-      //   if (conn.state === signalR.HubConnectionState.Disconnected) {
-      //     console.log("Connection lost. Attempting to reconnect...");
-      //     startConnection(conn);
-      //   }
-      //   console.log("Connection Checked");
-      // }, 1000);
+      setInterval(() => {
+        if (conn.state === signalR.HubConnectionState.Disconnected) {
+          console.log("Connection lost. Attempting to reconnect...");
+          startConnection(conn);
+        }
+        console.log("Connection Checked");
+      }, 1000);
 
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }

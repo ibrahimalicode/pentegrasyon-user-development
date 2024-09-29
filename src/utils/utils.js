@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import MarketPalceIds from "../data/marketPlaceIds";
+import _ from "lodash";
 
 export function formatDateString(
   dateString,
@@ -415,26 +416,33 @@ export function getCardProvider(cardNumber, src) {
   return { name: "Default", ...src[0] };
 }
 
-export function compareWithCurrentDateTime(givenDateTime, now) {
-  // Parse the given datetime string
+export function compareWithCurrentDateTime(givenDateTime, secondDate) {
+  let now = secondDate ? new Date(secondDate) : new Date();
   const targetDateTime = new Date(givenDateTime);
 
   const remainingTime = targetDateTime - now; // Difference in milliseconds
 
   // Convert remaining time to total minutes
   const remainingMinutes = Math.floor(remainingTime / (1000 * 60)); // Convert ms to minutes
+  const remainingSeconds = Math.floor(remainingTime / 1000); // Convert ms to seconds
   const isTimePassed = targetDateTime < now;
 
   if (isTimePassed) {
     return "";
   } else {
-    return `${remainingMinutes} Dk. Kaldı`;
+    return { remainingMinutes, remainingSeconds };
   }
 }
 
 //ORDERS
 export const formatOrders = (ordersData) => {
-  return ordersData.sort((a, b) => {
+  // Remove duplicates based on both 'id' and 'confirmationId'
+  const uniqueOrders = _.uniqBy(
+    ordersData,
+    (order) => `${order.id}-${order.confirmationId}`
+  );
+
+  return uniqueOrders.sort((a, b) => {
     const dateA = new Date(a.checkoutDate);
     const dateB = new Date(b.checkoutDate);
     return dateB - dateA;

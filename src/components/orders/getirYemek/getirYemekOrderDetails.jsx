@@ -1,49 +1,46 @@
-import React, { useState } from "react";
+//MODULES
+import React, { useEffect, useState } from "react";
+
+//COMP
+import { InfoI } from "../../../assets/icon";
+import CloseI from "../../../assets/icon/close";
+import orderStatuses from "../../../data/orderStatuses";
+import RemainingMinutes from "../components/remainingMinutes";
+import GetirYemekStatusButtons from "./getirYemekStatusButtons";
 
 //UTILS
 import { formatDateString } from "../../../utils/utils";
 
 //CONTEXT
+import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
-//COMP
-import { InfoI } from "../../../assets/icon";
-import CloseI from "../../../assets/icon/close";
-import RemainingMinutes from "./remainingMinutes";
-import orderStatuses from "../../../data/orderStatuses";
-import GetirYemekStatusButtons from "../getirYemek/getirYemekStatusButtons";
-
-const marketPlaceColors = [
-  { bg: "--getiryemek", color: "--white-1" },
-  { bg: "--migrosyemek", color: "--white-1" },
-  { bg: "--trendyol", color: "--white-1" },
-  { bg: "--yemeksepeti", color: "--white-1" },
-  { bg: "--gofody", color: "--white-1" },
-  { bg: "--siparisim", color: "--white-1" },
-];
-
-const OrderDetails = ({ order, setOrdersData }) => {
+const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
+  const { statusChangedOrder } = useSignalR();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(order);
 
-  const orderStatusButtons = [
-    <GetirYemekStatusButtons
-      order={order}
-      setOrdersData={setOrdersData}
-      setSideOrder={setSideOrder}
-    />,
-  ];
+  function checkDate(date) {
+    if (date === "0001-01-01T00:00:00") {
+      return "";
+    } else {
+      return date;
+    }
+  }
 
-  console.log(order);
+  useEffect(() => {
+    if (statusChangedOrder) {
+      if (statusChangedOrder.id === order.id && statusChangedOrder) {
+        console.log(statusChangedOrder);
+        setSideOrder(statusChangedOrder);
+      }
+    }
+  }, [statusChangedOrder]);
+
+  // console.log(order);
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
-      <div
-        className="flex items-center -mx-4 text-base"
-        style={{
-          backgroundColor: `var(${marketPlaceColors[order.marketplaceId]?.bg})`,
-          color: `var(${marketPlaceColors[order.marketplaceId]?.color})`,
-        }}
-      >
+      <div className="flex items-center -mx-4 text-base bg-[--getiryemek] text-[--white-1]">
         <div className="w-full flex justify-center items-center gap-2">
           <p>Sipariș Detayı</p>
         </div>
@@ -282,9 +279,19 @@ const OrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      {orderStatusButtons[order.marketplaceId]}
+      <GetirYemekStatusButtons
+        order={{
+          ...sideOrder,
+          approvalDate: checkDate(sideOrder.approvalDate),
+          cancelDate: checkDate(sideOrder.cancelDate),
+          deliveryDate: checkDate(sideOrder.deliveryDate),
+          preparationDate: checkDate(sideOrder.preparationDate),
+        }}
+        setOrdersData={setOrdersData}
+        setSideOrder={setSideOrder}
+      />
     </main>
   );
 };
 
-export default OrderDetails;
+export default GetirYemekOrderDetails;

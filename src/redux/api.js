@@ -43,8 +43,8 @@ export const privateApi = () => {
       return config;
     },
     (error) => {
-      Promise.reject(error);
       console.log(error);
+      return Promise.reject({ ...error });
     }
   );
 

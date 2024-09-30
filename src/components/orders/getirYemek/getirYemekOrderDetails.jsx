@@ -164,7 +164,12 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
               <p>Teslimat Zamanı:</p>
               <div className="flex gap-4">
                 {order.checkedScheduledDate}
-                <RemainingMinutes date={order.scheduledDate} />
+                {order.isScheduled &&
+                  (order.status != 1500 && order.status != 1600 ? (
+                    <RemainingMinutes date={order.scheduledDate} />
+                  ) : (
+                    <span className="text-[--red-1]">İptal edildi</span>
+                  ))}
               </div>
             </div>
           </div>

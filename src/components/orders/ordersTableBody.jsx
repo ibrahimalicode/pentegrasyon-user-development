@@ -112,7 +112,12 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           <p>{checkDate(order.checkoutDate)}</p>
-          {order.isScheduled && <RemainingMinutes date={order.scheduledDate} />}
+          {order.isScheduled &&
+            (order.status != 1500 && order.status != 1600 ? (
+              <RemainingMinutes date={order.scheduledDate} />
+            ) : (
+              <span className="text-[--red-1]">İptal edildi</span>
+            ))}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.client.name}

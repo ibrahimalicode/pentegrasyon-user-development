@@ -8,6 +8,23 @@ const RestaurantsStatus = () => {
   const { setPopupContent } = usePopup();
 
   return (
+    <div className="flex items-end">
+      <button
+        onClick={() => setPopupContent(<RestaurantsStatusPopup />)}
+        className="w-full border border-[--primary-2] text-[--primary-2] text-sm py-2.5 px-4 rounded-md"
+      >
+        Restoran Durumları
+      </button>
+    </div>
+  );
+};
+
+export default RestaurantsStatus;
+
+function RestaurantsStatusPopup() {
+  const { setPopupContent } = usePopup();
+
+  return (
     <main className="w-full bg-[--white-1] pb-[4%] pt-2 rounded-md">
       <div className="flex justify-end">
         <button
@@ -24,6 +41,4 @@ const RestaurantsStatus = () => {
       </div>
     </main>
   );
-};
-
-export default RestaurantsStatus;
+}

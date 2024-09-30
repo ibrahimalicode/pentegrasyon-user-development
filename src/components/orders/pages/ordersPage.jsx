@@ -41,6 +41,9 @@ import RestaurantsStatus from "../components/restaurantsStatus";
 import { useSignalR } from "../../../context/SignalRContext";
 import oneOrder from "../../../data/orderTest";
 import { formatOrders } from "../../../utils/utils";
+import AutomaticApproval from "../components/automaticApproval";
+import OnTheWayTime from "../components/onTheWayTime";
+import DeliveryTime from "../components/deliveryTime";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -140,44 +143,14 @@ const OrdersPage = () => {
         </div>
         <main className="flex items-center gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2">
-            <div className="flex items-end">
-              <button
-                onClick={() => setPopupContent(<RestaurantsStatus />)}
-                className="w-full border border-[--primary-2] text-[--primary-2] text-sm py-2.5 px-4 rounded-md"
-              >
-                Restoran Durumları
-              </button>
-            </div>
-            <div className="border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
-              <p>Otomatik Onay</p>
-              <button className="w-full bg-[--green-1] text-[--white-1] py-1.5 px-4 rounded-md">
-                Açık
-              </button>
-            </div>
+            <RestaurantsStatus />
+            <AutomaticApproval />
           </div>
 
           <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">
             <div className="flex gap-2 max-sm:w-full">
-              <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2">
-                <p>Yola Çıkar</p>
-                <CustomSelect
-                  className="mt-[0px] sm:mt-[0px] text-xs"
-                  className2="mt-[0px] sm:mt-[0px]"
-                  style={{ padding: "0px 0px" }}
-                  value={{ label: "Zaman Seç" }}
-                  options={minutes}
-                />
-              </div>
-              <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2">
-                <p>Teslim Et</p>
-                <CustomSelect
-                  className="mt-[0px] sm:mt-[0px] text-xs"
-                  className2="mt-[0px] sm:mt-[0px]"
-                  style={{ padding: "0px 0px" }}
-                  value={{ label: "Zaman Seç" }}
-                  options={minutes}
-                />
-              </div>
+              <OnTheWayTime />
+              <DeliveryTime />
               <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
                 <p>Toplam Tutarı</p>
                 <p className=" py-1.5 px-4">15.162,00</p>

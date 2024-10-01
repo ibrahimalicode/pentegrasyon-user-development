@@ -94,7 +94,7 @@ const AutomaticApproval = () => {
     <div className="flex items-end">
       <button
         onClick={updateAutomaticApproval}
-        className={`w-full flex items-center border text-sm py-2.5 pl-4 rounded-md whitespace-nowrap ${
+        className={`w-full flex items-center border text-sm py-1.5 pl-4 rounded-md whitespace-nowrap ${
           varData?.automaticApproval
             ? "border-[--green-1] text-[--green-1]"
             : "border-[--red-1] text-[--red-1]"
@@ -102,7 +102,7 @@ const AutomaticApproval = () => {
       >
         <span>Otomatik Onay </span>
         <CustomToggle
-          className1="scale-[.8]"
+          className1="scale-[.7]"
           className="peer-checked:bg-[--green-1]"
           id="automatic-approval"
           checked={

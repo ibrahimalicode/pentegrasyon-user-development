@@ -16,7 +16,7 @@ import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
-  const { statusChangedOrder } = useSignalR();
+  const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(order);
 
@@ -33,6 +33,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
         console.log(statusChangedOrder);
         setSideOrder(statusChangedOrder);
+        setStatusChangedOrder(null);
       }
     }
   }, [statusChangedOrder]);

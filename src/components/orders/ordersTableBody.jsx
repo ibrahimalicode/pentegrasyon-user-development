@@ -42,7 +42,7 @@ const orderDetails = [
 ];
 
 const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
-  const { setPopupContent } = usePopup();
+  const { popupContent, setPopupContent } = usePopup();
   const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
   const { setSlideBarContent } = useSlideBar();
 
@@ -86,7 +86,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
           const updatedOrder = prev.filter((O) => O.id !== order.id);
           return formatOrders([...updatedOrder, statusChangedOrder]);
         });
-        setStatusChangedOrder(null);
+        if (!popupContent) setStatusChangedOrder(null);
       }
     }
   }, [statusChangedOrder]);

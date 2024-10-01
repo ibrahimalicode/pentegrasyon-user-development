@@ -439,7 +439,7 @@ export const formatOrders = (ordersData) => {
   // Remove duplicates based on both 'id' and 'confirmationId'
   const uniqueOrders = _.uniqBy(
     ordersData,
-    (order) => `${order.id}-${order.confirmationId}`
+    (order) => `${order.confirmationId}`
   );
 
   return uniqueOrders.sort((a, b) => {

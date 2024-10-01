@@ -77,17 +77,20 @@ const OrdersPage = () => {
 
   function handlePageChange(number) {}
 
+  //GET ORDERS
   useEffect(() => {
     if (!ordersData) {
       dispatch(getOrders());
     }
   }, [ordersData]);
 
+  //TOAST AND SET ORDERS
   useEffect(() => {
     if (error) {
       dispatch(resetGetOrdersState());
     }
     if (success) {
+      // console.log(orders.data);
       setOrdersData(orders.data);
       dispatch(resetGetOrdersState());
     }

@@ -39,6 +39,9 @@ const DeliveryTime = ({
         if (selectedOption?.deliveryTime) {
           setVarData(selectedOption);
           setDeliveryTimeData(selectedOption);
+          toast.dismiss(toastId.current);
+          toast.success("İşlem Başarılı", { id: "delivery/ontheway-time" });
+          dispatch(resetUpdateTicketAutomationVariable());
         }
       }
     });
@@ -71,12 +74,7 @@ const DeliveryTime = ({
       toast.dismiss(toastId.current);
       dispatch(resetUpdateTicketAutomationVariable());
     }
-    if (success) {
-      toast.dismiss(toastId.current);
-      toast.success("İşlem Başarılı", { id: "delivery/ontheway-time" });
-      dispatch(resetUpdateTicketAutomationVariable());
-    }
-  }, [loading, error, success]);
+  }, [loading, error]);
 
   //SET THE OPTIONS WHEN ON THE WAY DATA CHANGES
   useEffect(() => {

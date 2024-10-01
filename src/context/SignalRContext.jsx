@@ -94,11 +94,11 @@ export const SignalRProvider = ({ children }) => {
       conn.keepAliveIntervalInMilliseconds = 15 * 1000; // 30 second
 
       conn.on("ReceiveNewTicket", (ticket) => {
-        console.log(ticket);
+        console.log("ReceiveNewTicket", ticket);
         setNewOrder(ticket);
       });
       conn.on("ReceiveTicketStatus", (ticket) => {
-        console.log(ticket);
+        console.log("ReceiveTicketStatus", ticket);
         setStatusChangedOrder(ticket);
       });
       conn.on("ReceiveTicketCancellation", (ticket) => {

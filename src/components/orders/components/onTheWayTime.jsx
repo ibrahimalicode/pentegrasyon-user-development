@@ -55,6 +55,9 @@ const OnTheWayTime = ({
         if (selectedOption?.onTheWayTime) {
           setVarData(selectedOption);
           setOnTheWayTimeData(selectedOption);
+          toast.dismiss(toastId.current);
+          toast.success("İşlem Başarılı", { id: "delivery/ontheway-time" });
+          dispatch(resetUpdateTicketAutomationVariable());
         }
       }
     });
@@ -87,12 +90,7 @@ const OnTheWayTime = ({
       toast.dismiss(toastId.current);
       dispatch(resetUpdateTicketAutomationVariable());
     }
-    if (success) {
-      toast.dismiss(toastId.current);
-      toast.success("İşlem Başarılı", { id: "delivery/ontheway-time" });
-      dispatch(resetUpdateTicketAutomationVariable());
-    }
-  }, [loading, error, success]);
+  }, [loading, error]);
 
   return (
     <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2">

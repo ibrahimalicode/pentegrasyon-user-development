@@ -53,8 +53,8 @@ export const getAutomaticApprovalVariable = createAsyncThunk(
         `${baseURL}Tickets/GetAutomaticApprovalVariable`
       );
 
-      // console.log(res.data);
-      return res.data.data;
+      // console.log(res.data.data);
+      return res.data;
     } catch (err) {
       // console.log(err);
       const errorMessage = err.message;

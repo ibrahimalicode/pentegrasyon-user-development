@@ -6,16 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import minutes from "../../../data/minutes";
 import CustomSelect from "../../common/customSelector";
+
+//REDUX
 import {
   resetUpdateTicketAutomationVariable,
   updateTicketAutomationVariable,
 } from "../../../redux/orders/updateTicketAutomationVariableSlice";
-import {
-  getDeliveryTimeVariable,
-  resetgetDeliveryTimeVariable,
-} from "../../../redux/orders/getDeliveryTimeVariableSlice";
+import { resetgetDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
 
-const DeliveryTime = ({ onTheWayData }) => {
+const DeliveryTime = ({
+  onTheWayTimeData,
+  deliveryTimeData,
+  setDeliveryTimeData,
+}) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
@@ -27,7 +30,7 @@ const DeliveryTime = ({ onTheWayData }) => {
     (state) => state.orders.updateAutomationVars
   );
 
-  const [varData, setVarData] = useState({ label: "Zaman Seç" });
+  const [varData, setVarData] = useState(deliveryTimeData);
   const [optionsData, setOptionsData] = useState([]);
 
   function updateAutomaticApproval(selectedOption) {
@@ -35,28 +38,24 @@ const DeliveryTime = ({ onTheWayData }) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         if (selectedOption?.deliveryTime) {
           setVarData(selectedOption);
+          setDeliveryTimeData(selectedOption);
         }
       }
     });
   }
-
-  //GET
-  useEffect(() => {
-    if (!varData?.deliveryTime) {
-      dispatch(getDeliveryTimeVariable());
-    }
-  }, [varData]);
 
   //TOAST AND SET
   useEffect(() => {
     if (getError) dispatch(resetgetDeliveryTimeVariable());
 
     if (data) {
-      setVarData({
+      const formattedData = {
         value: data,
         deliveryTime: data,
         label: data + " dk sonra",
-      });
+      };
+      setVarData(formattedData);
+      setDeliveryTimeData(formattedData);
       dispatch(resetgetDeliveryTimeVariable());
     }
   }, [data, getError]);
@@ -81,18 +80,17 @@ const DeliveryTime = ({ onTheWayData }) => {
 
   //SET THE OPTIONS WHEN ON THE WAY DATA CHANGES
   useEffect(() => {
-    if (onTheWayData?.onTheWayTime) {
+    if (onTheWayTimeData?.onTheWayTime) {
       const formattedMins = minutes
-        .filter((min) => min.value > onTheWayData.onTheWayTime)
+        .filter((min) => min.value > onTheWayTimeData.onTheWayTime)
         .map((min) => ({
           ...min,
           deliveryTime: min.value,
           label: min.label + " dk sonra",
         }));
-      console.log(formattedMins);
       setOptionsData(formattedMins);
     }
-  }, [onTheWayData]);
+  }, [onTheWayTimeData]);
 
   return (
     <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2">

@@ -6,16 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import minutes from "../../../data/minutes";
 import CustomSelect from "../../common/customSelector";
-import {
-  getOnTheWayTimeVariable,
-  resetgetOnTheWayTimeVariable,
-} from "../../../redux/orders/getOnTheWayTimeVariableSlice";
+
+//REDUX
 import {
   resetUpdateTicketAutomationVariable,
   updateTicketAutomationVariable,
 } from "../../../redux/orders/updateTicketAutomationVariableSlice";
+import { resetgetOnTheWayTimeVariable } from "../../../redux/orders/getOnTheWayTimeVariableSlice";
 
-const OnTheWayTime = ({ onTheWayData, setOnTheWayData }) => {
+const OnTheWayTime = ({
+  onTheWayTimeData,
+  setOnTheWayTimeData,
+  deliveryTimeData,
+}) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
@@ -27,7 +30,7 @@ const OnTheWayTime = ({ onTheWayData, setOnTheWayData }) => {
     (state) => state.orders.updateAutomationVars
   );
 
-  const [varData, setVarData] = useState(onTheWayData);
+  const [varData, setVarData] = useState(onTheWayTimeData);
 
   function formatMins() {
     return minutes.map((min) => {
@@ -40,11 +43,18 @@ const OnTheWayTime = ({ onTheWayData, setOnTheWayData }) => {
   }
 
   function updateAutomaticApproval(selectedOption) {
+    if (selectedOption.value >= deliveryTimeData.value) {
+      toast.error(
+        "Teslim Et Süresi Yola Çıkart Süresinden az veya eşit olamaz",
+        { id: "delivery/ontheway-time" }
+      );
+      return;
+    }
     dispatch(updateTicketAutomationVariable(selectedOption)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         if (selectedOption?.onTheWayTime) {
           setVarData(selectedOption);
-          setOnTheWayData(selectedOption);
+          setOnTheWayTimeData(selectedOption);
         }
       }
     });
@@ -61,7 +71,7 @@ const OnTheWayTime = ({ onTheWayData, setOnTheWayData }) => {
         label: data + " dk sonra",
       };
       setVarData(formattedData);
-      setOnTheWayData(formattedData);
+      setOnTheWayTimeData(formattedData);
       dispatch(resetgetOnTheWayTimeVariable());
     }
   }, [data, getError]);

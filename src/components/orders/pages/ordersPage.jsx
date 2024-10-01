@@ -45,6 +45,7 @@ import { formatOrders } from "../../../utils/utils";
 
 //CONTEXT
 import { useSignalR } from "../../../context/SignalRContext";
+import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -67,7 +68,12 @@ const OrdersPage = () => {
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
-  const [onTheWayData, setOnTheWayData] = useState({ label: "Zaman Seç" });
+  const [onTheWayTimeData, setOnTheWayTimeData] = useState({
+    label: "Zaman Seç",
+  });
+  const [deliveryTimeData, setDeliveryTimeData] = useState({
+    label: "Zaman Seç",
+  });
 
   function handlePageChange(number) {}
 
@@ -89,10 +95,17 @@ const OrdersPage = () => {
 
   //GET ON THE WAY
   useEffect(() => {
-    if (!onTheWayData?.onTheWayTime) {
+    if (!onTheWayTimeData?.onTheWayTime) {
       dispatch(getOnTheWayTimeVariable());
     }
-  }, [onTheWayData]);
+  }, [onTheWayTimeData]);
+
+  //GET DELIVERY TIME
+  useEffect(() => {
+    if (!deliveryTimeData?.deliveryTime) {
+      dispatch(getDeliveryTimeVariable());
+    }
+  }, [deliveryTimeData]);
 
   //HIDE POPUP
   const filterOrders = useRef();
@@ -159,10 +172,15 @@ const OrdersPage = () => {
           <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">
             <div className="flex gap-2 max-sm:w-full">
               <OnTheWayTime
-                onTheWayData={onTheWayData}
-                setOnTheWayData={setOnTheWayData}
+                onTheWayTimeData={onTheWayTimeData}
+                setOnTheWayTimeData={setOnTheWayTimeData}
+                deliveryTimeData={deliveryTimeData}
               />
-              <DeliveryTime onTheWayData={onTheWayData} />
+              <DeliveryTime
+                deliveryTimeData={deliveryTimeData}
+                setDeliveryTimeData={setDeliveryTimeData}
+                onTheWayTimeData={onTheWayTimeData}
+              />
               <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
                 <p>Toplam Tutarı</p>
                 <p className=" py-1.5 px-4">15.162,00</p>

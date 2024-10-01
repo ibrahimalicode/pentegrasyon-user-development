@@ -33,7 +33,6 @@ const AutomaticApproval = () => {
     if (error) dispatch(resetgetAutomaticApprovalVariable());
 
     if (data) {
-      console.log(data);
       setVarData({ automaticApproval: data });
       dispatch(resetgetAutomaticApprovalVariable());
     }

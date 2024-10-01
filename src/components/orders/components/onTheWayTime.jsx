@@ -15,7 +15,7 @@ import {
   updateTicketAutomationVariable,
 } from "../../../redux/orders/updateTicketAutomationVariableSlice";
 
-const OnTheWayTime = () => {
+const OnTheWayTime = ({ onTheWayData, setOnTheWayData }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ const OnTheWayTime = () => {
     (state) => state.orders.updateAutomationVars
   );
 
-  const [varData, setVarData] = useState({ label: "Zaman Seç" });
+  const [varData, setVarData] = useState(onTheWayData);
 
   function formatMins() {
     return minutes.map((min) => {
@@ -42,28 +42,26 @@ const OnTheWayTime = () => {
   function updateAutomaticApproval(selectedOption) {
     dispatch(updateTicketAutomationVariable(selectedOption)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
-        setVarData(selectedOption);
+        if (selectedOption?.onTheWayTime) {
+          setVarData(selectedOption);
+          setOnTheWayData(selectedOption);
+        }
       }
     });
   }
-
-  //GET
-  useEffect(() => {
-    if (!varData?.onTheWayTime) {
-      dispatch(getOnTheWayTimeVariable());
-    }
-  }, [varData]);
 
   //TOAST AND SET
   useEffect(() => {
     if (getError) dispatch(resetgetOnTheWayTimeVariable());
 
     if (data) {
-      setVarData({
+      const formattedData = {
         value: data,
         onTheWayTime: data,
         label: data + " dk sonra",
-      });
+      };
+      setVarData(formattedData);
+      setOnTheWayData(formattedData);
       dispatch(resetgetOnTheWayTimeVariable());
     }
   }, [data, getError]);

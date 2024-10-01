@@ -11,6 +11,10 @@ import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
+import OnTheWayTime from "../components/onTheWayTime";
+import DeliveryTime from "../components/deliveryTime";
+import AutomaticApproval from "../components/automaticApproval";
+import RestaurantsStatus from "../components/restaurantsStatus";
 
 //SOUND
 import getirYemekNewOrderSoundPath from "../../../assets/sound/getiryemekneworder.mp3";
@@ -29,21 +33,18 @@ const newOrderSounds = [
   new Audio(siparisimPlusNewOrderSoundPath),
 ];
 
-//UTILS
-import minutes from "../../../data/minutes";
-
 // REDUX
 import {
   getOrders,
   resetGetOrdersState,
 } from "../../../redux/orders/getOrdersSlice";
-import RestaurantsStatus from "../components/restaurantsStatus";
-import { useSignalR } from "../../../context/SignalRContext";
-import oneOrder from "../../../data/orderTest";
+import { getOnTheWayTimeVariable } from "../../../redux/orders/getOnTheWayTimeVariableSlice";
+
+//UTILS
 import { formatOrders } from "../../../utils/utils";
-import AutomaticApproval from "../components/automaticApproval";
-import OnTheWayTime from "../components/onTheWayTime";
-import DeliveryTime from "../components/deliveryTime";
+
+//CONTEXT
+import { useSignalR } from "../../../context/SignalRContext";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ const OrdersPage = () => {
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
+  const [onTheWayData, setOnTheWayData] = useState({ label: "Zaman Seç" });
 
   function handlePageChange(number) {}
 
@@ -84,6 +86,13 @@ const OrdersPage = () => {
       dispatch(resetGetOrdersState());
     }
   }, [success, error, orders]);
+
+  //GET ON THE WAY
+  useEffect(() => {
+    if (!onTheWayData?.onTheWayTime) {
+      dispatch(getOnTheWayTimeVariable());
+    }
+  }, [onTheWayData]);
 
   //HIDE POPUP
   const filterOrders = useRef();
@@ -141,16 +150,19 @@ const OrdersPage = () => {
             />
           </form>
         </div>
-        <main className="flex items-center gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
-          <div className="flex gap-2">
+        <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
+          <div className="flex gap-2 max-sm:mt-3">
             <RestaurantsStatus />
             <AutomaticApproval />
           </div>
 
           <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">
             <div className="flex gap-2 max-sm:w-full">
-              <OnTheWayTime />
-              <DeliveryTime />
+              <OnTheWayTime
+                onTheWayData={onTheWayData}
+                setOnTheWayData={setOnTheWayData}
+              />
+              <DeliveryTime onTheWayData={onTheWayData} />
               <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
                 <p>Toplam Tutarı</p>
                 <p className=" py-1.5 px-4">15.162,00</p>

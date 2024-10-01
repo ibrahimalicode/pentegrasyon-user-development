@@ -8,50 +8,48 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  automationVariables: null,
+  data: null,
 };
 
-const getTicketAutomationVariableSlice = createSlice({
-  name: "getTicketAutomationVariable",
+const getOnTheWayTimeVariableSlice = createSlice({
+  name: "getOnTheWayTimeVariable",
   initialState: initialState,
   reducers: {
-    resetGetTicketAutomationVariable: (state) => {
+    resetgetOnTheWayTimeVariable: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.automationVariables = null;
+      state.data = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(getTicketAutomationVariable.pending, (state) => {
+      .addCase(getOnTheWayTimeVariable.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.automationVariables = null;
+        state.data = null;
       })
-      .addCase(getTicketAutomationVariable.fulfilled, (state, action) => {
+      .addCase(getOnTheWayTimeVariable.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.automationVariables = action.payload;
+        state.data = action.payload;
       })
-      .addCase(getTicketAutomationVariable.rejected, (state, action) => {
+      .addCase(getOnTheWayTimeVariable.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.automationVariables = null;
+        state.data = null;
       });
   },
 });
 
-export const getTicketAutomationVariable = createAsyncThunk(
-  "Tickets/GetTicketAutomationVariable",
+export const getOnTheWayTimeVariable = createAsyncThunk(
+  "Tickets/GetOnTheWayTimeVariable",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(
-        `${baseURL}Tickets/GetTicketAutomationVariable`
-      );
+      const res = await api.get(`${baseURL}Tickets/GetOnTheWayTimeVariable`);
 
       // console.log(res.data);
       return res.data.data;
@@ -66,6 +64,6 @@ export const getTicketAutomationVariable = createAsyncThunk(
   }
 );
 
-export const { resetGetTicketAutomationVariable } =
-  getTicketAutomationVariableSlice.actions;
-export default getTicketAutomationVariableSlice.reducer;
+export const { resetgetOnTheWayTimeVariable } =
+  getOnTheWayTimeVariableSlice.actions;
+export default getOnTheWayTimeVariableSlice.reducer;

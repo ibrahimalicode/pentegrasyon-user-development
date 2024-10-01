@@ -4,51 +4,47 @@ import { usePopup } from "../../../context/PopupContext";
 import CustomToggle from "../../common/customToggle";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getTicketAutomationVariable,
-  resetGetTicketAutomationVariable,
-} from "../../../redux/orders/getTicketAutomationVariableSlice";
-import {
   resetUpdateTicketAutomationVariable,
   updateTicketAutomationVariable,
 } from "../../../redux/orders/updateTicketAutomationVariableSlice";
 import toast from "react-hot-toast";
+import {
+  getAutomaticApprovalVariable,
+  resetgetAutomaticApprovalVariable,
+} from "../../../redux/orders/getAutomaticApprovalVariableSlice";
 
 const AutomaticApproval = () => {
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
 
-  const { loading, automationVariables, error } = useSelector(
-    (state) => state.orders.getAutomationVars
+  const { loading, data, error } = useSelector(
+    (state) => state.orders.getAutoApprovalVar
   );
 
   const [varData, setVarData] = useState(null);
 
   useEffect(() => {
-    if (!automationVariables) {
-      dispatch(getTicketAutomationVariable());
+    if (!varData) {
+      dispatch(getAutomaticApprovalVariable());
     }
-  }, [automationVariables]);
+  }, [varData]);
 
   useEffect(() => {
-    if (error) dispatch(resetGetTicketAutomationVariable());
+    if (error) dispatch(resetgetAutomaticApprovalVariable());
 
-    if (automationVariables) {
-      console.log(automationVariables);
-      setVarData(automationVariables);
+    if (data) {
+      console.log(data);
+      setVarData({ automaticApproval: data });
+      dispatch(resetgetAutomaticApprovalVariable());
     }
-
-    return () => {
-      if (automationVariables) {
-        console.log("out");
-        dispatch(resetGetTicketAutomationVariable());
-      }
-    };
-  }, [automationVariables, error]);
+  }, [data, error]);
 
   return (
     <div className="flex items-end">
       <button
-        onClick={() => setPopupContent(<AutomaticApprovalPopup />)}
+        onClick={() =>
+          setPopupContent(<AutomaticApprovalPopup data={varData} />)
+        }
         className={`w-full border text-sm py-2.5 px-4 rounded-md whitespace-nowrap ${
           varData?.automaticApproval
             ? "border-[--green-1] text-[--green-1]"
@@ -88,16 +84,28 @@ function AutomaticApprovalPopup({ data }) {
     }
     if (success) {
       toast.dismiss(toastId.current);
-      setVarData({ ...varData, automaticApproval: !varData.automaticApproval });
-      toast.success(
-        `Otomatik Onay ${varData?.automaticApproval ? "Kapandı" : "Açıldı"}`
+      const style = varData?.automaticApproval
+        ? "text-[--red-1]"
+        : "text-[--green-1]";
+
+      const comp = (
+        <div>
+          Otomatik Onay{" "}
+          {varData?.automaticApproval ? (
+            <span className={style}>Kapandı</span>
+          ) : (
+            <span className={style}>Açıldı</span>
+          )}
+        </div>
       );
+      toast.success(comp);
+      setVarData({ automaticApproval: !varData.automaticApproval });
       dispatch(resetUpdateTicketAutomationVariable());
     }
   }, [loading, error, success]);
 
   return (
-    <main className="w-full bg-[--white-1] pb-[4%] pt-2 rounded-md">
+    <main className="w-full bg-[--white-1] pt-2 pb-8 rounded-md">
       <div className="flex justify-end">
         <button
           onClick={() => setPopupContent(null)}
@@ -109,7 +117,7 @@ function AutomaticApprovalPopup({ data }) {
       <div className="flex gap-2 px-8">
         <CustomToggle
           id="automatic-approval"
-          checked={varData?.automaticApproval ? true : false}
+          checked={varData?.automaticApproval}
           onChange={updateAutomaticApproval}
         />
         <label htmlFor="automatic-approval" className="cursor-pointer">

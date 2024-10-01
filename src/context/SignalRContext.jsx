@@ -91,8 +91,16 @@ export const SignalRProvider = ({ children }) => {
 
       conn.serverTimeoutInMilliseconds = 2 * 60 * 1000; // 2 minutes timeout
 
-      conn.on("ReceiveNewTicket", (ticket) => setNewOrder(ticket));
-      conn.on("ReceiveTicketStatus", (ticket) => setStatusChangedOrder(ticket));
+      conn.keepAliveIntervalInMilliseconds = 15 * 1000; // 30 second
+
+      conn.on("ReceiveNewTicket", (ticket) => {
+        console.log(ticket);
+        setNewOrder(ticket);
+      });
+      conn.on("ReceiveTicketStatus", (ticket) => {
+        console.log(ticket);
+        setStatusChangedOrder(ticket);
+      });
       conn.on("ReceiveTicketCancellation", (ticket) => {
         setStatusChangedOrder(ticket);
       });

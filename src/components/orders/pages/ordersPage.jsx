@@ -46,6 +46,7 @@ import { formatOrders } from "../../../utils/utils";
 //CONTEXT
 import { useSignalR } from "../../../context/SignalRContext";
 import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
+import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -292,9 +293,11 @@ const OrdersPage = () => {
           setOrdersData={setOrdersData}
           onSuccess={() => setOrdersData(null)}
         />
-      ) : true ? (
+      ) : loading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoOrdersPlaceholder />
+      )}
 
       {/* PAGINATION */}
       {/* {ordersData && typeof totalItems === "number" && (

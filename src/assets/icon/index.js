@@ -33,6 +33,8 @@ import AsteriskI from "./asterisk";
 import MenuI from "./menu";
 import PrinterI from "./printer";
 import InfoI from "./info";
+import CloudI from "./cloud";
+import NoOrdersI from "./noOrders";
 
 export {
   DashboardI,
@@ -68,4 +70,6 @@ export {
   MenuI,
   PrinterI,
   InfoI,
+  CloudI,
+  NoOrdersI,
 };

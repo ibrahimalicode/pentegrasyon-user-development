@@ -9,6 +9,7 @@ import UserPlusI from "./userPlus";
 import LogI from "./log";
 import PaymentI from "./payment";
 import ParamsI from "./parameters";
+import CourierI from "./courier";
 
 import WarnI from "./warn";
 import GobackI from "./goback";
@@ -35,6 +36,7 @@ import PrinterI from "./printer";
 import InfoI from "./info";
 import CloudI from "./cloud";
 import NoOrdersI from "./noOrders";
+import RotateI from "./rotate";
 
 export {
   DashboardI,
@@ -72,4 +74,6 @@ export {
   InfoI,
   CloudI,
   NoOrdersI,
+  CourierI,
+  RotateI,
 };

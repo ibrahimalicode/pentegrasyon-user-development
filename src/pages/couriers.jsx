@@ -1,14 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import NotFound from "./404";
-import OrdersPage from "../components/orders/pages/ordersPage";
+import CouriersPage from "../components/couriers/pages/couriersPage";
 
-const Orders = () => {
+const Couriers = () => {
   return (
     <Routes>
-      <Route path="/" element={<OrdersPage />} />
+      <Route path="/" element={<CouriersPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
 
-export default Orders;
+export default Couriers;

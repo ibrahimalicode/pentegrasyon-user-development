@@ -46,15 +46,32 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
   const { setSlideBarContent } = useSlideBar();
 
+  function isValidDate(date) {
+    if (date === "0001-01-01T00:00:00") {
+      return "";
+    } else {
+      return date;
+    }
+  }
+
   function getButtonComponent() {
     const StatusButtonComponent =
       marketPlaceAssets[order.marketplaceId]?.statusButton;
     return StatusButtonComponent ? (
-      <StatusButtonComponent order={order} setOrdersData={setOrdersData} />
+      <StatusButtonComponent
+        order={{
+          ...order,
+          approvalDate: isValidDate(order.approvalDate),
+          cancelDate: isValidDate(order.cancelDate),
+          deliveryDate: isValidDate(order.deliveryDate),
+          preparationDate: isValidDate(order.preparationDate),
+        }}
+        setOrdersData={setOrdersData}
+      />
     ) : null;
   }
 
-  function checkDate(date) {
+  function isCheckoutToday(date) {
     const today = new Date().getDate();
     const orderDate =
       formatDateString(date, true, false, false) === today
@@ -71,7 +88,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
       <OrderDetailsComponent
         order={{
           ...order,
-          checkedScheduledDate: checkDate(order.scheduledDate),
+          checkedScheduledDate: isCheckoutToday(order.scheduledDate),
         }}
         setOrdersData={setOrdersData}
       />
@@ -112,7 +129,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
           {order.marketplaceTicketRestaurantName}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          <p>{checkDate(order.checkoutDate)}</p>
+          <p>{isCheckoutToday(order.checkoutDate)}</p>
           {order.isScheduled &&
             (order.status != 1500 && order.status != 1600 ? (
               <RemainingMinutes date={order.scheduledDate} />

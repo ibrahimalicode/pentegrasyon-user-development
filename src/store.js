@@ -13,6 +13,7 @@ import cartSlice from "./redux/cart/cartSlice";
 import ordersSlice from "./redux/orders";
 import getirYemekSlice from "./redux/getirYemek";
 import dashboardSlice from "./redux/dashboard";
+import couriersSlice from "./redux/couriers";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     orders: ordersSlice,
     getirYemek: getirYemekSlice,
     dashboard: dashboardSlice,
+    couriers: couriersSlice,
   },
 });
 

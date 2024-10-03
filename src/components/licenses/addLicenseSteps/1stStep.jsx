@@ -14,8 +14,10 @@ import Siparisim from "../../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
+import Autoronics from "../../../assets/img/packages/Autoronics.png";
+import Vigo from "../../../assets/img/packages/Vigo.png";
 
-//FUNC
+//UTILS
 import {
   formatSelectorData,
   getPriceWithKDV,
@@ -45,6 +47,8 @@ const imageSRCs = [
   { src: Yemeksepeti, name: "Yemeksepeti" },
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
+  { src: Autoronics, name: "Autoronics" },
+  { src: Vigo, name: "Vigo" },
 ];
 
 const FirstStep = ({
@@ -162,12 +166,12 @@ const FirstStep = ({
       (license) => license.restaurantId === pkg.restaurantId
     );
     const marketPlaceExistes = existingLicenses.some(
-      (license) => license.marketplaceId === pkg.marketplaceId
+      (license) => license.licenseTypeId === pkg.licenseTypeId
     );
     if (marketPlaceExistes) {
       toast(
         `${pkg.restaurantName} restoranına ${
-          imageSRCs[pkg.marketplaceId].name
+          imageSRCs[pkg.licenseTypeId].name
         } lisansı var. Uzatmak isterseniz uzatma sayfasından uzatabılırsınız.`
       );
       return;
@@ -175,7 +179,7 @@ const FirstStep = ({
 
     const existingPackage = cartItems.find(
       (item) =>
-        item.marketplaceId === pkg.marketplaceId &&
+        item.licenseTypeId === pkg.licenseTypeId &&
         item.restaurantId === pkg.restaurantId
     );
 
@@ -231,7 +235,7 @@ const FirstStep = ({
                 className="flex max-sm:flex-col sm:items-center gap-2 sm:gap-8 max-sm:mb-6 even:bg-[--white-1] odd:bg-[--table-odd]"
               >
                 <img
-                  src={imageSRCs[licensePkg[0].marketplaceId]?.src}
+                  src={imageSRCs[licensePkg[0].licenseTypeId]?.src}
                   alt="Pazaryeri"
                   className="w-36 rounded-sm"
                 />
@@ -260,7 +264,7 @@ const FirstStep = ({
                               restaurantId: restaurantData.id,
                               restaurantName: restaurantData.label,
                               marketPlaceName:
-                                imageSRCs[licensePkg[0]?.marketplaceId]?.name,
+                                imageSRCs[licensePkg[0]?.licenseTypeId]?.name,
                             })
                           }
                         >

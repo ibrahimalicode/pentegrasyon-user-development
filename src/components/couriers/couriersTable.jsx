@@ -1,20 +1,18 @@
-import licenseTypeIds from "../../data/licenseTypeIds";
-import LicensesActions from "./actions/licensesActions";
-import { formatDateString, getRemainingDays } from "../../utils/utils";
-import EditLicenseIsActive from "./actions/updateLicenseIsActive";
+import Actions from "./actions/actions";
+import EditCourierIsActive from "./actions/updateCourierIsActive";
 
-const LicensesTable = ({ inData, totalItems, onSuccess }) => {
+const CouriersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
         <table className="w-full text-sm font-light">
           <thead>
             <tr className="bg-[--light-3] h-8 text-left">
-              <th className="pl-4 font-normal">Pazaryeri</th>
-              <th className="font-normal">Restoran</th>
-              <th className="font-normal">Bitiş Tarihi</th>
-              <th className="font-normal">Kalan Gün</th>
-              <th className="font-normal">Durum</th>
+              <th className="pl-4 font-normal">Ad</th>
+              <th className="font-normal">Tel No.</th>
+              <th className="font-normal">E-Posta</th>
+              <th className="font-normal">Giriş Kodu</th>
+              <th className="font-normal text-center">Durum</th>
               <th className="font-normal text-center">İşlem</th>
             </tr>
           </thead>
@@ -28,29 +26,29 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                 } `}
               >
                 <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
-                  {licenseTypeIds[data?.licenseTypeId]?.value}
+                  {data.username}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.restaurantName}
+                  {data.phoneNumber}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {formatDateString(data.endDateTime)}
+                  {data.email}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {getRemainingDays(data.endDateTime)}
+                  {data.loginCode}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  <EditLicenseIsActive
-                    licenseData={data}
+                <td className="whitespace-nowrap text-[--black-2] font-light text-center">
+                  <EditCourierIsActive
+                    courierData={data}
                     onSuccess={onSuccess}
                   />
                 </td>
                 <td className="whitespace-nowrap w-14 text-[--black-2] font-light relative">
-                  <LicensesActions
+                  <Actions
                     index={index}
-                    licenseData={data}
-                    itemsPerPage={inData.length}
+                    courier={data}
                     onSuccess={onSuccess}
+                    totalItems={totalItems}
                   />
                 </td>
               </tr>
@@ -62,4 +60,4 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
   );
 };
 
-export default LicensesTable;
+export default CouriersTable;

@@ -1,5 +1,4 @@
 //MODULES
-import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,14 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import OrdersTable from "../ordersTable";
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
+import OnTheWayTime from "../components/onTheWayTime";
+import DeliveryTime from "../components/deliveryTime";
 import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
-import { usePopup } from "../../../context/PopupContext";
-import OnTheWayTime from "../components/onTheWayTime";
-import DeliveryTime from "../components/deliveryTime";
 import AutomaticApproval from "../components/automaticApproval";
 import RestaurantsStatus from "../components/restaurantsStatus";
+import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
 //SOUND
 import getirYemekNewOrderSoundPath from "../../../assets/sound/getiryemekneworder.mp3";
@@ -39,19 +38,19 @@ import {
   resetGetOrdersState,
 } from "../../../redux/orders/getOrdersSlice";
 import { getOnTheWayTimeVariable } from "../../../redux/orders/getOnTheWayTimeVariableSlice";
+import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
 
 //UTILS
 import { formatOrders } from "../../../utils/utils";
 
 //CONTEXT
+import { usePopup } from "../../../context/PopupContext";
 import { useSignalR } from "../../../context/SignalRContext";
-import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
-import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
   const { newOrder, setNewOrder } = useSignalR();
-  const { contentRef, setContentRef, setPopupContent } = usePopup();
+  const { contentRef, setContentRef } = usePopup();
 
   const { loading, success, error, orders } = useSelector(
     (state) => state.orders.get

@@ -218,11 +218,11 @@ export const formatLisansPackages = (data) => {
 
 export function groupedLicensePackages(data) {
   const groupedData = data.reduce((result, item) => {
-    if (!result[item.marketplaceId]) {
-      result[item.marketplaceId] = [];
+    if (!result[item.licenseTypeId]) {
+      result[item.licenseTypeId] = [];
     }
 
-    result[item.marketplaceId].push(item);
+    result[item.licenseTypeId].push(item);
 
     return result;
   }, {});

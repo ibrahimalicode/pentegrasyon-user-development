@@ -1,14 +1,20 @@
+//MODULES
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+
+//COMP
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
-import Dashboard from "./dashboard";
-import NotFound from "./404";
-import Restourants from "./restourants";
-import Licenses from "./licenses";
-import Profile from "./profile";
+
+//PAGES
 import Test from "./test";
-import { useState } from "react";
+import NotFound from "./404";
 import Orders from "./orders";
+import Profile from "./profile";
+import Couriers from "./couriers";
+import Licenses from "./licenses";
+import Dashboard from "./dashboard";
+import Restourants from "./restourants";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -23,6 +29,7 @@ const Home = () => {
         <Route path="/licenses/*" element={<Licenses />} />
         <Route path="/profile/*" element={<Profile />} />
         <Route path="/orders/*" element={<Orders />} />
+        <Route path="/couriers/*" element={<Couriers />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

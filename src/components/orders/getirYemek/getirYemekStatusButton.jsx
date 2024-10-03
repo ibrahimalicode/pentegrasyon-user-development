@@ -1,6 +1,14 @@
+//MODULES
 import { useSelector } from "react-redux";
-import orderStatuses from "../../../data/orderStatuses";
+import { useEffect, useState } from "react";
+
+//COMP
 import { useOrderActions } from "./useOrderActions";
+import orderStatuses from "../../../data/orderStatuses";
+
+//UTILS
+import { formatDateString } from "../../../utils/utils";
+import { compareWithCurrentDateTime } from "../../../utils/utils";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
@@ -53,11 +61,30 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     cancelLoading ||
     (orderStat.id !== 350 && orderStat.id !== 700 && nextId !== 900);
 
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  // useEffect(() => {
+  //   const nextStatus = orderStatuses.filter((s) => s.id === order.status);
+  //   const nextId = nextStatus[0]?.nextId;
+  //   setIsDisabled(false);
+
+  //   function diffSec(date) {
+  //     return compareWithCurrentDateTime(new Date(), date).remainingSeconds < 1;
+  //   }
+
+  //   if (order?.approvalDate && nextId === 700 && diffSec(order.approvalDate)) {
+  //     setIsDisabled(true);
+  //   }
+  //   if (order?.preparationDate && nextId === 900 && diffSec(order.preparationDate)) {
+  //     setIsDisabled(true);
+  //   }
+  // }, [order]);
+
   return (
     <button
-      disabled={disabled}
+      disabled={disabled || isDisabled}
       onClick={handleClick}
-      className="w-24 py-3.5 px-2 rounded-md border disabled:py-2.5"
+      className="w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed"
       style={{
         backgroundColor: `var(${orderStat?.bg})`,
         color: `var(${orderStat?.color})`,

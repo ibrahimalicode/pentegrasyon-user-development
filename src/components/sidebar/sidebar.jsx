@@ -17,6 +17,7 @@ import {
   LogI,
   PaymentI,
   BoxInI,
+  CourierI,
 } from "../../assets/icon/index";
 
 function Sidebar({ openSidebar, setOpenSidebar }) {
@@ -35,6 +36,12 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
       text: "Restoranlar",
       to: "/restaurants",
       path: "restaurants",
+    },
+    {
+      icon: <CourierI />,
+      text: "Kuryeler",
+      to: "/couriers",
+      path: "couriers",
     },
     {
       icon: <LicenseI />,

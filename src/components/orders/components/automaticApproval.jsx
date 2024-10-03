@@ -103,7 +103,6 @@ const AutomaticApproval = () => {
         <span>Otomatik Onay </span>
         <CustomToggle
           className1="scale-[.7]"
-          className="peer-checked:bg-[--green-1]"
           id="automatic-approval"
           checked={
             varData?.automaticApproval ? varData?.automaticApproval : false

@@ -14,7 +14,7 @@ import Yemeksepeti from "../../assets/img/orders/Yemeksepeti.png";
 import { formatDateString, formatOrders } from "../../utils/utils";
 
 //COMP
-import { PrinterI } from "../../assets/icon";
+import PrintComponent from "./components/printComponent";
 import GoogleRoute from "./components/googleRoute";
 import RemainingMinutes from "./components/remainingMinutes";
 import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
@@ -22,6 +22,7 @@ import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
 //CONTEXT
 import { usePopup } from "../../context/PopupContext";
 import { useSignalR } from "../../context/SignalRContext";
+import Test from "../../pages/test";
 
 const marketPlaceAssets = [
   { src: GetirYemek, statusButton: GetirYemekStatusButton },
@@ -108,6 +109,8 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
     }
   }, [statusChangedOrder]);
 
+  console.log(order);
+
   return (
     order && (
       <tr
@@ -191,9 +194,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
           {getButtonComponent(order)}
         </td>
         <td className="w-14 relative">
-          <div className="flex justify-center w-full bg-[--light-1] py-2 rounded-md">
-            <PrinterI />
-          </div>
+          <PrintComponent component={<Test order={order} />} />
         </td>
       </tr>
     )

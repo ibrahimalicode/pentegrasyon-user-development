@@ -1,67 +1,200 @@
-import { useState } from "react";
-import CustomInput from "../components/common/customInput";
-import LoadingI from "../assets/anim/loading";
-import { useSelector } from "react-redux";
-import imgUrl from "../assets/img/pentegrasyon.png";
+import React from "react";
+import order from "../data/order";
+import MarketPalceIds from "../data/marketPlaceIds";
+import { formatDateString } from "../utils/utils";
 
 const Test = () => {
-  const { success, loading, error } = useSelector((state) => state.auth.login);
-
-  const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [password, setPassword] = useState("");
   return (
-    <section
-      className="px-[4%] pt-36 bg-no-repeat"
-      style={{
-        backgroundImage: `url(${imgUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="max-w-md mx-auto p-6 pt-10 text-[--white-1] bg-gray-400 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1]">
-        <form>
-          <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
-          <CustomInput
-            label="E-posta/Telefon"
-            type="text"
-            placeholder="E-posta/Telefon"
-            value={emailOrPhone}
-            onChange={(e) => setEmailOrPhone(e)}
-            required={true}
-            className="py-2 bg-transparent text-[var(--white-1)]"
-            className5="text-[var(--white-1)]"
-            autoComplete="on"
-          />
-          <CustomInput
-            label="Şifre"
-            placeholder="Şifre"
-            value={password}
-            onChange={(e) => setPassword(e)}
-            letIcon={true}
-            className="py-2 bg-transparent text-[var(--white-1)]"
-            className5="text-[var(--white-1)]"
-            autoComplete="on"
-          />
-          <div className="text-right text-[--link-1] mt-4">
-            <a href="/forgotPassword">Şifremi unuttum ?</a>
-          </div>
-          <button
-            disabled={loading}
-            type="submit"
-            className="w-full flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 disabled:cursor-not-allowed"
-          >
-            {loading ? <LoadingI className="h-7 text-white" /> : "Giriş"}
-          </button>
-
-          <div className="flex mt-4 justify-center gap-2">
-            <p>Hesabınız yok mu ?</p>
-            <a href="/register" className="text-[--link-1]">
-              Kayıt ol
-            </a>
-          </div>
-        </form>
+    <main className="mt-28 flex flex-col justify-center border border-[--primary-1] p-4 bg-[--light-3] font-normal mx-auto max-w-md">
+      <div className="text-center">
+        <p className="text-[--primary-2]">
+          {order.marketplaceTicketRestaurantName}
+        </p>
+        <p className="text-[--red-1]">
+          {MarketPalceIds[order.marketplaceId]?.label}
+        </p>
       </div>
-    </section>
+
+      <div className="text-sm">
+        <p>
+          <span className="font-bold">Müşteri </span>
+          <span>: {order.client.name}</span>
+        </p>
+        <p>
+          <span className="font-bold">Telefon </span>
+
+          {order.client.clientUnmaskedPhoneNumber ? (
+            <span>: {order.client.clientUnmaskedPhoneNumber}</span>
+          ) : (
+            <>
+              {order.client.clientPhoneNumber.split("/")[0]}
+              <span className="font-bold">Dahili </span>
+              <span>: {order.client.clientPhoneNumber.split("/")[1]}</span>
+            </>
+          )}
+        </p>
+        <p>
+          <span className="font-bold">Adres </span>
+          <span>
+            <span>: {order.client.address}</span>
+            {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
+            {order.client.doorNo && (
+              <span> Daire No: {order.client.doorNo}</span>
+            )}
+            {order.client.floor && <span> Kat: {order.client.floor}</span>}
+          </span>
+        </p>
+        <p>
+          <span className="font-bold">Bölge </span> <span>: Keçiören</span>
+        </p>
+        <p>
+          <span className="font-bold">Tarif </span>
+          <span>: {order.client.description}</span>
+        </p>
+        <p>
+          <span className="font-bold">Sip. Tar. </span>
+          <span>: 04:10.2024 - 17:45</span>
+        </p>
+        <p>
+          <span className="font-bold">Ödeme </span>
+          <span>: {order.marketplaceTicketPaymentMethodName}</span>
+        </p>
+        <p>
+          <span className="font-bold">Sip No </span>
+          <span>: {order.confirmationId}</span>
+        </p>
+      </div>
+
+      <div className="text-sm mt-2 border rounded-sm border-gray-700 relative pl-5">
+        <span className="absolute top-0 left-0 w-2.5 h-5 bg-black"></span>
+        <span>Teslim Zamanı : </span>
+        <span className="font-medium">
+          {" "}
+          {formatDateString(
+            order.createdDateTime,
+            false,
+            false,
+            false,
+            true,
+            true
+          )}
+        </span>
+      </div>
+
+      <div className="border border-gray-600 text-sm mt-2 p-0.5 rounded-sm">
+        <span className="font-bold">Not </span>: {order.clientNote}
+      </div>
+      <h1 className="font-bold text-center text-lg border-b border-black">
+        Siparişler
+      </h1>
+
+      <div className="text-sm w-full pb-2">
+        <table className="rounded-md overflow-clip w-full h-max">
+          <thead className="bg-[--light-3]">
+            <tr>
+              <th className="p-2 font-normal text-left">Ürün</th>
+              <th className="p-2 font-normal text-right">Tutar</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {order.orders.map((order) => (
+              <React.Fragment key={order.id}>
+                <tr>
+                  <td className="px-2 text-left">
+                    <div>
+                      <span className="mr-0.5 rounded-sm font-medium">
+                        {order.count}{" "}
+                      </span>
+                      x {order.name}
+                    </div>
+                    {order.optionCategories.map((cat) => (
+                      <div key={cat.id} className="text-xs pl-4">
+                        <span>{cat.name}</span>
+
+                        {cat.options.map((opt) => (
+                          <div
+                            key={opt.id}
+                            className="flex justify-between max-w-44"
+                          >
+                            <span>▸ {opt.name}</span>
+                            <span
+                              className={`${
+                                opt.price > 0
+                                  ? "text-[--green-1]"
+                                  : "text-[--red-1]"
+                              }`}
+                            >
+                              {opt.price > 0
+                                ? `+${opt.price * order.count}`
+                                : opt.price < 0
+                                ? `-${opt.price * order.count}`
+                                : ""}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </td>
+                  <td className="p-2 flex justify-end items-start">
+                    {order.price * order.count}
+                  </td>
+                </tr>
+                {order.note && (
+                  <tr>
+                    <td className="relative text-xs">
+                      <p className="invisible px-2 py-1 flex gap-1">
+                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
+                        {order.note}
+                      </p>
+                      <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
+                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
+                        {order.note}
+                      </span>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="text-sm border-y border-black">
+        {order.totalDiscountedPrice ? (
+          <>
+            <p className="flex justify-between">
+              <span>Hesap Toplamı : </span>
+              <span className="font-bold">{order.totalPrice}</span>
+            </p>
+            <p className="flex justify-between">
+              <span>%15 iskonto : </span>
+              <span>-{order.totalPrice - order.totalDiscountedPrice}</span>
+            </p>
+          </>
+        ) : null}
+
+        <p className="flex justify-between text-base">
+          <span>Kalan Odeme : </span>
+          <span className="font-bold">
+            {order.totalDiscountedPrice
+              ? order.totalDiscountedPrice
+              : order.totalPrice}
+          </span>
+        </p>
+      </div>
+
+      <div className="text-sm text-center">
+        <p>Müşteri Konumu QR</p>
+        <p>
+          <span className="font-bold" style={{ fontFamily: "conthrax" }}>
+            Pentegrasyon
+          </span>{" "}
+          Sipariş Otomasyonu
+        </p>
+        <p>www.pentegrasyon.net</p>
+      </div>
+    </main>
   );
 };
 

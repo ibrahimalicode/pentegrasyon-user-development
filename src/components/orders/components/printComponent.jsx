@@ -9,7 +9,9 @@ const PrintComponent = ({ component }) => {
   return (
     <main>
       <button
-        onClick={reactToPrintFn}
+        onClick={() => {
+          reactToPrintFn();
+        }}
         className="flex justify-center w-full bg-gray-200 py-2 rounded-md"
       >
         <PrinterI />

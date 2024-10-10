@@ -18,8 +18,8 @@ const GetirYemekPrintOrder = ({ order }) => {
     return address;
   }
   return (
-    <main className="flex flex-col justify-center border border-[--primary-1] p-4 bg-[--light-3] font-normal mx-auto">
-      <div className="text-center">
+    <main className="flex flex-col justify-center border border-black p-4 bg-[--light-3] font-normal mx-auto">
+      <div className="text-center text-xl">
         <p className="text-[--primary-2]">
           {order.marketplaceTicketRestaurantName}
         </p>
@@ -28,7 +28,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      <div className="text-sm">
+      <div className="text-lg">
         <p>
           <span className="font-bold">Müşteri </span>
           <span>: {order.client.name}</span>
@@ -78,7 +78,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      <div className="text-sm mt-2 border rounded-sm border-gray-700 relative pl-5">
+      <div className="text-lg mt-2 border rounded-sm border-gray-700 relative pl-5">
         <span className="absolute top-0 left-0 w-2.5 h-5 bg-black"></span>
         <span>Teslim Zamanı : </span>
         <span className="font-medium">
@@ -94,14 +94,14 @@ const GetirYemekPrintOrder = ({ order }) => {
         </span>
       </div>
 
-      <div className="border border-gray-600 text-sm mt-2 p-0.5 rounded-sm">
+      <div className="border border-gray-600 text-lg mt-2 p-0.5 rounded-sm">
         <span className="font-bold">Not </span>: {order.clientNote}
       </div>
       <h1 className="font-bold text-center text-lg border-b border-black">
         Siparişler
       </h1>
 
-      <div className="text-sm w-full pb-2">
+      <div className="text-lg w-full pb-2">
         <table className="rounded-md overflow-clip w-full h-max">
           <thead className="bg-[--light-3]">
             <tr>
@@ -122,7 +122,7 @@ const GetirYemekPrintOrder = ({ order }) => {
                       x {order.name}
                     </div>
                     {order.optionCategories.map((cat) => (
-                      <div key={cat.id} className="text-xs pl-4">
+                      <div key={cat.id} className="text-base pl-4">
                         <span>{cat.name}</span>
 
                         {cat.options.map((opt) => (
@@ -155,7 +155,7 @@ const GetirYemekPrintOrder = ({ order }) => {
                 </tr>
                 {order.note && (
                   <tr>
-                    <td className="relative text-xs">
+                    <td className="relative text-base">
                       <p className="invisible px-2 py-1 flex gap-1">
                         <InfoI className="size-[16px]" strokeWidth={2} />{" "}
                         {order.note}
@@ -173,7 +173,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         </table>
       </div>
 
-      <div className="text-sm border-y border-black">
+      <div className="text-lg border-y border-black">
         {order.totalDiscountedPrice ? (
           <>
             <p className="flex justify-between">
@@ -197,9 +197,9 @@ const GetirYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      <div className="text-sm text-center">
+      <div className="text-lg text-center">
         <p>Müşteri Konumu QR</p>
-        <div className="flex justify-center">
+        <div className="flex justify-center my-2">
           <QrGenerator text={getFullAddress()} />
         </div>
         <p>

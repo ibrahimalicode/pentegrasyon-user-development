@@ -1,4 +1,7 @@
 import React from "react";
+
+//COMP
+import { InfoI } from "../../../assets/icon";
 import QrGenerator from "../../common/qrGenerator";
 import { formatDateString } from "../../../utils/utils";
 import MarketPalceIds from "../../../data/marketPlaceIds";
@@ -19,11 +22,11 @@ const GetirYemekPrintOrder = ({ order }) => {
   }
   return (
     <main className="flex flex-col justify-center p-4 bg-[--light-3] font-normal mx-auto">
-      <div className="text-center text-xl">
-        <p className="text-[--primary-2]">
+      <div className="text-center mb-2">
+        <p className="text-[--primary-2] text-2xl font-medium">
           {order.marketplaceTicketRestaurantName}
         </p>
-        <p className="text-[--red-1]">
+        <p className="text-[--red-1] text-xl ">
           {MarketPalceIds[order.marketplaceId]?.label}
         </p>
       </div>
@@ -79,7 +82,7 @@ const GetirYemekPrintOrder = ({ order }) => {
       </div>
 
       <div className="text-lg mt-2 border rounded-sm border-gray-700 relative pl-5">
-        <span className="absolute top-0 left-0 w-2.5 h-5 bg-black"></span>
+        <span className="absolute top-0 left-0 w-2.5 h-7 bg-black"></span>
         <span>Teslim Zamanı : </span>
         <span className="font-medium">
           {" "}

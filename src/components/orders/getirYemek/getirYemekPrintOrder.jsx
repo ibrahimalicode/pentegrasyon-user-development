@@ -18,7 +18,7 @@ const GetirYemekPrintOrder = ({ order }) => {
     return address;
   }
   return (
-    <main className="flex flex-col justify-center border border-black p-4 bg-[--light-3] font-normal mx-auto">
+    <main className="flex flex-col justify-center p-4 bg-[--light-3] font-normal mx-auto">
       <div className="text-center text-xl">
         <p className="text-[--primary-2]">
           {order.marketplaceTicketRestaurantName}

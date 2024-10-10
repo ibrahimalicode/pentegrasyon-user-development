@@ -5,7 +5,7 @@ import { formatDateString } from "../utils/utils";
 
 const Test = () => {
   return (
-    <main className="mt-28 flex flex-col justify-center border border-[--primary-1] p-4 bg-[--light-3] font-normal mx-auto max-w-md">
+    <main className="flex flex-col justify-center border border-[--primary-1] p-4 bg-[--light-3] font-normal mx-auto max-w-md">
       <div className="text-center">
         <p className="text-[--primary-2]">
           {order.marketplaceTicketRestaurantName}

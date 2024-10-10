@@ -17,29 +17,50 @@ import { formatDateString, formatOrders } from "../../utils/utils";
 import PrintComponent from "./components/printComponent";
 import GoogleRoute from "./components/googleRoute";
 import RemainingMinutes from "./components/remainingMinutes";
+import GetirYemekPrintOrder from "./getirYemek/getirYemekPrintOrder";
 import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
 
 //CONTEXT
 import { usePopup } from "../../context/PopupContext";
 import { useSignalR } from "../../context/SignalRContext";
-import Test from "../../pages/test";
 
 const marketPlaceAssets = [
-  { src: GetirYemek, statusButton: GetirYemekStatusButton },
-  { src: MigrosYemek, statusButton: GetirYemekStatusButton },
-  { src: TrendyolYemek, statusButton: GetirYemekStatusButton },
-  { src: Yemeksepeti, statusButton: GetirYemekStatusButton },
-  { src: GoFody, statusButton: GetirYemekStatusButton },
-  { src: Siparisim, statusButton: GetirYemekStatusButton },
-];
-
-const orderDetails = [
-  { src: GetirYemek, orderDetailsComp: GetirYemekOrderDetails },
-  { src: MigrosYemek, orderDetailsComp: GetirYemekOrderDetails },
-  { src: TrendyolYemek, orderDetailsComp: GetirYemekOrderDetails },
-  { src: Yemeksepeti, orderDetailsComp: GetirYemekOrderDetails },
-  { src: GoFody, orderDetailsComp: GetirYemekOrderDetails },
-  { src: Siparisim, orderDetailsComp: GetirYemekOrderDetails },
+  {
+    src: GetirYemek,
+    statusButton: GetirYemekStatusButton,
+    orderDetailsComp: GetirYemekOrderDetails,
+    printerComp: GetirYemekPrintOrder,
+  },
+  {
+    src: MigrosYemek,
+    statusButton: GetirYemekStatusButton,
+    orderDetailsComp: GetirYemekOrderDetails,
+    printerComp: GetirYemekPrintOrder,
+  },
+  {
+    src: TrendyolYemek,
+    statusButton: GetirYemekStatusButton,
+    orderDetailsComp: GetirYemekOrderDetails,
+    printerComp: GetirYemekPrintOrder,
+  },
+  {
+    src: Yemeksepeti,
+    statusButton: GetirYemekStatusButton,
+    orderDetailsComp: GetirYemekOrderDetails,
+    printerComp: GetirYemekPrintOrder,
+  },
+  {
+    src: GoFody,
+    statusButton: GetirYemekStatusButton,
+    orderDetailsComp: GetirYemekOrderDetails,
+    printerComp: GetirYemekPrintOrder,
+  },
+  {
+    src: Siparisim,
+    statusButton: GetirYemekStatusButton,
+    orderDetailsComp: GetirYemekOrderDetails,
+    printerComp: GetirYemekPrintOrder,
+  },
 ];
 
 const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
@@ -55,21 +76,28 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
     }
   }
 
-  function getButtonComponent() {
-    const StatusButtonComponent =
-      marketPlaceAssets[order.marketplaceId]?.statusButton;
-    return StatusButtonComponent ? (
-      <StatusButtonComponent
-        order={{
-          ...order,
-          approvalDate: isValidDate(order.approvalDate),
-          cancelDate: isValidDate(order.cancelDate),
-          deliveryDate: isValidDate(order.deliveryDate),
-          preparationDate: isValidDate(order.preparationDate),
-        }}
-        setOrdersData={setOrdersData}
-      />
-    ) : null;
+  function getMarketPlaceAssets() {
+    const StatusButton = marketPlaceAssets[order.marketplaceId]?.statusButton;
+    const OrderDetailsComp =
+      marketPlaceAssets[order.marketplaceId]?.orderDetailsComp;
+    const PrinterComp = marketPlaceAssets[order.marketplaceId]?.printerComp;
+
+    return {
+      StatusButton: (
+        <StatusButton
+          order={{
+            ...order,
+            approvalDate: isValidDate(order.approvalDate),
+            cancelDate: isValidDate(order.cancelDate),
+            deliveryDate: isValidDate(order.deliveryDate),
+            preparationDate: isValidDate(order.preparationDate),
+          }}
+          setOrdersData={setOrdersData}
+        />
+      ),
+      OrderDetailsComp,
+      PrinterComp: <PrintComponent component={<PrinterComp order={order} />} />,
+    };
   }
 
   function isCheckoutToday(date) {
@@ -83,7 +111,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
 
   function cellClicked() {
     const OrderDetailsComponent =
-      orderDetails[order.marketplaceId]?.orderDetailsComp;
+      marketPlaceAssets[order.marketplaceId]?.orderDetailsComp;
 
     setSlideBarContent(
       <OrderDetailsComponent
@@ -108,8 +136,6 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
       }
     }
   }, [statusChangedOrder]);
-
-  console.log(order);
 
   return (
     order && (
@@ -191,11 +217,9 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
             : order.totalPrice}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
-          {getButtonComponent(order)}
+          {getMarketPlaceAssets(order).StatusButton}
         </td>
-        <td className="w-14 relative">
-          <PrintComponent component={<Test order={order} />} />
-        </td>
+        <td className="w-14 relative">{getMarketPlaceAssets().PrinterComp}</td>
       </tr>
     )
   );

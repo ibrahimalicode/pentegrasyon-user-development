@@ -121,7 +121,7 @@ function AddCourierPopup({ onSuccess }) {
           </div>
           <h1 className="self-center text-2xl font-bold">Kurye Ekle</h1>
           <form onSubmit={handleSubmit}>
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div className="flex max-sm:flex-col sm:gap-4 items-end">
               <CustomSelect
                 required
                 label="Restoran"
@@ -162,7 +162,7 @@ function AddCourierPopup({ onSuccess }) {
               />
             </div>
 
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div className="flex max-sm:flex-col sm:gap-4 items-end">
               <CustomPhoneInput
                 required
                 label="Telefone"

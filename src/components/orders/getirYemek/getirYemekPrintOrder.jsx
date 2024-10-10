@@ -1,10 +1,9 @@
 import React from "react";
-import order from "../data/order";
-import MarketPalceIds from "../data/marketPlaceIds";
-import { formatDateString } from "../utils/utils";
-import QrGenerator from "../components/common/qrGenerator";
+import QrGenerator from "../../common/qrGenerator";
+import { formatDateString } from "../../../utils/utils";
+import MarketPalceIds from "../../../data/marketPlaceIds";
 
-const Test = () => {
+const GetirYemekPrintOrder = ({ order }) => {
   function getFullAddress() {
     let address = order.client.address;
     if (order.client.aptNo) {
@@ -215,4 +214,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default GetirYemekPrintOrder;

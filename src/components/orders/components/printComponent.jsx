@@ -3,14 +3,15 @@ import { useReactToPrint } from "react-to-print";
 import { PrinterI } from "../../../assets/icon";
 
 const PrintComponent = ({ component }) => {
-  const contentRef = useRef(null);
-  const reactToPrintFn = useReactToPrint({ contentRef });
+  const contentRef = useRef(component);
+  const handlePrint = useReactToPrint({ contentRef });
 
   return (
     <main>
       <button
         onClick={() => {
-          reactToPrintFn();
+          handlePrint();
+          // console.log(contentRef.current);
         }}
         className="flex justify-center w-full bg-gray-200 py-2 rounded-md"
       >

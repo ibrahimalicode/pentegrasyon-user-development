@@ -18,8 +18,11 @@ const GetirYemekPrintOrder = ({ order }) => {
     if (order.client.floor) {
       order.client.floor;
     }
-    return address;
+    // return address;
+    const googleMapsUrl = `https://www.google.com/maps?q=${order.restaurantLatitude},${order.restaurantLongitude}`;
+    return googleMapsUrl;
   }
+
   return (
     <main className="flex flex-col justify-center p-4 bg-[--light-3] font-normal mx-auto">
       <div className="text-center mb-2">
@@ -63,10 +66,12 @@ const GetirYemekPrintOrder = ({ order }) => {
         <p>
           <span className="font-bold">Bölge </span> <span>: Keçiören</span>
         </p>
-        <p>
-          <span className="font-bold">Tarif </span>
-          <span>: {order.client.description}</span>
-        </p>
+        {order.client.description && (
+          <p>
+            <span className="font-bold">Tarif </span>
+            <span>: {order.client.description}</span>
+          </p>
+        )}
         <p>
           <span className="font-bold">Sip. Tar. </span>
           <span>: 04:10.2024 - 17:45</span>
@@ -81,8 +86,8 @@ const GetirYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      <div className="text-lg mt-2 border rounded-sm border-gray-700 relative pl-5">
-        <span className="absolute top-0 left-0 w-2.5 h-7 bg-black"></span>
+      <div className="text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
+        <span className="inline-block px-1 mr-1 bg-[--gr-1]">🕑</span>
         <span>Teslim Zamanı : </span>
         <span className="font-medium">
           {" "}
@@ -97,9 +102,23 @@ const GetirYemekPrintOrder = ({ order }) => {
         </span>
       </div>
 
-      <div className="border border-gray-600 text-lg mt-2 p-0.5 rounded-sm">
-        <span className="font-bold">Not </span>: {order.clientNote}
-      </div>
+      {(order.clientNote ||
+        order.doNotKnock ||
+        order.dropOffAtDoor ||
+        order.isEcoFriendly) && (
+        <div className="flex items-center rounded-md overflow-clip my-2">
+          <p className="whitespace-nowrap font-bold">Not : </p>
+          <div className="w-full px-2 italic flex flex-col gap-1">
+            {order.clientNote && <p>{order.clientNote}</p>}
+            {order.doNotKnock && <p>Lütfen zil çalmayın.</p>}
+            {order.dropOffAtDoor && <p>Kapıda Bırakın.</p>}
+            {order.isEcoFriendly && (
+              <p>Doğayı seviyorum. Plastik çatal, bıçak, peçete istemiyorum.</p>
+            )}
+          </div>
+        </div>
+      )}
+
       <h1 className="font-bold text-center text-lg border-b border-black">
         Siparişler
       </h1>

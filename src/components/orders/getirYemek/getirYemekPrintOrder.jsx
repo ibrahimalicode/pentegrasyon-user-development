@@ -86,8 +86,8 @@ const GetirYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      <div className="text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
-        <span className="inline-block px-1 mr-1 bg-[--gr-1]">🕑</span>
+      <div className="flex items-center text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
+        <span className="px-1 mr-1 bg-[--gr-1]">🕑</span>
         <span>Teslim Zamanı : </span>
         <span className="font-medium">
           {" "}
@@ -106,7 +106,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         order.doNotKnock ||
         order.dropOffAtDoor ||
         order.isEcoFriendly) && (
-        <div className="flex items-center rounded-md overflow-clip my-2">
+        <div className="flex rounded-md overflow-clip my-2">
           <p className="whitespace-nowrap font-bold">Not : </p>
           <div className="w-full px-2 italic flex flex-col gap-1">
             {order.clientNote && <p>{order.clientNote}</p>}
@@ -179,12 +179,10 @@ const GetirYemekPrintOrder = ({ order }) => {
                   <tr>
                     <td className="relative text-base">
                       <p className="invisible px-2 py-1 flex gap-1">
-                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
-                        {order.note}
+                        👉 {order.note}
                       </p>
                       <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
-                        {order.note}
+                        👉 {order.note}
                       </span>
                     </td>
                   </tr>

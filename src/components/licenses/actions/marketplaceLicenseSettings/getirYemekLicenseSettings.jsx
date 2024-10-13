@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { CancelI } from "../../../../assets/icon";
 import CustomInput from "../../../common/customInput";
 import { usePopup } from "../../../../context/PopupContext";
+
+//REDUX
 import {
   addIntegrationInformation,
   resetAddIntegrationInformation,
@@ -16,8 +18,6 @@ import {
   getIntegrationInformationByLicenseId,
   resetGetIntegrationInformationByLicenseId,
 } from "../../../../redux/informations/getirYemek/getIntegrationInformationByLicenseIdSlice";
-
-//REDUX
 
 const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -62,7 +62,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     if (data?.isSettingsAdded) {
       dispatch(getIntegrationInformationByLicenseId(data.id));
     }
-  });
+  }, [data?.isSettingsAdded]);
 
   // TOAST UPDATE
   useEffect(() => {
@@ -86,7 +86,11 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
       dispatch(resetGetIntegrationInformationByLicenseId());
     }
     if (infoData) {
-      setLicenseData({ ...licenseData, restaurantSecretKey: infoData });
+      console.log(infoData);
+      setLicenseData({
+        ...licenseData,
+        restaurantSecretKey: infoData.restaurantSecretKey,
+      });
       setLicenseDataBefore({ ...licenseData, restaurantSecretKey: infoData });
       dispatch(resetGetIntegrationInformationByLicenseId());
     }
@@ -129,7 +133,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
 
             <div className="w-full flex justify-end mt-10">
               <button
-                disabled={loading || getLoading}
+                disabled={loading || getLoading || data.isSettingsAdded}
                 className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md"
                 type="submit"
               >

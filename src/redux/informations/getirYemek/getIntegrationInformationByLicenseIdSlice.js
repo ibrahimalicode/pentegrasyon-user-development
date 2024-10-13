@@ -52,16 +52,16 @@ const getIntegrationInformationByLicenseIdSlice = createSlice({
 });
 
 export const getIntegrationInformationByLicenseId = createAsyncThunk(
-  "Licenses/AddGetirYemekIntegrationInformation",
+  "Licenses/GetGetirYemekIntegrationInformationByLicenseId",
   async (licenseId, { rejectWithValue }) => {
     try {
       const res = await api.get(
-        `${baseURL}IntegrationInformations/AddGetirYemekIntegrationInformation`,
+        `${baseURL}IntegrationInformations/GetGetirYemekIntegrationInformationByLicenseId`,
         { params: { licenseId } }
       );
 
       // console.log(res);
-      return res.data;
+      return res.data.data;
     } catch (err) {
       const errorMessage = err.message;
       return rejectWithValue({ message: errorMessage });

@@ -14,6 +14,7 @@ import ordersSlice from "./redux/orders";
 import getirYemekSlice from "./redux/getirYemek";
 import dashboardSlice from "./redux/dashboard";
 import couriersSlice from "./redux/couriers";
+import integrationInformationsSlice from "./redux/informations";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     getirYemek: getirYemekSlice,
     dashboard: dashboardSlice,
     couriers: couriersSlice,
+    integrationInfos: integrationInformationsSlice,
   },
 });
 

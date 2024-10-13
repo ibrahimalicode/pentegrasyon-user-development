@@ -2,6 +2,7 @@ import licenseTypeIds from "../../data/licenseTypeIds";
 import LicensesActions from "./actions/licensesActions";
 import { formatDateString, getRemainingDays } from "../../utils/utils";
 import EditLicenseIsActive from "./actions/updateLicenseIsActive";
+import CustomPing from "../common/customPing";
 
 const LicensesTable = ({ inData, totalItems, onSuccess }) => {
   return (
@@ -30,7 +31,8 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                 <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
                   {licenseTypeIds[data?.licenseTypeId]?.value}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className="flex items-center gap-1 whitespace-nowrap text-[--black-2] font-light">
+                  {!data?.isSettingsAdded && <CustomPing />}
                   {data.restaurantName}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">

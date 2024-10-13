@@ -6,11 +6,12 @@ import { useLocation, useParams } from "react-router-dom";
 //COMPONENTS
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
-import AddLicense from "../../licenses/actions/addLicense";
 import CustomSelect from "../../common/customSelector";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
+import LicensesTable from "../../licenses/licensesTable";
+import AddLicense from "../../licenses/actions/addLicense";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 // REDUX
@@ -26,7 +27,6 @@ import {
   getRestaurant,
   resetGetRestaurantState,
 } from "../../../redux/restaurants/getRestaurantSlice";
-import LicensesTable from "../../licenses/licensesTable";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
@@ -162,7 +162,13 @@ const RestaurantLicensesPage = () => {
     );
   }
 
-  // GET LICENSES WITH RESTAURANT
+  function insertRestaurantToLicenses(restaurantName) {
+    return restaurantLicenses.data.map((ent) => {
+      return { ...ent, restaurantName };
+    });
+  }
+
+  // GET LICENSES
   useEffect(() => {
     if (!licensesData) {
       dispatch(
@@ -186,7 +192,10 @@ const RestaurantLicensesPage = () => {
       if (!restaurantInData) {
         dispatch(getRestaurant({ restaurantId }));
       } else {
-        setLicensesData(restaurantLicenses.data);
+        const licensesWithRestaurantName = insertRestaurantToLicenses(
+          restaurantData.name
+        );
+        setLicensesData(licensesWithRestaurantName);
         setTotalItems(restaurantLicenses.totalCount);
         dispatch(resetGetRestaurantLicenses());
       }
@@ -206,7 +215,10 @@ const RestaurantLicensesPage = () => {
 
     if (restaurantSuccess) {
       setRestaurantData(restaurant);
-      setLicensesData(restaurantLicenses.data);
+      const licensesWithRestaurantName = insertRestaurantToLicenses(
+        restaurant.name
+      );
+      setLicensesData(licensesWithRestaurantName);
       setTotalItems(restaurantLicenses.totalCount);
       dispatch(resetGetRestaurantState());
       dispatch(resetGetRestaurantLicenses());

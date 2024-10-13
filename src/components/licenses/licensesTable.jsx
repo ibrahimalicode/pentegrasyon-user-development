@@ -31,9 +31,11 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                 <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
                   {licenseTypeIds[data?.licenseTypeId]?.value}
                 </td>
-                <td className="flex items-center gap-1 whitespace-nowrap text-[--black-2] font-light">
-                  {!data?.isSettingsAdded && <CustomPing />}
-                  {data.restaurantName}
+                <td className="w-max whitespace-nowrap text-[--black-2] font-light">
+                  <div className="w-max flex items-center gap-1">
+                    {!data?.isSettingsAdded && <CustomPing />}
+                    <span>{data.restaurantName}</span>
+                  </div>
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {formatDateString(data.endDateTime)}

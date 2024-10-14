@@ -38,7 +38,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
     }
   }, [statusChangedOrder]);
 
-  // console.log(order);
+  console.log(order);
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div className="flex items-center -mx-4 text-base bg-[--getiryemek] text-[--white-1]">
@@ -233,11 +233,8 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                                   : "text-[--red-1]"
                               }`}
                             >
-                              {opt.price > 0
-                                ? `+${opt.price * order.count}`
-                                : opt.price < 0
-                                ? `-${opt.price * order.count}`
-                                : ""}
+                              {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
+                              {(opt.price * order.count).toFixed(2)}
                             </span>
                           </div>
                         ))}
@@ -245,7 +242,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                     ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
-                    {order.price * order.count}
+                    {(order.price * order.count).toFixed(2)}
                   </td>
                 </tr>
                 {order.note && (
@@ -272,12 +269,12 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             <>
               <div className="w-full flex items-center justify-end gap-2">
                 <p>Toplam:</p>
-                <p className="text-base">{order.totalPrice}</p>
+                <p className="text-base">{order.totalPrice.toFixed(2)}</p>
               </div>
               <div className="w-full flex items-center justify-end gap-2">
                 <p>İndirim:</p>
                 <p className="text-base">
-                  {order.totalPrice - order.totalDiscountedPrice}
+                  {(order.totalPrice - order.totalDiscountedPrice).toFixed(2)}
                 </p>
               </div>
             </>
@@ -286,8 +283,8 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {order.totalDiscountedPrice
-                ? order.totalDiscountedPrice
-                : order.totalPrice}
+                ? order.totalDiscountedPrice.toFixed(2)
+                : order.totalPrice.toFixed(2)}
             </p>
           </div>
         </div>

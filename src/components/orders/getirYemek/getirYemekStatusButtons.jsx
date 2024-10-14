@@ -131,6 +131,13 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       disabled || nextId !== 700 || xMinWait(order.approvalDate)
     );
     setDeliverDisabled(disabled || !nextId || xMinWait(order.preparationDate));
+    setCancelDisabled(
+      disabled ||
+        order.status == 900 ||
+        order.status == 1500 ||
+        order.status == 1600 ||
+        order.cancelDate
+    );
   }, [secState, order]);
 
   return (

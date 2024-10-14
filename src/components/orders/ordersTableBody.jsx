@@ -24,7 +24,7 @@ import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
 import { usePopup } from "../../context/PopupContext";
 import { useSignalR } from "../../context/SignalRContext";
 
-const marketPlaceAssets = [
+export const marketPlaceAssets = [
   {
     src: GetirYemek,
     statusButton: GetirYemekStatusButton,

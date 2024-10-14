@@ -15,6 +15,8 @@ import CancelOrderPopup from "./cancelOrderPopup";
 import { useOrderActions } from "./useOrderActions";
 import orderStatuses from "../../../data/orderStatuses";
 import RemainingSeconds from "../components/remainingSeconds";
+import { marketPlaceAssets } from "../ordersTableBody";
+import PrintComponent from "../components/printComponent";
 
 const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
@@ -51,6 +53,38 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   function xMinuteAhead(date, x) {
     return new Date(new Date(date).getTime() + 60000 * x);
+  }
+
+  function isValidDate(date) {
+    if (date === "0001-01-01T00:00:00") {
+      return "";
+    } else {
+      return date;
+    }
+  }
+
+  function getMarketPlaceAssets() {
+    const StatusButton = marketPlaceAssets[order.marketplaceId]?.statusButton;
+    const OrderDetailsComp =
+      marketPlaceAssets[order.marketplaceId]?.orderDetailsComp;
+    const PrinterComp = marketPlaceAssets[order.marketplaceId]?.printerComp;
+
+    return {
+      StatusButton: (
+        <StatusButton
+          order={{
+            ...order,
+            approvalDate: isValidDate(order.approvalDate),
+            cancelDate: isValidDate(order.cancelDate),
+            deliveryDate: isValidDate(order.deliveryDate),
+            preparationDate: isValidDate(order.preparationDate),
+          }}
+          setOrdersData={setOrdersData}
+        />
+      ),
+      OrderDetailsComp,
+      PrinterComp: <PrintComponent component={<PrinterComp order={order} />} />,
+    };
   }
 
   const btnClass =
@@ -228,6 +262,9 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
           "İptal Et"
         )}
       </button>
+      <div className="w-full max-w-16 bg-gray-200 flex justify-center items-center rounded-md">
+        {getMarketPlaceAssets().PrinterComp}
+      </div>
     </div>
   );
 };

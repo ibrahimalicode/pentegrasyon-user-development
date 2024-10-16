@@ -169,7 +169,7 @@ const OrdersPage = () => {
         <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2 max-sm:mt-3">
             <RestaurantsStatus />
-            <AutomaticApproval />
+            <AutomaticApproval ordersData={ordersData} />
           </div>
 
           <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">

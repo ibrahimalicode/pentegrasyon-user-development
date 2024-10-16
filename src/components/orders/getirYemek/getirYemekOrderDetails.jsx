@@ -233,7 +233,8 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                               }`}
                             >
                               {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
-                              {(opt.price * order.count).toFixed(2)}
+                              {opt.price > 0 &&
+                                (opt.price * order.count).toFixed(2)}
                             </span>
                           </div>
                         ))}

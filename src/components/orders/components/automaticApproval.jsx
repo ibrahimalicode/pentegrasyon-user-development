@@ -19,7 +19,7 @@ import {
   resetgetAutomaticApprovalVariable,
 } from "../../../redux/orders/getAutomaticApprovalVariableSlice";
 
-const AutomaticApproval = () => {
+const AutomaticApproval = ({ ordersData }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
@@ -89,6 +89,37 @@ const AutomaticApproval = () => {
       dispatch(resetUpdateTicketAutomationVariable());
     }
   }, [loading, error]);
+
+  //LOOP SOUND
+  useEffect(() => {
+    let soundInterval;
+    let loopSound = false;
+
+    ordersData?.map((order) => {
+      const stat = order.status;
+      const mkId = order.marketplaceId;
+
+      //GetirYemek
+      if (mkId == 0 && (stat == 325 || stat == 400)) {
+        return (loopSound = true);
+      }
+      //YemekSepeti...
+      return (loopSound = false);
+    });
+
+    if (!varData?.automaticApproval && loopSound) {
+      soundInterval = setInterval(() => {
+        console.log(loopSound, "loop sound playing.");
+      }, 1000);
+    }
+
+    return () => {
+      if (soundInterval) {
+        clearInterval(soundInterval);
+        console.log("Sound loop stopped.");
+      }
+    };
+  }, [varData, ordersData]);
 
   return (
     <div className="flex items-end">

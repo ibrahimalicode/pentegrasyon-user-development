@@ -79,6 +79,7 @@ const Register = () => {
       <Confirm
         phoneNumber={phoneNumber}
         popupContent={popupContent}
+        setPopupContent={setPopupContent}
         onClick={register}
       />
     );

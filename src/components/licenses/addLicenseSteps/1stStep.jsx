@@ -119,8 +119,8 @@ const FirstStep = ({
       const updatedData = licensePackages.data.map((pkg) => {
         return {
           ...pkg,
-          price: pkg.price,
-          kdvPrice: getPriceWithKDV(pkg.price, KDVParameters).replace(
+          price: pkg.userPrice,
+          kdvPrice: getPriceWithKDV(pkg.userPrice, KDVParameters).replace(
             ".00",
             ""
           ),
@@ -161,6 +161,7 @@ const FirstStep = ({
       toast.error("Lütfen restoran seçın 😊", { id: "choose_restaurant" });
       return;
     }
+
     if (!licenses) return;
     const existingLicenses = licenses.filter(
       (license) => license.restaurantId === pkg.restaurantId

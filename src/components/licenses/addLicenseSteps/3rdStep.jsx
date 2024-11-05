@@ -30,6 +30,7 @@ const ThirdStep = ({
         ) : (
           value === "onlinePayment" && (
             <OnlinePayment
+              step={step}
               setStep={setStep}
               userId={restaurantData?.userId}
               actionType={actionType}

@@ -29,6 +29,11 @@ const MarketPalceIds = [
     value: "Siparisim",
     id: 5,
   },
+  {
+    label: "Autoronics",
+    value: "Autoronics",
+    id: 6,
+  },
 ];
 
 export default MarketPalceIds;

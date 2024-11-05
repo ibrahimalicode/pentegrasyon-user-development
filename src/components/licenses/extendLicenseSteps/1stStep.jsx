@@ -15,6 +15,7 @@ import Siparisim from "../../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
+import Autoronics from "../../../assets/img/packages/Autoronics.png";
 import DefaultMarketplace from "../../../assets/img/packages/Default-Marketplace.png";
 
 //FUNC
@@ -43,6 +44,7 @@ const imageSRCs = [
   { src: Yemeksepeti, name: "Yemeksepeti" },
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
+  { src: Autoronics, name: "Autoronics" },
 ];
 
 const FirstStep = ({
@@ -70,6 +72,7 @@ const FirstStep = ({
     (state) => state.generalVars.getKDVParams
   );
 
+  const [kdvData, setKdvData] = useState(null);
   const [restaurantsData, setRestaurantsData] = useState(null);
   const [licensePackagesData, setLicensePackagesData] = useState(null);
 
@@ -98,12 +101,13 @@ const FirstStep = ({
     }
 
     if (KDVParameters && success) {
+      setKdvData(KDVParameters);
       const updatedData = licensePackages.data.map((pkg) => {
-        return { ...pkg, price: getPriceWithKDV(pkg.price, KDVParameters) };
+        return { ...pkg, price: getPriceWithKDV(pkg.userPrice, KDVParameters) };
       });
 
       const sameMarketplacePKGS = updatedData.filter(
-        (pack) => pack?.marketplaceId === currentLicense?.marketplaceId
+        (pack) => pack?.licenseTypeId === currentLicense?.licenseTypeId
       );
 
       if (sameMarketplacePKGS.length) {
@@ -165,9 +169,9 @@ const FirstStep = ({
   return (
     <form className="size-full flex flex-col" onSubmit={handleSubmit}>
       <div className="px-4 flex justify-between items-center p-2 w-full text-sm bg-[--light-1] border-b border-solid border-[--border-1]">
-        {licensePackageData?.id !== null ? (
+        {licensePackageData?.licenseTypeId !== null ? (
           <img
-            src={imageSRCs[licensePackageData?.id]?.src}
+            src={imageSRCs[licensePackageData?.licenseTypeId]?.src}
             alt="Pazaryeri"
             className="w-32 h-10 rounded-sm"
           />
@@ -184,20 +188,24 @@ const FirstStep = ({
           </div>
         )}
 
-        <div className="h-full text-center flex flex-col justify-between pb-3">
-          <p>KDV%{licensePackageData.kdvPercentage}</p>
-          <p className="">
-            {licensePackageData.price && licensePackageData.kdvPercentage
-              ? (licensePackageData.price / 100) *
-                  licensePackageData.kdvPercentage +
-                " ₺"
-              : " ₺"}
-          </p>
-        </div>
+        {kdvData?.useKDV && (
+          <div className="h-full text-center flex flex-col justify-between pb-3">
+            <p>KDV%{kdvData?.kdvPercentage}</p>
+            {licensePackageData?.userPrice ? (
+              <p className="">
+                {(licensePackageData?.userPrice / 100) *
+                  kdvData?.kdvPercentage +
+                  " ₺"}
+              </p>
+            ) : (
+              "₺"
+            )}
+          </div>
+        )}
 
         <div className="h-full text-center flex flex-col justify-between pb-3">
           <p>Toplam</p>
-          <p className="">{licensePackageData.kdvPrice} ₺</p>
+          <p className="">{licensePackageData.price} ₺</p>
         </div>
       </div>
 
@@ -228,7 +236,7 @@ const FirstStep = ({
               ) {
                 handleAddToCart({
                   ...selectedOption,
-                  marketplaceId: selectedOption.id,
+                  licenseTypeId: selectedOption.id,
                   restaurantId: restaurantData.value,
                   restaurantName: restaurantData.label,
                 });

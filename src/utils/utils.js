@@ -200,17 +200,18 @@ export const formatLisansPackages = (data) => {
 
   const outData = data.map((ent, index) => {
     return {
-      value: MarketPalceIds[ent.marketplaceId].label,
+      value: MarketPalceIds[ent.licenseTypeId].label,
       label: CustomLabel(
-        MarketPalceIds[ent.marketplaceId].label,
+        MarketPalceIds[ent.licenseTypeId].label,
         ent.time,
-        ent.price,
+        ent.userPrice,
         index
       ),
-      id: ent.marketplaceId,
+      id: ent.licenseTypeId,
       time: ent.time,
-      price: ent.price,
+      price: ent.userPrice,
       licensePackageId: ent.id,
+      ...ent,
     };
   });
   return outData;

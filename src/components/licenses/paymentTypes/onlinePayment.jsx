@@ -16,7 +16,7 @@ import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
 import { addByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
-const OnlinePayment = ({ setStep, actionType }) => {
+const OnlinePayment = ({ step, setStep, actionType }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -175,7 +175,7 @@ const OnlinePayment = ({ setStep, actionType }) => {
         <BackButton
           text="Geri"
           letIcon={true}
-          onClick={() => setStep(steps - 3)}
+          onClick={() => setStep(step - 1)}
           disabled={
             addLoading || extendLoading || updateInvLoading || addInvLoading
           }

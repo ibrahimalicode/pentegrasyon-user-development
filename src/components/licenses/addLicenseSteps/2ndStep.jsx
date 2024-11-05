@@ -101,7 +101,7 @@ const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
                   className="flex items-center gap-8 even:bg-[--white-1] odd:bg-[--table-odd] relative"
                 >
                   <img
-                    src={imageSRCs[licensePkg[0].marketplaceId]?.src}
+                    src={imageSRCs[licensePkg[0].licenseTypeId]?.src}
                     alt="Pazaryeri"
                     className="w-36 h-full rounded-sm"
                   />

@@ -62,12 +62,6 @@ export const useEditUserInvoice = (dispatcher, user) => {
     if (loading) {
       toastId.current = toast.loading("Updating Invoice...");
     } else if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetUpdateUserInvoice());
     } else if (success) {
       toastId.current && toast.dismiss(toastId.current);
@@ -81,12 +75,6 @@ export const useEditUserInvoice = (dispatcher, user) => {
     if (addInvoiceLoading) {
       toastId.current = toast.loading("Updating Invoice...");
     } else if (addInvoiceError) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR);
-      } else {
-        toast.error("Something went wrong");
-      }
       dispatch(resetaddUserInvoice());
     } else if (addInvoiceSuccess) {
       toastId.current && toast.dismiss(toastId.current);

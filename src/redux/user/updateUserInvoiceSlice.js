@@ -54,7 +54,6 @@ export const updateUserInvoice = createAsyncThunk(
   "Users/updateUserInvoice",
   async (
     {
-      userId,
       taxOffice,
       taxNumber,
       title,

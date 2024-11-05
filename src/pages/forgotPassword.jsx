@@ -46,6 +46,7 @@ const ForgotPassword = () => {
       toast.success("Onay kodu gönderildi");
     }
     if (error) {
+      toast.error(error.message);
       dispatch(resetForgotPassword());
     }
   }, [success, error]);

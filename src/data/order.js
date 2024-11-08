@@ -130,7 +130,7 @@ const order = {
               marketplaceTicketOrderOptionCategoryId:
                 "80db716f-6a7c-458a-8b64-5499ebb82147",
               option: "6087dfb109253a2ba77547d4",
-              name: "Garnitür Ekle",
+              name: "Coca Cola 330 (ml) long text",
               price: 5,
             },
           ],

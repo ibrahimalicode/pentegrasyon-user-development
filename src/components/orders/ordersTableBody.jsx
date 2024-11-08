@@ -213,8 +213,14 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.totalDiscountedPrice
-            ? order.totalDiscountedPrice
-            : order.totalPrice}
+            ? String(order.totalDiscountedPrice)
+                .replace(",", "#")
+                .replace(".", ",")
+                .replace("#", ".")
+            : String(order.totalPrice)
+                .replace(",", "#")
+                .replace(".", ",")
+                .replace("#", ".")}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
           {getMarketPlaceAssets(order).StatusButton}

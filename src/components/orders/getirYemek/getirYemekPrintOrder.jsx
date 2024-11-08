@@ -148,10 +148,7 @@ const GetirYemekPrintOrder = ({ order }) => {
                         <span>{cat.name}</span>
 
                         {cat.options.map((opt) => (
-                          <div
-                            key={opt.id}
-                            className="flex justify-between max-w-44"
-                          >
+                          <div key={opt.id} className="flex justify-between">
                             <span>▸ {opt.name}</span>
                             <span
                               className={`${

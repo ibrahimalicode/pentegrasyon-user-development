@@ -213,11 +213,11 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.totalDiscountedPrice
-            ? String(order.totalDiscountedPrice)
+            ? String(order.totalDiscountedPrice.toFixed(2))
                 .replace(",", "#")
                 .replace(".", ",")
                 .replace("#", ".")
-            : String(order.totalPrice)
+            : String(order.totalPrice.toFixed(2))
                 .replace(",", "#")
                 .replace(".", ",")
                 .replace("#", ".")}

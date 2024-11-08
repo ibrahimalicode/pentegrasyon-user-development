@@ -158,9 +158,19 @@ const GetirYemekPrintOrder = ({ order }) => {
                               }`}
                             >
                               {opt.price > 0
-                                ? `+${opt.price * order.count}`
+                                ? `+${String(
+                                    (opt.price * order.count).toFixed(2)
+                                  )
+                                    .replace(",", "#")
+                                    .replace(".", ",")
+                                    .replace("#", ".")}`
                                 : opt.price < 0
-                                ? `-${opt.price * order.count}`
+                                ? `-${String(
+                                    (opt.price * order.count).toFixed(2)
+                                  )
+                                    .replace(",", "#")
+                                    .replace(".", ",")
+                                    .replace("#", ".")}`
                                 : ""}
                             </span>
                           </div>
@@ -169,7 +179,10 @@ const GetirYemekPrintOrder = ({ order }) => {
                     ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
-                    {order.price * order.count}
+                    {String((order.price * order.count).toFixed(2))
+                      .replace(",", "#")
+                      .replace(".", ",")
+                      .replace("#", ".")}
                   </td>
                 </tr>
                 {order.note && (
@@ -199,7 +212,15 @@ const GetirYemekPrintOrder = ({ order }) => {
             </p>
             <p className="flex justify-between">
               <span>%15 iskonto : </span>
-              <span>-{order.totalPrice - order.totalDiscountedPrice}</span>
+              <span>
+                -
+                {String(
+                  (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
+                )
+                  .replace(",", "#")
+                  .replace(".", ",")
+                  .replace("#", ".")}
+              </span>
             </p>
           </>
         ) : null}
@@ -208,8 +229,14 @@ const GetirYemekPrintOrder = ({ order }) => {
           <span>Kalan Odeme : </span>
           <span className="font-bold">
             {order.totalDiscountedPrice
-              ? order.totalDiscountedPrice
-              : order.totalPrice}
+              ? String(order.totalDiscountedPrice.toFixed(2))
+                  .replace(",", "#")
+                  .replace(".", ",")
+                  .replace("#", ".")
+              : String(order.totalPrice.toFixed(2))
+                  .replace(",", "#")
+                  .replace(".", ",")
+                  .replace("#", ".")}
           </span>
         </p>
       </div>

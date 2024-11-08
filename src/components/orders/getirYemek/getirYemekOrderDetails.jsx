@@ -102,7 +102,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
           <p>Kurye</p>
           <p className="flex items-center">
             <span className="flex justify-center items-center text-xs size-4 bg-[--green-2] text-[--white-1] rounded-full mr-1">
-              {order.courier.name.slice(0, 1)}
+              {order?.courier?.name?.slice(0, 1)}
             </span>
             {order.courier.name}
           </p>
@@ -234,7 +234,10 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                             >
                               {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
                               {opt.price > 0 &&
-                                (opt.price * order.count).toFixed(2)}
+                                String((opt.price * order.count).toFixed(2))
+                                  .replace(",", "#")
+                                  .replace(".", ",")
+                                  .replace("#", ".")}
                             </span>
                           </div>
                         ))}
@@ -242,7 +245,10 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                     ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
-                    {(order.price * order.count).toFixed(2)}
+                    {String((order.price * order.count).toFixed(2))
+                      .replace(",", "#")
+                      .replace(".", ",")
+                      .replace("#", ".")}
                   </td>
                 </tr>
                 {order.note && (
@@ -269,12 +275,22 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             <>
               <div className="w-full flex items-center justify-end gap-2">
                 <p>Toplam:</p>
-                <p className="text-base">{order.totalPrice.toFixed(2)}</p>
+                <p className="text-base">
+                  {String(order.totalPrice.toFixed(2))
+                    .replace(",", "#")
+                    .replace(".", ",")
+                    .replace("#", ".")}
+                </p>
               </div>
               <div className="w-full flex items-center justify-end gap-2">
                 <p>İndirim:</p>
                 <p className="text-base">
-                  {(order.totalPrice - order.totalDiscountedPrice).toFixed(2)}
+                  {String(
+                    (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
+                  )
+                    .replace(",", "#")
+                    .replace(".", ",")
+                    .replace("#", ".")}
                 </p>
               </div>
             </>
@@ -283,8 +299,14 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {order.totalDiscountedPrice
-                ? order.totalDiscountedPrice.toFixed(2)
-                : order.totalPrice.toFixed(2)}
+                ? String(order.totalDiscountedPrice.toFixed(2))
+                    .replace(",", "#")
+                    .replace(".", ",")
+                    .replace("#", ".")
+                : String(order.totalPrice.toFixed(2))
+                    .replace(",", "#")
+                    .replace(".", ",")
+                    .replace("#", ".")}
             </p>
           </div>
         </div>

@@ -5,15 +5,20 @@ import { useEffect, useRef, useState } from "react";
 
 //COMP
 import ActionButton from "../../common/actionButton";
-import { CancelI, RotateI } from "../../../assets/icon";
+import { CancelI, RotateI, TransferI } from "../../../assets/icon";
 import { usePopup } from "../../../context/PopupContext";
 import CustomCheckbox from "../../common/customCheckbox";
+import CustomInput from "../../common/customInput";
 
 //REDUX
 import {
   updateCourierLoginCode,
   resetUpdateCourierLoginCode,
 } from "../../../redux/couriers/updateCourierLoginCodeSlice";
+import {
+  generateLoginCode,
+  resetgenerateLoginCode,
+} from "../../../redux/couriers/generateLoginCodeSlice";
 
 const UpdateCourierLoginCode = ({ courier, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -42,15 +47,23 @@ function UpdateCourierLoginCodePopup({ courier, onSuccess }) {
     (state) => state.couriers.updateLoginCode
   );
 
+  const { loading: codeLoading, code } = useSelector(
+    (state) => state.couriers.generateCode
+  );
+
   const { setPopupContent } = usePopup();
-  const [checked, setChecked] = useState(false);
+  const [courierData, setCourierData] = useState({
+    courierId: courier.id,
+    loginCode: "",
+    sendSMSNotify: false,
+  });
 
   const closeForm = () => {
     setPopupContent(null);
   };
 
   function handleClick() {
-    dispatch(updateCourierLoginCode({ courierId: courier.id }));
+    dispatch(updateCourierLoginCode(courierData));
   }
 
   useEffect(() => {
@@ -69,6 +82,20 @@ function UpdateCourierLoginCodePopup({ courier, onSuccess }) {
     }
   }, [loading, success, error, dispatch]);
 
+  // SET THE CODE
+  useEffect(() => {
+    if (code) {
+      console.log(code);
+      setCourierData((prev) => {
+        return {
+          ...prev,
+          loginCode: code,
+        };
+      });
+      dispatch(resetgenerateLoginCode());
+    }
+  }, [code]);
+
   return (
     <div className="w-full flex justify-center">
       <div className="w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] max-w-2xl">
@@ -82,24 +109,61 @@ function UpdateCourierLoginCodePopup({ courier, onSuccess }) {
             </div>
           </div>
           <h1 className="self-center text-2xl font-bold">Kurye Durumu</h1>
-          <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left gap-8">
+          <div className="flex flex-col px-14 mt-9 w-full text-left">
             <div className="w-full flex gap-12 items-center">
               <p className="min-w-28">Mevcüt Giriş Kodu:</p>
               <p className="py-3 text-[--primary-1]">{courier.loginCode}</p>
             </div>
 
-            <div className="w-full flex gap-12 items-center">
-              <p className="min-w-28">İşlem:</p>
+            <div className="flex items-center gap-8">
+              <CustomInput
+                // required
+                type="text"
+                label="Yeni Giriş Kodu"
+                placeholder="Yeni Giriş Kodu"
+                className="py-[.45rem] text-sm"
+                className2="mt-[.5rem] sm:mt-[.5rem] max-w-40"
+                value={courierData.loginCode}
+                onChange={(e) => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      loginCode: e,
+                    };
+                  });
+                }}
+              />
+
+              <div className="mt-7">
+                <button
+                  type="button"
+                  className="flex gap-1 hover:text-[--primary-2]"
+                  onClick={() => dispatch(generateLoginCode({}))}
+                >
+                  <TransferI /> Otomatik Oluştur
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-8">
               <CustomCheckbox
-                label="Giriş Kodu Yenile"
-                checked={checked}
-                onChange={() => setChecked(!checked)}
+                label="SMS Gönder"
+                className="mt-7 whitespace-nowrap"
+                checked={courierData.sendSMSNotify}
+                onChange={() => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      sendSMSNotify: !courierData.sendSMSNotify,
+                    };
+                  });
+                }}
               />
             </div>
 
             <div className="w-full flex gap-12 items-center justify-end">
               <button
-                disabled={loading || !checked}
+                disabled={loading}
                 onClick={handleClick}
                 className="py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-lg disabled:cursor-not-allowed"
               >

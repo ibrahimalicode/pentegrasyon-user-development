@@ -23,11 +23,11 @@ import GoogleRoute from "./components/googleRoute";
 import RemainingMinutes from "./components/remainingMinutes";
 import GetirYemekPrintOrder from "./getirYemek/getirYemekPrintOrder";
 import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
+import GetirYemekChooseCourier from "./getirYemek/getirYemekChooseCourier";
 
 //CONTEXT
 import { usePopup } from "../../context/PopupContext";
 import { useSignalR } from "../../context/SignalRContext";
-import ChooseCourier from "./getirYemek/chooseCaurier";
 
 export const marketPlaceAssets = [
   {
@@ -199,7 +199,7 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
           onClick={() =>
             setPopupContent(
               <>
-                <ChooseCourier order={order} />
+                <GetirYemekChooseCourier order={order} />
                 {/* <GoogleRoute
                   data={{
                     lat1: order.courier.latitude,

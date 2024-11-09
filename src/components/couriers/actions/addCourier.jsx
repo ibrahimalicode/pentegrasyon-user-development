@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
+import { TransferI } from "../../../assets/icon";
 import { CancelI } from "../../../assets/icon";
 import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 import CustomPhoneInput from "../../common/customPhoneInput";
+import CustomCheckbox from "../../common/customCheckbox";
 
 //REDUX
 import {
@@ -21,7 +23,11 @@ import {
 } from "../../../redux/restaurants/getRestaurantsSlice";
 
 //UTILS
-import { formatSelectorData } from "../../../utils/utils";
+import { formatSelectorData, formatToPrice } from "../../../utils/utils";
+import {
+  generateLoginCode,
+  resetgenerateLoginCode,
+} from "../../../redux/couriers/generateLoginCodeSlice";
 
 const AddCourier = ({ onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -55,14 +61,34 @@ function AddCourierPopup({ onSuccess }) {
     (state) => state.restaurants.getRestaurants
   );
 
+  const { loading: codeLoading, code } = useSelector(
+    (state) => state.couriers.generateCode
+  );
+
+  const [compensationOptions, setCompensationOptions] = useState([
+    {
+      label: "Package",
+      value: 0,
+    },
+    {
+      label: "KM",
+      value: 1,
+    },
+  ]);
+
   const { setPopupContent } = usePopup();
   const [restaurantsData, setRestaurantsData] = useState([]);
   const [courierData, setCourierData] = useState({
     restaurant: null,
+    compensation: null,
     restaurantId: "",
     username: "",
     phoneNumber: "",
     email: "",
+    loginCode: "",
+    compensationType: 0,
+    rate: "",
+    sendSMSNotify: false,
   });
 
   const closeForm = () => {
@@ -71,7 +97,15 @@ function AddCourierPopup({ onSuccess }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(addCourier(courierData));
+    dispatch(
+      addCourier({
+        ...courierData,
+        compensationRate: courierData.rate
+          .replace(",", "#")
+          .replace(".", ",")
+          .replace("#", "."),
+      })
+    );
   }
 
   //GET RESTAURANTS
@@ -106,6 +140,20 @@ function AddCourierPopup({ onSuccess }) {
       dispatch(resetaddCourier());
     }
   }, [loading, success, error]);
+
+  // SET THE CODE
+  useEffect(() => {
+    if (code) {
+      console.log(code);
+      setCourierData((prev) => {
+        return {
+          ...prev,
+          loginCode: code,
+        };
+      });
+      dispatch(resetgenerateLoginCode());
+    }
+  }, [code]);
 
   return (
     <main>
@@ -193,6 +241,94 @@ function AddCourierPopup({ onSuccess }) {
                     return {
                       ...prev,
                       email: e,
+                    };
+                  });
+                }}
+              />
+            </div>
+
+            <div className="flex max-sm:flex-col sm:gap-4 items-end">
+              <CustomSelect
+                // required
+                label="Compensation"
+                style={{ padding: "1px 0px" }}
+                className="text-sm"
+                value={
+                  courierData.compensation
+                    ? courierData.compensation
+                    : { value: null, label: "Compensation seç" }
+                }
+                options={compensationOptions}
+                onChange={(selectedOption) => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      compensation: selectedOption,
+                      compensationType: selectedOption.value,
+                    };
+                  });
+                }}
+              />
+
+              <CustomInput
+                // required
+                type="text"
+                label="Compensation Rate"
+                placeholder="Compensation Rate"
+                className="py-[.45rem] text-sm"
+                className2="mt-[.5rem] sm:mt-[.5rem]"
+                value={formatToPrice(courierData.rate)}
+                onChange={(e) => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      rate: formatToPrice(e),
+                    };
+                  });
+                }}
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <CustomInput
+                // required
+                type="text"
+                label="Login Code"
+                placeholder="Login Code"
+                className="py-[.45rem] text-sm"
+                className2="mt-[.5rem] sm:mt-[.5rem]"
+                value={courierData.loginCode}
+                onChange={(e) => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      loginCode: e,
+                    };
+                  });
+                }}
+              />
+
+              <div className="mt-7">
+                <button
+                  type="button"
+                  className="flex gap-1 hover:text-[--primary-2]"
+                  onClick={() => dispatch(generateLoginCode({}))}
+                >
+                  <TransferI /> Otomatik Oluştur
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-10">
+              <CustomCheckbox
+                label="SMS Gönder"
+                className="mt-7 whitespace-nowrap"
+                checked={courierData.sendSMSNotify}
+                onChange={() => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      sendSMSNotify: !courierData.sendSMSNotify,
                     };
                   });
                 }}

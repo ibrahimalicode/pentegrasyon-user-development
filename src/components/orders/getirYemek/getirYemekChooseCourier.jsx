@@ -12,7 +12,7 @@ import {
 } from "../../../redux/orders/updateOrderCourierSlice";
 import toast from "react-hot-toast";
 
-const ChooseCourier = ({ order }) => {
+const GetirYemekChooseCourier = ({ order }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
@@ -136,4 +136,4 @@ const ChooseCourier = ({ order }) => {
   );
 };
 
-export default ChooseCourier;
+export default GetirYemekChooseCourier;

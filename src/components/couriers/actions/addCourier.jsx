@@ -86,7 +86,7 @@ function AddCourierPopup({ onSuccess }) {
     phoneNumber: "",
     email: "",
     loginCode: "",
-    compensationType: 0,
+    compensationTypeId: 0,
     rate: "",
     sendSMSNotify: false,
   });
@@ -264,7 +264,7 @@ function AddCourierPopup({ onSuccess }) {
                     return {
                       ...prev,
                       compensation: selectedOption,
-                      compensationType: selectedOption.value,
+                      compensationTypeId: selectedOption.value,
                     };
                   });
                 }}
@@ -308,10 +308,10 @@ function AddCourierPopup({ onSuccess }) {
                 }}
               />
 
-              <div className="mt-7">
+              <div className="mt-9">
                 <button
                   type="button"
-                  className="flex gap-1 hover:text-[--primary-2]"
+                  className="flex gap-1 hover:text-[--primary-2] whitespace-nowrap"
                   onClick={() => dispatch(generateLoginCode({}))}
                 >
                   <TransferI /> Otomatik Oluştur

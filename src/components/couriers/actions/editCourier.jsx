@@ -102,9 +102,10 @@ function EditCourierPopup({ onSuccess, courier }) {
     phoneNumber: "9" + phoneNumber,
     email: email,
     loginCode,
-    compensationType: compensationTypeId,
+    compensationTypeId,
     compensationRate: Number(compensationRate).toFixed(2).replace(".", ","),
     sendSMSNotify: false,
+    isOnline: true,
   });
 
   const [courierDataBefore, setCourierDataBefore] = useState({
@@ -116,9 +117,10 @@ function EditCourierPopup({ onSuccess, courier }) {
     phoneNumber: "9" + phoneNumber,
     email: email,
     loginCode,
-    compensationType: compensationTypeId,
+    compensationTypeId,
     compensationRate: Number(compensationRate).toFixed(2).replace(".", ","),
     sendSMSNotify: false,
+    isOnline: true,
   });
 
   const closeForm = () => {
@@ -313,7 +315,7 @@ function EditCourierPopup({ onSuccess, courier }) {
                     return {
                       ...prev,
                       compensation: selectedOption,
-                      compensationType: selectedOption.value,
+                      compensationTypeId: selectedOption.value,
                     };
                   });
                 }}
@@ -358,10 +360,10 @@ function EditCourierPopup({ onSuccess, courier }) {
                 }}
               />
 
-              <div className="mt-7">
+              <div className="mt-9">
                 <button
                   type="button"
-                  className="flex gap-1 hover:text-[--primary-2]"
+                  className="flex gap-1 hover:text-[--primary-2] whitespace-nowrap"
                   onClick={() => dispatch(generateLoginCode({}))}
                 >
                   <TransferI /> Otomatik Oluştur
@@ -370,6 +372,20 @@ function EditCourierPopup({ onSuccess, courier }) {
             </div>
 
             <div className="flex items-center gap-10">
+              <CustomCheckbox
+                label="Is Online"
+                className="mt-7 whitespace-nowrap"
+                checked={courierData.isOnline}
+                onChange={() => {
+                  setCourierData((prev) => {
+                    return {
+                      ...prev,
+                      isOnline: !courierData.isOnline,
+                    };
+                  });
+                }}
+              />
+
               <CustomCheckbox
                 label="SMS Gönder"
                 className="mt-7 whitespace-nowrap"

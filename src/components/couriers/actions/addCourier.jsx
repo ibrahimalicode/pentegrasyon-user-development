@@ -210,8 +210,8 @@ function AddCourierPopup({ onSuccess }) {
             <div className="flex max-sm:flex-col sm:gap-4 items-end">
               <CustomPhoneInput
                 required
-                label="Telefone"
-                placeholder="Telefone"
+                label="Telefon"
+                placeholder="Telefon"
                 className="py-[.45rem] text-sm"
                 value={courierData.phoneNumber}
                 onChange={(phone) => {

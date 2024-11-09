@@ -64,9 +64,9 @@ const SendCode = ({ phoneNumber, setPhoneNumber, setToVerify }) => {
       </div>
       <div className="flex flex-col max-w-full">
         <CustomPhoneInput
-          label="Telefone"
+          label="Telefon"
           type="number"
-          placeholder="Telefone"
+          placeholder="Telefon"
           value={phoneNumber}
           onChange={(phone) => setPhoneNumber(phone)}
           required={true}

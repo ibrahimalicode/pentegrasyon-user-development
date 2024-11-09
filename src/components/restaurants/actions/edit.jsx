@@ -424,8 +424,8 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
               />
               <CustomPhoneInput
                 required={true}
-                label="Telefone"
-                placeholder="Telefone"
+                label="Telefon"
+                placeholder="Telefon"
                 className="py-[.45rem] text-sm"
                 value={restaurantData.phoneNumber}
                 onChange={(phone) => {

@@ -9,7 +9,7 @@ import RemainingMinutes from "../components/remainingMinutes";
 import GetirYemekStatusButtons from "./getirYemekStatusButtons";
 
 //UTILS
-import { formatDateString } from "../../../utils/utils";
+import { formatDateString, formatToPrice } from "../../../utils/utils";
 
 //CONTEXT
 import { useSignalR } from "../../../context/SignalRContext";
@@ -234,10 +234,11 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                             >
                               {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
                               {opt.price > 0 &&
-                                String((opt.price * order.count).toFixed(2))
-                                  .replace(",", "#")
-                                  .replace(".", ",")
-                                  .replace("#", ".")}
+                                formatToPrice(
+                                  String(
+                                    (opt.price * order.count).toFixed(2)
+                                  ).replace(".", ",")
+                                )}
                             </span>
                           </div>
                         ))}
@@ -245,10 +246,12 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                     ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
-                    {String((order.price * order.count).toFixed(2))
-                      .replace(",", "#")
-                      .replace(".", ",")
-                      .replace("#", ".")}
+                    {formatToPrice(
+                      String((order.price * order.count).toFixed(2)).replace(
+                        ".",
+                        ","
+                      )
+                    )}
                   </td>
                 </tr>
                 {order.note && (
@@ -276,21 +279,19 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
               <div className="w-full flex items-center justify-end gap-2">
                 <p>Toplam:</p>
                 <p className="text-base">
-                  {String(order.totalPrice.toFixed(2))
-                    .replace(",", "#")
-                    .replace(".", ",")
-                    .replace("#", ".")}
+                  {formatToPrice(
+                    String(order.totalPrice.toFixed(2)).replace(".", ",")
+                  )}
                 </p>
               </div>
               <div className="w-full flex items-center justify-end gap-2">
                 <p>İndirim:</p>
                 <p className="text-base">
-                  {String(
-                    (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
-                  )
-                    .replace(",", "#")
-                    .replace(".", ",")
-                    .replace("#", ".")}
+                  {formatToPrice(
+                    String(
+                      (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
+                    ).replace(".", ",")
+                  )}
                 </p>
               </div>
             </>
@@ -299,14 +300,15 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {order.totalDiscountedPrice
-                ? String(order.totalDiscountedPrice.toFixed(2))
-                    .replace(",", "#")
-                    .replace(".", ",")
-                    .replace("#", ".")
-                : String(order.totalPrice.toFixed(2))
-                    .replace(",", "#")
-                    .replace(".", ",")
-                    .replace("#", ".")}
+                ? formatToPrice(
+                    String(order.totalDiscountedPrice.toFixed(2)).replace(
+                      ".",
+                      ","
+                    )
+                  )
+                : formatToPrice(
+                    String(order.totalPrice.toFixed(2)).replace(".", ",")
+                  )}
             </p>
           </div>
         </div>

@@ -1,9 +1,8 @@
 import React from "react";
 
 //COMP
-import { InfoI } from "../../../assets/icon";
 import QrGenerator from "../../common/qrGenerator";
-import { formatDateString } from "../../../utils/utils";
+import { formatDateString, formatToPrice } from "../../../utils/utils";
 import MarketPalceIds from "../../../data/marketPlaceIds";
 
 const GetirYemekPrintOrder = ({ order }) => {
@@ -86,21 +85,23 @@ const GetirYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      <div className="flex items-center text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
-        <span className="px-1 mr-1 bg-[--gr-1]">🕑</span>
-        <span>Teslim Zamanı : </span>
-        <span className="font-medium">
-          {" "}
-          {formatDateString(
-            order.createdDateTime,
-            false,
-            false,
-            false,
-            true,
-            true
-          )}
-        </span>
-      </div>
+      {order.isScheduled && (
+        <div className="flex items-center text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
+          <div className="px-1 mt-1.5 mr-1 bg-[--gr-1]">🕑</div>
+          <div>Teslim Zamanı : </div>
+          <div className="font-medium">
+            {" "}
+            {formatDateString(
+              order.createdDateTime,
+              false,
+              false,
+              false,
+              true,
+              true
+            )}
+          </div>
+        </div>
+      )}
 
       {(order.clientNote ||
         order.doNotKnock ||
@@ -157,21 +158,13 @@ const GetirYemekPrintOrder = ({ order }) => {
                                   : "text-[--red-1]"
                               }`}
                             >
-                              {opt.price > 0
-                                ? `+${String(
+                              {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
+                              {opt.price > 0 &&
+                                formatToPrice(
+                                  String(
                                     (opt.price * order.count).toFixed(2)
-                                  )
-                                    .replace(",", "#")
-                                    .replace(".", ",")
-                                    .replace("#", ".")}`
-                                : opt.price < 0
-                                ? `-${String(
-                                    (opt.price * order.count).toFixed(2)
-                                  )
-                                    .replace(",", "#")
-                                    .replace(".", ",")
-                                    .replace("#", ".")}`
-                                : ""}
+                                  ).replace(".", ",")
+                                )}
                             </span>
                           </div>
                         ))}
@@ -179,10 +172,12 @@ const GetirYemekPrintOrder = ({ order }) => {
                     ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
-                    {String((order.price * order.count).toFixed(2))
-                      .replace(",", "#")
-                      .replace(".", ",")
-                      .replace("#", ".")}
+                    {formatToPrice(
+                      String((order.price * order.count).toFixed(2)).replace(
+                        ".",
+                        ","
+                      )
+                    )}
                   </td>
                 </tr>
                 {order.note && (
@@ -214,12 +209,11 @@ const GetirYemekPrintOrder = ({ order }) => {
               <span>%15 iskonto : </span>
               <span>
                 -
-                {String(
-                  (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
-                )
-                  .replace(",", "#")
-                  .replace(".", ",")
-                  .replace("#", ".")}
+                {formatToPrice(
+                  String(
+                    (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
+                  ).replace(".", ",")
+                )}
               </span>
             </p>
           </>
@@ -229,14 +223,15 @@ const GetirYemekPrintOrder = ({ order }) => {
           <span>Kalan Odeme : </span>
           <span className="font-bold">
             {order.totalDiscountedPrice
-              ? String(order.totalDiscountedPrice.toFixed(2))
-                  .replace(",", "#")
-                  .replace(".", ",")
-                  .replace("#", ".")
-              : String(order.totalPrice.toFixed(2))
-                  .replace(",", "#")
-                  .replace(".", ",")
-                  .replace("#", ".")}
+              ? formatToPrice(
+                  String(order.totalDiscountedPrice.toFixed(2)).replace(
+                    ".",
+                    ","
+                  )
+                )
+              : formatToPrice(
+                  String(order.totalPrice.toFixed(2)).replace(".", ",")
+                )}
           </span>
         </p>
       </div>

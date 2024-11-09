@@ -11,7 +11,11 @@ import GoFody from "../../assets/img/orders/GoFody.png";
 import Yemeksepeti from "../../assets/img/orders/Yemeksepeti.png";
 
 //UTILS
-import { formatDateString, formatOrders } from "../../utils/utils";
+import {
+  formatDateString,
+  formatOrders,
+  formatToPrice,
+} from "../../utils/utils";
 
 //COMP
 import PrintComponent from "./components/printComponent";
@@ -213,14 +217,12 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.totalDiscountedPrice
-            ? String(order.totalDiscountedPrice.toFixed(2))
-                .replace(",", "#")
-                .replace(".", ",")
-                .replace("#", ".")
-            : String(order.totalPrice.toFixed(2))
-                .replace(",", "#")
-                .replace(".", ",")
-                .replace("#", ".")}
+            ? formatToPrice(
+                String(order.totalDiscountedPrice.toFixed(2)).replace(".", ",")
+              )
+            : formatToPrice(
+                String(order.totalPrice.toFixed(2)).replace(".", ",")
+              )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
           {getMarketPlaceAssets(order).StatusButton}

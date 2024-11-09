@@ -72,11 +72,11 @@ function EditCourierPopup({ onSuccess, courier }) {
 
   const compensationOptions = [
     {
-      label: "Package",
+      label: "Paket Başına Hakediş",
       value: 0,
     },
     {
-      label: "KM",
+      label: "KM Bazında Hakediş",
       value: 1,
     },
   ];
@@ -204,8 +204,6 @@ function EditCourierPopup({ onSuccess, courier }) {
     }
   }, [code]);
 
-  console.log(courier);
-
   return (
     <main>
       <div className="w-full pt-12 px-[4%] pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] max-w-2xl">
@@ -301,13 +299,13 @@ function EditCourierPopup({ onSuccess, courier }) {
             <div className="flex max-sm:flex-col sm:gap-4 items-end">
               <CustomSelect
                 // required
-                label="Compensation"
+                label="Hakediş Şekli"
                 style={{ padding: "1px 0px" }}
                 className="text-sm"
                 value={
                   courierData.compensation
                     ? courierData.compensation
-                    : { value: null, label: "Compensation seç" }
+                    : { value: null, label: "Hakediş Şekli seç" }
                 }
                 options={compensationOptions}
                 onChange={(selectedOption) => {

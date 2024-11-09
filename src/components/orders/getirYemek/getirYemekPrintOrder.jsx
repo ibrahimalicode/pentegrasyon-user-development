@@ -128,14 +128,12 @@ const GetirYemekPrintOrder = ({ order }) => {
               <React.Fragment key={order.id}>
                 <tr>
                   <td className="px-2 text-left">
-                    <div>
-                      <span className="mr-0.5 rounded-sm font-medium">
-                        {order.count}{" "}
-                      </span>
-                      x {order.name}
+                    <div className="font-bold">
+                      <span className="mr-0.5 rounded-sm">{order.count} </span>x{" "}
+                      {order.name}
                     </div>
                     {order.optionCategories.map((cat) => (
-                      <div key={cat.id} className="text-base pl-4">
+                      <div key={cat.id} className="text-sm pl-4">
                         <span>{cat.name}</span>
 
                         {cat.options.map((opt) => (

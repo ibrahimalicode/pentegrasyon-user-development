@@ -100,10 +100,7 @@ function AddCourierPopup({ onSuccess }) {
     dispatch(
       addCourier({
         ...courierData,
-        compensationRate: courierData.rate
-          .replace(",", "#")
-          .replace(".", ",")
-          .replace("#", "."),
+        compensationRate: courierData.rate.replace(".", "").replace(",", "."),
       })
     );
   }

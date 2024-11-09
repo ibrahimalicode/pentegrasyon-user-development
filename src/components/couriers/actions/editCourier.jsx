@@ -138,8 +138,8 @@ function EditCourierPopup({ onSuccess, courier }) {
       updateCourier({
         ...courierData,
         compensationRate: courierData.compensationRate
-          .replace(",", ".")
-          .replace(".", ""),
+          .replace(".", "")
+          .replace(",", "."),
       })
     );
   }

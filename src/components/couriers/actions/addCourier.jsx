@@ -270,8 +270,8 @@ function AddCourierPopup({ onSuccess }) {
               <CustomInput
                 // required
                 type="text"
-                label="Compensation Rate"
-                placeholder="Compensation Rate"
+                label="Hakediş Oranı"
+                placeholder="Hakediş Oranı"
                 className="py-[.45rem] text-sm"
                 className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={formatToPrice(courierData.rate)}

@@ -89,17 +89,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         <div className="flex items-center text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
           <div className="px-1 mt-1.5 mr-1 bg-[--gr-1]">🕑</div>
           <div>Teslim Zamanı : </div>
-          <div className="font-medium">
-            {" "}
-            {formatDateString(
-              order.createdDateTime,
-              false,
-              false,
-              false,
-              true,
-              true
-            )}
-          </div>
+          <div className="font-medium">{order.checkedScheduledDate}</div>
         </div>
       )}
 

@@ -27,6 +27,7 @@ import GetirYemekOrderDetails from "./getirYemek/getirYemekOrderDetails";
 //CONTEXT
 import { usePopup } from "../../context/PopupContext";
 import { useSignalR } from "../../context/SignalRContext";
+import ChooseCourier from "./getirYemek/chooseCaurier";
 
 export const marketPlaceAssets = [
   {
@@ -197,16 +198,19 @@ const OrdersTableBody = ({ order, totalItems, setOrdersData }) => {
         <td
           onClick={() =>
             setPopupContent(
-              <GoogleRoute
-                data={{
-                  lat1: order.courier.latitude,
-                  lng1: order.courier.longitude,
-                  lat2: order.client.latitude,
-                  lng2: order.client.longitude,
-                }}
-                name1={order.courier.name}
-                name2={order.client.name}
-              />
+              <>
+                <ChooseCourier order={order} />
+                {/* <GoogleRoute
+                  data={{
+                    lat1: order.courier.latitude,
+                    lng1: order.courier.longitude,
+                    lat2: order.client.latitude,
+                    lng2: order.client.longitude,
+                  }}
+                  name1={order.courier.name}
+                  name2={order.client.name}
+                /> */}
+              </>
             )
           }
           className="whitespace-nowrap"

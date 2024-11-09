@@ -343,8 +343,8 @@ function EditCourierPopup({ onSuccess, courier }) {
               <CustomInput
                 // required
                 type="text"
-                label="Login Code"
-                placeholder="Login Code"
+                label="Giriş Kodu"
+                placeholder="Giriş Kodu"
                 className="py-[.45rem] text-sm"
                 className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={courierData.loginCode}
@@ -371,7 +371,7 @@ function EditCourierPopup({ onSuccess, courier }) {
 
             <div className="flex items-center gap-10">
               <CustomCheckbox
-                label="Is Online"
+                label="Teslimata Hazır"
                 className="mt-7 whitespace-nowrap"
                 checked={courierData.isOnline}
                 onChange={() => {

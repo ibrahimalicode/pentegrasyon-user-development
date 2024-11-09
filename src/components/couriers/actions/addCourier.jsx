@@ -290,8 +290,8 @@ function AddCourierPopup({ onSuccess }) {
               <CustomInput
                 // required
                 type="text"
-                label="Login Code"
-                placeholder="Login Code"
+                label="Giriş Kodu"
+                placeholder="Giriş Kodu"
                 className="py-[.45rem] text-sm"
                 className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={courierData.loginCode}

@@ -22,9 +22,9 @@ import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
-  getRestaurantsForLicenses,
-  resetGetRestaurantsForLicenses,
-} from "../../../redux/restaurants/getRestaurantsForLicensesSlice";
+  getRestaurantsMap,
+  resetGetRestaurantsMap,
+} from "../../../redux/restaurants/getRestaurantsMapSlice";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -36,8 +36,8 @@ const LicensesPage = () => {
   const {
     loading: restaurantsLoading,
     error: restaurantsError,
-    restaurants,
-  } = useSelector((state) => state.restaurants.getForLicenses);
+    entities,
+  } = useSelector((state) => state.restaurants.getRestaurantsMap);
 
   const { cities: citiesData } = useSelector((state) => state.data.getCities);
 
@@ -93,7 +93,8 @@ const LicensesPage = () => {
       dispatch(resetGetLicensesState());
     }
     if (success) {
-      dispatch(getRestaurantsForLicenses(licenses.data));
+      setTotalItems(licenses.totalCount);
+      dispatch(getRestaurantsMap(licenses.data));
       dispatch(resetGetLicensesState());
     }
   }, [success, error, licenses]);
@@ -102,13 +103,13 @@ const LicensesPage = () => {
   useEffect(() => {
     if (restaurantsError) {
       toast.error(restaurantsError.message);
-      dispatch(resetGetRestaurantsForLicenses());
+      dispatch(resetGetRestaurantsMap());
     }
-    if (restaurants) {
-      setLicensesData(restaurants);
-      dispatch(resetGetRestaurantsForLicenses());
+    if (entities) {
+      setLicensesData(entities);
+      dispatch(resetGetRestaurantsMap());
     }
-  }, [restaurants, restaurantsError, licenses]);
+  }, [entities, restaurantsError, licenses]);
 
   // GET AND SET CITIES
   useEffect(() => {

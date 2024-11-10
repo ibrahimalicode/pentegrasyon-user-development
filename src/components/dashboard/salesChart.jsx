@@ -1,7 +1,7 @@
 import CustomSelector from "../common/customSelector";
-import TotalSales from "../../data/totalSales";
-import months from "../../data/months";
-import years from "../../data/years";
+import TotalSales from "../../enums/totalSales";
+import months from "../../enums/months";
+import years from "../../enums/years";
 
 const SalesChart = () => {
   const rates = ["100", "80", "60", "40", "20", "0"];

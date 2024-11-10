@@ -9,8 +9,8 @@ import { CancelI } from "../../../assets/icon";
 import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
-import CustomPhoneInput from "../../common/customPhoneInput";
 import CustomCheckbox from "../../common/customCheckbox";
+import CustomPhoneInput from "../../common/customPhoneInput";
 
 //REDUX
 import {
@@ -21,13 +21,14 @@ import {
   getRestaurants,
   resetGetRestaurants,
 } from "../../../redux/restaurants/getRestaurantsSlice";
-
-//UTILS
-import { formatSelectorData, formatToPrice } from "../../../utils/utils";
 import {
   generateLoginCode,
   resetgenerateLoginCode,
 } from "../../../redux/couriers/generateLoginCodeSlice";
+
+//UTILS
+import compensationTypes from "../../../enums/compensationTypes";
+import { formatSelectorData, formatToPrice } from "../../../utils/utils";
 
 const AddCourier = ({ onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -64,17 +65,6 @@ function AddCourierPopup({ onSuccess }) {
   const { loading: codeLoading, code } = useSelector(
     (state) => state.couriers.generateCode
   );
-
-  const [compensationOptions, setCompensationOptions] = useState([
-    {
-      label: "Paket Başına Hakediş",
-      value: 0,
-    },
-    {
-      label: "KM Bazında Hakediş",
-      value: 1,
-    },
-  ]);
 
   const { setPopupContent } = usePopup();
   const [restaurantsData, setRestaurantsData] = useState([]);
@@ -255,7 +245,7 @@ function AddCourierPopup({ onSuccess }) {
                     ? courierData.compensation
                     : { value: null, label: "Hakediş Şekli seç" }
                 }
-                options={compensationOptions}
+                options={compensationTypes}
                 onChange={(selectedOption) => {
                   setCourierData((prev) => {
                     return {

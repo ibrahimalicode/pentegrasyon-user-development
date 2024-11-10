@@ -8,49 +8,49 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  restaurants: null,
+  entities: null,
 };
 
-const getRestaurantsForLicensesSlice = createSlice({
-  name: "getRestaurantsForLicenses",
+const getRestaurantsMapSlice = createSlice({
+  name: "getRestaurantsMap",
   initialState: initialState,
   reducers: {
-    resetGetRestaurantsForLicenses: (state) => {
+    resetGetRestaurantsMap: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.restaurants = null;
+      state.entities = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(getRestaurantsForLicenses.pending, (state) => {
+      .addCase(getRestaurantsMap.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.restaurants = null;
+        state.entities = null;
       })
-      .addCase(getRestaurantsForLicenses.fulfilled, (state, action) => {
+      .addCase(getRestaurantsMap.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.restaurants = action.payload;
+        state.entities = action.payload;
       })
-      .addCase(getRestaurantsForLicenses.rejected, (state, action) => {
+      .addCase(getRestaurantsMap.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.restaurants = null;
+        state.entities = null;
       });
   },
 });
 
-export const getRestaurantsForLicenses = createAsyncThunk(
-  "Restaurants/GetRestaurantsForLicenses",
-  async (licenses, { rejectWithValue }) => {
+export const getRestaurantsMap = createAsyncThunk(
+  "Restaurants/getRestaurantsMap",
+  async (inData, { rejectWithValue }) => {
     try {
       const uniqueRestaurantIds = [
-        ...new Set(licenses.map((license) => license.restaurantId)),
+        ...new Set(inData.map((entity) => entity.restaurantId)),
       ];
 
       const restaurantPromises = uniqueRestaurantIds.map((restaurantId) =>
@@ -70,16 +70,16 @@ export const getRestaurantsForLicenses = createAsyncThunk(
         return acc;
       }, {});
 
-      const updatedLicenses = licenses.map((license) => {
-        const restaurant = restaurantMap[license.restaurantId];
+      const updatedInData = inData.map((entity) => {
+        const restaurant = restaurantMap[entity.restaurantId];
         return {
-          ...license,
+          ...entity,
           restaurantName: restaurant.name,
           restaurantId: restaurant.id,
         };
       });
 
-      return updatedLicenses;
+      return updatedInData;
     } catch (err) {
       const errorMessage = err.message;
       return rejectWithValue({ message: errorMessage });
@@ -87,6 +87,5 @@ export const getRestaurantsForLicenses = createAsyncThunk(
   }
 );
 
-export const { resetGetRestaurantsForLicenses } =
-  getRestaurantsForLicensesSlice.actions;
-export default getRestaurantsForLicensesSlice.reducer;
+export const { resetGetRestaurantsMap } = getRestaurantsMapSlice.actions;
+export default getRestaurantsMapSlice.reducer;

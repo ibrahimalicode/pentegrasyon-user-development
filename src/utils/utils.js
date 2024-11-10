@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import MarketPalceIds from "../data/marketPlaceIds";
+import MarketPalceIds from "../enums/marketPlaceIds";
 import _ from "lodash";
 
 export function formatDateString(

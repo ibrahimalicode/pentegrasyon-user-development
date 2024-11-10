@@ -49,17 +49,14 @@ const getCouriersSlice = createSlice({
 
 export const getCouriers = createAsyncThunk(
   "Couriers/GetCouriers",
-  async ({ pageNumber, pageSize }, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const res = await api.get(`${baseURL}Couriers/GetCouriers`, {
-        params: {
-          pageNumber,
-          pageSize,
-        },
+        params: { ...data },
       });
 
       // console.log(res.data);
-      return res.data.data;
+      return res.data;
     } catch (err) {
       const errorMessage = err.message;
       return rejectWithValue({ message: errorMessage });

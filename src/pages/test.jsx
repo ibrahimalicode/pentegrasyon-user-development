@@ -1,5 +1,5 @@
 import React from "react";
-import order from "../data/order";
+import order from "../enums/order";
 import GetirYemekPrintOrder from "../components/orders/getirYemek/getirYemekPrintOrder";
 
 const Test = () => {

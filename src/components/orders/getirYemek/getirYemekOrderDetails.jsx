@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 //COMP
 import { InfoI } from "../../../assets/icon";
 import CloseI from "../../../assets/icon/close";
-import orderStatuses from "../../../data/orderStatuses";
+import orderStatuses from "../../../enums/orderStatuses";
 import RemainingMinutes from "../components/remainingMinutes";
 import GetirYemekStatusButtons from "./getirYemekStatusButtons";
 

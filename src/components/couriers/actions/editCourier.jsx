@@ -14,6 +14,10 @@ import {
   getRestaurants,
   resetGetRestaurants,
 } from "../../../redux/restaurants/getRestaurantsSlice";
+import {
+  generateLoginCode,
+  resetgenerateLoginCode,
+} from "../../../redux/couriers/generateLoginCodeSlice";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
@@ -21,17 +25,14 @@ import { usePopup } from "../../../context/PopupContext";
 //COMP
 import CustomInput from "../../common/customInput";
 import ActionButton from "../../common/actionButton";
-import { CancelI, EditI, TransferI } from "../../../assets/icon";
 import CustomSelect from "../../common/customSelector";
+import CustomCheckbox from "../../common/customCheckbox";
 import CustomPhoneInput from "../../common/customPhoneInput";
+import { CancelI, EditI, TransferI } from "../../../assets/icon";
 
 //UTILS
+import compensationTypes from "../../../enums/compensationTypes";
 import { formatSelectorData, formatToPrice } from "../../../utils/utils";
-import {
-  generateLoginCode,
-  resetgenerateLoginCode,
-} from "../../../redux/couriers/generateLoginCodeSlice";
-import CustomCheckbox from "../../common/customCheckbox";
 
 const EditCourier = ({ courier, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -57,6 +58,8 @@ export default EditCourier;
 function EditCourierPopup({ onSuccess, courier }) {
   const toastId = useRef();
   const dispatch = useDispatch();
+  const { setPopupContent } = usePopup();
+
   const { loading, success, error } = useSelector(
     (state) => state.couriers.update
   );
@@ -67,19 +70,6 @@ function EditCourierPopup({ onSuccess, courier }) {
   const { loading: codeLoading, code } = useSelector(
     (state) => state.couriers.generateCode
   );
-
-  const { setPopupContent } = usePopup();
-
-  const compensationOptions = [
-    {
-      label: "Paket Başına Hakediş",
-      value: 0,
-    },
-    {
-      label: "KM Bazında Hakediş",
-      value: 1,
-    },
-  ];
 
   const [restaurantsData, setRestaurantsData] = useState([]);
 
@@ -96,7 +86,7 @@ function EditCourierPopup({ onSuccess, courier }) {
   const [courierData, setCourierData] = useState({
     courierId: id,
     restaurant: null,
-    compensation: compensationOptions[compensationTypeId],
+    compensation: compensationTypes[compensationTypeId],
     restaurantId: "",
     username: username,
     phoneNumber: "9" + phoneNumber,
@@ -111,7 +101,7 @@ function EditCourierPopup({ onSuccess, courier }) {
   const [courierDataBefore, setCourierDataBefore] = useState({
     courierId: id,
     restaurant: null,
-    compensation: compensationOptions[compensationTypeId],
+    compensation: compensationTypes[compensationTypeId],
     restaurantId: "",
     username: username,
     phoneNumber: "9" + phoneNumber,
@@ -218,7 +208,7 @@ function EditCourierPopup({ onSuccess, courier }) {
           </div>
           <h1 className="self-center text-2xl font-bold">Kurye Düzenle</h1>
           <form onSubmit={handleSubmit}>
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div className="flex items-end max-sm:flex-col sm:gap-4">
               <CustomSelect
                 required
                 label="Restoran"
@@ -307,7 +297,7 @@ function EditCourierPopup({ onSuccess, courier }) {
                     ? courierData.compensation
                     : { value: null, label: "Hakediş Şekli seç" }
                 }
-                options={compensationOptions}
+                options={compensationTypes}
                 onChange={(selectedOption) => {
                   setCourierData((prev) => {
                     return {

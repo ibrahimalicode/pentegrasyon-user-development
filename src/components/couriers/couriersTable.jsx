@@ -1,7 +1,16 @@
+import { useState } from "react";
+import EyeI from "../../assets/icon/eye";
+import EyeInv from "../../assets/icon/eyeInv";
 import Actions from "./actions/actions";
 import EditCourierIsActive from "./actions/updateCourierIsActive";
 
 const CouriersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
+  const [showLoginCode, setShowLoginCode] = useState(null);
+
+  function switchShowLoginCode(index) {
+    setShowLoginCode(showLoginCode == index ? null : index);
+  }
+
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
@@ -11,6 +20,8 @@ const CouriersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
               <th className="pl-4 font-normal">Ad</th>
               <th className="font-normal">Tel No.</th>
               <th className="font-normal">E-Posta</th>
+              <th className="font-normal">Restoran</th>
+              <th className="font-normal">Teslimata</th>
               <th className="font-normal">Giriş Kodu</th>
               <th className="font-normal text-center">Durum</th>
               <th className="font-normal text-center">İşlem</th>
@@ -35,7 +46,35 @@ const CouriersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                   {data.email}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.loginCode}
+                  {data.restaurantName}
+                </td>
+                <td
+                  className={`whitespace-nowrap text-[--black-2] font-normal ${
+                    data.isOnline ? "text-[--green-1]" : "text-[--red-1]"
+                  }`}
+                >
+                  {data.isOnline ? "Uygun" : "Uygin Değil"}
+                </td>
+                <td className="whitespace-nowrap text-[--black-2] font-light">
+                  <button
+                    className="flex items-center cursor-pointer"
+                    onClick={() => switchShowLoginCode(index)}
+                  >
+                    <p
+                      className={`min-w-16 ${
+                        showLoginCode !== index && "hidden"
+                      }`}
+                    >
+                      {data.loginCode}
+                    </p>
+                    <span>
+                      {showLoginCode !== index ? (
+                        <EyeInv className="size-[1rem]" />
+                      ) : (
+                        <EyeI className="size-[1rem]" />
+                      )}
+                    </span>
+                  </button>
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light text-center">
                   <EditCourierIsActive

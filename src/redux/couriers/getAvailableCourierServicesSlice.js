@@ -8,49 +8,49 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  couriers: null,
+  services: null,
 };
 
-const getAvailableCouriersSlice = createSlice({
-  name: "getAvailableCouriers",
+const getAvailableCourierServicesSlice = createSlice({
+  name: "getAvailableCourierServices",
   initialState: initialState,
   reducers: {
-    resetgetAvailableCouriers: (state) => {
+    resetgetAvailableCourierServices: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.couriers = null;
+      state.services = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(getAvailableCouriers.pending, (state) => {
+      .addCase(getAvailableCourierServices.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.couriers = null;
+        state.services = null;
       })
-      .addCase(getAvailableCouriers.fulfilled, (state, action) => {
+      .addCase(getAvailableCourierServices.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.couriers = action.payload;
+        state.services = action.payload;
       })
-      .addCase(getAvailableCouriers.rejected, (state, action) => {
+      .addCase(getAvailableCourierServices.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.couriers = null;
+        state.services = null;
       });
   },
 });
 
-export const getAvailableCouriers = createAsyncThunk(
-  "Couriers/GetAvailableCouriers",
+export const getAvailableCourierServices = createAsyncThunk(
+  "Couriers/GetAvailableCourierServices",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.get(
-        `${baseURL}Couriers/GetAvailableCouriers`,
+        `${baseURL}Couriers/GetAvailableCourierServices`,
         {
           ...data,
         },
@@ -66,5 +66,6 @@ export const getAvailableCouriers = createAsyncThunk(
   }
 );
 
-export const { resetgetAvailableCouriers } = getAvailableCouriersSlice.actions;
-export default getAvailableCouriersSlice.reducer;
+export const { resetgetAvailableCourierServices } =
+  getAvailableCourierServicesSlice.actions;
+export default getAvailableCourierServicesSlice.reducer;

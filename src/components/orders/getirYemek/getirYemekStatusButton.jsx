@@ -1,14 +1,12 @@
 //MODULES
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 
 //COMP
 import { useOrderActions } from "./useOrderActions";
-import orderStatuses from "../../../data/orderStatuses";
 
 //UTILS
-import { formatDateString } from "../../../utils/utils";
-import { compareWithCurrentDateTime } from "../../../utils/utils";
+import orderStatuses from "../../../enums/orderStatuses";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;

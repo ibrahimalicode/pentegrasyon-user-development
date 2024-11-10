@@ -6,6 +6,7 @@ import deleteCourierSlice from "./deleteCourierSlice";
 import updateCourierLoginCodeSlice from "./updateCourierLoginCodeSlice";
 import getAvailableCouriersSlice from "./getAvailableCouriersSlice";
 import generateLoginCodeSlice from "./generateLoginCodeSlice";
+import getAvailableCourierServicesSlice from "./getAvailableCourierServicesSlice";
 
 // Slices
 const couriersSlice = combineReducers({
@@ -16,6 +17,7 @@ const couriersSlice = combineReducers({
   updateLoginCode: updateCourierLoginCodeSlice,
   getOnlineCouriers: getAvailableCouriersSlice,
   generateCode: generateLoginCodeSlice,
+  getCourierLicenses: getAvailableCourierServicesSlice,
 });
 
 export default couriersSlice;

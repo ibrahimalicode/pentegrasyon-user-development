@@ -1,16 +1,25 @@
+//MODULE
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMPONENT
 import CloseI from "../../../assets/icon/close";
-import { usePopup } from "../../../context/PopupContext";
 import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
-import { useDispatch, useSelector } from "react-redux";
-import { getAvailableCouriers } from "../../../redux/couriers/getAvailableCouriersSlice";
-import ActionButton from "../../common/actionButton";
+import { usePopup } from "../../../context/PopupContext";
+
+//UTILS
+import { formatSelectorData } from "../../../utils/utils";
+import compensationTypes from "../../../enums/compensationTypes";
+
+//REDUX
 import {
   resetupdateOrderCourier,
   updateOrderCourier,
 } from "../../../redux/orders/updateOrderCourierSlice";
-import toast from "react-hot-toast";
+import { getAvailableCouriers } from "../../../redux/couriers/getAvailableCouriersSlice";
+import { getAvailableCourierServices } from "../../../redux/couriers/getAvailableCourierServicesSlice";
 
 const GetirYemekChooseCourier = ({ order }) => {
   const toastId = useRef();
@@ -20,6 +29,9 @@ const GetirYemekChooseCourier = ({ order }) => {
   const { loading: couriersLoading, couriers } = useSelector(
     (state) => state.couriers.getOnlineCouriers
   );
+  const { loading: servicesLoading, services } = useSelector(
+    (state) => state.couriers.getCourierLicenses
+  );
   const { loading, error, success } = useSelector(
     (state) => state.orders.updateCourier
   );
@@ -28,19 +40,9 @@ const GetirYemekChooseCourier = ({ order }) => {
   const [courierServices, setCourierServices] = useState(null);
   const [restaurantCouriers, setRestaurantCouriers] = useState(null);
   const [compensationValue, setCompensationValue] = useState({
-    label: "Choose Type",
+    label: "Hakediş Şekl Seç",
     value: null,
   });
-  const [compensationOptions, setCompensationOptions] = useState([
-    {
-      label: "Package",
-      value: 0,
-    },
-    {
-      label: "KM",
-      value: 1,
-    },
-  ]);
 
   function handleSubmit() {
     dispatch(
@@ -70,21 +72,31 @@ const GetirYemekChooseCourier = ({ order }) => {
     }
   }, [loading, error, success]);
 
-  // GET COURIERS
+  // GET COURIERS AND COURIER LICENSES
   useEffect(() => {
     if (!restaurantCouriers) {
-      dispatch(getAvailableCouriers()); // GetAvialableCouriers
+      dispatch(getAvailableCouriers({ restaurantId: order.restaurantId }));
     }
-    // dispatch() //GetAvialableCourierService
+    if (!courierServices) {
+      dispatch(
+        getAvailableCourierServices({ restaurantId: order.restaurantId })
+      );
+    }
   }, []);
 
   // SET COURIERS
   useEffect(() => {
-    if (couriers) {
-      console.log(couriers);
-      setRestaurantCouriers(couriers);
+    if (couriers?.length) {
+      setRestaurantCouriers(formatSelectorData(couriers));
     }
   }, [couriers]);
+
+  // SET SERVICES(LICENSES)
+  useEffect(() => {
+    if (services?.length) {
+      setCourierServices(formatSelectorData(services));
+    }
+  }, [services]);
 
   return (
     <main className="bg-[--white-1] rounded-md p-5">
@@ -109,15 +121,15 @@ const GetirYemekChooseCourier = ({ order }) => {
               onChange={(e) => setCompensationRate(e)}
             />
             <CustomSelect
-              label="Compensation Type"
+              label="Hakediş Şekl (Zorunlu Değil)"
               isSearchable={false}
               value={compensationValue}
-              options={compensationOptions}
+              options={compensationTypes}
               onChange={(selectedOption) =>
                 setCompensationValue(selectedOption)
               }
             />
-            <CustomInput label="Compensation Rate" />
+            <CustomInput label="Hakediş Oranı (Zorunlu Değil)" />
           </div>
           {courierServices && <div></div>}
         </div>

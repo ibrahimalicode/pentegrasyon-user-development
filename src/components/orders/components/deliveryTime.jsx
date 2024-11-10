@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import minutes from "../../../data/minutes";
+import minutes from "../../../enums/minutes";
 import CustomSelect from "../../common/customSelector";
 
 //REDUX

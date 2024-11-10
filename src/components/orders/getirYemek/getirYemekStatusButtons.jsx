@@ -8,15 +8,15 @@ import { useSlideBar } from "../../../context/SlideBarContext";
 
 //UTILS
 import { formatDateString } from "../../../utils/utils";
+import orderStatuses from "../../../enums/orderStatuses";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
 
 //COMP
 import CancelOrderPopup from "./cancelOrderPopup";
 import { useOrderActions } from "./useOrderActions";
-import orderStatuses from "../../../data/orderStatuses";
-import RemainingSeconds from "../components/remainingSeconds";
 import { marketPlaceAssets } from "../ordersTableBody";
 import PrintComponent from "../components/printComponent";
+import RemainingSeconds from "../components/remainingSeconds";
 
 const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();

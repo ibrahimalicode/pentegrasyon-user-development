@@ -1,4 +1,4 @@
-import licenseTypeIds from "../../data/licenseTypeIds";
+import licenseTypeIds from "../../enums/licenseTypeIds";
 import LicensesActions from "./actions/licensesActions";
 import { formatDateString, getRemainingDays } from "../../utils/utils";
 import EditLicenseIsActive from "./actions/updateLicenseIsActive";

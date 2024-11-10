@@ -2,8 +2,8 @@ import React from "react";
 
 //COMP
 import QrGenerator from "../../common/qrGenerator";
-import { formatDateString, formatToPrice } from "../../../utils/utils";
-import MarketPalceIds from "../../../data/marketPlaceIds";
+import { formatToPrice } from "../../../utils/utils";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const GetirYemekPrintOrder = ({ order }) => {
   function getFullAddress() {
@@ -208,7 +208,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         ) : null}
 
         <p className="flex justify-between text-base">
-          <span>Kalan Odeme : </span>
+          <span>Ödenecek Tutar : </span>
           <span className="font-bold">
             {order.totalDiscountedPrice
               ? formatToPrice(

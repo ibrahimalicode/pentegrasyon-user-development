@@ -49,6 +49,7 @@ export const getAvailableCouriers = createAsyncThunk(
   "Couriers/GetAvailableCouriers",
   async (data, { rejectWithValue }) => {
     try {
+      console.log(data);
       const res = await api.get(
         `${baseURL}Couriers/GetAvailableCouriers`,
         {

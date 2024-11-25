@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePopup } from "../../../context/PopupContext";
-import RestaurantsStatusPopup from "./RestaurantsStatusPopup";
+import RestaurantsStatusPopup from "./restaurantsStatusPopup";
 
 const RestaurantsStatus = () => {
   const { setPopupContent } = usePopup();

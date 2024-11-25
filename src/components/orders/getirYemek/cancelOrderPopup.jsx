@@ -21,7 +21,7 @@ function CancelOrderPopup({ ticketId }) {
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
 
-  const { error, loading, options } = useSelector(
+  const { error, options } = useSelector(
     (state) => state.getirYemek.ticketCancelOptions
   );
 

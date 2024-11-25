@@ -1,16 +1,16 @@
 //MODULES
-import { useState } from "react";
+// import { useState } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
-import { useOrderActions } from "./useOrderActions";
+import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
 
 //UTILS
-import orderStatuses from "../../../enums/orderStatuses";
+import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
-  const { verifyOrder, prepareOrder, deliverOrder } = useOrderActions(
+  const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
     order,
     ticketId,
     setOrdersData
@@ -32,10 +32,13 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     (state) => state.getirYemek.cancelTicket
   );
 
-  const nextId = orderStatuses.filter((s) => s.id === order.status)[0]?.nextId;
-  let orderStat = orderStatuses.filter((stat) => stat.id === order.status)[0];
+  const nextId = getirYemekOrderStatuses.filter((s) => s.id === order.status)[0]
+    ?.nextId;
+  let orderStat = getirYemekOrderStatuses.filter(
+    (stat) => stat.id === order.status
+  )[0];
   if (nextId) {
-    orderStat = orderStatuses.filter((s) => s.id === nextId)[0];
+    orderStat = getirYemekOrderStatuses.filter((s) => s.id === nextId)[0];
   } else {
     orderStat = { ...orderStat, text: orderStat?.label };
   }
@@ -59,10 +62,11 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     cancelLoading ||
     (orderStat.id !== 350 && orderStat.id !== 700 && nextId !== 900);
 
-  const [isDisabled, setIsDisabled] = useState(false);
+  // const [isDisabled, setIsDisabled] = useState(false);
+  const isDisabled = false;
 
   // useEffect(() => {
-  //   const nextStatus = orderStatuses.filter((s) => s.id === order.status);
+  //   const nextStatus = getirYemekOrderStatuses.filter((s) => s.id === order.status);
   //   const nextId = nextStatus[0]?.nextId;
   //   setIsDisabled(false);
 

@@ -49,16 +49,11 @@ export const getAvailableCouriers = createAsyncThunk(
   "Couriers/GetAvailableCouriers",
   async (data, { rejectWithValue }) => {
     try {
-      console.log(data);
-      const res = await api.get(
-        `${baseURL}Couriers/GetAvailableCouriers`,
-        {
-          ...data,
-        },
-        { params: { ...data } }
-      );
+      const res = await api.get(`${baseURL}Couriers/GetAvailableCouriers`, {
+        params: { ...data },
+      });
 
-      console.log(res.data);
+      // console.log(res.data);
       return res.data.data;
     } catch (err) {
       const errorMessage = err.message;

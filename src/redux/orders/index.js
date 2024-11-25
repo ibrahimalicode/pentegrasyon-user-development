@@ -6,6 +6,7 @@ import getAutomaticApprovalVariableSlice from "./getAutomaticApprovalVariableSli
 import getOnTheWayTimeVariableSlice from "./getOnTheWayTimeVariableSlice";
 import getDeliveryTimeVariableSlice from "./getDeliveryTimeVariableSlice";
 import updateOrderCourierSlice from "./updateOrderCourierSlice";
+import getOrderCompensationSlice from "./getOrderCompensationSlice";
 
 // Slices
 
@@ -17,6 +18,7 @@ const ordersSlice = combineReducers({
   getOnTheWayTimeVar: getOnTheWayTimeVariableSlice,
   getDeliveryTimeVar: getDeliveryTimeVariableSlice,
   updateAutomationVars: updateTicketAutomationVariableSlice,
+  getOrderCompensation: getOrderCompensationSlice,
 });
 
 export default ordersSlice;

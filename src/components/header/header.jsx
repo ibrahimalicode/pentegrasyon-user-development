@@ -40,8 +40,8 @@ function Header({ openSidebar, setOpenSidebar }) {
       dispatch(resetLogoutState());
     }
     if (error) {
-      clearAuth();
-      navigate("/login");
+      // clearAuth();
+      // navigate("/login");
       dispatch(resetLogoutState());
     }
   }, [success, loading, error]);

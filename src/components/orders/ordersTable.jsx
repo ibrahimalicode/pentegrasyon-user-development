@@ -1,12 +1,46 @@
-//MODULEe
+//MODULE
 
 //COMP
-import OrdersTableBody from "./ordersTableBody";
+import React from "react";
+import GetirYemekTableBody from "./getirYemek/getirYemekTableBody";
+import YemekSepetiTableBody from "./yemekSepeti/yemekSepetiTableBody";
+
+export const marketplaceTableBodies = [
+  {
+    TableBody: GetirYemekTableBody,
+  },
+  {
+    TableBody: GetirYemekTableBody,
+  },
+  {
+    TableBody: YemekSepetiTableBody,
+  },
+  {
+    TableBody: YemekSepetiTableBody,
+  },
+];
 
 const OrdersTable = ({ ordersData, setOrdersData }) => {
+  function getMarketPlaceAssets(order) {
+    const TableBodyComp =
+      marketplaceTableBodies[order.marketplaceId]?.TableBody;
+
+    return {
+      TableBody: (
+        <TableBodyComp
+          order={order}
+          totalItems={ordersData?.length}
+          setOrdersData={setOrdersData}
+        />
+      ),
+    };
+  }
+
+  // console.log(ordersData);
+
   return (
     <main className="max-xl:overflow-x-scroll">
-      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
+      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-max overflow-hidden">
         <table className="w-full text-sm font-light">
           <thead>
             <tr className="bg-[--light-3] h-10 text-left">
@@ -25,12 +59,9 @@ const OrdersTable = ({ ordersData, setOrdersData }) => {
 
           <tbody>
             {ordersData.map((order, i) => (
-              <OrdersTableBody
-                key={i}
-                order={order}
-                totalItems={ordersData.length}
-                setOrdersData={setOrdersData}
-              />
+              <React.Fragment key={i}>
+                {getMarketPlaceAssets(order)?.TableBody}
+              </React.Fragment>
             ))}
           </tbody>
         </table>

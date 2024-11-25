@@ -161,6 +161,10 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
     sortedData = dataCopy.sort((a, b) =>
       a.fullName.localeCompare(b.fullName, "tr")
     );
+  } else if (data[0]?.username) {
+    sortedData = dataCopy.sort((a, b) =>
+      a.username.localeCompare(b.username, "tr")
+    );
   }
   if (withPhoneNumber && sortedData[0]?.phoneNumber) {
     outData = sortedData.map((ent) => {
@@ -176,7 +180,11 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
     outData = sortedData.map((ent) => {
       return {
         value: ent.id,
-        label: ent?.name ? ent.name : ent?.fullName,
+        label: ent?.name
+          ? ent.name
+          : ent?.fullName
+          ? ent.fullName
+          : ent?.username,
         id: ent.id,
         userId: ent?.userId,
       };

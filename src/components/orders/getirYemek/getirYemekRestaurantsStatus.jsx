@@ -1,6 +1,12 @@
+//MODELS
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import CustomToggle from "../../common/customToggle";
 import { useDispatch, useSelector } from "react-redux";
+
+//COMP
+import CustomToggle from "../../common/customToggle";
+
+//REDUX
 import {
   getirYemekGetRestaurants,
   resetGetirYemekGetRestaurants,
@@ -9,11 +15,11 @@ import {
   getirYemekUpdateRestaurantStatus,
   resetGetirYemekUpdateRestaurantStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantStatusSlice";
-import toast from "react-hot-toast";
 import {
   getirYemekUpdateRestaurantCourierStatus,
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
+
 const GetirYemekRestaurantsStatus = () => {
   const toastId = useRef();
   const dispatch = useDispatch();

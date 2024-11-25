@@ -1,4 +1,4 @@
-const orderStatuses = [
+const getirYemekOrderStatuses = [
   {
     bg: "--status-yellow",
     color: "--yellow-1",
@@ -89,4 +89,4 @@ const orderStatuses = [
   },
 ];
 
-export default orderStatuses;
+export default getirYemekOrderStatuses;

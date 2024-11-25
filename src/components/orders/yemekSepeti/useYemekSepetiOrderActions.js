@@ -1,18 +1,3 @@
-//REDUX
-import {
-  getirYemekTicketVerify,
-  resetGetirYemekTicketVerify,
-} from "../../../redux/getirYemek/getirYemekTicketVerifySlice";
-import {
-  getirYemekTicketPrepare,
-  resetGetirYemekTicketPrepare,
-} from "../../../redux/getirYemek/getirYemekTicketPrepareSlice";
-import {
-  getirYemekTicketDeliver,
-  resetGetirYemekTicketDeliver,
-} from "../../../redux/getirYemek/getirYemekTicketDeliverSlice";
-import { resetGetirYemekTicketCancel } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
-
 //MODULES
 import toast from "react-hot-toast";
 import { useEffect, useRef } from "react";
@@ -21,9 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 //UTILS
 import { formatOrders } from "../../../utils/utils";
 
-//COMP
+//REDUX
+import {
+  resetyemekSepetiTicketVerify,
+  yemekSepetiTicketVerify,
+} from "../../../redux/yemekSepeti/yemekSepetiTicketVerifySlice";
+import {
+  resetyemekSepetiTicketPrepare,
+  yemekSepetiTicketPrepare,
+} from "../../../redux/yemekSepeti/yemekSepetiTicketPrepareSlice";
+import {
+  resetyemekSepetiTicketDeliver,
+  yemekSepetiTicketDeliver,
+} from "../../../redux/yemekSepeti/yemekSepetiTicketDeliverSlice";
+import { resetyemekSepetiTicketCancel } from "../../../redux/yemekSepeti/yemekSepetiTicketCancelSlice";
 
-export const useOrderActions = (
+export const useYemekSepetiOrderActions = (
   order,
   ticketId,
   setOrdersData,
@@ -36,32 +34,28 @@ export const useOrderActions = (
     loading: verifyLoading,
     success: verifySuccess,
     error: verifyErr,
-    data: verifyData,
-  } = useSelector((state) => state.getirYemek.verifyTicket);
+  } = useSelector((state) => state.yemekSepeti.verifyTicket);
 
   const {
     loading: prepareLoading,
     success: prepareSuccess,
     error: prepareErr,
-    data: prepareData,
-  } = useSelector((state) => state.getirYemek.prepareTicket);
+  } = useSelector((state) => state.yemekSepeti.prepareTicket);
 
   const {
     loading: deliverLoading,
     success: deliverSuccess,
     error: deliverErr,
-    data: deliverData,
-  } = useSelector((state) => state.getirYemek.deliverTicket);
+  } = useSelector((state) => state.yemekSepeti.deliverTicket);
 
   const {
     loading: cancelLoading,
     success: cancelSuccess,
     error: cancelErr,
-    data: cancelData,
-  } = useSelector((state) => state.getirYemek.cancelTicket);
+  } = useSelector((state) => state.yemekSepeti.cancelTicket);
 
   const verifyOrder = () => {
-    dispatch(getirYemekTicketVerify({ ticketId })).then((res) => {
+    dispatch(yemekSepetiTicketVerify({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
@@ -86,7 +80,7 @@ export const useOrderActions = (
   };
 
   const prepareOrder = () => {
-    dispatch(getirYemekTicketPrepare({ ticketId })).then((res) => {
+    dispatch(yemekSepetiTicketPrepare({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
@@ -115,7 +109,7 @@ export const useOrderActions = (
   };
 
   const deliverOrder = () => {
-    dispatch(getirYemekTicketDeliver({ ticketId })).then((res) => {
+    dispatch(yemekSepetiTicketDeliver({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
@@ -145,12 +139,12 @@ export const useOrderActions = (
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (verifyErr) {
-      dispatch(resetGetirYemekTicketVerify());
+      dispatch(resetyemekSepetiTicketVerify());
     }
     if (verifySuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetGetirYemekTicketVerify());
+      dispatch(resetyemekSepetiTicketVerify());
     }
   }, [verifyLoading, verifySuccess, verifyErr]);
 
@@ -160,12 +154,12 @@ export const useOrderActions = (
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (prepareErr) {
-      dispatch(resetGetirYemekTicketPrepare());
+      dispatch(resetyemekSepetiTicketPrepare());
     }
     if (prepareSuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetGetirYemekTicketPrepare());
+      dispatch(resetyemekSepetiTicketPrepare());
     }
   }, [prepareLoading, prepareSuccess, prepareErr]);
 
@@ -175,12 +169,12 @@ export const useOrderActions = (
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (deliverErr) {
-      dispatch(resetGetirYemekTicketDeliver());
+      dispatch(resetyemekSepetiTicketDeliver());
     }
     if (deliverSuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetGetirYemekTicketDeliver());
+      dispatch(resetyemekSepetiTicketDeliver());
     }
   }, [deliverLoading, deliverSuccess, deliverErr]);
 
@@ -190,12 +184,12 @@ export const useOrderActions = (
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (cancelErr) {
-      dispatch(resetGetirYemekTicketCancel());
+      dispatch(resetyemekSepetiTicketCancel());
     }
     if (cancelSuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetGetirYemekTicketCancel());
+      dispatch(resetyemekSepetiTicketCancel());
     }
   }, [cancelLoading, cancelSuccess, cancelErr]);
 

@@ -7,15 +7,15 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 const initialState = {
   loading: false,
   success: false,
-  error: false,
+  error: null,
   data: null,
 };
 
-const updateOrderCourierSlice = createSlice({
-  name: "updateOrderCourier",
+const yemekSepetiTicketCancelSlice = createSlice({
+  name: "yemekSepetiTicketCancel",
   initialState: initialState,
   reducers: {
-    resetupdateOrderCourier: (state) => {
+    resetyemekSepetiTicketCancel: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const updateOrderCourierSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(updateOrderCourier.pending, (state) => {
+      .addCase(yemekSepetiTicketCancel.pending, (state) => {
         state.loading = true;
         state.success = false;
-        state.error = false;
+        state.error = null;
         state.data = null;
       })
-      .addCase(updateOrderCourier.fulfilled, (state, action) => {
+      .addCase(yemekSepetiTicketCancel.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = false;
+        state.error = null;
         state.data = action.payload;
       })
-      .addCase(updateOrderCourier.rejected, (state, action) => {
+      .addCase(yemekSepetiTicketCancel.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,28 +45,29 @@ const updateOrderCourierSlice = createSlice({
   },
 });
 
-export const updateOrderCourier = createAsyncThunk(
-  "Tickets/UpdateOrderCourier",
+export const yemekSepetiTicketCancel = createAsyncThunk(
+  "YemekSepeti/TicketCancel",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.put(
-        `${baseURL}Tickets/UpdateTicketCourier`,
+      console.log(data);
+      const res = await api.post(
+        `${baseURL}GetirYemek/TicketCancel`,
         { ...data },
         { params: { ...data } }
       );
 
-      // console.log(res.data);
+      // console.log(res);
       return res.data;
     } catch (err) {
-      // console.log(err);
-      const errorMessage = err.message;
-      return rejectWithValue({
-        message: errorMessage,
-        status: err?.response?.status,
-      });
+      console.log(err);
+      if (err?.response?.data) {
+        return rejectWithValue(err.response.data);
+      }
+      return rejectWithValue({ message_TR: err.message });
     }
   }
 );
 
-export const { resetupdateOrderCourier } = updateOrderCourierSlice.actions;
-export default updateOrderCourierSlice.reducer;
+export const { resetyemekSepetiTicketCancel } =
+  yemekSepetiTicketCancelSlice.actions;
+export default yemekSepetiTicketCancelSlice.reducer;

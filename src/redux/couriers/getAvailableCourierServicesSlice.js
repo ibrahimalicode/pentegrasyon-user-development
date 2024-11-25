@@ -51,13 +51,10 @@ export const getAvailableCourierServices = createAsyncThunk(
     try {
       const res = await api.get(
         `${baseURL}Couriers/GetAvailableCourierServices`,
-        {
-          ...data,
-        },
         { params: { ...data } }
       );
 
-      console.log(res.data);
+      // console.log(res.data);
       return res.data.data;
     } catch (err) {
       const errorMessage = err.message;

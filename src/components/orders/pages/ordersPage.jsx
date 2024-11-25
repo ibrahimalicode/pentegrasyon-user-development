@@ -8,7 +8,7 @@ import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
 import OnTheWayTime from "../components/onTheWayTime";
 import DeliveryTime from "../components/deliveryTime";
-import CustomPagination from "../../common/pagination";
+// import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import AutomaticApproval from "../components/automaticApproval";
@@ -65,9 +65,9 @@ const OrdersPage = () => {
   });
   const [openFilter, setOpenFilter] = useState(false);
 
-  const itemsPerPage = 8;
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalItems, setTotalItems] = useState(null);
+  // const itemsPerPage = 8;
+  // const [pageNumber, setPageNumber] = useState(1);
+  // const [totalItems, setTotalItems] = useState(null);
   const [onTheWayTimeData, setOnTheWayTimeData] = useState({
     label: "Zaman Seç",
   });
@@ -75,7 +75,7 @@ const OrdersPage = () => {
     label: "Zaman Seç",
   });
 
-  function handlePageChange(number) {}
+  // function handlePageChange(number) {}
 
   //GET ORDERS
   useEffect(() => {

@@ -8,49 +8,49 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  data: null,
+  compensationData: null,
 };
 
-const updateOrderCourierSlice = createSlice({
-  name: "updateOrderCourier",
+const getOrderCompensationSlice = createSlice({
+  name: "getOrderCompensation",
   initialState: initialState,
   reducers: {
-    resetupdateOrderCourier: (state) => {
+    resetGetOrderCompensation: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.data = null;
+      state.compensationData = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(updateOrderCourier.pending, (state) => {
+      .addCase(getOrderCompensation.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.data = null;
+        state.compensationData = null;
       })
-      .addCase(updateOrderCourier.fulfilled, (state, action) => {
+      .addCase(getOrderCompensation.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.data = action.payload;
+        state.compensationData = action.payload;
       })
-      .addCase(updateOrderCourier.rejected, (state, action) => {
+      .addCase(getOrderCompensation.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.data = null;
+        state.compensationData = null;
       });
   },
 });
 
-export const updateOrderCourier = createAsyncThunk(
-  "Tickets/UpdateOrderCourier",
+export const getOrderCompensation = createAsyncThunk(
+  "Tickets/GetTicGetTicketCourierCompensationAssignmentkets",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.put(
-        `${baseURL}Tickets/UpdateTicketCourier`,
+      const res = await api.get(
+        `${baseURL}Tickets/GetTicketCourierCompensationAssignment`,
         { ...data },
         { params: { ...data } }
       );
@@ -68,5 +68,5 @@ export const updateOrderCourier = createAsyncThunk(
   }
 );
 
-export const { resetupdateOrderCourier } = updateOrderCourierSlice.actions;
-export default updateOrderCourierSlice.reducer;
+export const { resetGetOrderCompensation } = getOrderCompensationSlice.actions;
+export default getOrderCompensationSlice.reducer;

@@ -21,6 +21,8 @@ const GoogleRoute = ({ data, name1, name2 }) => {
       const duration = leg.duration.text;
       setRouteInfo({ distance, duration });
       setResponse(result);
+    } else {
+      console.log(data);
     }
   };
 
@@ -103,3 +105,33 @@ const GoogleRoute = ({ data, name1, name2 }) => {
 };
 
 export default GoogleRoute;
+
+export const RouteInfo = ({ lat1, lng1, lat2, lng2 }) => {
+  return new Promise((resolve, reject) => {
+    const directionsService = new google.maps.DirectionsService();
+
+    function addDot(num) {
+      return parseFloat(
+        num.toString().slice(0, 2) + "." + num.toString().slice(2)
+      );
+    }
+
+    directionsService.route(
+      {
+        origin: { lat: addDot(lat1), lng: addDot(lng1) },
+        destination: { lat: addDot(lat2), lng: addDot(lng2) },
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK") {
+          const leg = result.routes[0].legs[0];
+          const distance = leg.distance.text;
+          const duration = leg.duration.text;
+          resolve({ distance, duration });
+        } else {
+          reject(new Error(`Failed to fetch route info: ${status}`));
+        }
+      }
+    );
+  });
+};

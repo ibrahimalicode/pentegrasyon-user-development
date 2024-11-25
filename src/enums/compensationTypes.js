@@ -1,11 +1,13 @@
 const compensationTypes = [
   {
-    label: "Paket Başına Hakediş",
-    value: 0,
+    label: "Paket Başına",
+    value: "0",
+    id: 0,
   },
   {
-    label: "KM Bazında Hakediş",
-    value: 1,
+    label: "KM Bazında",
+    value: "1",
+    id: 1,
   },
 ];
 

@@ -1,54 +1,44 @@
-//MODULES
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-
-//CONTEXT
 import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
-
-//UTILS
-import { formatDateString } from "../../../utils/utils";
-import { compareWithCurrentDateTime } from "../../../utils/utils";
-import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
-import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
-
-//COMP
-import CancelOrderPopup from "./cancelOrderPopup";
-import PrintComponent from "../components/printComponent";
-import GetirYemekPrintOrder from "./getirYemekPrintOrder";
+import { useYemekSepetiOrderActions } from "./useYemekSepetiOrderActions";
+import {
+  compareWithCurrentDateTime,
+  formatDateString,
+} from "../../../utils/utils";
+import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
+import { useEffect, useState } from "react";
 import RemainingSeconds from "../components/remainingSeconds";
+import PrintComponent from "../components/printComponent";
+import YemekSepetiPrintOrder from "./yemekSepetiPrintOrder";
 
-const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
+const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
   const ticketId = order.id;
-  const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
-    order,
-    ticketId,
-    setOrdersData,
-    setSideOrder
-  );
+  const { verifyOrder, prepareOrder, deliverOrder } =
+    useYemekSepetiOrderActions(order, ticketId, setOrdersData, setSideOrder);
 
   const { loading: verifyLoading } = useSelector(
-    (state) => state.getirYemek.verifyTicket
+    (state) => state.yemekSepeti.verifyTicket
   );
 
   const { loading: prepareLoading } = useSelector(
-    (state) => state.getirYemek.prepareTicket
+    (state) => state.yemekSepeti.prepareTicket
   );
 
   const { loading: deliverLoading } = useSelector(
-    (state) => state.getirYemek.deliverTicket
+    (state) => state.yemekSepeti.deliverTicket
   );
 
   const { loading: cancelLoading } = useSelector(
-    (state) => state.getirYemek.cancelTicket
+    (state) => state.yemekSepeti.cancelTicket
   );
 
   function cancelOrder() {
     setSlideBarContent(null);
-    setPopupContent(<CancelOrderPopup ticketId={ticketId} />);
+    // setPopupContent(<CancelOrderPopup ticketId={ticketId} />);
   }
 
   function xMinuteAhead(date, x) {
@@ -70,43 +60,34 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     );
   }
 
-  const nextId = getirYemekOrderStatuses.filter((s) => s.id === order.status)[0]
-    ?.nextId;
+  const nextId = yemekSepetiOrderStatuses.filter(
+    (s) => s.id === order.status
+  )[0]?.nextId;
 
   const [secState, setSecState] = useState(0);
 
-  const [verifyDisabled, setVerifyDisabled] = useState(
-    disabled || nextId != 350
-  );
+  const [verifyDisabled, setVerifyDisabled] = useState(disabled || nextId != 1);
   const [prepareDisabled, setPrepareDisabled] = useState(
-    disabled || nextId != 700 || xMinWait(order.approvalDate)
+    disabled || nextId != 2 || xMinWait(order.approvalDate)
   );
   const [deliverDisabled, setDeliverDisabled] = useState(
     disabled || !nextId || xMinWait(order.preparationDate)
   );
   const [cancelDisabled, setCancelDisabled] = useState(
-    disabled ||
-      order.status == 900 ||
-      order.status == 1500 ||
-      order.status == 1600 ||
-      order.cancelDate
+    disabled || order.status == 3 || order.status == 4 || order.cancelDate
   );
 
   useEffect(() => {
-    const nextId = getirYemekOrderStatuses.filter(
+    const nextId = yemekSepetiOrderStatuses.filter(
       (s) => s.id === order.status
     )[0]?.nextId;
-    setVerifyDisabled(disabled || nextId !== 350);
+    setVerifyDisabled(disabled || nextId !== 1);
     setPrepareDisabled(
-      disabled || nextId !== 700 || xMinWait(order.approvalDate)
+      disabled || nextId !== 2 || xMinWait(order.approvalDate)
     );
     setDeliverDisabled(disabled || !nextId || xMinWait(order.preparationDate));
     setCancelDisabled(
-      disabled ||
-        order.status == 900 ||
-        order.status == 1500 ||
-        order.status == 1600 ||
-        order.cancelDate
+      disabled || order.status == 3 || order.status == 4 || order.cancelDate
     );
   }, [
     secState,
@@ -167,20 +148,17 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         ) : (
           <>
             <p>Yola Çıkart</p>
-            {350 <= order.status &&
-              order.status <= 600 &&
-              order.status != 400 &&
-              xMinWait(order.approvalDate) && (
-                <p>
-                  Bekle:{" "}
-                  <RemainingSeconds
-                    date={order.approvalDate}
-                    state={secState}
-                    setState={setSecState}
-                  />{" "}
-                  Sn
-                </p>
-              )}
+            {order.status == 1 && xMinWait(order.approvalDate) && (
+              <p>
+                Bekle:{" "}
+                <RemainingSeconds
+                  date={order.approvalDate}
+                  state={secState}
+                  setState={setSecState}
+                />{" "}
+                Sn
+              </p>
+            )}
           </>
         )}
       </button>
@@ -208,7 +186,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         ) : (
           <>
             <p>Teslim Et</p>
-            {order.status == 700 && xMinWait(order.preparationDate) && (
+            {order.status == 2 && xMinWait(order.preparationDate) && (
               <p>
                 Bekle:{" "}
                 <RemainingSeconds
@@ -247,10 +225,10 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         )}
       </button>
       <div className="w-full max-w-16 bg-gray-200 flex justify-center items-center rounded-md">
-        {<PrintComponent component={<GetirYemekPrintOrder order={order} />} />}
+        {<PrintComponent component={<YemekSepetiPrintOrder order={order} />} />}
       </div>
     </div>
   );
 };
 
-export default GetirYemekStatusButtons;
+export default YemekSepetiStatusButtons;

@@ -37,6 +37,7 @@ import InfoI from "./info";
 import CloudI from "./cloud";
 import NoOrdersI from "./noOrders";
 import RotateI from "./rotate";
+import CloseI from "./close";
 
 export {
   DashboardI,
@@ -76,4 +77,5 @@ export {
   NoOrdersI,
   CourierI,
   RotateI,
+  CloseI,
 };

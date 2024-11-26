@@ -16,19 +16,25 @@ import {
   getirYemekTicketDeliver,
   resetGetirYemekTicketDeliver,
 } from "../../../redux/getirYemek/getirYemekTicketDeliverSlice";
-import { resetGetirYemekTicketCancel } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
+import {
+  getirYemekTicketCancel,
+  resetGetirYemekTicketCancel,
+} from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
 
 //UTILS
 import { formatOrders } from "../../../utils/utils";
+import { usePopup } from "../../../context/PopupContext";
 
-export const useGetirYemekOrderActions = (
+export const useGetirYemekOrderActions = ({
   order,
   ticketId,
+  setSideOrder,
   setOrdersData,
-  setSideOrder
-) => {
+  cancelOrderData,
+}) => {
   const toastId = useRef();
   const dispatch = useDispatch();
+  const { setPopupContent } = usePopup();
 
   const {
     loading: verifyLoading,
@@ -54,6 +60,7 @@ export const useGetirYemekOrderActions = (
     error: cancelErr,
   } = useSelector((state) => state.getirYemek.cancelTicket);
 
+  //VERIFY ORDER
   const verifyOrder = () => {
     dispatch(getirYemekTicketVerify({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
@@ -79,6 +86,7 @@ export const useGetirYemekOrderActions = (
     });
   };
 
+  //PREPARE ORDER
   const prepareOrder = () => {
     dispatch(getirYemekTicketPrepare({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
@@ -108,6 +116,7 @@ export const useGetirYemekOrderActions = (
     });
   };
 
+  //DELIVER ORDER
   const deliverOrder = () => {
     dispatch(getirYemekTicketDeliver({ ticketId })).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
@@ -129,6 +138,27 @@ export const useGetirYemekOrderActions = (
             status: res.payload.data,
             deliveryDate: currentDate,
           });
+      }
+    });
+  };
+
+  //CANCEL ORDER
+  const cancelOrder = () => {
+    dispatch(getirYemekTicketCancel(cancelOrderData)).then((res) => {
+      if (res?.meta?.requestStatus === "fulfilled") {
+        const currentDate = new Date().toLocaleString();
+
+        setPopupContent(null);
+        setOrdersData((prev) => {
+          const unChangedOrders = prev.filter(
+            (p) => p.id !== res.meta.arg.ticketId
+          );
+          const updatedData = [
+            ...unChangedOrders,
+            { ...order, status: res.payload.data, cancelDate: currentDate },
+          ];
+          return formatOrders(updatedData);
+        });
       }
     });
   };
@@ -193,5 +223,5 @@ export const useGetirYemekOrderActions = (
     }
   }, [cancelLoading, cancelSuccess, cancelErr]);
 
-  return { verifyOrder, prepareOrder, deliverOrder };
+  return { verifyOrder, prepareOrder, deliverOrder, cancelOrder };
 };

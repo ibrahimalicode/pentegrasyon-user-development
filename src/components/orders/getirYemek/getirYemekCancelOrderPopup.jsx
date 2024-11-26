@@ -7,7 +7,6 @@ import {
   getTicketCancelOptions,
   resetGetTicketCancelOptions,
 } from "../../../redux/getirYemek/getTicketCancelOptionsSlice";
-import { getirYemekTicketCancel } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
 
 //COMP
 import CloseI from "../../../assets/icon/close";
@@ -17,7 +16,10 @@ import CustomSelect from "../../common/customSelector";
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
 
-function CancelOrderPopup({ ticketId }) {
+//UTILS
+import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
+
+function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
 
@@ -33,26 +35,10 @@ function CancelOrderPopup({ ticketId }) {
     ticketId,
   });
 
-  function handleCancel(e) {
-    e.preventDefault();
-    dispatch(getirYemekTicketCancel(cancelOrderData)).then((res) => {
-      if (res?.meta?.requestStatus === "fulfilled") {
-        const currentDate = new Date().toLocaleString();
-
-        setPopupContent(null);
-        setOrdersData((prev) => {
-          const unChangedOrders = prev.filter(
-            (p) => p.id !== res.meta.arg.ticketId
-          );
-          const updatedData = [
-            ...unChangedOrders,
-            { ...order, status: res.payload.data, cancelDate: currentDate },
-          ];
-          return formatOrders(updatedData);
-        });
-      }
-    });
-  }
+  const { cancelOrder } = useGetirYemekOrderActions({
+    setOrdersData,
+    cancelOrderData,
+  });
 
   useEffect(() => {
     if (!optionsData) {
@@ -89,7 +75,7 @@ function CancelOrderPopup({ ticketId }) {
           <CloseI />
         </button>
       </div>
-      <form onSubmit={handleCancel}>
+      <form onSubmit={cancelOrder}>
         <div>
           <CustomSelect
             required
@@ -135,4 +121,4 @@ function CancelOrderPopup({ ticketId }) {
   );
 }
 
-export default CancelOrderPopup;
+export default GetirYemekCancelOrderPopup;

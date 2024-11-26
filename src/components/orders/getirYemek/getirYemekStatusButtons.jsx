@@ -13,10 +13,10 @@ import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
 import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
 
 //COMP
-import CancelOrderPopup from "./cancelOrderPopup";
 import PrintComponent from "../components/printComponent";
 import GetirYemekPrintOrder from "./getirYemekPrintOrder";
 import RemainingSeconds from "../components/remainingSeconds";
+import GetirYemekCancelOrderPopup from "./getirYemekCancelOrderPopup";
 
 const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
@@ -24,10 +24,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   const ticketId = order.id;
   const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
-    order,
-    ticketId,
-    setOrdersData,
-    setSideOrder
+    { order, ticketId, setOrdersData, setSideOrder }
   );
 
   const { loading: verifyLoading } = useSelector(
@@ -48,7 +45,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   function cancelOrder() {
     setSlideBarContent(null);
-    setPopupContent(<CancelOrderPopup ticketId={ticketId} />);
+    setPopupContent(<GetirYemekCancelOrderPopup ticketId={ticketId} />);
   }
 
   function xMinuteAhead(date, x) {

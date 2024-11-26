@@ -63,14 +63,18 @@ const GetirYemekChooseCourier = ({ order }) => {
     label: "Kurye Seç",
   });
   const [compensationType, setCompensationType] = useState({
-    label: "Hakediş Şekl Seç",
+    label: "Hakediş Şekli Seç",
     value: null,
   });
 
   function handleSubmit(e) {
     e.preventDefault();
     if (!selectedCourier?.id) {
-      toast.error("Lütfen kurye seçin");
+      toast.error("Lütfen kurye seçin", { id: "kurye-error" });
+      return;
+    }
+    if (selectedService?.id == null) {
+      toast.error("Lütfen servis seçin", { id: "kurye-error" });
       return;
     }
     dispatch(
@@ -180,23 +184,23 @@ const GetirYemekChooseCourier = ({ order }) => {
           ...routeInfo,
           distance: Number(routeInfo?.distance?.replace("km", "")),
         });
-        console.log("Route Info:", routeInfo);
       })
       .catch((error) => {
-        toast.error("Mesafe alınamadı");
+        toast.error("Mesafe alınamadı", { id: "google-error" });
         console.error(error.message);
       });
   }, []);
 
   return (
     <main className="bg-[--white-1] rounded-md">
-      <div className="flex justify-between bg-[--getiryemek] p-3 rounded-t-md">
+      <div className="flex justify-between bg-indigo-700/60 p-3 rounded-t-md">
         <div className="text-sm text-[--white-1]">
           <p>
-            <span className="font-bold">Müşteri:</span> {order?.client?.name}{" "}
+            <span className="font-bold text-[--black-1]">Müşteri:</span>{" "}
+            {order?.client?.name}{" "}
           </p>
           <p>
-            <span className="font-bold">Adres: </span>
+            <span className="font-bold text-[--black-1]">Adres: </span>
             <span>{order.client.address}</span>
             {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
             {order.client.doorNo && (
@@ -204,49 +208,61 @@ const GetirYemekChooseCourier = ({ order }) => {
             )}
             {order.client.floor && <span> Kat: {order.client.floor}</span>}
           </p>
-          <p>
-            <span className="font-bold">Mesafe: </span>
-            {routeData ? <span>{routeData.distance} KM</span> : <LoadingI />}
+          <p className="flex">
+            <span className="font-bold text-[--black-1] mr-2">Mesafe: </span>
+            {routeData ? <span> {routeData.distance} KM</span> : <LoadingI />}
           </p>
           <p>
-            <span className="font-bold">Platform:</span> Getir Yemek
+            <span className="font-bold text-[--black-1]">Platform:</span> Getir
+            Yemek
           </p>
         </div>
-        <button
+        {/* <button
           onClick={() => setPopupContent(null)}
           className="text-[--red-1] w-max h-max border border-[--red-1] p-2 rounded-full"
         >
           <CloseI />
-        </button>
+        </button> */}
       </div>
-
-      <h1 className="text-center text-xl font-bold py-4">Kurye Seç</h1>
 
       <form onSubmit={handleSubmit} className="px-5 pb-5">
         <div>
           <div>
-            <CustomSelect
-              required
-              label="Servis Tipi"
-              className="mt-[0] sm:mt-[0] "
-              className2="mt-[0] sm:mt-[0]"
-              value={selectedService}
-              options={courierServices}
-              onChange={(selectedOption) => setSelectedService(selectedOption)}
-            />
+            <h1 className="text-center text-2xl font-bold py-4">
+              Servis Seçin
+            </h1>
+            {courierServices?.length && (
+              <div className="flex gap-4">
+                {courierServices.map((C) => (
+                  <button
+                    key={C.id}
+                    onClick={() => setSelectedService(C)}
+                    className={`border bg-[--light-3] py-2 px-3 rounded-sm ${
+                      selectedService.id == C.id &&
+                      "bg-[--status-green] text-[--green-1] border-[--green-1]"
+                    }`}
+                  >
+                    {C.label}
+                  </button>
+                ))}
+              </div>
+            )}
             {selectedService?.id === 0 && (
               <div>
-                <div className="py-2">
+                <h1 className="text-center text-2xl font-bold mt-8">
+                  Kurye Seçin
+                </h1>
+                <div>
                   {restaurantCouriers?.length ? (
                     restaurantCouriers.map((R) => (
                       <button
                         key={R.id}
                         type="button"
                         onClick={() => setSelectedCourier(R)}
-                        className={`rounded-md px-3 py-1.5 ${
+                        className={`border rounded-sm px-3 py-1.5 ${
                           R.id == selectedCourier.id
                             ? "bg-[--status-green] text-[--green-1] border border-[--green-1]"
-                            : "bg-[--light-4] font-normal"
+                            : "bg-[--light-3] font-normal"
                         }`}
                       >
                         {R.label}
@@ -264,13 +280,13 @@ const GetirYemekChooseCourier = ({ order }) => {
                 </div>
 
                 <main className="text-sm">
-                  <h1 className="text-center text-xl font-bold mb-5">
+                  <h1 className="text-center text-2xl font-bold mt-8">
                     Hadeiş Şekli
                   </h1>
 
                   <div className="flex flex-wrap w-full">
-                    <div className="flex items-center mr-3 min-w-max max-w-max p-3 rounded-md bg-[--light-4] mt-3">
-                      Mevcut: <span className="ml-2"> Paket Bazı 80tl</span>
+                    <div className="flex items-center mr-3 min-w-max max-w-max p-3 rounded-sm bg-[--light-3] mt-3">
+                      Mevcut: <span className="ml-2"> Paket Bazı 80 ₺</span>
                     </div>
 
                     <div className="flex flex-wrap gap-1 mr-3 mt-3">
@@ -293,35 +309,37 @@ const GetirYemekChooseCourier = ({ order }) => {
                       />
                       <CustomInput
                         type="number"
-                        className="mt-[0] sm:mt-[0]"
+                        className="mt-[0] sm:mt-[0] text-[--red-1]"
                         className2="max-w-[64px] mt-[0] sm:mt-[0] justify-end"
                         value={compensationRate}
                         required={compensationType.value ? true : false}
                         onChange={(e) => setCompensationRate(e)}
                       />
-                      <p className="flex items-center">₺</p>
+                      <p className="flex items-center text-[--red-1]">₺</p>
                     </div>
 
                     <div className="flex mt-3">
-                      <p className="flex whitespace-nowrap mr-1 items-center px-3 rounded-md bg-[--light-4]">
+                      <p className="flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3]">
                         Özel Hakediş
                       </p>
                       <CustomInput
                         type="number"
-                        className="mt-[0] sm:mt-[0]"
+                        className="mt-[0] sm:mt-[0] text-[--red-1]"
                         className2="max-w-[64px] mt-[0] sm:mt-[0] justify-end"
                         value={specialBonusRate}
                         onChange={(e) => setSpecialBonusRate(e)}
                       />
-                      <p className="flex items-center">₺</p>
+                      <p className="flex items-center text-[--red-1]">₺</p>
                     </div>
 
                     <div className="flex flex-col items-center w-full pt-4">
                       <div>
-                        <p>
-                          <span className="font-bold">Mesafe: </span>
+                        <p className="flex">
+                          <span className="font-bold mr-2">Mesafe: </span>
                           {routeData ? (
-                            <span>{routeData.distance} KM</span>
+                            <span className="text-[--red-1]">
+                              {routeData.distance} KM
+                            </span>
                           ) : (
                             <LoadingI />
                           )}
@@ -329,7 +347,7 @@ const GetirYemekChooseCourier = ({ order }) => {
 
                         <p>
                           <span className="font-bold">Tutar: </span>
-                          <span>
+                          <span className="text-[--red-1]">
                             {compensationRate * routeData?.distance} ₺
                           </span>
                         </p>
@@ -342,11 +360,19 @@ const GetirYemekChooseCourier = ({ order }) => {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-4">
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => setPopupContent(null)}
+            className="border border-[--red-1] px-5 py-2 bg-[--status-red] text-[--red-1] rounded-sm mt-3"
+          >
+            İptal
+          </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-5 py-2.5 bg-[--primary-2] text-[--white-1] rounded-md mt-3"
+            className="border border-transparent px-5 py-2 bg-[--primary-2] text-[--white-1] rounded-sm mt-3"
           >
             Kaydet
           </button>

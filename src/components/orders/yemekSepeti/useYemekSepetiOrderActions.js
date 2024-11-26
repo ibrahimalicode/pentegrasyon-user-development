@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
 import { formatOrders } from "../../../utils/utils";
+import { usePopup } from "../../../context/PopupContext";
 
 //REDUX
 import {
-  resetyemekSepetiTicketVerify,
+  resetYemekSepetiTicketVerify,
   yemekSepetiTicketVerify,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketVerifySlice";
 import {
@@ -19,16 +20,22 @@ import {
   resetyemekSepetiTicketDeliver,
   yemekSepetiTicketDeliver,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketDeliverSlice";
-import { resetyemekSepetiTicketCancel } from "../../../redux/yemekSepeti/yemekSepetiTicketCancelSlice";
+import {
+  resetyemekSepetiTicketCancel,
+  yemekSepetiTicketCancel,
+} from "../../../redux/yemekSepeti/yemekSepetiTicketCancelSlice";
 
-export const useYemekSepetiOrderActions = (
+export const useYemekSepetiOrderActions = ({
   order,
   ticketId,
+  setSideOrder,
   setOrdersData,
-  setSideOrder
-) => {
+  onlyInDataBase,
+  cancelOrderData,
+}) => {
   const toastId = useRef();
   const dispatch = useDispatch();
+  const { setPopupContent } = usePopup();
 
   const {
     loading: verifyLoading,
@@ -54,81 +61,111 @@ export const useYemekSepetiOrderActions = (
     error: cancelErr,
   } = useSelector((state) => state.yemekSepeti.cancelTicket);
 
+  //VERIFY ORDER
   const verifyOrder = () => {
-    dispatch(yemekSepetiTicketVerify({ ticketId })).then((res) => {
-      if (res?.meta?.requestStatus === "fulfilled") {
-        const currentDate = new Date().toLocaleString();
+    dispatch(yemekSepetiTicketVerify({ ticketId, onlyInDataBase })).then(
+      (res) => {
+        if (res?.meta?.requestStatus === "fulfilled") {
+          const currentDate = new Date().toLocaleString();
 
-        setOrdersData((prev) => {
-          const unChangedOrders = prev.filter(
-            (p) => p.id !== res.meta.arg.ticketId
-          );
-          const updatedData = [
-            ...unChangedOrders,
-            { ...order, status: res.payload.data, approvalDate: currentDate },
-          ];
-          return formatOrders(updatedData);
-        });
-        setSideOrder &&
-          setSideOrder({
-            ...order,
-            status: res.payload.data,
-            approvalDate: currentDate,
+          setOrdersData((prev) => {
+            const unChangedOrders = prev.filter(
+              (p) => p.id !== res.meta.arg.ticketId
+            );
+            const updatedData = [
+              ...unChangedOrders,
+              { ...order, status: res.payload.data, approvalDate: currentDate },
+            ];
+            return formatOrders(updatedData);
           });
+          setSideOrder &&
+            setSideOrder({
+              ...order,
+              status: res.payload.data,
+              approvalDate: currentDate,
+            });
+        }
       }
-    });
+    );
   };
 
+  //PREPARE ORDER
   const prepareOrder = () => {
-    dispatch(yemekSepetiTicketPrepare({ ticketId })).then((res) => {
-      if (res?.meta?.requestStatus === "fulfilled") {
-        const currentDate = new Date().toLocaleString();
+    dispatch(yemekSepetiTicketPrepare({ ticketId, onlyInDataBase })).then(
+      (res) => {
+        if (res?.meta?.requestStatus === "fulfilled") {
+          const currentDate = new Date().toLocaleString();
 
-        setOrdersData((prev) => {
-          const unChangedOrders = prev.filter(
-            (p) => p.id !== res.meta.arg.ticketId
-          );
-          const updatedData = [
-            ...unChangedOrders,
-            {
+          setOrdersData((prev) => {
+            const unChangedOrders = prev.filter(
+              (p) => p.id !== res.meta.arg.ticketId
+            );
+            const updatedData = [
+              ...unChangedOrders,
+              {
+                ...order,
+                status: res.payload.data,
+                preparationDate: currentDate,
+              },
+            ];
+            return formatOrders(updatedData);
+          });
+          setSideOrder &&
+            setSideOrder({
               ...order,
               status: res.payload.data,
               preparationDate: currentDate,
-            },
-          ];
-          return formatOrders(updatedData);
-        });
-        setSideOrder &&
-          setSideOrder({
-            ...order,
-            status: res.payload.data,
-            preparationDate: currentDate,
-          });
+            });
+        }
       }
-    });
+    );
   };
 
+  //DELIVER ORDER
   const deliverOrder = () => {
-    dispatch(yemekSepetiTicketDeliver({ ticketId })).then((res) => {
+    dispatch(yemekSepetiTicketDeliver({ ticketId, onlyInDataBase })).then(
+      (res) => {
+        if (res?.meta?.requestStatus === "fulfilled") {
+          const currentDate = new Date().toLocaleString();
+
+          setOrdersData((prev) => {
+            const unChangedOrders = prev.filter(
+              (p) => p.id !== res.meta.arg.ticketId
+            );
+            const updatedData = [
+              ...unChangedOrders,
+              { ...order, status: res.payload.data, deliveryDate: currentDate },
+            ];
+            return formatOrders(updatedData);
+          });
+          setSideOrder &&
+            setSideOrder({
+              ...order,
+              status: res.payload.data,
+              deliveryDate: currentDate,
+            });
+        }
+      }
+    );
+  };
+
+  //CANCEL ORDER
+  const cancelOrder = () => {
+    dispatch(yemekSepetiTicketCancel(cancelOrderData)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
+        setPopupContent(null);
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
           );
           const updatedData = [
             ...unChangedOrders,
-            { ...order, status: res.payload.data, deliveryDate: currentDate },
+            { ...order, status: res.payload.data, cancelDate: currentDate },
           ];
           return formatOrders(updatedData);
         });
-        setSideOrder &&
-          setSideOrder({
-            ...order,
-            status: res.payload.data,
-            deliveryDate: currentDate,
-          });
       }
     });
   };
@@ -136,15 +173,16 @@ export const useYemekSepetiOrderActions = (
   // VERIFY TOAST
   useEffect(() => {
     if (verifyLoading) {
+      console.log("working");
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (verifyErr) {
-      dispatch(resetyemekSepetiTicketVerify());
+      dispatch(resetYemekSepetiTicketVerify());
     }
     if (verifySuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetyemekSepetiTicketVerify());
+      dispatch(resetYemekSepetiTicketVerify());
     }
   }, [verifyLoading, verifySuccess, verifyErr]);
 
@@ -193,5 +231,5 @@ export const useYemekSepetiOrderActions = (
     }
   }, [cancelLoading, cancelSuccess, cancelErr]);
 
-  return { verifyOrder, prepareOrder, deliverOrder };
+  return { verifyOrder, prepareOrder, deliverOrder, cancelOrder };
 };

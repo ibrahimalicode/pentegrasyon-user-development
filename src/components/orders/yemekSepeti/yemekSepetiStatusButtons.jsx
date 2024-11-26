@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import RemainingSeconds from "../components/remainingSeconds";
 import PrintComponent from "../components/printComponent";
 import YemekSepetiPrintOrder from "./yemekSepetiPrintOrder";
+import YemekSepetoOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
 
 const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
@@ -18,21 +19,26 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   const ticketId = order.id;
   const { verifyOrder, prepareOrder, deliverOrder } =
-    useYemekSepetiOrderActions(order, ticketId, setOrdersData, setSideOrder);
+    useYemekSepetiOrderActions({
+      order,
+      ticketId,
+      setOrdersData,
+      setSideOrder,
+    });
 
-  const { loading: verifyLoading } = useSelector(
+  const { loading: verifyLoading, error: verifyErr } = useSelector(
     (state) => state.yemekSepeti.verifyTicket
   );
 
-  const { loading: prepareLoading } = useSelector(
+  const { loading: prepareLoading, error: prepareErr } = useSelector(
     (state) => state.yemekSepeti.prepareTicket
   );
 
-  const { loading: deliverLoading } = useSelector(
+  const { loading: deliverLoading, error: deliverErr } = useSelector(
     (state) => state.yemekSepeti.deliverTicket
   );
 
-  const { loading: cancelLoading } = useSelector(
+  const { loading: cancelLoading, error: cancelErr } = useSelector(
     (state) => state.yemekSepeti.cancelTicket
   );
 
@@ -60,32 +66,29 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     );
   }
 
-  const nextId = yemekSepetiOrderStatuses.filter(
-    (s) => s.id === order.status
-  )[0]?.nextId;
-
   const [secState, setSecState] = useState(0);
 
-  const [verifyDisabled, setVerifyDisabled] = useState(disabled || nextId != 1);
+  const [verifyDisabled, setVerifyDisabled] = useState(
+    disabled || order.status != 0
+  );
   const [prepareDisabled, setPrepareDisabled] = useState(
-    disabled || nextId != 2 || xMinWait(order.approvalDate)
+    disabled || order.status != 1 || xMinWait(order.approvalDate)
   );
   const [deliverDisabled, setDeliverDisabled] = useState(
-    disabled || !nextId || xMinWait(order.preparationDate)
+    disabled || order.status != 2 || xMinWait(order.preparationDate)
   );
   const [cancelDisabled, setCancelDisabled] = useState(
     disabled || order.status == 3 || order.status == 4 || order.cancelDate
   );
 
   useEffect(() => {
-    const nextId = yemekSepetiOrderStatuses.filter(
-      (s) => s.id === order.status
-    )[0]?.nextId;
-    setVerifyDisabled(disabled || nextId !== 1);
+    setVerifyDisabled(disabled || order.status !== 0);
     setPrepareDisabled(
-      disabled || nextId !== 2 || xMinWait(order.approvalDate)
+      disabled || order.status != 1 || xMinWait(order.approvalDate)
     );
-    setDeliverDisabled(disabled || !nextId || xMinWait(order.preparationDate));
+    setDeliverDisabled(
+      disabled || order.status != 2 || xMinWait(order.preparationDate)
+    );
     setCancelDisabled(
       disabled || order.status == 3 || order.status == 4 || order.cancelDate
     );
@@ -97,6 +100,19 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     deliverLoading,
     cancelLoading,
   ]);
+
+  useEffect(() => {
+    if (verifyErr || prepareErr || deliverErr || cancelErr) {
+      setPopupContent(
+        <YemekSepetoOrderErrorPopup
+          order={order}
+          ticketId={ticketId}
+          setOrdersData={setOrdersData}
+          setSideOrder={setSideOrder}
+        />
+      );
+    }
+  }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
   return (
     <div className="fixed bottom-0 right-0 left-0 flex gap-2 sm:gap-4 p-2 py-3.5 bg-white border-t border-[--light-4] text-xs whitespace-nowrap">

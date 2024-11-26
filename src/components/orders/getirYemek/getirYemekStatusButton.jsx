@@ -11,9 +11,7 @@ import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
   const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
-    order,
-    ticketId,
-    setOrdersData
+    { order, ticketId, setOrdersData }
   );
 
   const { loading: verifyLoading } = useSelector(

@@ -15,7 +15,7 @@ const yemekSepetiTicketVerifySlice = createSlice({
   name: "yemekSepetiTicketVerify",
   initialState: initialState,
   reducers: {
-    resetyemekSepetiTicketVerify: (state) => {
+    resetYemekSepetiTicketVerify: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -67,6 +67,6 @@ export const yemekSepetiTicketVerify = createAsyncThunk(
   }
 );
 
-export const { resetyemekSepetiTicketVerify } =
+export const { resetYemekSepetiTicketVerify } =
   yemekSepetiTicketVerifySlice.actions;
 export default yemekSepetiTicketVerifySlice.reducer;

@@ -37,7 +37,7 @@ const YemekSepetoOrderErrorPopup = ({
         <span className="text-[--red-1]">
           {JSON?.parse(errorDetails?.data)?.message}
         </span>{" "}
-        sebebi ile değiştirilemiyor.
+        sebebi ile değiştirilemiyor. Ne yapmak istersiniz ?
       </h1>
 
       <div className="flex gap-3 py-6 justify-center">

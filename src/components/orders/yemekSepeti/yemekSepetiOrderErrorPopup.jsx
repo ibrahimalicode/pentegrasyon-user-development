@@ -32,15 +32,17 @@ const YemekSepetoOrderErrorPopup = ({
         </button>
       </div>
 
-      <h1>
-        Sipariş durumu{" "}
-        <span className="text-[--red-1]">
-          {JSON?.parse(errorDetails?.data)?.message}
-        </span>{" "}
-        sebebi ile değiştirilemiyor. Ne yapmak istersiniz ?
-      </h1>
+      <div>
+        <p>Sipariş durumu aşağıdaki hata kodundan dolayı değiştirilemiyor.</p>
+        <p>
+          <span>Hata: </span>
+          <span className="text-[--red-1]">
+            {JSON?.parse(errorDetails?.data)?.message}
+          </span>
+        </p>
+      </div>
 
-      <div className="flex gap-3 py-6 justify-center">
+      <div className="flex gap-3 py-10 justify-center">
         <button
           className="py-2 px-3 border border-[--green-1] text-[--green-1] bg-[--status-green] rounded-sm"
           onClick={verifyOrder}
@@ -65,6 +67,13 @@ const YemekSepetoOrderErrorPopup = ({
         >
           İptal Et
         </button>
+      </div>
+
+      <div>
+        <p>
+          Seçtiğiniz durum sadece veritabanda değiştirilecek ve ilgili platforma
+          iletilmeyecektir!
+        </p>
       </div>
     </main>
   );

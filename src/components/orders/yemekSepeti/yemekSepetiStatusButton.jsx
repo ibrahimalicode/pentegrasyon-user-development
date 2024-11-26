@@ -65,8 +65,10 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     prepareLoading ||
     deliverLoading ||
     cancelLoading ||
-    (orderStat.id == 3 && orderStat.id == 4);
+    orderStat.id == 3 ||
+    orderStat.id == 4;
 
+  //ORDER ONLY DB ACTION POPUP
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       setPopupContent(
@@ -91,7 +93,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
         borderColor: `var(${orderStat?.color})`,
       }}
     >
-      {orderStat.text}
+      {orderStat.text ? orderStat.text : orderStat.label}
     </button>
   );
 };

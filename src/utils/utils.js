@@ -446,10 +446,7 @@ export function compareWithCurrentDateTime(givenDateTime, secondDate) {
 //ORDERS
 export const formatOrders = (ordersData) => {
   // Remove duplicates based on both 'id' and 'confirmationId'
-  const uniqueOrders = _.uniqBy(
-    ordersData,
-    (order) => `${order.confirmationId}`
-  );
+  const uniqueOrders = _.uniqBy(ordersData, (order) => `${order.id}`);
 
   return uniqueOrders.sort((a, b) => {
     const dateA = new Date(a.checkoutDate);

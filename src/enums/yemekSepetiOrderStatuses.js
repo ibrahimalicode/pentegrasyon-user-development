@@ -1,19 +1,20 @@
 const yemekSepetiOrderStatuses = [
   {
-    bg: "--status-green",
-    color: "--green-1",
+    bg: "--status-yellow",
+    color: "--yellow-1",
     label: "Onay Bekliyor",
     value: true,
     id: 0,
-    text: "Onayla",
+    nextId: 1,
   },
   {
-    bg: "--status-yellow",
-    color: "--yellow-1",
+    bg: "--status-green",
+    color: "--green-1",
     label: "Hazırlanıyor",
     value: true,
     id: 1,
-    text: "Yola Çıkart",
+    text: "Onayla",
+    nextId: 2,
   },
   {
     bg: "--status-purple",
@@ -21,13 +22,15 @@ const yemekSepetiOrderStatuses = [
     label: "Yola Çıktı",
     value: true,
     id: 2,
-    text: "Teslim Et",
+    text: "Yola Çıkart",
+    nextId: 3,
   },
   {
     bg: "--status-brown",
     color: "--brown-1",
     label: "Teslim Edildi",
     value: true,
+    text: "Teslim Et",
     id: 3,
   },
   {
@@ -35,6 +38,7 @@ const yemekSepetiOrderStatuses = [
     color: "--red-1",
     label: "İptal Edildi",
     value: true,
+    text: "İptal Et",
     id: 4,
   },
 ];

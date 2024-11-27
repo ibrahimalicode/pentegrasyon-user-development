@@ -1,5 +1,5 @@
 //MODULES
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
@@ -33,29 +33,24 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     (state) => state.yemekSepeti.cancelTicket
   );
 
-  const nextId = yemekSepetiOrderStatuses.filter(
-    (s) => s.id === order.status
-  )[0]?.nextId;
-
-  let orderStat = yemekSepetiOrderStatuses.filter(
+  let orderStatus = yemekSepetiOrderStatuses.filter(
     (stat) => stat.id === order.status
   )[0];
+  const nextId = yemekSepetiOrderStatuses.filter((S) => S.id == order.status)[0]
+    ?.nextId;
 
-  // if (nextId) {
-  //   orderStat = yemekSepetiOrderStatuses.filter((s) => s.id === nextId)[0];
-  // } else {
-  //   orderStat = { ...orderStat, text: orderStat?.label };
-  // }
+  if (nextId) {
+    orderStatus = yemekSepetiOrderStatuses.filter((s) => s.id === nextId)[0];
+  } else {
+    orderStatus = { ...orderStatus, text: orderStatus?.label };
+  }
 
   function handleClick() {
     if (order.status === 0) {
       verifyOrder();
-    }
-    if (order.status === 1) {
-      console.log(orderStat, "this is the stat");
+    } else if (order.status === 1) {
       prepareOrder();
-    }
-    if (nextId === 3) {
+    } else if (order.status === 2) {
       deliverOrder();
     }
   }
@@ -65,8 +60,16 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     prepareLoading ||
     deliverLoading ||
     cancelLoading ||
-    orderStat.id == 3 ||
-    orderStat.id == 4;
+    order.status == 3 ||
+    order.status == 4;
+
+  // FOR ORDER STATUS
+  // useEffect(() => {
+  //   const status = yemekSepetiOrderStatuses.filter(
+  //     (stat) => stat.id === order.status
+  //   )[0];
+  //   setOrderStatus(status);
+  // }, [order]);
 
   //ORDER ONLY DB ACTION POPUP
   useEffect(() => {
@@ -88,12 +91,12 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
       onClick={handleClick}
       className="w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed"
       style={{
-        backgroundColor: `var(${orderStat?.bg})`,
-        color: `var(${orderStat?.color})`,
-        borderColor: `var(${orderStat?.color})`,
+        backgroundColor: `var(${orderStatus?.bg})`,
+        color: `var(${orderStatus?.color})`,
+        borderColor: `var(${orderStatus?.color})`,
       }}
     >
-      {orderStat.text ? orderStat.text : orderStat.label}
+      {orderStatus?.text}
     </button>
   );
 };

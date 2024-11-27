@@ -74,7 +74,12 @@ export const useYemekSepetiOrderActions = ({
             );
             const updatedData = [
               ...unChangedOrders,
-              { ...order, status: res.payload.data, approvalDate: currentDate },
+              {
+                ...order,
+                status: Number(order.status) + 1,
+                approvalDate: currentDate,
+              },
+              // { ...order, status: res.payload.data, approvalDate: currentDate },
             ];
             return formatOrders(updatedData);
           });
@@ -104,9 +109,14 @@ export const useYemekSepetiOrderActions = ({
               ...unChangedOrders,
               {
                 ...order,
-                status: res.payload.data,
+                status: Number(order.status) + 1,
                 preparationDate: currentDate,
               },
+              // {
+              //   ...order,
+              //   status: res.payload.data,
+              //   preparationDate: currentDate,
+              // },
             ];
             return formatOrders(updatedData);
           });
@@ -134,10 +144,16 @@ export const useYemekSepetiOrderActions = ({
             );
             const updatedData = [
               ...unChangedOrders,
-              { ...order, status: res.payload.data, deliveryDate: currentDate },
+              {
+                ...order,
+                status: Number(order.status) + 1,
+                deliveryDate: currentDate,
+              },
+              // { ...order, status: res.payload.data, deliveryDate: currentDate },
             ];
             return formatOrders(updatedData);
           });
+
           setSideOrder &&
             setSideOrder({
               ...order,
@@ -162,7 +178,12 @@ export const useYemekSepetiOrderActions = ({
           );
           const updatedData = [
             ...unChangedOrders,
-            { ...order, status: res.payload.data, cancelDate: currentDate },
+            {
+              ...order,
+              status: Number(order.status) + 1,
+              cancelDate: currentDate,
+            },
+            // { ...order, status: res.payload.data, cancelDate: currentDate },
           ];
           return formatOrders(updatedData);
         });

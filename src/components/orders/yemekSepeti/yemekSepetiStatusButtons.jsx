@@ -56,7 +56,6 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const disabled =
     verifyLoading || prepareLoading || deliverLoading || cancelLoading;
 
-  // console.log(order);
   function xMinWait(date, min = 1) {
     if (!date) {
       return true;
@@ -113,6 +112,9 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       );
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
+
+  console.log(order);
+  console.log(xMinWait(order.approvalDate));
 
   return (
     <div className="fixed bottom-0 right-0 left-0 flex gap-2 sm:gap-4 p-2 py-3.5 bg-white border-t border-[--light-4] text-xs whitespace-nowrap">

@@ -449,8 +449,8 @@ export const formatOrders = (ordersData) => {
   const uniqueOrders = _.uniqBy(ordersData, (order) => `${order.id}`);
 
   return uniqueOrders.sort((a, b) => {
-    const dateA = new Date(a.checkoutDate);
-    const dateB = new Date(b.checkoutDate);
+    const dateA = new Date(a.createdDateTime);
+    const dateB = new Date(b.createdDateTime);
     return dateB - dateA;
   });
 };

@@ -69,7 +69,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
         </p>
         <p>
           <span className="font-bold">Bölge </span>{" "}
-          <span>: {order.customer.deliveryMainArea.split("")[0]}</span>
+          <span>: {order?.customer?.deliveryMainArea?.split("")[0]}</span>
         </p>
         {order.customer.deliveryInstructions && (
           <p>

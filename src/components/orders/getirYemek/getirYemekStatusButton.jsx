@@ -1,32 +1,37 @@
 //MODULES
-// import { useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
 import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
+import GetirYemekCancelOrderPopup from "./getirYemekCancelOrderPopup";
 
 //UTILS
+import { usePopup } from "../../../context/PopupContext";
 import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
+import GetirYemekOrderErrorPopup from "./getirYemekOrderErrorPopup";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
+  const { setPopupContent } = usePopup();
+
   const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
     { order, ticketId, setOrdersData }
   );
 
-  const { loading: verifyLoading } = useSelector(
+  const { loading: verifyLoading, error: verifyErr } = useSelector(
     (state) => state.getirYemek.verifyTicket
   );
 
-  const { loading: prepareLoading } = useSelector(
+  const { loading: prepareLoading, error: prepareErr } = useSelector(
     (state) => state.getirYemek.prepareTicket
   );
 
-  const { loading: deliverLoading } = useSelector(
+  const { loading: deliverLoading, error: deliverErr } = useSelector(
     (state) => state.getirYemek.deliverTicket
   );
 
-  const { loading: cancelLoading } = useSelector(
+  const { loading: cancelLoading, error: cancelErr } = useSelector(
     (state) => state.getirYemek.cancelTicket
   );
 
@@ -60,29 +65,23 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     cancelLoading ||
     (orderStat.id !== 350 && orderStat.id !== 700 && nextId !== 900);
 
-  // const [isDisabled, setIsDisabled] = useState(false);
-  const isDisabled = false;
-
-  // useEffect(() => {
-  //   const nextStatus = getirYemekOrderStatuses.filter((s) => s.id === order.status);
-  //   const nextId = nextStatus[0]?.nextId;
-  //   setIsDisabled(false);
-
-  //   function diffSec(date) {
-  //     return compareWithCurrentDateTime(new Date(), date).remainingSeconds < 1;
-  //   }
-
-  //   if (order?.approvalDate && nextId === 700 && diffSec(order.approvalDate)) {
-  //     setIsDisabled(true);
-  //   }
-  //   if (order?.preparationDate && nextId === 900 && diffSec(order.preparationDate)) {
-  //     setIsDisabled(true);
-  //   }
-  // }, [order]);
+  //ORDER ONLY DB ACTION POPUP
+  useEffect(() => {
+    if (verifyErr || prepareErr || deliverErr || cancelErr) {
+      setPopupContent(
+        <GetirYemekOrderErrorPopup
+          order={order}
+          ticketId={ticketId}
+          setOrdersData={setOrdersData}
+          errorDetails={verifyErr || prepareErr || deliverErr || cancelErr}
+        />
+      );
+    }
+  }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
   return (
     <button
-      disabled={disabled || isDisabled}
+      disabled={disabled}
       onClick={handleClick}
       className="w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed"
       style={{

@@ -17,6 +17,7 @@ import PrintComponent from "../components/printComponent";
 import GetirYemekPrintOrder from "./getirYemekPrintOrder";
 import RemainingSeconds from "../components/remainingSeconds";
 import GetirYemekCancelOrderPopup from "./getirYemekCancelOrderPopup";
+import GetirYemekOrderErrorPopup from "./getirYemekOrderErrorPopup";
 
 const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
@@ -26,20 +27,19 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
     { order, ticketId, setOrdersData, setSideOrder }
   );
-
-  const { loading: verifyLoading } = useSelector(
+  const { loading: verifyLoading, error: verifyErr } = useSelector(
     (state) => state.getirYemek.verifyTicket
   );
 
-  const { loading: prepareLoading } = useSelector(
+  const { loading: prepareLoading, error: prepareErr } = useSelector(
     (state) => state.getirYemek.prepareTicket
   );
 
-  const { loading: deliverLoading } = useSelector(
+  const { loading: deliverLoading, error: deliverErr } = useSelector(
     (state) => state.getirYemek.deliverTicket
   );
 
-  const { loading: cancelLoading } = useSelector(
+  const { loading: cancelLoading, error: cancelErr } = useSelector(
     (state) => state.getirYemek.cancelTicket
   );
 
@@ -113,6 +113,20 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     deliverLoading,
     cancelLoading,
   ]);
+
+  //ORDER ONLY DB ACTION POPUP
+  useEffect(() => {
+    if (verifyErr || prepareErr || deliverErr || cancelErr) {
+      setPopupContent(
+        <GetirYemekOrderErrorPopup
+          order={order}
+          ticketId={ticketId}
+          setOrdersData={setOrdersData}
+          errorDetails={verifyErr || prepareErr || deliverErr || cancelErr}
+        />
+      );
+    }
+  }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
   return (
     <div className="fixed bottom-0 right-0 left-0 flex gap-2 sm:gap-4 p-2 py-3.5 bg-white border-t border-[--light-4] text-xs whitespace-nowrap">

@@ -18,6 +18,7 @@ import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
 import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
+import toast from "react-hot-toast";
 
 function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
   const dispatch = useDispatch();
@@ -39,6 +40,15 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
     setOrdersData,
     cancelOrderData,
   });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!selectedData?.value) {
+      toast.error("Lütfen  İptal Sebepini Seçiniz");
+      return;
+    }
+    cancelOrder();
+  }
 
   useEffect(() => {
     if (!optionsData) {
@@ -75,23 +85,35 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
           <CloseI />
         </button>
       </div>
-      <form onSubmit={cancelOrder}>
+      <form onSubmit={handleSubmit}>
+        <h1 className="text-center text-2xl font-bold mb-5">
+          İptal Opsiyonları Seç
+        </h1>
         <div>
-          <CustomSelect
-            required
-            label="İptal Opsiyonları"
-            value={selectedData}
-            options={optionsData}
-            onChange={(selectedOption) => {
-              setSelectedData(selectedOption);
-              setCancelOrderData((prev) => {
-                return {
-                  ...prev,
-                  cancelReasonId: selectedOption.cancelReasonId,
-                };
-              });
-            }}
-          />
+          <div className="flex gap-4 flex-wrap">
+            {optionsData?.length &&
+              optionsData.map((opt) => (
+                <button
+                  type="button"
+                  key={opt.value}
+                  onClick={() => {
+                    setSelectedData(opt);
+                    setCancelOrderData((prev) => {
+                      return {
+                        ...prev,
+                        cancelReasonId: opt.cancelReasonId,
+                      };
+                    });
+                  }}
+                  className={`border bg-[--light-4] py-2 px-3 rounded-sm text-leftm ${
+                    opt.value == selectedData.value &&
+                    "border-[--green-1] bg-[--light-green] text-[--green-1]"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+          </div>
         </div>
 
         <div>

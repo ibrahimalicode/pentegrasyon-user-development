@@ -52,20 +52,15 @@ const GetirYemekChooseCourier = ({ order }) => {
   } = useSelector((state) => state.orders.getOrderCompensation);
 
   const [routeData, setRouteData] = useState(null);
+  const [courierServices, setCourierServices] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [restaurantCouriers, setRestaurantCouriers] = useState(null);
+  const [selectedCourier, setSelectedCourier] = useState(null);
+
+  const [compensationType, setCompensationType] = useState(null);
   const [compensationRate, setCompensationRate] = useState("");
   const [specialBonusRate, setSpecialBonusRate] = useState("");
-  const [courierServices, setCourierServices] = useState(null);
-  const [selectedService, setSelectedService] = useState({
-    label: "Servis Tipi Seç",
-  });
-  const [restaurantCouriers, setRestaurantCouriers] = useState(null);
-  const [selectedCourier, setSelectedCourier] = useState({
-    label: "Kurye Seç",
-  });
-  const [compensationType, setCompensationType] = useState({
-    label: "Hakediş Şekli Seç",
-    value: null,
-  });
+  const [currentCompensation, setCurrentCompensation] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -108,7 +103,7 @@ const GetirYemekChooseCourier = ({ order }) => {
 
   // GET COURIERS AND COURIER LICENSES
   useEffect(() => {
-    if (!restaurantCouriers && selectedService.id === 0) {
+    if (!restaurantCouriers && selectedService?.id === 0) {
       dispatch(getAvailableCouriers({ restaurantId: order.restaurantId }));
     }
     if (!courierServices) {
@@ -116,7 +111,7 @@ const GetirYemekChooseCourier = ({ order }) => {
         getAvailableCourierServices({ restaurantId: order.restaurantId })
       );
     }
-    if (!compensationType.value) {
+    if (!currentCompensation) {
       dispatch(
         getOrderCompensation({
           marketplaceId: order.marketplaceId,
@@ -150,6 +145,7 @@ const GetirYemekChooseCourier = ({ order }) => {
   useEffect(() => {
     if (compensationData) {
       console.log(compensationData);
+      setCurrentCompensation(compensationData);
       dispatch(resetGetOrderCompensation());
     }
   }, [compensationData]);
@@ -260,7 +256,7 @@ const GetirYemekChooseCourier = ({ order }) => {
                         type="button"
                         onClick={() => setSelectedCourier(R)}
                         className={`border rounded-sm px-3 py-1.5 ${
-                          R.id == selectedCourier.id
+                          R.id == selectedCourier?.id
                             ? "bg-[--status-green] text-[--green-1] border border-[--green-1]"
                             : "bg-[--light-3] font-normal"
                         }`}
@@ -285,34 +281,45 @@ const GetirYemekChooseCourier = ({ order }) => {
                   </h1>
 
                   <div className="flex flex-wrap w-full">
-                    <div className="flex items-center mr-3 min-w-max max-w-max p-3 rounded-sm bg-[--light-3] mt-3">
-                      Mevcut: <span className="ml-2"> Paket Bazı 80 ₺</span>
-                    </div>
-
                     <div className="flex flex-wrap gap-1 mr-3 mt-3">
-                      <CustomSelect
-                        className="w-max mt-[0] sm:mt-[0] text-sm"
-                        className2="w-max mt-[0] sm:mt-[0]"
-                        isSearchable={false}
-                        value={compensationType}
-                        options={[
-                          {
-                            label: "Hakediş Şekli",
-                            value: null,
-                          },
-                          ...compensationTypes,
-                        ]}
-                        onChange={(selectedOption) =>
-                          setCompensationType(selectedOption)
-                        }
-                        required={compensationRate ? true : false}
-                      />
+                      {currentCompensation ? (
+                        <div>
+                          <p className="flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3]">
+                            Mevcut:{" "}
+                            <span className="ml-2">
+                              {currentCompensation.label}₺
+                            </span>
+                          </p>
+                          <p>
+                            {
+                              compensationTypes.filter(
+                                (c) => c.id !== currentCompensation.id
+                              )[0].label
+                            }
+                          </p>
+                        </div>
+                      ) : compensationTypes?.length ? (
+                        compensationTypes.map((C) => (
+                          <button
+                            key={C.id}
+                            type="button"
+                            onClick={() => setCompensationType(C)}
+                            className={`border flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3] ${
+                              C.id == compensationType?.id &&
+                              "border-[--green-1] bg-[--status-green] text-[--green-1]"
+                            }`}
+                          >
+                            {C.label}
+                          </button>
+                        ))
+                      ) : null}
                       <CustomInput
                         type="number"
                         className="mt-[0] sm:mt-[0] text-[--red-1]"
                         className2="max-w-[64px] mt-[0] sm:mt-[0] justify-end"
                         value={compensationRate}
-                        required={compensationType.value ? true : false}
+                        disabled={!compensationType?.id}
+                        required={compensationType?.value ? true : false}
                         onChange={(e) => setCompensationRate(e)}
                       />
                       <p className="flex items-center text-[--red-1]">₺</p>

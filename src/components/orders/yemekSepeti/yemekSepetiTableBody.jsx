@@ -119,7 +119,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {order.customer.deliveryMainArea.split(" ")[0]}
+            {order?.customer?.deliveryMainArea?.split(" ")[0]}
           </button>
         </td>
         <td

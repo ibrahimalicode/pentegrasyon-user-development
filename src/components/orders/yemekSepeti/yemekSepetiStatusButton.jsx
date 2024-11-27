@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
-import YemekSepetoOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
+import YemekSepetiOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
 import { useYemekSepetiOrderActions } from "./useYemekSepetiOrderActions";
 
 //UTILS
@@ -75,7 +75,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       setPopupContent(
-        <YemekSepetoOrderErrorPopup
+        <YemekSepetiOrderErrorPopup
           order={order}
           ticketId={ticketId}
           setOrdersData={setOrdersData}

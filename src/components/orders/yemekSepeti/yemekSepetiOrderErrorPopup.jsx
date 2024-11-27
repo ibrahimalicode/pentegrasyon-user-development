@@ -2,7 +2,7 @@ import { usePopup } from "../../../context/PopupContext";
 import { CloseI } from "../../../assets/icon";
 import { useYemekSepetiOrderActions } from "./useYemekSepetiOrderActions";
 
-const YemekSepetoOrderErrorPopup = ({
+const YemekSepetiOrderErrorPopup = ({
   order,
   ticketId,
   setSideOrder,
@@ -100,4 +100,4 @@ const YemekSepetoOrderErrorPopup = ({
   );
 };
 
-export default YemekSepetoOrderErrorPopup;
+export default YemekSepetiOrderErrorPopup;

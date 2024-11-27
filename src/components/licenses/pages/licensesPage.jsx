@@ -219,7 +219,7 @@ const LicensesPage = () => {
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                 onClick={() => setOpenFilter(!openFilter)}
               >
-                Filter
+                Filtre
               </button>
 
               <div
@@ -333,7 +333,7 @@ const LicensesPage = () => {
                     className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
                     // onClick={() => handleFilter(true)}
                   >
-                    Filter
+                    Filtre
                   </button>
                 </div>
               </div>

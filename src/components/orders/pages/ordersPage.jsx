@@ -8,7 +8,7 @@ import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
 import OnTheWayTime from "../components/onTheWayTime";
 import DeliveryTime from "../components/deliveryTime";
-// import CustomPagination from "../../common/pagination";
+import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import AutomaticApproval from "../components/automaticApproval";
@@ -65,9 +65,9 @@ const OrdersPage = () => {
   });
   const [openFilter, setOpenFilter] = useState(false);
 
-  // const itemsPerPage = 8;
-  // const [pageNumber, setPageNumber] = useState(1);
-  // const [totalItems, setTotalItems] = useState(null);
+  const itemsPerPage = 20;
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalItems, setTotalItems] = useState(null);
   const [onTheWayTimeData, setOnTheWayTimeData] = useState({
     label: "Zaman Seç",
   });
@@ -75,12 +75,19 @@ const OrdersPage = () => {
     label: "Zaman Seç",
   });
 
-  // function handlePageChange(number) {}
+  function handlePageChange(number) {
+    dispatch(
+      getOrders({
+        page: number,
+        pageSize: itemsPerPage,
+      })
+    );
+  }
 
   //GET ORDERS
   useEffect(() => {
     if (!ordersData) {
-      dispatch(getOrders());
+      dispatch(getOrders({ pageNumber, pageSize: itemsPerPage }));
     }
   }, [ordersData]);
 
@@ -92,6 +99,7 @@ const OrdersPage = () => {
     if (success) {
       // console.log(orders.data);
       setOrdersData(orders.data);
+      setTotalItems(orders.totalCount);
       dispatch(resetGetOrdersState());
     }
   }, [success, error, orders]);
@@ -155,7 +163,7 @@ const OrdersPage = () => {
                 // !e && clearSearch();
               }}
               value={searchVal}
-              placeholder="Search..."
+              placeholder="Ara...Onay kodu veya Müşteri Adı"
               className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}
@@ -197,7 +205,7 @@ const OrdersPage = () => {
                     className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                     onClick={() => setOpenFilter(!openFilter)}
                   >
-                    Filter
+                    Filtre
                   </button>
 
                   <div
@@ -267,17 +275,10 @@ const OrdersPage = () => {
                         className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
                         // onClick={() => handleFilter(true)}
                       >
-                        Filter
+                        Filtre
                       </button>
                     </div>
                   </div>
-                </div>
-
-                <div>
-                  {/* <AddLicense
-                onSuccess={() => setOrdersData(null)}
-                licenses={ordersData}
-              /> */}
                 </div>
               </div>
             </div>
@@ -299,7 +300,7 @@ const OrdersPage = () => {
       )}
 
       {/* PAGINATION */}
-      {/* {ordersData && typeof totalItems === "number" && (
+      {ordersData && typeof totalItems === "number" && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
@@ -309,7 +310,7 @@ const OrdersPage = () => {
             handlePageChange={handlePageChange}
           />
         </div>
-      )} */}
+      )}
     </section>
   );
 };

@@ -313,8 +313,8 @@ function EditCourierPopup({ onSuccess, courier }) {
                 // required
                 type="text"
                 maxLength={11}
-                label="Hakediş Oranı"
-                placeholder="Hakediş Oranı"
+                label="Hakediş Tutarı"
+                placeholder="Hakediş Tutarı"
                 className="py-[.45rem] text-sm"
                 className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={formatToPrice(courierData.compensationRate)}

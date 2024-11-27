@@ -39,7 +39,7 @@ const yemekSepetiTicketPrepareSlice = createSlice({
       .addCase(yemekSepetiTicketPrepare.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.payload;
+        state.error = { ...action.payload, ticketId: action.meta.arg.ticketId };
         state.data = null;
       });
   },

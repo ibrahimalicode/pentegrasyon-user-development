@@ -68,6 +68,7 @@ export const useYemekSepetiOrderActions = ({
         if (res?.meta?.requestStatus === "fulfilled") {
           const currentDate = new Date().toLocaleString();
 
+          setPopupContent(null);
           setOrdersData((prev) => {
             const unChangedOrders = prev.filter(
               (p) => p.id !== res.meta.arg.ticketId
@@ -101,6 +102,7 @@ export const useYemekSepetiOrderActions = ({
         if (res?.meta?.requestStatus === "fulfilled") {
           const currentDate = new Date().toLocaleString();
 
+          setPopupContent(null);
           setOrdersData((prev) => {
             const unChangedOrders = prev.filter(
               (p) => p.id !== res.meta.arg.ticketId
@@ -118,6 +120,7 @@ export const useYemekSepetiOrderActions = ({
               //   preparationDate: currentDate,
               // },
             ];
+            console.log({ status: Number(order.status) + 1 });
             return formatOrders(updatedData);
           });
           setSideOrder &&
@@ -138,6 +141,7 @@ export const useYemekSepetiOrderActions = ({
         if (res?.meta?.requestStatus === "fulfilled") {
           const currentDate = new Date().toLocaleString();
 
+          setPopupContent(null);
           setOrdersData((prev) => {
             const unChangedOrders = prev.filter(
               (p) => p.id !== res.meta.arg.ticketId

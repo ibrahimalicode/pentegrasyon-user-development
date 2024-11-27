@@ -39,7 +39,7 @@ const yemekSepetiTicketVerifySlice = createSlice({
       .addCase(yemekSepetiTicketVerify.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.payload;
+        state.error = { ...action.payload, ticketId: action.meta.arg.ticketId };
         state.data = null;
       });
   },
@@ -58,7 +58,7 @@ export const yemekSepetiTicketVerify = createAsyncThunk(
       // console.log(res);
       return res.data;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       if (err?.response?.data) {
         return rejectWithValue(err.response.data);
       }

@@ -78,73 +78,73 @@ const RestaurantLicensesPage = () => {
   function clearSearch() {
     setSearchVal("");
     return;
-    dispatch(
-      getRestaurantLicenses({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: null,
-        active: filter?.status?.value,
-        city: filter?.city?.value,
-        district: filter?.district?.value,
-        neighbourhood: filter?.neighbourhood?.value,
-      })
-    );
+    // dispatch(
+    //   getRestaurantLicenses({
+    //     pageNumber,
+    //     pageSize: itemsPerPage,
+    //     searchKey: null,
+    //     active: filter?.status?.value,
+    //     city: filter?.city?.value,
+    //     district: filter?.district?.value,
+    //     neighbourhood: filter?.neighbourhood?.value,
+    //   })
+    // );
   }
 
   function handleSearch(e) {
     e.preventDefault();
     return;
-    if (!searchVal) return;
-    dispatch(
-      getRestaurantLicenses({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: searchVal,
-        active: filter?.status?.value,
-        city: filter?.city?.value,
-        district: filter?.district?.value,
-        neighbourhood: filter?.neighbourhood?.value,
-      })
-    );
+    // if (!searchVal) return;
+    // dispatch(
+    //   getRestaurantLicenses({
+    //     pageNumber,
+    //     pageSize: itemsPerPage,
+    //     searchKey: searchVal,
+    //     active: filter?.status?.value,
+    //     city: filter?.city?.value,
+    //     district: filter?.district?.value,
+    //     neighbourhood: filter?.neighbourhood?.value,
+    //   })
+    // );
   }
 
   function handleFilter(bool) {
     return;
-    if (bool) {
-      setOpenFilter(false);
-      setPageNumber(1);
-      dispatch(
-        getRestaurantLicenses({
-          pageNumber,
-          pageSize: itemsPerPage,
-          searchKey: searchVal,
-          active: filter?.status?.value,
-          city: filter?.city?.value,
-          district: filter?.district?.value,
-          neighbourhood: filter?.neighbourhood?.value,
-        })
-      );
-    } else {
-      if (filter) {
-        dispatch(
-          getRestaurantLicenses({
-            pageNumber,
-            pageSize: itemsPerPage,
-            searchKey: null,
-            active: null,
-            city: null,
-            district: null,
-            neighbourhood: null,
-          })
-        );
-      }
-      setFilter({
-        city: null,
-        district: null,
-        neighbourhood: null,
-      });
-      setOpenFilter(false);
-    }
+    // if (bool) {
+    //   setOpenFilter(false);
+    //   setPageNumber(1);
+    //   dispatch(
+    //     getRestaurantLicenses({
+    //       pageNumber,
+    //       pageSize: itemsPerPage,
+    //       searchKey: searchVal,
+    //       active: filter?.status?.value,
+    //       city: filter?.city?.value,
+    //       district: filter?.district?.value,
+    //       neighbourhood: filter?.neighbourhood?.value,
+    //     })
+    //   );
+    // } else {
+    //   if (filter) {
+    //     dispatch(
+    //       getRestaurantLicenses({
+    //         pageNumber,
+    //         pageSize: itemsPerPage,
+    //         searchKey: null,
+    //         active: null,
+    //         city: null,
+    //         district: null,
+    //         neighbourhood: null,
+    //       })
+    //     );
+    //   }
+    //   setFilter({
+    //     city: null,
+    //     district: null,
+    //     neighbourhood: null,
+    //   });
+    //   setOpenFilter(false);
+    // }
   }
 
   function handlePageChange(number) {
@@ -347,7 +347,7 @@ const RestaurantLicensesPage = () => {
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                 onClick={() => setOpenFilter(!openFilter)}
               >
-                Filter
+                Filtre
               </button>
 
               <div
@@ -461,7 +461,7 @@ const RestaurantLicensesPage = () => {
                     className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
                     onClick={() => handleFilter(true)}
                   >
-                    Filter
+                    Filtre
                   </button>
                 </div>
               </div>

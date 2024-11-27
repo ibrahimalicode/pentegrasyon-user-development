@@ -102,14 +102,17 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
-      setPopupContent(
-        <YemekSepetoOrderErrorPopup
-          order={order}
-          ticketId={ticketId}
-          setOrdersData={setOrdersData}
-          setSideOrder={setSideOrder}
-        />
-      );
+      const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
+      if (actionError.ticketId == order.id) {
+        setPopupContent(
+          <YemekSepetoOrderErrorPopup
+            order={order}
+            ticketId={ticketId}
+            setOrdersData={setOrdersData}
+            setSideOrder={setSideOrder}
+          />
+        );
+      }
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 

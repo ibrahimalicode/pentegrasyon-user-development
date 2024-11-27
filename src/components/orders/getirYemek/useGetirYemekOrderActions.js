@@ -66,6 +66,7 @@ export const useGetirYemekOrderActions = ({
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
+        setPopupContent(null);
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
@@ -92,6 +93,7 @@ export const useGetirYemekOrderActions = ({
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
+        setPopupContent(null);
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId
@@ -122,6 +124,7 @@ export const useGetirYemekOrderActions = ({
       if (res?.meta?.requestStatus === "fulfilled") {
         const currentDate = new Date().toLocaleString();
 
+        setPopupContent(null);
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
             (p) => p.id !== res.meta.arg.ticketId

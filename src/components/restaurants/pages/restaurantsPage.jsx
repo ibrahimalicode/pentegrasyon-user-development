@@ -160,9 +160,10 @@ const RestaurantsPage = () => {
       dispatch(resetGetRestaurantsState());
     }
 
-    if (success) {
+    if (success && restaurants) {
       setTotalItems(restaurants.totalCount);
       setRestaurantsData(restaurants.data);
+      dispatch(resetGetRestaurantsState());
     }
   }, [success, error, restaurants]);
 
@@ -244,7 +245,7 @@ const RestaurantsPage = () => {
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
       <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
-        <h2>Restaurants</h2>
+        <h2>Restoranlar</h2>
       </div>
 
       {/* ACTIONS/BUTTONS */}
@@ -276,7 +277,7 @@ const RestaurantsPage = () => {
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
                 onClick={() => setOpenFilter(!openFilter)}
               >
-                Filter
+                Filtre
               </button>
 
               <div
@@ -390,7 +391,7 @@ const RestaurantsPage = () => {
                     className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
                     onClick={() => handleFilter(true)}
                   >
-                    Filter
+                    Filtre
                   </button>
                 </div>
               </div>

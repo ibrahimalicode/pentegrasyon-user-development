@@ -90,7 +90,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           {order.restaurantName}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          <p>{isCheckoutToday(order.customer.expectedDeliveryTime)}</p>
+          <p>{isCheckoutToday(order.createdDateTime)}</p>
           {order.isScheduled &&
             order.status != 1500 &&
             order.status != 1600 &&

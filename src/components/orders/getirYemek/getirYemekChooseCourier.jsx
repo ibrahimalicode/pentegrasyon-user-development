@@ -326,9 +326,12 @@ const GetirYemekChooseCourier = ({ order }) => {
                     </div>
 
                     <div className="flex mt-3">
-                      <p className="flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3]">
+                      <button
+                        type="button"
+                        className={`flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3]`}
+                      >
                         Özel Hakediş
-                      </p>
+                      </button>
                       <CustomInput
                         type="number"
                         className="mt-[0] sm:mt-[0] text-[--red-1]"

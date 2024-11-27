@@ -43,7 +43,7 @@ const AddRestaurant = ({ onSuccess }) => {
       className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
       onClick={handleClick}
     >
-      Add Restaurant
+      Restoran Ekle
     </button>
   );
 };
@@ -270,14 +270,14 @@ function AddRestaurantPopup({ onSuccess }) {
           <div className="w-[400px] px-2 py-1 pt-2 flex bg-[--light-1] rounded-b-md">
             <div className="w-full gap-2 flex">
               <div className="text-sm">
-                <span className="text-xs text-[--gr-1]">latitude</span>
+                <span className="text-xs text-[--gr-1]">enlem</span>
                 <p className="border border-solid border-[--border-1]  px-2">
                   {lat}
                 </p>
               </div>
 
               <div className="text-sm">
-                <span className="text-xs text-[--gr-1]">longitude</span>
+                <span className="text-xs text-[--gr-1]">boylam</span>
                 <p className="border border-solid border-[--border-1]  px-2">
                   {lng}
                 </p>
@@ -423,8 +423,8 @@ function AddRestaurantPopup({ onSuccess }) {
               <div className="flex gap-4 pointer-events-none">
                 <CustomInput
                   required
-                  label="Latitude"
-                  placeholder="Latitude"
+                  label="Enlem"
+                  placeholder="Enlem"
                   className="py-[.45rem] text-sm"
                   className2="mt-[.5rem] sm:mt-[.5rem]"
                   value={restaurantData.latitude}
@@ -434,8 +434,8 @@ function AddRestaurantPopup({ onSuccess }) {
                 />
                 <CustomInput
                   required
-                  label="Longitude"
-                  placeholder="Longitude"
+                  label="Boylam"
+                  placeholder="Boylam"
                   className="py-[.45rem] text-sm"
                   className2="mt-[.5rem] sm:mt-[.5rem]"
                   value={restaurantData.longitude}

@@ -182,7 +182,7 @@ function AddCourierPopup({ onSuccess }) {
               <CustomInput
                 required
                 label="Ad"
-                placeholder="Ad"
+                placeholder="Kurye Adı"
                 className="py-[.45rem] text-sm"
                 className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={courierData.username}
@@ -260,8 +260,8 @@ function AddCourierPopup({ onSuccess }) {
               <CustomInput
                 // required
                 type="text"
-                label="Hakediş Oranı"
-                placeholder="Hakediş Oranı"
+                label="Hakediş Tutarı"
+                placeholder="Hakediş Tutarı"
                 className="py-[.45rem] text-sm"
                 className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={formatToPrice(courierData.rate)}

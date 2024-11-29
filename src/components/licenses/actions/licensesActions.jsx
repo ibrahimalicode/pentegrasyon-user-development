@@ -1,9 +1,12 @@
+//MODULES
 import { useEffect, useRef, useState } from "react";
+
+//CONTEXT
 import { usePopup } from "../../../context/PopupContext";
+
+//COMP
 import MenuI from "../../../assets/icon/menu";
-import DeleteLicense from "./deleteLicense";
 import ExtendLicense from "./extendLicense";
-import TransferLicense from "./tranferLicense";
 import LicenseSettings from "./licenseSettings";
 
 const LicensesActions = ({ index, licenseData, itemsPerPage, onSuccess }) => {
@@ -49,8 +52,6 @@ const LicensesActions = ({ index, licenseData, itemsPerPage, onSuccess }) => {
         <ul className="bg-[--white-1] text-[--gr-1] w-48">
           <ExtendLicense licenseData={licenseData} onSuccess={onSuccess} />
           <LicenseSettings licenseData={licenseData} onSuccess={onSuccess} />
-          <TransferLicense licenseData={licenseData} onSuccess={onSuccess} />
-          <DeleteLicense licenseData={licenseData} onSuccess={onSuccess} />
         </ul>
       </div>
     </>

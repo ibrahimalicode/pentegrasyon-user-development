@@ -23,7 +23,7 @@ const LicenseSettings = ({ licenseData, onSuccess }) => {
     <ActionButton
       className="text-[--gr-1]"
       element={<SettingsI className="w-[1.1rem]" />}
-      element2="Ayarlar"
+      element2="Entegrasyon"
       onClick={handlePopup}
     />
   );

@@ -21,7 +21,7 @@ const ExtendLicense = ({ licenseData }) => {
   return (
     <ActionButton
       element={<ExtendI className="w-[1.1rem]" />}
-      element2="Extend"
+      element2="Lisans Uzat"
       onClick={handleClick}
     />
   );

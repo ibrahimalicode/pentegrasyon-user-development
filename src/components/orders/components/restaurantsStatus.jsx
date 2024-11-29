@@ -14,7 +14,7 @@ import RestaurantsStatusPopup from "./restaurantsStatusPopup";
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import TrendyolYemek from "../../../assets/img/orders/TrendyolYemek.png";
-import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
+import YemekSepeti from "../../../assets/img/orders/YemekDepeti.png";
 import GoFody from "../../../assets/img/orders/GoFody.png";
 import Siparisim from "../../../assets/img/orders/Siparisim.png";
 

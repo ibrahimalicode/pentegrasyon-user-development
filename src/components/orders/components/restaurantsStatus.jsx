@@ -1,10 +1,35 @@
+//MODULES
 import { useEffect, useState } from "react";
-import { usePopup } from "../../../context/PopupContext";
-import RestaurantsStatusPopup from "./restaurantsStatusPopup";
 import { useDispatch, useSelector } from "react-redux";
-import { getRestaurantsStatus } from "../../../redux/orders/getRestaurantsStatusSlice";
-import GetirYemekRestaurantStatuses from "../../../enums/getirYemekRestaurantStatuses";
+
+//UTILS
+import { usePopup } from "../../../context/PopupContext";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
 import { useSignalR } from "../../../context/SignalRContext";
+import GetirYemekRestaurantStatuses from "../../../enums/getirYemekRestaurantStatuses";
+
+//COMP
+import RestaurantsStatusPopup from "./restaurantsStatusPopup";
+
+//IMAGES
+import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
+import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
+import TrendyolYemek from "../../../assets/img/orders/TrendyolYemek.png";
+import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
+import Gofody from "../../../assets/img/orders/Gofody.png";
+import Siparisim from "../../../assets/img/orders/Siparisim.png";
+
+const MarketPlaceAssets = [
+  { src: GetirYemek },
+  { src: MigrosYemek },
+  { src: TrendyolYemek },
+  { src: YemekSepeti },
+  { src: Gofody },
+  { src: Siparisim },
+];
+
+//REDUX
+import { getRestaurantsStatus } from "../../../redux/orders/getRestaurantsStatusSlice";
 
 const RestaurantsStatus = () => {
   const dispatch = useDispatch();
@@ -67,7 +92,7 @@ const RestaurantsStatus = () => {
   const buttonClass =
     "text-white bg-[--red-1] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.7 animate-pulse relative after:absolute after:inset-0 after:rounded-lg after:border-2 after:border-red-500 after:animate-[emergencyRipple_1s_ease-out_infinite] before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-red-600 before:animate-[emergencyRipple_1s_ease-out_infinite] before:delay-500 flex items-center justify-center transition-all duration-[.3] ease-in-out";
 
-  const toolTipClass = `absolute top-14 left-1/2 -translate-x-1/2 bg-red-100 text-red-800 
+  const toolTipClass = `w-max absolute top-14 left-1/2 -translate-x-1/2 bg-red-100 text-red-800 
                    px-4 py-1 rounded-md border border-red-200 shadow-lg
                    transition-all duration-300 transform z-50
                    ${
@@ -89,7 +114,7 @@ const RestaurantsStatus = () => {
             closedRestaurants?.length > 3
               ? {
                   overflow: "hidden",
-                  height: "3rem", // Set visible area
+                  height: "4rem",
                   position: "relative",
                 }
               : {}
@@ -106,9 +131,19 @@ const RestaurantsStatus = () => {
               >
                 {[...closedRestaurants, ...closedRestaurants].map(
                   (rest, index) => (
-                    <p key={`${rest.id}-${index}`}>
-                      {rest.index}- {rest.name}
-                    </p>
+                    <div
+                      key={`${rest.id}-${index}`}
+                      className={`flex items-center gap-2  ${
+                        !(rest.index % 2) && "py-1"
+                      }`}
+                    >
+                      <img
+                        alt="pentegrasyon"
+                        className="size-6 rounded-full"
+                        src={MarketPlaceAssets[rest.marketplaceId].src}
+                      />
+                      <p>{rest.name} Kapalı</p>
+                    </div>
                   )
                 )}
               </div>
@@ -126,7 +161,21 @@ const RestaurantsStatus = () => {
               </style>
             </>
           ) : (
-            closedRestaurants.map((rest) => <p key={rest.id}>{rest.name}</p>)
+            closedRestaurants.map((rest) => (
+              <div
+                key={rest.id}
+                className={`flex items-center gap-2 ${
+                  !(rest.index % 2) && "py-1"
+                }`}
+              >
+                <img
+                  alt="pentegrasyon"
+                  className="size-6 rounded-full"
+                  src={MarketPlaceAssets[rest.marketplaceId].src}
+                />{" "}
+                <p>{rest.name} Kapalı</p>
+              </div>
+            ))
           )}
         </div>
       </div>

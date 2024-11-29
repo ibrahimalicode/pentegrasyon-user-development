@@ -1,7 +1,7 @@
 //MODULE
+import React from "react";
 
 //COMP
-import React from "react";
 import GetirYemekTableBody from "./getirYemek/getirYemekTableBody";
 import YemekSepetiTableBody from "./yemekSepeti/yemekSepetiTableBody";
 

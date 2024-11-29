@@ -1,22 +1,22 @@
 const MarketPalceIds = [
   {
     label: "Getir Yemek",
-    value: "Getir Yemek",
+    value: "GetirYemek",
     id: 0,
   },
   {
     label: "Migros Yemek",
-    value: "Migros Yemek",
+    value: "MigrosYemek",
     id: 1,
   },
   {
     label: "Trendyol Yemek",
-    value: "Trendyol Yemek",
+    value: "TrendyolYemek",
     id: 2,
   },
   {
     label: "Yemek Sepeti",
-    value: "Yemek Sepeti",
+    value: "YemekSepeti",
     id: 3,
   },
   {

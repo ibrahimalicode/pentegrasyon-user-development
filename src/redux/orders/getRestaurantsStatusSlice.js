@@ -8,58 +8,50 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  orders: null,
+  restaurantStatuses: null,
 };
 
-const getOrdersSlice = createSlice({
-  name: "getOrders",
+const getRestaurantsStatusSlice = createSlice({
+  name: "getRestaurantsStatus",
   initialState: initialState,
   reducers: {
-    resetGetOrdersState: (state) => {
+    resetGetRestaurantsStatus: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
-    },
-    resetGetOrders: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.orders = null;
+      state.restaurantStatuses = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(getOrders.pending, (state) => {
+      .addCase(getRestaurantsStatus.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.orders = null;
+        state.restaurantStatuses = null;
       })
-      .addCase(getOrders.fulfilled, (state, action) => {
+      .addCase(getRestaurantsStatus.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.orders = action.payload;
+        state.restaurantStatuses = action.payload;
       })
-      .addCase(getOrders.rejected, (state, action) => {
+      .addCase(getRestaurantsStatus.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.orders = null;
+        state.restaurantStatuses = null;
       });
   },
 });
 
-export const getOrders = createAsyncThunk(
-  "Tickets/GetTickets",
-  async (data, { rejectWithValue }) => {
+export const getRestaurantsStatus = createAsyncThunk(
+  "Tickets/GetRestaurants",
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${baseURL}Tickets/GetTickets`, {
-        params: data,
-      });
-
+      const res = await api.get(`${baseURL}Tickets/GetRestaurants`);
       // console.log(res.data);
-      return res.data;
+      return res.data.data;
     } catch (err) {
       // console.log(err);
       const errorMessage = err.message;
@@ -71,5 +63,5 @@ export const getOrders = createAsyncThunk(
   }
 );
 
-export const { resetGetOrdersState, resetGetOrders } = getOrdersSlice.actions;
-export default getOrdersSlice.reducer;
+export const { resetGetRestaurantsStatus } = getRestaurantsStatusSlice.actions;
+export default getRestaurantsStatusSlice.reducer;

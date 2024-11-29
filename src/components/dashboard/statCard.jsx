@@ -7,7 +7,7 @@ import { TrendDownI, TrendUpI } from "../../assets/icon";
 //REDUX
 import {
   getRestaurantStatistics,
-  resetgetRestaurantStatistics,
+  resetGetRestaurantStatistics,
 } from "../../redux/dashboard/restaurant/getRestaurantStatisticsSlice";
 import {
   getLicenseStatistics,
@@ -40,7 +40,7 @@ const StatCard = () => {
 
   function resetStates() {
     dispatch(resetgetLicenseStatistics());
-    dispatch(resetgetRestaurantStatistics());
+    dispatch(resetGetRestaurantStatistics());
   }
 
   useEffect(() => {
@@ -76,8 +76,8 @@ const StatCard = () => {
   }, [restError, licenseError]);
 
   return (
-    <main className="w-full flex gap-5 max-md:flex-col">
-      {statData &&
+    <main className="w-full flex gap-4 max-md:flex-col">
+      {statData && !restLoading && !licenseLoading ? (
         statData.map((card, index) => (
           <div
             key={index}
@@ -120,7 +120,13 @@ const StatCard = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="flex max-sm:flex-col gap-4 w-full text-sm font-light overflow-hidden fade">
+          <div className="border border-solid border-[--border-1] w-full h-32 bg-[--light-3] rounded-lg"></div>
+          <div className="border border-solid border-[--border-1] w-full h-32 bg-[--light-3] rounded-lg"></div>
+        </div>
+      )}
     </main>
   );
 };

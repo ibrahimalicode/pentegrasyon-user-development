@@ -81,7 +81,7 @@ const OnlinePayment = ({ step, setStep, actionType }) => {
       );
 
       if (existingRestaurant) {
-        existingRestaurant.licenseIds.push(item.id);
+        existingRestaurant.licensePackageIds.push(item.id);
       } else {
         result.push({
           restaurantId: item.restaurantId,

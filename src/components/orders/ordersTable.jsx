@@ -39,8 +39,8 @@ const OrdersTable = ({ ordersData, setOrdersData }) => {
   // console.log(ordersData);
 
   return (
-    <main className="max-xl:overflow-x-scroll">
-      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-max overflow-hidden">
+    <main className="overflow-x-auto">
+      <div className="border border-solid border-[--light-4] rounded-lg min-w-max">
         <table className="w-full text-sm font-light">
           <thead>
             <tr className="bg-[--light-3] h-10 text-left">

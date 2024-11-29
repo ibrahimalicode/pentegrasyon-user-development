@@ -37,7 +37,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   useEffect(() => {
     if (statusChangedOrder) {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
-        console.log(statusChangedOrder);
+        // console.log(statusChangedOrder);
         setSideOrder(statusChangedOrder);
         setStatusChangedOrder(null);
       }
@@ -52,7 +52,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
       ? currentCourier[0].label
       : order?.courier?.name;
   }
-  // console.log(order);
+  console.log(order);
 
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
@@ -159,7 +159,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
             <p>{customerAddress}</p>
             <p>
               {order.customer.building && (
-                <span>Bldg: {order.customer.building}</span>
+                <span>Bina: {order.customer.building}</span>
               )}
               {order.customer.entrance && (
                 <span> Daire No: {order.customer.entrance}</span>
@@ -239,9 +239,10 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                   </td>
                   <td className="p-2 flex justify-end items-start">
                     {formatToPrice(
-                      String(
-                        (order.paidPrice * order.quantity).toFixed(2)
-                      ).replace(".", ",")
+                      String(Number(order.paidPrice).toFixed(2)).replace(
+                        ".",
+                        ","
+                      )
                     )}
                   </td>
                 </tr>
@@ -263,7 +264,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         </table>
 
         <div className="w-full border-t border-[--gr-1]">
-          {order.discountAmountTotal ? (
+          {Number(order.discountAmountTotal) ? (
             <>
               <div className="w-full flex items-center justify-end gap-2">
                 <p>Toplam:</p>
@@ -283,7 +284,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                     String(
                       (
                         Number(order.grandTotal) -
-                        Number(order.totalDiscountedPrice)
+                        Number(order.discountAmountTotal)
                       ).toFixed(2)
                     ).replace(".", ",")
                   )}
@@ -294,10 +295,10 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
           <div className="w-full flex items-center justify-end gap-2">
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
-              {order.totalDiscountedPrice
+              {Number(order.discountAmountTotal)
                 ? formatToPrice(
                     String(
-                      Number(order.totalDiscountedPrice).toFixed(2)
+                      Number(order.discountAmountTotal).toFixed(2)
                     ).replace(".", ",")
                   )
                 : formatToPrice(

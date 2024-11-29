@@ -1,5 +1,6 @@
-//MOD
+//MODULES
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -7,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomSelect from "../../common/customSelector";
 import ForwardButton from "../stepsAssets/forwardButton";
 
-// IMAGES
+//IMAGES
 import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
 import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
 import Siparisim from "../../../assets/img/packages/Siparisim.png";
@@ -25,7 +26,7 @@ import {
   formatToPrice,
 } from "../../../utils/utils";
 
-// REDUX
+//REDUX
 import {
   getLicensePackages,
   resetGetLicensePackages,
@@ -150,7 +151,9 @@ const FirstStep = ({
   function handleSubmit(e) {
     e.preventDefault();
     if (!cartItems?.length) {
-      toast.error("Lütfen en az bir tane lisans paketi seçin");
+      toast.error("Lütfen en az bir tane lisans paketi seçin", {
+        id: "add-licese",
+      });
       return;
     }
     setStep(2);
@@ -158,7 +161,11 @@ const FirstStep = ({
 
   const handleAddToCart = (pkg) => {
     if (!pkg.restaurantId) {
-      toast.error("Lütfen restoran seçın 😊", { id: "choose_restaurant" });
+      toast.error(
+        "Lütfen restoran seçın 😊",
+        { id: "choose_restaurant" },
+        { id: "add-licese" }
+      );
       return;
     }
 
@@ -170,11 +177,25 @@ const FirstStep = ({
       (license) => license.licenseTypeId === pkg.licenseTypeId
     );
     if (marketPlaceExistes) {
-      toast(
-        `${pkg.restaurantName} restoranına ${
-          imageSRCs[pkg.licenseTypeId].name
-        } lisansı var. Uzatmak isterseniz uzatma sayfasından uzatabılırsınız.`
+      const toastComp = (
+        <div>
+          <span className="text-[--primary-1]">{pkg.restaurantName} </span>
+          <span>restoranına </span>
+          <span className="text-[--primary-1]">
+            {imageSRCs[pkg.licenseTypeId].name}
+          </span>
+          <span> lisansı var. Uzatmak isterseniz </span>
+          <Link
+            className="text-[--link-1] underline"
+            to="/licenses"
+            onClick={() => toast.dismiss("add-licese")}
+          >
+            uzatma
+          </Link>
+          <span> sayfasından uzatabılırsınız.</span>
+        </div>
       );
+      toast(toastComp, { id: "add-licese" });
       return;
     }
 
@@ -199,7 +220,9 @@ const FirstStep = ({
     }
     const data = kdvData ? kdvData : {};
     dispatch(addItemToCart({ ...pkg, ...data }));
-    toast.success(`${pkg.time} Yıllık lısans sepete eklendi`);
+    toast.success(`${pkg.time} Yıllık lısans sepete eklendi`, {
+      id: "add-licese",
+    });
   };
 
   return (

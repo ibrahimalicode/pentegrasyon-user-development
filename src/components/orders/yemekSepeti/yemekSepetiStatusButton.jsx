@@ -63,14 +63,6 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     order.status == 3 ||
     order.status == 4;
 
-  // FOR ORDER STATUS
-  // useEffect(() => {
-  //   const status = yemekSepetiOrderStatuses.filter(
-  //     (stat) => stat.id === order.status
-  //   )[0];
-  //   setOrderStatus(status);
-  // }, [order]);
-
   //ORDER ONLY DB ACTION POPUP
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {

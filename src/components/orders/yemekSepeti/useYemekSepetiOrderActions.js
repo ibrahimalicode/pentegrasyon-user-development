@@ -198,7 +198,6 @@ export const useYemekSepetiOrderActions = ({
   // VERIFY TOAST
   useEffect(() => {
     if (verifyLoading) {
-      console.log("working");
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (verifyErr) {

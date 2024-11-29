@@ -1,6 +1,7 @@
-const years = [
-  { label: "2024", value: 2024 },
-  { label: "2025", value: 2025 },
+const currentYear = new Date().getFullYear(); // Dynamically get the current year
+const Years = [
+  { label: `${currentYear - 1}`, value: currentYear - 1 }, // Previous year
+  { label: `${currentYear}`, value: currentYear }, // Current year
 ];
 
-export default years;
+export default Years;

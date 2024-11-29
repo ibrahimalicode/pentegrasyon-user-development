@@ -23,6 +23,7 @@ export const SignalRProvider = ({ children }) => {
   const [statusChangedOrder, setStatusChangedOrder] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newOrder, setNewOrder] = useState(null);
+  const [statusChangedRestaurant, setStatusChangedRestaurant] = useState(null);
 
   //GET USER
   useEffect(() => {
@@ -114,6 +115,11 @@ export const SignalRProvider = ({ children }) => {
         console.log("New Message Received: ", message);
       });
 
+      conn.on("ReceiveRestaurantStatus", function (restaurant) {
+        setStatusChangedRestaurant(restaurant);
+        console.log("New Restaurant status Received: ", restaurant);
+      });
+
       // Handle automatic reconnect
       conn.onreconnecting((error) => {
         console.log(
@@ -172,6 +178,8 @@ export const SignalRProvider = ({ children }) => {
         setStatusChangedOrder,
         messages,
         setMessages,
+        statusChangedRestaurant,
+        setStatusChangedRestaurant,
       }}
     >
       {children}

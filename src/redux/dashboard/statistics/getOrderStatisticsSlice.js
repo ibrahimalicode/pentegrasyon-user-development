@@ -11,11 +11,11 @@ const initialState = {
   data: null,
 };
 
-const getRestaurantStatisticsSlice = createSlice({
-  name: "getRestaurantStatistics",
+const getOrderStatisticsSlice = createSlice({
+  name: "getOrderStatistics",
   initialState: initialState,
   reducers: {
-    resetGetRestaurantStatistics: (state) => {
+    resetGetOrderStatistics: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const getRestaurantStatisticsSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(getRestaurantStatistics.pending, (state) => {
+      .addCase(getOrderStatistics.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
         state.data = null;
       })
-      .addCase(getRestaurantStatistics.fulfilled, (state, action) => {
+      .addCase(getOrderStatistics.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
         state.data = action.payload;
       })
-      .addCase(getRestaurantStatistics.rejected, (state, action) => {
+      .addCase(getOrderStatistics.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,25 +45,26 @@ const getRestaurantStatisticsSlice = createSlice({
   },
 });
 
-export const getRestaurantStatistics = createAsyncThunk(
-  "Statistics/GetRestaurantStatistics",
-  async (_, { rejectWithValue }) => {
+export const getOrderStatistics = createAsyncThunk(
+  "Statistics/GetTicketStatistics",
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await api.get(
-        `${baseURL}Statistics/GetRestaurantStatistics`
-      );
+      const res = await api.get(`${baseURL}Statistics/GetTicketStatistics`, {
+        params: { ...data },
+      });
 
-      return response.data.data;
+      // console.log(res.data);
+      return res.data.data;
     } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
+      // console.log(err);
+      const errorMessage = err.message;
+      return rejectWithValue({
+        message: errorMessage,
+        status: err?.response?.status,
+      });
     }
   }
 );
 
-export const { resetGetRestaurantStatistics } =
-  getRestaurantStatisticsSlice.actions;
-export default getRestaurantStatisticsSlice.reducer;
+export const { resetGetOrderStatistics } = getOrderStatisticsSlice.actions;
+export default getOrderStatisticsSlice.reducer;

@@ -5,7 +5,7 @@ export const getChartOptions = (series, colors, labels) => {
     series,
     colors,
     chart: {
-      height: "240",
+      height: "200",
       width: "100%",
       type: "donut",
     },

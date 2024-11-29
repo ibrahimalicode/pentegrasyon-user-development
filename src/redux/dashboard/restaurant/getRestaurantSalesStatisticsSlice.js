@@ -11,11 +11,11 @@ const initialState = {
   data: null,
 };
 
-const getRestaurantStatisticsSlice = createSlice({
-  name: "getRestaurantStatistics",
+const getRestaurantSalesStatisticsSlice = createSlice({
+  name: "getRestaurantSalesStatistics",
   initialState: initialState,
   reducers: {
-    resetGetRestaurantStatistics: (state) => {
+    resetGetRestaurantSalesStatistics: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const getRestaurantStatisticsSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(getRestaurantStatistics.pending, (state) => {
+      .addCase(getRestaurantSalesStatistics.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
         state.data = null;
       })
-      .addCase(getRestaurantStatistics.fulfilled, (state, action) => {
+      .addCase(getRestaurantSalesStatistics.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
         state.data = action.payload;
       })
-      .addCase(getRestaurantStatistics.rejected, (state, action) => {
+      .addCase(getRestaurantSalesStatistics.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,12 +45,12 @@ const getRestaurantStatisticsSlice = createSlice({
   },
 });
 
-export const getRestaurantStatistics = createAsyncThunk(
-  "Statistics/GetRestaurantStatistics",
+export const getRestaurantSalesStatistics = createAsyncThunk(
+  "Statistics/getRestaurantSalesStatistics",
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(
-        `${baseURL}Statistics/GetRestaurantStatistics`
+        `${baseURL}Statistics/getRestaurantSalesStatistics`
       );
 
       return response.data.data;
@@ -64,6 +64,6 @@ export const getRestaurantStatistics = createAsyncThunk(
   }
 );
 
-export const { resetGetRestaurantStatistics } =
-  getRestaurantStatisticsSlice.actions;
-export default getRestaurantStatisticsSlice.reducer;
+export const { resetGetRestaurantSalesStatistics } =
+  getRestaurantSalesStatisticsSlice.actions;
+export default getRestaurantSalesStatisticsSlice.reducer;

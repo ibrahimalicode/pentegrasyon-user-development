@@ -19,6 +19,7 @@ import {
   getirYemekUpdateRestaurantCourierStatus,
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
+import GetirYemekRestaurantStatuses from "../../../enums/getirYemekRestaurantStatuses";
 
 const GetirYemekRestaurantsStatus = () => {
   const toastId = useRef();
@@ -107,6 +108,11 @@ const GetirYemekRestaurantsStatus = () => {
 
   //TOAST AND SET RESTAURANT STATUS
   useEffect(() => {
+    function statusValue(inData) {
+      return GetirYemekRestaurantStatuses.filter(
+        (S) => S.id == inData.status
+      )[0]?.value;
+    }
     if (error) {
       dispatch(resetGetirYemekGetRestaurants());
     }
@@ -115,7 +121,7 @@ const GetirYemekRestaurantsStatus = () => {
       data.map((res) => {
         formattedData[res.id] = {
           ...res,
-          restaurantStatus: res.status == 100 ? true : false,
+          restaurantStatus: statusValue(res),
           courierStatus: res.isCourierAvailable,
         };
       });

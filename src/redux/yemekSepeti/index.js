@@ -5,12 +5,18 @@ import yemekSepetiTicketVerifySlice from "./yemekSepetiTicketVerifySlice";
 import yemekSepetiTicketPrepareSlice from "./yemekSepetiTicketPrepareSlice";
 import yemekSepetiTicketDeliverSlice from "./yemekSepetiTicketDeliverSlice";
 import yemekSepetiTicketCancelSlice from "./yemekSepetiTicketCancelSlice";
+import yemekSepetiGetRestaurantsSlice from "./yemekSepetiGetRestaurantsSlice";
+import yemekSepetiUpdateRestaurantStatusSlice from "./yemekSepetiUpdateRestaurantStatusSlice";
+import yemekSepetiUpdateRestaurantCourierStatusSlice from "./yemekSepetiUpdateRestaurantCourierStatusSlice";
 
 const yemekSepetiSlice = combineReducers({
   verifyTicket: yemekSepetiTicketVerifySlice,
   prepareTicket: yemekSepetiTicketPrepareSlice,
   deliverTicket: yemekSepetiTicketDeliverSlice,
   cancelTicket: yemekSepetiTicketCancelSlice,
+  getRestaurants: yemekSepetiGetRestaurantsSlice,
+  updateRestaurants: yemekSepetiUpdateRestaurantStatusSlice,
+  updateRestaurantsCourier: yemekSepetiUpdateRestaurantCourierStatusSlice,
 });
 
 export default yemekSepetiSlice;

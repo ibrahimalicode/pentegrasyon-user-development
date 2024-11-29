@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { privateApi } from "../../api";
+import { privateApi } from "../api";
 
 const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -7,15 +7,15 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 const initialState = {
   loading: false,
   success: false,
-  error: false,
+  error: null,
   data: null,
 };
 
-const getRestaurantStatisticsSlice = createSlice({
-  name: "getRestaurantStatistics",
+const yemekSepetiGetRestaurantsSlice = createSlice({
+  name: "yemekSepetiGetRestaurants",
   initialState: initialState,
   reducers: {
-    resetGetRestaurantStatistics: (state) => {
+    resetYemekSepetiGetRestaurants: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const getRestaurantStatisticsSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(getRestaurantStatistics.pending, (state) => {
+      .addCase(yemekSepetiGetRestaurants.pending, (state) => {
         state.loading = true;
         state.success = false;
-        state.error = false;
+        state.error = null;
         state.data = null;
       })
-      .addCase(getRestaurantStatistics.fulfilled, (state, action) => {
+      .addCase(yemekSepetiGetRestaurants.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = false;
+        state.error = null;
         state.data = action.payload;
       })
-      .addCase(getRestaurantStatistics.rejected, (state, action) => {
+      .addCase(yemekSepetiGetRestaurants.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,15 +45,14 @@ const getRestaurantStatisticsSlice = createSlice({
   },
 });
 
-export const getRestaurantStatistics = createAsyncThunk(
-  "Statistics/GetRestaurantStatistics",
+export const yemekSepetiGetRestaurants = createAsyncThunk(
+  "YemekSepeti/GetRestaurants",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get(
-        `${baseURL}Statistics/GetRestaurantStatistics`
-      );
+      const res = await api.get(`${baseURL}YemekSepeti/GetRestaurants`);
 
-      return response.data.data;
+      // console.log(res);
+      return res.data.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {
@@ -64,6 +63,6 @@ export const getRestaurantStatistics = createAsyncThunk(
   }
 );
 
-export const { resetGetRestaurantStatistics } =
-  getRestaurantStatisticsSlice.actions;
-export default getRestaurantStatisticsSlice.reducer;
+export const { resetYemekSepetiGetRestaurants } =
+  yemekSepetiGetRestaurantsSlice.actions;
+export default yemekSepetiGetRestaurantsSlice.reducer;

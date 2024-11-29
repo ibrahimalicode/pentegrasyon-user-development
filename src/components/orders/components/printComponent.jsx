@@ -19,10 +19,21 @@ const PrintComponent = ({ component }) => {
       </button>
 
       <main style={{ display: "none" }}>
-        <div ref={contentRef} className="scale-[.7]">
+        <div ref={contentRef} className="orders-print-content">
           {component}
         </div>
       </main>
+      <style>
+        {`
+          @media print {
+            .orders-print-content {
+              transform: scale(0.7); /* Scale the content */
+              transform-origin: top left; /* Adjust the origin for scaling */
+              width: 140%; /* Adjust width to accommodate scaling */
+            }
+          }
+        `}
+      </style>
     </main>
   );
 };

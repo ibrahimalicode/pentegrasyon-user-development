@@ -19,7 +19,9 @@ const PrintComponent = ({ component }) => {
       </button>
 
       <main style={{ display: "none" }}>
-        <div ref={contentRef}> {component}</div>
+        <div ref={contentRef} className="scale-[.7]">
+          {component}
+        </div>
       </main>
     </main>
   );

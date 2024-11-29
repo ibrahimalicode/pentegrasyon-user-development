@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import CustomToggle from "../../common/customToggle";
 
+//UTILS
+import RestaurantStatuses from "../../../enums/restaurantStatuses";
+
 //REDUX
 import {
   getirYemekGetRestaurants,
@@ -19,7 +22,6 @@ import {
   getirYemekUpdateRestaurantCourierStatus,
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
-import GetirYemekRestaurantStatuses from "../../../enums/getirYemekRestaurantStatuses";
 
 const GetirYemekRestaurantsStatus = () => {
   const toastId = useRef();
@@ -34,6 +36,7 @@ const GetirYemekRestaurantsStatus = () => {
   const { loading: updateCourierLoading, error: updateCourierError } =
     useSelector((state) => state.getirYemek.updateRestaurantsCourier);
 
+  //UPDATE RESTAURANT STATUS
   function updateRestaurantStatus(id) {
     const updatedStat = {
       ...statusData,
@@ -66,6 +69,7 @@ const GetirYemekRestaurantsStatus = () => {
     );
   }
 
+  //UPDATE COURIER STATUS
   function updateRestaurantCourierStatus(id) {
     const updatedStat = {
       ...statusData,
@@ -109,7 +113,7 @@ const GetirYemekRestaurantsStatus = () => {
   //TOAST AND SET RESTAURANT STATUS
   useEffect(() => {
     function statusValue(inData) {
-      return GetirYemekRestaurantStatuses.filter(
+      return RestaurantStatuses[inData.marketplaceId].filter(
         (S) => S.id == inData.status
       )[0]?.value;
     }

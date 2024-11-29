@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
 import { useSignalR } from "../../../context/SignalRContext";
-import GetirYemekRestaurantStatuses from "../../../enums/getirYemekRestaurantStatuses";
+import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //COMP
 import RestaurantsStatusPopup from "./restaurantsStatusPopup";
@@ -14,12 +14,15 @@ import RestaurantsStatusPopup from "./restaurantsStatusPopup";
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import TrendyolYemek from "../../../assets/img/orders/TrendyolYemek.png";
-import YemekSepeti from "../../../assets/img/orders/YemekDepeti.png";
+import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 import GoFody from "../../../assets/img/orders/GoFody.png";
 import Siparisim from "../../../assets/img/orders/Siparisim.png";
 
 //REDUX
-import { getRestaurantsStatus } from "../../../redux/orders/getRestaurantsStatusSlice";
+import {
+  getRestaurantsStatus,
+  resetGetRestaurantsStatus,
+} from "../../../redux/orders/getRestaurantsStatusSlice";
 
 const MarketPlaceAssets = [
   { src: GetirYemek },
@@ -42,25 +45,26 @@ const RestaurantsStatus = () => {
   const [closedRestaurants, setClosedRestaurants] = useState([]);
 
   function setRestaurantStatusData(restaurantStatData) {
+    //SMAL FUNC
     function statusValue(inData) {
-      return GetirYemekRestaurantStatuses.filter(
-        (S) => S.id == inData.status
+      const statCodeArray = RestaurantStatuses[inData.marketplaceId];
+      return statCodeArray.filter(
+        (S) => S.id == inData[statCodeArray[0].key]
       )[0]?.value;
     }
 
     const formattedData = [];
     restaurantStatData.map((res, i) => {
-      formattedData.push({
-        ...res,
-        index: i + 1,
-        restaurantStatus: statusValue(res),
-        courierStatus: res.isCourierAvailable,
-      });
+      if (!statusValue(res)) {
+        formattedData.push({
+          ...res,
+          restaurantStatus: false,
+          courierStatus: res.isCourierAvailable,
+        });
+      }
     });
-    setStatusesData(formattedData);
-    setClosedRestaurants(
-      formattedData.filter((R) => R.restaurantStatus === false)
-    );
+    setStatusesData(restaurantStatData);
+    setClosedRestaurants(formattedData);
   }
 
   //GET STATUSES
@@ -74,6 +78,7 @@ const RestaurantsStatus = () => {
   useEffect(() => {
     if (restaurantStatuses) {
       setRestaurantStatusData(restaurantStatuses);
+      dispatch(resetGetRestaurantsStatus());
     }
   }, [restaurantStatuses]);
 
@@ -133,7 +138,7 @@ const RestaurantsStatus = () => {
                     <div
                       key={`${rest.id}-${index}`}
                       className={`flex items-center gap-2  ${
-                        !(rest.index % 2) && "py-1"
+                        !((index + 1) % 2) && "py-1"
                       }`}
                     >
                       <img
@@ -160,11 +165,11 @@ const RestaurantsStatus = () => {
               </style>
             </>
           ) : (
-            closedRestaurants.map((rest) => (
+            closedRestaurants.map((rest, i) => (
               <div
                 key={rest.id}
                 className={`flex items-center gap-2 ${
-                  !(rest.index % 2) && "py-1"
+                  !((i + 1) % 2) && "py-1"
                 }`}
               >
                 <img

@@ -6,19 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import CustomToggle from "../../common/customToggle";
 
+//UTILS
+import RestaurantStatuses from "../../../enums/restaurantStatuses";
+
 //REDUX
 import {
-  resetYemekSepetiUpdateRestaurantStatus,
+  yemekSepetiGetRestaurants,
+  resetYemekSepetiGetRestaurants,
+} from "../../../redux/yemekSepeti/yemekSepetiGetRestaurantsSlice";
+import {
   yemekSepetiUpdateRestaurantStatus,
+  resetYemekSepetiUpdateRestaurantStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantStatusSlice";
 import {
-  resetYemekSepetiUpdateRestaurantCourierStatus,
   yemekSepetiUpdateRestaurantCourierStatus,
+  resetYemekSepetiUpdateRestaurantCourierStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantCourierStatusSlice";
-import {
-  resetYemekSepetiGetRestaurants,
-  yemekSepetiGetRestaurants,
-} from "../../../redux/yemekSepeti/yemekSepetiGetRestaurantsSlice";
 
 const YemekSepetiRestaurantsStatus = () => {
   const toastId = useRef();
@@ -26,7 +29,7 @@ const YemekSepetiRestaurantsStatus = () => {
   const [statusData, setStatusData] = useState(null);
 
   const { loading, success, data, error } = useSelector(
-    (state) => state.getirYemek.getRestaurants
+    (state) => state.yemekSepeti.getRestaurants
   );
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.yemekSepeti.updateRestaurants);
@@ -40,16 +43,17 @@ const YemekSepetiRestaurantsStatus = () => {
       ...statusData,
       [id]: {
         ...statusData[id],
-        status: !statusData[id].status,
+        restaurantStatus: !statusData[id].restaurantStatus,
       },
     };
 
     dispatch(yemekSepetiUpdateRestaurantStatus(updatedStat[id])).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
         toast.dismiss(toastId.current);
-        const text = updatedStat[id].status === true ? "Açıldı" : "Kapandı";
+        const text =
+          updatedStat[id].restaurantStatus === true ? "Açıldı" : "Kapandı";
         const className =
-          updatedStat[id].status === true
+          updatedStat[id].restaurantStatus === true
             ? "text-[--green-1]"
             : "text-[--red-1]";
         const comp = (
@@ -107,16 +111,23 @@ const YemekSepetiRestaurantsStatus = () => {
 
   //TOAST AND SET RESTAURANT STATUS
   useEffect(() => {
+    function statusValue(inData) {
+      return RestaurantStatuses[inData.marketplaceId].filter(
+        (S) =>
+          S.id.toLocaleLowerCase() ==
+          inData.availabilityState.toLocaleLowerCase()
+      )[0]?.value;
+    }
+
     if (error) {
       dispatch(resetYemekSepetiGetRestaurants());
-    }
-    if (success) {
-      console.log(data);
+    } else if (success) {
       const formattedData = [];
       data.map((res) => {
-        formattedData[res.id] = {
+        formattedData[res.restaurantId] = {
           ...res,
-          restaurantStatus: res.status == 100 ? true : false,
+          id: res.restaurantId,
+          restaurantStatus: statusValue(res),
           courierStatus: res.isCourierAvailable,
         };
       });
@@ -124,6 +135,28 @@ const YemekSepetiRestaurantsStatus = () => {
       dispatch(resetYemekSepetiGetRestaurants());
     }
   }, [error, success]);
+
+  //RESTAURANT UPDATE TOAST
+  useEffect(() => {
+    if (updateRestaurantLoading) {
+      toastId.current = toast.loading("İşleniyor...");
+    }
+    if (updateRestaurantError) {
+      toast.dismiss(toastId.current);
+      dispatch(resetYemekSepetiUpdateRestaurantStatus());
+    }
+  }, [updateRestaurantLoading, updateRestaurantError]);
+
+  //COURIER UPDATE TOAST
+  useEffect(() => {
+    if (updateCourierLoading) {
+      toastId.current = toast.loading("İşleniyor...");
+    }
+    if (updateCourierError) {
+      toast.dismiss(toastId.current);
+      dispatch(resetYemekSepetiUpdateRestaurantCourierStatus());
+    }
+  }, [updateCourierLoading, updateCourierError]);
 
   return (
     <main>
@@ -156,7 +189,7 @@ const YemekSepetiRestaurantsStatus = () => {
                           updateRestaurantLoading && "cursor-not-allowed"
                         }`}
                         onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].status}
+                        checked={statusData[key].restaurantStatus}
                         disabled={updateRestaurantLoading}
                       />
                     </td>

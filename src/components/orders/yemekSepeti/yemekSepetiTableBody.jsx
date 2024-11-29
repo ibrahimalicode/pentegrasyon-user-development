@@ -20,7 +20,7 @@ import RemainingMinutes from "../components/remainingMinutes";
 import YemekSepetiOrderDetails from "./yemekSepetiOrderDetails";
 import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
 import YemekSepetiChooseCourier from "./yemekSepetiChooseCourier";
-import YemekSepeti from "../../../assets/img/orders/Yemeksepeti.png";
+import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 
 const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
   const { popupContent, setPopupContent } = usePopup();

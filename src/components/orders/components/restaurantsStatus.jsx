@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
-import MarketPalceIds from "../../../enums/marketPlaceIds";
 import { useSignalR } from "../../../context/SignalRContext";
 import GetirYemekRestaurantStatuses from "../../../enums/getirYemekRestaurantStatuses";
 
@@ -16,20 +15,20 @@ import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import TrendyolYemek from "../../../assets/img/orders/TrendyolYemek.png";
 import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
-import Gofody from "../../../assets/img/orders/Gofody.png";
+import GoFody from "../../../assets/img/orders/GoFody.png";
 import Siparisim from "../../../assets/img/orders/Siparisim.png";
+
+//REDUX
+import { getRestaurantsStatus } from "../../../redux/orders/getRestaurantsStatusSlice";
 
 const MarketPlaceAssets = [
   { src: GetirYemek },
   { src: MigrosYemek },
   { src: TrendyolYemek },
   { src: YemekSepeti },
-  { src: Gofody },
+  { src: GoFody },
   { src: Siparisim },
 ];
-
-//REDUX
-import { getRestaurantsStatus } from "../../../redux/orders/getRestaurantsStatusSlice";
 
 const RestaurantsStatus = () => {
   const dispatch = useDispatch();

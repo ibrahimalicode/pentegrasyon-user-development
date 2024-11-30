@@ -8,6 +8,7 @@ import yemekSepetiTicketCancelSlice from "./yemekSepetiTicketCancelSlice";
 import yemekSepetiGetRestaurantsSlice from "./yemekSepetiGetRestaurantsSlice";
 import yemekSepetiUpdateRestaurantStatusSlice from "./yemekSepetiUpdateRestaurantStatusSlice";
 import yemekSepetiUpdateRestaurantCourierStatusSlice from "./yemekSepetiUpdateRestaurantCourierStatusSlice";
+import yemekSepetiGetTicketCancelOptionsSlice from "./yemekSepetiGetTicketCancelOptionsSlice";
 
 const yemekSepetiSlice = combineReducers({
   verifyTicket: yemekSepetiTicketVerifySlice,
@@ -17,6 +18,7 @@ const yemekSepetiSlice = combineReducers({
   getRestaurants: yemekSepetiGetRestaurantsSlice,
   updateRestaurants: yemekSepetiUpdateRestaurantStatusSlice,
   updateRestaurantsCourier: yemekSepetiUpdateRestaurantCourierStatusSlice,
+  getTicketCancelOptions: yemekSepetiGetTicketCancelOptionsSlice,
 });
 
 export default yemekSepetiSlice;

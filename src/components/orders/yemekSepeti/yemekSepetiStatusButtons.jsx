@@ -6,12 +6,12 @@ import {
   compareWithCurrentDateTime,
   formatDateString,
 } from "../../../utils/utils";
-import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
 import { useEffect, useState } from "react";
 import RemainingSeconds from "../components/remainingSeconds";
 import PrintComponent from "../components/printComponent";
 import YemekSepetiPrintOrder from "./yemekSepetiPrintOrder";
 import YemekSepetoOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
+import YemekSepetiCancelOrderPopup from "./yemekSepetiCancelOrderPopup";
 
 const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
@@ -44,7 +44,12 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
 
   function cancelOrder() {
     setSlideBarContent(null);
-    // setPopupContent(<CancelOrderPopup ticketId={ticketId} />);
+    setPopupContent(
+      <YemekSepetiCancelOrderPopup
+        ticketId={ticketId}
+        setOrdersData={setOrdersData}
+      />
+    );
   }
 
   function xMinuteAhead(date, x) {
@@ -125,7 +130,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       >
         {order.approvalDate ? (
           <>
-            <p>Onaylandı</p>
+            <p>Onaylandıdd</p>
             <p>
               {formatDateString(
                 order.approvalDate,

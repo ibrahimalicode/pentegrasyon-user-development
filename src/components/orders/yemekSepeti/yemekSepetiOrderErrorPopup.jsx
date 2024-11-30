@@ -65,8 +65,7 @@ const YemekSepetiOrderErrorPopup = ({
         <div className="flex gap-3 py-10 justify-center">
           <button
             className="py-2 px-3 border border-[--green-1] text-[--green-1] bg-[--status-green] rounded-sm"
-            // onClick={verifyOrder}
-            onClick={() => console.log(order)}
+            onClick={verifyOrder}
           >
             Onayla
           </button>

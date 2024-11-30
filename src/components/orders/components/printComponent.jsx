@@ -25,13 +25,13 @@ const PrintComponent = ({ component }) => {
       </main>
       <style>
         {`
-          @media print {
-            .orders-print-content {
-              transform: scale(0.7); /* Scale the content */
-              transform-origin: top left; /* Adjust the origin for scaling */
-              width: 140%; /* Adjust width to accommodate scaling */
-            }
-          }
+          // @media print {
+          //   .orders-print-content {
+          //     transform: scale(0.5); /* Scale the content */
+          //     transform-origin: top left; /* Adjust the origin for scaling */
+          //     width: 200%; /* Adjust width to accommodate scaling */
+          //   }
+          // }
         `}
       </style>
     </main>

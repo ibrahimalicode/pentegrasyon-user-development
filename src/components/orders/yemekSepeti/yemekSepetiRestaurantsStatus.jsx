@@ -163,7 +163,12 @@ const YemekSepetiRestaurantsStatus = () => {
       <div className="w-full text-center py-3 bg-[--yemeksepeti] text-[--white-1]">
         Yemeksepeti
       </div>
+
       <div className="w-full px-3 text-sm">
+        <h1 className="pt-2 text-[--red-1]">
+          YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
+          arasında yansımaktadır.
+        </h1>
         <table className="w-full mt-2">
           <thead>
             <tr>

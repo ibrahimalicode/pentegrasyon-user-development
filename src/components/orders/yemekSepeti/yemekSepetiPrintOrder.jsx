@@ -1,6 +1,11 @@
+//MODULES
 import React from "react";
+
+//UTILS
 import MarketPalceIds from "../../../enums/marketPlaceIds";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
+
+//COMP
 import QrGenerator from "../../common/qrGenerator";
 
 const YemekSepetiPrintOrder = ({ order }) => {
@@ -29,7 +34,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
     <main className="flex flex-col justify-center p-4 bg-[--light-3] font-normal mx-auto">
       <div className="text-center mb-2">
         <p className="text-[--primary-2] text-3xl font-medium">
-          {order.marketplaceTicketRestaurantName}
+          {order.restaurantName}
         </p>
         <p className="text-[--red-1] text-xl ">
           {MarketPalceIds[order.marketplaceId]?.label}
@@ -69,7 +74,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
         </p>
         <p>
           <span className="font-bold">Bölge </span>{" "}
-          <span>: {order?.customer?.deliveryMainArea?.split("")[0]}</span>
+          <span>: {order?.customer?.deliveryMainArea?.split(" ")[0]}</span>
         </p>
         {order.customer.deliveryInstructions && (
           <p>

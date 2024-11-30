@@ -117,7 +117,9 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
               />
             )
           }
-          className="whitespace-nowrap"
+          className={`whitespace-nowrap ${
+            order.deliveryType == 1 && "pointer-events-none"
+          }`}
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
             {order.deliveryType == 1

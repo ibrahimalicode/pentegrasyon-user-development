@@ -120,23 +120,28 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
           className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {order?.client?.district}
+            {order.deliveryType == 1
+              ? "Kurye Bilgisinde"
+              : order?.client?.district}
           </button>
         </td>
         <td
           onClick={() =>
             setPopupContent(<GetirYemekChooseCourier order={order} />)
           }
-          className="whitespace-nowrap"
+          className={`whitespace-nowrap ${
+            order.deliveryType == 1 && "pointer-events-none"
+          }`}
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
             {(() => {
               const currentCourier = courierServiceTypes.filter(
                 (T) => T.licenseTypeId === order.courierTypeId
               );
-              return currentCourier.length
+
+              return currentCourier.length && order.deliveryType != 1
                 ? currentCourier[0].label
-                : order?.courier?.name;
+                : "Getir Kuryesi";
             })()}
           </button>
         </td>
@@ -164,7 +169,14 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
         <td className="w-14 relative">
           {
             <PrintComponent
-              component={<GetirYemekPrintOrder order={order} />}
+              component={
+                <GetirYemekPrintOrder
+                  order={{
+                    ...order,
+                    checkedScheduledDate: isCheckoutToday(order.scheduledDate),
+                  }}
+                />
+              }
             />
           }
         </td>

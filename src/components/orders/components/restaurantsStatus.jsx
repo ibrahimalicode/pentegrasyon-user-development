@@ -153,15 +153,15 @@ const RestaurantsStatus = () => {
               </div>
               <style>
                 {`
-              @keyframes scroll-marquee {
-                0% {
-                  transform: translateY(0);
-                }
-                100% {
-                  transform: translateY(-50%);
-                }
-              }
-            `}
+                  @keyframes scroll-marquee {
+                    0% {
+                      transform: translateY(0);
+                    }
+                    100% {
+                      transform: translateY(-50%);
+                    }
+                  }
+                `}
               </style>
             </>
           ) : (
@@ -194,6 +194,23 @@ const RestaurantsStatus = () => {
       >
         Restoran Durumları
       </button>
+      <style>
+        {`
+        @keyframes emergencyRipple {
+          0% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.15);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }`}
+      </style>
     </div>
   );
 };

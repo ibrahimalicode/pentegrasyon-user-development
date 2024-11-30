@@ -84,7 +84,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           />
         </td>
         <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
-          {order.shortCode}
+          {order.code}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.restaurantName}
@@ -119,7 +119,9 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {order?.customer?.deliveryMainArea?.split(" ")[0]}
+            {order.expeditionType.toLocaleLowerCase() == "pickup"
+              ? "Gel Al"
+              : order?.customer?.deliveryMainArea?.split(" ")[0]}
           </button>
         </td>
         <td

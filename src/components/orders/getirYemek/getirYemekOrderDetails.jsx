@@ -43,9 +43,9 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
     const currentCourier = courierServiceTypes.filter(
       (T) => T.licenseTypeId === order.courierTypeId
     );
-    return currentCourier.length
+    return currentCourier.length && order.deliveryType != 1
       ? currentCourier[0].label
-      : order?.courier?.name;
+      : "Getir Kuryesi";
   }
   console.log(order);
 

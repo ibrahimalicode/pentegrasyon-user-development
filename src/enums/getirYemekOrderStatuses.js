@@ -59,9 +59,9 @@ const getirYemekOrderStatuses = [
     text: "Yola Çıkart",
   },
   {
-    bg: "--status-purple",
-    color: "--purple-1",
-    label: "Kurye Vardı", // Courier Arrived At Address
+    bg: "--status-brown",
+    color: "--brown-1",
+    label: "Teslim Edildi", //"Kurye Vardı", // Courier Arrived At Address here
     value: true,
     id: 800,
   },

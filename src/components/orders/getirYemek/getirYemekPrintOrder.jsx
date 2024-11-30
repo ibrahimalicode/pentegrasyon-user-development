@@ -29,7 +29,7 @@ const GetirYemekPrintOrder = ({ order }) => {
           {order.marketplaceTicketRestaurantName}
         </p>
         <p className="text-[--red-1] text-xl ">
-          {MarketPalceIds[order.marketplaceId]?.label}
+          {MarketPalceIds[order.marketplaceId]?.value}
         </p>
       </div>
 
@@ -89,7 +89,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         <div className="flex items-center text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
           <div className="px-1 mt-1.5 mr-1 bg-[--gr-1]">🕑</div>
           <div>Teslim Zamanı : </div>
-          <div className="font-medium">{order.checkedScheduledDate}</div>
+          <div className="font-medium ml-3">{order.checkedScheduledDate}</div>
         </div>
       )}
 

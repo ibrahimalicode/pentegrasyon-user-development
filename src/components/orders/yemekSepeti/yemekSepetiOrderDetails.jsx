@@ -126,7 +126,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         <div className="w-full flex justify-between">
           <p>Onay Kodu</p>
           <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
-            {order.shortCode}
+            {order.code}
           </p>
         </div>
       </div>

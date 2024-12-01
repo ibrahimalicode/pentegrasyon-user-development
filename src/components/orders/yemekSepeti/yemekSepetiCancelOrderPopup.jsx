@@ -8,9 +8,8 @@ import {
   yemekSepetiGetTicketCancelOptions,
 } from "../../../redux/yemekSepeti/yemekSepetiGetTicketCancelOptionsSlice";
 import { CloseI } from "../../../assets/icon";
-import CustomInput from "../../common/customInput";
 
-const YemekSepetiCancelOrderPopup = ({ ticketId, setOrdersData }) => {
+const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
 
@@ -23,13 +22,14 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, setOrdersData }) => {
   const [cancelOrderData, setCancelOrderData] = useState(null);
 
   const { cancelOrder } = useYemekSepetiOrderActions({
+    order,
     setOrdersData,
     cancelOrderData,
   });
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!selectedData?.status) {
+    if (!selectedData?.reason) {
       toast.error("Lütfen  İptal Sebepini Seçiniz");
       return;
     }
@@ -52,8 +52,6 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, setOrdersData }) => {
         return {
           message: opt.description,
           reason: opt.code,
-          status: opt.orderType,
-          applicable: opt.applicable,
         };
       });
       console.log(formattedOptions);
@@ -77,7 +75,7 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, setOrdersData }) => {
           İptal Opsiyonları Seç
         </h1>
         <div>
-          <div className="flex gap-4 flex-wrap max-h-[70dvh] overflow-y-auto">
+          <div className="flex flex-col gap-4 max-h-[70dvh] overflow-y-auto">
             {optionsData?.length &&
               optionsData.map((opt) => (
                 <button
@@ -90,7 +88,6 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, setOrdersData }) => {
                         ticketId,
                         message: opt.message,
                         reason: opt.reason,
-                        status: opt.status,
                       };
                     });
                   }}

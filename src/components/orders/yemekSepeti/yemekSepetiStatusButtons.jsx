@@ -46,6 +46,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     setSlideBarContent(null);
     setPopupContent(
       <YemekSepetiCancelOrderPopup
+        order={order}
         ticketId={ticketId}
         setOrdersData={setOrdersData}
       />

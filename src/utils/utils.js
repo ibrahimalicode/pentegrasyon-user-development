@@ -259,6 +259,7 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
     lng: parseFloat(lng),
   };
 
+  // eslint-disable-next-line no-undef
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom,
     center: position,
@@ -266,6 +267,7 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
   });
 
   // Define the boundary polygon
+  // eslint-disable-next-line no-undef
   const boundaryPolygon = new google.maps.Polygon({
     paths: boundaryCoords,
     strokeColor: "#0B8A00",
@@ -280,11 +282,14 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
 
   // Helper function to check if a position is within the allowed bounds
   function isPositionWithinBounds(lat, lng) {
+    // eslint-disable-next-line no-undef
     const point = new google.maps.LatLng(lat, lng);
+    // eslint-disable-next-line no-undef
     return google.maps.geometry.poly.containsLocation(point, boundaryPolygon);
   }
 
   // Create a marker when the map initially loads
+  // eslint-disable-next-line no-undef
   marker = new google.maps.marker.AdvancedMarkerElement({
     map,
     position,
@@ -317,6 +322,7 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
         marker.setMap(null);
       }
 
+      // eslint-disable-next-line no-undef
       marker = new google.maps.marker.AdvancedMarkerElement({
         map,
         position: { lat: latitude, lng: longitude },

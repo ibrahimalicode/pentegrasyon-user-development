@@ -92,7 +92,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
         </p>
         <p>
           <span className="font-bold">Sip No </span>
-          <span>: {order.shortCode}</span>
+          <span>: {order.code}</span>
         </p>
       </div>
 
@@ -154,9 +154,10 @@ const YemekSepetiPrintOrder = ({ order }) => {
                               {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
                               {opt.price > 0 &&
                                 formatToPrice(
-                                  String(
-                                    (opt.price * order.quantity).toFixed(2)
-                                  ).replace(".", ",")
+                                  String(Number(opt.price).toFixed(2)).replace(
+                                    ".",
+                                    ","
+                                  )
                                 )}
                             </span>
                           </div>
@@ -166,9 +167,10 @@ const YemekSepetiPrintOrder = ({ order }) => {
                   </td>
                   <td className="p-2 flex justify-end items-start">
                     {formatToPrice(
-                      String(
-                        (order.paidPrice * order.quantity).toFixed(2)
-                      ).replace(".", ",")
+                      String(Number(order.paidPrice).toFixed(2)).replace(
+                        ".",
+                        ","
+                      )
                     )}
                   </td>
                 </tr>

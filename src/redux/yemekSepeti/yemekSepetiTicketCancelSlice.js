@@ -51,7 +51,7 @@ export const yemekSepetiTicketCancel = createAsyncThunk(
     try {
       console.log(data);
       const res = await api.post(
-        `${baseURL}GetirYemek/TicketCancel`,
+        `${baseURL}YemekSepeti/TicketCancel`,
         { ...data },
         { params: { ...data } }
       );

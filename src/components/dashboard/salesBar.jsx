@@ -59,7 +59,6 @@ const SalesBar = () => {
     }
 
     if (data) {
-      console.log(data);
       const salesSum = data.reduce((sum, stat) => sum + stat.approvedAmount, 0);
       const updatedData = data.map((stat) => {
         return {
@@ -88,8 +87,6 @@ const SalesBar = () => {
       dispatch(resetGetRestaurants());
     }
   }, [restaurants]);
-
-  // console.log(filterData);
 
   //CALCLULATE THE HEIGHT
   function calc(price) {

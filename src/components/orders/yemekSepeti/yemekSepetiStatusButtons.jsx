@@ -1,15 +1,20 @@
+//MODULES
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
+//CONTEXT
 import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
+
+//UTILS
+import { formatDateString } from "../../../utils/utils";
+import { compareWithCurrentDateTime } from "../../../utils/utils";
 import { useYemekSepetiOrderActions } from "./useYemekSepetiOrderActions";
-import {
-  compareWithCurrentDateTime,
-  formatDateString,
-} from "../../../utils/utils";
-import { useEffect, useState } from "react";
-import RemainingSeconds from "../components/remainingSeconds";
+
+//COMP
 import PrintComponent from "../components/printComponent";
 import YemekSepetiPrintOrder from "./yemekSepetiPrintOrder";
+import RemainingSeconds from "../components/remainingSeconds";
 import YemekSepetoOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
 import YemekSepetiCancelOrderPopup from "./yemekSepetiCancelOrderPopup";
 

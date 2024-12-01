@@ -127,8 +127,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
           </thead>
 
           <tbody>
-            {order.orders.map((order) => (
-              <React.Fragment key={order.id}>
+            {order.orders.map((order, i) => (
+              <React.Fragment key={i}>
                 <tr>
                   <td className="px-2 text-left">
                     <div className="font-bold">

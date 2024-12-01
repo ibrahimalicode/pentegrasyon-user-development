@@ -1,9 +1,26 @@
-import { createContext, useState, useContext, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserRestaurants } from "../redux/restaurants/getUserRestaurantsSlice";
+import { getAuth } from "../redux/api";
 import * as signalR from "@microsoft/signalr";
 import { getUser } from "../redux/user/getUserSlice";
-import { getAuth } from "../redux/api";
+import { useDispatch, useSelector } from "react-redux";
+import { createContext, useState, useContext, useEffect } from "react";
+import { getUserRestaurants } from "../redux/restaurants/getUserRestaurantsSlice";
+
+//SOUND
+import getirYemekNewOrderSoundPath from "../assets/sound/getiryemekneworder.mp3";
+import migrosYemekNewOrderSoundPath from "../assets/sound/migrosyemekneworder.mp3";
+import trendyolYemekNewOrderSoundPath from "../assets/sound/trendyolyemekneworder.mp3";
+import yemekSepetiNewOrderSoundPath from "../assets/sound/yemeksepetineworder.mp3";
+import goFodyNewOrderSoundPath from "../assets/sound/gofodyneworder.mp3";
+import siparisimPlusNewOrderSoundPath from "../assets/sound/siparisimplus.mp3";
+
+const newOrderSounds = [
+  new Audio(getirYemekNewOrderSoundPath),
+  new Audio(migrosYemekNewOrderSoundPath),
+  new Audio(trendyolYemekNewOrderSoundPath),
+  new Audio(yemekSepetiNewOrderSoundPath),
+  new Audio(goFodyNewOrderSoundPath),
+  new Audio(siparisimPlusNewOrderSoundPath),
+];
 
 const SignalRContext = createContext();
 
@@ -83,7 +100,7 @@ export const SignalRProvider = ({ children }) => {
 
   useEffect(() => {
     if (userId && restaurantsId.length > 0) {
-      // Initialize the SignalR connection
+      // INITIALIZE THE SIGNALR CONNECTION
       const conn = new signalR.HubConnectionBuilder()
         .withUrl("https://api.pentegrasyon.net/generalHub")
         .withAutomaticReconnect()
@@ -91,17 +108,25 @@ export const SignalRProvider = ({ children }) => {
         .build();
 
       conn.serverTimeoutInMilliseconds = 2 * 60 * 1000; // 2 minutes timeout
-
       conn.keepAliveIntervalInMilliseconds = 15 * 1000; // 30 second
 
+      //NEW ORDER
       conn.on("ReceiveNewTicket", (ticket) => {
-        console.log("ReceiveNewTicket", ticket);
         setNewOrder(ticket);
+        const newOrderSound = newOrderSounds[ticket.marketplaceId];
+        newOrderSound.play().catch((error) => {
+          console.error("Failed to play audio:", error);
+        });
+        console.log("ReceiveNewTicket", ticket);
       });
+
+      //STATUS
       conn.on("ReceiveTicketStatus", (ticket) => {
-        console.log("ReceiveTicketStatus", ticket);
+        // console.log("ReceiveTicketStatus", ticket);
         setStatusChangedOrder(ticket);
       });
+
+      //CANCELED ORDER
       conn.on("ReceiveTicketCancellation", (ticket) => {
         setStatusChangedOrder(ticket);
       });
@@ -110,32 +135,32 @@ export const SignalRProvider = ({ children }) => {
         console.log("Courier Location for Ticket ID: ", ticket);
       });
 
+      //MESSAGE
       conn.on("ReceiveNewMessage", function (message) {
         setMessages((prevMessages) => [message, ...prevMessages]);
         console.log("New Message Received: ", message);
       });
 
+      //RESTAURANT STATUS
       conn.on("ReceiveRestaurantStatus", function (restaurant) {
         setStatusChangedRestaurant(restaurant);
         console.log("New Restaurant status Received: ", restaurant);
       });
 
-      // Handle automatic reconnect
+      // HANDLE AUTO RECONNECT
       conn.onreconnecting((error) => {
         console.log(
           `Connection lost. Attempting to reconnect... Error: ${error}`
         );
-        // Optionally show reconnection attempt message to the user
       });
 
       conn.onreconnected((connectionId) => {
         console.log(
           `Connection reestablished. Connected with connectionId: ${connectionId}`
         );
-        // Optionally notify user of successful reconnection
       });
 
-      // Reconnect on close
+      // RECONNECT ON CLOSE
       conn.onclose((error) => {
         console.log("Connection closed: ", error);
         conn.start().catch((err) => {

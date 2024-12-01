@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 
 //UTILS
-import { formatOrders } from "../../../utils/utils";
 import { formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
@@ -20,12 +19,10 @@ import GetirYemekStatusButton from "./getirYemekStatusButton";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
-import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
-  const { popupContent, setPopupContent } = usePopup();
-  const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
+  const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
   function isValidDate(date) {
@@ -56,19 +53,6 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
       />
     );
   }
-
-  useEffect(() => {
-    if (statusChangedOrder) {
-      if (statusChangedOrder.id === order.id && statusChangedOrder) {
-        // console.log(statusChangedOrder);
-        setOrdersData((prev) => {
-          const updatedOrder = prev.filter((O) => O.id !== order.id);
-          return formatOrders([...updatedOrder, statusChangedOrder]);
-        });
-        if (!popupContent) setStatusChangedOrder(null);
-      }
-    }
-  }, [statusChangedOrder]);
 
   return (
     order && (

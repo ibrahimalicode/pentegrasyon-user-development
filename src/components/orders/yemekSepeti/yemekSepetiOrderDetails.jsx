@@ -17,7 +17,7 @@ import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
 const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
   const { setSlideBarContent } = useSlideBar();
-  const [sideOrder, setSideOrder] = useState(order);
+  const [sideOrder, setSideOrder] = useState(formatOrder());
 
   const customerAddress = `
   ${order.customer.city},
@@ -31,6 +31,21 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
       return date;
     }
   }
+
+  function formatOrder() {
+    const formattdOrder = order.orders.flatMap(
+      (order) =>
+        order.options.length > 0
+          ? order.options.map((option) => ({
+              ...order, // Keep all original properties
+              options: [option], // Replace options with a single option
+            }))
+          : [order] // Keep the original order if no options exist
+    );
+    return { ...order, orders: formattdOrder };
+  }
+
+  console.log(sideOrder);
 
   useEffect(() => {
     if (statusChangedOrder) {
@@ -50,7 +65,6 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
       ? currentCourier[0].label
       : order?.courier?.name;
   }
-  console.log(order);
 
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
@@ -195,69 +209,70 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
           </thead>
 
           <tbody>
-            {order.orders.map((order) => (
-              <React.Fragment key={order.id}>
-                <tr>
-                  <td className="p-2 text-left">
-                    <div>
-                      <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
-                        {order.quantity}
-                      </span>
-                      {order.name}
-                    </div>
-                    {order.options.map((cat) => (
-                      <div key={cat.id} className="text-xs mt-1">
-                        <span>{cat.name}</span>
-
-                        {cat.childrens.map((opt) => (
-                          <div
-                            key={opt.id}
-                            className="flex justify-between max-w-44"
-                          >
-                            <span>▸ {opt.name}</span>
-                            <span
-                              className={`${
-                                opt.price > 0
-                                  ? "text-[--green-1]"
-                                  : "text-[--red-1]"
-                              }`}
-                            >
-                              {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
-                              {opt.price > 0 &&
-                                formatToPrice(
-                                  String(
-                                    (opt.price * order.quantity).toFixed(2)
-                                  ).replace(".", ",")
-                                )}
-                            </span>
-                          </div>
-                        ))}
+            {sideOrder &&
+              sideOrder.orders.map((order, i) => (
+                <React.Fragment key={i}>
+                  <tr className={`${i}"-here"`}>
+                    <td className="p-2 text-left">
+                      <div>
+                        <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
+                          {order.quantity}
+                        </span>
+                        {order.name}
                       </div>
-                    ))}
-                  </td>
-                  <td className="p-2 flex justify-end items-start">
-                    {formatToPrice(
-                      String(Number(order.paidPrice).toFixed(2)).replace(
-                        ".",
-                        ","
-                      )
-                    )}
-                  </td>
-                </tr>
-                {(order.comment || order.description) && (
-                  <tr>
-                    <td className="relative text-base">
-                      <p className="invisible px-2 py-1 flex gap-1">
-                        👉 {order.comment}, {order.description}
-                      </p>
-                      <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                        👉 {order.description}, {order.description}
-                      </span>
+                      {order.options.map((cat) => (
+                        <div key={cat.id} className="text-xs mt-1">
+                          <span>{cat.name}</span>
+
+                          {cat.childrens.map((opt) => (
+                            <div
+                              key={opt.id}
+                              className="flex justify-between max-w-44"
+                            >
+                              <span>▸ {opt.name}</span>
+                              <span
+                                className={`${
+                                  opt.price > 0
+                                    ? "text-[--green-1]"
+                                    : "text-[--red-1]"
+                                }`}
+                              >
+                                {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
+                                {opt.price > 0 &&
+                                  formatToPrice(
+                                    String(
+                                      (opt.price * order.quantity).toFixed(2)
+                                    ).replace(".", ",")
+                                  )}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </td>
+                    <td className="p-2 flex justify-end items-start">
+                      {formatToPrice(
+                        String(Number(order.paidPrice).toFixed(2)).replace(
+                          ".",
+                          ","
+                        )
+                      )}
                     </td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
+                  {(order.comment || order.description) && (
+                    <tr>
+                      <td className="relative text-base">
+                        <p className="invisible px-2 py-1 flex gap-1">
+                          👉 {order.comment}, {order.description}
+                        </p>
+                        <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
+                          👉 {order.description}, {order.description}
+                        </span>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
           </tbody>
         </table>
 

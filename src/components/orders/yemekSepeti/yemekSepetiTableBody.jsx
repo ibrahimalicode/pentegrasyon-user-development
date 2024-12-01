@@ -1,13 +1,10 @@
 //MODULES
-import { useEffect } from "react";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
-import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 //UTILS
-import { formatOrders } from "../../../utils/utils";
 import { formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
@@ -23,8 +20,7 @@ import YemekSepetiChooseCourier from "./yemekSepetiChooseCourier";
 import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 
 const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
-  const { popupContent, setPopupContent } = usePopup();
-  const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
+  const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
   function isValidDate(date) {
@@ -56,18 +52,30 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
     );
   }
 
-  useEffect(() => {
-    if (statusChangedOrder) {
-      if (statusChangedOrder.id === order.id && statusChangedOrder) {
-        // console.log(statusChangedOrder);
-        setOrdersData((prev) => {
-          const updatedOrder = prev.filter((O) => O.id !== order.id);
-          return formatOrders([...updatedOrder, statusChangedOrder]);
-        });
-        if (!popupContent) setStatusChangedOrder(null);
-      }
-    }
-  }, [statusChangedOrder]);
+  function formatOrder() {
+    const formattdOrder = order.orders.flatMap((order) =>
+      order.options.length > 0
+        ? order.options.map((option) => ({
+            ...order,
+            options: [option],
+          }))
+        : [order]
+    );
+    return { ...order, orders: formattdOrder };
+  }
+
+  // useEffect(() => {
+  //   if (statusChangedOrder) {
+  //     if (statusChangedOrder.id === order.id && statusChangedOrder) {
+  //       // console.log(statusChangedOrder);
+  //       setOrdersData((prev) => {
+  //         const updatedOrder = prev.filter((O) => O.id !== order.id);
+  //         return formatOrders([...updatedOrder, statusChangedOrder]);
+  //       });
+  //       if (!popupContent) setStatusChangedOrder(null);
+  //     }
+  //   }
+  // }, [statusChangedOrder]);
 
   return (
     order && (
@@ -168,7 +176,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
         <td className="w-14 relative">
           {
             <PrintComponent
-              component={<YemekSepetiPrintOrder order={order} />}
+              component={<YemekSepetiPrintOrder order={formatOrder()} />}
             />
           }
         </td>

@@ -15,23 +15,6 @@ import AutomaticApproval from "../components/automaticApproval";
 import RestaurantsStatus from "../components/restaurantsStatus";
 import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
-//SOUND
-import getirYemekNewOrderSoundPath from "../../../assets/sound/getiryemekneworder.mp3";
-import migrosYemekNewOrderSoundPath from "../../../assets/sound/migrosyemekneworder.mp3";
-import trendyolYemekNewOrderSoundPath from "../../../assets/sound/trendyolyemekneworder.mp3";
-import yemekSepetiNewOrderSoundPath from "../../../assets/sound/yemeksepetineworder.mp3";
-import goFodyNewOrderSoundPath from "../../../assets/sound/gofodyneworder.mp3";
-import siparisimPlusNewOrderSoundPath from "../../../assets/sound/siparisimplus.mp3";
-
-const newOrderSounds = [
-  new Audio(getirYemekNewOrderSoundPath),
-  new Audio(migrosYemekNewOrderSoundPath),
-  new Audio(trendyolYemekNewOrderSoundPath),
-  new Audio(yemekSepetiNewOrderSoundPath),
-  new Audio(goFodyNewOrderSoundPath),
-  new Audio(siparisimPlusNewOrderSoundPath),
-];
-
 // REDUX
 import {
   getOrders,
@@ -43,54 +26,29 @@ import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVa
 //UTILS
 import { formatOrders } from "../../../utils/utils";
 import { useSignalR } from "../../../context/SignalRContext";
+import { useOrdersContext } from "../../../context/OrdersContext";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
-  const { newOrder, setNewOrder } = useSignalR();
+  const {
+    itemsPerPage,
+    ordersData,
+    setOrdersData,
+    pageNumber,
+    setPageNumber,
+    totalItems,
+    setTotalItems,
+    handlePageChange,
+  } = useOrdersContext();
 
-  const { loading, success, error, orders } = useSelector(
-    (state) => state.orders.get
-  );
+  const { loading } = useSelector((state) => state.orders.get);
 
-  const [ordersData, setOrdersData] = useState(null);
-
-  const itemsPerPage = 20;
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalItems, setTotalItems] = useState(null);
   const [onTheWayTimeData, setOnTheWayTimeData] = useState({
     label: "Zaman Seç",
   });
   const [deliveryTimeData, setDeliveryTimeData] = useState({
     label: "Zaman Seç",
   });
-
-  function handlePageChange(number) {
-    dispatch(
-      getOrders({
-        page: number,
-        pageSize: itemsPerPage,
-      })
-    );
-  }
-
-  //GET ORDERS
-  useEffect(() => {
-    if (!ordersData) {
-      dispatch(getOrders({ pageNumber, pageSize: itemsPerPage }));
-    }
-  }, [ordersData]);
-
-  //TOAST AND SET ORDERS
-  useEffect(() => {
-    if (error) {
-      dispatch(resetGetOrdersState());
-    }
-    if (success) {
-      setOrdersData(orders.data);
-      setTotalItems(orders.totalCount);
-      dispatch(resetGetOrdersState());
-    }
-  }, [success, error, orders]);
 
   //GET ON THE WAY
   useEffect(() => {
@@ -105,22 +63,6 @@ const OrdersPage = () => {
       dispatch(getDeliveryTimeVariable());
     }
   }, [deliveryTimeData]);
-
-  useEffect(() => {
-    if (newOrder) {
-      const newOrderSound = newOrderSounds[newOrder.marketplaceId];
-      newOrderSound.play().catch((error) => {
-        console.error("Failed to play audio:", error);
-      });
-
-      if (ordersData) {
-        setOrdersData(formatOrders([newOrder, ...ordersData]));
-      } else {
-        setOrdersData([newOrder]);
-      }
-      setNewOrder(null);
-    }
-  }, [newOrder]);
 
   return (
     <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">

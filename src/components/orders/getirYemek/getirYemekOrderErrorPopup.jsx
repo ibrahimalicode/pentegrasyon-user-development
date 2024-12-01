@@ -32,6 +32,15 @@ const GetirYemekOrderErrorPopup = ({
     </>
   );
 
+  function getTheMessage() {
+    try {
+      return JSON?.parse(errorDetails?.data)?.message;
+    } catch (error) {
+      console.log(error);
+      return "";
+    }
+  }
+
   return (
     <main className="bg-[--white-1] rounded-md">
       <div className="flex justify-between items-center mb-4 bg-[--getiryemek] px-5 py-3 rounded-t-md">
@@ -62,9 +71,7 @@ const GetirYemekOrderErrorPopup = ({
           <p>Sipariş durumu aşağıdaki hata kodundan dolayı değiştirilemiyor.</p>
           <p>
             <span>Hata: </span>
-            <span className="text-[--red-1]">
-              {JSON?.parse(errorDetails?.data)?.message}
-            </span>
+            <span className="text-[--red-1]">{getTheMessage()}</span>
           </p>
         </div>
 

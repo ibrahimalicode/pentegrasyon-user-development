@@ -22,15 +22,24 @@ import {
   yemekSepetiUpdateRestaurantCourierStatus,
   resetYemekSepetiUpdateRestaurantCourierStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantCourierStatusSlice";
+import {
+  getRestaurantsMap,
+  resetGetRestaurantsMap,
+} from "../../../redux/restaurants/getRestaurantsMapSlice";
 
 const YemekSepetiRestaurantsStatus = () => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
 
-  const { loading, success, data, error } = useSelector(
+  const { success, data, error } = useSelector(
     (state) => state.yemekSepeti.getRestaurants
   );
+
+  const { entities, error: mapError } = useSelector(
+    (state) => state.restaurants.getRestaurantsMap
+  );
+
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.yemekSepeti.updateRestaurants);
 
@@ -109,7 +118,17 @@ const YemekSepetiRestaurantsStatus = () => {
     }
   }, [statusData]);
 
-  //TOAST AND SET RESTAURANT STATUS
+  //TOAST RESTAURANT STATUS AND GET RESTAURANTS NAME
+  useEffect(() => {
+    if (error) {
+      dispatch(resetYemekSepetiGetRestaurants());
+    } else if (success) {
+      dispatch(getRestaurantsMap(data));
+      dispatch(resetYemekSepetiGetRestaurants());
+    }
+  }, [error, success]);
+
+  //SET RESTAURANT STATUS FROM MAP
   useEffect(() => {
     function statusValue(inData) {
       return RestaurantStatuses[inData.marketplaceId].filter(
@@ -119,11 +138,11 @@ const YemekSepetiRestaurantsStatus = () => {
       )[0]?.value;
     }
 
-    if (error) {
-      dispatch(resetYemekSepetiGetRestaurants());
-    } else if (success) {
+    if (mapError) {
+      dispatch(resetGetRestaurantsMap());
+    } else if (entities) {
       const formattedData = [];
-      data.map((res) => {
+      entities.map((res) => {
         formattedData[res.restaurantId] = {
           ...res,
           id: res.restaurantId,
@@ -132,9 +151,9 @@ const YemekSepetiRestaurantsStatus = () => {
         };
       });
       setStatusData(formattedData);
-      dispatch(resetYemekSepetiGetRestaurants());
+      dispatch(resetGetRestaurantsMap());
     }
-  }, [error, success]);
+  }, [entities]);
 
   //RESTAURANT UPDATE TOAST
   useEffect(() => {
@@ -186,7 +205,7 @@ const YemekSepetiRestaurantsStatus = () => {
                 const restaurant = statusData[key];
                 return (
                   <tr key={i}>
-                    <td className="text-start">{restaurant.name}</td>
+                    <td className="text-start">{restaurant.restaurantName}</td>
                     <td className="w-44 text-center">
                       <CustomToggle
                         className="scale-75"

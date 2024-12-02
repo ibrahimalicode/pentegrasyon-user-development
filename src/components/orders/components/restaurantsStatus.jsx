@@ -23,6 +23,10 @@ import {
   getRestaurantsStatus,
   resetGetRestaurantsStatus,
 } from "../../../redux/orders/getRestaurantsStatusSlice";
+import {
+  getRestaurantsMap,
+  resetGetRestaurantsMap,
+} from "../../../redux/restaurants/getRestaurantsMapSlice";
 
 const MarketPlaceAssets = [
   { src: GetirYemek },
@@ -41,18 +45,22 @@ const RestaurantsStatus = () => {
   const { restaurantStatuses } = useSelector(
     (state) => state.orders.getRestaurantsStatus
   );
+
+  const { entities, error: mapError } = useSelector(
+    (state) => state.restaurants.getRestaurantsMap
+  );
   const [statusesData, setStatusesData] = useState(null);
   const [closedRestaurants, setClosedRestaurants] = useState([]);
 
-  function setRestaurantStatusData(restaurantStatData) {
-    //SMAL FUNC
-    function statusValue(inData) {
-      const statCodeArray = RestaurantStatuses[inData.marketplaceId];
-      return statCodeArray.filter(
-        (S) => S.id == inData[statCodeArray[0].key]
-      )[0]?.value;
-    }
+  //CHECK OPEN/CLOSE STATUS
+  function statusValue(inData) {
+    const statCodeArray = RestaurantStatuses[inData.marketplaceId];
+    return statCodeArray.filter((S) => S.id == inData[statCodeArray[0].key])[0]
+      ?.value;
+  }
 
+  //SET THE DATA
+  function setRestaurantStatusData(restaurantStatData) {
     const formattedData = [];
     restaurantStatData.map((res, i) => {
       if (!statusValue(res)) {
@@ -65,6 +73,24 @@ const RestaurantsStatus = () => {
     });
     setStatusesData(restaurantStatData);
     setClosedRestaurants(formattedData);
+    dispatch(resetGetRestaurantsStatus());
+  }
+
+  //GET RESTAURANT NAMES
+  function getRestaurantNames(inRestaurant) {
+    const noNameRestaurants = inRestaurant.filter((Restaurant) => {
+      if (
+        !Restaurant?.name &&
+        !Restaurant?.restaurantName &&
+        !statusValue(Restaurant)
+      ) {
+        return Restaurant;
+      }
+    });
+    if (noNameRestaurants.length) {
+      setStatusesData(inRestaurant);
+      dispatch(getRestaurantsMap(noNameRestaurants));
+    } else setRestaurantStatusData(inRestaurant);
   }
 
   //GET STATUSES
@@ -74,13 +100,29 @@ const RestaurantsStatus = () => {
     }
   }, [statusesData]);
 
-  //SET STATUESE FROM FETCH
+  //SET THE STATUSES
   useEffect(() => {
     if (restaurantStatuses) {
-      setRestaurantStatusData(restaurantStatuses);
-      dispatch(resetGetRestaurantsStatus());
+      getRestaurantNames(restaurantStatuses);
     }
   }, [restaurantStatuses]);
+
+  //SET THE STATUS FROM THE MAP
+  useEffect(() => {
+    if (mapError) {
+      dispatch(resetGetRestaurantsMap());
+    } else if (entities?.length && statusesData) {
+      const uniqueRestaurants = statusesData.filter((R) => {
+        let notSameId;
+        entities.map((e) => {
+          notSameId = e.id !== R.id;
+        });
+        return notSameId;
+      });
+      setRestaurantStatusData([...uniqueRestaurants, ...entities]);
+      dispatch(resetGetRestaurantsMap());
+    }
+  }, [entities]);
 
   //SET STATUSES FROM SIGNALR
   useEffect(() => {
@@ -88,7 +130,7 @@ const RestaurantsStatus = () => {
       const uniqueRestaurants = statusesData.filter(
         (R) => R.id !== statusChangedRestaurant.id
       );
-      setRestaurantStatusData([statusChangedRestaurant, ...uniqueRestaurants]);
+      getRestaurantNames([statusChangedRestaurant, ...uniqueRestaurants]);
       setStatusChangedRestaurant(null);
     }
   }, [statusChangedRestaurant]);
@@ -146,7 +188,9 @@ const RestaurantsStatus = () => {
                         className="size-6 rounded-full"
                         src={MarketPlaceAssets[rest.marketplaceId].src}
                       />
-                      <p>{rest.name} Kapalı</p>
+                      <p>
+                        {rest.name ? rest.name : rest.restaurantName} Kapalı
+                      </p>
                     </div>
                   )
                 )}
@@ -177,7 +221,7 @@ const RestaurantsStatus = () => {
                   className="size-6 rounded-full"
                   src={MarketPlaceAssets[rest.marketplaceId].src}
                 />{" "}
-                <p>{rest.name} Kapalı</p>
+                <p>{rest.name ? rest.name : rest.restaurantName} Kapalı</p>
               </div>
             ))
           )}

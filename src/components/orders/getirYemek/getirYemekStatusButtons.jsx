@@ -118,7 +118,8 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
-      if (actionError.ticketId == order.id) {
+
+      if (actionError.ticketId == order.id && actionError.statusCode == 400) {
         setPopupContent(
           <GetirYemekOrderErrorPopup
             order={order}

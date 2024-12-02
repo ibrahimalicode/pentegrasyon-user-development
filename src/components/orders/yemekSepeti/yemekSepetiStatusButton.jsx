@@ -1,5 +1,5 @@
 //MODULES
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
@@ -67,7 +67,8 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
-      if (actionError.ticketId == order.id) {
+
+      if (actionError.ticketId == order.id && actionError.statusCode == 400) {
         setPopupContent(
           <YemekSepetiOrderErrorPopup
             order={order}

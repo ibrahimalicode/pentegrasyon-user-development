@@ -2,7 +2,7 @@ import React from "react";
 
 //COMP
 import QrGenerator from "../../common/qrGenerator";
-import { formatToPrice } from "../../../utils/utils";
+import { formatDateString, formatToPrice } from "../../../utils/utils";
 import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const GetirYemekPrintOrder = ({ order }) => {
@@ -73,7 +73,14 @@ const GetirYemekPrintOrder = ({ order }) => {
         )}
         <p>
           <span className="font-bold">Sip. Tar. </span>
-          <span>: 04:10.2024 - 17:45</span>
+          <span>
+            :{" "}
+            {formatDateString({
+              dateString: order.createdDateTime,
+              hour: true,
+              min: true,
+            })}
+          </span>
         </p>
         <p>
           <span className="font-bold">Ödeme </span>
@@ -191,10 +198,14 @@ const GetirYemekPrintOrder = ({ order }) => {
           <>
             <p className="flex justify-between">
               <span>Hesap Toplamı : </span>
-              <span className="font-bold">{order.totalPrice}</span>
+              <span className="font-bold">
+                {formatToPrice(
+                  String(order.totalPrice.toFixed(2).replace(".", ","))
+                )}
+              </span>
             </p>
             <p className="flex justify-between">
-              <span>%15 iskonto : </span>
+              <span>İskonto : </span>
               <span>
                 -
                 {formatToPrice(

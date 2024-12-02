@@ -38,7 +38,7 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                   </div>
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {formatDateString(data.endDateTime)}
+                  {formatDateString({ dateString: data.endDateTime })}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {getRemainingDays(data.endDateTime)}

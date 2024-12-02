@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import MarketPalceIds from "../enums/marketPlaceIds";
 import _ from "lodash";
 
-export function formatDateString(
+export function formatDateString({
   dateString,
   letDay = true,
   letMonth = true,
@@ -10,8 +10,8 @@ export function formatDateString(
   hour = false,
   min = false,
   sec = false,
-  joint = "-"
-) {
+  joint = "-",
+}) {
   const date = new Date(dateString);
 
   // Extract the month, day, and year

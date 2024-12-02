@@ -84,7 +84,14 @@ const YemekSepetiPrintOrder = ({ order }) => {
         )}
         <p>
           <span className="font-bold">Sip. Tar. </span>
-          <span>: {formatDateString(order.customer.createdDateTime)}</span>
+          <span>
+            :{" "}
+            {formatDateString({
+              dateString: order.customer.createdDateTime,
+              hour: true,
+              min: true,
+            })}
+          </span>
         </p>
         <p>
           <span className="font-bold">Ödeme </span>

@@ -34,9 +34,20 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
   function isCheckoutToday(date) {
     const today = new Date().getDate();
     const orderDate =
-      formatDateString(date, true, false, false) === today
-        ? formatDateString(date, false, false, false, true, true, false)
-        : formatDateString(date, true, true, true, true, true);
+      formatDateString({
+        dateString: date,
+        letMonth: false,
+        letYear: false,
+      }) === today
+        ? formatDateString({
+            dateString: date,
+            letDay: false,
+            letMonth: false,
+            letYear: false,
+            hour: true,
+            min: true,
+          })
+        : formatDateString({ dateString: date, hour: true, min: true });
     return orderDate;
   }
 

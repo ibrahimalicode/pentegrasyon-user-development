@@ -118,14 +118,11 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         <div className="w-full flex justify-between">
           <p>Sipariş Tarihi</p>
           <p>
-            {formatDateString(
-              order.createdDateTime,
-              true,
-              true,
-              true,
-              true,
-              true
-            )}
+            {formatDateString({
+              dateString: order.createdDateTime,
+              hour: true,
+              min: true,
+            })}
           </p>
         </div>
         <div className="w-full flex justify-between">

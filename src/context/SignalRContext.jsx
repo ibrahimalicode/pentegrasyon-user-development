@@ -92,6 +92,7 @@ export const SignalRProvider = ({ children }) => {
           console.error(`Error joining user group ${userId}:`, err);
         });
       });
+      registerSignalREvents(conn);
     } catch (err) {
       console.log("Error in SignalR connection:", err);
       setTimeout(() => startConnection(conn), 5000);

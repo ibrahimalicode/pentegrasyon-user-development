@@ -178,13 +178,13 @@ export const SignalRProvider = ({ children }) => {
         }
       };
 
-      // setInterval(() => {
-      //   if (conn.state === signalR.HubConnectionState.Disconnected) {
-      //     console.log("Connection lost. Attempting to reconnect...");
-      //     startConnection(conn);
-      //   }
-      //   console.log("Connection Checked");
-      // }, 1000);
+      setInterval(() => {
+        if (conn.state === signalR.HubConnectionState.Disconnected) {
+          console.log("Connection lost. Attempting to reconnect...");
+          startConnection(conn);
+        }
+        console.log("Connection Checked");
+      }, 2000);
 
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }

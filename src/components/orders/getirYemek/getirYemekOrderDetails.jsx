@@ -232,7 +232,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                         {cat.options.map((opt) => (
                           <div
                             key={opt.id}
-                            className="flex justify-between max-w-44"
+                            className="min-w-full flex justify-between max-w-44"
                           >
                             <span>▸ {opt.name}</span>
                             <span
@@ -255,6 +255,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                       </div>
                     ))}
                   </td>
+
                   <td className="p-2 flex justify-end items-start">
                     {formatToPrice(
                       String((order.price * order.count).toFixed(2)).replace(

@@ -98,6 +98,46 @@ export const SignalRProvider = ({ children }) => {
     }
   }
 
+  // SUBSCRIPTIONS
+  function registerSignalREvents(conn) {
+    //NEW ORDER
+    conn.on("ReceiveNewTicket", (ticket) => {
+      setNewOrder(ticket);
+      const newOrderSound = newOrderSounds[ticket.marketplaceId];
+      newOrderSound.play().catch((error) => {
+        console.error("Failed to play audio:", error);
+      });
+      console.log("ReceiveNewTicket", ticket);
+    });
+
+    //STATUS
+    conn.on("ReceiveTicketStatus", (ticket) => {
+      // console.log("ReceiveTicketStatus", ticket);
+      setStatusChangedOrder(ticket);
+    });
+
+    //CANCELED ORDER
+    conn.on("ReceiveTicketCancellation", (ticket) => {
+      setStatusChangedOrder(ticket);
+    });
+
+    conn.on("ReceiveTicketCourierLocation", (ticket) => {
+      console.log("Courier Location for Ticket ID: ", ticket);
+    });
+
+    //MESSAGE
+    conn.on("ReceiveNewMessage", function (message) {
+      setMessages((prevMessages) => [message, ...prevMessages]);
+      console.log("New Message Received: ", message);
+    });
+
+    //RESTAURANT STATUS
+    conn.on("ReceiveRestaurantStatus", function (restaurant) {
+      setStatusChangedRestaurant(restaurant);
+      console.log("New Restaurant status Received: ", restaurant);
+    });
+  }
+
   useEffect(() => {
     if (userId && restaurantsId.length > 0) {
       // INITIALIZE THE SIGNALR CONNECTION
@@ -110,54 +150,20 @@ export const SignalRProvider = ({ children }) => {
       conn.serverTimeoutInMilliseconds = 2 * 60 * 1000; // 2 minutes timeout
       conn.keepAliveIntervalInMilliseconds = 15 * 1000; // 30 second
 
-      //NEW ORDER
-      conn.on("ReceiveNewTicket", (ticket) => {
-        setNewOrder(ticket);
-        const newOrderSound = newOrderSounds[ticket.marketplaceId];
-        newOrderSound.play().catch((error) => {
-          console.error("Failed to play audio:", error);
-        });
-        console.log("ReceiveNewTicket", ticket);
-      });
-
-      //STATUS
-      conn.on("ReceiveTicketStatus", (ticket) => {
-        // console.log("ReceiveTicketStatus", ticket);
-        setStatusChangedOrder(ticket);
-      });
-
-      //CANCELED ORDER
-      conn.on("ReceiveTicketCancellation", (ticket) => {
-        setStatusChangedOrder(ticket);
-      });
-
-      conn.on("ReceiveTicketCourierLocation", (ticket) => {
-        console.log("Courier Location for Ticket ID: ", ticket);
-      });
-
-      //MESSAGE
-      conn.on("ReceiveNewMessage", function (message) {
-        setMessages((prevMessages) => [message, ...prevMessages]);
-        console.log("New Message Received: ", message);
-      });
-
-      //RESTAURANT STATUS
-      conn.on("ReceiveRestaurantStatus", function (restaurant) {
-        setStatusChangedRestaurant(restaurant);
-        console.log("New Restaurant status Received: ", restaurant);
-      });
-
       // HANDLE AUTO RECONNECT
+      //RECONNECTION
       conn.onreconnecting((error) => {
         console.log(
           `Connection lost. Attempting to reconnect... Error: ${error}`
         );
       });
 
+      //RECONNECTED
       conn.onreconnected((connectionId) => {
         console.log(
           `Connection reestablished. Connected with connectionId: ${connectionId}`
         );
+        registerSignalREvents(conn);
       });
 
       // RECONNECT ON CLOSE
@@ -169,6 +175,7 @@ export const SignalRProvider = ({ children }) => {
       });
       startConnection(conn);
 
+      //CHECK IF THE DEVICE WAKES UP
       const handleVisibilityChange = () => {
         if (
           document.visibilityState === "visible" &&
@@ -178,12 +185,13 @@ export const SignalRProvider = ({ children }) => {
         }
       };
 
+      //PING 2SEC
       setInterval(() => {
+        console.log(`Connection state: ${conn.state}`);
         if (conn.state === signalR.HubConnectionState.Disconnected) {
           console.log("Connection lost. Attempting to reconnect...");
           startConnection(conn);
         }
-        console.log("Connection Checked");
       }, 2000);
 
       document.addEventListener("visibilitychange", handleVisibilityChange);

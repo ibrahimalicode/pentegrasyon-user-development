@@ -47,7 +47,7 @@ const getirYemekOrderStatuses = [
     label: "Kurye'ye verildi", // Delivered To Courier
     value: true,
     id: 600,
-    nextId: 700,
+    nextId: 900,
   },
   {
     bg: "--status-purple",

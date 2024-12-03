@@ -12,14 +12,16 @@ import { useSignalR } from "./SignalRContext";
 import { formatOrders } from "../utils/utils";
 import { usePopup } from "./PopupContext";
 import { CloseI } from "../assets/icon";
+import { getAuth } from "../redux/api";
 
 const OrdersContext = createContext();
 
 export const useOrdersContext = () => useContext(OrdersContext);
 
 export const OrdersContextProvider = ({ children }) => {
-  const timeoutRef = useRef(null);
   const dispatch = useDispatch();
+  const token = getAuth()?.token;
+  const timeoutRef = useRef(null);
   const { setPopupContent } = usePopup();
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
@@ -45,7 +47,7 @@ export const OrdersContextProvider = ({ children }) => {
 
   //GET ORDERS
   useEffect(() => {
-    if (!ordersData) {
+    if (!ordersData && token) {
       dispatch(getOrders({ pageNumber, pageSize: itemsPerPage }));
     }
   }, [ordersData]);
@@ -88,7 +90,7 @@ export const OrdersContextProvider = ({ children }) => {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
 
-    if (audioContext.state === "suspended") {
+    if (audioContext.state === "suspended" && token) {
       const popupContent = (
         <main className="bg-[--white-1] rounded-sm p-5">
           <div className="flex justify-end mb-3">
@@ -128,7 +130,7 @@ export const OrdersContextProvider = ({ children }) => {
         console.log("Sound played");
       }, 4000);
     } else {
-      console.log("Pause");
+      console.log("Sound Paused");
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -142,7 +144,7 @@ export const OrdersContextProvider = ({ children }) => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isThereUnverifiedOrder]);
+  }, [isThereUnverifiedOrder, token]);
 
   //SET NEW ORDER
   useEffect(() => {

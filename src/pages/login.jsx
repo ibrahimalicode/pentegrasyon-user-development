@@ -1,17 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import CustomInput from "../components/common/customInput";
-import { useDispatch, useSelector } from "react-redux";
+//MODELS
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 // ICONS
 import LoadingI from "../assets/anim/loading";
-import { login, resetLoginState } from "../redux/auth/loginSlice";
 import TurnstileWidget from "../components/turnstileWidget";
 
+//REDUX
+import { login, resetLoginState } from "../redux/auth/loginSlice";
+
 // COMP
-import GlassFrame from "../components/common/glassFrame";
 import { getAuth } from "../redux/api";
+import GlassFrame from "../components/common/glassFrame";
+import CustomInput from "../components/common/customInput";
 
 function Login() {
   const toastId = useRef();

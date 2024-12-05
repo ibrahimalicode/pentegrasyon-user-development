@@ -3,34 +3,57 @@ import { usePopup } from "../../../context/PopupContext";
 import CustomSelect from "../../common/customSelector";
 import { useDispatch } from "react-redux";
 import { getOrders } from "../../../redux/orders/getOrdersSlice";
+import { useOrdersContext } from "../../../context/OrdersContext";
+import CustomDatePicker from "../../common/customdatePicker";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
+import { formatDate } from "../../../utils/utils";
+import { isEqual } from "lodash";
 
-const FilterOrders = ({ pageNumber, itemsPerPage }) => {
+const FilterOrders = () => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
   const { contentRef, setContentRef } = usePopup();
+  const { itemsPerPage, pageNumber } = useOrdersContext();
 
-  const [openFilter, setOpenFilter] = useState(false);
-  const [filter, setFilter] = useState({
-    date: null,
+  const filterInitialState = {
     startDateTime: "",
     endDateTime: "",
-    status: "",
+    statusId: null,
+    status: { label: "Hepsi", value: null },
     marketplaceId: null,
-  });
+    marketplace: { value: null, label: "Hepsi", id: null },
+  };
+  const [openFilter, setOpenFilter] = useState(false);
+  const [filter, setFilter] = useState(filterInitialState);
 
   function handleFilter(bool) {
     if (bool) {
+      console.log({
+        page: pageNumber,
+        pageSize: itemsPerPage.value,
+        startDateTime: formatDate(filter.startDateTime),
+        endDateTime: formatDate(filter.endDateTime),
+        status: filter.statusId,
+        marketplaceId: filter.marketplaceId,
+      });
+
       dispatch(
         getOrders({
           page: pageNumber,
-          pageSize: itemsPerPage,
-          startDateTime: filter.startDateTime,
-          endDateTime: filter.endDateTime,
-          status: filter.status,
+          pageSize: itemsPerPage.value,
+          startDateTime: formatDate(filter.startDateTime),
+          endDateTime: formatDate(filter.endDateTime),
+          status: filter.statusId,
           marketplaceId: filter.marketplaceId,
         })
       );
+    } else {
+      if (!isEqual(filterInitialState, filter)) {
+        setFilter(filterInitialState);
+        dispatch(getOrders({ pageNumber, pageSize: itemsPerPage.value }));
+      }
     }
+    setOpenFilter(false);
   }
 
   //HIDE POPUP
@@ -61,10 +84,62 @@ const FilterOrders = ({ pageNumber, itemsPerPage }) => {
           </button>
 
           <div
-            className={`absolute right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-[999] ${
+            className={`absolute right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-[999] min-w-max ${
               openFilter ? "visible" : "hidden"
             }`}
           >
+            <div className="flex gap-6">
+              <div>
+                <CustomDatePicker
+                  label="Başlangıç Tarihi"
+                  className="text-sm sm:mt-1 w-36 py-2"
+                  style={{ padding: "0 !important" }}
+                  popperClassName="react-datepicker-popper-filter-order-1"
+                  value={filter.startDateTime}
+                  onChange={(selectedDate) => {
+                    setFilter((prev) => {
+                      return {
+                        ...prev,
+                        startDateTime: selectedDate,
+                      };
+                    });
+                  }}
+                />
+                <style>
+                  {`
+                  .react-datepicker-popper-filter-order-1 {
+                    right: -2rem
+                  }
+                `}
+                </style>
+              </div>
+
+              <div>
+                <CustomDatePicker
+                  label="Bitiş Tarihi"
+                  className="text-sm sm:mt-1 w-36 py-2"
+                  style={{ padding: "0 !important" }}
+                  popperClassName="react-datepicker-popper-filter-order-2"
+                  value={filter.endDateTime}
+                  onChange={(selectedDate) => {
+                    setFilter((prev) => {
+                      return {
+                        ...prev,
+                        endDateTime: selectedDate,
+                      };
+                    });
+                  }}
+                />
+                <style>
+                  {`
+                  .react-datepicker-popper-filter-order-2 {
+                    right: -22rem
+                  }
+                `}
+                </style>
+              </div>
+            </div>
+
             <div className="flex gap-6">
               <CustomSelect
                 label="Durum"
@@ -72,44 +147,40 @@ const FilterOrders = ({ pageNumber, itemsPerPage }) => {
                 className2="sm:mt-3"
                 style={{ padding: "0 !important" }}
                 options={[
-                  { label: "Hepsi", value: null, id: null },
-                  { label: "Pending", value: true, id: 0 },
-                  { label: "Onaylamış", value: true, id: 1 },
+                  { label: "Hepsi", value: null },
+                  { label: "Bekliyor", value: 0 },
+                  { label: "Onaylandı", value: 1 },
+                  { label: "Yola Çıktı", value: 2 },
+                  { label: "Teslim Edildi", value: 3 },
+                  { label: "İptal Edildi", value: 4 },
                 ]}
-                value={
-                  filter?.status
-                    ? filter.status
-                    : { value: null, label: "Hepsi" }
-                }
+                value={filter.status}
                 onChange={(selectedOption) => {
                   setFilter((prev) => {
                     return {
                       ...prev,
+                      statusId: selectedOption.value,
                       status: selectedOption,
                     };
                   });
                 }}
               />
               <CustomSelect
-                label="pazaryeri"
+                label="Pazaryeri"
                 className="text-sm sm:mt-1"
                 className2="sm:mt-3"
                 style={{ padding: "0 !important" }}
                 options={[
-                  { label: "Hepsi", value: null, id: null },
-                  { label: "Pending", value: true, id: 0 },
-                  { label: "Onaylamış", value: true, id: 1 },
+                  { value: null, label: "Hepsi", id: null },
+                  ...MarketPalceIds,
                 ]}
-                value={
-                  filter?.status
-                    ? filter.status
-                    : { value: null, label: "Hepsi" }
-                }
+                value={filter.marketplace}
                 onChange={(selectedOption) => {
                   setFilter((prev) => {
                     return {
                       ...prev,
-                      status: selectedOption,
+                      marketplaceId: selectedOption.id,
+                      marketplace: selectedOption,
                     };
                   });
                 }}

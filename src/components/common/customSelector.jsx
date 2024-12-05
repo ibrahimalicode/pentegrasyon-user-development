@@ -15,6 +15,7 @@ const CustomSelect = ({
   inputStyle,
   optionStyle,
   singleValueStyle,
+  menuPlacement,
 }) => {
   const formatOptionLabel = ({ label }) => (
     <div dangerouslySetInnerHTML={{ __html: label }} />
@@ -35,6 +36,7 @@ const CustomSelect = ({
         isDisabled={disabled}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
         formatOptionLabel={formatOptionLabel}
+        menuPlacement={menuPlacement || "bottom"}
         styles={{
           control: (provided, state) => ({
             ...provided,

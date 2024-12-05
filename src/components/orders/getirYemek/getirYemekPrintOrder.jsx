@@ -139,32 +139,6 @@ const GetirYemekPrintOrder = ({ order }) => {
                       <span className="mr-0.5 rounded-sm">{order.count} </span>x{" "}
                       {order.name}
                     </div>
-                    {order.optionCategories.map((cat) => (
-                      <div key={cat.id} className="text-sm pl-4">
-                        <span>{cat.name}</span>
-
-                        {cat.options.map((opt) => (
-                          <div key={opt.id} className="flex justify-between">
-                            <span>▸ {opt.name}</span>
-                            <span
-                              className={`${
-                                opt.price > 0
-                                  ? "text-[--green-1]"
-                                  : "text-[--red-1]"
-                              }`}
-                            >
-                              {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
-                              {opt.price > 0 &&
-                                formatToPrice(
-                                  String(
-                                    (opt.price * order.count).toFixed(2)
-                                  ).replace(".", ",")
-                                )}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
                   </td>
                   <td className="p-2 flex justify-end items-start">
                     {formatToPrice(
@@ -175,6 +149,33 @@ const GetirYemekPrintOrder = ({ order }) => {
                     )}
                   </td>
                 </tr>
+                {order.optionCategories.map((cat) => (
+                  <React.Fragment key={cat.id}>
+                    <tr className="text-xs px-2">
+                      <td className="pl-2">{cat.name}</td>
+                    </tr>
+                    {cat.options.map((opt) => (
+                      <tr key={opt.id} className="text-xs">
+                        <td className="pl-2">▸ {opt.name}</td>
+                        <td
+                          className={`pr-2 text-right ${
+                            opt.price > 0
+                              ? "text-[--green-1]"
+                              : "text-[--red-1]"
+                          }`}
+                        >
+                          {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
+                          {opt.price > 0 &&
+                            formatToPrice(
+                              String(
+                                (opt.price * order.count).toFixed(2)
+                              ).replace(".", ",")
+                            )}
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
                 {order.note && (
                   <tr>
                     <td className="relative text-base">

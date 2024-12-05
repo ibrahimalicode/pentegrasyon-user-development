@@ -10,28 +10,25 @@ import OnTheWayTime from "../components/onTheWayTime";
 import DeliveryTime from "../components/deliveryTime";
 import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
+import CustomSelect from "../../common/customSelector";
 import OrdersTotalPrice from "../components/ordersTotalPrice";
 import AutomaticApproval from "../components/automaticApproval";
 import RestaurantsStatus from "../components/restaurantsStatus";
 import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
 // REDUX
-import {
-  getOrders,
-  resetGetOrdersState,
-} from "../../../redux/orders/getOrdersSlice";
 import { getOnTheWayTimeVariable } from "../../../redux/orders/getOnTheWayTimeVariableSlice";
 import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
 
 //UTILS
-import { formatOrders } from "../../../utils/utils";
-import { useSignalR } from "../../../context/SignalRContext";
 import { useOrdersContext } from "../../../context/OrdersContext";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
+
   const {
     itemsPerPage,
+    handleItemsPerPage,
     ordersData,
     setOrdersData,
     pageNumber,
@@ -49,6 +46,13 @@ const OrdersPage = () => {
   const [deliveryTimeData, setDeliveryTimeData] = useState({
     label: "Zaman Seç",
   });
+  const pageNumbers = () => {
+    const numbersColl = [];
+    for (let i = 20; i < 101; i++) {
+      numbersColl.push({ label: `${i}`, value: i });
+    }
+    return numbersColl;
+  };
 
   //GET ON THE WAY
   useEffect(() => {
@@ -111,10 +115,22 @@ const OrdersPage = () => {
       {/* PAGINATION */}
       {ordersData && typeof totalItems === "number" && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
+          <div className="scale-[.8]">
+            <CustomSelect
+              className="mt-[0] sm:mt-[0]"
+              className2="mt-[0] sm:mt-[0]"
+              menuPlacement="top"
+              value={itemsPerPage}
+              options={pageNumbers()}
+              onChange={(option) => {
+                handleItemsPerPage(option.value);
+              }}
+            />
+          </div>
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
-            itemsPerPage={itemsPerPage}
+            itemsPerPage={itemsPerPage.value}
             totalItems={totalItems}
             handlePageChange={handlePageChange}
           />

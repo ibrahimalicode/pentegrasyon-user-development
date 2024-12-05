@@ -63,6 +63,17 @@ export function formatDateString({
   return formattedDate;
 }
 
+export const formatDate = (date) => {
+  const formattedDate = new Date(date);
+  const month = (formattedDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = formattedDate.getDate().toString().padStart(2, "0");
+  const year = formattedDate.getFullYear().toString().padStart(4, "0");
+  const hours = formattedDate.getHours().toString().padStart(2, "0");
+  const minutes = formattedDate.getMinutes().toString().padStart(2, "0");
+  const seconds = formattedDate.getSeconds().toString().padStart(2, "0");
+  return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+};
+
 export function getRemainingDays(endDateTime) {
   const start = new Date();
   const end = new Date(endDateTime);

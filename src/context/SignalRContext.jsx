@@ -41,6 +41,7 @@ export const SignalRProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [newOrder, setNewOrder] = useState(null);
   const [statusChangedRestaurant, setStatusChangedRestaurant] = useState(null);
+  const [automaticApprovalDatas, setAutomaticApprovalDatas] = useState(null);
 
   //GET USER
   useEffect(() => {
@@ -137,6 +138,12 @@ export const SignalRProvider = ({ children }) => {
       setStatusChangedRestaurant(restaurant);
       console.log("New Restaurant status Received: ", restaurant);
     });
+
+    //AUTOMATION STATUS
+    conn.on("ReceiveUserTicketAutomation", function (autoData) {
+      setAutomaticApprovalDatas(autoData);
+      console.log("Automation status Changed: ", autoData);
+    });
   }
 
   useEffect(() => {
@@ -214,6 +221,8 @@ export const SignalRProvider = ({ children }) => {
         setMessages,
         statusChangedRestaurant,
         setStatusChangedRestaurant,
+        automaticApprovalDatas,
+        setAutomaticApprovalDatas,
       }}
     >
       {children}

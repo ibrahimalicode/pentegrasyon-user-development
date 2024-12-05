@@ -137,7 +137,12 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           }
           className="whitespace-nowrap"
         >
-          <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+          <button
+            className={`border border-[--primary-1] py-2 px-3 rounded-md ${
+              order.expeditionType.toLocaleLowerCase() == "pickup" &&
+              "border-[--green-1] text-[--green-1]"
+            }`}
+          >
             {order.expeditionType.toLocaleLowerCase() == "pickup"
               ? "Gel Al"
               : order?.customer?.deliveryMainArea?.split(" ")[0]}

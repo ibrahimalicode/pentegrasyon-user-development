@@ -8,6 +8,7 @@ const CustomCheckbox = ({
   className,
   className2,
   size = "6",
+  Icon = <CheckI className="h-4 text-[--white-1]" strokeWidth="4" />,
 }) => {
   return (
     <label
@@ -25,7 +26,7 @@ const CustomCheckbox = ({
           checked ? "bg-[--primary-2] border-[--primary-2]" : "bg-[--white-1]"
         }`}
       >
-        {checked && <CheckI className="h-4 text-[--white-1]" strokeWidth="4" />}
+        {checked && Icon}
       </span>
       {label && (
         <span

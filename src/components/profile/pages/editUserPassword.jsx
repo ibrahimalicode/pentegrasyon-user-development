@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import Button from "../../common/button";
+import ProtectPages from "./protectPages";
 import CustomInput from "../../common/customInput";
 
 // REDUX
@@ -97,14 +98,16 @@ const EditUserPassword = () => {
         </div>
 
         <div className="flex justify-end mt-16">
-          <Button
-            text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+          <button
             type="submit"
             disabled={loading}
-          />
+            className="text-[--white-1] bg-[--primary-1] rounded-md px-5 py-2.5"
+          >
+            Kaydet
+          </button>
         </div>
       </form>
+      <ProtectPages />
     </section>
   );
 };

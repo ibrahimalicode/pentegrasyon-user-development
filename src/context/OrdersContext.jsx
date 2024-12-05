@@ -30,7 +30,10 @@ export const OrdersContextProvider = ({ children }) => {
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
 
-  const itemsPerPage = 20;
+  const localItemsPerPage = JSON.parse(
+    localStorage.getItem("ITEMS_PERPAGE")
+  ) || { label: "20", value: 20 };
+  const [itemsPerPage, setItemsPerPage] = useState(localItemsPerPage);
   const [ordersData, setOrdersData] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
@@ -40,17 +43,30 @@ export const OrdersContextProvider = ({ children }) => {
     dispatch(
       getOrders({
         page: number,
-        pageSize: itemsPerPage,
+        pageSize: itemsPerPage.value,
       })
     );
+  }
+
+  function handleItemsPerPage(number) {
+    dispatch(
+      getOrders({
+        page: pageNumber,
+        pageSize: number,
+      })
+    );
+    const localData = { label: `${number}`, value: number };
+    localStorage.removeItem("ITEMS_PERPAGE");
+    localStorage.setItem("ITEMS_PERPAGE", JSON.stringify(localData));
+    setItemsPerPage({ label: `${number}`, value: number });
   }
 
   //GET ORDERS
   useEffect(() => {
     if (!ordersData && token) {
-      dispatch(getOrders({ pageNumber, pageSize: itemsPerPage }));
+      dispatch(getOrders({ pageNumber, pageSize: itemsPerPage.value }));
     }
-  }, [ordersData]);
+  }, [ordersData, token]);
 
   //TOAST AND SET ORDERS
   useEffect(() => {
@@ -162,6 +178,7 @@ export const OrdersContextProvider = ({ children }) => {
     <OrdersContext.Provider
       value={{
         itemsPerPage,
+        handleItemsPerPage,
         ordersData,
         setOrdersData,
         pageNumber,

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
-import { formatOrders } from "../../../utils/utils";
+import { compareWithCurrentDateTime, formatOrders } from "../../../utils/utils";
 import { usePopup } from "../../../context/PopupContext";
 
 //REDUX
@@ -175,6 +175,12 @@ export const useYemekSepetiOrderActions = ({
     });
   };
 
+  //FUNC
+  function remainingMin(date) {
+    const xMinuteAhead = new Date(new Date(date).getTime() + 60000);
+    return compareWithCurrentDateTime(xMinuteAhead).remainingSeconds;
+  }
+
   // VERIFY TOAST
   useEffect(() => {
     if (verifyLoading) {
@@ -196,6 +202,15 @@ export const useYemekSepetiOrderActions = ({
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (prepareErr) {
+      if (order.id === prepareErr.ticketId) {
+        if (prepareErr.statusCode === 408) {
+          toast.dismiss();
+          const message = `Lütfen ${remainingMin(
+            order.approvalDate
+          )}sn sonra tekrar deneyiniz.`;
+          toast.error(message);
+        }
+      }
       dispatch(resetyemekSepetiTicketPrepare());
     }
     if (prepareSuccess) {
@@ -211,6 +226,15 @@ export const useYemekSepetiOrderActions = ({
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (deliverErr) {
+      if (order.id === deliverErr.ticketId) {
+        if (deliverErr.statusCode === 408) {
+          toast.dismiss();
+          const message = `Lütfen ${remainingMin(
+            order.approvalDate
+          )}sn sonra tekrar deneyiniz.`;
+          toast.error(message);
+        }
+      }
       dispatch(resetyemekSepetiTicketDeliver());
     }
     if (deliverSuccess) {

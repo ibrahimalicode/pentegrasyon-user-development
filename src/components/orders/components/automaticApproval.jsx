@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
+import { useSignalR } from "../../../context/SignalRContext";
 
 //COMP
 import CustomToggle from "../../common/customToggle";
@@ -19,10 +20,11 @@ import {
   resetgetAutomaticApprovalVariable,
 } from "../../../redux/orders/getAutomaticApprovalVariableSlice";
 
-const AutomaticApproval = ({ ordersData }) => {
+const AutomaticApproval = () => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
+  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useSignalR();
 
   const { data, error: getError } = useSelector(
     (state) => state.orders.getAutoApprovalVar
@@ -90,36 +92,19 @@ const AutomaticApproval = ({ ordersData }) => {
     }
   }, [loading, error]);
 
-  //LOOP SOUND
+  //SIGNALR
   useEffect(() => {
-    let soundInterval;
-    let loopSound = false;
-
-    ordersData?.map((order) => {
-      const stat = order.status;
-      const mkId = order.marketplaceId;
-
-      //GetirYemek
-      if (mkId == 0 && (stat == 325 || stat == 400)) {
-        return (loopSound = true);
+    if (automaticApprovalDatas) {
+      if (
+        automaticApprovalDatas.automaticApproval !== varData.automaticApproval
+      ) {
+        setVarData({
+          automaticApproval: automaticApprovalDatas.automaticApproval,
+        });
+        setAutomaticApprovalDatas(null);
       }
-      //YemekSepeti...
-      return (loopSound = false);
-    });
-
-    if (!varData?.automaticApproval && loopSound) {
-      soundInterval = setInterval(() => {
-        console.log(loopSound, "loop sound playing.");
-      }, 1000);
     }
-
-    return () => {
-      if (soundInterval) {
-        clearInterval(soundInterval);
-        console.log("Sound loop stopped.");
-      }
-    };
-  }, [varData, ordersData]);
+  }, [automaticApprovalDatas]);
 
   return (
     <div className="flex items-end">

@@ -11,6 +11,9 @@ import UserProfile from "./userProfile";
 import logo from "../../assets/img/logo.png";
 import bell_anim from "../../assets/anim/lottie/bell_anim.json";
 
+//UTILS
+import sidebarItems from "../../enums/sidebarItems";
+
 // ICONS
 import {
   DashboardI,
@@ -28,50 +31,20 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   const sidebarRef = useRef();
   const { isThereUnverifiedOrder } = useOrdersContext();
   const { popupContent, contentRef, setContentRef } = usePopup();
-  const sidebarItems = [
-    {
-      icon: <DashboardI />,
-      text: "Gösterge Paneli",
-      to: "/dashboard",
-      path: "dashboard",
-    },
-    {
-      icon: <RestourantI />,
-      text: "Restoranlar",
-      to: "/restaurants",
-      path: "restaurants",
-    },
-    {
-      icon: <CourierI />,
-      text: "Kuryeler",
-      to: "/couriers",
-      path: "couriers",
-    },
-    {
-      icon: <LicenseI />,
-      text: "Lisanslar",
-      to: "/licenses",
-      path: "licenses",
-    },
-    {
-      icon: <BoxInI />,
-      text: "Siparişler",
-      to: "/orders",
-      path: "orders",
-    },
-    {
-      icon: <LogI />,
-      text: "İşlem Kayıtları",
-      to: "/activity-logs",
-      path: "activity-logs",
-    },
-    {
-      icon: <PaymentI />,
-      text: "Ödemeler",
-      to: "/payments",
-      path: "payments",
-    },
+
+  const sidebarIcons = [
+    { icon: <DashboardI /> },
+    { icon: <RestourantI /> },
+    { icon: <CourierI /> },
+    { icon: <LicenseI /> },
+    { icon: <BoxInI /> },
+    { icon: <LogI /> },
+    { icon: <PaymentI /> },
   ];
+
+  const formattedSidebarItems = sidebarItems.map((item, i) => {
+    return { ...item, icon: sidebarIcons[i].icon };
+  });
 
   const route = Object.values(param)[0].split("/")[0];
   const path = route.length > 1 ? route : "orders";
@@ -115,7 +88,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-col gap-1 px-6 pb-4 w-full">
-            {sidebarItems.map((item, index) => (
+            {formattedSidebarItems.map((item, index) => (
               <Link to={item.to} key={index}>
                 <div
                   onClick={() => {

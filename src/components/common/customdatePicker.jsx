@@ -25,7 +25,7 @@ const CustomDatePicker = ({
         {label}
       </label>
       <DatePicker
-        //locale={i18n.language}
+        locale="tr"
         selected={value}
         onChange={onChange}
         showTimeSelect

@@ -96,7 +96,7 @@ const AutomaticApproval = () => {
   useEffect(() => {
     if (automaticApprovalDatas) {
       if (
-        automaticApprovalDatas.automaticApproval !== varData.automaticApproval
+        automaticApprovalDatas?.automaticApproval !== varData?.automaticApproval
       ) {
         setVarData({
           automaticApproval: automaticApprovalDatas.automaticApproval,

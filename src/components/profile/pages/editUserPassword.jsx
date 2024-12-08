@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import Button from "../../common/button";
-import ProtectPages from "./protectPages";
 import CustomInput from "../../common/customInput";
 
 // REDUX
@@ -14,7 +12,7 @@ import {
   updateUserPassword,
 } from "../../../redux/user/updateUserPasswordSlice";
 
-const EditUserPassword = () => {
+const EditUserPassword = ({ user }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
 
@@ -107,7 +105,6 @@ const EditUserPassword = () => {
           </button>
         </div>
       </form>
-      <ProtectPages />
     </section>
   );
 };

@@ -168,7 +168,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
             <p>Yola Çıktı</p>
             <p>
               {formatDateString({
-                dateString: order.approvalDate,
+                dateString: order.preparationDate,
                 letDay: false,
                 letMonth: false,
                 letYear: false,
@@ -208,7 +208,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
             <p>Teslim Edildi</p>
             <p>
               {formatDateString({
-                dateString: order.approvalDate,
+                dateString: order.deliveryDate,
                 letDay: false,
                 letMonth: false,
                 letYear: false,
@@ -244,7 +244,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
             <p>İptal Edildi</p>
             <p>
               {formatDateString({
-                dateString: order.approvalDate,
+                dateString: order.cancelDate,
                 letDay: false,
                 letMonth: false,
                 letYear: false,

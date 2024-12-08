@@ -7,9 +7,11 @@ import EditUserProfile from "./pages/editUserProfile";
 import EditUserInvoice from "./pages/editUserInvoice";
 import EditUserPassword from "./pages/editUserPassword";
 
+//UTILS
+
 //REDUX
-import { getUser, resetGetUserState } from "../../redux/user/getUserSlice";
 import { getCities } from "../../redux/data/getCitiesSlice";
+import { getUser, resetGetUserState } from "../../redux/user/getUserSlice";
 
 //VAR
 const tabs = ["Profili Düzenle", "Fatura Bilgileri", "Güvenlik"];
@@ -85,7 +87,7 @@ const ProfilePage = () => {
       ) : selected === 1 ? (
         <EditUserInvoice user={userData} cities={cities} />
       ) : (
-        selected === 2 && <EditUserPassword />
+        selected === 2 && <EditUserPassword user={userData} />
       )}
     </section>
   );

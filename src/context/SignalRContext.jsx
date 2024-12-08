@@ -194,13 +194,13 @@ export const SignalRProvider = ({ children }) => {
       };
 
       //PING 2SEC
-      setInterval(() => {
-        console.log(`Connection state: ${conn.state}`);
-        if (conn.state === signalR.HubConnectionState.Disconnected) {
-          console.log("Connection lost. Attempting to reconnect...");
-          startConnection(conn);
-        }
-      }, 2000);
+      // setInterval(() => {
+      //   console.log(`Connection state: ${conn.state}`);
+      //   if (conn.state === signalR.HubConnectionState.Disconnected) {
+      //     console.log("Connection lost. Attempting to reconnect...");
+      //     startConnection(conn);
+      //   }
+      // }, 2000);
 
       document.addEventListener("visibilitychange", handleVisibilityChange);
     }

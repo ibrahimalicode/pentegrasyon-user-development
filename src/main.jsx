@@ -13,20 +13,23 @@ import toastOptions from "./config/toast";
 import { SignalRProvider } from "./context/SignalRContext";
 import { OrdersContextProvider } from "./context/OrdersContext";
 import { PopupProvider } from "./context/PopupContext";
+import { ProtectPagesProvider } from "./context/ProtectPagesContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <BrowserRouter>
       <PopupProvider>
-        <SignalRProvider>
-          <OrdersContextProvider>
-            <div className="light">
-              <App />
-              <Toaster toastOptions={toastOptions} />
-            </div>
-          </OrdersContextProvider>
-        </SignalRProvider>
+        <ProtectPagesProvider>
+          <SignalRProvider>
+            <OrdersContextProvider>
+              <div className="light">
+                <App />
+                <Toaster toastOptions={toastOptions} />
+              </div>
+            </OrdersContextProvider>
+          </SignalRProvider>
+        </ProtectPagesProvider>
       </PopupProvider>
     </BrowserRouter>
   </Provider>

@@ -15,6 +15,7 @@ import Couriers from "./couriers";
 import Licenses from "./licenses";
 import Dashboard from "./dashboard";
 import Restourants from "./restourants";
+import ProtectedPages from "./protectedPages";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -30,6 +31,7 @@ const Home = () => {
         <Route path="/profile/*" element={<Profile />} />
         <Route path="/orders/*" element={<Orders />} />
         <Route path="/couriers/*" element={<Couriers />} />
+        <Route path="/locked-pages/*" element={<ProtectedPages />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

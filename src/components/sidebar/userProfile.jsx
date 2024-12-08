@@ -3,14 +3,18 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-//COMP
+//ASSETS
 import { UserI } from "../../assets/icon";
 import ArrowIR from "../../assets/icon/arrowR";
+
+//UTILS
+import { useProtectPages } from "../../context/ProtectPagesContext";
 
 //REDUX
 
 function UserProfile({ setOpenSidebar }) {
   const param = useParams();
+  const { protectedPages } = useProtectPages();
   const { user } = useSelector((state) => state.user.getUser);
   const [userData, setUserData] = useState(null);
 
@@ -24,7 +28,12 @@ function UserProfile({ setOpenSidebar }) {
   }, [user]);
 
   return (
-    <Link to="/profile">
+    <Link
+      to="/profile"
+      className={`${
+        protectedPages?.profile && "pointer-events-none opacity-60"
+      }`}
+    >
       <div
         className={`flex items-center gap-3 px-6 py-4 font-normal whitespace-nowrap border-t text-[--gr-1] border-neutral-200 hover:bg-[--light-1] hover:text-[--primary-1] cursor-pointer group ${
           param["*"] === "profile" && "bg-[--light-1] text-[--primary-1]"

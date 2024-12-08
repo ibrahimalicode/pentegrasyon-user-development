@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 // IMAGES
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 

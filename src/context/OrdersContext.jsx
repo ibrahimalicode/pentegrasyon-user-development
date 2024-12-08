@@ -131,7 +131,7 @@ export const OrdersContextProvider = ({ children }) => {
           </div>
         </main>
       );
-      setPopupContent(popupContent);
+      // setPopupContent(popupContent);
       console.warn(
         "Audio context is suspended due to lack of user interaction."
       );

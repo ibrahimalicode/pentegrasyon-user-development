@@ -1,4 +1,4 @@
-const LockI = ({ className, strokeWidth = 1.5 }) => (
+const LockI = ({ className, strokeWidth = 2 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"

@@ -137,7 +137,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       >
         {order.approvalDate ? (
           <>
-            <p>Onaylandıdd</p>
+            <p>Onaylandı</p>
             <p>
               {formatDateString({
                 dateString: order.approvalDate,
@@ -164,7 +164,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
             <p>Yola Çıktı</p>
             <p>
               {formatDateString({
-                dateString: order.approvalDate,
+                dateString: order.preparationDate,
                 letDay: false,
                 letMonth: false,
                 letYear: false,
@@ -201,7 +201,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
             <p>Teslim Edildi</p>
             <p>
               {formatDateString({
-                dateString: order.approvalDate,
+                dateString: order.deliveryDate,
                 letDay: false,
                 letMonth: false,
                 letYear: false,
@@ -237,7 +237,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
             <p>İptal Edildi</p>
             <p>
               {formatDateString({
-                dateString: order.approvalDate,
+                dateString: order.cancelDate,
                 letDay: false,
                 letMonth: false,
                 letYear: false,

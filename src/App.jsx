@@ -14,10 +14,10 @@ import ProtectedRoute from "./components/protect";
 import SetNewPassword from "./pages/setNewPassword";
 import ForgotPassword from "./pages/forgotPassword";
 import PaymentSuccess from "./pages/paymentSuccess";
+import SlideBar from "./components/common/slideBar";
 
 //CONTEXT
 import { SlideBarProvider } from "./context/SlideBarContext";
-import SlideBar from "./components/common/slideBar";
 
 function App() {
   return (

@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 //COMP
 import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
-import GetirYemekCancelOrderPopup from "./getirYemekCancelOrderPopup";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
@@ -65,6 +64,8 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     cancelLoading ||
     (orderStat.id !== 350 && orderStat.id !== 700 && nextId !== 900);
 
+  const btnClass = `relative overflow-clip dynamic-after after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-[var(--after-bg)] after:transition-transform after:duration-[5000ms] after:-translate-x-full after:rounded-md after:ease-in-out`;
+
   //ORDER ONLY DB ACTION POPUP
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
@@ -83,18 +84,23 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
   return (
-    <button
-      disabled={disabled}
-      onClick={handleClick}
-      className="w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed"
-      style={{
-        backgroundColor: `var(${orderStat?.bg})`,
-        color: `var(${orderStat?.color})`,
-        borderColor: `var(${orderStat?.color})`,
-      }}
-    >
-      {orderStat.text}
-    </button>
+    <>
+      <button
+        disabled={disabled}
+        onClick={handleClick}
+        className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed after:translate-x-0 ${
+          disabled && btnClass
+        }`}
+        style={{
+          backgroundColor: `var(${orderStat?.bg})`,
+          color: `var(${orderStat?.color})`,
+          borderColor: `var(${orderStat?.color})`,
+          "--after-bg": orderStat?.transColor,
+        }}
+      >
+        <span className="relative z-10">{orderStat.text}</span>
+      </button>
+    </>
   );
 }
 

@@ -35,13 +35,15 @@ const OnTheWayTime = ({
   );
 
   function formatMins() {
-    return minutes.map((min) => {
-      return {
-        ...min,
-        onTheWayTime: min.value,
-        label: min.label + " dk sonra",
-      };
-    });
+    return minutes
+      .filter((min) => min.value > 9)
+      .map((min) => {
+        return {
+          ...min,
+          onTheWayTime: min.value,
+          label: min.label + " dk sonra",
+        };
+      });
   }
 
   function updateAutomaticApproval(selectedOption) {

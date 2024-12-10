@@ -135,8 +135,8 @@ const ProtectPage = () => {
 
             <div>
               <p className="text-sm max mt-4">
-                Bu ayan açtiginizda yetkisiz personelin menülere erisimini
-                parola ile koruyabilirsiniz. Hangi sekmelerin korunacagini
+                Bu ayarı açtığınızda yetkisiz personelin menülere erişimini
+                parola ile koruyabilirsiniz. Hangi sekmelerin korunacağını
                 seçiniz.
               </p>
             </div>

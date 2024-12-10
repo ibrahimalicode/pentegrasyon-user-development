@@ -32,7 +32,7 @@ const sidebarItems = [
     to: "/orders",
     path: "orders",
     id: "tickets",
-    show: true,
+    show: false,
   },
   {
     text: "İşlem Kayıtları",

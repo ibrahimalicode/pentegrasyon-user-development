@@ -61,6 +61,7 @@ const getirYemekOrderStatuses = [
   {
     bg: "--status-brown",
     color: "--brown-1",
+    transColor: "#ca986ab3",
     label: "Teslim Edildi", //"Kurye Vardı", // Courier Arrived At Address here
     value: true,
     id: 800,
@@ -68,6 +69,7 @@ const getirYemekOrderStatuses = [
   {
     bg: "--status-brown",
     color: "--brown-1",
+    transColor: "#ca986ab3",
     label: "Teslim Edildi", //Order Delivered
     value: true,
     id: 900,
@@ -76,6 +78,7 @@ const getirYemekOrderStatuses = [
   {
     bg: "--status-red",
     color: "--red-1",
+    transColor: "#fca5a5",
     label: "İptal Edildi", // Order Cancelled By Admin
     value: true,
     id: 1500,
@@ -83,6 +86,7 @@ const getirYemekOrderStatuses = [
   {
     bg: "--status-red",
     color: "--red-1",
+    transColor: "#fca5a5",
     label: "İptal Edildi", // Order Cancelled By Restaurant
     value: true,
     id: 1600,

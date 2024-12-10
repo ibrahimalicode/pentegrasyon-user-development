@@ -146,6 +146,8 @@ export const SignalRProvider = ({ children }) => {
     });
   }
 
+  let lockResolver;
+
   useEffect(() => {
     if (userId && restaurantsId.length > 0) {
       // INITIALIZE THE SIGNALR CONNECTION
@@ -202,7 +204,43 @@ export const SignalRProvider = ({ children }) => {
       //   }
       // }, 2000);
 
+      const pingInterval = setInterval(() => {
+        if (conn.state === signalR.HubConnectionState.Connected) {
+          conn
+            .invoke("Ping")
+            .then(() => console.log("Ping sent to server"))
+            .catch((err) => console.error("Error sending Ping: ", err));
+        }
+      }, 2000);
+
+      if (navigator && navigator.locks && navigator.locks.request) {
+        const lockPromise = new Promise((resolve) => {
+          lockResolver = resolve;
+        });
+
+        navigator.locks.request("signalr_lock", { mode: "shared" }, () => {
+          return lockPromise; // Keeps the lock active
+        });
+      }
+
       document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      //CLEANUP
+      return () => {
+        // if (conn.state === signalR.HubConnectionState.Connected) {
+        //   conn.stop();
+        // }
+
+        clearInterval(pingInterval);
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+
+        if (lockResolver) {
+          lockResolver(); // Releases the lock
+        }
+      };
     }
   }, [userId, restaurantsId]);
 

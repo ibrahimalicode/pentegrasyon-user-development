@@ -28,6 +28,7 @@ const yemekSepetiOrderStatuses = [
   {
     bg: "--status-brown",
     color: "--brown-1",
+    transColor: "#ca986ab3",
     label: "Teslim Edildi",
     value: true,
     text: "Teslim Et",
@@ -36,6 +37,7 @@ const yemekSepetiOrderStatuses = [
   {
     bg: "--status-red",
     color: "--red-1",
+    transColor: "#fca5a5",
     label: "İptal Edildi",
     value: true,
     text: "İptal Et",

@@ -30,7 +30,6 @@ export const ProtectPagesProvider = ({ children }) => {
     if (error) {
       dispatch(resetgetUserLock());
     } else if (data) {
-      console.log(data);
       setProtectedPages(data);
       setProtectedPagesBefore(data);
       dispatch(resetgetUserLock());

@@ -48,7 +48,7 @@ const OrdersPage = () => {
   });
   const pageNumbers = () => {
     const numbersColl = [];
-    for (let i = 20; i < 101; i++) {
+    for (let i = 20; i < 101; i += 5) {
       numbersColl.push({ label: `${i}`, value: i });
     }
     return numbersColl;

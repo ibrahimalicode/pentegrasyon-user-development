@@ -175,7 +175,7 @@ export const useGetirYemekOrderActions = ({
 
   //FUNC
   function remainingMin(date) {
-    const xMinuteAhead = new Date(new Date(date).getTime() + 6000);
+    const xMinuteAhead = new Date(new Date(date).getTime() + 60000);
     return compareWithCurrentDateTime(xMinuteAhead).remainingSeconds;
   }
 

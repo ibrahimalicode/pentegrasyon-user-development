@@ -87,7 +87,9 @@ const DeliveryTime = ({
   useEffect(() => {
     if (onTheWayTimeData?.onTheWayTime) {
       const formattedMins = minutes
-        .filter((min) => min.value > onTheWayTimeData.onTheWayTime)
+        .filter(
+          (min) => min.value > onTheWayTimeData.onTheWayTime && min.value > 14
+        )
         .map((min) => ({
           ...min,
           deliveryTime: min.value,

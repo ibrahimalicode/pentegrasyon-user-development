@@ -1,10 +1,9 @@
 //MODULES
-import { getAuth } from "../redux/api";
 import { useDispatch, useSelector } from "react-redux";
 import { createContext, useContext, useEffect, useState } from "react";
 
 //REDUX
-import { getUserLock, resetgetUserLock } from "../redux/user/getUserLockSlice";
+import { resetgetUserLock } from "../redux/user/getUserLockSlice";
 
 const ProtectPagesContext = createContext();
 
@@ -12,29 +11,24 @@ export const useProtectPages = () => useContext(ProtectPagesContext);
 
 export const ProtectPagesProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const token = getAuth()?.token;
-  const { error, data } = useSelector((state) => state.user.getUserLock);
+  const { error, data, success } = useSelector(
+    (state) => state.user.getUserLock
+  );
 
   const [protectedPages, setProtectedPages] = useState(null);
   const [protectedPagesBefore, setProtectedPagesBefore] = useState(null);
 
-  //GET
-  useEffect(() => {
-    if (!protectedPages && token) {
-      dispatch(getUserLock());
-    }
-  }, [protectedPages, token]);
-
-  //SET
+  //SET, THE GET IS IN THE SIDEBAR COMPONENT
   useEffect(() => {
     if (error) {
       dispatch(resetgetUserLock());
-    } else if (data) {
+    }
+    if (success) {
       setProtectedPages(data);
       setProtectedPagesBefore(data);
       dispatch(resetgetUserLock());
     }
-  }, [data, error]);
+  }, [success, data, error]);
 
   return (
     <ProtectPagesContext.Provider

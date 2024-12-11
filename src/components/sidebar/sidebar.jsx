@@ -27,10 +27,13 @@ import {
   CourierI,
   LockI,
 } from "../../assets/icon/index";
+import { getUserLock } from "../../redux/user/getUserLockSlice";
+import { useDispatch } from "react-redux";
 
 function Sidebar({ openSidebar, setOpenSidebar }) {
   const param = useParams();
   const sidebarRef = useRef();
+  const dispatch = useDispatch();
   const { protectedPages } = useProtectPages();
   const { isThereUnverifiedOrder } = useOrdersContext();
   const { popupContent, contentRef, setContentRef } = usePopup();
@@ -47,6 +50,13 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
     { icon: <PaymentI /> },
     { icon: <LockI /> },
   ];
+
+  //GET
+  useEffect(() => {
+    if (!protectedPages) {
+      dispatch(getUserLock());
+    }
+  }, [protectedPages]);
 
   useEffect(() => {
     if (protectedPages) {

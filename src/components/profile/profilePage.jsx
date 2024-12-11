@@ -23,11 +23,11 @@ const ProfilePage = () => {
   const { cities } = useSelector((state) => state.data.getCities);
 
   const [selected, setSelected] = useState(0);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(user);
 
   // GET THE USER
   useEffect(() => {
-    if (!userData) {
+    if (!userData && !user) {
       dispatch(getUser());
     }
   }, [user]);

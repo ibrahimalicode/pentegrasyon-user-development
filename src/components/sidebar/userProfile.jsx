@@ -18,6 +18,7 @@ function UserProfile({ setOpenSidebar }) {
   const { user } = useSelector((state) => state.user.getUser);
   const [userData, setUserData] = useState(null);
 
+  //SET
   useEffect(() => {
     if (user) {
       setUserData({
@@ -31,7 +32,9 @@ function UserProfile({ setOpenSidebar }) {
     <Link
       to="/profile"
       className={`${
-        protectedPages?.profile && "pointer-events-none opacity-60"
+        protectedPages?.profile &&
+        protectedPages?.lock &&
+        "pointer-events-none opacity-60"
       }`}
     >
       <div

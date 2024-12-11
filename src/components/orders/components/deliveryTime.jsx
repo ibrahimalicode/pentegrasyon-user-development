@@ -88,7 +88,7 @@ const DeliveryTime = ({
     if (onTheWayTimeData?.onTheWayTime) {
       const formattedMins = minutes
         .filter(
-          (min) => min.value > onTheWayTimeData.onTheWayTime && min.value > 14
+          (min) => min.value > onTheWayTimeData.onTheWayTime && min.value > 9
         )
         .map((min) => ({
           ...min,

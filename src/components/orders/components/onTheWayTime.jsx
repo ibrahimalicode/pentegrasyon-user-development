@@ -36,7 +36,7 @@ const OnTheWayTime = ({
 
   function formatMins() {
     return minutes
-      .filter((min) => min.value > 9)
+      .filter((min) => min.value > 2)
       .map((min) => {
         return {
           ...min,

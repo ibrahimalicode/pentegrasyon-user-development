@@ -28,7 +28,7 @@ export const useSignalR = () => useContext(SignalRContext);
 
 export const SignalRProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user.getUser);
+  const { user, loading } = useSelector((state) => state.user.getUser);
   const { success } = useSelector((state) => state.auth.login);
   const { restaurants } = useSelector(
     (state) => state.restaurants.getUserRestaurants
@@ -45,7 +45,7 @@ export const SignalRProvider = ({ children }) => {
 
   //GET USER
   useEffect(() => {
-    if (!user && token) {
+    if (!user && token && !loading) {
       dispatch(getUser());
     }
   }, [user, success, token]);
@@ -204,14 +204,14 @@ export const SignalRProvider = ({ children }) => {
       //   }
       // }, 2000);
 
-      const pingInterval = setInterval(() => {
-        if (conn.state === signalR.HubConnectionState.Connected) {
-          conn
-            .invoke("Ping")
-            .then(() => console.log("Ping sent to server"))
-            .catch((err) => console.error("Error sending Ping: ", err));
-        }
-      }, 2000);
+      // const pingInterval = setInterval(() => {
+      //   if (conn.state === signalR.HubConnectionState.Connected) {
+      //     conn
+      //       .invoke("Ping")
+      //       .then(() => console.log("Ping sent to server"))
+      //       .catch((err) => console.error("Error sending Ping: ", err));
+      //   }
+      // }, 2000);
 
       if (navigator && navigator.locks && navigator.locks.request) {
         const lockPromise = new Promise((resolve) => {
@@ -230,16 +230,14 @@ export const SignalRProvider = ({ children }) => {
         // if (conn.state === signalR.HubConnectionState.Connected) {
         //   conn.stop();
         // }
-
-        clearInterval(pingInterval);
-        document.removeEventListener(
-          "visibilitychange",
-          handleVisibilityChange
-        );
-
-        if (lockResolver) {
-          lockResolver(); // Releases the lock
-        }
+        // clearInterval(pingInterval);
+        // document.removeEventListener(
+        //   "visibilitychange",
+        //   handleVisibilityChange
+        // );
+        // if (lockResolver) {
+        //   lockResolver(); // Releases the lock
+        // }
       };
     }
   }, [userId, restaurantsId]);

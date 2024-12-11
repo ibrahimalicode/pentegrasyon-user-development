@@ -18,14 +18,28 @@ import {
   getIntegrationInformationByLicenseId,
   resetGetIntegrationInformationByLicenseId,
 } from "../../../../redux/informations/getirYemek/getIntegrationInformationByLicenseIdSlice";
+import {
+  resetUpdateIntegrationInformation,
+  updateIntegrationInformation,
+} from "../../../../redux/informations/getirYemek/updateIntegrationInformationSlice";
 
 const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
+
   const { loading, success, error } = useSelector(
     (state) => state.integrationInfos.getirYemek.addIntegrationInfo
   );
+
+  const {
+    loading: updateLoad,
+    success: updateSucc,
+    error: updateErr,
+  } = useSelector(
+    (state) => state.integrationInfos.getirYemek.updateIntegrationInfo
+  );
+
   const {
     loading: getLoading,
     error: getError,
@@ -38,11 +52,15 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     restaurantSecretKey: data?.restaurantSecretKey || "",
     restaurantId: data.restaurantId,
     licenseId: data.id,
+    commissionRate: 0,
+    getirYemekIntegrationInformationId: "",
   });
   const [licenseDataBefore, setLicenseDataBefore] = useState({
     restaurantSecretKey: data?.restaurantSecretKey || "",
     restaurantId: data.restaurantId,
     licenseId: data.id,
+    commissionRate: 0,
+    getirYemekIntegrationInformationId: "",
   });
 
   const closeForm = () => {
@@ -55,7 +73,11 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
       toast.error("Herhangi bir değişiklik yapmadınız.");
       return;
     }
-    dispatch(addIntegrationInformation(licenseData));
+    if (data.isSettingsAdded) {
+      dispatch(updateIntegrationInformation(licenseData));
+    } else {
+      dispatch(addIntegrationInformation(licenseData));
+    }
   }
 
   useEffect(() => {
@@ -64,7 +86,25 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     }
   }, [data?.isSettingsAdded]);
 
-  // TOAST UPDATE
+  // TOAST GET
+  useEffect(() => {
+    if (getError) {
+      dispatch(resetGetIntegrationInformationByLicenseId());
+    }
+    if (infoData) {
+      const data = {
+        ...licenseData,
+        commissionRate: infoData.commissionRate,
+        restaurantSecretKey: infoData.restaurantSecretKey,
+        getirYemekIntegrationInformationId: infoData.id,
+      };
+      setLicenseData(data);
+      setLicenseDataBefore(data);
+      dispatch(resetGetIntegrationInformationByLicenseId());
+    }
+  }, [getLoading, infoData, getError]);
+
+  // TOAST ADD
   useEffect(() => {
     if (loading) {
       toastId.current = toast.loading("İşleniyor 🤩...");
@@ -72,7 +112,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     if (error) {
       dispatch(resetAddIntegrationInformation());
     } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
+      toast.dismiss(toastId.current);
       onSuccess();
       closeForm();
       toast.success("Lisans ayarları başarıyla eklendi");
@@ -80,21 +120,21 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     }
   }, [loading, success, error]);
 
-  // TOAST GET
+  // TOAST UPDATE
   useEffect(() => {
-    if (getError) {
-      dispatch(resetGetIntegrationInformationByLicenseId());
+    if (updateLoad) {
+      toastId.current = toast.loading("İşleniyor 🤩...");
     }
-    if (infoData) {
-      console.log(infoData);
-      setLicenseData({
-        ...licenseData,
-        restaurantSecretKey: infoData.restaurantSecretKey,
-      });
-      setLicenseDataBefore({ ...licenseData, restaurantSecretKey: infoData });
-      dispatch(resetGetIntegrationInformationByLicenseId());
+    if (updateErr) {
+      dispatch(resetUpdateIntegrationInformation());
+    } else if (updateSucc) {
+      toast.dismiss(toastId.current);
+      onSuccess();
+      closeForm();
+      toast.success("Lisans ayarları başarıyla düzenlendi.");
+      dispatch(resetUpdateIntegrationInformation());
     }
-  }, [getLoading, infoData, getError]);
+  }, [updateLoad, updateSucc, updateErr]);
 
   return (
     <div className="flex flex-col items-center w-full text-base">
@@ -127,13 +167,32 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
                     };
                   });
                 }}
-                disabled={data?.isSettingsAdded || getLoading}
+                disabled={/* data?.isSettingsAdded || */ getLoading}
+              />
+            </div>
+            <div className="flex max-sm:flex-col sm:gap-4">
+              <CustomInput
+                required
+                type="number"
+                label="Komisyon Oranı"
+                placeholder="Komisyon Oranı"
+                className="py-[.45rem] text-sm"
+                value={licenseData.commissionRate}
+                onChange={(e) => {
+                  setLicenseData((prev) => {
+                    return {
+                      ...prev,
+                      commissionRate: e,
+                    };
+                  });
+                }}
+                disabled={/* data?.isSettingsAdded || */ getLoading}
               />
             </div>
 
             <div className="w-full flex justify-end mt-10">
               <button
-                disabled={loading || getLoading || data.isSettingsAdded}
+                disabled={loading || getLoading /* || data.isSettingsAdded */}
                 className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md"
                 type="submit"
               >

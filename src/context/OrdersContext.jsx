@@ -13,6 +13,7 @@ import { formatOrders } from "../utils/utils";
 import { usePopup } from "./PopupContext";
 import { CloseI } from "../assets/icon";
 import { getAuth } from "../redux/api";
+import { useFirestore } from "./FirestoreContext";
 
 const OrdersContext = createContext();
 
@@ -26,7 +27,8 @@ export const OrdersContextProvider = ({ children }) => {
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
-    useSignalR();
+    useFirestore();
+  // useSignalR();
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
 

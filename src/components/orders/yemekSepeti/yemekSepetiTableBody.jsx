@@ -75,19 +75,6 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
     return { ...order, orders: formattdOrder };
   }
 
-  // useEffect(() => {
-  //   if (statusChangedOrder) {
-  //     if (statusChangedOrder.id === order.id && statusChangedOrder) {
-  //       // console.log(statusChangedOrder);
-  //       setOrdersData((prev) => {
-  //         const updatedOrder = prev.filter((O) => O.id !== order.id);
-  //         return formatOrders([...updatedOrder, statusChangedOrder]);
-  //       });
-  //       if (!popupContent) setStatusChangedOrder(null);
-  //     }
-  //   }
-  // }, [statusChangedOrder]);
-
   return (
     order && (
       <tr

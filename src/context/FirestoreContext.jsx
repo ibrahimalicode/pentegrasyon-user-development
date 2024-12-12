@@ -4,9 +4,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 //FIREBASE
 import { db } from "../config/firebase";
-import { doc } from "firebase/firestore";
 import { onSnapshot } from "firebase/firestore";
 import { getDoc, setDoc } from "firebase/firestore";
+import { doc, collection } from "firebase/firestore";
 
 //UTILS
 import { getAuth } from "../redux/api";
@@ -21,6 +21,7 @@ import trendyolYemekNewOrderSoundPath from "../assets/sound/trendyolyemekneworde
 import yemekSepetiNewOrderSoundPath from "../assets/sound/yemeksepetineworder.mp3";
 import goFodyNewOrderSoundPath from "../assets/sound/gofodyneworder.mp3";
 import siparisimPlusNewOrderSoundPath from "../assets/sound/siparisimplus.mp3";
+import dummyOrder from "../assets/dummy/dummyOrder";
 
 const newOrderSounds = [
   new Audio(getirYemekNewOrderSoundPath),
@@ -39,8 +40,8 @@ export const useFirestore = () => {
 
 export const FirestoreProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const { success } = useSelector((state) => state.auth.login);
   const { user, loading } = useSelector((state) => state.user.getUser);
+  const { success } = useSelector((state) => state.auth.login);
 
   const token = getAuth()?.token;
   const [userId, setUserId] = useState(null);
@@ -72,9 +73,43 @@ export const FirestoreProvider = ({ children }) => {
     if (!docSnapshot.exists()) {
       await setDoc(userRef);
     }
+
+    //DUMMY DATA
+    // const newOrderRef = doc(db, "users", userId, "ticketStatus", "data");
+    // try {
+    //   // Set the dummyOrder data to the newOrder collection
+    //   await setDoc(newOrderRef, dummyOrder);
+    //   console.log("Dummy order added to newOrder collection successfully");
+    // } catch (error) {
+    //   console.error("Error adding dummy order to newOrder collection:", error);
+    // }
   };
 
-  let isInitialLoad = true;
+  // Subscribe to subcollections
+  const subscribeToSubcollection = (subcollection, setState) => {
+    let isInitialLoad = true;
+    const subcollectionRef = collection(db, `users/${userId}/${subcollection}`);
+
+    return onSnapshot(subcollectionRef, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+      if (isInitialLoad) {
+        isInitialLoad = false;
+        return;
+      }
+
+      if (data?.length) {
+        setState(data[0]);
+        console.log(subcollection, data);
+        if (subcollection === "newTicket") {
+          const newOrderSound = newOrderSounds[data[0].marketplaceId];
+          newOrderSound.play().catch((error) => {
+            console.error("Failed to play audio:", error);
+          });
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     if (!userId) return;
@@ -82,53 +117,31 @@ export const FirestoreProvider = ({ children }) => {
     const setup = async () => {
       await ensureUserDocExists();
 
-      const userDocRef = doc(db, "users", userId);
-      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
-        if (isInitialLoad) {
-          isInitialLoad = false;
-          return;
-        }
-
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-
-          // Check which field was updated
-          if (data.newTicket) {
-            setNewOrder(data.newTicket);
-            console.log("New ticket data received:", data.newTicket);
-            const newOrderSound = newOrderSounds[data.newTicket.marketplaceId];
-            newOrderSound.play().catch((error) => {
-              console.error("Failed to play audio:", error);
-            });
-          }
-          if (data.ticketStatus) {
-            console.log("Ticket status data received:", data.ticketStatus);
-            setStatusChangedOrder(data.ticketStatus);
-          }
-          if (data.newMessage) {
-            console.log("New message data received:", data.newMessage);
-            setMessages(data.newMessage);
-          }
-          if (data.restaurantStatus) {
-            console.log(
-              "Restaurant status data received:",
-              data.restaurantStatus
-            );
-            setStatusChangedRestaurant(data.restaurantStatus);
-          }
-          if (data.ticketAutomation) {
-            console.log(
-              "Restaurant status data received:",
-              data.ticketAutomation
-            );
-            setAutomaticApprovalDatas(data.ticketAutomation);
-          }
-        }
-      });
+      const unsubNewOrder = subscribeToSubcollection("newTicket", setNewOrder);
+      const unsubOrderStatus = subscribeToSubcollection(
+        "ticketStatus",
+        setStatusChangedOrder
+      );
+      const unsubNewMessage = subscribeToSubcollection(
+        "newMessage",
+        setMessages
+      );
+      const unsubRestaurantStatus = subscribeToSubcollection(
+        "restaurantStatus",
+        setStatusChangedRestaurant
+      );
+      const unsubAutoApproval = subscribeToSubcollection(
+        "ticketAutomation",
+        setAutomaticApprovalDatas
+      );
 
       // Cleanup subscriptions on unmount
       return () => {
-        unsubscribe();
+        unsubNewOrder();
+        unsubOrderStatus();
+        unsubNewMessage();
+        unsubRestaurantStatus();
+        unsubAutoApproval();
       };
     };
 

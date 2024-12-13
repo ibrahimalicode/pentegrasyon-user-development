@@ -74,6 +74,30 @@ export const formatDate = (date) => {
   return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
+export const formatToISO = (date) => {
+  const miliDate = new Date(date.seconds * 1000); // Convert seconds to milliseconds
+
+  // Extract milliseconds and nanoseconds
+  const milliseconds = miliDate.getMilliseconds();
+  const nanoseconds = date.nanoseconds;
+
+  // Convert milliseconds to 3 digits (ensure it's always 3 digits)
+  const millisecondsString = milliseconds.toString().padStart(3, "0");
+
+  // Convert nanoseconds to 7 digits (ensure it's always 7 digits)
+  const nanosecondsString = nanoseconds.toString().padStart(9, "0").slice(0, 7); // Keep only first 7 digits
+
+  // Create a custom formatted date string
+  const isoString = miliDate
+    .toISOString()
+    .replace(
+      `.${millisecondsString}Z`,
+      `.${millisecondsString}${nanosecondsString}Z`
+    );
+
+  return isoString;
+};
+
 export function getRemainingDays(endDateTime) {
   const start = new Date();
   const end = new Date(endDateTime);

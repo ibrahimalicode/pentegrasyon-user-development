@@ -6,8 +6,9 @@ import CloseI from "../../../assets/icon/close";
 import YemekSepetiStatusButtons from "./yemekSepetiStatusButtons";
 
 //CONTEXT
-import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
+// import { useSignalR } from "../../../context/SignalRContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 
 //UTILS
 import courierServiceTypes from "../../../enums/courierServiceType";
@@ -15,7 +16,7 @@ import { formatDateString, formatToPrice } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
 
 const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
-  const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
+  const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(formatOrder());
 

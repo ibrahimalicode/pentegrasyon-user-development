@@ -8,7 +8,7 @@ import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
 import unverifiedOrderPath from "../assets/sound/unverifiedOrder.mp3";
 
 //UTILS
-import { useSignalR } from "./SignalRContext";
+// import { useSignalR } from "./SignalRContext";
 import { formatOrders } from "../utils/utils";
 import { usePopup } from "./PopupContext";
 import { CloseI } from "../assets/icon";

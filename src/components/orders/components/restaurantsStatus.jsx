@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
-import { useSignalR } from "../../../context/SignalRContext";
+// import { useSignalR } from "../../../context/SignalRContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //COMP
@@ -40,7 +41,8 @@ const MarketPlaceAssets = [
 const RestaurantsStatus = () => {
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
-  const { statusChangedRestaurant, setStatusChangedRestaurant } = useSignalR();
+  const { statusChangedRestaurant, setStatusChangedRestaurant } =
+    useFirestore();
 
   const { restaurantStatuses } = useSelector(
     (state) => state.orders.getRestaurantsStatus

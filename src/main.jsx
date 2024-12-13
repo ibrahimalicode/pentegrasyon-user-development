@@ -10,7 +10,7 @@ import "./index.css";
 import App from "./App";
 import store from "./store";
 import toastOptions from "./config/toast";
-import { SignalRProvider } from "./context/SignalRContext";
+// import { SignalRProvider } from "./context/SignalRContext";
 import { OrdersContextProvider } from "./context/OrdersContext";
 import { PopupProvider } from "./context/PopupContext";
 import { ProtectPagesProvider } from "./context/ProtectPagesContext";
@@ -22,16 +22,16 @@ root.render(
     <BrowserRouter>
       <PopupProvider>
         <ProtectPagesProvider>
-          <SignalRProvider>
-            <FirestoreProvider>
-              <OrdersContextProvider>
-                <div className="light">
-                  <App />
-                  <Toaster toastOptions={toastOptions} />
-                </div>
-              </OrdersContextProvider>
-            </FirestoreProvider>
-          </SignalRProvider>
+          {/* <SignalRProvider> */}
+          <FirestoreProvider>
+            <OrdersContextProvider>
+              <div className="light">
+                <App />
+                <Toaster toastOptions={toastOptions} />
+              </div>
+            </OrdersContextProvider>
+          </FirestoreProvider>
+          {/* </SignalRProvider> */}
         </ProtectPagesProvider>
       </PopupProvider>
     </BrowserRouter>

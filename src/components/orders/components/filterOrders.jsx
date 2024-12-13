@@ -31,8 +31,10 @@ const FilterOrders = () => {
       console.log({
         page: pageNumber,
         pageSize: itemsPerPage.value,
-        startDateTime: formatDate(filter.startDateTime),
-        endDateTime: formatDate(filter.endDateTime),
+        startDateTime: filter.endDateTime
+          ? formatDate(filter.startDateTime)
+          : null,
+        endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
         status: filter.statusId,
         marketplaceId: filter.marketplaceId,
       });
@@ -41,8 +43,12 @@ const FilterOrders = () => {
         getOrders({
           page: pageNumber,
           pageSize: itemsPerPage.value,
-          startDateTime: formatDate(filter.startDateTime),
-          endDateTime: formatDate(filter.endDateTime),
+          startDateTime: filter.endDateTime
+            ? formatDate(filter.startDateTime)
+            : null,
+          endDateTime: filter.endDateTime
+            ? formatDate(filter.endDateTime)
+            : null,
           status: filter.statusId,
           marketplaceId: filter.marketplaceId,
         })

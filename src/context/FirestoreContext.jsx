@@ -10,6 +10,7 @@ import { doc, collection } from "firebase/firestore";
 
 //UTILS
 import { getAuth } from "../redux/api";
+import { formatToISO } from "../utils/utils";
 
 //REDUX
 import { getUser } from "../redux/user/getUserSlice";
@@ -21,7 +22,6 @@ import trendyolYemekNewOrderSoundPath from "../assets/sound/trendyolyemekneworde
 import yemekSepetiNewOrderSoundPath from "../assets/sound/yemeksepetineworder.mp3";
 import goFodyNewOrderSoundPath from "../assets/sound/gofodyneworder.mp3";
 import siparisimPlusNewOrderSoundPath from "../assets/sound/siparisimplus.mp3";
-import dummyOrder from "../assets/dummy/dummyOrder";
 
 const newOrderSounds = [
   new Audio(getirYemekNewOrderSoundPath),
@@ -34,9 +34,7 @@ const newOrderSounds = [
 
 const FirestoreContext = createContext();
 
-export const useFirestore = () => {
-  return useContext(FirestoreContext);
-};
+export const useFirestore = () => useContext(FirestoreContext);
 
 export const FirestoreProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -62,27 +60,30 @@ export const FirestoreProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       setUserId(user.id);
+      // setUserId("c8d2fdbd-37b1-4ebd-aaf3-6581a8cb3745");
     }
   }, [user]);
 
   // Ensure the user document exists
   const ensureUserDocExists = async () => {
     const userRef = doc(db, "users", userId);
-    const docSnapshot = await getDoc(userRef);
 
-    if (!docSnapshot.exists()) {
-      await setDoc(userRef);
+    try {
+      const docSnapshot = await getDoc(userRef);
+
+      if (!docSnapshot.exists()) {
+        await setDoc(userRef, {});
+
+        await setDoc(doc(userRef, "newTicket", "data"), {});
+        await setDoc(doc(userRef, "ticketStatus", "data"), {});
+        await setDoc(doc(userRef, "newMessage", "data"), {});
+        await setDoc(doc(userRef, "restaurantStatus", "data"), {});
+        await setDoc(doc(userRef, "ticketAutomation", "data"), {});
+      }
+    } catch (error) {
+      console.log(error);
+      return;
     }
-
-    //DUMMY DATA
-    // const newOrderRef = doc(db, "users", userId, "ticketStatus", "data");
-    // try {
-    //   // Set the dummyOrder data to the newOrder collection
-    //   await setDoc(newOrderRef, dummyOrder);
-    //   console.log("Dummy order added to newOrder collection successfully");
-    // } catch (error) {
-    //   console.error("Error adding dummy order to newOrder collection:", error);
-    // }
   };
 
   // Subscribe to subcollections
@@ -99,8 +100,28 @@ export const FirestoreProvider = ({ children }) => {
       }
 
       if (data?.length) {
-        setState(data[0]);
-        console.log(subcollection, data);
+        const fieldsToFormat = [
+          "approvalDate",
+          "cancelDate",
+          "deliveryDate",
+          "preparationDate",
+          "createdDateTime",
+          "checkoutDate",
+        ];
+        const convertedData = { ...data[0] };
+
+        fieldsToFormat.forEach((field) => {
+          if (
+            convertedData[field] &&
+            convertedData[field].seconds !== undefined
+          ) {
+            convertedData[field] = formatToISO(convertedData[field]);
+          }
+        });
+
+        setState(convertedData);
+        console.log(subcollection, convertedData);
+
         if (subcollection === "newTicket") {
           const newOrderSound = newOrderSounds[data[0].marketplaceId];
           newOrderSound.play().catch((error) => {

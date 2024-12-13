@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
-import { useSignalR } from "../../../context/SignalRContext";
+// import { useSignalR } from "../../../context/SignalRContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 
 //COMP
 import CustomToggle from "../../common/customToggle";
@@ -24,7 +25,7 @@ const AutomaticApproval = () => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
-  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useSignalR();
+  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useFirestore();
 
   const { data, error: getError } = useSelector(
     (state) => state.orders.getAutoApprovalVar

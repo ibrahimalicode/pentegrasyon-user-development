@@ -8,7 +8,8 @@ import minutes from "../../../enums/minutes";
 import CustomSelect from "../../common/customSelector";
 
 //CONTEXT
-import { useSignalR } from "../../../context/SignalRContext";
+// import { useSignalR } from "../../../context/SignalRContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 
 //REDUX
 import {
@@ -24,7 +25,7 @@ const DeliveryTime = ({
 }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
-  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useSignalR();
+  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useFirestore();
 
   const { error: getError, data } = useSelector(
     (state) => state.orders.getDeliveryTimeVar

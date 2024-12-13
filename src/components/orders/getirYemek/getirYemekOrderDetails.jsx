@@ -12,12 +12,13 @@ import GetirYemekStatusButtons from "./getirYemekStatusButtons";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 
 //CONTEXT
-import { useSignalR } from "../../../context/SignalRContext";
+// import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
 const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
-  const { statusChangedOrder, setStatusChangedOrder } = useSignalR();
+  const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(order);
 

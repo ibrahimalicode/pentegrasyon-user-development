@@ -1,5 +1,9 @@
-Licence Type göre filtre lazım. -WILL BE DONE
-Yeni sipairş verdim. Sayfa 15-20 dk. dır aktif değildi farklı sekmelerde geziyordum.  -NEEDS TESTING
-İleri tarihli olmayan siparişte teslim zamanı yazıyor yazıcı çıktısında. Ekranda görünmüyor ama yazıcıda var -DONE
-İbrahim  Yazıcı şablonunda etiket fiyatlarını ürün fiyatları ile aynı hizaya al sayfa sonuna. Uzun etiketleri bölüyor bu şekilde. -DONE
-Fiyat olan yerlerde currency format hatalı -DONE
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow access to user-specific subcollections
+    match /users/{userId}/{subcollection}/{documentId} {
+      allow read, write: if resource.data.userId == userId;
+    }
+  }
+}

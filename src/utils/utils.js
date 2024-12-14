@@ -74,26 +74,27 @@ export const formatDate = (date) => {
   return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
-export const formatToISO = (date) => {
+export const formatToISO = (date, offsetHours = 0) => {
   const miliDate = new Date(date.seconds * 1000); // Convert seconds to milliseconds
 
+  // Adjust for the timezone offset
+  const adjustedDate = new Date(
+    miliDate.getTime() + offsetHours * 60 * 60 * 1000
+  );
+
   // Extract milliseconds and nanoseconds
-  const milliseconds = miliDate.getMilliseconds();
+  const milliseconds = adjustedDate.getMilliseconds();
   const nanoseconds = date.nanoseconds;
 
-  // Convert milliseconds to 3 digits (ensure it's always 3 digits)
-  const millisecondsString = milliseconds.toString().padStart(3, "0");
+  // Merge milliseconds and nanoseconds into a 7-digit fractional part
+  const fractionalSeconds = `${milliseconds
+    .toString()
+    .padStart(3, "0")}${nanoseconds.toString().padStart(9, "0").slice(0, 4)}`; // Merge and slice to get 7 digits total
 
-  // Convert nanoseconds to 7 digits (ensure it's always 7 digits)
-  const nanosecondsString = nanoseconds.toString().padStart(9, "0").slice(0, 7); // Keep only first 7 digits
-
-  // Create a custom formatted date string
-  const isoString = miliDate
+  // Build the ISO string
+  const isoString = `${adjustedDate
     .toISOString()
-    .replace(
-      `.${millisecondsString}Z`,
-      `.${millisecondsString}${nanosecondsString}Z`
-    );
+    .slice(0, 19)}.${fractionalSeconds}`;
 
   return isoString;
 };

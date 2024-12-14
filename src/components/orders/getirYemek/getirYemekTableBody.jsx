@@ -24,11 +24,7 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
   const { setSlideBarContent } = useSlideBar();
 
   function isValidDate(date) {
-    if (date === "0001-01-01T00:00:00") {
-      return "";
-    } else {
-      return date;
-    }
+    return date.startsWith("0001-01-01T00:00:00") ? "" : date;
   }
 
   function isCheckoutToday(date) {

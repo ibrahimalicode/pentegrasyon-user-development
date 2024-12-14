@@ -12,7 +12,6 @@ import GetirYemekStatusButtons from "./getirYemekStatusButtons";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 
 //CONTEXT
-// import { useSignalR } from "../../../context/SignalRContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 import { useFirestore } from "../../../context/FirestoreContext";
 import courierServiceTypes from "../../../enums/courierServiceType";
@@ -22,12 +21,8 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(order);
 
-  function checkDate(date) {
-    if (date === "0001-01-01T00:00:00") {
-      return "";
-    } else {
-      return date;
-    }
+  function isValidDate(date) {
+    return date.startsWith("0001-01-01T00:00:00") ? "" : date;
   }
 
   useEffect(() => {
@@ -87,7 +82,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             }
           </p>
         </div>
-        {checkDate(sideOrder.cancelDate) && (
+        {isValidDate(sideOrder.cancelDate) && (
           <div className="w-full flex justify-between">
             <p>İptal notu</p>
             <p>
@@ -327,10 +322,10 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
       <GetirYemekStatusButtons
         order={{
           ...sideOrder,
-          approvalDate: checkDate(sideOrder.approvalDate),
-          cancelDate: checkDate(sideOrder.cancelDate),
-          deliveryDate: checkDate(sideOrder.deliveryDate),
-          preparationDate: checkDate(sideOrder.preparationDate),
+          approvalDate: isValidDate(sideOrder.approvalDate),
+          cancelDate: isValidDate(sideOrder.cancelDate),
+          deliveryDate: isValidDate(sideOrder.deliveryDate),
+          preparationDate: isValidDate(sideOrder.preparationDate),
         }}
         setOrdersData={setOrdersData}
         setSideOrder={setSideOrder}

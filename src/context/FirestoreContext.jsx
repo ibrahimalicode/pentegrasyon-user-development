@@ -100,34 +100,25 @@ export const FirestoreProvider = ({ children }) => {
       }
 
       if (data?.length) {
-        // const fieldsToFormat = [
-        //   "approvalDate",
-        //   "cancelDate",
-        //   "deliveryDate",
-        //   "preparationDate",
-        //   "createdDateTime",
-        //   "checkoutDate",
-        // ];
+        const fieldsToFormat = [
+          "approvalDate",
+          "cancelDate",
+          "deliveryDate",
+          "preparationDate",
+          "createdDateTime",
+          "checkoutDate",
+        ];
 
-        // const convertedData = { ...data[0] };
+        const convertedData = { ...data[0] };
 
-        // fieldsToFormat.forEach((field) => {
-        //   const date = convertedData[field];
+        fieldsToFormat.forEach((field) => {
+          const date = convertedData[field];
+          if (date) convertedData[field] = date.replace(" ", "T");
+        });
 
-        //   // Check if the field is in Firestore timestamp format
-        //   if (date && typeof date !== "string") {
-        //     console.log(date);
-        //     if (date.seconds < 0) {
-        //       convertedData[field] = ""; // Handle negative seconds as an empty value
-        //     } else {
-        //       convertedData[field] = formatToISO(date); // Format to ISO
-        //     }
-        //   }
-        // });
-
-        setState(data);
-        // console.log(subcollection, data);
-        // console.log(subcollection, convertedData);
+        setState(convertedData);
+        console.log(subcollection, data);
+        console.log(subcollection, convertedData);
 
         if (subcollection === "newTicket") {
           const newOrderSound = newOrderSounds[data[0].marketplaceId];

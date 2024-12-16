@@ -52,7 +52,7 @@ const ProtectPage = () => {
       return;
     }
     if (protectedPagesBefore.password == protectedPages.password) {
-      dispatch(updateUserLock(protectedPages));
+      dispatch(updateUserLock(isLockedData));
     } else {
       setPopupContent(<ConfirmationPopup user={user} />);
     }
@@ -60,10 +60,13 @@ const ProtectPage = () => {
 
   //AUTH
   useEffect(() => {
-    if (!isAuthorized) {
+    if (!isAuthorized && protectedPages?.lock) {
       setPopupContent(<AuthorizePopup setIsAuthorized={setIsAuthorized} />);
+    } else {
+      setIsAuthorized(true);
     }
-  }, [isAuthorized]);
+    if (protectedPages) setIsLockedData(protectedPages);
+  }, [isAuthorized && protectedPages]);
 
   //UPDATE
   useEffect(() => {
@@ -71,6 +74,12 @@ const ProtectPage = () => {
       toastId.current = toast.loading("İşleniyor...", { id: "safePages" });
     } else if (error) {
       setPopupContent(null);
+      setIsLockedData((prev) => {
+        return {
+          ...prev,
+          lock: !isLockedData?.lock,
+        };
+      });
       dispatch(resetupdateUserLock());
     } else if (success) {
       setPopupContent(null);
@@ -118,14 +127,16 @@ const ProtectPage = () => {
               <div className="flex items-center gap-4">
                 <h1 className="whitespace-nowrap text-xl">Koruma Parolası</h1>
                 <CustomInput
+                  disabled={loading}
                   className="mt-[0] sm:mt-[0]"
-                  className2="max-w-28 mt-[0] sm:mt-[0]"
+                  className2="max-w-80 mt-[0] sm:mt-[0]"
+                  maxLength={10}
                   value={isLockedData?.password || ""}
                   onChange={(e) =>
                     setIsLockedData((prev) => {
                       return {
                         ...prev,
-                        password: e,
+                        password: e.replace(/[^a-zA-Z0-9]/g, ""),
                       };
                     })
                   }
@@ -150,22 +161,23 @@ const ProtectPage = () => {
                     text: "Profil",
                     id: "profile",
                   },
-                ].map((item) => (
-                  <div key={item.to}>
+                ].map((item, i) => (
+                  <div key={i}>
                     <CustomCheckbox
                       label={item.text}
                       checked={isLockedData[item.id]}
+                      className={`${loading && "pointer-events-none"}`}
                       Icon={
                         <LockI className="text-[--white-1]" strokeWidth={2.5} />
                       }
-                      onChange={() =>
+                      onChange={() => {
                         setIsLockedData((prev) => {
                           return {
                             ...prev,
                             [item.id]: !isLockedData[item.id],
                           };
-                        })
-                      }
+                        });
+                      }}
                       className2="text-[var(--black-1)]"
                     />
                   </div>
@@ -175,6 +187,7 @@ const ProtectPage = () => {
               <div className="flex justify-end">
                 <button
                   onClick={handleSubmit}
+                  disabled={loading}
                   className="text-[--white-1] bg-[--primary-1] rounded-md px-5 py-2.5"
                 >
                   Kaydet

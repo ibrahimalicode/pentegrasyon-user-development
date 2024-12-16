@@ -22,6 +22,7 @@ import trendyolYemekNewOrderSoundPath from "../assets/sound/trendyolyemekneworde
 import yemekSepetiNewOrderSoundPath from "../assets/sound/yemeksepetineworder.mp3";
 import goFodyNewOrderSoundPath from "../assets/sound/gofodyneworder.mp3";
 import siparisimPlusNewOrderSoundPath from "../assets/sound/siparisimplus.mp3";
+import { useProtectPages } from "./ProtectPagesContext";
 
 const newOrderSounds = [
   new Audio(getirYemekNewOrderSoundPath),
@@ -38,8 +39,9 @@ export const useFirestore = () => useContext(FirestoreContext);
 
 export const FirestoreProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state) => state.user.getUser);
   const { success } = useSelector((state) => state.auth.login);
+  const { user, loading } = useSelector((state) => state.user.getUser);
+  const { setProtectedPages, setProtectedPagesBefore } = useProtectPages();
 
   const token = getAuth()?.token;
   const [userId, setUserId] = useState(null);
@@ -79,6 +81,7 @@ export const FirestoreProvider = ({ children }) => {
         await setDoc(doc(userRef, "newMessage", "data"), {});
         await setDoc(doc(userRef, "restaurantStatus", "data"), {});
         await setDoc(doc(userRef, "ticketAutomation", "data"), {});
+        await setDoc(doc(userRef, "userLock", "data"), {});
       }
     } catch (error) {
       console.log(error);
@@ -115,6 +118,9 @@ export const FirestoreProvider = ({ children }) => {
           const date = convertedData[field];
           if (date) convertedData[field] = date.replace(" ", "T");
         });
+
+        if (subcollection === "userLock")
+          setProtectedPagesBefore(convertedData);
 
         setState(convertedData);
         console.log(subcollection, data);
@@ -153,6 +159,10 @@ export const FirestoreProvider = ({ children }) => {
         "ticketAutomation",
         setAutomaticApprovalDatas
       );
+      const unsubProtectedPages = subscribeToSubcollection(
+        "userLock",
+        setProtectedPages
+      );
 
       // Cleanup subscriptions on unmount
       return () => {
@@ -161,6 +171,7 @@ export const FirestoreProvider = ({ children }) => {
         unsubNewMessage();
         unsubRestaurantStatus();
         unsubAutoApproval();
+        unsubProtectedPages();
       };
     };
 

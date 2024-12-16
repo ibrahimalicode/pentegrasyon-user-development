@@ -177,12 +177,14 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
                 disabled={/* data?.isSettingsAdded || */ getLoading}
               />
             </div>
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div className="flex gap-2 mt-6">
+              <p className="flex justify-center items-center -ml-5">%</p>
               <CustomInput
                 type="number"
                 label="Komisyon Oranı"
                 placeholder="Komisyon Oranı"
-                className="py-[.45rem] text-sm"
+                className="py-[.45rem] text-sm mt-[0] sm:mt-[0]"
+                className2="mt-[0] sm:mt-[0]"
                 value={licenseData.commissionRate}
                 onChange={(e) => {
                   setLicenseData((prev) => {

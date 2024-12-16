@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 //COMP
 import { InfoI } from "../../../assets/icon";
 import CloseI from "../../../assets/icon/close";
-import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
 import RemainingMinutes from "../components/remainingMinutes";
 import GetirYemekStatusButtons from "./getirYemekStatusButtons";
+import { GetirYemekAddress } from "../components/marketplaceAddresses";
+import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
 
 //UTILS
 import { formatDateString, formatToPrice } from "../../../utils/utils";
@@ -144,14 +145,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
         <div className="flex justify-between">
           <p>Adres</p>
           <div className="w-full max-w-[65%] text-end text-[--primary-2]">
-            <p>{order.client.address}</p>
-            <p>
-              {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
-              {order.client.doorNo && (
-                <span> Daire No: {order.client.doorNo}</span>
-              )}
-              {order.client.floor && <span> Kat: {order.client.floor}</span>}
-            </p>
+            <GetirYemekAddress order={order} />
           </div>
         </div>
         <div className="flex border-t border-[--gr-3] py-2">

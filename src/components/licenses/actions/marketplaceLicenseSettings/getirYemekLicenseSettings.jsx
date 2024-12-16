@@ -22,6 +22,7 @@ import {
   resetUpdateIntegrationInformation,
   updateIntegrationInformation,
 } from "../../../../redux/informations/getirYemek/updateIntegrationInformationSlice";
+import licenseTypeIds from "../../../../enums/licenseTypeIds";
 
 const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -135,6 +136,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
       dispatch(resetUpdateIntegrationInformation());
     }
   }, [updateLoad, updateSucc, updateErr]);
+  console.log(data);
 
   return (
     <div className="flex flex-col items-center w-full text-base">
@@ -148,7 +150,12 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
           </div>
         </div>
 
-        <h1 className="self-center text-2xl font-bold">Lisans Ayarları</h1>
+        <div className="text-center text-xl font-bold">
+          <p>
+            {data.restaurantName} - {licenseTypeIds[data.licenseTypeId].label}
+          </p>
+          <p className="text-lg">Entegrasyon Parametreleri</p>
+        </div>
 
         <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
           <form onSubmit={handleSubmit}>
@@ -172,7 +179,6 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
             </div>
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
-                required
                 type="number"
                 label="Komisyon Oranı"
                 placeholder="Komisyon Oranı"

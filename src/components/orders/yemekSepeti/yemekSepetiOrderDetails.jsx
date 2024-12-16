@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 //COMP
 import CloseI from "../../../assets/icon/close";
 import YemekSepetiStatusButtons from "./yemekSepetiStatusButtons";
+import { YemekSepetiAddress } from "../components/marketplaceAddresses";
 
 //CONTEXT
 import { useSlideBar } from "../../../context/SlideBarContext";
@@ -18,11 +19,6 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(formatOrder());
-
-  const customerAddress = `
-  ${order.customer.city},
-  ${order.customer.deliveryMainArea},
-  ${order.customer.street}`;
 
   function isValidDate(date) {
     return date.startsWith("0001-01-01T00:00:00") ? "" : date;
@@ -161,18 +157,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         <div className="flex justify-between">
           <p>Adres</p>
           <div className="w-full max-w-[65%] text-end text-[--primary-2]">
-            <p>{customerAddress}</p>
-            <p>
-              {order.customer.building && (
-                <span>Bina: {order.customer.building}</span>
-              )}
-              {order.customer.entrance && (
-                <span> Daire No: {order.customer.entrance}</span>
-              )}
-              {order.customer.floor && (
-                <span> Kat: {order.customer.floor}</span>
-              )}
-            </p>
+            <YemekSepetiAddress order={order} />
           </div>
         </div>
         <div className="flex border-t border-[--gr-3] py-2">

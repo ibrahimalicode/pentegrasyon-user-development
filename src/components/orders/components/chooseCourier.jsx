@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMPONENT
-import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
-import CustomSelect from "../../common/customSelector";
+import LoadingI from "../../../assets/anim/loading";
+import { RouteInfo } from "../components/googleRoute";
 import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
@@ -16,22 +16,20 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 
 //REDUX
 import {
-  resetupdateOrderCourier,
   updateOrderCourier,
+  resetupdateOrderCourier,
 } from "../../../redux/orders/updateOrderCourierSlice";
 import {
   getAvailableCouriers,
   resetgetAvailableCouriers,
 } from "../../../redux/couriers/getAvailableCouriersSlice";
-import { getAvailableCourierServices } from "../../../redux/couriers/getAvailableCourierServicesSlice";
-import LoadingI from "../../../assets/anim/loading";
-import { RouteInfo } from "../components/googleRoute";
 import {
   getOrderCompensation,
   resetGetOrderCompensation,
 } from "../../../redux/orders/getOrderCompensationSlice";
+import { getAvailableCourierServices } from "../../../redux/couriers/getAvailableCourierServicesSlice";
 
-const GetirYemekChooseCourier = ({ order }) => {
+const ChooseCourier = ({ order, Address, locatioData }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
@@ -46,9 +44,9 @@ const GetirYemekChooseCourier = ({ order }) => {
     (state) => state.orders.updateCourier
   );
   const {
-    loading: compensationLoading,
-    error: compensationError,
     compensationData,
+    error: compensationError,
+    loading: compensationLoading,
   } = useSelector((state) => state.orders.getOrderCompensation);
 
   const [routeData, setRouteData] = useState(null);
@@ -59,7 +57,6 @@ const GetirYemekChooseCourier = ({ order }) => {
 
   const [compensationType, setCompensationType] = useState(null);
   const [compensationRate, setCompensationRate] = useState("");
-  const [specialBonusRate, setSpecialBonusRate] = useState("");
   const [currentCompensation, setCurrentCompensation] = useState(null);
 
   function handleSubmit(e) {
@@ -106,12 +103,12 @@ const GetirYemekChooseCourier = ({ order }) => {
     if (!restaurantCouriers && selectedService?.id === 0) {
       dispatch(getAvailableCouriers({ restaurantId: order.restaurantId }));
     }
-    if (!courierServices) {
+    if (!courierServices && selectedService?.id === 0) {
       dispatch(
         getAvailableCourierServices({ restaurantId: order.restaurantId })
       );
     }
-    if (!currentCompensation) {
+    if (!currentCompensation && selectedService?.id === 0) {
       dispatch(
         getOrderCompensation({
           marketplaceId: order.marketplaceId,
@@ -148,7 +145,10 @@ const GetirYemekChooseCourier = ({ order }) => {
       setCurrentCompensation(compensationData);
       dispatch(resetGetOrderCompensation());
     }
-  }, [compensationData]);
+    if (compensationError) {
+      dispatch(resetGetOrderCompensation());
+    }
+  }, [compensationData, compensationError]);
 
   // SET SERVICES(LICENSES)
   useEffect(() => {
@@ -168,57 +168,63 @@ const GetirYemekChooseCourier = ({ order }) => {
 
   //GET ROUTE INFO
   useEffect(() => {
-    const data = {
-      lat1: order.courier.latitude,
-      lng1: order.courier.longitude,
-      lat2: order.client.latitude,
-      lng2: order.client.longitude,
-    };
-    RouteInfo(data)
-      .then((routeInfo) => {
-        setRouteData({
-          ...routeInfo,
-          distance: Number(routeInfo?.distance?.replace("km", "")),
+    if (locatioData) {
+      RouteInfo(locatioData)
+        .then((routeInfo) => {
+          setRouteData({
+            ...routeInfo,
+            distance: Number(routeInfo?.distance?.replace("km", "")),
+          });
+        })
+        .catch((error) => {
+          toast.error("Mesafe alınamadı", { id: "google-error" });
+          console.error(error.message);
         });
-      })
-      .catch((error) => {
-        toast.error("Mesafe alınamadı", { id: "google-error" });
-        console.error(error.message);
-      });
+    }
   }, []);
+
+  const bgColors = [
+    "var(--getiryemek)",
+    "var(--migrosyemek)",
+    "var(--trendyol)",
+    "var(--yemeksepeti)",
+    "var(--gofody)",
+    "var(--siparisim)",
+  ];
+
+  const userName = order?.client?.name
+    ? order?.client?.name
+    : order?.customer?.firstName
+    ? order?.customer?.firstName
+    : "";
 
   return (
     <main className="bg-[--white-1] rounded-md">
-      <div className="flex justify-between bg-indigo-700/60 p-3 rounded-t-md">
-        <div className="text-sm text-[--white-1]">
+      <div className="flex justify-between p-3 rounded-t-md relative">
+        <span
+          className="absolute top-0 left-0 w-full h-full opacity-60 z-10"
+          style={{ backgroundColor: bgColors[order.marketplaceId] }}
+        ></span>
+        <div className="text-sm text-[--white-1] z-20">
           <p>
             <span className="font-bold text-[--black-1]">Müşteri:</span>{" "}
-            {order?.client?.name}{" "}
+            {userName}{" "}
           </p>
           <p>
             <span className="font-bold text-[--black-1]">Adres: </span>
-            <span>{order.client.address}</span>
-            {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
-            {order.client.doorNo && (
-              <span> Daire No: {order.client.doorNo}</span>
-            )}
-            {order.client.floor && <span> Kat: {order.client.floor}</span>}
+            <Address order={order} />
           </p>
-          <p className="flex">
-            <span className="font-bold text-[--black-1] mr-2">Mesafe: </span>
-            {routeData ? <span> {routeData.distance} KM</span> : <LoadingI />}
-          </p>
+          {locatioData && (
+            <p className="flex">
+              <span className="font-bold text-[--black-1] mr-2">Mesafe: </span>
+              {routeData ? <span> {routeData.distance} KM</span> : <LoadingI />}
+            </p>
+          )}
           <p>
             <span className="font-bold text-[--black-1]">Platform:</span> Getir
             Yemek
           </p>
         </div>
-        {/* <button
-          onClick={() => setPopupContent(null)}
-          className="text-[--red-1] w-max h-max border border-[--red-1] p-2 rounded-full"
-        >
-          <CloseI />
-        </button> */}
       </div>
 
       <form onSubmit={handleSubmit} className="px-5 pb-5">
@@ -232,6 +238,7 @@ const GetirYemekChooseCourier = ({ order }) => {
                 {courierServices.map((C) => (
                   <button
                     key={C.id}
+                    type="button"
                     onClick={() => setSelectedService(C)}
                     className={`border bg-[--light-3] py-2 px-3 rounded-sm ${
                       selectedService.id == C.id &&
@@ -280,23 +287,42 @@ const GetirYemekChooseCourier = ({ order }) => {
                     Hadeiş Şekli
                   </h1>
 
-                  <div className="flex flex-wrap w-full">
+                  <div className="flex flex-wrap justify-center w-full">
                     <div className="flex flex-wrap gap-1 mr-3 mt-3">
                       {currentCompensation ? (
                         <div>
-                          <p className="flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3]">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setCompensationType(currentCompensation)
+                            }
+                            className={`border flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3] ${
+                              currentCompensation.id == compensationType?.id &&
+                              "border-[--green-1] bg-[--status-green] text-[--green-1]"
+                            }`}
+                          >
                             Mevcut:{" "}
                             <span className="ml-2">
                               {currentCompensation.label}₺
                             </span>
-                          </p>
-                          <p>
-                            {
-                              compensationTypes.filter(
-                                (c) => c.id !== currentCompensation.id
-                              )[0].label
-                            }
-                          </p>
+                          </button>
+                          {() => {
+                            const elmnt = compensationTypes.filter(
+                              (c) => c.id !== currentCompensation.id
+                            )[0];
+                            return (
+                              <button
+                                type="button"
+                                onClick={() => setCompensationType(elmnt)}
+                                className={`border flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3] ${
+                                  elmnt?.id == compensationType?.id &&
+                                  "border-[--green-1] bg-[--status-green] text-[--green-1]"
+                                }`}
+                              >
+                                {elmnt?.label}
+                              </button>
+                            );
+                          }}
                         </div>
                       ) : compensationTypes?.length ? (
                         compensationTypes.map((C) => (
@@ -318,47 +344,33 @@ const GetirYemekChooseCourier = ({ order }) => {
                         className="mt-[0] sm:mt-[0] text-[--red-1]"
                         className2="max-w-[64px] mt-[0] sm:mt-[0] justify-end"
                         value={compensationRate}
-                        disabled={!compensationType?.id}
+                        disabled={!compensationType?.value}
                         required={compensationType?.value ? true : false}
                         onChange={(e) => setCompensationRate(e)}
                       />
                       <p className="flex items-center text-[--red-1]">₺</p>
                     </div>
 
-                    <div className="flex mt-3">
-                      <button
-                        type="button"
-                        className={`flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3]`}
-                      >
-                        Özel Hakediş
-                      </button>
-                      <CustomInput
-                        type="number"
-                        className="mt-[0] sm:mt-[0] text-[--red-1]"
-                        className2="max-w-[64px] mt-[0] sm:mt-[0] justify-end"
-                        value={specialBonusRate}
-                        onChange={(e) => setSpecialBonusRate(e)}
-                      />
-                      <p className="flex items-center text-[--red-1]">₺</p>
-                    </div>
-
                     <div className="flex flex-col items-center w-full pt-4">
                       <div>
-                        <p className="flex">
-                          <span className="font-bold mr-2">Mesafe: </span>
-                          {routeData ? (
-                            <span className="text-[--red-1]">
-                              {routeData.distance} KM
-                            </span>
-                          ) : (
-                            <LoadingI />
-                          )}
-                        </p>
+                        {locatioData && (
+                          <p className="flex">
+                            <span className="font-bold mr-2">Mesafe: </span>
+                            {routeData ? (
+                              <span className="text-[--red-1]">
+                                {routeData.distance} KM
+                              </span>
+                            ) : (
+                              <LoadingI />
+                            )}
+                          </p>
+                        )}
 
                         <p>
                           <span className="font-bold">Tutar: </span>
                           <span className="text-[--red-1]">
-                            {compensationRate * routeData?.distance} ₺
+                            {compensationType?.id === 1 &&
+                              `${compensationRate * routeData?.distance} ₺`}
                           </span>
                         </p>
                       </div>
@@ -392,4 +404,4 @@ const GetirYemekChooseCourier = ({ order }) => {
   );
 };
 
-export default GetirYemekChooseCourier;
+export default ChooseCourier;

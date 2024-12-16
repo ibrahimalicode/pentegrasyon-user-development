@@ -11,13 +11,14 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
 import GoogleRoute from "../components/googleRoute";
+import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
 import YemekSepetiPrintOrder from "./yemekSepetiPrintOrder";
 import RemainingMinutes from "../components/remainingMinutes";
 import YemekSepetiOrderDetails from "./yemekSepetiOrderDetails";
 import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
-import YemekSepetiChooseCourier from "./yemekSepetiChooseCourier";
 import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
+import { YemekSepetiAddress } from "../components/marketplaceAddresses";
 
 const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
   const { setPopupContent } = usePopup();
@@ -133,7 +134,9 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
         </td>
         <td
           onClick={() =>
-            setPopupContent(<YemekSepetiChooseCourier order={order} />)
+            setPopupContent(
+              <ChooseCourier order={order} Address={YemekSepetiAddress} />
+            )
           }
           className="whitespace-nowrap"
         >

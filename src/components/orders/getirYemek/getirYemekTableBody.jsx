@@ -8,16 +8,17 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
 import GoogleRoute from "../components/googleRoute";
+import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
 import GetirYemekPrintOrder from "./getirYemekPrintOrder";
 import RemainingMinutes from "../components/remainingMinutes";
 import GetirYemekOrderDetails from "./getirYemekOrderDetails";
-import GetirYemekChooseCourier from "./getirYemekChooseCourier";
 import GetirYemekStatusButton from "./getirYemekStatusButton";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
+import { GetirYemekAddress } from "../components/marketplaceAddresses";
 
 const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
   const { setPopupContent } = usePopup();
@@ -118,7 +119,18 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
         </td>
         <td
           onClick={() =>
-            setPopupContent(<GetirYemekChooseCourier order={order} />)
+            setPopupContent(
+              <ChooseCourier
+                order={order}
+                Address={GetirYemekAddress}
+                locatioData={{
+                  lat1: order.courier.latitude,
+                  lng1: order.courier.longitude,
+                  lat2: order.client.latitude,
+                  lng2: order.client.longitude,
+                }}
+              />
+            )
           }
           className={`whitespace-nowrap ${
             order.deliveryType == 1 && "pointer-events-none"

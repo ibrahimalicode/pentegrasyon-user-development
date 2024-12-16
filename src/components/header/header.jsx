@@ -36,8 +36,9 @@ function Header({ openSidebar, setOpenSidebar }) {
     if (success) {
       clearAuth();
       navigate("/login");
-      toast.dismiss(toastId.current);
+      dispatch({ type: "LOGOUT" });
       dispatch(resetLogoutState());
+      toast.dismiss(toastId.current);
     }
     if (error) {
       // clearAuth();

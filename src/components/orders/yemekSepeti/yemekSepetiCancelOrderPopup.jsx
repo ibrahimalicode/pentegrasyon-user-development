@@ -8,6 +8,7 @@ import {
   yemekSepetiGetTicketCancelOptions,
 } from "../../../redux/yemekSepeti/yemekSepetiGetTicketCancelOptionsSlice";
 import { CloseI } from "../../../assets/icon";
+import CustomInput from "../../common/customInput";
 
 const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
       toast.error("Lütfen  İptal Sebepini Seçiniz");
       return;
     }
+
     cancelOrder();
   }
 
@@ -88,6 +90,7 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
                         ticketId,
                         message: opt.message,
                         reason: opt.reason,
+                        cancelNote: opt.message,
                       };
                     });
                   }}
@@ -102,7 +105,7 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
           </div>
         </div>
 
-        {/* <div>
+        <div>
           <CustomInput
             label="İptal Notu"
             value={cancelOrderData.cancelNote}
@@ -115,7 +118,7 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
               })
             }
           />
-        </div> */}
+        </div>
 
         <div className="flex justify-end mt-8">
           <button

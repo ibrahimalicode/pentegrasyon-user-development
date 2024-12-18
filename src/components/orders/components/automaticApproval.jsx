@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
-import { useFirestore } from "../../../context/FirestoreContext";
 
 //COMP
 import CustomToggle from "../../common/customToggle";
@@ -15,40 +14,32 @@ import {
   resetUpdateTicketAutomationVariable,
   updateTicketAutomationVariable,
 } from "../../../redux/orders/updateTicketAutomationVariableSlice";
-import {
-  getAutomaticApprovalVariable,
-  resetgetAutomaticApprovalVariable,
-} from "../../../redux/orders/getAutomaticApprovalVariableSlice";
 
-const AutomaticApproval = () => {
+const AutomaticApproval = ({ automationDatas, setAutomationDatas }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
-  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useFirestore();
 
-  const { data, error: getError } = useSelector(
-    (state) => state.orders.getAutoApprovalVar
-  );
   const { loading, error } = useSelector(
     (state) => state.orders.updateAutomationVars
   );
 
-  const [varData, setVarData] = useState(null);
-
   function updateAutomaticApproval() {
-    const updatedData = { automaticApproval: !varData.automaticApproval };
+    const updatedData = {
+      automaticApproval: !automationDatas.automaticApproval,
+    };
     dispatch(updateTicketAutomationVariable(updatedData)).then((res) => {
       if (res?.meta?.requestStatus === "fulfilled") {
-        setVarData(updatedData);
+        setAutomationDatas({ ...automationDatas, ...updatedData });
         toast.dismiss(toastId.current);
-        const style = varData?.automaticApproval
+        const style = automationDatas?.automaticApproval
           ? "text-[--red-1]"
           : "text-[--green-1]";
 
         const comp = (
           <div>
             Otomatik Onay{" "}
-            {varData?.automaticApproval ? (
+            {automationDatas?.automaticApproval ? (
               <span className={style}>Kapandı</span>
             ) : (
               <span className={style}>Açıldı</span>
@@ -57,27 +48,10 @@ const AutomaticApproval = () => {
         );
         toast.success(comp, { id: "delivery/ontheway-time" });
         dispatch(resetUpdateTicketAutomationVariable());
-        setPopupContent(null);
+        // setPopupContent(null);
       }
     });
   }
-
-  //GET DATA
-  useEffect(() => {
-    if (!varData) {
-      dispatch(getAutomaticApprovalVariable());
-    }
-  }, [varData]);
-
-  //TOAST AND SET DATA
-  useEffect(() => {
-    if (getError) dispatch(resetgetAutomaticApprovalVariable());
-
-    if (data) {
-      setVarData({ automaticApproval: data.data });
-      dispatch(resetgetAutomaticApprovalVariable());
-    }
-  }, [data, getError]);
 
   //UPDATE
   useEffect(() => {
@@ -92,26 +66,12 @@ const AutomaticApproval = () => {
     }
   }, [loading, error]);
 
-  //SIGNALR
-  useEffect(() => {
-    if (automaticApprovalDatas) {
-      if (
-        automaticApprovalDatas?.automaticApproval !== varData?.automaticApproval
-      ) {
-        setVarData({
-          automaticApproval: automaticApprovalDatas.automaticApproval,
-        });
-        setAutomaticApprovalDatas(null);
-      }
-    }
-  }, [automaticApprovalDatas]);
-
   return (
     <div className="flex items-end">
       <button
         onClick={updateAutomaticApproval}
         className={`w-full flex items-center border text-sm py-1.5 pl-4 rounded-md whitespace-nowrap ${
-          varData?.automaticApproval
+          automationDatas?.automaticApproval
             ? "border-[--green-1] text-[--green-1]"
             : "border-[--red-1] text-[--red-1]"
         }`}
@@ -121,7 +81,9 @@ const AutomaticApproval = () => {
           className1="scale-[.7]"
           id="automatic-approval"
           checked={
-            varData?.automaticApproval ? varData?.automaticApproval : false
+            automationDatas?.automaticApproval
+              ? automationDatas?.automaticApproval
+              : false
           }
           onChange={() => {}}
         />

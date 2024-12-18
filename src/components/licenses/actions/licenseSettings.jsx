@@ -3,10 +3,16 @@ import { SettingsI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 import { usePopup } from "../../../context/PopupContext";
 import GetirYemekLicenseSettings from "./marketplaceLicenseSettings/getirYemekLicenseSettings";
+import YemekSepetiLicenseSettings from "./marketplaceLicenseSettings/yemekSepetiLicenseSettings";
 
 const LicenseSettings = ({ licenseData, onSuccess }) => {
   const { setPopupContent } = usePopup();
-  const LicenseSettingsPopups = [GetirYemekLicenseSettings];
+  const LicenseSettingsPopups = [
+    GetirYemekLicenseSettings,
+    GetirYemekLicenseSettings, //Placeholder
+    GetirYemekLicenseSettings, //Placeholder
+    YemekSepetiLicenseSettings,
+  ];
   const LicenseSettingsPopup = LicenseSettingsPopups[licenseData.licenseTypeId];
 
   const handlePopup = (event) => {

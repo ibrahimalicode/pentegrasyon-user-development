@@ -79,7 +79,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     disabled || nextId != 700 || xMinWait(order.approvalDate)
   );
   const [deliverDisabled, setDeliverDisabled] = useState(
-    disabled || !nextId || xMinWait(order.preparationDate)
+    disabled || !nextId || xMinWait(order.preparationDate, 10)
   );
   const [cancelDisabled, setCancelDisabled] = useState(
     disabled ||
@@ -97,7 +97,9 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     setPrepareDisabled(
       disabled || nextId !== 700 || xMinWait(order.approvalDate)
     );
-    setDeliverDisabled(disabled || !nextId || xMinWait(order.preparationDate));
+    setDeliverDisabled(
+      disabled || !nextId || xMinWait(order.preparationDate, 10)
+    );
     setCancelDisabled(
       disabled ||
         order.status == 900 ||
@@ -220,13 +222,14 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         ) : (
           <>
             <p>Teslim Et</p>
-            {order.status == 700 && xMinWait(order.preparationDate) && (
+            {order.status == 700 && xMinWait(order.preparationDate, 10) && (
               <p>
                 Bekle:{" "}
                 <RemainingSeconds
                   date={order.preparationDate}
                   state={secState}
                   setState={setSecState}
+                  m={10}
                 />{" "}
                 Sn
               </p>

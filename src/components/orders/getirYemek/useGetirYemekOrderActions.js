@@ -22,8 +22,9 @@ import {
 } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
 
 //UTILS
-import { compareWithCurrentDateTime, formatOrders } from "../../../utils/utils";
 import { usePopup } from "../../../context/PopupContext";
+import { compareWithCurrentDateTime, formatOrders } from "../../../utils/utils";
+import toastStatusError from "../components/toastOrderStatError";
 
 export const useGetirYemekOrderActions = ({
   order,
@@ -173,12 +174,6 @@ export const useGetirYemekOrderActions = ({
     });
   };
 
-  //FUNC
-  function remainingMin(date) {
-    const xMinuteAhead = new Date(new Date(date).getTime() + 60000);
-    return compareWithCurrentDateTime(xMinuteAhead).remainingSeconds;
-  }
-
   // VERIFY TOAST
   useEffect(() => {
     if (verifyLoading) {
@@ -201,13 +196,8 @@ export const useGetirYemekOrderActions = ({
     }
     if (prepareErr) {
       if (order.id === prepareErr.ticketId) {
-        console.log(remainingMin(order.approvalDate));
         if (prepareErr.statusCode == 408) {
-          toast.dismiss();
-          const message = `Lütfen ${remainingMin(
-            order.approvalDate
-          )}sn sonra tekrar deneyiniz.`;
-          toast.error(message);
+          toastStatusError(order.approvalDate);
         }
       }
       dispatch(resetGetirYemekTicketPrepare());
@@ -227,11 +217,7 @@ export const useGetirYemekOrderActions = ({
     if (deliverErr) {
       if (order.id === deliverErr.ticketId) {
         if (deliverErr.statusCode == 408) {
-          toast.dismiss();
-          const message = `Lütfen ${remainingMin(
-            order.preparationDate
-          )}sn sonra tekrar deneyiniz.`;
-          toast.error(message);
+          toastStatusError(order.preparationDate, 10);
         }
       }
       dispatch(resetGetirYemekTicketDeliver());

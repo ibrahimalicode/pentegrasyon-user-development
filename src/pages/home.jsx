@@ -11,6 +11,7 @@ import Test from "./test";
 import NotFound from "./404";
 import Orders from "./orders";
 import Profile from "./profile";
+import Payments from "./payments";
 import Couriers from "./couriers";
 import Licenses from "./licenses";
 import Dashboard from "./dashboard";
@@ -32,6 +33,7 @@ const Home = () => {
         <Route path="/orders/*" element={<Orders />} />
         <Route path="/couriers/*" element={<Couriers />} />
         <Route path="/locked-pages/*" element={<ProtectedPages />} />
+        <Route path="/payments/*" element={<Payments />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -11,11 +11,11 @@ const initialState = {
   data: null,
 };
 
-const getOnTheWayTimeVariableSlice = createSlice({
-  name: "getOnTheWayTimeVariable",
+const getAutomationVariablesSlice = createSlice({
+  name: "getAutomationVariables",
   initialState: initialState,
   reducers: {
-    resetgetOnTheWayTimeVariable: (state) => {
+    resetGetAutomationVariables: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const getOnTheWayTimeVariableSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(getOnTheWayTimeVariable.pending, (state) => {
+      .addCase(getAutomationVariables.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
         state.data = null;
       })
-      .addCase(getOnTheWayTimeVariable.fulfilled, (state, action) => {
+      .addCase(getAutomationVariables.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
         state.data = action.payload;
       })
-      .addCase(getOnTheWayTimeVariable.rejected, (state, action) => {
+      .addCase(getAutomationVariables.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,14 +45,14 @@ const getOnTheWayTimeVariableSlice = createSlice({
   },
 });
 
-export const getOnTheWayTimeVariable = createAsyncThunk(
-  "Tickets/GetOnTheWayTimeVariable",
+export const getAutomationVariables = createAsyncThunk(
+  "Tickets/GetAutomationVariables",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${baseURL}Tickets/GetOnTheWayTimeVariable`);
+      const res = await api.get(`${baseURL}Tickets/GetAutomationVariables`);
 
-      // console.log(res.data);
-      return res.data.data;
+      // console.log(res.data.data);
+      return res.data;
     } catch (err) {
       // console.log(err);
       const errorMessage = err.message;
@@ -64,6 +64,6 @@ export const getOnTheWayTimeVariable = createAsyncThunk(
   }
 );
 
-export const { resetgetOnTheWayTimeVariable } =
-  getOnTheWayTimeVariableSlice.actions;
-export default getOnTheWayTimeVariableSlice.reducer;
+export const { resetGetAutomationVariables } =
+  getAutomationVariablesSlice.actions;
+export default getAutomationVariablesSlice.reducer;

@@ -85,7 +85,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     disabled || order.status != 1 || xMinWait(order.approvalDate)
   );
   const [deliverDisabled, setDeliverDisabled] = useState(
-    disabled || order.status != 2 || xMinWait(order.preparationDate)
+    disabled || order.status != 2 || xMinWait(order.preparationDate, 10)
   );
   const [cancelDisabled, setCancelDisabled] = useState(
     disabled || order.status == 3 || order.status == 4 || order.cancelDate
@@ -97,7 +97,7 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       disabled || order.status != 1 || xMinWait(order.approvalDate)
     );
     setDeliverDisabled(
-      disabled || order.status != 2 || xMinWait(order.preparationDate)
+      disabled || order.status != 2 || xMinWait(order.preparationDate, 10)
     );
     setCancelDisabled(
       disabled || order.status == 3 || order.status == 4 || order.cancelDate
@@ -213,13 +213,14 @@ const YemekSepetiStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         ) : (
           <>
             <p>Teslim Et</p>
-            {order.status == 2 && xMinWait(order.preparationDate) && (
+            {order.status == 2 && xMinWait(order.preparationDate, 10) && (
               <p>
                 Bekle:{" "}
                 <RemainingSeconds
                   date={order.preparationDate}
                   state={secState}
                   setState={setSecState}
+                  m={10}
                 />{" "}
                 Sn
               </p>

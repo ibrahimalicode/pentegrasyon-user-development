@@ -4,26 +4,27 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
-import { compareWithCurrentDateTime, formatOrders } from "../../../utils/utils";
+import { formatOrders } from "../../../utils/utils";
 import { usePopup } from "../../../context/PopupContext";
 
 //REDUX
 import {
-  resetYemekSepetiTicketVerify,
   yemekSepetiTicketVerify,
+  resetYemekSepetiTicketVerify,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketVerifySlice";
 import {
-  resetyemekSepetiTicketPrepare,
   yemekSepetiTicketPrepare,
+  resetyemekSepetiTicketPrepare,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketPrepareSlice";
 import {
-  resetyemekSepetiTicketDeliver,
   yemekSepetiTicketDeliver,
+  resetyemekSepetiTicketDeliver,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketDeliverSlice";
 import {
-  resetyemekSepetiTicketCancel,
   yemekSepetiTicketCancel,
+  resetyemekSepetiTicketCancel,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketCancelSlice";
+import toastStatusError from "../components/toastOrderStatError";
 
 export const useYemekSepetiOrderActions = ({
   order,
@@ -175,12 +176,6 @@ export const useYemekSepetiOrderActions = ({
     });
   };
 
-  //FUNC
-  function remainingMin(date) {
-    const xMinuteAhead = new Date(new Date(date).getTime() + 60000);
-    return compareWithCurrentDateTime(xMinuteAhead).remainingSeconds;
-  }
-
   // VERIFY TOAST
   useEffect(() => {
     if (verifyLoading) {
@@ -204,11 +199,7 @@ export const useYemekSepetiOrderActions = ({
     if (prepareErr) {
       if (order.id === prepareErr.ticketId) {
         if (prepareErr.statusCode === 408) {
-          toast.dismiss();
-          const message = `Lütfen ${remainingMin(
-            order.approvalDate
-          )}sn sonra tekrar deneyiniz.`;
-          toast.error(message);
+          toastStatusError(order.approvalDate);
         }
       }
       dispatch(resetyemekSepetiTicketPrepare());
@@ -228,11 +219,7 @@ export const useYemekSepetiOrderActions = ({
     if (deliverErr) {
       if (order.id === deliverErr.ticketId) {
         if (deliverErr.statusCode === 408) {
-          toast.dismiss();
-          const message = `Lütfen ${remainingMin(
-            order.approvalDate
-          )}sn sonra tekrar deneyiniz.`;
-          toast.error(message);
+          toastStatusError(order.preparationDate, 10);
         }
       }
       dispatch(resetyemekSepetiTicketDeliver());

@@ -470,9 +470,19 @@ export function getCardProvider(cardNumber, src) {
   return { name: "Default", ...src[0] };
 }
 
-export function compareWithCurrentDateTime(givenDateTime, secondDate) {
+export function compareWithCurrentDateTime(
+  givenDateTime,
+  secondDate,
+  givenXMinAhead
+) {
   let now = secondDate ? new Date(secondDate) : new Date();
-  const targetDateTime = new Date(givenDateTime);
+  let targetDateTime = new Date(givenDateTime);
+
+  if (givenXMinAhead) {
+    targetDateTime = new Date(
+      new Date(givenDateTime).getTime() + 60000 * givenXMinAhead
+    );
+  }
 
   const remainingTime = targetDateTime - now; // Difference in milliseconds
 
@@ -481,11 +491,7 @@ export function compareWithCurrentDateTime(givenDateTime, secondDate) {
   const remainingSeconds = Math.floor(remainingTime / 1000); // Convert ms to seconds
   const isTimePassed = targetDateTime < now;
 
-  if (isTimePassed) {
-    return "";
-  } else {
-    return { remainingMinutes, remainingSeconds };
-  }
+  return { remainingMinutes, remainingSeconds };
 }
 
 //ORDERS

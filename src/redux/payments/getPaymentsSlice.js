@@ -8,52 +8,52 @@ const initialState = {
   loading: false,
   success: false,
   error: false,
-  data: null,
+  payments: null,
 };
 
-const getAutomaticApprovalVariableSlice = createSlice({
-  name: "getAutomaticApprovalVariable",
+const getPaymentsSlice = createSlice({
+  name: "getPayments",
   initialState: initialState,
   reducers: {
-    resetgetAutomaticApprovalVariable: (state) => {
+    resetGetPayments: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.data = null;
+      state.payments = null;
     },
   },
   extraReducers: (build) => {
     build
-      .addCase(getAutomaticApprovalVariable.pending, (state) => {
+      .addCase(getPayments.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = false;
-        state.data = null;
+        state.payments = null;
       })
-      .addCase(getAutomaticApprovalVariable.fulfilled, (state, action) => {
+      .addCase(getPayments.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.data = action.payload;
+        state.payments = action.payload;
       })
-      .addCase(getAutomaticApprovalVariable.rejected, (state, action) => {
+      .addCase(getPayments.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
-        state.data = null;
+        state.payments = null;
       });
   },
 });
 
-export const getAutomaticApprovalVariable = createAsyncThunk(
-  "Tickets/GetAutomaticApprovalVariable",
-  async (_, { rejectWithValue }) => {
+export const getPayments = createAsyncThunk(
+  "Payments/GetPayments",
+  async (data, { rejectWithValue }) => {
     try {
-      const res = await api.get(
-        `${baseURL}Tickets/GetAutomaticApprovalVariable`
-      );
+      const res = await api.get(`${baseURL}Payments/GetPayments`, {
+        params: data,
+      });
 
-      // console.log(res.data.data);
+      // console.log(res.data);
       return res.data;
     } catch (err) {
       // console.log(err);
@@ -66,6 +66,5 @@ export const getAutomaticApprovalVariable = createAsyncThunk(
   }
 );
 
-export const { resetgetAutomaticApprovalVariable } =
-  getAutomaticApprovalVariableSlice.actions;
-export default getAutomaticApprovalVariableSlice.reducer;
+export const { resetGetPayments } = getPaymentsSlice.actions;
+export default getPaymentsSlice.reducer;

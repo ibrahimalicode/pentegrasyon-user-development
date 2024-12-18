@@ -156,11 +156,11 @@ const YemekSepetiPrintOrder = ({ order }) => {
                 </tr>
                 {order.options.map((cat) => (
                   <React.Fragment key={cat.id}>
-                    <tr className="text-xs px-2">
+                    <tr className="px-2">
                       <td className="pl-2">{cat.name}</td>
                     </tr>
                     {cat.childrens.map((opt) => (
-                      <tr key={opt.id} className="text-xs">
+                      <tr key={opt.id} className="">
                         <td className="pl-2">▸ {opt.name}</td>
                         <td
                           className={`pr-2 text-right ${

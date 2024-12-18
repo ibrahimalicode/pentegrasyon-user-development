@@ -16,6 +16,7 @@ import dashboardSlice from "./redux/dashboard";
 import couriersSlice from "./redux/couriers";
 import integrationInformationsSlice from "./redux/informations";
 import yemekSepetiSlice from "./redux/yemekSepeti";
+import paymentsSlice from "./redux/payments";
 
 const appReducer = combineReducers({
   auth: authSlice,
@@ -32,6 +33,7 @@ const appReducer = combineReducers({
   yemekSepeti: yemekSepetiSlice,
   dashboard: dashboardSlice,
   couriers: couriersSlice,
+  payments: paymentsSlice,
   integrationInfos: integrationInformationsSlice,
 });
 

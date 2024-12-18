@@ -7,8 +7,10 @@ import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
-import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
+import toastStatusError from "../components/toastOrderStatError";
+import { compareWithCurrentDateTime } from "../../../utils/utils";
 import GetirYemekOrderErrorPopup from "./getirYemekOrderErrorPopup";
+import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
@@ -46,15 +48,27 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
   }
 
   function handleClick() {
+    function remSec(date) {
+      return compareWithCurrentDateTime(date, null, 10).remainingSeconds;
+    }
+
     if (orderStat.id === 350) {
       verifyOrder();
+      return;
     }
     if (orderStat.id === 700) {
-      prepareOrder();
+      if (!(remSec(order.approvalDate) > 0)) {
+        prepareOrder();
+        return;
+      }
     }
     if (nextId === 900) {
-      deliverOrder();
+      if (!(remSec(order.preparationDate) > 0)) {
+        deliverOrder();
+        return;
+      }
     }
+    toastStatusError(order.preparationDate, 10);
   }
 
   const disabled =
@@ -70,6 +84,7 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
+
       if (actionError.ticketId == order.id && actionError.statusCode != 408) {
         setPopupContent(
           <GetirYemekOrderErrorPopup

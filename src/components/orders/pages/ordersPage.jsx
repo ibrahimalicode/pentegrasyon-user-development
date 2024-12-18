@@ -17,14 +17,18 @@ import RestaurantsStatus from "../components/restaurantsStatus";
 import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
 // REDUX
-import { getOnTheWayTimeVariable } from "../../../redux/orders/getOnTheWayTimeVariableSlice";
-import { getDeliveryTimeVariable } from "../../../redux/orders/getDeliveryTimeVariableSlice";
+import {
+  getAutomationVariables,
+  resetGetAutomationVariables,
+} from "../../../redux/orders/getAutomationVariablesSlice";
 
 //UTILS
 import { useOrdersContext } from "../../../context/OrdersContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
+  const { automaticApprovalDatas, setAutomaticApprovalDatas } = useFirestore();
 
   const {
     itemsPerPage,
@@ -39,13 +43,11 @@ const OrdersPage = () => {
   } = useOrdersContext();
 
   const { loading } = useSelector((state) => state.orders.get);
+  const { data, error } = useSelector(
+    (state) => state.orders.getAutomationVariables
+  );
 
-  const [onTheWayTimeData, setOnTheWayTimeData] = useState({
-    label: "Zaman Seç",
-  });
-  const [deliveryTimeData, setDeliveryTimeData] = useState({
-    label: "Zaman Seç",
-  });
+  const [automationDatas, setAutomationDatas] = useState(null);
   const pageNumbers = () => {
     const numbersColl = [];
     for (let i = 20; i < 101; i += 5) {
@@ -54,19 +56,31 @@ const OrdersPage = () => {
     return numbersColl;
   };
 
-  //GET ON THE WAY
+  //GET AUTOMATION DATAS
   useEffect(() => {
-    if (!onTheWayTimeData?.onTheWayTime) {
-      dispatch(getOnTheWayTimeVariable());
+    if (!automationDatas) {
+      dispatch(getAutomationVariables());
     }
-  }, [onTheWayTimeData]);
+  }, [automationDatas]);
 
-  //GET DELIVERY TIME
+  //TOAST AND SET DATA
   useEffect(() => {
-    if (!deliveryTimeData?.deliveryTime) {
-      dispatch(getDeliveryTimeVariable());
+    if (error) dispatch(resetGetAutomationVariables());
+
+    if (data) {
+      console.log(data);
+      setAutomationDatas(data.data);
+      dispatch(resetGetAutomationVariables());
     }
-  }, [deliveryTimeData]);
+  }, [data, error]);
+
+  //FIRESTORE
+  useEffect(() => {
+    if (automaticApprovalDatas) {
+      setAutomationDatas(automaticApprovalDatas);
+      setAutomaticApprovalDatas(null);
+    }
+  }, [automaticApprovalDatas]);
 
   return (
     <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">
@@ -76,20 +90,22 @@ const OrdersPage = () => {
         <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2 max-sm:mt-3">
             <RestaurantsStatus />
-            <AutomaticApproval ordersData={ordersData} />
+            <AutomaticApproval
+              ordersData={ordersData}
+              automationDatas={automationDatas}
+              setAutomationDatas={setAutomationDatas}
+            />
           </div>
 
           <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">
             <div className="flex gap-2 max-sm:w-full">
               <OnTheWayTime
-                onTheWayTimeData={onTheWayTimeData}
-                setOnTheWayTimeData={setOnTheWayTimeData}
-                deliveryTimeData={deliveryTimeData}
+                automationDatas={automationDatas}
+                setAutomationDatas={setAutomationDatas}
               />
               <DeliveryTime
-                deliveryTimeData={deliveryTimeData}
-                setDeliveryTimeData={setDeliveryTimeData}
-                onTheWayTimeData={onTheWayTimeData}
+                automationDatas={automationDatas}
+                setAutomationDatas={setAutomationDatas}
               />
               <OrdersTotalPrice orders={ordersData} />
             </div>

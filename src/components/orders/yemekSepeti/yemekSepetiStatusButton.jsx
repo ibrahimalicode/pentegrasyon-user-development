@@ -8,6 +8,8 @@ import { useYemekSepetiOrderActions } from "./useYemekSepetiOrderActions";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
+import toastStatusError from "../components/toastOrderStatError";
+import { compareWithCurrentDateTime } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
 
 const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
@@ -46,13 +48,24 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   }
 
   function handleClick() {
+    function remSec(date) {
+      return compareWithCurrentDateTime(date, null, 10).remainingSeconds;
+    }
     if (order.status === 0) {
       verifyOrder();
+      return;
     } else if (order.status === 1) {
-      prepareOrder();
+      if (!(remSec(order.approvalDate) > 0)) {
+        prepareOrder();
+        return;
+      }
     } else if (order.status === 2) {
-      deliverOrder();
+      if (!(remSec(order.preparationDate) > 0)) {
+        deliverOrder();
+        return;
+      }
     }
+    toastStatusError(order.preparationDate, 10);
   }
 
   const isDisabled =
@@ -71,7 +84,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
 
-      if (actionError.ticketId == order.id && actionError.statusCode !== 408) {
+      if (actionError.ticketId == order.id && actionError.statusCode != 408) {
         setPopupContent(
           <YemekSepetiOrderErrorPopup
             order={order}

@@ -68,7 +68,6 @@ const OrdersPage = () => {
     if (error) dispatch(resetGetAutomationVariables());
 
     if (data) {
-      console.log(data);
       setAutomationDatas(data.data);
       dispatch(resetGetAutomationVariables());
     }

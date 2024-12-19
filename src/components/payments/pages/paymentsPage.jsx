@@ -41,6 +41,7 @@ const PaymentsPage = () => {
   const [totalItems, setTotalItems] = useState(null);
 
   function handlePageChange(number) {
+    if (number === pageNumber) return;
     dispatch(
       getPayments({
         pageNumber: number,

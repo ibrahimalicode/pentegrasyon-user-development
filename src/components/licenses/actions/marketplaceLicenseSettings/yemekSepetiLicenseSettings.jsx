@@ -139,7 +139,6 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       dispatch(resetUpdateIntegrationInformation());
     }
   }, [updateLoad, updateSucc, updateErr]);
-  console.log(data);
 
   return (
     <div className="flex flex-col items-center w-full text-base">
@@ -165,7 +164,6 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
                 required
-                disabled={true}
                 label="Seller Id"
                 placeholder="Seller Id"
                 className="py-[.45rem] text-sm"
@@ -184,26 +182,6 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
                 required
-                disabled={true}
-                label="Remote Id"
-                placeholder="Remote Id"
-                className="py-[.45rem] text-sm"
-                value={licenseData.remoteId}
-                onChange={(e) => {
-                  setLicenseData((prev) => {
-                    return {
-                      ...prev,
-                      remoteId: e,
-                    };
-                  });
-                }}
-              />
-            </div>
-
-            <div className="flex max-sm:flex-col sm:gap-4">
-              <CustomInput
-                required
-                disabled={true}
                 label="Chain Code"
                 placeholder="Chain Code"
                 className="py-[.45rem] text-sm"

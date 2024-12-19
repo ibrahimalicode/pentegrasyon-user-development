@@ -48,8 +48,8 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   }
 
   function handleClick() {
-    function remSec(date) {
-      return compareWithCurrentDateTime(date, null, 10).remainingSeconds;
+    function remSec(date, min = 1) {
+      return compareWithCurrentDateTime(date, null, min).remainingSeconds;
     }
     if (order.status === 0) {
       verifyOrder();
@@ -57,15 +57,12 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     } else if (order.status === 1) {
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
-        return;
-      }
+      } else toastStatusError(order.approvalDate, 1);
     } else if (order.status === 2) {
-      if (!(remSec(order.preparationDate) > 0)) {
+      if (!(remSec(order.preparationDate, 10) > 0)) {
         deliverOrder();
-        return;
-      }
+      } else toastStatusError(order.preparationDate, 10);
     }
-    toastStatusError(order.preparationDate, 10);
   }
 
   const isDisabled =

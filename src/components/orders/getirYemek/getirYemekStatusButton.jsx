@@ -48,27 +48,23 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
   }
 
   function handleClick() {
-    function remSec(date) {
-      return compareWithCurrentDateTime(date, null, 10).remainingSeconds;
+    function remSec(date, min = 1) {
+      return compareWithCurrentDateTime(date, null, min).remainingSeconds;
     }
 
     if (orderStat.id === 350) {
       verifyOrder();
-      return;
     }
     if (orderStat.id === 700) {
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
-        return;
-      }
+      } else toastStatusError(order.approvalDate, 1);
     }
     if (nextId === 900) {
-      if (!(remSec(order.preparationDate) > 0)) {
+      if (!(remSec(order.preparationDate, 10) > 0)) {
         deliverOrder();
-        return;
-      }
+      } else toastStatusError(order.preparationDate, 10);
     }
-    toastStatusError(order.preparationDate, 10);
   }
 
   const disabled =

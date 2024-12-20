@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
-// import { useSignalR } from "../../../context/SignalRContext";
 import { useFirestore } from "../../../context/FirestoreContext";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 

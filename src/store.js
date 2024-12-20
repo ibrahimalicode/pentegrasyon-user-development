@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 
 // INDEX
 import authSlice from "./redux/auth";
@@ -18,34 +18,25 @@ import integrationInformationsSlice from "./redux/informations";
 import yemekSepetiSlice from "./redux/yemekSepeti";
 import paymentsSlice from "./redux/payments";
 
-const appReducer = combineReducers({
-  auth: authSlice,
-  user: userSlice,
-  restaurants: restaurantsSlice,
-  licenses: licensesSlice,
-  licensePackages: licensePackagesSlice,
-  data: dataSlice,
-  generalVars: generalVariablesSlice,
-  getContext: getContextSlice,
-  cart: cartSlice,
-  orders: ordersSlice,
-  getirYemek: getirYemekSlice,
-  yemekSepeti: yemekSepetiSlice,
-  dashboard: dashboardSlice,
-  couriers: couriersSlice,
-  payments: paymentsSlice,
-  integrationInfos: integrationInformationsSlice,
-});
-
-const rootReducer = (state, action) => {
-  if (action.type === "LOGOUT") {
-    state = undefined;
-  }
-  return appReducer(state, action);
-};
-
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    auth: authSlice,
+    user: userSlice,
+    restaurants: restaurantsSlice,
+    licenses: licensesSlice,
+    licensePackages: licensePackagesSlice,
+    data: dataSlice,
+    generalVars: generalVariablesSlice,
+    getContext: getContextSlice,
+    cart: cartSlice,
+    orders: ordersSlice,
+    getirYemek: getirYemekSlice,
+    yemekSepeti: yemekSepetiSlice,
+    dashboard: dashboardSlice,
+    couriers: couriersSlice,
+    payments: paymentsSlice,
+    integrationInfos: integrationInformationsSlice,
+  },
 });
 
 export default store;

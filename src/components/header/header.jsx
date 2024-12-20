@@ -35,7 +35,7 @@ function Header({ openSidebar, setOpenSidebar }) {
     }
     if (success) {
       clearAuth();
-      navigate("/login");
+      window.location.href = "/login";
       dispatch({ type: "LOGOUT" });
       dispatch(resetLogoutState());
       toast.dismiss(toastId.current);

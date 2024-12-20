@@ -12,7 +12,7 @@ const EditUserInvoiceById = ({
 }) => {
   return (
     <>
-      <div className="flex gap-4">
+      <div className="flex gap-4 sm:w-1/2">
         <CustomInput
           required={true}
           label="İsim/Ünvan"

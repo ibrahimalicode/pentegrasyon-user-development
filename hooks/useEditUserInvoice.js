@@ -211,8 +211,8 @@ export const useEditUserInvoice = (dispatcher, user) => {
       });
     } else if (userInvoice.district?.label && userInvoice.city?.label) {
       if (cities.length > 0 && districts.length > 0) {
-        const cityLabel = (userInvoice.city?.label).toLowerCase();
-        const districtLabel = (userInvoice.district?.label).toLowerCase();
+        const cityLabel = userInvoice?.city?.label?.toLowerCase();
+        const districtLabel = userInvoice?.district?.label?.toLowerCase();
 
         const cityId = cities.filter(
           (city) => city.label.toLowerCase() === cityLabel
@@ -256,7 +256,8 @@ export const useEditUserInvoice = (dispatcher, user) => {
     }
   }, [neighsSuccess]);
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e?.preventDefault();
     const equalData = isEqual(userInvoiceBefore, userInvoice);
     if (!equalData && user) {
       if (userInvoiceBefore) {

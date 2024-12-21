@@ -20,7 +20,6 @@ const CouriersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
               <th className="pl-4 font-normal">Ad</th>
               <th className="font-normal">Tel No.</th>
               <th className="font-normal">E-Posta</th>
-              <th className="font-normal">Restoran</th>
               <th className="font-normal">Teslimata</th>
               <th className="font-normal">Giriş Kodu</th>
               <th className="font-normal text-center">Durum</th>
@@ -44,9 +43,6 @@ const CouriersTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {data.email}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.restaurantName}
                 </td>
                 <td
                   className={`whitespace-nowrap text-[--black-2] font-normal ${

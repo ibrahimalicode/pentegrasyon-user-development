@@ -11,10 +11,6 @@ import {
   updateCourier,
 } from "../../../redux/couriers/updateCouriersSlice";
 import {
-  getRestaurants,
-  resetGetRestaurants,
-} from "../../../redux/restaurants/getRestaurantsSlice";
-import {
   generateLoginCode,
   resetgenerateLoginCode,
 } from "../../../redux/couriers/generateLoginCodeSlice";
@@ -31,8 +27,8 @@ import CustomPhoneInput from "../../common/customPhoneInput";
 import { CancelI, EditI, TransferI } from "../../../assets/icon";
 
 //UTILS
+import { formatToPrice } from "../../../utils/utils";
 import compensationTypes from "../../../enums/compensationTypes";
-import { formatSelectorData, formatToPrice } from "../../../utils/utils";
 
 const EditCourier = ({ courier, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -71,8 +67,6 @@ function EditCourierPopup({ onSuccess, courier }) {
     (state) => state.couriers.generateCode
   );
 
-  const [restaurantsData, setRestaurantsData] = useState([]);
-
   const {
     id,
     username,
@@ -85,9 +79,7 @@ function EditCourierPopup({ onSuccess, courier }) {
 
   const [courierData, setCourierData] = useState({
     courierId: id,
-    restaurant: null,
     compensation: compensationTypes[compensationTypeId],
-    restaurantId: "",
     username: username,
     phoneNumber: "9" + phoneNumber,
     email: email,
@@ -100,9 +92,7 @@ function EditCourierPopup({ onSuccess, courier }) {
 
   const [courierDataBefore, setCourierDataBefore] = useState({
     courierId: id,
-    restaurant: null,
     compensation: compensationTypes[compensationTypeId],
-    restaurantId: "",
     username: username,
     phoneNumber: "9" + phoneNumber,
     email: email,
@@ -133,34 +123,6 @@ function EditCourierPopup({ onSuccess, courier }) {
       })
     );
   }
-
-  //GET RESTAURANTS
-  useEffect(() => {
-    if (!restaurantsData.length) {
-      dispatch(getRestaurants({}));
-    }
-  }, [restaurantsData]);
-
-  //SET RESTAURANTS
-  useEffect(() => {
-    if (restaurants) {
-      setRestaurantsData(formatSelectorData(restaurants.data, false));
-      const currentRestaurant = restaurants.data.filter(
-        (r) => r.id === courier.restaurantId
-      )[0];
-      if (currentRestaurant) {
-        const { id, name } = currentRestaurant;
-        const updateData = {
-          ...courierData,
-          restaurant: { value: id, label: name, id: id },
-          restaurantId: id,
-        };
-        setCourierData(updateData);
-        setCourierDataBefore(updateData);
-      }
-      dispatch(resetGetRestaurants());
-    }
-  }, [restaurants]);
 
   // TOAST FOR ADD
   useEffect(() => {
@@ -208,29 +170,7 @@ function EditCourierPopup({ onSuccess, courier }) {
           </div>
           <h1 className="self-center text-2xl font-bold">Kurye Düzenle</h1>
           <form onSubmit={handleSubmit}>
-            <div className="flex items-end max-sm:flex-col sm:gap-4">
-              <CustomSelect
-                required
-                label="Restoran"
-                style={{ padding: "1px 0px" }}
-                className="text-sm"
-                value={
-                  courierData.restaurant
-                    ? courierData.restaurant
-                    : { value: null, label: "Restoran seç" }
-                }
-                options={restaurantsData}
-                onChange={(selectedOption) => {
-                  setCourierData((prev) => {
-                    return {
-                      ...prev,
-                      restaurant: selectedOption,
-                      restaurantId: selectedOption.id,
-                    };
-                  });
-                }}
-              />
-
+            <div className="flex items-end max-sm:flex-col sm:gap-4 sm:w-1/2">
               <CustomInput
                 required
                 label="Ad"
@@ -255,6 +195,7 @@ function EditCourierPopup({ onSuccess, courier }) {
                 label="Telefon"
                 placeholder="Telefon"
                 className="py-[.45rem] text-sm"
+                className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={courierData.phoneNumber}
                 onChange={(phone) => {
                   setCourierData((prev) => {

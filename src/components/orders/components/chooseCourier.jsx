@@ -44,7 +44,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
     (state) => state.orders.updateCourier
   );
   const {
-    compensationData,
+    compensationData: compensation,
     error: compensationError,
     loading: compensationLoading,
   } = useSelector((state) => state.orders.getOrderCompensation);
@@ -55,7 +55,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
   const [restaurantCouriers, setRestaurantCouriers] = useState(null);
   const [selectedCourier, setSelectedCourier] = useState(null);
 
-  const [compensationType, setCompensationType] = useState(null);
+  const [compensationData, setCompensationData] = useState(null);
   const [compensationRate, setCompensationRate] = useState("");
   const [currentCompensation, setCurrentCompensation] = useState(null);
 
@@ -75,7 +75,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
         marketplaceId: order.marketplaceId,
         courierService: selectedService.licenseTypeId,
         courierId: selectedCourier.id,
-        courierCompensationType: compensationType.id,
+        courierCompensationType: compensationData.id,
         compensationRate,
       })
     );
@@ -124,9 +124,9 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
       const couriersForSelector = formatSelectorData(couriers);
       setRestaurantCouriers(couriersForSelector);
 
-      if (order.courier?.id && !selectedCourier?.id) {
+      if (order?.courierId && !selectedCourier?.id) {
         const currentCourier = couriersForSelector.filter(
-          (C) => C.id == order.courier.id
+          (C) => C.id == order?.courierId
         );
         if (currentCourier.length) setSelectedCourier(currentCourier[0]);
       }
@@ -140,15 +140,24 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
 
   //SET COMPENSATION
   useEffect(() => {
-    if (compensationData) {
-      console.log(compensationData);
-      setCurrentCompensation(compensationData);
+    if (compensation) {
+      const data = compensationTypes.filter(
+        (C) => C.id == compensation.compensationType
+      )[0];
+      const formattedData = {
+        label: data.label,
+        value: data.value,
+        id: data.id,
+      };
+      setCompensationData(formattedData);
+      setCurrentCompensation(formattedData);
+      setCompensationRate(compensation.rate);
       dispatch(resetGetOrderCompensation());
     }
     if (compensationError) {
       dispatch(resetGetOrderCompensation());
     }
-  }, [compensationData, compensationError]);
+  }, [compensation, compensationError]);
 
   // SET SERVICES(LICENSES)
   useEffect(() => {
@@ -197,6 +206,8 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
     : order?.customer?.firstName
     ? order?.customer?.firstName
     : "";
+
+  // console.log(currentCompensation);
 
   return (
     <main className="bg-[--white-1] rounded-md">
@@ -255,7 +266,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
                 <h1 className="text-center text-2xl font-bold mt-8">
                   Kurye Seçin
                 </h1>
-                <div>
+                <div className="flex gap-2">
                   {restaurantCouriers?.length ? (
                     restaurantCouriers.map((R) => (
                       <button
@@ -289,63 +300,31 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
 
                   <div className="flex flex-wrap justify-center w-full">
                     <div className="flex flex-wrap gap-1 mr-3 mt-3">
-                      {currentCompensation ? (
-                        <div>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setCompensationType(currentCompensation)
-                            }
-                            className={`border flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3] ${
-                              currentCompensation.id == compensationType?.id &&
-                              "border-[--green-1] bg-[--status-green] text-[--green-1]"
-                            }`}
-                          >
-                            Mevcut:{" "}
-                            <span className="ml-2">
-                              {currentCompensation.label}₺
-                            </span>
-                          </button>
-                          {() => {
-                            const elmnt = compensationTypes.filter(
-                              (c) => c.id !== currentCompensation.id
-                            )[0];
-                            return (
-                              <button
-                                type="button"
-                                onClick={() => setCompensationType(elmnt)}
-                                className={`border flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3] ${
-                                  elmnt?.id == compensationType?.id &&
-                                  "border-[--green-1] bg-[--status-green] text-[--green-1]"
-                                }`}
-                              >
-                                {elmnt?.label}
-                              </button>
-                            );
-                          }}
+                      {currentCompensation && (
+                        <div className="flex">
+                          {compensationTypes.map((C) => (
+                            <button
+                              key={C.id}
+                              type="button"
+                              onClick={() => setCompensationData(C)}
+                              className={`border flex whitespace-nowrap mr-1 items-center px-3 py-2.5 rounded-sm bg-[--light-3] ${
+                                C.id == compensationData?.id &&
+                                "border-[--green-1] bg-[--status-green] text-[--green-1]"
+                              }`}
+                            >
+                              {currentCompensation.id === C.id && " Mevcut:"}{" "}
+                              <span className="ml-2">{C.label}</span>
+                            </button>
+                          ))}
                         </div>
-                      ) : compensationTypes?.length ? (
-                        compensationTypes.map((C) => (
-                          <button
-                            key={C.id}
-                            type="button"
-                            onClick={() => setCompensationType(C)}
-                            className={`border flex whitespace-nowrap mr-1 items-center px-3 rounded-sm bg-[--light-3] ${
-                              C.id == compensationType?.id &&
-                              "border-[--green-1] bg-[--status-green] text-[--green-1]"
-                            }`}
-                          >
-                            {C.label}
-                          </button>
-                        ))
-                      ) : null}
+                      )}
                       <CustomInput
                         type="number"
                         className="mt-[0] sm:mt-[0] text-[--red-1]"
                         className2="max-w-[64px] mt-[0] sm:mt-[0] justify-end"
                         value={compensationRate}
-                        disabled={!compensationType?.value}
-                        required={compensationType?.value ? true : false}
+                        disabled={!compensationData?.value}
+                        required={compensationData?.value ? true : false}
                         onChange={(e) => setCompensationRate(e)}
                       />
                       <p className="flex items-center text-[--red-1]">₺</p>
@@ -369,8 +348,10 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
                         <p>
                           <span className="font-bold">Tutar: </span>
                           <span className="text-[--red-1]">
-                            {compensationType?.id === 1 &&
-                              `${compensationRate * routeData?.distance} ₺`}
+                            {compensationData?.id === 1
+                              ? compensationRate * routeData?.distance
+                              : compensationRate}{" "}
+                            ₺
                           </span>
                         </p>
                       </div>

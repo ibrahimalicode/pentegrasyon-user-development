@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
 import TableSkeleton from "../../common/tableSkeleton";
-import compensationTypes from "../../../enums/compensationTypes";
 
 //CONT
 import { usePopup } from "../../../context/PopupContext";
@@ -19,10 +18,6 @@ import {
 import CouriersTable from "../couriersTable";
 import AddCourier from "../actions/addCourier";
 import CustomPagination from "../../common/pagination";
-import {
-  getRestaurantsMap,
-  resetGetRestaurantsMap,
-} from "../../../redux/restaurants/getRestaurantsMapSlice";
 import CustomSelect from "../../common/customSelector";
 
 const CouriersPage = () => {
@@ -33,12 +28,6 @@ const CouriersPage = () => {
   const { loading, success, error, couriers } = useSelector(
     (state) => state.couriers.get
   );
-
-  const {
-    loading: restaurantsLoading,
-    error: restaurantsError,
-    entities,
-  } = useSelector((state) => state.restaurants.getRestaurantsMap);
 
   const [searchVal, setSearchVal] = useState("");
   const [filter, setFilter] = useState({
@@ -120,22 +109,11 @@ const CouriersPage = () => {
   useEffect(() => {
     if (error) dispatch(resetgetCouriersState());
     if (success) {
+      setCouriersData(couriers.data);
       setTotalItems(couriers.totalCount);
       dispatch(resetgetCouriersState());
-      dispatch(getRestaurantsMap(couriers.data));
     }
   }, [success, error, couriers]);
-
-  // TOAST GET AND SET RESTAURANTS
-  useEffect(() => {
-    if (restaurantsError) {
-      dispatch(resetGetRestaurantsMap());
-    }
-    if (entities) {
-      setCouriersData(entities);
-      dispatch(resetGetRestaurantsMap());
-    }
-  }, [entities, restaurantsError, couriers]);
 
   //HIDE POPUP
   useEffect(() => {

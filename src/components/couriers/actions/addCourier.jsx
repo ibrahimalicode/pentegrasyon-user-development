@@ -18,17 +18,13 @@ import {
   resetaddCourier,
 } from "../../../redux/couriers/addCourierSlice";
 import {
-  getRestaurants,
-  resetGetRestaurants,
-} from "../../../redux/restaurants/getRestaurantsSlice";
-import {
   generateLoginCode,
   resetgenerateLoginCode,
 } from "../../../redux/couriers/generateLoginCodeSlice";
 
 //UTILS
 import compensationTypes from "../../../enums/compensationTypes";
-import { formatSelectorData, formatToPrice } from "../../../utils/utils";
+import { formatToPrice } from "../../../utils/utils";
 
 const AddCourier = ({ onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -58,20 +54,14 @@ function AddCourierPopup({ onSuccess }) {
   const { loading, success, error } = useSelector(
     (state) => state.couriers.add
   );
-  const { restaurants } = useSelector(
-    (state) => state.restaurants.getRestaurants
-  );
 
   const { loading: codeLoading, code } = useSelector(
     (state) => state.couriers.generateCode
   );
 
   const { setPopupContent } = usePopup();
-  const [restaurantsData, setRestaurantsData] = useState([]);
   const [courierData, setCourierData] = useState({
-    restaurant: null,
     compensation: null,
-    restaurantId: "",
     username: "",
     phoneNumber: "",
     email: "",
@@ -94,21 +84,6 @@ function AddCourierPopup({ onSuccess }) {
       })
     );
   }
-
-  //GET RESTAURANTS
-  useEffect(() => {
-    if (!restaurantsData.length) {
-      dispatch(getRestaurants({}));
-    }
-  }, [restaurantsData]);
-
-  //SET RESTAURANTS
-  useEffect(() => {
-    if (restaurants) {
-      setRestaurantsData(formatSelectorData(restaurants.data, false));
-      dispatch(resetGetRestaurants());
-    }
-  }, [restaurants]);
 
   // TOAST FOR ADD
   useEffect(() => {
@@ -156,29 +131,7 @@ function AddCourierPopup({ onSuccess }) {
           </div>
           <h1 className="self-center text-2xl font-bold">Kurye Ekle</h1>
           <form onSubmit={handleSubmit}>
-            <div className="flex max-sm:flex-col sm:gap-4 items-end">
-              <CustomSelect
-                required
-                label="Restoran"
-                style={{ padding: "1px 0px" }}
-                className="text-sm"
-                value={
-                  courierData.restaurant
-                    ? courierData.restaurant
-                    : { value: null, label: "Restoran seç" }
-                }
-                options={restaurantsData}
-                onChange={(selectedOption) => {
-                  setCourierData((prev) => {
-                    return {
-                      ...prev,
-                      restaurant: selectedOption,
-                      restaurantId: selectedOption.id,
-                    };
-                  });
-                }}
-              />
-
+            <div className="flex max-sm:flex-col sm:gap-4 items-end sm:w-1/2">
               <CustomInput
                 required
                 label="Ad"
@@ -203,6 +156,7 @@ function AddCourierPopup({ onSuccess }) {
                 label="Telefon"
                 placeholder="Telefon"
                 className="py-[.45rem] text-sm"
+                className2="mt-[.5rem] sm:mt-[.5rem]"
                 value={courierData.phoneNumber}
                 onChange={(phone) => {
                   setCourierData((prev) => {

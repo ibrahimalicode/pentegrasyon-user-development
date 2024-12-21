@@ -46,17 +46,16 @@ const getOrderCompensationSlice = createSlice({
 });
 
 export const getOrderCompensation = createAsyncThunk(
-  "Tickets/GetTicGetTicketCourierCompensationAssignmentkets",
+  "Tickets/GetTicGetTicketCourierCompensationAssignmentket",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.get(
         `${baseURL}Tickets/GetTicketCourierCompensationAssignment`,
-        { ...data },
         { params: { ...data } }
       );
 
       // console.log(res.data);
-      return res.data;
+      return res.data.data;
     } catch (err) {
       // console.log(err);
       const errorMessage = err.message;

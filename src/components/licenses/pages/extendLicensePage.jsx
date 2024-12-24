@@ -116,7 +116,7 @@ const ExtendLicensePage = () => {
 
           <div className="w-full self-center">
             <div
-              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow-x-clip ${
+              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
               style={{
@@ -131,6 +131,7 @@ const ExtendLicensePage = () => {
                   measure="rem"
                   component={[
                     <FirstStep
+                      key={0}
                       restaurantData={restaurantData}
                       setRestaurantData={setRestaurantData}
                       licensePackageData={licensePackageData}
@@ -141,6 +142,7 @@ const ExtendLicensePage = () => {
                       actionType={actionType}
                     />,
                     <SecondStep
+                      key={1}
                       step={step}
                       setStep={setStep}
                       restaurantData={restaurantData}
@@ -148,10 +150,15 @@ const ExtendLicensePage = () => {
                       licenseData={licensePackageData}
                     />,
                     <ThirdStep
+                      key={2}
                       setStep={setStep}
                       setPaymentStatus={setPaymentStatus}
                     />,
-                    <FourthStep step={step} paymentStatus={paymentStatus} />,
+                    <FourthStep
+                      key={3}
+                      step={step}
+                      paymentStatus={paymentStatus}
+                    />,
                   ]}
                 />
               </div>

@@ -148,6 +148,7 @@ const AddLicensePage = () => {
                   measure="%"
                   component={[
                     <FirstStep
+                      key={0}
                       restaurantData={restaurantData}
                       setRestaurantData={setRestaurantData}
                       licensePackageData={licensePackageData}
@@ -160,6 +161,7 @@ const AddLicensePage = () => {
                       licenses={licenses}
                     />,
                     <SecondStep
+                      key={1}
                       step={step}
                       setStep={setStep}
                       paymentMethod={paymentMethod}
@@ -167,6 +169,7 @@ const AddLicensePage = () => {
                       restaurantData={restaurantData}
                     />,
                     <ThirdStep
+                      key={2}
                       step={step}
                       setStep={setStep}
                       restaurantData={restaurantData}
@@ -174,10 +177,15 @@ const AddLicensePage = () => {
                       licenseData={licensePackageData}
                     />,
                     <FourthStep
+                      key={3}
                       setStep={setStep}
                       setPaymentStatus={setPaymentStatus}
                     />,
-                    <FifthStep step={step} paymentStatus={paymentStatus} />,
+                    <FifthStep
+                      key={4}
+                      step={step}
+                      paymentStatus={paymentStatus}
+                    />,
                   ]}
                 />
               </div>

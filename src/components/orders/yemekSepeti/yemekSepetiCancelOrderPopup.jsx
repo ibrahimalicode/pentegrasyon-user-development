@@ -82,7 +82,7 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
               optionsData.map((opt) => (
                 <button
                   type="button"
-                  key={opt.value}
+                  key={opt.reason}
                   onClick={() => {
                     setSelectedData(opt);
                     setCancelOrderData(() => {
@@ -108,7 +108,8 @@ const YemekSepetiCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
         <div>
           <CustomInput
             label="İptal Notu"
-            value={cancelOrderData.cancelNote}
+            required
+            value={cancelOrderData?.cancelNote || ""}
             onChange={(e) =>
               setCancelOrderData((pre) => {
                 return {

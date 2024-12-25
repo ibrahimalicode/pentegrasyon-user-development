@@ -11,6 +11,7 @@ import { usePopup } from "../../../context/PopupContext";
 import toastStatusError from "../components/toastOrderStatError";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
+import GlowButton from "../components/glowButton";
 
 const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   const ticketId = order.id;
@@ -94,7 +95,9 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
-  return (
+  return order.status == 0 ? (
+    <GlowButton text="Onayla" onClick={handleClick} />
+  ) : (
     <button
       disabled={isDisabled}
       onClick={handleClick}

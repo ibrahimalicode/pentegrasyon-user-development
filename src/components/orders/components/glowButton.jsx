@@ -1,4 +1,4 @@
-const Test = () => {
+const GlowButton = ({ text, onClick }) => {
   const buttonAnimations = {
     base: "w-24 py-2 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed relative overflow-hidden bg-gradient-to-r from-green-500 to-green-600",
     hover: "hover:from-green-600 hover:to-green-700",
@@ -7,7 +7,7 @@ const Test = () => {
   };
 
   return (
-    <main className="mt-60 flex justify-center">
+    <>
       <style>
         {`
           @keyframes parlama {
@@ -53,13 +53,14 @@ const Test = () => {
         `}
       </style>
       <button
+        onClick={onClick}
         className={`${buttonAnimations.base} text-white ${buttonAnimations.animation} ${buttonAnimations.hover} shadow-lg shadow-green-500/30 transition-all duration-300`}
       >
-        <p className="font-bold yaziRengiAnimation">Onayla</p>
+        <p className="font-bold yaziRengiAnimation">{text}</p>
         <div className={buttonAnimations.shine} />
       </button>
-    </main>
+    </>
   );
 };
 
-export default Test;
+export default GlowButton;

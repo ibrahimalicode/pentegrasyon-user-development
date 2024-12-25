@@ -11,6 +11,7 @@ import toastStatusError from "../components/toastOrderStatError";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
 import GetirYemekOrderErrorPopup from "./getirYemekOrderErrorPopup";
 import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
+import GlowButton from "../components/glowButton";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
@@ -94,24 +95,24 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
-  return (
-    <>
-      <button
-        disabled={disabled}
-        onClick={handleClick}
-        className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed ${
-          disabled ? btnClass : "after:translate-x-0"
-        }`}
-        style={{
-          backgroundColor: `var(${orderStat?.bg})`,
-          color: `var(${orderStat?.color})`,
-          borderColor: `var(${orderStat?.color})`,
-          "--after-bg": orderStat?.transColor,
-        }}
-      >
-        <span className="relative z-10">{orderStat.text}</span>
-      </button>
-    </>
+  return order.status === 400 || order.status === 325 ? (
+    <GlowButton text="Onayla" onClick={handleClick} />
+  ) : (
+    <button
+      disabled={disabled}
+      onClick={handleClick}
+      className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed ${
+        disabled ? btnClass : "after:translate-x-0"
+      }`}
+      style={{
+        backgroundColor: `var(${orderStat?.bg})`,
+        color: `var(${orderStat?.color})`,
+        borderColor: `var(${orderStat?.color})`,
+        "--after-bg": orderStat?.transColor,
+      }}
+    >
+      <span className="relative z-10">{orderStat.text}</span>
+    </button>
   );
 }
 

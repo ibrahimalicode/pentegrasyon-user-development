@@ -111,6 +111,16 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
       toastId.current = toast.loading("İşleniyor 🤩...");
     }
     if (error) {
+      let getirError;
+      try {
+        getirError = JSON.parse(error?.data)?.message;
+      } catch (err) {
+        /*  */
+      }
+      if (getirError) {
+        toast.dismiss();
+        toast.error(getirError);
+      }
       dispatch(resetAddIntegrationInformation());
     } else if (success) {
       toast.dismiss(toastId.current);
@@ -127,6 +137,16 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
       toastId.current = toast.loading("İşleniyor 🤩...");
     }
     if (updateErr) {
+      let getirError;
+      try {
+        getirError = JSON.parse(updateErr?.data)?.message;
+      } catch (err) {
+        /*  */
+      }
+      if (getirError) {
+        toast.dismiss();
+        toast.error(getirError);
+      }
       dispatch(resetUpdateIntegrationInformation());
     } else if (updateSucc) {
       toast.dismiss(toastId.current);
@@ -136,7 +156,6 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
       dispatch(resetUpdateIntegrationInformation());
     }
   }, [updateLoad, updateSucc, updateErr]);
-  console.log(data);
 
   return (
     <div className="flex flex-col items-center w-full text-base">
@@ -159,7 +178,8 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
 
         <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
           <form onSubmit={handleSubmit}>
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div className="flex gap-2">
+              <p className="w-2 h-3"></p>
               <CustomInput
                 required
                 label="Restauran Secret Key"
@@ -178,7 +198,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
               />
             </div>
             <div className="flex gap-2 mt-6">
-              <p className="flex justify-center items-center -ml-5">%</p>
+              <p className="flex justify-center items-center w-2">%</p>
               <CustomInput
                 type="number"
                 label="Komisyon Oranı"
@@ -204,7 +224,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
                 className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md"
                 type="submit"
               >
-                {data.isSettingsAdded ? "Düzenle" : "Ekle"}
+                {data.isSettingsAdded ? "Kaydet" : "Ekle"}
               </button>
             </div>
           </form>

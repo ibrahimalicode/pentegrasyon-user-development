@@ -295,7 +295,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
 
                 <main className="text-sm">
                   <h1 className="text-center text-2xl font-bold mt-8">
-                    Hadeiş Şekli
+                    Hakediş Şekli
                   </h1>
 
                   <div className="flex flex-wrap justify-center w-full">

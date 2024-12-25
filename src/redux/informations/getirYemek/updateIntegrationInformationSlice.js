@@ -59,7 +59,10 @@ export const updateIntegrationInformation = createAsyncThunk(
       return res.data;
     } catch (err) {
       const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
+      return rejectWithValue({
+        message: errorMessage,
+        data: err?.response?.data?.data,
+      });
     }
   }
 );

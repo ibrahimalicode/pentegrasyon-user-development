@@ -10,7 +10,7 @@ import { RouteInfo } from "../components/googleRoute";
 import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
-import { formatSelectorData } from "../../../utils/utils";
+import { formatOrders, formatSelectorData } from "../../../utils/utils";
 import compensationTypes from "../../../enums/compensationTypes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -29,7 +29,7 @@ import {
 } from "../../../redux/orders/getOrderCompensationSlice";
 import { getAvailableCourierServices } from "../../../redux/couriers/getAvailableCourierServicesSlice";
 
-const ChooseCourier = ({ order, Address, locatioData }) => {
+const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
@@ -98,9 +98,16 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
       toastId.current = toast.loading("İşleniyor...");
     }
     if (success) {
-      setPopupContent(null);
       toast.dismiss(toastId.current);
       toast.success("Başarıyla güncelendi.");
+      setOrdersData((prev) => {
+        const outCurrentOrder = prev.filter((O) => O.id !== order.id);
+        return formatOrders([
+          ...outCurrentOrder,
+          { ...order, courierId: selectedCourier.id },
+        ]);
+      });
+      setPopupContent(null);
       dispatch(resetupdateOrderCourier());
     }
     if (error) {

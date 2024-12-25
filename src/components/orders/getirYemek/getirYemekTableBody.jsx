@@ -125,6 +125,7 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
             setPopupContent(
               <ChooseCourier
                 order={order}
+                setOrdersData={setOrdersData}
                 Address={GetirYemekAddress}
                 locatioData={{
                   lat1: order.courier.latitude,

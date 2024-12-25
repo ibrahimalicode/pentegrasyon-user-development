@@ -136,7 +136,11 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
         <td
           onClick={() =>
             setPopupContent(
-              <ChooseCourier order={order} Address={YemekSepetiAddress} />
+              <ChooseCourier
+                order={order}
+                setOrdersData={setOrdersData}
+                Address={YemekSepetiAddress}
+              />
             )
           }
           className="whitespace-nowrap"

@@ -83,7 +83,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
 
   function formatCompensation(inData) {
     const data = compensationTypes.filter(
-      (C) => C.id == inData.compensationType
+      (C) => C.id == inData.compensationTypeId
     )[0];
     return {
       label: data.label,

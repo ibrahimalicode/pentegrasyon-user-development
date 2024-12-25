@@ -77,8 +77,11 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
         <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
           {order.confirmationId}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className="whitespace-nowrap relative">
           {order.marketplaceTicketRestaurantName}
+          <span className="absolute top-2 left-0 bg-[--status-green] border border-[--green-1] py-1.5 px-3 rounded-md opacity-0 hover:opacity-100">
+            {order.restaurantName}
+          </span>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           <p>{isCheckoutToday(order.checkoutDate)}</p>

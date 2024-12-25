@@ -81,6 +81,17 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
     );
   }
 
+  function formatCompensation(inData) {
+    const data = compensationTypes.filter(
+      (C) => C.id == inData.compensationType
+    )[0];
+    return {
+      label: data.label,
+      value: data.value,
+      id: data.id,
+    };
+  }
+
   // TOAST FOR UPDATE
   useEffect(() => {
     if (loading) {
@@ -98,7 +109,7 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
     }
   }, [loading, error, success]);
 
-  // GET COURIERS AND COURIER LICENSES
+  // GET COURIERS, COURIER LICENSES AND COMPENSATION
   useEffect(() => {
     if (!restaurantCouriers && selectedService?.id === 0) {
       dispatch(getAvailableCouriers({ restaurantId: order.restaurantId }));
@@ -141,16 +152,8 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
   //SET COMPENSATION
   useEffect(() => {
     if (compensation) {
-      const data = compensationTypes.filter(
-        (C) => C.id == compensation.compensationType
-      )[0];
-      const formattedData = {
-        label: data.label,
-        value: data.value,
-        id: data.id,
-      };
-      setCompensationData(formattedData);
-      setCurrentCompensation(formattedData);
+      setCompensationData(formatCompensation(compensation));
+      setCurrentCompensation(formatCompensation(compensation));
       setCompensationRate(compensation.rate);
       dispatch(resetGetOrderCompensation());
     }
@@ -208,9 +211,10 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
     : "";
 
   // console.log(currentCompensation);
+  console.log(restaurantCouriers);
 
   return (
-    <main className="bg-[--white-1] rounded-md">
+    <main className="bg-[--white-1] rounded-md overflow-clip">
       <div className="flex justify-between p-3 rounded-t-md relative">
         <span
           className="absolute top-0 left-0 w-full h-full opacity-60 z-10"
@@ -272,7 +276,12 @@ const ChooseCourier = ({ order, Address, locatioData }) => {
                       <button
                         key={R.id}
                         type="button"
-                        onClick={() => setSelectedCourier(R)}
+                        onClick={() => {
+                          setSelectedCourier(R);
+                          setCurrentCompensation(formatCompensation(R));
+                          setCompensationData(formatCompensation(R));
+                          setCompensationRate(R.compensationRate);
+                        }}
                         className={`border rounded-sm px-3 py-1.5 ${
                           R.id == selectedCourier?.id
                             ? "bg-[--status-green] text-[--green-1] border border-[--green-1]"

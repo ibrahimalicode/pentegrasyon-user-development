@@ -218,6 +218,7 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
   } else {
     outData = sortedData.map((ent) => {
       return {
+        ...ent,
         value: ent.id,
         label: ent?.name
           ? ent.name

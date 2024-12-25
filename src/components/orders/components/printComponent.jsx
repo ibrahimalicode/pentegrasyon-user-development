@@ -4,7 +4,11 @@ import { PrinterI } from "../../../assets/icon";
 
 const PrintComponent = ({ component }) => {
   const contentRef = useRef(component);
-  const handlePrint = useReactToPrint({ contentRef });
+  // const handlePrint = useReactToPrint({ contentRef });
+  const handlePrint = useReactToPrint({
+    content: () => contentRef.current,
+    onAfterPrint: () => console.log("------------ Print success! ------------"),
+  });
 
   return (
     <main>

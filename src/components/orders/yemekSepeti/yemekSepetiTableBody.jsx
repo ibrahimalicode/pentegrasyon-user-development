@@ -140,6 +140,12 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
                 order={order}
                 setOrdersData={setOrdersData}
                 Address={YemekSepetiAddress}
+                locatioData={{
+                  lat1: order.restaurantLatitude,
+                  lng1: order.restaurantLongitude,
+                  lat2: order.customer.latitude,
+                  lng2: order.customer.longitude,
+                }}
               />
             )
           }

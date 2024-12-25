@@ -128,8 +128,8 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
                 setOrdersData={setOrdersData}
                 Address={GetirYemekAddress}
                 locatioData={{
-                  lat1: order.courier.latitude,
-                  lng1: order.courier.longitude,
+                  lat1: order.restaurantLatitude,
+                  lng1: order.restaurantLongitude,
                   lat2: order.client.latitude,
                   lng2: order.client.longitude,
                 }}

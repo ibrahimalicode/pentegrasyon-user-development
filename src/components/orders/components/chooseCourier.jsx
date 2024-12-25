@@ -28,6 +28,7 @@ import {
   resetGetOrderCompensation,
 } from "../../../redux/orders/getOrderCompensationSlice";
 import { getAvailableCourierServices } from "../../../redux/couriers/getAvailableCourierServicesSlice";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
   const toastId = useRef();
@@ -243,8 +244,8 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
             </p>
           )}
           <p>
-            <span className="font-bold text-[--black-1]">Platform:</span> Getir
-            Yemek
+            <span className="font-bold text-[--black-1]">Platform:</span>{" "}
+            {MarketPalceIds[order.marketplaceId].label}
           </p>
         </div>
       </div>

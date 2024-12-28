@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { usePopup } from "../../context/PopupContext";
-import { BellI, SettingsI, MenuI } from "../../assets/icon";
+import { BellI, SettingsI, MenuI, InfoI, CloseI } from "../../assets/icon";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
@@ -68,22 +68,28 @@ function Header({ openSidebar, setOpenSidebar }) {
   }, [headerSettingsRef, open]);
 
   useEffect(() => {
+    // toast.dismiss(); //Tesing
+
     function elmnt(t) {
       return (
         <div
-          className={`transition-all max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5 ${
+          className={`transition-all max-w-sm w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip ${
             t.visible ? "opacity-100 scale-1" : "opacity-0 scale-0"
           }`}
         >
-          <div className="flex-1 w-0 p-4">
+          <div className="flex justify-center items-center px-2.5 mr-2 bg-[--status-red] text-[--red-1]">
+            <InfoI />
+          </div>
+          <div className="flex-1 w-0 py-4">
             <div className="flex items-start">
               <div className="flex-shrink-0 pt-0.5"></div>
-              <div className="ml-3 flex-1">
+              <div className="flex-1">
                 <p className="text-sm font-medium text-gray-900">
-                  {newMessage.title}
+                  {/* {newMessage.title} */}Title here
                 </p>
                 <p className="mt-1 text-sm text-gray-500">
-                  {newMessage.content}
+                  {/* {newMessage.content} */} The content here content here
+                  content here content here
                 </p>
               </div>
             </div>
@@ -91,9 +97,9 @@ function Header({ openSidebar, setOpenSidebar }) {
           <div className="flex border-l border-gray-200">
             <button
               onClick={() => toast.dismiss(t.id)}
-              className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-[--red-1] hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              kapat
+              <CloseI />
             </button>
           </div>
         </div>

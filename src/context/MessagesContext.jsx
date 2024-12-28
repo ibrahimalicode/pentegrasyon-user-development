@@ -35,7 +35,7 @@ export const MessagesContextProvider = ({ children }) => {
   }, [messages]);
 
   useEffect(() => {
-    if (newMessage) {
+    if (newMessage && newMessage.platforms == 2) {
       if (messagesData) {
         setMessagesData((prev) => {
           return formatByDate([...prev, newMessage]);

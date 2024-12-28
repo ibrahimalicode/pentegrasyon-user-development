@@ -38,34 +38,41 @@ const MessagesPage = () => {
 
       <main className="flex flex-col gap-4">
         {messagesData &&
-          messagesData.map((_) => (
-            <div
-              key={_.id}
-              className="border-2 border-[--border-1] rounded-md p-2 bg-[--light-1]"
-            >
-              <p className="font-bold pb-1">{_.title}</p>
-              <p className="text-sm pl-3">{_.content}</p>
-              <div className="flex justify-end text-xs items-center gap-1.5">
-                <p>
-                  {formatDateString({
-                    dateString: _.createdDateTime,
-                    hour: true,
-                    min: true,
-                  })}
+          messagesData
+            .filter((M) => M.platforms == 2)
+            .map((_) => (
+              <div
+                key={_.id}
+                className="border-2 border-[--border-1] rounded-md p-2 bg-[--light-1]"
+              >
+                <p className="font-bold pb-1">{_.title}</p>
+                <p
+                  className="text-sm pl-3"
+                  // dangerouslySetInnerHTML={{ __html: _.content }}
+                >
+                  {_.content}
                 </p>
-                <p className="flex justify-end">
-                  {_.isRead ? (
-                    <SeenI className="fill-[--green-1] text-[--green-1]" />
-                  ) : (
-                    <CustomPing
-                      bgColor1="var(--green-1)"
-                      bgColor2="var(--green-1)"
-                    />
-                  )}
-                </p>
+                <div className="flex justify-end text-xs items-center gap-1.5">
+                  <p>
+                    {formatDateString({
+                      dateString: _.createdDateTime,
+                      hour: true,
+                      min: true,
+                    })}
+                  </p>
+                  <p className="flex justify-end">
+                    {_.isRead ? (
+                      <SeenI className="fill-[--green-1] text-[--green-1]" />
+                    ) : (
+                      <CustomPing
+                        bgColor1="var(--green-1)"
+                        bgColor2="var(--green-1)"
+                      />
+                    )}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
       </main>
     </section>
   );

@@ -117,16 +117,18 @@ const FirstStep = ({
     }
 
     if (KDVParameters && success) {
-      const updatedData = licensePackages.data.map((pkg) => {
-        return {
-          ...pkg,
-          price: pkg.userPrice,
-          kdvPrice: getPriceWithKDV(pkg.userPrice, KDVParameters).replace(
-            ".00",
-            ""
-          ),
-        };
-      });
+      const updatedData = licensePackages.data
+        .filter((P) => P.isActive)
+        .map((pkg) => {
+          return {
+            ...pkg,
+            price: pkg.userPrice,
+            kdvPrice: getPriceWithKDV(pkg.userPrice, KDVParameters).replace(
+              ".00",
+              ""
+            ),
+          };
+        });
       setKdvData(KDVParameters);
       setLicensePackagesData(groupedLicensePackages(updatedData));
       dispatch(resetGetLicensePackages());

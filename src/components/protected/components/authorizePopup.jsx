@@ -31,6 +31,7 @@ const AuthorizePopup = ({ setIsAuthorized }) => {
       <h1 className="text-center text-3xl font-bold pt-2">Şifreniz</h1>
       <CustomInput
         value={password}
+        letIcon
         label="Şifrenizi giriniz"
         onChange={(e) => setPassword(e)}
       />

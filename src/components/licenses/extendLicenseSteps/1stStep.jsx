@@ -102,9 +102,14 @@ const FirstStep = ({
 
     if (KDVParameters && success) {
       setKdvData(KDVParameters);
-      const updatedData = licensePackages.data.map((pkg) => {
-        return { ...pkg, price: getPriceWithKDV(pkg.userPrice, KDVParameters) };
-      });
+      const updatedData = licensePackages.data
+        .filter((P) => P.isActive)
+        .map((pkg) => {
+          return {
+            ...pkg,
+            price: getPriceWithKDV(pkg.userPrice, KDVParameters),
+          };
+        });
 
       const sameMarketplacePKGS = updatedData.filter(
         (pack) => pack?.licenseTypeId === currentLicense?.licenseTypeId

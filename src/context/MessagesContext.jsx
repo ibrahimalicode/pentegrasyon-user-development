@@ -7,12 +7,14 @@ import {
 import { useFirestore } from "./FirestoreContext";
 import { formatByDate } from "../utils/utils";
 import newMessageMp3 from "../assets/sound/newMessage.mp3";
+import { getAuth } from "../redux/api";
 
 const MessagesContext = createContext();
 export const useMessagesContext = () => useContext(MessagesContext);
 
 export const MessagesContextProvider = ({ children }) => {
   const dispatch = useDispatch();
+  const token = getAuth()?.token;
   const { newMessage, setNewMessage } = useFirestore();
   const { messages } = useSelector((state) => state.messages.getMessages);
   const { data } = useSelector((state) => state.messages.updateMessageStatus);
@@ -20,10 +22,10 @@ export const MessagesContextProvider = ({ children }) => {
   const newMessageSound = new Audio(newMessageMp3);
 
   useEffect(() => {
-    if (!messagesData) {
+    if (!messagesData && token) {
       dispatch(getMessages());
     }
-  }, [messagesData]);
+  }, [messagesData, token]);
 
   useEffect(() => {
     if (messages) {

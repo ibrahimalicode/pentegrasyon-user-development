@@ -102,7 +102,7 @@ function Header({ openSidebar, setOpenSidebar }) {
     if (newMessage) {
       toast.custom((t) => elmnt(t), {
         position: "top-right",
-        duration: 6000,
+        duration: 60000,
       });
     }
   }, [newMessage]);

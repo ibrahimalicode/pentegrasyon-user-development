@@ -29,7 +29,7 @@ export const MessagesContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (messages) {
-      setMessagesData(formatByDate(messages.data, true));
+      setMessagesData(formatByDate(messages.data));
       dispatch(resetGetMessages());
     }
   }, [messages]);
@@ -38,7 +38,7 @@ export const MessagesContextProvider = ({ children }) => {
     if (newMessage) {
       if (messagesData) {
         setMessagesData((prev) => {
-          return formatByDate([...prev, newMessage], true);
+          return formatByDate([...prev, newMessage]);
         });
       } else setMessagesData(newMessage);
 
@@ -63,9 +63,7 @@ export const MessagesContextProvider = ({ children }) => {
             )
         );
 
-        setMessagesData(
-          formatByDate([...uniqueMessages, ...updatedMessages], true)
-        );
+        setMessagesData(formatByDate([...uniqueMessages, ...updatedMessages]));
       }
     }
   }, [data]);

@@ -85,11 +85,10 @@ function Header({ openSidebar, setOpenSidebar }) {
               <div className="flex-shrink-0 pt-0.5"></div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-900">
-                  {/* {newMessage.title} */}Title here
+                  {newMessage.title}
                 </p>
                 <p className="mt-1 text-sm text-gray-500">
-                  {/* {newMessage.content} */} The content here content here
-                  content here content here
+                  {newMessage.content}
                 </p>
               </div>
             </div>

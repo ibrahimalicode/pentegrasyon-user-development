@@ -39,6 +39,7 @@ import NoOrdersI from "./noOrders";
 import RotateI from "./rotate";
 import CloseI from "./close";
 import LockI from "./lock";
+import SeenI from "./seen";
 
 export {
   DashboardI,
@@ -80,4 +81,5 @@ export {
   RotateI,
   CloseI,
   LockI,
+  SeenI,
 };

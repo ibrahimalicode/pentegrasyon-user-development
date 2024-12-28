@@ -130,7 +130,7 @@ const RestaurantsStatus = () => {
 
   //SET STATUSES FROM SIGNALR
   useEffect(() => {
-    if (statusChangedRestaurant) {
+    if (statusChangedRestaurant && statusesData) {
       const uniqueRestaurants = statusesData.filter(
         (R) => R.id !== statusChangedRestaurant.id
       );

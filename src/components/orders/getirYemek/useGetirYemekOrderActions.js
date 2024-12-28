@@ -22,8 +22,8 @@ import {
 } from "../../../redux/getirYemek/getirYemekTicketCancelSlice";
 
 //UTILS
+import { formatByDate } from "../../../utils/utils";
 import { usePopup } from "../../../context/PopupContext";
-import { compareWithCurrentDateTime, formatOrders } from "../../../utils/utils";
 import toastStatusError from "../components/toastOrderStatError";
 
 export const useGetirYemekOrderActions = ({
@@ -78,7 +78,7 @@ export const useGetirYemekOrderActions = ({
               ...unChangedOrders,
               { ...order, status: res.payload.data, approvalDate: currentDate },
             ];
-            return formatOrders(updatedData);
+            return formatByDate(updatedData);
           });
           setSideOrder &&
             setSideOrder({
@@ -111,7 +111,7 @@ export const useGetirYemekOrderActions = ({
                 preparationDate: currentDate,
               },
             ];
-            return formatOrders(updatedData);
+            return formatByDate(updatedData);
           });
           setSideOrder &&
             setSideOrder({
@@ -140,7 +140,7 @@ export const useGetirYemekOrderActions = ({
               ...unChangedOrders,
               { ...order, status: res.payload.data, deliveryDate: currentDate },
             ];
-            return formatOrders(updatedData);
+            return formatByDate(updatedData);
           });
           setSideOrder &&
             setSideOrder({
@@ -168,7 +168,7 @@ export const useGetirYemekOrderActions = ({
             ...unChangedOrders,
             { ...order, status: res.payload.data, cancelDate: currentDate },
           ];
-          return formatOrders(updatedData);
+          return formatByDate(updatedData);
         });
       }
     });

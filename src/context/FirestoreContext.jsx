@@ -46,7 +46,7 @@ export const FirestoreProvider = ({ children }) => {
   const token = getAuth()?.token;
   const [userId, setUserId] = useState(null);
   const [statusChangedOrder, setStatusChangedOrder] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState(null);
   const [newOrder, setNewOrder] = useState(null);
   const [statusChangedRestaurant, setStatusChangedRestaurant] = useState(null);
   const [automaticApprovalDatas, setAutomaticApprovalDatas] = useState(null);
@@ -149,7 +149,7 @@ export const FirestoreProvider = ({ children }) => {
       );
       const unsubNewMessage = subscribeToSubcollection(
         "newMessage",
-        setMessages
+        setNewMessage
       );
       const unsubRestaurantStatus = subscribeToSubcollection(
         "restaurantStatus",
@@ -196,8 +196,8 @@ export const FirestoreProvider = ({ children }) => {
         setNewOrder,
         statusChangedOrder,
         setStatusChangedOrder,
-        messages,
-        setMessages,
+        newMessage,
+        setNewMessage,
         statusChangedRestaurant,
         setStatusChangedRestaurant,
         automaticApprovalDatas,

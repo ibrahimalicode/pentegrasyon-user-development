@@ -495,14 +495,18 @@ export function compareWithCurrentDateTime(
   return { remainingMinutes, remainingSeconds };
 }
 
-//ORDERS
-export const formatOrders = (ordersData) => {
-  // Remove duplicates based on both 'id' and 'confirmationId'
-  const uniqueOrders = _.uniqBy(ordersData, (order) => `${order.id}`);
+//
+export const formatByDate = (inData, lastInFirst) => {
+  // Remove duplicates based on both 'id'
+  const uniqueOrders = _.uniqBy(inData, (entity) => entity.id);
 
   return uniqueOrders.sort((a, b) => {
     const dateA = new Date(a.createdDateTime);
     const dateB = new Date(b.createdDateTime);
-    return dateB - dateA;
+    if (lastInFirst) {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
   });
 };

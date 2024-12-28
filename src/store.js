@@ -17,6 +17,7 @@ import couriersSlice from "./redux/couriers";
 import integrationInformationsSlice from "./redux/informations";
 import yemekSepetiSlice from "./redux/yemekSepeti";
 import paymentsSlice from "./redux/payments";
+import messagesSlice from "./redux/messages";
 
 const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ const store = configureStore({
     couriers: couriersSlice,
     payments: paymentsSlice,
     integrationInfos: integrationInformationsSlice,
+    messages: messagesSlice,
   },
 });
 

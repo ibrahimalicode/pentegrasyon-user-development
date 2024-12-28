@@ -8,8 +8,7 @@ import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
 import unverifiedOrderPath from "../assets/sound/unverifiedOrder.mp3";
 
 //UTILS
-// import { useSignalR } from "./SignalRContext";
-import { formatOrders } from "../utils/utils";
+import { formatByDate } from "../utils/utils";
 import { usePopup } from "./PopupContext";
 import { CloseI } from "../assets/icon";
 import { getAuth } from "../redux/api";
@@ -28,7 +27,6 @@ export const OrdersContextProvider = ({ children }) => {
 
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
     useFirestore();
-  // useSignalR();
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
 
@@ -95,7 +93,7 @@ export const OrdersContextProvider = ({ children }) => {
     if (statusChangedOrder) {
       setOrdersData((prev) => {
         const updatedOrder = prev.filter((O) => O.id !== statusChangedOrder.id);
-        return formatOrders([...updatedOrder, statusChangedOrder]);
+        return formatByDate([...updatedOrder, statusChangedOrder]);
       });
       setStatusChangedOrder(null);
     }
@@ -168,7 +166,7 @@ export const OrdersContextProvider = ({ children }) => {
   useEffect(() => {
     if (newOrder) {
       if (ordersData) {
-        setOrdersData(formatOrders([newOrder, ...ordersData]));
+        setOrdersData(formatByDate([newOrder, ...ordersData]));
       } else {
         setOrdersData([newOrder]);
       }

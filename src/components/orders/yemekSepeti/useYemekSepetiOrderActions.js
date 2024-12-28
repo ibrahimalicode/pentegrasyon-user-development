@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
-import { formatOrders } from "../../../utils/utils";
+import { formatByDate } from "../../../utils/utils";
 import { usePopup } from "../../../context/PopupContext";
 
 //REDUX
@@ -78,7 +78,7 @@ export const useYemekSepetiOrderActions = ({
               ...unChangedOrders,
               { ...order, status: res.payload.data, approvalDate: currentDate },
             ];
-            return formatOrders(updatedData);
+            return formatByDate(updatedData);
           });
           setSideOrder &&
             setSideOrder({
@@ -112,7 +112,7 @@ export const useYemekSepetiOrderActions = ({
               },
             ];
             console.log({ status: Number(order.status) + 1 });
-            return formatOrders(updatedData);
+            return formatByDate(updatedData);
           });
           setSideOrder &&
             setSideOrder({
@@ -141,7 +141,7 @@ export const useYemekSepetiOrderActions = ({
               ...unChangedOrders,
               { ...order, status: res.payload.data, deliveryDate: currentDate },
             ];
-            return formatOrders(updatedData);
+            return formatByDate(updatedData);
           });
 
           setSideOrder &&
@@ -170,7 +170,7 @@ export const useYemekSepetiOrderActions = ({
             ...unChangedOrders,
             { ...order, status: res.payload.data, cancelDate: currentDate },
           ];
-          return formatOrders(updatedData);
+          return formatByDate(updatedData);
         });
       }
     });

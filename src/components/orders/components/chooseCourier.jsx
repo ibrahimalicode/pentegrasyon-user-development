@@ -10,7 +10,7 @@ import { RouteInfo } from "../components/googleRoute";
 import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
-import { formatOrders, formatSelectorData } from "../../../utils/utils";
+import { formatByDate, formatSelectorData } from "../../../utils/utils";
 import compensationTypes from "../../../enums/compensationTypes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -103,7 +103,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
       toast.success("Başarıyla güncelendi.");
       setOrdersData((prev) => {
         const outCurrentOrder = prev.filter((O) => O.id !== order.id);
-        return formatOrders([
+        return formatByDate([
           ...outCurrentOrder,
           { ...order, courierId: selectedCourier.id },
         ]);

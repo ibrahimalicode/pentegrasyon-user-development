@@ -11,6 +11,7 @@ import Test from "./test";
 import NotFound from "./404";
 import Orders from "./orders";
 import Profile from "./profile";
+import Messages from "./messages";
 import Payments from "./payments";
 import Couriers from "./couriers";
 import Licenses from "./licenses";
@@ -34,6 +35,7 @@ const Home = () => {
         <Route path="/couriers/*" element={<Couriers />} />
         <Route path="/locked-pages/*" element={<ProtectedPages />} />
         <Route path="/payments/*" element={<Payments />} />
+        <Route path="/messages/*" element={<Messages />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -165,6 +165,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
               <div className="flex gap-4">
                 {order.checkedScheduledDate}
                 {order.isScheduled &&
+                  order.status !== 900 &&
                   (order.status != 1500 && order.status != 1600 ? (
                     <RemainingMinutes date={order.scheduledDate} />
                   ) : (

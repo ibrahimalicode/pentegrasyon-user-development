@@ -55,6 +55,13 @@ const sidebarItems = [
     id: "locked-pages",
     show: false,
   },
+  {
+    text: "Mesajlar",
+    to: "/messages",
+    path: "messages",
+    id: "messages",
+    show: true,
+  },
 ];
 
 export default sidebarItems;

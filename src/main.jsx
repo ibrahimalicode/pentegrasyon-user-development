@@ -15,6 +15,7 @@ import { OrdersContextProvider } from "./context/OrdersContext";
 import { PopupProvider } from "./context/PopupContext";
 import { ProtectPagesProvider } from "./context/ProtectPagesContext";
 import { FirestoreProvider } from "./context/FirestoreContext";
+import { MessagesContextProvider } from "./context/MessagesContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -22,16 +23,16 @@ root.render(
     <BrowserRouter>
       <PopupProvider>
         <ProtectPagesProvider>
-          {/* <SignalRProvider> */}
           <FirestoreProvider>
             <OrdersContextProvider>
-              <div className="light">
-                <App />
-                <Toaster toastOptions={toastOptions} />
-              </div>
+              <MessagesContextProvider>
+                <div className="light">
+                  <App />
+                  <Toaster toastOptions={toastOptions} />
+                </div>
+              </MessagesContextProvider>
             </OrdersContextProvider>
           </FirestoreProvider>
-          {/* </SignalRProvider> */}
         </ProtectPagesProvider>
       </PopupProvider>
     </BrowserRouter>

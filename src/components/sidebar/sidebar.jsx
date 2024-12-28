@@ -26,6 +26,7 @@ import {
   BoxInI,
   CourierI,
   LockI,
+  MessagesI,
 } from "../../assets/icon/index";
 import { getUserLock } from "../../redux/user/getUserLockSlice";
 import { useDispatch } from "react-redux";
@@ -49,6 +50,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
     { icon: <LogI /> },
     { icon: <PaymentI /> },
     { icon: <LockI /> },
+    { icon: <MessagesI /> },
   ];
 
   //GET

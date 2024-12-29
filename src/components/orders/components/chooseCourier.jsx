@@ -219,7 +219,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
     : "";
 
   // console.log(currentCompensation);
-  console.log(restaurantCouriers);
+  // console.log(restaurantCouriers);
 
   return (
     <main className="bg-[--white-1] rounded-md overflow-clip">

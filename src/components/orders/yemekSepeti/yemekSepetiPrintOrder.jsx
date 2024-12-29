@@ -25,8 +25,9 @@ const YemekSepetiPrintOrder = ({ order }) => {
     if (order.customer.floor) {
       order.customer.floor;
     }
+
     // return address;
-    const googleMapsUrl = `https://www.google.com/maps?q=${order.restaurantLatitude},${order.restaurantLongitude}`;
+    const googleMapsUrl = `https://www.google.com/maps?q=${order.customer.latitude},${order.customer.longitude}`;
     return googleMapsUrl;
   }
 

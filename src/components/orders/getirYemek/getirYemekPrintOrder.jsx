@@ -17,8 +17,9 @@ const GetirYemekPrintOrder = ({ order }) => {
     if (order.client.floor) {
       order.client.floor;
     }
+
     // return address;
-    const googleMapsUrl = `https://www.google.com/maps?q=${order.restaurantLatitude},${order.restaurantLongitude}`;
+    const googleMapsUrl = `https://www.google.com/maps?q=${order.client.latitude},${order.client.longitude}`;
     return googleMapsUrl;
   }
 
@@ -63,7 +64,8 @@ const GetirYemekPrintOrder = ({ order }) => {
           </span>
         </p>
         <p>
-          <span className="font-bold">Bölge </span> <span>: Keçiören</span>
+          <span className="font-bold">Bölge </span>{" "}
+          <span>: {order?.client?.district}</span>
         </p>
         {order.client.description && (
           <p>
@@ -140,7 +142,7 @@ const GetirYemekPrintOrder = ({ order }) => {
                       {order.name}
                     </div>
                   </td>
-                  <td className="p-2 flex justify-end items-start">
+                  <td className="px-2 flex justify-end items-start">
                     {formatToPrice(
                       String((order.price * order.count).toFixed(2)).replace(
                         ".",

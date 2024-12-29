@@ -6,21 +6,13 @@ import { formatDateString, formatToPrice } from "../../../utils/utils";
 import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const GetirYemekPrintOrder = ({ order }) => {
-  function getFullAddress() {
-    let address = order.client.address;
-    if (order.client.aptNo) {
-      address += order.client.aptNo;
-    }
-    if (order.client.doorNo) {
-      address += order.client.doorNo;
-    }
-    if (order.client.floor) {
-      order.client.floor;
-    }
-
-    // return address;
+  function getLocationLink() {
     const googleMapsUrl = `https://www.google.com/maps?q=${order.client.latitude},${order.client.longitude}`;
     return googleMapsUrl;
+  }
+  function splittedAddreses() {
+    const adr = order.client.address.split(",");
+    return `${adr[0]}, ${adr[1]}, ${adr[5]}`;
   }
 
   return (
@@ -55,7 +47,7 @@ const GetirYemekPrintOrder = ({ order }) => {
         <p>
           <span className="font-bold">Adres </span>
           <span>
-            <span>: {order.client.address}</span>
+            <span>: {splittedAddreses()}</span>
             {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
             {order.client.doorNo && (
               <span> Daire No: {order.client.doorNo}</span>
@@ -241,7 +233,7 @@ const GetirYemekPrintOrder = ({ order }) => {
       <div className="text-lg text-center">
         <p>Müşteri Konumu QR</p>
         <div className="flex justify-center my-2">
-          <QrGenerator text={getFullAddress()} />
+          <QrGenerator text={getLocationLink()} />
         </div>
         <p>
           <span className="font-bold" style={{ fontFamily: "conthrax" }}>

@@ -1,7 +1,11 @@
 export const GetirYemekAddress = ({ order }) => {
+  function splittedAddreses() {
+    const adr = order.client.address.split(",");
+    return `${adr[0]}, ${adr[1]}, ${adr[5]}`;
+  }
   return (
     <>
-      <span>{order.client.address}</span>
+      <span>{splittedAddreses()}</span>
       {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
       {order.client.doorNo && <span> Daire No: {order.client.doorNo}</span>}
       {order.client.floor && <span> Kat: {order.client.floor}</span>}

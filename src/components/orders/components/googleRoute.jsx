@@ -27,6 +27,7 @@ const GoogleRoute = ({ data, name1, name2 }) => {
   };
 
   function addDot(num) {
+    console.log(num);
     return parseFloat(
       num.toString().slice(0, 2) + "." + num.toString().slice(2)
     );
@@ -111,7 +112,6 @@ export const RouteInfo = ({ lat1, lng1, lat2, lng2 }) => {
     const directionsService = new google.maps.DirectionsService();
 
     function addDot(num) {
-      console.log(num);
       return parseFloat(
         num.toString().slice(0, 2) + "." + num.toString().slice(2)
       );
@@ -121,7 +121,7 @@ export const RouteInfo = ({ lat1, lng1, lat2, lng2 }) => {
       {
         origin: { lat: addDot(lat1), lng: addDot(lng1) },
         destination: { lat: lat2, lng: lng2 },
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: "DRIVING",
       },
       (result, status) => {
         if (status === "OK") {

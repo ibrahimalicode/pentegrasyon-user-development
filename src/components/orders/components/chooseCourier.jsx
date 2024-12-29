@@ -193,7 +193,13 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
         .then((routeInfo) => {
           setRouteData({
             ...routeInfo,
-            distance: Number(routeInfo?.distance?.replace("km", "")),
+            distance: Number(
+              routeInfo?.distance
+                ?.replace("km", "")
+                .replace(",", "#")
+                .replace(".", ",")
+                .replace("#", ".")
+            ),
           });
         })
         .catch((error) => {

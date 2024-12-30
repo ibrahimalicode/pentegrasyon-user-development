@@ -123,7 +123,7 @@ export const maxInput = (e) => {
 
   // Handle different input types
   if (type === "number") {
-    useVal = value.replace(/[^\d]/g, ""); // Only allow digits
+    useVal = value.replace(/[^\d.]/g, ""); // Only allow digits
   }
 
   // Enforce max length

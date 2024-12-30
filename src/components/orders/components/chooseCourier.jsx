@@ -10,7 +10,11 @@ import { RouteInfo } from "../components/googleRoute";
 import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
-import { formatByDate, formatSelectorData } from "../../../utils/utils";
+import {
+  formatByDate,
+  formatSelectorData,
+  formatToPrice,
+} from "../../../utils/utils";
 import compensationTypes from "../../../enums/compensationTypes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -372,9 +376,15 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
                           <span className="font-bold">Tutar: </span>
                           <span className="text-[--red-1]">
                             {compensationData?.id === 1
-                              ? compensationRate * routeData?.distance
-                              : compensationRate}{" "}
-                            ₺
+                              ? formatToPrice(
+                                  String(
+                                    compensationRate * routeData?.distance
+                                  )?.replace(".", ",")
+                                )
+                              : formatToPrice(
+                                  String(compensationRate)?.replace(".", ",")
+                                )}
+                            {""}₺
                           </span>
                         </p>
                       </div>

@@ -123,7 +123,6 @@ export const FirestoreProvider = ({ children }) => {
           setProtectedPagesBefore(convertedData);
 
         setState(convertedData);
-        console.log(subcollection, data);
         console.log(subcollection, convertedData);
 
         if (subcollection === "newTicket") {

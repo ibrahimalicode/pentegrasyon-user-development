@@ -33,14 +33,14 @@ const GetirYemekPrintOrder = ({ order }) => {
           <span>: {order.client.name}</span>
         </p>
         <p>
-          <span className="font-bold">Telefon </span>
+          <span className="font-bold">Tel </span>
 
           {order.client.clientUnmaskedPhoneNumber ? (
             <span>: {order.client.clientUnmaskedPhoneNumber}</span>
           ) : (
             <>
               {order.client.clientPhoneNumber.split("/")[0]}
-              <span className="font-bold">Dahili </span>
+              <span className="font-bold">Ext </span>
               <span>: {order.client.clientPhoneNumber.split("/")[1]}</span>
             </>
           )}

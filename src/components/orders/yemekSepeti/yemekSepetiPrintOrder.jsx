@@ -48,14 +48,14 @@ const YemekSepetiPrintOrder = ({ order }) => {
           <span>: {order.customer.firstName}</span>
         </p>
         <p>
-          <span className="font-bold">Telefon </span>
+          <span className="font-bold">Tel </span>
 
           {order.customer.mobilePhone ? (
             <span>: {order.customer.mobilePhone}</span>
           ) : (
             <>
               {order.customer.customerPhoneNumber.split("/")[0]}
-              <span className="font-bold">Dahili </span>
+              <span className="font-bold">Ext </span>
               <span>: {order.customer.customerPhoneNumber.split("/")[1]}</span>
             </>
           )}

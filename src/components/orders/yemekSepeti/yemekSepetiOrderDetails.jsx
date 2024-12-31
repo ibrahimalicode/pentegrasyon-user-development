@@ -140,7 +140,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
           <p className="w-1/2 text-end">{order.customer.firstName}</p>
         </div>
         <div className="flex">
-          <p className="w-1/2">Telefon Numarası</p>
+          <p className="w-1/2">Tel</p>
           <p className="w-1/2 text-end">
             {order.customer.mobilePhone ? (
               `${order.customer.mobilePhone}`
@@ -148,7 +148,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
               <>
                 {order.customer.customerPhoneNumber.split("/")[0]}
                 <span className="bg-[--border-1] text-xs ml-2 p-1">
-                  Dahili: {order.customer.customerPhoneNumber.split("/")[1]}
+                  Ext: {order.customer.customerPhoneNumber.split("/")[1]}
                 </span>
               </>
             )}

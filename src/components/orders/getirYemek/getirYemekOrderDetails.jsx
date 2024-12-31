@@ -128,7 +128,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
           <p className="w-1/2 text-end">{order.client.name}</p>
         </div>
         <div className="flex">
-          <p className="w-1/2">Telefon Numarası</p>
+          <p className="w-1/2">Tel</p>
           <p className="w-1/2 text-end">
             {order.client.clientUnmaskedPhoneNumber ? (
               `${order.client.clientUnmaskedPhoneNumber}`
@@ -136,7 +136,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
               <>
                 {order.client.clientPhoneNumber.split("/")[0]}
                 <span className="bg-[--border-1] text-xs ml-2 p-1">
-                  Dahili: {order.client.clientPhoneNumber.split("/")[1]}
+                  Ext: {order.client.clientPhoneNumber.split("/")[1]}
                 </span>
               </>
             )}

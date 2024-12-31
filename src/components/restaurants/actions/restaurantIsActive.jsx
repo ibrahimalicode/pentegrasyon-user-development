@@ -9,6 +9,7 @@ import {
   updateRestaurant,
 } from "../../../redux/restaurants/updateRestaurantSlice";
 import { CancelI } from "../../../assets/icon";
+import CustomInput from "../../common/customInput";
 
 const ChangeRestaurantStatus = ({ restaurant, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -25,12 +26,12 @@ const ChangeRestaurantStatus = ({ restaurant, onSuccess }) => {
   return (
     <>
       <span
-        className={`text-xs font-normal cursor-pointer ${
+        className={`text-xs font-normal cursor-pointerr ${
           restaurant.isActive
             ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
             : "text-[--red-1] bg-[--status-red] border-[--red-1]"
         } px-3 py-1 border border-solid rounded-full`}
-        onClick={handleEditRestaurantStatus}
+        // onClick={handleEditRestaurantStatus}
       >
         ● {restaurant.isActive ? "Aktif" : "Pasif"}
       </span>

@@ -26,8 +26,8 @@ const yemekSepetiOrderStatuses = [
     nextId: 3,
   },
   {
-    bg: "--status-brown",
-    color: "--brown-1",
+    bg: "--status-green",
+    color: "--green-1",
     transColor: "#ca986ab3",
     label: "Teslim Edildi",
     value: true,

@@ -164,17 +164,21 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
                 required
+                maxLength={4}
+                minLength={4}
                 label="Platform Satıcı ID"
                 placeholder="Platform Satıcı ID"
                 className="py-[.45rem] text-sm"
                 value={licenseData.sellerId}
                 onChange={(e) => {
-                  setLicenseData((prev) => {
-                    return {
+                  const pattern = /^[a-zA-Z0-9]*$/; // Allow only letters and numbers
+                  if (pattern.test(e)) {
+                    // If valid, update state
+                    setLicenseData((prev) => ({
                       ...prev,
                       sellerId: e,
-                    };
-                  });
+                    }));
+                  }
                 }}
               />
             </div>
@@ -196,6 +200,26 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
                 }}
               />
             </div>
+
+            {licenseData.remoteId && (
+              <div className="flex max-sm:flex-col sm:gap-4">
+                <CustomInput
+                  disabled
+                  label="remoteId"
+                  placeholder="remoteId"
+                  className="py-[.45rem] text-sm"
+                  value={licenseData.remoteId}
+                  onChange={(e) => {
+                    setLicenseData((prev) => {
+                      return {
+                        ...prev,
+                        remoteId: e,
+                      };
+                    });
+                  }}
+                />
+              </div>
+            )}
 
             <div className="flex gap-2 mt-6">
               <p className="flex justify-center items-center -ml-5">%</p>

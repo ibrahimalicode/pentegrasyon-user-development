@@ -19,6 +19,7 @@ const CustomInput = ({
   className3,
   className4,
   maxLength,
+  minLength,
   autoComplete = "new-password",
   disabled,
   onClick,
@@ -64,6 +65,7 @@ const CustomInput = ({
         onKeyDown={onKeyDown}
         autoComplete={autoComplete}
         maxLength={maxLength}
+        minLength={minLength}
         disabled={disabled}
         onClick={onClick}
         readOnly={readOnly}

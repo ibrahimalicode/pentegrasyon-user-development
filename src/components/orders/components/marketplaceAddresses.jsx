@@ -18,16 +18,26 @@ export const YemekSepetiAddress = ({ order }) => {
   const customerAddress = `
   ${order.customer.city ?? ""},
   ${order.customer.deliveryMainArea ?? ""},
-  ${order.customer.street ?? ""}`;
+  ${order.customer.street ?? ""},`;
 
   return (
-    <>
-      <span>{customerAddress && customerAddress}</span>
-      {order.customer.building && <span> Bina: {order.customer.building}</span>}
-      {order.customer.entrance && (
-        <span> Daire No: {order.customer.entrance}</span>
+    <div className="flex flex-wrap justify-end">
+      <p>{customerAddress && customerAddress}</p>
+      {order.customer.building && (
+        <p className="min-w-max px-0.5"> Bina: {order.customer.building}, </p>
       )}
-      {order.customer.floor && <span> Kat: {order.customer.floor}</span>}
-    </>
+      {order.customer.number && (
+        <p className="min-w-max "> Bina No: {order.customer.number}, </p>
+      )}
+      {order.customer.entrance && (
+        <p className="min-w-max px-0.5">
+          {" "}
+          Daire No: {order.customer.entrance},{" "}
+        </p>
+      )}
+      {order.customer.floor && (
+        <p className="min-w-max"> Kat: {order.customer.floor}</p>
+      )}
+    </div>
   );
 };

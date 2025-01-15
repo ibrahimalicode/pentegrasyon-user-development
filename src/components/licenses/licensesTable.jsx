@@ -41,7 +41,11 @@ const LicensesTable = ({ inData, totalItems, onSuccess }) => {
                   {formatDateString({ dateString: data.endDateTime })}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {getRemainingDays(data.endDateTime)}
+                  {getRemainingDays(data.endDateTime) > 0 ? (
+                    getRemainingDays(data.endDateTime)
+                  ) : (
+                    <p className="text-[--red-1] font-bold">Süresi bitmiş</p>
+                  )}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   <EditLicenseIsActive

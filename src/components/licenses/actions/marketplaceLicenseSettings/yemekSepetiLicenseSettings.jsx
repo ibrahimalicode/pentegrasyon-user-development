@@ -164,8 +164,8 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             <div className="flex max-sm:flex-col sm:gap-4">
               <CustomInput
                 required
-                label="Seller Id"
-                placeholder="Seller Id"
+                label="Platform Satıcı ID"
+                placeholder="Platform Satıcı ID"
                 className="py-[.45rem] text-sm"
                 value={licenseData.sellerId}
                 onChange={(e) => {

@@ -16,14 +16,14 @@ export const GetirYemekAddress = ({ order }) => {
 
 export const YemekSepetiAddress = ({ order }) => {
   const customerAddress = `
-  ${order.customer.city},
-  ${order.customer.deliveryMainArea},
-  ${order.customer.street}`;
+  ${order.customer.city ?? ""},
+  ${order.customer.deliveryMainArea ?? ""},
+  ${order.customer.street ?? ""}`;
 
   return (
     <>
-      <span>{customerAddress}</span>
-      {order.customer.building && <span>Bina: {order.customer.building}</span>}
+      <span>{customerAddress && customerAddress}</span>
+      {order.customer.building && <span> Bina: {order.customer.building}</span>}
       {order.customer.entrance && (
         <span> Daire No: {order.customer.entrance}</span>
       )}

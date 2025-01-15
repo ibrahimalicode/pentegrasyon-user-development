@@ -102,7 +102,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
             )}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {order.customer.firstName}
+          {order.customer.firstName + " " + order.customer.lastName}
         </td>
         <td
           onClick={() =>

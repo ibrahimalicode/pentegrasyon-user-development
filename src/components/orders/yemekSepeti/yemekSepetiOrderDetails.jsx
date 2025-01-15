@@ -137,7 +137,9 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
       <div className="bg-white p-2 rounded-md flex flex-col gap-1">
         <div className="flex">
           <p className="w-1/2">Müşteri</p>
-          <p className="w-1/2 text-end">{order.customer.firstName}</p>
+          <p className="w-1/2 text-end">
+            {order.customer.firstName + " " + order.customer.lastName}
+          </p>
         </div>
         <div className="flex">
           <p className="w-1/2">Tel</p>

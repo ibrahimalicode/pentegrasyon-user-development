@@ -34,7 +34,7 @@ const AddLicensePage = () => {
     (state) => state.licenses.addByPay
   );
 
-  const steps = 5;
+  const [steps, setSteps] = useState(5);
   const [step, setStep] = useState(1);
   const [paymentStatus, setPaymentStatus] = useState(null);
 

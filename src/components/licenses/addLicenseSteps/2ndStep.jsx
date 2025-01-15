@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 
 //COMP
 import BackButton from "../stepsAssets/backButton";
-import CustomSelect from "../../common/customSelector";
 import ForwardButton from "../stepsAssets/forwardButton";
 
 //IMG
@@ -16,7 +15,7 @@ import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 
 //FUNC
-import { groupedLicensePackages, formatToPrice } from "../../../utils/utils";
+import { groupedLicensePackages } from "../../../utils/utils";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -30,21 +29,6 @@ const imageSRCs = [
 const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const [licensePackagesData, setLicensePackagesData] = useState();
-
-  function getTotalPrice() {
-    const result = cartItems.reduce(
-      (acc, item) => acc + parseFloat(item.price),
-      0
-    );
-    const kdv = cartItems.reduce(
-      (acc, item) => acc + (parseFloat(item.price) / 100) * item.kdvPercentage,
-      0
-    );
-    const useKDV = cartItems[0]?.useKDV;
-    const kdvTotal = formatToPrice(kdv);
-    const total = formatToPrice(result);
-    return { total, kdvTotal, useKDV };
-  }
 
   function handleSubmit(e) {
     e.preventDefault();

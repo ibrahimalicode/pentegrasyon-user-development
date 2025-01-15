@@ -209,14 +209,14 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
                   placeholder="remoteId"
                   className="py-[.45rem] text-sm"
                   value={licenseData.remoteId}
-                  onChange={(e) => {
-                    setLicenseData((prev) => {
-                      return {
-                        ...prev,
-                        remoteId: e,
-                      };
-                    });
-                  }}
+                  // onChange={(e) => {
+                  //   setLicenseData((prev) => {
+                  //     return {
+                  //       ...prev,
+                  //       remoteId: e,
+                  //     };
+                  //   });
+                  // }}
                 />
               </div>
             )}

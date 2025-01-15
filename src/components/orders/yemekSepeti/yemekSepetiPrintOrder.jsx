@@ -190,7 +190,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
                         👉 {order.comment}, {order.description}
                       </p>
                       <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                        👉 {order.description}, {order.description}
+                        👉 {order.comment}{" "}
+                        {order.description && `, ${order.description}`}
                       </span>
                     </td>
                   </tr>

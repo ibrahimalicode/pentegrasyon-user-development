@@ -1,32 +1,31 @@
 //MODULES
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // COMP
 import PaymentCard from "../../payment/card/card";
 import BackButton from "../stepsAssets/backButton";
-import InvoiceData from "../stepsAssets/invoiceData";
 import PayTRForm from "../../payment/form/PayTRForm";
 import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 // REDUX
-import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
 import { addByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 
-const OnlinePayment = ({ step, setStep, actionType }) => {
+const OnlinePayment = ({
+  step,
+  setStep,
+  userData,
+  actionType,
+  userInvData,
+}) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  let invoiceHandleSubmit = useRef(null);
   const { currentLicense } = location?.state || {};
   const isPageExtend = actionType === "extend-license";
-
-  const { success: getUserSucc, user } = useSelector(
-    (state) => state.user.getUser
-  );
 
   const { loading: addLoading } = useSelector(
     (state) => state.licenses.addByPay
@@ -36,20 +35,9 @@ const OnlinePayment = ({ step, setStep, actionType }) => {
     (state) => state.licenses.extendByPay
   );
 
-  const { loading: updateInvLoading } = useSelector(
-    (state) => state.user.updateInvoice
-  );
-
-  const { loading: addInvLoading } = useSelector(
-    (state) => state.user.addInvoice
-  );
-
   const cartItems = useSelector((state) => state.cart.items);
 
   const [flip, setFlip] = useState(false);
-  const [userData, setUserData] = useState(null);
-  const [openFatura, setOpenFatura] = useState(false);
-  const [userInvData, setUserInvData] = useState(null);
   const [cardData, setCardData] = useState({
     userName: "PAYTR TEST",
     cardNumber: "4355 0843 5508 4358",
@@ -60,12 +48,6 @@ const OnlinePayment = ({ step, setStep, actionType }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (openFatura) {
-      if (invoiceHandleSubmit.current) {
-        invoiceHandleSubmit.current();
-      }
-      return;
-    }
 
     const { userName, cardNumber, month, year, cvv } = cardData;
     const { email, fullName, phoneNumber } = userData;
@@ -121,23 +103,8 @@ const OnlinePayment = ({ step, setStep, actionType }) => {
     } else {
       dispatch(addByOnlinePay(data));
     }
+    //NOTE: the step changer function based on the response is in the "addLicensePage".
   }
-
-  //GET USER
-  useEffect(() => {
-    if (!userData) {
-      dispatch(getUser());
-    }
-  }, [userData]);
-
-  //SET USER AND INVOICE
-  useEffect(() => {
-    if (getUserSucc) {
-      setUserData(user);
-      setUserInvData(user.userInvoiceAddressDTO);
-      dispatch(resetGetUserState());
-    }
-  }, [user, getUserSucc]);
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
@@ -153,40 +120,19 @@ const OnlinePayment = ({ step, setStep, actionType }) => {
         </div>
       </div>
 
-      <div className="w-full">
-        {userData && (
-          <InvoiceData
-            user={userData}
-            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
-            userInvData={userInvData}
-            setUserInvData={setUserInvData}
-            openFatura={openFatura}
-            setOpenFatura={setOpenFatura}
-            userData={userData}
-            onSubmit={(submitFn) => {
-              invoiceHandleSubmit.current = submitFn;
-            }}
-          />
-        )}
-      </div>
-
       {/* BTNS */}
       <div className="flex gap-3 absolute -bottom-20 -right-0 h-12">
         <BackButton
           text="Geri"
           letIcon={true}
           onClick={() => setStep(step - 1)}
-          disabled={
-            addLoading || extendLoading || updateInvLoading || addInvLoading
-          }
+          disabled={addLoading || extendLoading}
         />
         <ForwardButton
-          text={openFatura ? "Kaydet" : "Devam"}
+          text="Devam"
           letIcon={true}
           type="submit"
-          disabled={
-            addLoading || extendLoading || updateInvLoading || addInvLoading
-          }
+          disabled={addLoading || extendLoading}
         />
       </div>
 

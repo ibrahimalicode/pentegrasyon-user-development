@@ -8,6 +8,9 @@ import { useFirestore } from "./FirestoreContext";
 import { formatByDate } from "../utils/utils";
 import newMessageMp3 from "../assets/sound/newMessage.mp3";
 import { getAuth } from "../redux/api";
+import { CloseI, InfoI } from "../assets/icon";
+import toast from "react-hot-toast";
+import CustomToast from "../components/common/customToast";
 
 const MessagesContext = createContext();
 export const useMessagesContext = () => useContext(MessagesContext);
@@ -34,8 +37,11 @@ export const MessagesContextProvider = ({ children }) => {
     }
   }, [messages]);
 
+  //SET NEW MESSAGE IN THE MESSAGES
   useEffect(() => {
+    //Check the platform
     if (newMessage && newMessage.platforms == 2) {
+      //Check if messages include another messages
       if (messagesData) {
         setMessagesData((prev) => {
           return formatByDate([...prev, newMessage]);
@@ -49,6 +55,18 @@ export const MessagesContextProvider = ({ children }) => {
     }
   }, [newMessage]);
 
+  //TOAST NEW MESSAGE
+  useEffect(() => {
+    if (newMessage) {
+      toast.custom((t) => CustomToast({ message: newMessage, t }), {
+        position: "top-right",
+        duration: 60000,
+        id: "NEW_MESSAGE",
+      });
+    }
+  }, [newMessage]);
+
+  //SET MESSAGES
   useEffect(() => {
     if (data) {
       const updatedMessages = data

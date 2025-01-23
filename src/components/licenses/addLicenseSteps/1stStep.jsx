@@ -230,7 +230,7 @@ const FirstStep = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-full flex flex-col justify-between mb-7"
+      className="min-h-full flex flex-col justify-between pb-7"
     >
       <div className="w-full h-full sm:px-4">
         <div className="w-full flex justify-center pt-2">

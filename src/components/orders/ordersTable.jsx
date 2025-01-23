@@ -36,7 +36,7 @@ const OrdersTable = ({ ordersData, setOrdersData }) => {
     };
   }
 
-  // console.log(ordersData);
+  console.log(ordersData.filter((O) => O.marketplaceId == 1));
 
   return (
     <main className="overflow-x-auto">

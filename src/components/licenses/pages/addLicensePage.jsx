@@ -15,6 +15,7 @@ import SecondStep from "../addLicenseSteps/2ndStep";
 import ThirdStep from "../addLicenseSteps/3rdStep";
 import FourthStep from "../addLicenseSteps/4thStep";
 import FifthStep from "../addLicenseSteps/5thStep";
+import SixthStep from "../addLicenseSteps/6thStep";
 
 //REDUX
 import { clearCart } from "../../../redux/cart/cartSlice";
@@ -34,8 +35,10 @@ const AddLicensePage = () => {
     (state) => state.licenses.addByPay
   );
 
-  const [steps, setSteps] = useState(5);
   const [step, setStep] = useState(1);
+  const [steps, setSteps] = useState(4);
+  const [userData, setUserData] = useState(null);
+  const [userInvData, setUserInvData] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
   const [restaurantData, setRestaurantData] = useState({
@@ -48,10 +51,10 @@ const AddLicensePage = () => {
     time: null,
   });
   const [paymentMethod, setPaymentMethod] = useState({
-    selectedOption: { label: "Online Ödeme", value: "onlinePayment" },
+    selectedOption: { label: "Online Ödeme", value: "onlinePayment", id: 0 },
     options: [
-      { label: "Online Ödeme", value: "onlinePayment" },
-      { label: "Banka Havale", value: "bankPayment" },
+      { label: "Online Ödeme", value: "onlinePayment", id: 0 },
+      { label: "Banka Havale", value: "bankPayment", id: 1 },
     ],
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
@@ -75,11 +78,11 @@ const AddLicensePage = () => {
     } else if (success) {
       toast.remove(toastId.current);
       if (success) {
-        setStep(4);
+        setStep(5);
       }
       dispatch(resetAddByOnlinePay());
     } else if (error) {
-      setStep(5);
+      setStep(6);
       toast.dismiss(toastId.current);
       window.parent.postMessage({ status: "failed" }, "*");
       dispatch(resetAddByOnlinePay());
@@ -136,9 +139,9 @@ const AddLicensePage = () => {
               className={`w-full h-[32rem] border-0 border-dashed border-[--light-3] rounded-sm relative ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
-              style={{
-                clipPath: "inset(-200px 0px)",
-              }}
+              // style={{
+              //   clipPath: "inset(-200px 0px)",
+              // }}
             >
               <div className="w-full h-full">
                 <StepFrame
@@ -163,6 +166,7 @@ const AddLicensePage = () => {
                     <SecondStep
                       key={1}
                       step={step}
+                      setSteps={setSteps}
                       setStep={setStep}
                       paymentMethod={paymentMethod}
                       setPaymentMethod={setPaymentMethod}
@@ -172,16 +176,30 @@ const AddLicensePage = () => {
                       key={2}
                       step={step}
                       setStep={setStep}
-                      restaurantData={restaurantData}
-                      paymentMethod={paymentMethod}
+                      userData={userData}
+                      userInvData={userInvData}
+                      setUserData={setUserData}
                       licenseData={licensePackageData}
+                      paymentMethod={paymentMethod}
+                      restaurantData={restaurantData}
+                      setUserInvData={setUserInvData}
                     />,
                     <FourthStep
                       key={3}
+                      step={step}
+                      setStep={setStep}
+                      userData={userData}
+                      userInvData={userInvData}
+                      licenseData={licensePackageData}
+                      paymentMethod={paymentMethod}
+                      restaurantData={restaurantData}
+                    />,
+                    <FifthStep
+                      key={4}
                       setStep={setStep}
                       setPaymentStatus={setPaymentStatus}
                     />,
-                    <FifthStep
+                    <SixthStep
                       key={4}
                       step={step}
                       paymentStatus={paymentStatus}

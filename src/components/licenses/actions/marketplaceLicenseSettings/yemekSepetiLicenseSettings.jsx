@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import { CancelI } from "../../../../assets/icon";
 import CustomInput from "../../../common/customInput";
+import CustomToast from "../../../common/customToast";
 import { usePopup } from "../../../../context/PopupContext";
 
 //REDUX
@@ -83,6 +84,27 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     }
   }
 
+  function showToast() {
+    const message = {
+      title: "Entegrasyon geçişi için Yemeksepeti'ne mail gönderildi  ✅",
+      content:
+        "Yemeksepeti tarafından Entegrasyon geçişleri sadece Salı, Çarşamba ve Perşembe günleri olarak belirlenmiştir.. Entegrasyon geçişi yapıldığında Chain Code bilgisi tarafınıza iletilecektir. Bu kodu girdiğinizde Pentegrasyon servisi çalışmaya başlayacaktır.",
+    };
+    if (
+      licenseData.chainCode !== licenseDataBefore.chainCode ||
+      licenseData.remoteId !== licenseDataBefore.remoteId ||
+      licenseData.sellerId !== licenseDataBefore.sellerId
+    ) {
+      toast.custom((t) => CustomToast({ color: "green", message, t }), {
+        position: "top-right",
+        duration: 60000,
+        id: "LICENSE_ENTEGRATED",
+      });
+    } else {
+      toast.success("İşleminiz başarıyla gerçekleşti.");
+    }
+  }
+
   useEffect(() => {
     if (data?.isSettingsAdded) {
       dispatch(getIntegrationInformationByLicenseId(data.id));
@@ -119,7 +141,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       toast.dismiss(toastId.current);
       onSuccess();
       closeForm();
-      toast.success("Lisans ayarları başarıyla eklendi");
+      showToast();
       dispatch(resetAddIntegrationInformation());
     }
   }, [loading, success, error]);
@@ -135,7 +157,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       toast.dismiss(toastId.current);
       onSuccess();
       closeForm();
-      toast.success("Lisans ayarları başarıyla düzenlendi.");
+      showToast();
       dispatch(resetUpdateIntegrationInformation());
     }
   }, [updateLoad, updateSucc, updateErr]);

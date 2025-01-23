@@ -1,46 +1,52 @@
 //MODULES
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-//COMP
-import SuccessPage from "../stepsAssets/successPage";
-import FailurePage from "../stepsAssets/failurePage";
+//REDUX
 
-const FifthStep = ({ step, paymentStatus }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const currentPath = location.pathname;
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
+const FifthStep = ({ setStep, setPaymentStatus }) => {
+  const dispatch = useDispatch();
+
+  const [htmlResponse, setHtmlResponse] = useState(null);
+  const { data } = useSelector((state) => state.licenses.addByPay);
 
   useEffect(() => {
-    let goToLicenses;
-
-    if (step === 5) {
-      goToLicenses = setTimeout(
-        () => navigate(currentPath?.replace(`/${actionType}`, "")),
-        7000
-      );
+    if (data) {
+      setHtmlResponse(data);
     }
 
-    return () => {
-      if (goToLicenses) {
-        clearTimeout(goToLicenses);
+    const handleMessage = (event) => {
+      // Verify the origin here if necessary
+      if (event.data.status === "success") {
+        setStep(6);
+        setPaymentStatus("success");
+        toast.success("Ödeme başarılı 😃", { id: "payment_success" });
+      } else if (event.data.status === "failed") {
+        setStep(6);
+        setPaymentStatus("failure");
+        toast.error("Ödeme başarısız 😞", { id: "payment_failed" });
       }
     };
-  }, [step]);
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [data, dispatch]);
 
   return (
-    step === 5 &&
-    (paymentStatus === "success" ? (
-      <SuccessPage
-        step={step}
-        currentPath={currentPath}
-        actionType={actionType}
-      />
-    ) : (
-      <FailurePage currentPath={currentPath} actionType={actionType} />
-    ))
+    <div className="w-full h-full bg-[--white-1] flex flex-col justify-center items-center relative">
+      {htmlResponse && (
+        <iframe
+          title="3D Secure Frame"
+          width="100%"
+          height="100%"
+          srcDoc={htmlResponse}
+          sandbox="allow-scripts allow-forms allow-same-origin"
+        />
+      )}
+    </div>
   );
 };
 

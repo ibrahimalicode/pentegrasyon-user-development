@@ -1,16 +1,18 @@
 //MODULES
 
 //COMP
-import OnlinePayment from "../paymentTypes/onlinePayment";
-import BankPayment from "../paymentTypes/bankPayment";
 import { useLocation } from "react-router-dom";
+import ThirdStepOnlinePayment from "./3rdStepOnlinePayment";
+import ThirdStepBankPayment from "./3rdStepBankPayment";
 
 const ThirdStep = ({
   step,
   setStep,
-  licenseData,
+  userData,
+  userInvData,
+  setUserData,
   paymentMethod,
-  restaurantData,
+  setUserInvData,
 }) => {
   const location = useLocation();
   const pathArray = location.pathname.split("/");
@@ -21,19 +23,16 @@ const ThirdStep = ({
     step === 3 && (
       <div className="h-full overflow-y-auto">
         {value === "bankPayment" ? (
-          <BankPayment
-            setStep={setStep}
-            licenseData={licenseData}
-            restaurantData={restaurantData}
-            actionType={actionType}
-          />
+          <ThirdStepBankPayment step={step} setStep={setStep} />
         ) : (
           value === "onlinePayment" && (
-            <OnlinePayment
+            <ThirdStepOnlinePayment
               step={step}
               setStep={setStep}
-              userId={restaurantData?.userId}
-              actionType={actionType}
+              userData={userData}
+              setUserData={setUserData}
+              userInvData={userInvData}
+              setUserInvData={setUserInvData}
             />
           )
         )}

@@ -1,52 +1,47 @@
 //MODULES
-import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-//REDUX
+//COMP
+import OnlinePayment from "../paymentTypes/onlinePayment";
+import BankPayment from "../paymentTypes/bankPayment";
+import { useLocation } from "react-router-dom";
 
-const FourthStep = ({ setStep, setPaymentStatus }) => {
-  const dispatch = useDispatch();
+const FourthStep = ({
+  step,
+  setStep,
+  userData,
+  userInvData,
+  licenseData,
+  paymentMethod,
+  restaurantData,
+}) => {
+  const location = useLocation();
+  const pathArray = location.pathname.split("/");
+  const actionType = pathArray[pathArray.length - 1];
 
-  const [htmlResponse, setHtmlResponse] = useState(null);
-  const { data } = useSelector((state) => state.licenses.addByPay);
-
-  useEffect(() => {
-    if (data) {
-      setHtmlResponse(data);
-    }
-
-    const handleMessage = (event) => {
-      // Verify the origin here if necessary
-      if (event.data.status === "success") {
-        setStep(5);
-        setPaymentStatus("success");
-        toast.success("Ödeme başarılı 😃", { id: "payment_success" });
-      } else if (event.data.status === "failed") {
-        setStep(5);
-        setPaymentStatus("failure");
-        toast.error("Ödeme başarısız 😞", { id: "payment_failed" });
-      }
-    };
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, [data, dispatch]);
-
+  const value = paymentMethod.selectedOption.value;
   return (
-    <div className="w-full h-full bg-[--white-1] flex flex-col justify-center items-center relative">
-      {htmlResponse && (
-        <iframe
-          title="3D Secure Frame"
-          width="100%"
-          height="100%"
-          srcDoc={htmlResponse}
-          sandbox="allow-scripts allow-forms allow-same-origin"
-        />
-      )}
-    </div>
+    step === 4 && (
+      <div className="h-full overflow-y-auto">
+        {value === "onlinePayment" ? (
+          <OnlinePayment
+            step={step}
+            setStep={setStep}
+            userData={userData}
+            actionType={actionType}
+            userInvData={userInvData}
+          />
+        ) : (
+          value === "bankPayment" && (
+            <BankPayment
+              setStep={setStep}
+              licenseData={licenseData}
+              restaurantData={restaurantData}
+              actionType={actionType}
+            />
+          )
+        )}
+      </div>
+    )
   );
 };
 

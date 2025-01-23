@@ -37,8 +37,6 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
     return { ...order, orders: formattdOrder };
   }
 
-  console.log(sideOrder);
-
   useEffect(() => {
     if (statusChangedOrder) {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
@@ -57,6 +55,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
       ? currentCourier[0].label
       : order?.courier?.name;
   }
+  console.log(sideOrder);
 
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
@@ -159,7 +158,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         <div className="flex justify-between">
           <p>Adres</p>
           <div className="w-full max-w-[65%] text-end text-[--primary-2]">
-            <YemekSepetiAddress order={order} />
+            <YemekSepetiAddress order={order} className="justify-end" />
           </div>
         </div>
         <div className="flex border-t border-[--gr-3] py-2">

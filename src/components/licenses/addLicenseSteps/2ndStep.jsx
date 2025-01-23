@@ -13,6 +13,8 @@ import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
+import Autoronics from "../../../assets/img/packages/Autoronics.png";
+import Vigo from "../../../assets/img/packages/Vigo.png";
 
 //FUNC
 import { groupedLicensePackages } from "../../../utils/utils";
@@ -24,9 +26,17 @@ const imageSRCs = [
   { src: Yemeksepeti, name: "Yemeksepeti" },
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
+  { src: Autoronics, name: "Autoronics" },
+  { src: Vigo, name: "Vigo" },
 ];
 
-const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
+const SecondStep = ({
+  step,
+  setStep,
+  setSteps,
+  paymentMethod,
+  setPaymentMethod,
+}) => {
   const cartItems = useSelector((state) => state.cart.items);
   const [licensePackagesData, setLicensePackagesData] = useState();
 
@@ -40,6 +50,12 @@ const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
       setLicensePackagesData(groupedLicensePackages(cartItems));
     }
   }, [cartItems]);
+
+  useEffect(() => {
+    if (paymentMethod.selectedOption.id === 0 && step == 2) {
+      setSteps(6);
+    }
+  }, [step]);
 
   return (
     step === 2 && (
@@ -63,6 +79,7 @@ const SecondStep = ({ paymentMethod, setPaymentMethod, step, setStep }) => {
                           selectedOption: option,
                         };
                       });
+                      option.id == 0 ? setSteps(6) : setSteps(5);
                     }}
                     className={`py-2.5 px-2  text-[--white-1] text-sm rounded-md ${
                       option.value === paymentMethod.selectedOption.value

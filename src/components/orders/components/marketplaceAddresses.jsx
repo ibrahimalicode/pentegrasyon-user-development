@@ -14,14 +14,14 @@ export const GetirYemekAddress = ({ order }) => {
   );
 };
 
-export const YemekSepetiAddress = ({ order }) => {
+export const YemekSepetiAddress = ({ order, className }) => {
   const customerAddress = `
   ${order.customer.city ?? ""},
   ${order.customer.deliveryMainArea ?? ""},
   ${order.customer.street ?? ""},`;
 
   return (
-    <div className="flex flex-wrap justify-end">
+    <div className={`flex flex-wrap ${className}`}>
       <p>{customerAddress && customerAddress}</p>
       {order.customer.building && (
         <p className="min-w-max px-0.5"> Bina: {order.customer.building}, </p>

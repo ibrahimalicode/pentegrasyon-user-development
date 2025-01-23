@@ -12,6 +12,8 @@ import Siparisim from "../../../assets/img/packages/Siparisim.png";
 import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
+import Autoronics from "../../../assets/img/packages/Autoronics.png";
+import Vigo from "../../../assets/img/packages/Vigo.png";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -20,6 +22,8 @@ const imageSRCs = [
   { src: Yemeksepeti, name: "Yemeksepeti" },
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
+  { src: Autoronics, name: "Autoronics" },
+  { src: Vigo, name: "Vigo" },
 ];
 
 const BankPayment = ({ setStep }) => {
@@ -41,20 +45,20 @@ const BankPayment = ({ setStep }) => {
         <div>
           <p>Dekontunuz kontrol edildikten sonra</p>
           {licensePackageData &&
-            licensePackageData.map((pkg) => (
-              <div>
+            licensePackageData.map((pkg, i) => (
+              <div key={i}>
                 <p className="w-max mt-1 mb-1 border-b border-[--primary-1]">
                   <span className="text-[--primary-1] pr-1">
                     {pkg[0].restaurantName}
                   </span>
-                  Restoran'a
+                  Restoran&apos;a
                 </p>
 
                 <div className="flex flex-wrap gap-x-4 gap-y-2 pb-2">
                   {pkg.map((item, i) => (
-                    <div className="flex text-sm">
+                    <div className="flex text-sm" key={i}>
                       <p className="mt-1 pr-2">
-                        {imageSRCs[item.marketplaceId].name}
+                        {imageSRCs[item.licenseTypeId].name}
                       </p>
                       <p className="mt-1">
                         {item.time} Yıllık{i < pkg.length - 1 && ","}

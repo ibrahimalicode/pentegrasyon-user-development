@@ -67,51 +67,6 @@ function Header({ openSidebar, setOpenSidebar }) {
     }
   }, [headerSettingsRef, open]);
 
-  useEffect(() => {
-    // toast.dismiss(); //Tesing
-
-    function elmnt(t) {
-      return (
-        <div
-          className={`transition-all max-w-sm w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip ${
-            t.visible ? "opacity-100 scale-1" : "opacity-0 scale-0"
-          }`}
-        >
-          <div className="flex justify-center items-center px-2.5 mr-2 bg-[--status-red] text-[--red-1]">
-            <InfoI />
-          </div>
-          <div className="flex-1 w-0 py-4">
-            <div className="flex items-start">
-              <div className="flex-shrink-0 pt-0.5"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  {newMessage.title}
-                </p>
-                <p className="mt-1 text-sm text-gray-500">
-                  {newMessage.content}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex border-l border-gray-200">
-            <button
-              onClick={() => toast.dismiss(t.id)}
-              className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-[--red-1] hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <CloseI />
-            </button>
-          </div>
-        </div>
-      );
-    }
-    if (newMessage) {
-      toast.custom((t) => elmnt(t), {
-        position: "top-right",
-        duration: 60000,
-      });
-    }
-  }, [newMessage]);
-
   return (
     <header className="fixed top-0 right-0 left-0 flex flex-col justify-center h-16 py-3.5 px-[4%] bg-white border-b border-slate-200 max-md:px-5 z-[99]">
       <nav className="w-full flex justify-between items-center">

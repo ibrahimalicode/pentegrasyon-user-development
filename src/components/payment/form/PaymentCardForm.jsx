@@ -77,7 +77,9 @@ const PaymentCardForm = ({ setFlip, cardData, setCardData }) => {
         </div>
         <div className="w-full">
           <CustomInput
-            label={invalidCardNumber === false && "Hatalı kart numarası"}
+            label={
+              invalidCardNumber === false ? "Hatalı kart numarası" : undefined
+            }
             className5="text-[--red-1] text-[.7rem]"
             type="text"
             placeholder="Kart No"

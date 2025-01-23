@@ -7,26 +7,15 @@ import { formatDateString, formatToPrice } from "../../../utils/utils";
 
 //COMP
 import QrGenerator from "../../common/qrGenerator";
+import { YemekSepetiAddress } from "../components/marketplaceAddresses";
 
 const YemekSepetiPrintOrder = ({ order }) => {
   const customerAddress = `
-    ${order.customer.city},
-    ${order.customer.deliveryMainArea},
-    ${order.customer.street}`;
+  ${order.customer.city ?? ""},
+  ${order.customer.deliveryMainArea ?? ""},
+  ${order.customer.street ?? ""},`;
 
-  function getFullAddress() {
-    let address = customerAddress;
-    if (order.customer.building) {
-      address += order.customer.building;
-    }
-    if (order.customer.entrance) {
-      address += order.customer.entrance;
-    }
-    if (order.customer.floor) {
-      order.customer.floor;
-    }
-
-    // return address;
+  function getGoogleAddress() {
     const googleMapsUrl = `https://www.google.com/maps?q=${order.customer.latitude},${order.customer.longitude}`;
     return googleMapsUrl;
   }
@@ -44,44 +33,38 @@ const YemekSepetiPrintOrder = ({ order }) => {
 
       <div className="text-lg">
         <p>
-          <span className="font-bold">Müşteri </span>
-          <span>: {order.customer.firstName}</span>
-        </p>
-        <p>
-          <span className="font-bold">Tel </span>
-
-          {order.customer.mobilePhone ? (
-            <span>: {order.customer.mobilePhone}</span>
-          ) : (
-            <>
-              {order.customer.customerPhoneNumber.split("/")[0]}
-              <span className="font-bold">Ext </span>
-              <span>: {order.customer.customerPhoneNumber.split("/")[1]}</span>
-            </>
-          )}
-        </p>
-        <p>
-          <span className="font-bold">Adres </span>
+          <span className="font-bold">Müşteri: </span>
           <span>
-            <span>: {customerAddress}</span>
-            {order.customer.building && (
-              <span>Bldg: {order.customer.building}</span>
-            )}
-            {order.customer.entrance && (
-              <span> Daire No: {order.customer.entrance}</span>
-            )}
-            {order.customer.floor && <span> Kat: {order.customer.floor}</span>}
+            {" "}
+            {order.customer.firstName + " " + order.customer.lastName}
           </span>
         </p>
         <p>
-          <span className="font-bold">Bölge </span>{" "}
-          <span>: {order?.customer?.deliveryMainArea?.split(" ")[0]}</span>
+          <span className="font-bold">Tel: </span>
+
+          {order.customer.mobilePhone ? (
+            <span> {order.customer.mobilePhone}</span>
+          ) : (
+            <>
+              {order.customer.customerPhoneNumber.split("/")[0]}
+              <span className="font-bold">Ext: </span>
+              <span> {order.customer.customerPhoneNumber.split("/")[1]}</span>
+            </>
+          )}
+        </p>
+        <div className="flex">
+          <p className="font-bold pr-1">Adres: </p>
+          <YemekSepetiAddress order={order} />
+        </div>
+        <p>
+          <span className="font-bold">Bölge: </span>{" "}
+          <span> {order?.customer?.deliveryMainArea?.split(" ")[0]}</span>
         </p>
         {order.customer.deliveryInstructions && (
-          <p>
-            <span className="font-bold">Tarif </span>
-            <span>: {order.customer.deliveryInstructions}</span>
-          </p>
+          <div className="flex">
+            <p className="font-bold pr-1">Tarif: </p>
+            <div> {order.customer.deliveryInstructions}</div>
+          </div>
         )}
         <p>
           <span className="font-bold">Sip. Tar. </span>
@@ -99,8 +82,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
           <span>: {order.marketplaceTicketPaymentMethodName}</span>
         </p>
         <p>
-          <span className="font-bold">Sip No </span>
-          <span>: {order.code}</span>
+          <span className="font-bold">Sip No: </span>
+          <span> {order.code}</span>
         </p>
       </div>
 
@@ -243,7 +226,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
       <div className="text-lg text-center">
         <p>Müşteri Konumu QR</p>
         <div className="flex justify-center my-2">
-          <QrGenerator text={getFullAddress()} />
+          <QrGenerator text={getGoogleAddress()} />
         </div>
         <p>
           <span className="font-bold" style={{ fontFamily: "conthrax" }}>

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import { CancelI } from "../../../../assets/icon";
 import CustomInput from "../../../common/customInput";
+import CustomCheckbox from "../../../common/customCheckbox";
 import CustomToast from "../../../common/customToast";
 import { usePopup } from "../../../../context/PopupContext";
 
@@ -123,6 +124,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
         sellerId: infoData.sellerId,
         remoteId: infoData.remoteId,
         chainCode: infoData.chainCode,
+        sendYemekSepetiEmailNotify: false,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);
@@ -183,7 +185,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
 
         <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
           <form onSubmit={handleSubmit}>
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div>
               <CustomInput
                 required
                 maxLength={4}
@@ -205,7 +207,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
               />
             </div>
 
-            <div className="flex max-sm:flex-col sm:gap-4">
+            <div>
               <CustomInput
                 required
                 label="Chain Code"
@@ -224,7 +226,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             </div>
 
             {licenseData.remoteId && (
-              <div className="flex max-sm:flex-col sm:gap-4">
+              <div>
                 <CustomInput
                   disabled
                   label="remoteId"
@@ -244,10 +246,12 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             )}
 
             <div className="flex gap-2 mt-6">
-              <p className="flex justify-center items-center -ml-5">%</p>
+              <p className="hidden justify-center items-center sm:flex -ml-5">
+                %
+              </p>
               <CustomInput
                 type="number"
-                label="Komisyon Oranı"
+                label="Komisyon Oranı (%)"
                 placeholder="Komisyon Oranı"
                 className="py-[.45rem] text-sm mt-[0] sm:mt-[0]"
                 className2="mt-[0] sm:mt-[0]"
@@ -263,6 +267,31 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
                 disabled={/* data?.isSettingsAdded || */ getLoading}
               />
             </div>
+
+            {licenseData.chainCode && (
+              <div className="mt-3">
+                <CustomCheckbox
+                  label="YemekSepei'ye E-Posta gönder"
+                  checked={licenseData.sendYemekSepetiEmailNotify}
+                  onChange={() => {
+                    setLicenseData((prev) => {
+                      return {
+                        ...prev,
+                        sendYemekSepetiEmailNotify:
+                          !licenseData.sendYemekSepetiEmailNotify,
+                      };
+                    });
+                    setLicenseDataBefore((prev) => {
+                      return {
+                        ...prev,
+                        sendYemekSepetiEmailNotify:
+                          !licenseData.sendYemekSepetiEmailNotify,
+                      };
+                    });
+                  }}
+                />
+              </div>
+            )}
 
             <div className="w-full flex justify-end mt-10">
               <button

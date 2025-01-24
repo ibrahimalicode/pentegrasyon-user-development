@@ -1,6 +1,7 @@
 import CloseI from "../../../assets/icon/close";
 import { usePopup } from "../../../context/PopupContext";
 import GetirYemekRestaurantsStatus from "../getirYemek/getirYemekRestaurantsStatus";
+import MigrosYemekRestaurantsStatus from "../migrosYemek/migrosYemekRestaurantsStatus";
 import YemekSepetiRestaurantsStatus from "../yemekSepeti/yemekSepetiRestaurantsStatus";
 
 const RestaurantsStatusPopup = () => {
@@ -19,7 +20,7 @@ const RestaurantsStatusPopup = () => {
       <div className="flex flex-col gap-2">
         <GetirYemekRestaurantsStatus />
         <YemekSepetiRestaurantsStatus />
-        {/* <MigrosYemekRestaurantsStatus /> */}
+        <MigrosYemekRestaurantsStatus />
       </div>
     </main>
   );

@@ -86,6 +86,7 @@ const RestaurantsStatus = () => {
       if (
         !Restaurant?.name &&
         !Restaurant?.restaurantName &&
+        !Restaurant?.storeName &&
         !statusValue(Restaurant)
       ) {
         return Restaurant;

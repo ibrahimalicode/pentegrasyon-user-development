@@ -11,9 +11,9 @@ import { useFirestore } from "../../../context/FirestoreContext";
 
 //UTILS
 import courierServiceTypes from "../../../enums/courierServiceType";
+import MigrosYemekStatusButtons from "./migrosYemekStatusButtons";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import migrosYemekiOrderStatuses from "../../../enums/migrosYemekiOrderStatuses";
-import MigrosYemekStatusButtons from "./migrosYemekStatusButtons";
 
 const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();

@@ -37,8 +37,6 @@ const OrdersTable = ({ ordersData, setOrdersData }) => {
     };
   }
 
-  console.log(ordersData.filter((O) => O.marketplaceId == 1));
-
   return (
     <main className="overflow-x-auto">
       <div className="border border-solid border-[--light-4] rounded-lg min-w-max">

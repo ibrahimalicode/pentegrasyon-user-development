@@ -1,59 +1,65 @@
+//MODULES
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import CustomToggle from "../../common/customToggle";
 import { useDispatch, useSelector } from "react-redux";
+
+//UTILS
+import RestaurantStatuses from "../../../enums/restaurantStatuses";
+
+//REDUX
 import {
-  getirYemekGetRestaurants,
-  resetGetirYemekGetRestaurants,
-} from "../../../redux/getirYemek/getirYemekGetRestaurantsSlice";
+  migrosYemekGetRestaurants,
+  resetMigrosYemekGetRestaurants,
+} from "../../../redux/migrosYemek/migrosYemekGetRestaurantsSlice";
 import {
-  getirYemekUpdateRestaurantStatus,
-  resetGetirYemekUpdateRestaurantStatus,
-} from "../../../redux/getirYemek/getirYemekUpdateRestaurantStatusSlice";
-import toast from "react-hot-toast";
+  migrosYemekUpdateRestaurantStatus,
+  resetMigrosYemekUpdateRestaurantStatus,
+} from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantStatusSlice";
 import {
-  getirYemekUpdateRestaurantCourierStatus,
-  resetgetirYemekUpdateRestaurantCourierStatus,
-} from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
+  migrosYemekUpdateRestaurantCourierStatus,
+  resetMigrosYemekUpdateRestaurantCourierStatus,
+} from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantCourierStatusSlice";
 
 const MigrosYemekRestaurantsStatus = () => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
   const { loading, success, data, error } = useSelector(
-    (state) => state.getirYemek.getRestaurants
+    (state) => state.migrosYemek.getRestaurants
   );
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
-    useSelector((state) => state.getirYemek.updateRestaurants);
+    useSelector((state) => state.migrosYemek.updateRestaurants);
 
   const { loading: updateCourierLoading, error: updateCourierError } =
-    useSelector((state) => state.getirYemek.updateRestaurantsCourier);
+    useSelector((state) => state.migrosYemek.updateRestaurantsCourier);
 
   function updateRestaurantStatus(id) {
     const updatedStat = {
       ...statusData,
       [id]: {
         ...statusData[id],
-        status: !statusData[id].status,
+        active: !statusData[id].active,
       },
     };
-    dispatch(getirYemekUpdateRestaurantStatus({ ...updatedStat[id] })).then(
+    dispatch(migrosYemekUpdateRestaurantStatus({ ...updatedStat[id] })).then(
       (res) => {
         if (res.meta.requestStatus === "fulfilled") {
           toast.dismiss(toastId.current);
-          const text = updatedStat[id].status === true ? "Açıldı" : "Kapandı";
+          const text = updatedStat[id].active === true ? "Açıldı" : "Kapandı";
           const className =
-            updatedStat[id].status === true
+            updatedStat[id].active === true
               ? "text-[--green-1]"
               : "text-[--red-1]";
           const comp = (
             <div>
-              {updatedStat[id].name}
+              {updatedStat[id].storeName}
               <span className={className}> {text}</span>
             </div>
           );
           toast.success(comp, { id: "success" });
           setStatusData(updatedStat);
-          dispatch(resetGetirYemekUpdateRestaurantStatus());
+          dispatch(resetMigrosYemekUpdateRestaurantStatus());
         }
       }
     );
@@ -68,7 +74,7 @@ const MigrosYemekRestaurantsStatus = () => {
       },
     };
     dispatch(
-      getirYemekUpdateRestaurantCourierStatus({ ...updatedStat[id] })
+      migrosYemekUpdateRestaurantCourierStatus({ ...updatedStat[id] })
     ).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
         toast.dismiss(toastId.current);
@@ -80,20 +86,73 @@ const MigrosYemekRestaurantsStatus = () => {
             : "text-[--red-1]";
         const comp = (
           <div>
-            {updatedStat[id].name} Kuriye durumu
+            {updatedStat[id].storeName} Kuriye durumu
             <span className={className}> {text}</span>
           </div>
         );
         toast.success(comp, { id: "success" });
         setStatusData(updatedStat);
-        dispatch(resetgetirYemekUpdateRestaurantCourierStatus());
+        dispatch(resetMigrosYemekUpdateRestaurantCourierStatus());
       }
     });
   }
 
+  //GET RESTAURANT STATUS
+  useEffect(() => {
+    if (!statusData) {
+      dispatch(migrosYemekGetRestaurants());
+    }
+  }, [statusData]);
+
+  //TOAST AND SET RESTAURANT STATUS
+  useEffect(() => {
+    function statusValue(inData) {
+      return RestaurantStatuses[inData.marketplaceId].filter(
+        (S) => S.id == inData.active
+      )[0]?.value;
+    }
+    if (error) {
+      dispatch(resetMigrosYemekGetRestaurants());
+    }
+    if (success) {
+      const formattedData = [];
+      data.map((res) => {
+        formattedData[res.id] = {
+          ...res,
+          restaurantStatus: statusValue(res),
+          courierStatus: res.isCourierAvailable,
+        };
+      });
+      setStatusData(formattedData);
+      dispatch(resetMigrosYemekGetRestaurants());
+    }
+  }, [error, success]);
+
+  //RESTAURANT UPDATE TOAST
+  useEffect(() => {
+    if (updateRestaurantLoading) {
+      toastId.current = toast.loading("İşleniyor...");
+    }
+    if (updateRestaurantError) {
+      toast.dismiss(toastId.current);
+      dispatch(resetMigrosYemekUpdateRestaurantStatus());
+    }
+  }, [updateRestaurantLoading, updateRestaurantError]);
+
+  //COURIER UPDATE TOAST
+  useEffect(() => {
+    if (updateCourierLoading) {
+      toastId.current = toast.loading("İşleniyor...");
+    }
+    if (updateCourierError) {
+      toast.dismiss(toastId.current);
+      dispatch(resetMigrosYemekUpdateRestaurantCourierStatus());
+    }
+  }, [updateCourierLoading, updateCourierError]);
+
   return (
     <main>
-      <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--orange-1] border-y border-[--orange-1]">
+      <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1] border-y border-[--migrosyemek-1]">
         Migros Yemek
       </div>
       <div className="w-full px-3 text-sm">
@@ -112,7 +171,7 @@ const MigrosYemekRestaurantsStatus = () => {
                 const restaurant = statusData[key];
                 return (
                   <tr key={i}>
-                    <td className="text-start">{restaurant.name}</td>
+                    <td className="text-start">{restaurant.storeName}</td>
                     <td className="text-center">
                       <CustomToggle
                         className="scale-75"
@@ -120,7 +179,7 @@ const MigrosYemekRestaurantsStatus = () => {
                           updateRestaurantLoading && "cursor-not-allowed"
                         }`}
                         onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].status}
+                        checked={statusData[key].active}
                         disabled={updateRestaurantLoading}
                       />
                     </td>

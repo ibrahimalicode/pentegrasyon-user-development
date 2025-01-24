@@ -5,7 +5,7 @@ const RestaurantStatuses = [
   ],
   [
     { label: "Açık", value: true, id: true, key: "active" },
-    { label: "Kapalı", value: false, id: true },
+    { label: "Kapalı", value: false, id: false },
   ],
   [],
   [

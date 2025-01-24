@@ -52,6 +52,8 @@ const migrosYemekiOrderStatuses = [
   },
 ];
 
+export default migrosYemekiOrderStatuses;
+
 // {
 //   NEW_PENDING,         //Beklemede
 

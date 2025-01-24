@@ -225,10 +225,10 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
   const userName = order?.client?.name
     ? order?.client?.name
     : order?.customer?.firstName
-    ? order?.customer?.firstName
+    ? order.customer.firstName
     : "";
 
-  // console.log(currentCompensation);
+  // console.log(order.customer.firstName);
   // console.log(restaurantCouriers);
 
   return (
@@ -243,10 +243,10 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
             <span className="font-bold text-[--black-1]">Müşteri:</span>{" "}
             {userName}{" "}
           </p>
-          <p>
-            <span className="font-bold text-[--black-1]">Adres: </span>
+          <div className="flex">
+            <span className="font-bold text-[--black-1] mr-1">Adres: </span>
             <Address order={order} />
-          </p>
+          </div>
           {locatioData && (
             <p className="flex">
               <span className="font-bold text-[--black-1] mr-2">Mesafe: </span>

@@ -92,9 +92,8 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
         "Yemeksepeti tarafından Entegrasyon geçişleri sadece Salı, Çarşamba ve Perşembe günleri olarak belirlenmiştir.. Entegrasyon geçişi yapıldığında Chain Code bilgisi tarafınıza iletilecektir. Bu kodu girdiğinizde Pentegrasyon servisi çalışmaya başlayacaktır.",
     };
     if (
-      licenseData.chainCode !== licenseDataBefore.chainCode ||
-      licenseData.remoteId !== licenseDataBefore.remoteId ||
-      licenseData.sellerId !== licenseDataBefore.sellerId
+      !licenseDataBefore.chainCode ||
+      licenseData.sendYemekSepetiEmailNotify
     ) {
       toast.custom((t) => CustomToast({ color: "green", message, t }), {
         position: "top-right",

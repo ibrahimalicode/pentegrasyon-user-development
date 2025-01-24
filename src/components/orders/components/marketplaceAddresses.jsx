@@ -41,3 +41,31 @@ export const YemekSepetiAddress = ({ order, className }) => {
     </div>
   );
 };
+
+export const MigrosYemekAddress = ({ order, className }) => {
+  const customerAddress = `
+  ${order.customer.city ?? ""},
+  ${order.customer.district ?? ""},
+  ${order.customer.streetName ?? ""},`;
+
+  return (
+    <div className={`flex flex-wrap ${className}`}>
+      <p>{customerAddress}</p>
+      {order.customer.buildingNumber && (
+        <p className="min-w-max ">
+          {" "}
+          Bina No: {order.customer.buildingNumber},{" "}
+        </p>
+      )}
+      {order.customer.doorNumber && (
+        <p className="min-w-max px-0.5">
+          {" "}
+          Daire No: {order.customer.doorNumber},{" "}
+        </p>
+      )}
+      {order.customer.floorNumber && (
+        <p className="min-w-max"> Kat: {order.customer.floorNumber}</p>
+      )}
+    </div>
+  );
+};

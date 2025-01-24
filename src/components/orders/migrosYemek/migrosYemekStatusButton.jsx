@@ -2,48 +2,49 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-//COMP
-import YemekSepetiOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
-import { useYemekSepetiOrderActions } from "./useYemekSepetiOrderActions";
-
 //UTILS
-import GlowButton from "../components/glowButton";
 import { usePopup } from "../../../context/PopupContext";
-import toastStatusError from "../components/toastOrderStatError";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
-import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
+import { useMigrosYemekOrderActions } from "./useMigrosYemekOrderActions";
+import migrosYemekiOrderStatuses from "../../../enums/migrosYemekiOrderStatuses";
 
-const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
+//COMP
+import GlowButton from "../components/glowButton";
+import toastStatusError from "../components/toastOrderStatError";
+import MigrosYemekOrderErrorPopup from "./migrosYemekOrderErrorPopup";
+
+const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
   const ticketId = order.id;
   const { setPopupContent } = usePopup();
 
   const { verifyOrder, prepareOrder, deliverOrder } =
-    useYemekSepetiOrderActions({ order, ticketId, setOrdersData });
+    useMigrosYemekOrderActions({ order, ticketId, setOrdersData });
 
   const { loading: verifyLoading, error: verifyErr } = useSelector(
-    (state) => state.yemekSepeti.verifyTicket
+    (state) => state.migrosYemek.verifyTicket
   );
 
   const { loading: prepareLoading, error: prepareErr } = useSelector(
-    (state) => state.yemekSepeti.prepareTicket
+    (state) => state.migrosYemek.prepareTicket
   );
 
   const { loading: deliverLoading, error: deliverErr } = useSelector(
-    (state) => state.yemekSepeti.deliverTicket
+    (state) => state.migrosYemek.deliverTicket
   );
 
   const { loading: cancelLoading, error: cancelErr } = useSelector(
-    (state) => state.yemekSepeti.cancelTicket
+    (state) => state.migrosYemek.cancelTicket
   );
 
-  let orderStatus = yemekSepetiOrderStatuses.filter(
+  let orderStatus = migrosYemekiOrderStatuses.filter(
     (stat) => stat.id === order.status
   )[0];
-  const nextId = yemekSepetiOrderStatuses.filter((S) => S.id == order.status)[0]
-    ?.nextId;
+  const nextId = migrosYemekiOrderStatuses.filter(
+    (S) => S.id == order.status
+  )[0]?.nextId;
 
   if (nextId) {
-    orderStatus = yemekSepetiOrderStatuses.filter((s) => s.id === nextId)[0];
+    orderStatus = migrosYemekiOrderStatuses.filter((s) => s.id === nextId)[0];
   } else {
     orderStatus = { ...orderStatus, text: orderStatus?.label };
   }
@@ -52,14 +53,14 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     function remSec(date, min = 1) {
       return compareWithCurrentDateTime(date, null, min).remainingSeconds;
     }
-    if (order.status === 0) {
+    if (order.status === "NEW_PENDING") {
       verifyOrder();
       return;
-    } else if (order.status === 1) {
+    } else if (order.status === "COLLECTING") {
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
       } else toastStatusError(order.approvalDate, 1);
-    } else if (order.status === 2) {
+    } else if (order.status === "COLLECTION_APPROVED") {
       if (!(remSec(order.preparationDate, 10) > 0)) {
         deliverOrder();
       } else toastStatusError(order.preparationDate, 10);
@@ -71,8 +72,8 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     prepareLoading ||
     deliverLoading ||
     cancelLoading ||
-    order.status == 3 ||
-    order.status == 4;
+    order.status == "DELIVERED" ||
+    order.status == "Cancelled";
 
   const btnClass =
     "relative overflow-clip after:absolute after:top-0 after:left-0 after:bg-[var(--after-bg)] after:w-full after:h-full after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-md after:ease-in-out";
@@ -84,7 +85,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
 
       if (actionError.ticketId == order.id && actionError.statusCode != 408) {
         setPopupContent(
-          <YemekSepetiOrderErrorPopup
+          <MigrosYemekOrderErrorPopup
             order={order}
             ticketId={ticketId}
             setOrdersData={setOrdersData}
@@ -95,7 +96,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
-  return order.status == 0 ? (
+  return order.status == "NEW_PENDING" ? (
     <GlowButton text="Onayla" onClick={handleClick} />
   ) : (
     <button
@@ -116,4 +117,4 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   );
 };
 
-export default YemekSepetiStatusButton;
+export default MigrosYemekStatusButton;

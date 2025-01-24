@@ -4,13 +4,14 @@ import React from "react";
 //COMP
 import GetirYemekTableBody from "./getirYemek/getirYemekTableBody";
 import YemekSepetiTableBody from "./yemekSepeti/yemekSepetiTableBody";
+import MigrosYemekTableBody from "./migrosYemek/migrosYemekTableBody";
 
 export const marketplaceTableBodies = [
   {
     TableBody: GetirYemekTableBody,
   },
   {
-    TableBody: GetirYemekTableBody,
+    TableBody: MigrosYemekTableBody,
   },
   {
     TableBody: YemekSepetiTableBody,

@@ -18,6 +18,7 @@ import integrationInformationsSlice from "./redux/informations";
 import yemekSepetiSlice from "./redux/yemekSepeti";
 import paymentsSlice from "./redux/payments";
 import messagesSlice from "./redux/messages";
+import migrosYemekSlice from "./redux/migrosYemek";
 
 const store = configureStore({
   reducer: {
@@ -33,6 +34,7 @@ const store = configureStore({
     orders: ordersSlice,
     getirYemek: getirYemekSlice,
     yemekSepeti: yemekSepetiSlice,
+    migrosYemek: migrosYemekSlice,
     dashboard: dashboardSlice,
     couriers: couriersSlice,
     payments: paymentsSlice,

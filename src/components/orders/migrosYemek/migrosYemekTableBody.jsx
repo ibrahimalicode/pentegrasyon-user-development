@@ -13,14 +13,13 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 import GoogleRoute from "../components/googleRoute";
 import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
-import YemekSepetiPrintOrder from "./yemekSepetiPrintOrder";
-import RemainingMinutes from "../components/remainingMinutes";
-import YemekSepetiOrderDetails from "./yemekSepetiOrderDetails";
-import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
-import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
-import { YemekSepetiAddress } from "../components/marketplaceAddresses";
+import MigrosYemekPrintOrder from "./migrosYemekPrintOrder";
+import MigrosYemekOrderDetails from "./migrosYemekOrderDetails";
+import MigrosYemekStatusButton from "./migrosYemekStatusButton";
+import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
+import { MigrosYemekAddress } from "../components/marketplaceAddresses";
 
-const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
+const MigrosYemekTableBody = ({ order, totalItems, setOrdersData }) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
@@ -50,7 +49,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
 
   function cellClicked() {
     setSlideBarContent(
-      <YemekSepetiOrderDetails
+      <MigrosYemekOrderDetails
         order={{
           ...order,
           checkedScheduledDate: isCheckoutToday(order.scheduledDate),
@@ -82,24 +81,18 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
         <td onClick={cellClicked} className="pl-4">
           <img
             alt="perntegrasyon-marketplace"
-            src={YemekSepeti}
+            src={MigrosYemek}
             className="size-10"
           />
         </td>
         <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
-          {order.code}
+          {order.shortCode}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.restaurantName}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           <p>{isCheckoutToday(order.createdDateTime)}</p>
-          {order.isScheduled &&
-            order.status != 1500 &&
-            order.status != 1600 &&
-            order.status != 900 && (
-              <RemainingMinutes date={order.scheduledDate} />
-            )}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.customer.firstName + " " + order.customer.lastName}
@@ -122,15 +115,9 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           className="whitespace-nowrap"
         >
           <button
-            className={`border py-2 px-3 rounded-md ${
-              order.expeditionType.toLocaleLowerCase() == "pickup"
-                ? "border-[--green-1] text-[--green-1]"
-                : "border-[--primary-1]"
-            }`}
+            className={`border py-2 px-3 rounded-md border-[--primary-1]`}
           >
-            {order.expeditionType.toLocaleLowerCase() == "pickup"
-              ? "Gel Al"
-              : order?.customer?.deliveryMainArea?.split(" ")[0]}
+            {order.customer.district}
           </button>
         </td>
         <td
@@ -139,7 +126,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
               <ChooseCourier
                 order={order}
                 setOrdersData={setOrdersData}
-                Address={YemekSepetiAddress}
+                Address={MigrosYemekAddress}
                 locatioData={{
                   lat1: order.restaurantLatitude,
                   lng1: order.restaurantLongitude,
@@ -158,24 +145,23 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
               );
               return currentCourier.length
                 ? currentCourier[0].label
-                : order?.courier?.name; //YS kurye adi
+                : order?.courier?.name; //MY kurye adi
             })()}
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {Number(order.discountAmountTotal)
+          {order.discountedPrice == order.totalPrice
             ? formatToPrice(
-                String(Number(order.discountAmountTotal).toFixed(2)).replace(
-                  ".",
-                  ","
-                )
+                String(order.totalPrice.toFixed(2)).replace(".", ",")
               )
             : formatToPrice(
-                String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+                String(
+                  (order.totalPrice - order.discountedPrice).toFixed(2)
+                ).replace(".", ",")
               )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
-          <YemekSepetiStatusButton
+          <MigrosYemekStatusButton
             order={{
               ...order,
               approvalDate: isValidDate(order.approvalDate),
@@ -189,7 +175,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
         <td className="w-14 relative">
           {
             <PrintComponent
-              component={<YemekSepetiPrintOrder order={formatOrder()} />}
+              component={<MigrosYemekPrintOrder order={formatOrder()} />}
             />
           }
         </td>
@@ -198,4 +184,4 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
   );
 };
 
-export default YemekSepetiTableBody;
+export default MigrosYemekTableBody;

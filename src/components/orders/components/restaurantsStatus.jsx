@@ -194,7 +194,12 @@ const RestaurantsStatus = () => {
                         src={MarketPlaceAssets[rest.marketplaceId].src}
                       />
                       <p>
-                        {rest.name ? rest.name : rest.restaurantName} Kapalı
+                        {rest.name
+                          ? rest.name
+                          : rest.restaurantName
+                          ? rest.restaurantName
+                          : rest.storeName}
+                        Kapalı
                       </p>
                     </div>
                   )
@@ -226,7 +231,14 @@ const RestaurantsStatus = () => {
                   className="size-6 rounded-full"
                   src={MarketPlaceAssets[rest.marketplaceId].src}
                 />{" "}
-                <p>{rest.name ? rest.name : rest.restaurantName} Kapalı</p>
+                <p>
+                  {rest.name
+                    ? rest.name
+                    : rest.restaurantName
+                    ? rest.restaurantName
+                    : rest.storeName}
+                  Kapalı
+                </p>
               </div>
             ))
           )}

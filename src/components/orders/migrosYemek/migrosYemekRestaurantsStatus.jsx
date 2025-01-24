@@ -39,16 +39,17 @@ const MigrosYemekRestaurantsStatus = () => {
       ...statusData,
       [id]: {
         ...statusData[id],
-        active: !statusData[id].active,
+        restaurantStatus: !statusData[id].restaurantStatus,
       },
     };
     dispatch(migrosYemekUpdateRestaurantStatus({ ...updatedStat[id] })).then(
       (res) => {
         if (res.meta.requestStatus === "fulfilled") {
           toast.dismiss(toastId.current);
-          const text = updatedStat[id].active === true ? "Açıldı" : "Kapandı";
+          const text =
+            updatedStat[id].restaurantStatus === true ? "Açıldı" : "Kapandı";
           const className =
-            updatedStat[id].active === true
+            updatedStat[id].restaurantStatus === true
               ? "text-[--green-1]"
               : "text-[--red-1]";
           const comp = (
@@ -179,7 +180,7 @@ const MigrosYemekRestaurantsStatus = () => {
                           updateRestaurantLoading && "cursor-not-allowed"
                         }`}
                         onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].active}
+                        checked={statusData[key].restaurantStatus}
                         disabled={updateRestaurantLoading}
                       />
                     </td>

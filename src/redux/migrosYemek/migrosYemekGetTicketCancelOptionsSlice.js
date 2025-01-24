@@ -54,7 +54,7 @@ export const migrosYemekGetTicketCancelOptions = createAsyncThunk(
       });
 
       // console.log(res);
-      return res.data.data;
+      return res.data.data.data;
     } catch (err) {
       console.log(err);
       if (err?.response?.data) {

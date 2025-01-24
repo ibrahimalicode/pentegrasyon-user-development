@@ -1,74 +1,73 @@
 const migrosYemekiOrderStatuses = [
   {
-    bg: "--status-green-",
+    bg: "--status-green",
     color: "--green-1",
     label: "Onay Bekliyor", //Beklemede
     value: true,
-    id: "NEW_PENDING",
-    nextId: "COLLECTING",
+    id: 0,
+    nextId: 2,
   },
   {
-    bg: "--status-green-",
+    bg: "--status-green",
     color: "--green-1",
     label: "Hazırlanıyor", //Hazırlanıyor
     value: true,
     text: "Onayla",
-    id: "COLLECTING",
-    nextId: "COLLECTION_APPROVED",
+    id: 2,
+    nextId: 6,
   },
   {
-    bg: "--status-green-",
-    color: "--green-1",
-    label: "Kuryeye Verilecek", //Kuryeye Verilecek
-    value: true,
-    text: "Hazırla",
-    id: "COLLECTION_APPROVED",
-    nextId: "IN_DELIVERY",
-  },
-  {
-    bg: "--status-green-",
+    bg: "--status-green",
     color: "--green-1",
     label: "Teslim Edilecek", //Teslim Edilecek veya Yola Çıktı
     value: true,
     text: "Yola Çıkart",
-    id: "IN_DELIVERY",
-    nextId: "DELIVERED",
+    id: 6,
+    nextId: 8,
   },
   {
-    bg: "--status-green-",
+    bg: "--status-green",
     color: "--green-1",
     label: "Teslim Edildi", //Teslim Edildi
     value: true,
     text: "Teslim Et",
-    id: "DELIVERED",
+    id: 8,
   },
   {
-    bg: "--status-green-",
-    color: "--green-1",
+    bg: "--status-red",
+    color: "--red-1",
     label: "İptal Edildi", //İptal Edildi
     value: true,
     text: "İptal Et",
-    id: "Cancelled",
+    id: 9,
+  },
+  {
+    bg: "--status-red",
+    color: "--red-1",
+    label: "İptal Edildi", //İptal Edildi
+    value: true,
+    text: "İptal Et",
+    id: 10,
   },
 ];
 
 export default migrosYemekiOrderStatuses;
 
 // {
-//   NEW_PENDING,         //Beklemede
+//   NEW_PENDING = 0,         //Beklemede
 
-//   Approved,            //Onayla
-//   COLLECTING,          //Hazırlanıyor
+//--------//   Approved = 1,            //Onayla-------//
+//   COLLECTING = 2,          //Hazırlanıyor
 
-//   Prepared,            //Hazırla
-//   COLLECTION_APPROVED, //Kuryeye Verilecek
+//---------   Prepared = 3,            //Hazırla
+//---------   COLLECTION_APPROVED = 4, //Kuryeye Verilecek
 
-//   Delivery,            //Yola Çıkart
-//   IN_DELIVERY,         //Teslim Edilecek
+//---------   Delivery = 5,            //Yola Çıkart
+//   IN_DELIVERY = 6,         //Teslim Edilecek
 
-//   Completed,           //Teslim Et
-//   DELIVERED,           //Teslim Edildi
+//----------   Completed = 7,           //Teslim Et
+//   DELIVERED = 8,           //Teslim Edildi
 
-//   Rejected,            //Reddedildi
-//   Cancelled,           //İptal Edildi
+//   Rejected = 9,            //Reddedildi
+//   Cancelled = 10,           //İptal Edildi
 // }

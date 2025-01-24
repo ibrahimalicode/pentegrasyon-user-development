@@ -53,14 +53,14 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
     function remSec(date, min = 1) {
       return compareWithCurrentDateTime(date, null, min).remainingSeconds;
     }
-    if (order.status === "NEW_PENDING") {
+    if (order.status === 0) {
       verifyOrder();
       return;
-    } else if (order.status === "COLLECTING") {
+    } else if (order.status === 2) {
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
       } else toastStatusError(order.approvalDate, 1);
-    } else if (order.status === "COLLECTION_APPROVED") {
+    } else if (order.status === 6) {
       if (!(remSec(order.preparationDate, 10) > 0)) {
         deliverOrder();
       } else toastStatusError(order.preparationDate, 10);
@@ -72,8 +72,9 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
     prepareLoading ||
     deliverLoading ||
     cancelLoading ||
-    order.status == "DELIVERED" ||
-    order.status == "Cancelled";
+    order.status == 8 ||
+    order.status == 9 ||
+    order.status == 10;
 
   const btnClass =
     "relative overflow-clip after:absolute after:top-0 after:left-0 after:bg-[var(--after-bg)] after:w-full after:h-full after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-md after:ease-in-out";
@@ -96,7 +97,7 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
-  return order.status == "NEW_PENDING" ? (
+  return order.status == 0 ? (
     <GlowButton text="Onayla" onClick={handleClick} />
   ) : (
     <button

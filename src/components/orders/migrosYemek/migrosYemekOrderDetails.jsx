@@ -3,10 +3,7 @@ import React, { useEffect, useState } from "react";
 
 //COMP
 import CloseI from "../../../assets/icon/close";
-import {
-  MigrosYemekAddress,
-  YemekSepetiAddress,
-} from "../components/marketplaceAddresses";
+import { MigrosYemekAddress } from "../components/marketplaceAddresses";
 
 //CONTEXT
 import { useSlideBar } from "../../../context/SlideBarContext";
@@ -16,6 +13,7 @@ import { useFirestore } from "../../../context/FirestoreContext";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import migrosYemekiOrderStatuses from "../../../enums/migrosYemekiOrderStatuses";
+import MigrosYemekStatusButtons from "./migrosYemekStatusButtons";
 
 const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
@@ -276,7 +274,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      {/* <YemekSepetiStatusButtons
+      <MigrosYemekStatusButtons
         order={{
           ...sideOrder,
           approvalDate: isValidDate(sideOrder.approvalDate),
@@ -286,7 +284,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
         }}
         setOrdersData={setOrdersData}
         setSideOrder={setSideOrder}
-      /> */}
+      />
     </main>
   );
 };

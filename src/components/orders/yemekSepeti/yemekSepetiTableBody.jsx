@@ -83,7 +83,7 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           <img
             alt="perntegrasyon-marketplace"
             src={YemekSepeti}
-            className="size-10"
+            className="size-10 rounded-full"
           />
         </td>
         <td onClick={cellClicked} className="pl-4 whitespace-nowrap">

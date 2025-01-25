@@ -79,7 +79,7 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     prepareLoading ||
     deliverLoading ||
     cancelLoading ||
-    (orderStat.id !== 350 && orderStat.id !== 700 && nextId !== 900);
+    !nextId;
 
   const btnClass = `relative overflow-clip dynamic-after after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-[var(--after-bg)] after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-md after:ease-in-out`;
 

@@ -163,16 +163,9 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {Number(order.discountAmountTotal)
-            ? formatToPrice(
-                String(Number(order.discountAmountTotal).toFixed(2)).replace(
-                  ".",
-                  ","
-                )
-              )
-            : formatToPrice(
-                String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
-              )}
+          {formatToPrice(
+            String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+          )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
           <YemekSepetiStatusButton

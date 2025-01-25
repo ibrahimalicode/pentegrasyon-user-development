@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { usePopup } from "../../context/PopupContext";
-import { BellI, SettingsI, MenuI, InfoI, CloseI } from "../../assets/icon";
+import { BellI, SettingsI, MenuI } from "../../assets/icon";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
 import { useMessagesContext } from "../../context/MessagesContext";
 import { useFirestore } from "../../context/FirestoreContext";
+import customToast from "../common/customToast";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const toastId = useRef();

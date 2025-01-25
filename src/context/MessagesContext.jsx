@@ -1,15 +1,21 @@
-import { createContext, useContext, useEffect, useState } from "react";
+//MODULES
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { createContext, useContext, useEffect, useState } from "react";
+
+//REDUX
+import { getAuth } from "../redux/api";
 import {
   getMessages,
   resetGetMessages,
 } from "../redux/messages/getMessagesSlice";
 import { useFirestore } from "./FirestoreContext";
+
+//UTILS
 import { formatByDate } from "../utils/utils";
 import newMessageMp3 from "../assets/sound/newMessage.mp3";
-import { getAuth } from "../redux/api";
-import { CloseI, InfoI } from "../assets/icon";
-import toast from "react-hot-toast";
+
+//COMP
 import CustomToast from "../components/common/customToast";
 
 const MessagesContext = createContext();
@@ -58,6 +64,7 @@ export const MessagesContextProvider = ({ children }) => {
   //TOAST NEW MESSAGE
   useEffect(() => {
     if (newMessage) {
+      console.log("New Message");
       toast.custom((t) => CustomToast({ message: newMessage, t }), {
         position: "top-right",
         duration: 60000,

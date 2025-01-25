@@ -83,7 +83,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   const btnClass =
     "relative overflow-clip after:absolute after:top-0 after:left-0 after:bg-[var(--after-bg)] after:w-full after:h-full after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-md after:ease-in-out";
 
-  //ORDER ONLY DB ACTION POPUP
+  //ORDER: ONLY IN DB ACTION-POPUP
   useEffect(() => {
     if (verifyErr || prepareErr || deliverErr || cancelErr) {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;

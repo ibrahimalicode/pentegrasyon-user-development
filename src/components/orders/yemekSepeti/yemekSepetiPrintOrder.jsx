@@ -190,19 +190,33 @@ const YemekSepetiPrintOrder = ({ order }) => {
           <>
             <p className="flex justify-between">
               <span>Hesap Toplamı : </span>
-              <span className="font-bold">{order.grandTotal}</span>
+              <span className="font-bold">
+                {formatToPrice(
+                  String(
+                    (
+                      Number(order.grandTotal) +
+                      Number(order.discountAmountTotal)
+                    ).toFixed(2)
+                  ).replace(".", ",")
+                )}
+              </span>
             </p>
             <p className="flex justify-between">
               <span>
                 %
-                {Number(100 / order.grandTotal) *
+                {(100 /
+                  (Number(order.grandTotal) +
+                    Number(order.discountAmountTotal))) *
                   Number(order.discountAmountTotal)}{" "}
                 iskonto :{" "}
               </span>{" "}
               {/* LOOK */}
               <span>
                 {formatToPrice(
-                  String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+                  String(Number(order.discountAmountTotal).toFixed(2)).replace(
+                    ".",
+                    ","
+                  )
                 )}
               </span>
             </p>
@@ -213,11 +227,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
           <span>Ödenecek Tutar : </span>
           <span className="font-bold">
             {formatToPrice(
-              String(
-                (
-                  Number(order.grandTotal) - Number(order.discountAmountTotal)
-                ).toFixed(2)
-              ).replace(".", ",")
+              String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
             )}
           </span>
         </p>

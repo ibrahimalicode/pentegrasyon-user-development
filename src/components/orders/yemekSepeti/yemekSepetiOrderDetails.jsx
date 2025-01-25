@@ -262,10 +262,12 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                 <p>Toplam:</p>
                 <p className="text-base">
                   {formatToPrice(
-                    String(Number(order.grandTotal).toFixed(2)).replace(
-                      ".",
-                      ","
-                    )
+                    String(
+                      (
+                        Number(order.grandTotal) +
+                        Number(order.discountAmountTotal)
+                      ).toFixed(2)
+                    ).replace(".", ",")
                   )}
                 </p>
               </div>
@@ -284,21 +286,9 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
           <div className="w-full flex items-center justify-end gap-2">
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
-              {Number(order.discountAmountTotal)
-                ? formatToPrice(
-                    String(
-                      (
-                        Number(order.grandTotal) -
-                        Number(order.discountAmountTotal)
-                      ).toFixed(2)
-                    ).replace(".", ",")
-                  )
-                : formatToPrice(
-                    String(Number(order.grandTotal).toFixed(2)).replace(
-                      ".",
-                      ","
-                    )
-                  )}
+              {formatToPrice(
+                String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+              )}
             </p>
           </div>
         </div>

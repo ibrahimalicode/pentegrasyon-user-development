@@ -18,7 +18,7 @@ export default function CustomToast({ color, message, t }) {
           elmnt2: "bg-[--status-red] text-[--red-1]",
         };
 
-  return color === "red" ? (
+  return (
     <div
       className={`transition-all max-w-md w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5 border overflow-clip ${
         classNames.elmnt1
@@ -47,5 +47,5 @@ export default function CustomToast({ color, message, t }) {
         </button>
       </div>
     </div>
-  ) : null;
+  );
 }

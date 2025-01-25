@@ -274,10 +274,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                 <p className="text-base">
                   {formatToPrice(
                     String(
-                      (
-                        Number(order.grandTotal) -
-                        Number(order.discountAmountTotal)
-                      ).toFixed(2)
+                      Number(order.discountAmountTotal).toFixed(2)
                     ).replace(".", ",")
                   )}
                 </p>
@@ -290,7 +287,10 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
               {Number(order.discountAmountTotal)
                 ? formatToPrice(
                     String(
-                      Number(order.discountAmountTotal).toFixed(2)
+                      (
+                        Number(order.grandTotal) -
+                        Number(order.discountAmountTotal)
+                      ).toFixed(2)
                     ).replace(".", ",")
                   )
                 : formatToPrice(

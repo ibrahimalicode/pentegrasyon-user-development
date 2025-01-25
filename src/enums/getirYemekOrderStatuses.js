@@ -61,7 +61,7 @@ const getirYemekOrderStatuses = [
   {
     bg: "--status-green",
     color: "--green-1",
-    transColor: "#ca986ab3",
+    transColor: "rgba(57, 186, 109, 0.8)",
     label: "Teslim Edildi", //"Kurye Vardı", // Courier Arrived At Address here
     value: true,
     id: 800,
@@ -69,7 +69,7 @@ const getirYemekOrderStatuses = [
   {
     bg: "--status-green",
     color: "--green-1",
-    transColor: "#ca986ab3",
+    transColor: "rgba(57, 186, 109, 0.8)",
     label: "Teslim Edildi", //Order Delivered
     value: true,
     id: 900,

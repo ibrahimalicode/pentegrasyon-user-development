@@ -44,6 +44,12 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
   )[0];
   if (nextId) {
     orderStat = getirYemekOrderStatuses.filter((s) => s.id === nextId)[0];
+    if (nextId === 900)
+      orderStat = {
+        ...orderStat,
+        bg: "--status-brown",
+        color: "--brown-1",
+      };
   } else {
     orderStat = { ...orderStat, text: orderStat?.label };
   }

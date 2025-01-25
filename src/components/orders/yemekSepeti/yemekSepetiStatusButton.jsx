@@ -44,6 +44,12 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
 
   if (nextId) {
     orderStatus = yemekSepetiOrderStatuses.filter((s) => s.id === nextId)[0];
+    if (nextId === 3)
+      orderStatus = {
+        ...orderStatus,
+        bg: "--status-brown",
+        color: "--brown-1",
+      };
   } else {
     orderStatus = { ...orderStatus, text: orderStatus?.label };
   }

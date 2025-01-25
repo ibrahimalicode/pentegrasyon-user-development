@@ -1,7 +1,7 @@
 const migrosYemekiOrderStatuses = [
   {
-    bg: "--status-green",
-    color: "--green-1",
+    bg: "--status-yellow",
+    color: "--yellow-1",
     label: "Onay Bekliyor", //Beklemede
     value: true,
     id: 0,
@@ -17,8 +17,8 @@ const migrosYemekiOrderStatuses = [
     nextId: 6,
   },
   {
-    bg: "--status-green",
-    color: "--green-1",
+    bg: "--status-purple",
+    color: "--purple-1",
     label: "Teslim Edilecek", //Teslim Edilecek veya Yola Çıktı
     value: true,
     text: "Yola Çıkart",
@@ -28,6 +28,7 @@ const migrosYemekiOrderStatuses = [
   {
     bg: "--status-green",
     color: "--green-1",
+    transColor: "rgba(57, 186, 109, 0.8)",
     label: "Teslim Edildi", //Teslim Edildi
     value: true,
     text: "Teslim Et",
@@ -36,6 +37,7 @@ const migrosYemekiOrderStatuses = [
   {
     bg: "--status-red",
     color: "--red-1",
+    transColor: "#fca5a5",
     label: "İptal Edildi", //İptal Edildi
     value: true,
     text: "İptal Et",
@@ -44,6 +46,7 @@ const migrosYemekiOrderStatuses = [
   {
     bg: "--status-red",
     color: "--red-1",
+    transColor: "#fca5a5",
     label: "İptal Edildi", //İptal Edildi
     value: true,
     text: "İptal Et",

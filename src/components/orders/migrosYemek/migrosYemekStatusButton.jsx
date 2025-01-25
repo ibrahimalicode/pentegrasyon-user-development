@@ -47,6 +47,12 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
     orderStatus = migrosYemekiOrderStatuses.filter((s) => s.id === nextId)[0];
   } else {
     orderStatus = { ...orderStatus, text: orderStatus?.label };
+    if (nextId === 8)
+      orderStatus = {
+        ...orderStatus,
+        bg: "--status-brown",
+        color: "--brown-1",
+      };
   }
 
   function handleClick() {

@@ -28,7 +28,7 @@ const yemekSepetiOrderStatuses = [
   {
     bg: "--status-green",
     color: "--green-1",
-    transColor: "#ca986ab3",
+    transColor: "rgba(57, 186, 109, 0.8)",
     label: "Teslim Edildi",
     value: true,
     text: "Teslim Et",

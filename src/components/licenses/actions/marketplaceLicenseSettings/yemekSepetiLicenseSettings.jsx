@@ -123,7 +123,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
         sellerId: infoData.sellerId,
         remoteId: infoData.remoteId,
         chainCode: infoData.chainCode,
-        sendYemekSepetiEmailNotify: false,
+        sendYemekSepetiEmailNotify: true,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);
@@ -270,7 +270,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             {licenseData.chainCode && (
               <div className="mt-3">
                 <CustomCheckbox
-                  label="YemekSepei'ye E-Posta gönder"
+                  label="YemekSepeine Entegrasyon Talebi Maili Gönder"
                   checked={licenseData.sendYemekSepetiEmailNotify}
                   onChange={() => {
                     setLicenseData((prev) => {

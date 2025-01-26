@@ -64,7 +64,12 @@ export const OrdersContextProvider = ({ children }) => {
   //GET ORDERS
   useEffect(() => {
     if (!ordersData && token) {
-      dispatch(getOrders({ pageNumber, pageSize: itemsPerPage.value }));
+      dispatch(
+        getOrders({
+          pageNumber,
+          pageSize: itemsPerPage.value,
+        })
+      );
     }
   }, [ordersData, token]);
 

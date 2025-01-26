@@ -8,6 +8,8 @@ import { useLocation } from "react-router-dom";
 const SecondStep = ({
   step,
   setStep,
+  userData,
+  userInvData,
   licenseData,
   paymentMethod,
   restaurantData,
@@ -21,22 +23,23 @@ const SecondStep = ({
     step === 2 && (
       <div className="h-full">
         <div className="flex flex-col w-full items-center h-full overflow-y-auto">
-          {value === "bankPayment" ? (
-            <BankPayment
-              setStep={setStep}
-              licenseData={licenseData}
-              restaurantData={restaurantData}
-              actionType={actionType}
-            />
-          ) : value === "onlinePayment" ? (
+          {value === "onlinePayment" ? (
             <OnlinePayment
               step={step}
               setStep={setStep}
-              userId={restaurantData?.userId}
+              userData={userData}
               actionType={actionType}
+              userInvData={userInvData}
             />
           ) : (
-            <CreditPayment setStep={setStep} actionType={actionType} />
+            value === "bankPayment" && (
+              <BankPayment
+                setStep={setStep}
+                licenseData={licenseData}
+                restaurantData={restaurantData}
+                actionType={actionType}
+              />
+            )
           )}
         </div>
       </div>

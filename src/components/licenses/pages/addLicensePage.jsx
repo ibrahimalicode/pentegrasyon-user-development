@@ -20,6 +20,7 @@ import SixthStep from "../addLicenseSteps/6thStep";
 //REDUX
 import { clearCart } from "../../../redux/cart/cartSlice";
 import { resetAddByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
+import PaymentTypes from "../../../enums/paymentTypes";
 
 const AddLicensePage = () => {
   const toastId = useRef();
@@ -51,11 +52,8 @@ const AddLicensePage = () => {
     time: null,
   });
   const [paymentMethod, setPaymentMethod] = useState({
-    selectedOption: { label: "Online Ödeme", value: "onlinePayment", id: 0 },
-    options: [
-      { label: "Online Ödeme", value: "onlinePayment", id: 0 },
-      { label: "Banka Havale", value: "bankPayment", id: 1 },
-    ],
+    selectedOption: PaymentTypes[0],
+    options: PaymentTypes,
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
 

@@ -142,12 +142,14 @@ const ExtendLicensePopup = ({ onSuccess }) => {
                 steps={steps}
                 component={[
                   <FirstStep
+                    key={0}
                     licensePackageData={licensePackageData}
                     setLicensePackageData={setLicensePackageData}
                     paymentMethod={paymentMethod}
                     setPaymentMethod={setPaymentMethod}
                   />,
                   <SecondStep
+                    key={1}
                     step={step}
                     paymentMethod={paymentMethod}
                     licensePackageData={licensePackageData}
@@ -160,7 +162,7 @@ const ExtendLicensePopup = ({ onSuccess }) => {
                     userData={userData}
                     setUserData={setUserData}
                   />,
-                  <ThirdStep step={step} />,
+                  <ThirdStep key={2} step={step} />,
                 ]}
               />
             </div>

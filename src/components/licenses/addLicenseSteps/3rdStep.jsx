@@ -1,23 +1,18 @@
 //MODULES
 
 //COMP
-import { useLocation } from "react-router-dom";
-import ThirdStepOnlinePayment from "./3rdStepOnlinePayment";
 import ThirdStepBankPayment from "./3rdStepBankPayment";
+import ThirdStepOnlinePayment from "./3rdStepOnlinePayment";
 
 const ThirdStep = ({
   step,
   setStep,
   userData,
-  userInvData,
   setUserData,
+  userInvData,
   paymentMethod,
   setUserInvData,
 }) => {
-  const location = useLocation();
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
-
   const value = paymentMethod.selectedOption.value;
   return (
     step === 3 && (

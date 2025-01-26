@@ -16,6 +16,7 @@ import FourthStep from "../extendLicenseSteps/4thStep";
 import toast from "react-hot-toast";
 import { clearCart } from "../../../redux/cart/cartSlice";
 import { resetExtendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
+import PaymentTypes from "../../../enums/paymentTypes";
 
 const ExtendLicensePage = () => {
   const toastId = useRef();
@@ -31,8 +32,10 @@ const ExtendLicensePage = () => {
   );
   const cartItems = useSelector((state) => state.cart.items);
 
-  const steps = 4;
   const [step, setStep] = useState(1);
+  const [steps, setSteps] = useState(4);
+  const [userData, setUserData] = useState(null);
+  const [userInvData, setUserInvData] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
   const [restaurantData, setRestaurantData] = useState({
@@ -45,11 +48,8 @@ const ExtendLicensePage = () => {
     time: null,
   });
   const [paymentMethod, setPaymentMethod] = useState({
-    selectedOption: { label: "Online Ödeme", value: "onlinePayment" },
-    options: [
-      { label: "Banka Havale", value: "bankPayment" },
-      { label: "Online Ödeme", value: "onlinePayment" },
-    ],
+    selectedOption: PaymentTypes[0],
+    options: PaymentTypes,
   });
   const selectedMethod = paymentMethod.selectedOption.value || "";
 
@@ -145,9 +145,11 @@ const ExtendLicensePage = () => {
                       key={1}
                       step={step}
                       setStep={setStep}
-                      restaurantData={restaurantData}
-                      paymentMethod={paymentMethod}
+                      userData={userData}
+                      userInvData={userInvData}
                       licenseData={licensePackageData}
+                      paymentMethod={paymentMethod}
+                      restaurantData={restaurantData}
                     />,
                     <ThirdStep
                       key={2}

@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import { CancelI } from "../../../../assets/icon";
 import CustomInput from "../../../common/customInput";
-import CustomCheckbox from "../../../common/customCheckbox";
 import CustomToast from "../../../common/customToast";
+import CustomCheckbox from "../../../common/customCheckbox";
 import { usePopup } from "../../../../context/PopupContext";
+import licenseTypeIds from "../../../../enums/licenseTypeIds";
 
 //REDUX
 import {
@@ -24,7 +25,6 @@ import {
   resetUpdateIntegrationInformation,
   updateIntegrationInformation,
 } from "../../../../redux/informations/yemekSepeti/updateIntegrationInformationSlice";
-import licenseTypeIds from "../../../../enums/licenseTypeIds";
 
 const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -72,12 +72,63 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     setPopupContent(null);
   };
 
+  function confirmAndContinue() {
+    const confirmation = (t) => {
+      return (
+        <div className="max-w-md w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip p-4">
+          <div>
+            <p className="text-center font-bold mb-2">ÖNEMLİ BİLGİLENDİRME !</p>
+            <p>
+              Entegrasyon geçişi için Yemeksepeti&apos;ne mail gönderilecek.
+              Yemeksepeti tarafından Entegrasyon geçişleri sadece Salı, Çarşamba
+              ve Perşembe günleri olarak belirlenmiştir.. Entegrasyon geçişi
+              yapıldığında Chain Code bilgisi xxxx.gmail.com mail adresinize
+              iletilecektir. Bu kodu girdiğinizde Pentegrasyon servisi çalışmaya
+              başlayacaktır.
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-5">
+            <button
+              onClick={() => toast.dismiss(t?.id)}
+              className="text-sm py-2 px-3 bg-[--status-red] text-[--red-1] rounded-md border border-[--red-1]"
+            >
+              İptal
+            </button>
+            <button
+              onClick={handleAddOrUpdate}
+              className="text-sm py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md whitespace-nowrap"
+            >
+              Kaydet & Gönder
+            </button>
+          </div>
+        </div>
+      );
+    };
+    toast.custom((t) => confirmation(t), {
+      position: "top-center",
+      duration: 60000,
+      id: "LICENSE_ENTEGRATION_COMFIRMATION",
+    });
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     if (isEqual(licenseData, licenseDataBefore)) {
       toast.error("Herhangi bir değişiklik yapmadınız.");
       return;
     }
+    if (
+      licenseData.sellerId !== licenseDataBefore.sellerId ||
+      licenseData.chainCode !== licenseDataBefore.chainCode
+    ) {
+      confirmAndContinue();
+    }
+
+    handleAddOrUpdate();
+  }
+
+  function handleAddOrUpdate() {
     if (data.isSettingsAdded) {
       dispatch(updateIntegrationInformation(licenseData));
     } else {
@@ -111,7 +162,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     }
   }, [data?.isSettingsAdded]);
 
-  // TOAST GET
+  // TOAST GET THEN SET
   useEffect(() => {
     if (getError) {
       dispatch(resetGetIntegrationInformationByLicenseId());
@@ -208,7 +259,6 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
 
             <div>
               <CustomInput
-                required
                 label="Chain Code"
                 placeholder="Chain Code"
                 className="py-[.45rem] text-sm"
@@ -267,7 +317,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
               />
             </div>
 
-            {licenseData.chainCode && (
+            {data.isSettingsAdded && (
               <div className="mt-3">
                 <CustomCheckbox
                   label="YemekSepeine Entegrasyon Talebi Maili Gönder"
@@ -298,7 +348,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
                 className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md"
                 type="submit"
               >
-                {data.isSettingsAdded ? "Düzenle" : "Ekle"}
+                {"Kaydet"}
               </button>
             </div>
           </form>

@@ -123,6 +123,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       licenseData.chainCode !== licenseDataBefore.chainCode
     ) {
       confirmAndContinue();
+      return;
     }
 
     handleAddOrUpdate();

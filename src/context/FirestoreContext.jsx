@@ -10,7 +10,6 @@ import { doc, collection } from "firebase/firestore";
 
 //UTILS
 import { getAuth } from "../redux/api";
-import { formatToISO } from "../utils/utils";
 
 //REDUX
 import { getUser } from "../redux/user/getUserSlice";

@@ -1,48 +1,40 @@
-import { useEffect, useRef, useState } from "react";
-import { usePopup } from "../../../context/PopupContext";
-import CustomSelect from "../../common/customSelector";
-import { useDispatch } from "react-redux";
-import { getOrders } from "../../../redux/orders/getOrdersSlice";
-import { useOrdersContext } from "../../../context/OrdersContext";
-import CustomDatePicker from "../../common/customdatePicker";
-import MarketPalceIds from "../../../enums/marketPlaceIds";
-import { formatDate } from "../../../utils/utils";
+//MODULES
 import { isEqual } from "lodash";
+import { useDispatch } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+
+//UTILS
+import { formatDate } from "../../../utils/utils";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
+import orderFilterDates from "../../../enums/orderFilterDates";
+
+//COMP
+import CustomSelect from "../../common/customSelector";
+import CustomDatePicker from "../../common/customdatePicker";
+
+//CONTEXT
+import { usePopup } from "../../../context/PopupContext";
+import { useOrdersContext } from "../../../context/OrdersContext";
+
+//REDUX
+import { getOrders } from "../../../redux/orders/getOrdersSlice";
 
 const FilterOrders = () => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
   const { contentRef, setContentRef } = usePopup();
-  const { itemsPerPage, pageNumber } = useOrdersContext();
+  const { itemsPerPage, pageNumber, filter, setFilter, filterInitialState } =
+    useOrdersContext();
 
-  const filterInitialState = {
-    startDateTime: "",
-    endDateTime: "",
-    statusId: null,
-    status: { label: "Hepsi", value: null },
-    marketplaceId: null,
-    marketplace: { value: null, label: "Hepsi", id: null },
-  };
   const [openFilter, setOpenFilter] = useState(false);
-  const [filter, setFilter] = useState(filterInitialState);
 
   function handleFilter(bool) {
     if (bool) {
-      console.log({
-        page: pageNumber,
-        pageSize: itemsPerPage.value,
-        startDateTime: filter.endDateTime
-          ? formatDate(filter.startDateTime)
-          : null,
-        endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
-        status: filter.statusId,
-        marketplaceId: filter.marketplaceId,
-      });
-
       dispatch(
         getOrders({
           page: pageNumber,
           pageSize: itemsPerPage.value,
+          dateRange: filter.dateRange,
           startDateTime: filter.endDateTime
             ? formatDate(filter.startDateTime)
             : null,
@@ -62,7 +54,7 @@ const FilterOrders = () => {
     setOpenFilter(false);
   }
 
-  //HIDE POPUP
+  //HIDE FILTER
   useEffect(() => {
     if (filterOrdersRef) {
       const refs = contentRef.filter((ref) => ref.id !== "ordersFilter");
@@ -94,11 +86,36 @@ const FilterOrders = () => {
               openFilter ? "visible" : "hidden"
             }`}
           >
+            <div className="grid grid-flow-row grid-cols-2 gap-1.5 my-2">
+              {orderFilterDates.map((D) => (
+                <div key={D.id} className="text-sm">
+                  <button
+                    onClick={() => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          dateRange: D.id,
+                          startDateTime: "",
+                          endDateTime: "",
+                        };
+                      });
+                    }}
+                    className={`p-2 border border-[--border-1] rounded-md w-40 text-center ${
+                      D.id === filter.dateRange &&
+                      "text-[--white-1] bg-[--primary-1]"
+                    }`}
+                  >
+                    {D.label}
+                  </button>
+                </div>
+              ))}
+            </div>
+
             <div className="flex gap-6">
               <div>
                 <CustomDatePicker
                   label="Başlangıç Tarihi"
-                  className="text-sm sm:mt-1 w-36 py-2"
+                  className="text-sm sm:mt-1 w-36 py-2 sm:py-[0.5rem]"
                   style={{ padding: "0 !important" }}
                   popperClassName="react-datepicker-popper-filter-order-1"
                   value={filter.startDateTime}
@@ -106,6 +123,7 @@ const FilterOrders = () => {
                     setFilter((prev) => {
                       return {
                         ...prev,
+                        dateRange: 0,
                         startDateTime: selectedDate,
                       };
                     });
@@ -123,7 +141,7 @@ const FilterOrders = () => {
               <div>
                 <CustomDatePicker
                   label="Bitiş Tarihi"
-                  className="text-sm sm:mt-1 w-36 py-2"
+                  className="text-sm sm:mt-1 w-36 py-2 sm:py-[0.5rem]"
                   style={{ padding: "0 !important" }}
                   popperClassName="react-datepicker-popper-filter-order-2"
                   value={filter.endDateTime}
@@ -131,6 +149,7 @@ const FilterOrders = () => {
                     setFilter((prev) => {
                       return {
                         ...prev,
+                        dateRange: 0,
                         endDateTime: selectedDate,
                       };
                     });

@@ -38,7 +38,6 @@ const OrdersPage = () => {
     pageNumber,
     setPageNumber,
     totalItems,
-    setTotalItems,
     handlePageChange,
   } = useOrdersContext();
 

@@ -3,19 +3,22 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
+import GlowButton from "../components/glowButton";
+import toastStatusError from "../components/toastOrderStatError";
 import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
 
 //UTILS
 import { usePopup } from "../../../context/PopupContext";
-import toastStatusError from "../components/toastOrderStatError";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
 import GetirYemekOrderErrorPopup from "./getirYemekOrderErrorPopup";
 import getirYemekOrderStatuses from "../../../enums/getirYemekOrderStatuses";
-import GlowButton from "../components/glowButton";
+import { useOrdersContext } from "../../../context/OrdersContext";
 
 function GetirYemekStatusButton({ order, setOrdersData }) {
   const ticketId = order.id;
   const { setPopupContent } = usePopup();
+
+  const { pageNumber } = useOrdersContext();
 
   const { verifyOrder, prepareOrder, deliverOrder } = useGetirYemekOrderActions(
     { order, ticketId, setOrdersData }
@@ -108,7 +111,7 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
       disabled={disabled}
       onClick={handleClick}
       className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed ${
-        disabled ? btnClass : "after:translate-x-0"
+        disabled ? pageNumber == 1 && btnClass : "after:translate-x-0"
       }`}
       style={{
         backgroundColor: `var(${orderStat?.bg})`,

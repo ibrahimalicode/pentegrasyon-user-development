@@ -11,11 +11,13 @@ import migrosYemekiOrderStatuses from "../../../enums/migrosYemekiOrderStatuses"
 //COMP
 import GlowButton from "../components/glowButton";
 import toastStatusError from "../components/toastOrderStatError";
+import { useOrdersContext } from "../../../context/OrdersContext";
 import MigrosYemekOrderErrorPopup from "./migrosYemekOrderErrorPopup";
 
 const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
   const ticketId = order.id;
   const { setPopupContent } = usePopup();
+  const { pageNumber } = useOrdersContext();
 
   const { verifyOrder, prepareOrder, deliverOrder } =
     useMigrosYemekOrderActions({ order, ticketId, setOrdersData });
@@ -110,7 +112,7 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
       disabled={isDisabled}
       onClick={handleClick}
       className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed ${
-        isDisabled ? btnClass : "after:translate-x-0"
+        isDisabled ? pageNumber == 1 && btnClass : "after:translate-x-0"
       }`}
       style={{
         backgroundColor: `var(${orderStatus?.bg})`,

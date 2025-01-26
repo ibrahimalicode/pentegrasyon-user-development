@@ -1,3 +1,4 @@
+//MODULES
 import { useDispatch, useSelector } from "react-redux";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
@@ -8,11 +9,11 @@ import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
 import unverifiedOrderPath from "../assets/sound/unverifiedOrder.mp3";
 
 //UTILS
-import { formatByDate } from "../utils/utils";
-import { usePopup } from "./PopupContext";
-import { CloseI } from "../assets/icon";
 import { getAuth } from "../redux/api";
+import { CloseI } from "../assets/icon";
+import { usePopup } from "./PopupContext";
 import { useFirestore } from "./FirestoreContext";
+import { formatByDate, formatDate } from "../utils/utils";
 
 const OrdersContext = createContext();
 
@@ -25,10 +26,19 @@ export const OrdersContextProvider = ({ children }) => {
   const { setPopupContent } = usePopup();
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
+  const { success, error, orders } = useSelector((state) => state.orders.get);
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
     useFirestore();
 
-  const { success, error, orders } = useSelector((state) => state.orders.get);
+  const filterInitialState = {
+    dateRange: 0,
+    startDateTime: "",
+    endDateTime: "",
+    statusId: null,
+    status: { label: "Hepsi", value: null },
+    marketplaceId: null,
+    marketplace: { value: null, label: "Hepsi", id: null },
+  };
 
   const localItemsPerPage = JSON.parse(
     localStorage.getItem("ITEMS_PERPAGE")
@@ -37,6 +47,7 @@ export const OrdersContextProvider = ({ children }) => {
   const [ordersData, setOrdersData] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
+  const [filter, setFilter] = useState(filterInitialState);
   const [isThereUnverifiedOrder, setisThereUnverifiedOrder] = useState(false);
 
   function handlePageChange(number) {
@@ -44,6 +55,13 @@ export const OrdersContextProvider = ({ children }) => {
       getOrders({
         page: number,
         pageSize: itemsPerPage.value,
+        dateRange: filter.dateRange,
+        startDateTime: filter.endDateTime
+          ? formatDate(filter.startDateTime)
+          : null,
+        endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
+        status: filter.statusId,
+        marketplaceId: filter.marketplaceId,
       })
     );
   }
@@ -53,6 +71,13 @@ export const OrdersContextProvider = ({ children }) => {
       getOrders({
         page: pageNumber,
         pageSize: number,
+        dateRange: filter.dateRange,
+        startDateTime: filter.endDateTime
+          ? formatDate(filter.startDateTime)
+          : null,
+        endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
+        status: filter.statusId,
+        marketplaceId: filter.marketplaceId,
       })
     );
     const localData = { label: `${number}`, value: number };
@@ -193,6 +218,9 @@ export const OrdersContextProvider = ({ children }) => {
         isThereUnverifiedOrder,
         setisThereUnverifiedOrder,
         handlePageChange,
+        filter,
+        setFilter,
+        filterInitialState,
       }}
     >
       {children}

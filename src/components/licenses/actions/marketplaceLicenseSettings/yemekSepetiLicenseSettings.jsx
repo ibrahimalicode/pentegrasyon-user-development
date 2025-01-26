@@ -31,6 +31,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
 
+  const { user } = useSelector((state) => state.user.getUser);
   const { loading, success, error } = useSelector(
     (state) => state.integrationInfos.yemekSepeti.addIntegrationInfo
   );
@@ -69,34 +70,40 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
   });
 
   const closeForm = () => {
+    toast.remove("LICENSE_ENTEGRATION_COMFIRMATION");
     setPopupContent(null);
   };
 
   function confirmAndContinue() {
+    toast.dismiss();
     const confirmation = (t) => {
       return (
-        <div className="max-w-md w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip p-4">
+        <div className="max-w-lg w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip p-4 font-normal">
           <div>
             <p className="text-center font-bold mb-2">ÖNEMLİ BİLGİLENDİRME !</p>
             <p>
               Entegrasyon geçişi için Yemeksepeti&apos;ne mail gönderilecek.
               Yemeksepeti tarafından Entegrasyon geçişleri sadece Salı, Çarşamba
               ve Perşembe günleri olarak belirlenmiştir.. Entegrasyon geçişi
-              yapıldığında Chain Code bilgisi xxxx.gmail.com mail adresinize
-              iletilecektir. Bu kodu girdiğinizde Pentegrasyon servisi çalışmaya
-              başlayacaktır.
+              yapıldığında Chain Code bilgisi{" "}
+              <span className="text-[--link-1]">{user.email}</span> mail
+              adresinize iletilecektir. Bu kodu girdiğinizde Pentegrasyon
+              servisi çalışmaya başlayacaktır.
             </p>
           </div>
 
           <div className="flex justify-end gap-3 mt-5">
             <button
-              onClick={() => toast.dismiss(t?.id)}
+              onClick={() => toast.remove(t?.id)}
               className="text-sm py-2 px-3 bg-[--status-red] text-[--red-1] rounded-md border border-[--red-1]"
             >
               İptal
             </button>
             <button
-              onClick={handleAddOrUpdate}
+              onClick={() => {
+                toast.remove(t?.id);
+                handleAddOrUpdate();
+              }}
               className="text-sm py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md whitespace-nowrap"
             >
               Kaydet & Gönder

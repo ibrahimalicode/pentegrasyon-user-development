@@ -37,7 +37,7 @@ const AddLicensePage = () => {
   );
 
   const [step, setStep] = useState(1);
-  const [steps, setSteps] = useState(4);
+  const [steps, setSteps] = useState(6);
   const [userData, setUserData] = useState(null);
   const [userInvData, setUserInvData] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
@@ -78,7 +78,6 @@ const AddLicensePage = () => {
       if (success) {
         setStep(5);
       }
-      dispatch(resetAddByOnlinePay());
     } else if (error) {
       setStep(6);
       toast.dismiss(toastId.current);
@@ -175,11 +174,8 @@ const AddLicensePage = () => {
                       step={step}
                       setStep={setStep}
                       userData={userData}
-                      userInvData={userInvData}
                       setUserData={setUserData}
-                      licenseData={licensePackageData}
-                      paymentMethod={paymentMethod}
-                      restaurantData={restaurantData}
+                      userInvData={userInvData}
                       setUserInvData={setUserInvData}
                     />,
                     <FourthStep
@@ -194,12 +190,17 @@ const AddLicensePage = () => {
                     />,
                     <FifthStep
                       key={4}
+                      step={step}
                       setStep={setStep}
+                      licenseData={licensePackageData}
+                      paymentMethod={paymentMethod}
+                      restaurantData={restaurantData}
                       setPaymentStatus={setPaymentStatus}
                     />,
                     <SixthStep
                       key={4}
                       step={step}
+                      paymentMethod={paymentMethod}
                       paymentStatus={paymentStatus}
                     />,
                   ]}

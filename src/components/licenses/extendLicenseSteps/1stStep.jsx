@@ -241,7 +241,6 @@ const FirstStep = ({
               ) {
                 handleAddToCart({
                   ...selectedOption,
-                  licenseTypeId: selectedOption.id,
                   restaurantId: restaurantData.value,
                   restaurantName: restaurantData.label,
                 });

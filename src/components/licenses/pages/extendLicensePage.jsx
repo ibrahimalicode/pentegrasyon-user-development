@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { clearCart } from "../../../redux/cart/cartSlice";
 import { resetExtendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 import PaymentTypes from "../../../enums/paymentTypes";
+import FifthStep from "../extendLicenseSteps/5thStep";
 
 const ExtendLicensePage = () => {
   const toastId = useRef();
@@ -33,7 +34,7 @@ const ExtendLicensePage = () => {
   const cartItems = useSelector((state) => state.cart.items);
 
   const [step, setStep] = useState(1);
-  const [steps, setSteps] = useState(4);
+  const [steps, setSteps] = useState(5);
   const [userData, setUserData] = useState(null);
   const [userInvData, setUserInvData] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState(null);
@@ -58,12 +59,11 @@ const ExtendLicensePage = () => {
     if (loading) {
       toastId.current = toast.loading("İşleniyor...");
     } else if (success) {
-      setStep(3);
+      setStep(4);
       toast.dismiss(toastId.current);
-      dispatch(resetExtendByOnlinePay());
     } else if (error) {
       toast.dismiss(toastId.current);
-      setStep(4);
+      setStep(5);
       window.parent.postMessage({ status: "failed" }, "*");
       dispatch(resetExtendByOnlinePay());
     }
@@ -132,33 +132,42 @@ const ExtendLicensePage = () => {
                   component={[
                     <FirstStep
                       key={0}
+                      setStep={setStep}
+                      paymentMethod={paymentMethod}
                       restaurantData={restaurantData}
+                      setPaymentMethod={setPaymentMethod}
                       setRestaurantData={setRestaurantData}
                       licensePackageData={licensePackageData}
                       setLicensePackageData={setLicensePackageData}
-                      paymentMethod={paymentMethod}
-                      setPaymentMethod={setPaymentMethod}
-                      setStep={setStep}
-                      actionType={actionType}
                     />,
                     <SecondStep
                       key={1}
                       step={step}
                       setStep={setStep}
                       userData={userData}
+                      setUserData={setUserData}
                       userInvData={userInvData}
-                      licenseData={licensePackageData}
-                      paymentMethod={paymentMethod}
-                      restaurantData={restaurantData}
+                      setUserInvData={setUserInvData}
                     />,
                     <ThirdStep
                       key={2}
+                      step={step}
                       setStep={setStep}
-                      setPaymentStatus={setPaymentStatus}
+                      userData={userData}
+                      userInvData={userInvData}
+                      paymentMethod={paymentMethod}
                     />,
                     <FourthStep
                       key={3}
                       step={step}
+                      setStep={setStep}
+                      paymentMethod={paymentMethod}
+                      setPaymentStatus={setPaymentStatus}
+                    />,
+                    <FifthStep
+                      key={4}
+                      step={step}
+                      paymentMethod={paymentMethod}
                       paymentStatus={paymentStatus}
                     />,
                   ]}

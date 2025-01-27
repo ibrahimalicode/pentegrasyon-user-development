@@ -1,46 +1,28 @@
 //MODULES
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
 //COMP
-import SuccessPage from "../stepsAssets/successPage";
-import FailurePage from "../stepsAssets/failurePage";
+import BankPayment from "../paymentTypes/bankPayment";
+import FourthStepOnlinePayment from "./4thStepOnlinePayment";
 
-const FourthStep = ({ step, paymentStatus }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const currentPath = location.pathname;
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
-
-  useEffect(() => {
-    let goToLicenses;
-
-    if (step === 4) {
-      goToLicenses = setTimeout(
-        () => navigate(currentPath?.replace(`/${actionType}`, "")),
-        7000
-      );
-    }
-
-    return () => {
-      if (goToLicenses) {
-        clearTimeout(goToLicenses);
-      }
-    };
-  }, [step]);
-
+const FourthStep = ({ step, setStep, paymentMethod, setPaymentStatus }) => {
+  const value = paymentMethod.selectedOption.value;
   return (
-    step === 4 &&
-    (paymentStatus === "success" ? (
-      <SuccessPage
-        step={step}
-        currentPath={currentPath}
-        actionType={actionType}
-      />
-    ) : (
-      <FailurePage currentPath={currentPath} actionType={actionType} />
-    ))
+    step === 4 && (
+      <div className="h-full">
+        <div className="flex flex-col w-full items-center h-full overflow-y-auto">
+          {value === "onlinePayment" ? (
+            <FourthStepOnlinePayment
+              setStep={setStep}
+              setPaymentStatus={setPaymentStatus}
+            />
+          ) : (
+            value === "bankPayment" && (
+              <BankPayment step={step} setStep={setStep} />
+            )
+          )}
+        </div>
+      </div>
+    )
   );
 };
 

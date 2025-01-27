@@ -48,7 +48,7 @@ export const extendByOnlinePay = createAsyncThunk(
         ...data,
       });
 
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.data.includes("html")) {
         return res.data.data;
       }

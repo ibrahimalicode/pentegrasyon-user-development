@@ -31,7 +31,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
         console.log(statusChangedOrder);
         setSideOrder(statusChangedOrder);
-        setStatusChangedOrder(null);
+        // setStatusChangedOrder(null);
       }
     }
   }, [statusChangedOrder]);

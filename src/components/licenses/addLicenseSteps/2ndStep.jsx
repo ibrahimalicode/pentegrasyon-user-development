@@ -79,7 +79,7 @@ const SecondStep = ({
                           selectedOption: option,
                         };
                       });
-                      option.id == 0 ? setSteps(6) : setSteps(5);
+                      option.id == 0 ? setSteps(6) : setSteps(6);
                     }}
                     className={`py-2.5 px-2  text-[--white-1] text-sm rounded-md ${
                       option.value === paymentMethod.selectedOption.value

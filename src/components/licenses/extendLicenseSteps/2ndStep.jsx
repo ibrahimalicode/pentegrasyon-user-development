@@ -1,49 +1,99 @@
-//MODULES
-
-//COMP
-import OnlinePayment from "../paymentTypes/onlinePayment";
-import BankPayment from "../paymentTypes/bankPayment";
-import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import InvoiceData from "../stepsAssets/invoiceData";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
+import BackButton from "../stepsAssets/backButton";
+import ForwardButton from "../stepsAssets/forwardButton";
 
 const SecondStep = ({
   step,
   setStep,
   userData,
+  setUserData,
   userInvData,
-  licenseData,
-  paymentMethod,
-  restaurantData,
+  setUserInvData,
 }) => {
-  const location = useLocation();
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
+  const dispatch = useDispatch();
+  let invoiceHandleSubmit = useRef(null);
 
-  const value = paymentMethod.selectedOption.value;
+  const { loading: updateInvLoading } = useSelector(
+    (state) => state.user.updateInvoice
+  );
+
+  const { loading: addInvLoading } = useSelector(
+    (state) => state.user.addInvoice
+  );
+
+  const { success: getUserSucc, user } = useSelector(
+    (state) => state.user.getUser
+  );
+
+  const [openFatura, setOpenFatura] = useState(false);
+
+  //SUBMIT
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (openFatura) {
+      if (invoiceHandleSubmit.current) {
+        invoiceHandleSubmit.current();
+      }
+      return;
+    }
+
+    setStep(3);
+  }
+
+  //SET USER AND INVOICE
+  useEffect(() => {
+    if (getUserSucc) {
+      setUserData(user);
+      setUserInvData(user.userInvoiceAddressDTO);
+      dispatch(resetGetUserState());
+    }
+  }, [user, getUserSucc]);
+
+  //GET USER
+  useEffect(() => {
+    if (!userData) {
+      dispatch(getUser());
+    }
+  }, [userData]);
+
   return (
-    step === 2 && (
-      <div className="h-full">
-        <div className="flex flex-col w-full items-center h-full overflow-y-auto">
-          {value === "onlinePayment" ? (
-            <OnlinePayment
-              step={step}
-              setStep={setStep}
-              userData={userData}
-              actionType={actionType}
-              userInvData={userInvData}
-            />
-          ) : (
-            value === "bankPayment" && (
-              <BankPayment
-                setStep={setStep}
-                licenseData={licenseData}
-                restaurantData={restaurantData}
-                actionType={actionType}
-              />
-            )
-          )}
-        </div>
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="w-full">
+        {userData && (
+          <InvoiceData
+            user={userData}
+            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
+            userInvData={userInvData}
+            setUserInvData={setUserInvData}
+            openFatura={openFatura}
+            setOpenFatura={setOpenFatura}
+            userData={userData}
+            onSubmit={(submitFn) => {
+              invoiceHandleSubmit.current = submitFn;
+            }}
+          />
+        )}
       </div>
-    )
+
+      {/* BTNS */}
+      <div className="flex gap-3 absolute -bottom-20 -right-0 h-12">
+        <BackButton
+          text="Geri"
+          letIcon={true}
+          onClick={() => setStep(step - 1)}
+          disabled={updateInvLoading || addInvLoading}
+        />
+        <ForwardButton
+          text={openFatura ? "Kaydet" : "Devam"}
+          letIcon={true}
+          type="submit"
+          disabled={updateInvLoading || addInvLoading}
+        />
+      </div>
+    </form>
   );
 };
 

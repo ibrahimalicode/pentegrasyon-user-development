@@ -59,6 +59,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     remoteId: "",
     chainCode: "",
     commissionRate: 0,
+    sendYemekSepetiEmailNotify: true,
   });
   const [licenseDataBefore, setLicenseDataBefore] = useState({
     licenseId: data.id,
@@ -67,6 +68,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     remoteId: "",
     chainCode: "",
     commissionRate: 0,
+    sendYemekSepetiEmailNotify: true,
   });
 
   const closeForm = () => {
@@ -102,7 +104,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             <button
               onClick={() => {
                 toast.remove(t?.id);
-                handleAddOrUpdate();
+                handleAddOrUpdate(licenseData);
               }}
               className="text-sm py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md whitespace-nowrap"
             >
@@ -132,15 +134,15 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       confirmAndContinue();
       return;
     }
-
-    handleAddOrUpdate();
+    const inData = { ...licenseData, sendYemekSepetiEmailNotify: false };
+    handleAddOrUpdate(inData);
   }
 
-  function handleAddOrUpdate() {
+  function handleAddOrUpdate(inData) {
     if (data.isSettingsAdded) {
-      dispatch(updateIntegrationInformation(licenseData));
+      dispatch(updateIntegrationInformation(inData));
     } else {
-      dispatch(addIntegrationInformation(licenseData));
+      dispatch(addIntegrationInformation(inData));
     }
   }
 
@@ -182,7 +184,6 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
         sellerId: infoData.sellerId,
         remoteId: infoData.remoteId,
         chainCode: infoData.chainCode,
-        sendYemekSepetiEmailNotify: true,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);
@@ -325,30 +326,32 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
               />
             </div>
 
-            {data.isSettingsAdded && (
-              <div className="mt-3">
-                <CustomCheckbox
-                  label="YemekSepeine Entegrasyon Talebi Maili Gönder"
-                  checked={licenseData.sendYemekSepetiEmailNotify}
-                  onChange={() => {
-                    setLicenseData((prev) => {
-                      return {
-                        ...prev,
-                        sendYemekSepetiEmailNotify:
-                          !licenseData.sendYemekSepetiEmailNotify,
-                      };
-                    });
-                    setLicenseDataBefore((prev) => {
-                      return {
-                        ...prev,
-                        sendYemekSepetiEmailNotify:
-                          !licenseData.sendYemekSepetiEmailNotify,
-                      };
-                    });
-                  }}
-                />
-              </div>
-            )}
+            {data.isSettingsAdded &&
+              (licenseData.sellerId !== licenseDataBefore.sellerId ||
+                licenseData.chainCode !== licenseDataBefore.chainCode) && (
+                <div className="mt-3">
+                  <CustomCheckbox
+                    label="YemekSepetine Entegrasyon Talebi Maili Gönder"
+                    checked={licenseData.sendYemekSepetiEmailNotify}
+                    onChange={() => {
+                      setLicenseData((prev) => {
+                        return {
+                          ...prev,
+                          sendYemekSepetiEmailNotify:
+                            !licenseData.sendYemekSepetiEmailNotify,
+                        };
+                      });
+                      setLicenseDataBefore((prev) => {
+                        return {
+                          ...prev,
+                          sendYemekSepetiEmailNotify:
+                            !licenseData.sendYemekSepetiEmailNotify,
+                        };
+                      });
+                    }}
+                  />
+                </div>
+              )}
 
             <div className="w-full flex justify-end mt-10">
               <button

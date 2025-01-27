@@ -1,46 +1,20 @@
 //MODULES
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
 //COMP
-import SuccessPage from "../stepsAssets/successPage";
-import FailurePage from "../stepsAssets/failurePage";
+import SixthStepOnlinePayment from "./6thStepOnlinePayment";
 
-const SixthStep = ({ step, paymentStatus }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const currentPath = location.pathname;
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
-
-  useEffect(() => {
-    let goToLicenses;
-
-    if (step === 6) {
-      goToLicenses = setTimeout(
-        () => navigate(currentPath?.replace(`/${actionType}`, "")),
-        7000
-      );
-    }
-
-    return () => {
-      if (goToLicenses) {
-        clearTimeout(goToLicenses);
-      }
-    };
-  }, [step]);
-
+const SixthStep = ({ step, setStep, paymentMethod, paymentStatus }) => {
+  const value = paymentMethod.selectedOption.value;
   return (
-    step === 6 &&
-    (paymentStatus === "success" ? (
-      <SuccessPage
-        step={step}
-        currentPath={currentPath}
-        actionType={actionType}
-      />
-    ) : (
-      <FailurePage currentPath={currentPath} actionType={actionType} />
-    ))
+    step === 6 && (
+      <div className="h-full overflow-y-auto">
+        {value === "onlinePayment" ? (
+          <SixthStepOnlinePayment step={step} paymentStatus={paymentStatus} />
+        ) : (
+          value === "bankPayment" && null
+        )}
+      </div>
+    )
   );
 };
 

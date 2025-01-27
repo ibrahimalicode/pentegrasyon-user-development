@@ -26,7 +26,7 @@ const imageSRCs = [
   { src: Vigo, name: "Vigo" },
 ];
 
-const BankPayment = ({ setStep }) => {
+const BankPayment = ({ step, setStep }) => {
   const cartItems = useSelector((state) => state.cart.items);
 
   const [document, setDocument] = useState("");
@@ -58,7 +58,7 @@ const BankPayment = ({ setStep }) => {
                   {pkg.map((item, i) => (
                     <div className="flex text-sm" key={i}>
                       <p className="mt-1 pr-2">
-                        {imageSRCs[item.licenseTypeId].name}
+                        {imageSRCs[item.licenseTypeId]?.name}
                       </p>
                       <p className="mt-1">
                         {item.time} Yıllık{i < pkg.length - 1 && ","}
@@ -96,7 +96,7 @@ const BankPayment = ({ setStep }) => {
           <BackButton
             text="Geri"
             letIcon={true}
-            onClick={() => setStep(2)}
+            onClick={() => setStep(step - 1)}
             disabled={false} //loading}
           />
           <ForwardButton

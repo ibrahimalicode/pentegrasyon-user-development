@@ -4,12 +4,13 @@ import ActionButton from "../../common/actionButton";
 import { usePopup } from "../../../context/PopupContext";
 import GetirYemekLicenseSettings from "./marketplaceLicenseSettings/getirYemekLicenseSettings";
 import YemekSepetiLicenseSettings from "./marketplaceLicenseSettings/yemekSepetiLicenseSettings";
+import MigrosYemekLicenseSettings from "./marketplaceLicenseSettings/migrosYemekLicenseSettings";
 
 const LicenseSettings = ({ licenseData, onSuccess }) => {
   const { setPopupContent } = usePopup();
   const LicenseSettingsPopups = [
     GetirYemekLicenseSettings,
-    GetirYemekLicenseSettings, //Placeholder
+    MigrosYemekLicenseSettings,
     GetirYemekLicenseSettings, //Placeholder
     YemekSepetiLicenseSettings,
   ];

@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const getIntegrationInformationByLicenseIdSlice = createSlice({
-  name: "getGetirYemekIntegrationInformationByLicenseId",
+  name: "getMigrosYemekIntegrationInformationByLicenseId",
   initialState: initialState,
   reducers: {
     resetGetIntegrationInformationByLicenseId: (state) => {
@@ -52,11 +52,11 @@ const getIntegrationInformationByLicenseIdSlice = createSlice({
 });
 
 export const getIntegrationInformationByLicenseId = createAsyncThunk(
-  "IntegrationInformations/GetGetirYemekIntegrationInformationByLicenseId",
+  "IntegrationInformations/GetMigrosYemekIntegrationInformationByLicenseId",
   async (licenseId, { rejectWithValue }) => {
     try {
       const res = await api.get(
-        `${baseURL}IntegrationInformations/GetGetirYemekIntegrationInformationByLicenseId`,
+        `${baseURL}IntegrationInformations/GetMigrosYemekIntegrationInformationByLicenseId`,
         { params: { licenseId } }
       );
 

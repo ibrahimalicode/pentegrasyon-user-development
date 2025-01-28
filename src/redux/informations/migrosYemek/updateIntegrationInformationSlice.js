@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const updateIntegrationInformationSlice = createSlice({
-  name: "updateGetirYemekIntegrationInformation",
+  name: "updateMigrosYemekIntegrationInformation",
   initialState: initialState,
   reducers: {
     resetUpdateIntegrationInformation: (state) => {
@@ -46,11 +46,11 @@ const updateIntegrationInformationSlice = createSlice({
 });
 
 export const updateIntegrationInformation = createAsyncThunk(
-  "IntegrationInformations/UpdateGetirYemekIntegrationInformation",
+  "Licenses/UpdateMigrosYemekIntegrationInformation",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.put(
-        `${baseURL}IntegrationInformations/UpdateGetirYemekIntegrationInformation`,
+        `${baseURL}IntegrationInformations/UpdateMigrosYemekIntegrationInformation`,
         { ...data },
         { params: data }
       );
@@ -59,10 +59,7 @@ export const updateIntegrationInformation = createAsyncThunk(
       return res.data;
     } catch (err) {
       const errorMessage = err.message;
-      return rejectWithValue({
-        message: errorMessage,
-        data: err?.response?.data?.data,
-      });
+      return rejectWithValue({ message: errorMessage });
     }
   }
 );

@@ -11,11 +11,11 @@ const initialState = {
   data: null,
 };
 
-const updateIntegrationInformationSlice = createSlice({
-  name: "updateGetirYemekIntegrationInformation",
+const addIntegrationInformationSlice = createSlice({
+  name: "addMigrosYemekIntegrationInformation",
   initialState: initialState,
   reducers: {
-    resetUpdateIntegrationInformation: (state) => {
+    resetAddIntegrationInformation: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -24,19 +24,19 @@ const updateIntegrationInformationSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(updateIntegrationInformation.pending, (state) => {
+      .addCase(addIntegrationInformation.pending, (state) => {
         state.loading = true;
         state.success = false;
         state.error = null;
         state.data = null;
       })
-      .addCase(updateIntegrationInformation.fulfilled, (state, action) => {
+      .addCase(addIntegrationInformation.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.data = action.payload;
       })
-      .addCase(updateIntegrationInformation.rejected, (state, action) => {
+      .addCase(addIntegrationInformation.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = action.payload;
@@ -45,28 +45,24 @@ const updateIntegrationInformationSlice = createSlice({
   },
 });
 
-export const updateIntegrationInformation = createAsyncThunk(
-  "IntegrationInformations/UpdateGetirYemekIntegrationInformation",
+export const addIntegrationInformation = createAsyncThunk(
+  "Licenses/AddMigrosYemekIntegrationInformation",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.put(
-        `${baseURL}IntegrationInformations/UpdateGetirYemekIntegrationInformation`,
-        { ...data },
-        { params: data }
+      const res = await api.post(
+        `${baseURL}IntegrationInformations/AddMigrosYemekIntegrationInformation`,
+        { ...data }
       );
 
       // console.log(res);
       return res.data;
     } catch (err) {
       const errorMessage = err.message;
-      return rejectWithValue({
-        message: errorMessage,
-        data: err?.response?.data?.data,
-      });
+      return rejectWithValue({ message: errorMessage });
     }
   }
 );
 
-export const { resetUpdateIntegrationInformation } =
-  updateIntegrationInformationSlice.actions;
-export default updateIntegrationInformationSlice.reducer;
+export const { resetAddIntegrationInformation } =
+  addIntegrationInformationSlice.actions;
+export default addIntegrationInformationSlice.reducer;

@@ -12,7 +12,7 @@ const initialState = {
 };
 
 const addIntegrationInformationSlice = createSlice({
-  name: "addIntegrationInformation",
+  name: "addYemekSepetiIntegrationInformation",
   initialState: initialState,
   reducers: {
     resetAddIntegrationInformation: (state) => {
@@ -46,7 +46,7 @@ const addIntegrationInformationSlice = createSlice({
 });
 
 export const addIntegrationInformation = createAsyncThunk(
-  "Licenses/AddYemekSepetiIntegrationInformation",
+  "IntegrationInformations/AddYemekSepetiIntegrationInformation",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.post(

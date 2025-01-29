@@ -96,6 +96,11 @@ export const FirestoreProvider = ({ children }) => {
     return onSnapshot(subcollectionRef, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
+      const testData = snapshot.docs
+        .filter((doc) => /* ! */ doc.metadata.hasPendingWrites) // Don't Ignore local writes
+        .map((doc) => ({ id: doc.id, ...doc.data() }));
+      console.log(testData);
+
       if (isInitialLoad) {
         isInitialLoad = false;
         return;
@@ -122,7 +127,7 @@ export const FirestoreProvider = ({ children }) => {
           setProtectedPagesBefore(convertedData);
 
         setState(convertedData);
-        console.log(subcollection, convertedData);
+        console.log(subcollection, convertedData, new Date());
 
         if (subcollection === "newTicket") {
           const newOrderSound = newOrderSounds[data[0].marketplaceId];

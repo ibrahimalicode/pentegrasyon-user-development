@@ -195,11 +195,15 @@ export const OrdersContextProvider = ({ children }) => {
   //SET NEW ORDER
   useEffect(() => {
     if (newOrder) {
-      if (ordersData) {
-        setOrdersData(formatByDate([newOrder, ...ordersData]));
-      } else {
-        setOrdersData([newOrder]);
-      }
+      setOrdersData((prevOrders) => {
+        const existingOrders = prevOrders || [];
+        const isDuplicate = existingOrders.some(
+          (order) => order.id === newOrder.id
+        );
+        return isDuplicate
+          ? existingOrders
+          : formatByDate([newOrder, ...existingOrders]);
+      });
       setNewOrder(null);
     }
   }, [newOrder]);

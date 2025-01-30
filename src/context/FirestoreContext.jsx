@@ -89,22 +89,15 @@ export const FirestoreProvider = ({ children }) => {
   };
 
   // Subscribe to subcollections
-  let isInitialLoad = {
-    newMessage: true,
-    newTicket: true,
-    restaurantStatus: true,
-    ticketAutomation: true,
-    ticketStatus: true,
-    userLock: true,
-  };
   const subscribeToSubcollection = (subcollection, setState) => {
+    let isInitialLoad = true;
     const subcollectionRef = collection(db, `users/${userId}/${subcollection}`);
 
     return onSnapshot(subcollectionRef, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      if (isInitialLoad[subcollection] === true) {
-        isInitialLoad[subcollection] = false;
+      if (isInitialLoad) {
+        isInitialLoad = false;
         return;
       }
 
@@ -185,7 +178,6 @@ export const FirestoreProvider = ({ children }) => {
       cleanup = await setup();
     };
     initialize();
-    console.log("isInitialLoad", isInitialLoad);
 
     // Cleanup on unmount
     return () => {

@@ -14,6 +14,8 @@ import { CloseI } from "../assets/icon";
 import { usePopup } from "./PopupContext";
 import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
+import { getTicketById } from "../redux/orders/getTicketByIdSlice";
+import toast from "react-hot-toast";
 
 const OrdersContext = createContext();
 
@@ -48,7 +50,7 @@ export const OrdersContextProvider = ({ children }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
   const [filter, setFilter] = useState(filterInitialState);
-  const [isThereUnverifiedOrder, setisThereUnverifiedOrder] = useState(false);
+  const [unverifiedOrders, setUnverifiedOrders] = useState(false);
 
   function handlePageChange(number) {
     dispatch(
@@ -86,6 +88,19 @@ export const OrdersContextProvider = ({ children }) => {
     setItemsPerPage({ label: `${number}`, value: number });
   }
 
+  function isOrderUnverifiedInDB(order) {
+    console.log(order);
+    if (order.status === 325 || order.status === 400 || order.status === 1) {
+      dispatch(getTicketById({ ticketId: order.id })).then((res) => {
+        if (res?.meta?.requestStatus === "fulfilled") {
+          console.log(res.payload.data);
+        } else {
+          console.log(res);
+        }
+      });
+    }
+  }
+
   //GET ORDERS
   useEffect(() => {
     if (!ordersData && token) {
@@ -113,12 +128,12 @@ export const OrdersContextProvider = ({ children }) => {
   //CHECK FOR UNVERIFIED ORDERS
   useEffect(() => {
     if (ordersData?.length) {
-      const hasUnverifiedOrders = ordersData.some(
+      const hasUnverifiedOrders = ordersData.filter(
         (order) =>
-          order.status === 325 || order.status === 400 || order.status === 0
+          order.status === 325 || order.status === 400 || order.status === 1
       );
-
-      setisThereUnverifiedOrder(hasUnverifiedOrders);
+      console.log(hasUnverifiedOrders[0]);
+      setUnverifiedOrders(hasUnverifiedOrders[0]);
     }
     if (statusChangedOrder) {
       setOrdersData((prev) => {
@@ -167,12 +182,13 @@ export const OrdersContextProvider = ({ children }) => {
       );
     }
 
-    if (isThereUnverifiedOrder) {
+    if (unverifiedOrders) {
       timeoutRef.current = setTimeout(() => {
         unverifiedOrderSound.loop = true;
         unverifiedOrderSound.play().catch((error) => {
           console.error("Failed to play audio:", error);
         });
+        isOrderUnverifiedInDB(unverifiedOrders);
         console.log("Sound played");
       }, 4000);
     } else {
@@ -190,7 +206,7 @@ export const OrdersContextProvider = ({ children }) => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isThereUnverifiedOrder, token]);
+  }, [unverifiedOrders, token]);
 
   //SET NEW ORDER
   useEffect(() => {
@@ -219,8 +235,8 @@ export const OrdersContextProvider = ({ children }) => {
         setPageNumber,
         totalItems,
         setTotalItems,
-        isThereUnverifiedOrder,
-        setisThereUnverifiedOrder,
+        unverifiedOrders,
+        setUnverifiedOrders,
         handlePageChange,
         filter,
         setFilter,

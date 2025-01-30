@@ -37,7 +37,7 @@ const MigrosYemekCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!selectedData?.reason) {
+    if (!selectedData?.cancelReasonId) {
       toast.error("Lütfen  İptal Sebepini Seçiniz");
       return;
     }
@@ -60,8 +60,8 @@ const MigrosYemekCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
       console.log(options);
       const formattedOptions = options.map((opt) => {
         return {
-          message: opt.description,
-          reason: opt.reasonId,
+          cancelNote: opt.description,
+          cancelReasonId: opt.reasonId,
         };
       });
       console.log(formattedOptions);
@@ -90,24 +90,23 @@ const MigrosYemekCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
               optionsData.map((opt) => (
                 <button
                   type="button"
-                  key={opt.reason}
+                  key={opt.cancelReasonId}
                   onClick={() => {
                     setSelectedData(opt);
                     setCancelOrderData(() => {
                       return {
                         ticketId,
-                        message: opt.message,
-                        reason: opt.reason,
-                        cancelNote: opt.message,
+                        cancelReasonId: opt.cancelReasonId,
+                        cancelNote: opt.cancelNote,
                       };
                     });
                   }}
                   className={`border bg-[--light-4] py-2 px-3 rounded-sm text-leftm ${
-                    opt.reason == selectedData?.reason &&
+                    opt.cancelReasonId == selectedData?.cancelReasonId &&
                     "border-[--green-1] bg-[--light-green] text-[--green-1]"
                   }`}
                 >
-                  {opt.message}
+                  {opt.cancelNote}
                 </button>
               ))}
           </div>

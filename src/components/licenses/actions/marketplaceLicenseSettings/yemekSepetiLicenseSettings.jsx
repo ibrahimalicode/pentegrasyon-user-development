@@ -85,9 +85,12 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
             <p className="text-center font-bold mb-2">ÖNEMLİ BİLGİLENDİRME !</p>
             <p>
               Entegrasyon geçişi için Yemeksepeti&apos;ne mail gönderilecek.
-              Yemeksepeti tarafından Entegrasyon geçişleri sadece Salı, Çarşamba
-              ve Perşembe günleri olarak belirlenmiştir.. Entegrasyon geçişi
-              yapıldığında Chain Code bilgisi{" "}
+              Yemeksepeti tarafından Entegrasyon geçişleri sadece{" "}
+              <span className="font-bold">Salı</span>,{" "}
+              <span className="font-bold">Çarşamba</span>
+              ve <span className="font-bold">Perşembe</span> günleri olarak
+              belirlenmiştir.. Entegrasyon geçişi yapıldığında{" "}
+              <span className="font-bold">Chain Code</span> bilgisi
               <span className="text-[--link-1]">{user.email}</span> mail
               adresinize iletilecektir. Bu kodu girdiğinizde Pentegrasyon
               servisi çalışmaya başlayacaktır.
@@ -127,16 +130,29 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       toast.error("Herhangi bir değişiklik yapmadınız.");
       return;
     }
-    if (
-      licenseData.sellerId !== licenseDataBefore.sellerId ||
-      licenseData.chainCode !== licenseDataBefore.chainCode
-    ) {
-      // if(licenseData.isSettingsAdded)
+
+    if (isSendShouldBeSent()) {
       confirmAndContinue();
       return;
     }
     const inData = { ...licenseData, sendYemekSepetiEmailNotify: false };
     handleAddOrUpdate(inData);
+  }
+
+  //CHECK IF THE SEND EMAIN IS CHOOOSEN
+  function isSendShouldBeSent() {
+    if (
+      licenseData.sellerId !== licenseDataBefore.sellerId ||
+      licenseData.chainCode !== licenseDataBefore.chainCode
+    ) {
+      if (
+        !licenseData.isSettingsAdded ||
+        (licenseData.isSettingsAdded && licenseData.sendYemekSepetiEmailNotify)
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function handleAddOrUpdate(inData) {
@@ -153,10 +169,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       content:
         "Yemeksepeti tarafından Entegrasyon geçişleri sadece Salı, Çarşamba ve Perşembe günleri olarak belirlenmiştir.. Entegrasyon geçişi yapıldığında Chain Code bilgisi tarafınıza iletilecektir. Bu kodu girdiğinizde Pentegrasyon servisi çalışmaya başlayacaktır.",
     };
-    if (
-      !licenseDataBefore.chainCode ||
-      licenseData.sendYemekSepetiEmailNotify
-    ) {
+    if (isSendShouldBeSent()) {
       toast.custom((t) => CustomToast({ color: "green", message, t }), {
         position: "top-right",
         duration: 60000,

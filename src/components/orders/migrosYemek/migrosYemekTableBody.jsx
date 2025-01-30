@@ -49,13 +49,7 @@ const MigrosYemekTableBody = ({ order, totalItems, setOrdersData }) => {
 
   function cellClicked() {
     setSlideBarContent(
-      <MigrosYemekOrderDetails
-        order={{
-          ...order,
-          checkedScheduledDate: isCheckoutToday(order.scheduledDate),
-        }}
-        setOrdersData={setOrdersData}
-      />
+      <MigrosYemekOrderDetails order={order} setOrdersData={setOrdersData} />
     );
   }
 
@@ -155,9 +149,7 @@ const MigrosYemekTableBody = ({ order, totalItems, setOrdersData }) => {
                 String(order.totalPrice.toFixed(2)).replace(".", ",")
               )
             : formatToPrice(
-                String(
-                  (order.totalPrice - order.discountedPrice).toFixed(2)
-                ).replace(".", ",")
+                String(order.discountedPrice.toFixed(2)).replace(".", ",")
               )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">

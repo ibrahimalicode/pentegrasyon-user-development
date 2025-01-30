@@ -90,7 +90,7 @@ export const OrdersContextProvider = ({ children }) => {
 
   function isOrderUnverifiedInDB(order) {
     console.log(order);
-    if (order.status === 325 || order.status === 400 || order.status === 1) {
+    if (order.status === 325 || order.status === 400 || order.status === 0) {
       dispatch(getTicketById({ ticketId: order.id })).then((res) => {
         if (res?.meta?.requestStatus === "fulfilled") {
           console.log(res.payload.data);
@@ -130,7 +130,7 @@ export const OrdersContextProvider = ({ children }) => {
     if (ordersData?.length) {
       const hasUnverifiedOrders = ordersData.filter(
         (order) =>
-          order.status === 325 || order.status === 400 || order.status === 1
+          order.status === 325 || order.status === 400 || order.status === 0
       );
       console.log(hasUnverifiedOrders[0]);
       setUnverifiedOrders(hasUnverifiedOrders[0]);

@@ -131,6 +131,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
       licenseData.sellerId !== licenseDataBefore.sellerId ||
       licenseData.chainCode !== licenseDataBefore.chainCode
     ) {
+      // if(licenseData.isSettingsAdded)
       confirmAndContinue();
       return;
     }
@@ -180,10 +181,11 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     if (infoData) {
       const data = {
         ...licenseData,
-        commissionRate: infoData.commissionRate,
         sellerId: infoData.sellerId,
         remoteId: infoData.remoteId,
         chainCode: infoData.chainCode,
+        commissionRate: infoData.commissionRate,
+        getirYemekIntegrationInformationId: infoData.id,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);

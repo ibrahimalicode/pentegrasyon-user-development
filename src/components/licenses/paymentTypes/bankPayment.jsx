@@ -1,11 +1,17 @@
-import { useSelector } from "react-redux";
-import CustomFileInput from "../../common/customFileInput";
+//MODULES
+import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
 import CustomInput from "../../common/customInput";
 import BackButton from "../stepsAssets/backButton";
 import ForwardButton from "../stepsAssets/forwardButton";
-import { useState } from "react";
-import { groupByRestaurantId } from "../../../utils/utils";
+import CustomFileInput from "../../common/customFileInput";
+import { getPriceWithKDV, groupByRestaurantId } from "../../../utils/utils";
 
+//IMAGES
 import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
 import MigrosYemek from "../../../assets/img/packages/MigrosYemek.png";
 import Siparisim from "../../../assets/img/packages/Siparisim.png";
@@ -13,7 +19,13 @@ import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import Autoronics from "../../../assets/img/packages/Autoronics.png";
-import Vigo from "../../../assets/img/packages/Vigo.png";
+
+//REDUX
+import {
+  addByBankPay,
+  resetAddByBankPay,
+} from "../../../redux/licenses/addLicense/addByBankPaySlice";
+import { clearCart } from "../../../redux/cart/cartSlice";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -23,21 +35,105 @@ const imageSRCs = [
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
   { src: Autoronics, name: "Autoronics" },
-  { src: Vigo, name: "Vigo" },
 ];
 
-const BankPayment = ({ step, setStep }) => {
+const BankPayment = ({ user, step, setStep, actionType, setPaymentStatus }) => {
+  const toastId = useRef();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { currentLicense } = location?.state || {};
+
+  const isPageExtend = actionType === "extend-license";
+
   const cartItems = useSelector((state) => state.cart.items);
+  const { success, loading, error } = useSelector(
+    (state) => state.licenses.addByBank
+  );
 
   const [document, setDocument] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [licensePackageData, setLicensePackageData] = useState(
-    groupByRestaurantId(cartItems)
-  );
+  const licensePackageData = groupByRestaurantId(cartItems);
 
   function handleSubmit(e) {
     e.preventDefault();
+    const { city, district, neighbourhood } = user.userInvoiceAddressDTO;
+    const paymentAmount = cartItems.reduce(
+      (acc, item) => acc + parseFloat(item.price),
+      0
+    );
+    const addLicenseBasket = cartItems.reduce((result, item) => {
+      const existingRestaurant = result.find(
+        (restaurant) => restaurant.restaurantId === item.restaurantId
+      );
+
+      if (existingRestaurant) {
+        existingRestaurant.licensePackageIds.push(item.id);
+      } else {
+        result.push({
+          restaurantId: item.restaurantId,
+          licensePackageIds: [item.id],
+        });
+      }
+
+      return result;
+    }, []);
+
+    const { licensePackageId, restaurantId } = cartItems[0];
+    const extendLicenseBasket = {
+      licensePackageId,
+      restaurantId,
+      licenseId: currentLicense?.id,
+    };
+
+    // Create a FormData object
+    const formData = new FormData();
+    // formData.append("UserId", user.id);
+    formData.append("UserName", user.fullName);
+    formData.append("UserEmail", user.email);
+    formData.append("UserPhoneNumber", user.phoneNumber);
+    formData.append("UserAddress", `${city}/${district}/${neighbourhood}`);
+    formData.append(
+      "UserBasket",
+      isPageExtend
+        ? JSON.stringify(extendLicenseBasket)
+        : JSON.stringify(addLicenseBasket)
+    );
+    formData.append("PaymentType", "Bank");
+    formData.append("PaymentAmount", paymentAmount.toString());
+    formData.append("Description", explanation);
+    formData.append("Receipt", document);
+
+    if (isPageExtend) {
+      // dispatch(extendByBankPay(data));
+    } else {
+      dispatch(addByBankPay(formData));
+    }
   }
+
+  // ADD SUCCESS
+  useEffect(() => {
+    if (loading) {
+      toastId.current = toast.loading("Loading...");
+    }
+    if (success) {
+      setStep(6);
+      toast.remove(toastId.current);
+      setPaymentStatus("success");
+      dispatch(resetAddByBankPay());
+    }
+    if (error) {
+      setStep(6);
+      toast.remove(toastId.current);
+      window.parent.postMessage({ status: "failed" }, "*");
+      dispatch(resetAddByBankPay());
+    }
+
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
+  }, [loading, success, error]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -56,7 +152,7 @@ const BankPayment = ({ step, setStep }) => {
 
                 <div className="flex flex-wrap gap-x-4 gap-y-2 pb-2">
                   {pkg.map((item, i) => (
-                    <div className="flex text-sm" key={i}>
+                    <div key={i} className="flex text-sm">
                       <p className="mt-1 pr-2">
                         {imageSRCs[item.licenseTypeId]?.name}
                       </p>
@@ -87,7 +183,7 @@ const BankPayment = ({ step, setStep }) => {
             value={document}
             onChange={setDocument}
             accept={"image/png, image/jpeg, application/pdf"}
-            required
+            required={!document}
           />
         </div>
 
@@ -103,7 +199,7 @@ const BankPayment = ({ step, setStep }) => {
             text="Devam"
             letIcon={true}
             type="submit"
-            disabled={false} //loading}
+            disabled={loading}
           />
         </div>
       </div>

@@ -42,7 +42,8 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
       ? currentCourier[0].label
       : order?.courier?.name;
   }
-  console.log(sideOrder);
+  // console.log();
+  sideOrder.orders.map((O) => O.options.map((opt) => console.log(opt)));
 
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
@@ -161,52 +162,52 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
 
           <tbody>
             {sideOrder &&
-              sideOrder.orders.map((order, i) => (
+              sideOrder.orders.map((Order, i) => (
                 <React.Fragment key={i}>
                   <tr className={`${i}"-here"`}>
                     <td className="p-2 text-left">
                       <div>
                         <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
-                          {order.amount}
+                          {Order.amount}
                         </span>
-                        {order.name}
+                        {Order.name}
                       </div>
                     </td>
                     <td className="p-2 flex justify-end items-start">
-                      {formatToPrice(order.priceText)}
+                      {formatToPrice(Order.priceText)}
                     </td>
                   </tr>
-                  {order.options.map((cat) => (
-                    <React.Fragment key={cat.id}>
-                      {cat.subOptions.length > 0 && (
+                  {Order.options.map((option) => (
+                    <React.Fragment key={option.id}>
+                      {option.subOptions.length > 0 && (
                         <tr className="text-xs px-2">
-                          <td className="pl-2">{cat.headerName}</td>
+                          <td className="pl-2">{option.headerName}</td>
                         </tr>
                       )}
-                      {cat.subOptions.map((opt) => (
-                        <tr key={opt.id} className="text-xs">
+                      {option.subOptions.map((subOpt) => (
+                        <tr key={subOpt.id} className="text-xs">
                           <td className="pl-2">
-                            ▸ {opt.itemNames}
-                            {opt.quantity > 1 && (
+                            ▸ {subOpt.itemNames}
+                            {subOpt.quantity > 1 && (
                               <span className="ml-1 text-[--green-1]">
-                                {"(x" + opt.quantity + ")"}
+                                {"(x" + subOpt.quantity + ")"}
                               </span>
                             )}
                           </td>
                           <td
                             className={`pr-2 text-right ${
-                              opt.primaryPrice > 0
+                              subOpt.primaryPrice > 0
                                 ? "text-[--green-1]"
                                 : "text-[--red-1]"
                             }`}
                           >
-                            {opt.primaryPrice > 0
+                            {subOpt.primaryPrice > 0
                               ? `+`
-                              : opt.primaryPrice < 0
+                              : subOpt.primaryPrice < 0
                               ? `-`
                               : ""}
-                            {opt.primaryPrice > 0 &&
-                              formatToPrice(opt.primaryPriceText)}
+                            {subOpt.primaryPrice > 0 &&
+                              formatToPrice(subOpt.primaryPriceText)}
                           </td>
                         </tr>
                       ))}

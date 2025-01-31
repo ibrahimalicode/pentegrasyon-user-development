@@ -17,6 +17,7 @@ const InvoiceData = ({
   userData,
   openFatura,
   setOpenFatura,
+  setInvoiceBeforeAfter,
 }) => {
   const dispatcher = useRef();
   const { error: updateInvError, success: updateInvSucc } = useSelector(
@@ -33,6 +34,7 @@ const InvoiceData = ({
     neighs,
     userInvoice,
     setUserInvoice,
+    userInvoiceBefore,
     handleSubmit,
   } = useEditUserInvoice(dispatcher, user);
 
@@ -46,6 +48,7 @@ const InvoiceData = ({
       setOpenFatura(true);
     }
 
+    setInvoiceBeforeAfter({ userInvoice, userInvoiceBefore });
     onSubmit(handleSubmit);
   }, [userInvoice]);
 

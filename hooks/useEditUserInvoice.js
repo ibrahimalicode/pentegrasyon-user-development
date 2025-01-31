@@ -41,11 +41,7 @@ export const useEditUserInvoice = (dispatcher, user) => {
     (state) => state.data.getNeighs
   );
 
-  const [cities, setCities] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [neighs, setNeighs] = useState([]);
-  const [userInvoiceBefore, setUserInvoiceBefore] = useState();
-  const [userInvoice, setUserInvoice] = useState({
+  const initialInvoice = {
     taxOffice: "",
     taxNumber: "",
     title: "",
@@ -55,7 +51,13 @@ export const useEditUserInvoice = (dispatcher, user) => {
     neighbourhood: "",
     tradeRegistryNumber: "",
     mersisNumber: "",
-  });
+  };
+
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [neighs, setNeighs] = useState([]);
+  const [userInvoiceBefore, setUserInvoiceBefore] = useState();
+  const [userInvoice, setUserInvoice] = useState(initialInvoice);
 
   //TOAST TO UPDATE
   useEffect(() => {
@@ -135,6 +137,9 @@ export const useEditUserInvoice = (dispatcher, user) => {
           tradeRegistryNumber: userInv.tradeRegistryNumber,
           mersisNumber: userInv.mersisNumber,
         });
+      } else {
+        setUserInvoice(initialInvoice);
+        setUserInvoiceBefore(initialInvoice);
       }
     }
   }, [user]);
@@ -276,5 +281,6 @@ export const useEditUserInvoice = (dispatcher, user) => {
     neighs,
     handleSubmit,
     userInvoiceBefore,
+    initialInvoice,
   };
 };

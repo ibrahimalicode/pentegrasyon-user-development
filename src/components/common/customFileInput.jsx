@@ -103,9 +103,9 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
         )}
       </div>
       <input
+        type="file"
         id="dropzone-file"
         name="dropzone-file"
-        type="file"
         className="absolute top-0 inset-0 opacity-0 cursor-pointer"
         onChange={handleInputChange}
         accept={accept}

@@ -1,5 +1,5 @@
 //MODULES
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,8 +11,13 @@ import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 // REDUX
-import { addByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
+import {
+  addByOnlinePay,
+  resetAddByOnlinePay,
+} from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
+import toast from "react-hot-toast";
+import { clearCart } from "../../../redux/cart/cartSlice";
 
 const OnlinePayment = ({
   step,
@@ -20,16 +25,20 @@ const OnlinePayment = ({
   userData,
   actionType,
   userInvData,
+  setPaymentStatus,
 }) => {
+  const toastId = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
 
   const { currentLicense } = location?.state || {};
   const isPageExtend = actionType === "extend-license";
 
-  const { loading: addLoading } = useSelector(
-    (state) => state.licenses.addByPay
-  );
+  const {
+    loading: addLoading,
+    success: addSuccess,
+    error: addError,
+  } = useSelector((state) => state.licenses.addByPay);
 
   const { loading: extendLoading } = useSelector(
     (state) => state.licenses.extendByPay
@@ -103,8 +112,32 @@ const OnlinePayment = ({
     } else {
       dispatch(addByOnlinePay(data));
     }
-    //NOTE: the step changer function based on the response is in the "addLicensePage".
   }
+
+  // ADD TOAST
+  useEffect(() => {
+    if (addLoading) {
+      toastId.current = toast.loading("Loading...");
+    }
+    if (addSuccess) {
+      setStep(5);
+      toast.remove(toastId.current);
+      dispatch(resetAddByOnlinePay());
+      return;
+    }
+    if (addError) {
+      setStep(6);
+      toast.remove(toastId.current);
+      window.parent.postMessage({ status: "failed" }, "*");
+      dispatch(resetAddByOnlinePay());
+    }
+
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
+  }, [addLoading, addSuccess, addError, dispatch]);
 
   return (
     <form onSubmit={handleSubmit} className="w-full">

@@ -11,6 +11,7 @@ const FourthStep = ({
   userData,
   userInvData,
   paymentMethod,
+  setPaymentStatus,
 }) => {
   const value = paymentMethod.selectedOption.value;
   const location = useLocation();
@@ -29,6 +30,7 @@ const FourthStep = ({
               userData={userData}
               actionType={actionType}
               userInvData={userInvData}
+              setPaymentStatus={setPaymentStatus}
             />
           )
         )}

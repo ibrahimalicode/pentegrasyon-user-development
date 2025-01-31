@@ -7,10 +7,9 @@ import FifthStepOnlinePayment from "./5thStepOnlinePayment";
 
 const FifthStep = ({
   step,
+  user,
   setStep,
-  licenseData,
   paymentMethod,
-  restaurantData,
   setPaymentStatus,
 }) => {
   const location = useLocation();
@@ -29,11 +28,11 @@ const FifthStep = ({
         ) : (
           value === "bankPayment" && (
             <BankPayment
+              user={user}
               step={step}
               setStep={setStep}
               actionType={actionType}
-              licenseData={licenseData}
-              restaurantData={restaurantData}
+              setPaymentStatus={setPaymentStatus}
             />
           )
         )}

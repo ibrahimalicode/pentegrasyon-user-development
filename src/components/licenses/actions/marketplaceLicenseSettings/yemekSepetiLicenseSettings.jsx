@@ -141,17 +141,15 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
 
   //CHECK IF THE SEND EMAIN IS CHOOOSEN
   function isSendShouldBeSent() {
-    if (
-      licenseData.sellerId !== licenseDataBefore.sellerId ||
-      licenseData.chainCode !== licenseDataBefore.chainCode
-    ) {
+    if (data.isSettingsAdded) {
       if (
-        !licenseData.isSettingsAdded ||
-        (licenseData.isSettingsAdded && licenseData.sendYemekSepetiEmailNotify)
+        licenseData.sellerId !== licenseDataBefore.sellerId ||
+        licenseData.chainCode !== licenseDataBefore.chainCode
       ) {
-        return true;
+        if (licenseData.sendYemekSepetiEmailNotify) return true;
       }
     }
+    if (!data.isSettingsAdded) return true;
     return false;
   }
 
@@ -198,7 +196,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
         remoteId: infoData.remoteId,
         chainCode: infoData.chainCode,
         commissionRate: infoData.commissionRate,
-        getirYemekIntegrationInformationId: infoData.id,
+        yemekSepetiIntegrationInformationId: infoData.id,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);

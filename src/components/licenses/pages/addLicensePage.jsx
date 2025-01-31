@@ -1,12 +1,11 @@
 // MODULES
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import StepBar from "../../common/stepBar";
 import StepFrame from "../../common/stepFrame";
+import PaymentTypes from "../../../enums/paymentTypes";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 //STEPS
@@ -18,23 +17,13 @@ import FifthStep from "../addLicenseSteps/5thStep";
 import SixthStep from "../addLicenseSteps/6thStep";
 
 //REDUX
-import { clearCart } from "../../../redux/cart/cartSlice";
-import { resetAddByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
-import PaymentTypes from "../../../enums/paymentTypes";
 
 const AddLicensePage = () => {
-  const toastId = useRef();
   const location = useLocation();
-  const dispatch = useDispatch();
   const { user, restaurant, licenses } = location.state || {};
   const currentPath = location.pathname;
   const pathArray = currentPath.split("/");
   const actionType = pathArray[pathArray.length - 1];
-
-  const cartItems = useSelector((state) => state.cart.items);
-  const { success, loading, error } = useSelector(
-    (state) => state.licenses.addByPay
-  );
 
   const [step, setStep] = useState(1);
   const [steps, setSteps] = useState(6);
@@ -68,29 +57,6 @@ const AddLicensePage = () => {
       });
     }
   }, [restaurant]);
-
-  // ADD SUCCESS
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor...");
-    } else if (success) {
-      toast.remove(toastId.current);
-      if (success) {
-        setStep(5);
-      }
-    } else if (error) {
-      setStep(6);
-      toast.dismiss(toastId.current);
-      window.parent.postMessage({ status: "failed" }, "*");
-      dispatch(resetAddByOnlinePay());
-    }
-
-    return () => {
-      if (cartItems) {
-        dispatch(clearCart());
-      }
-    };
-  }, [loading, success, error, dispatch]);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">
@@ -184,21 +150,19 @@ const AddLicensePage = () => {
                       setStep={setStep}
                       userData={userData}
                       userInvData={userInvData}
-                      licenseData={licensePackageData}
                       paymentMethod={paymentMethod}
-                      restaurantData={restaurantData}
+                      setPaymentStatus={setPaymentStatus}
                     />,
                     <FifthStep
                       key={4}
                       step={step}
+                      user={userData}
                       setStep={setStep}
-                      licenseData={licensePackageData}
                       paymentMethod={paymentMethod}
-                      restaurantData={restaurantData}
                       setPaymentStatus={setPaymentStatus}
                     />,
                     <SixthStep
-                      key={4}
+                      key={5}
                       step={step}
                       paymentMethod={paymentMethod}
                       paymentStatus={paymentStatus}

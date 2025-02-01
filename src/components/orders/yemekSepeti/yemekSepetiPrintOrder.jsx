@@ -110,10 +110,10 @@ const YemekSepetiPrintOrder = ({ order }) => {
 
       <div className="text-lg w-full pb-2">
         <table className="rounded-md overflow-clip w-full h-max">
-          <thead className="bg-[--light-3]">
+          <thead className="bg-[--light-3]-">
             <tr>
-              <th className="p-2 font-normal text-left">Ürün</th>
-              <th className="p-2 font-normal text-right">Tutar</th>
+              <th className="p-2- font-normal text-left"></th>
+              <th className="p-2- font-normal text-right"></th>
             </tr>
           </thead>
 

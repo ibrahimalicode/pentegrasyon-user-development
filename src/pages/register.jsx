@@ -121,6 +121,9 @@ const Register = () => {
       toast.success("Doğrulama Kodu Gönderildi");
       dispatch(resetRgisterState());
     } else if (error) {
+      console.log(error);
+      toast.dismiss(toastId.current);
+      toast.error(error.message);
       dispatch(resetRgisterState());
     }
   }, [loading, success, error]);

@@ -66,7 +66,7 @@ export const registerUser = createAsyncThunk(
         district,
       });
 
-      // console.log(res.data);
+      console.log(res.data);
       return res.data;
     } catch (err) {
       const errorMessage = err.message;

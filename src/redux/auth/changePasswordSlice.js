@@ -1,9 +1,5 @@
-import {
-  createSlice,
-  asyncThunkCreator,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const api = privateApi();
 const baseURL = import.meta.env.VITE_BASE_URL;

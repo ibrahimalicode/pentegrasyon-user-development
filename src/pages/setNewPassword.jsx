@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 //COMP
 import NotFound from "./404";
 import LoadingI from "../assets/anim/loading";
+import GlassFrame from "../components/common/glassFrame";
 import CustomInput from "../components/common/customInput";
 
 //REDUX
@@ -19,7 +20,6 @@ import {
   resetVerifyCodeState,
   codeVerification,
 } from "../redux/auth/verifyCodeSlice";
-import GlassFrame from "../components/common/glassFrame";
 
 const KEY = import.meta.env.VITE_LOCAL_KEY;
 
@@ -38,11 +38,10 @@ const SetNewPassword = () => {
     error: verifyE,
   } = useSelector((state) => state.auth.verifyCode);
 
+  const [token, setToken] = useState(null);
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [credentials, setCredentials] = useState(null);
-  const [isError, setIsError] = useState(false);
-  const [token, setToken] = useState(null);
 
   const handleChangePassword = (e) => {
     e.preventDefault();
@@ -94,7 +93,8 @@ const SetNewPassword = () => {
       dispatch(resetVerifyCodeState());
     }
     if (verifyE) {
-      setIsError(true);
+      toast.dismiss();
+      toast.error(error.message);
       dispatch(resetVerifyCodeState());
     }
   }, [verifyS, verifyE]);

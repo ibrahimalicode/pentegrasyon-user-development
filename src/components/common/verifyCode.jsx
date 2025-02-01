@@ -1,6 +1,6 @@
 //MODULES
 import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -30,7 +30,6 @@ const VerifyCode = ({
   phoneNumber,
   numInputs = 4,
 }) => {
-  const toastId = useRef();
   const dispatch = useDispatch();
 
   const { loading, success, error } = useSelector(
@@ -81,15 +80,17 @@ const VerifyCode = ({
   // TOAST AND ACTION FOR VERIFY CODE
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("İşleniyor...");
+      toast.loading("İşleniyor...");
     }
     if (success) {
       onSuccess();
-      toast.dismiss(toastId.current);
+      toast.dismiss();
       toast.success("Onay Kodu Doğrulandı");
       dispatch(resetVerifyCodeState());
     }
     if (error) {
+      toast.dismiss();
+      toast.error(error.message);
       dispatch(resetVerifyCodeState());
     }
   }, [loading, success, error]);
@@ -97,11 +98,14 @@ const VerifyCode = ({
   //TOAST AND ACTION FOR SEND VERIFICATION CODE
   useEffect(() => {
     if (sendSuccess) {
-      toast.success("Onay Kodu Gönderildi");
+      toast.dismiss();
       setMinutes(2);
+      toast.success("Onay Kodu Gönderildi");
       dispatch(resetUserVerification());
     }
     if (sendError) {
+      toast.dismiss();
+      toast.error(sendError.message);
       dispatch(resetUserVerification());
     }
   }, [sendSuccess, sendLoading, sendError]);

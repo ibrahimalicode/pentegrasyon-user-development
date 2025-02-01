@@ -76,6 +76,8 @@ const EditUserPassword = ({ user }) => {
                 };
               });
             }}
+            minLength={4}
+            maxLength={20}
           />
           <CustomInput
             required
@@ -92,6 +94,8 @@ const EditUserPassword = ({ user }) => {
                 };
               });
             }}
+            minLength={4}
+            maxLength={20}
           />
         </div>
 

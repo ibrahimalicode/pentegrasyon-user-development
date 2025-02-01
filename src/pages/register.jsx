@@ -1,5 +1,6 @@
 // MODULES
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { usePopup } from "../context/PopupContext";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,11 +22,9 @@ import { getDistricts } from "../redux/data/getDistrictsSlice";
 import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
 
 // ASSETS
-import imgUrl from "../assets/img/pentegrasyon.png";
+import { CancelI } from "../assets/icon";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
-import { useNavigate } from "react-router-dom";
-import { CancelI } from "../assets/icon";
 
 const Register = () => {
   const toastId = useRef();
@@ -121,8 +120,7 @@ const Register = () => {
       toast.success("Doğrulama Kodu Gönderildi");
       dispatch(resetRgisterState());
     } else if (error) {
-      console.log(error);
-      toast.dismiss(toastId.current);
+      toast.dismiss();
       toast.error(error.message);
       dispatch(resetRgisterState());
     }
@@ -263,6 +261,8 @@ const Register = () => {
                   className3="top-[25%]"
                   className5="text-[var(--white-1)]"
                   letIcon={true}
+                  minLength={4}
+                  maxLength={20}
                 />
                 <CustomInput
                   // label="Şifreyi onayla"
@@ -275,6 +275,8 @@ const Register = () => {
                   className3="top-[25%]"
                   className5="text-[var(--white-1)]"
                   letIcon={true}
+                  minLength={4}
+                  maxLength={20}
                 />
               </div>
 

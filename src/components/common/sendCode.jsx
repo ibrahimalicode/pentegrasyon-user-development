@@ -34,6 +34,8 @@ const SendCode = ({ phoneNumber, setPhoneNumber, setToVerify }) => {
       dispatch(resetUserVerification());
     }
     if (error) {
+      toast.dismiss();
+      toast.error(error.message);
       dispatch(resetUserVerification());
     }
   }, [success, error, loading]);

@@ -30,6 +30,7 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     if (!emailOrPhone || !password) return;
     dispatch(login({ emailOrPhone, password }));
   };
@@ -84,6 +85,8 @@ function Login() {
             className="py-2 bg-transparent text-[var(--white-1)]"
             className5="text-[var(--white-1)]"
             autoComplete="on"
+            minLength={4}
+            maxLength={20}
           />
           <div className="text-right text-[--link-1] mt-4">
             <a href="/forgotPassword">Şifremi unuttum ?</a>

@@ -65,7 +65,7 @@ export const codeVerification = createAsyncThunk(
       // console.log(res.data);
       return data;
     } catch (err) {
-      const errorMessage = err.message;
+      const errorMessage = err.response.data.message_TR || err.message;
       return rejectWithValue({ message: errorMessage });
     }
   }

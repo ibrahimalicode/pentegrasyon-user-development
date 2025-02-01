@@ -1,20 +1,24 @@
+//MODULES
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+
+//REDUX
 import {
   forgotPassword,
   resetForgotPassword,
 } from "../redux/auth/forgotPasswordSlice";
+
+//COMP
 import LoadingI from "../assets/anim/loading";
-import CustomCheckbox from "../components/common/customCheckbox";
-import CustomInput from "../components/common/customInput";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import CustomPhoneInput from "../components/common/customPhoneInput";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
+import CustomInput from "../components/common/customInput";
+import CustomCheckbox from "../components/common/customCheckbox";
+import CustomPhoneInput from "../components/common/customPhoneInput";
 
 const ForgotPassword = () => {
-  const toastId = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

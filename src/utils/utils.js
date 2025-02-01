@@ -496,14 +496,14 @@ export function compareWithCurrentDateTime(
 }
 
 //
-export const formatByDate = (inData, lastInFirst) => {
+export const formatByDate = (inData, lastInLast) => {
   // Remove duplicates based on both 'id'
   const uniqueOrders = _.uniqBy(inData, (entity) => entity.id);
 
   return uniqueOrders.sort((a, b) => {
     const dateA = new Date(a.createdDateTime);
     const dateB = new Date(b.createdDateTime);
-    if (lastInFirst) {
+    if (lastInLast) {
       return dateA - dateB;
     } else {
       return dateB - dateA;

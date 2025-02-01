@@ -119,7 +119,7 @@ export const OrdersContextProvider = ({ children }) => {
       dispatch(resetGetOrdersState());
     }
     if (success) {
-      setOrdersData(orders.data);
+      setOrdersData(formatByDate(orders.data));
       setTotalItems(orders.totalCount);
       dispatch(resetGetOrdersState());
     }

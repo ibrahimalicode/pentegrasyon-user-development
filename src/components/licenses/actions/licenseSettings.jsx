@@ -18,6 +18,7 @@ const LicenseSettings = ({ licenseData, onSuccess }) => {
 
   const handlePopup = (event) => {
     event.stopPropagation();
+    if (!licenseData.isActive) return;
     if (LicenseSettingsPopup) {
       setPopupContent(
         <LicenseSettingsPopup data={licenseData} onSuccess={onSuccess} />

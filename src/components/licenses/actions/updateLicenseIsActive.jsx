@@ -1,13 +1,19 @@
-import { useDispatch, useSelector } from "react-redux";
-import { usePopup } from "../../../context/PopupContext";
-import { useEffect, useRef, useState } from "react";
-import CustomCheckbox from "../../common/customCheckbox";
+//MODULES
 import toast from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//COMP
+import { CancelI } from "../../../assets/icon";
+import CustomInput from "../../common/customInput";
+import { usePopup } from "../../../context/PopupContext";
+import CustomCheckbox from "../../common/customCheckbox";
+
+//REDUX
 import {
   resetUpdateLicenseIsActiveState,
   updateLicenseIsActive,
 } from "../../../redux/licenses/updateLicenseIsActiveSlice";
-import { CancelI } from "../../../assets/icon";
 
 const EditLicenseIsActive = ({ licenseData, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -34,7 +40,7 @@ const EditLicenseIsActive = ({ licenseData, onSuccess }) => {
 
 export default EditLicenseIsActive;
 
-///*** */////
+///*** *///
 /////////////
 // EDIT licenseData POPUP
 function EditLicenseIsActivesPopup({ onSuccess, license }) {

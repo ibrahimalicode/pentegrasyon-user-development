@@ -60,7 +60,7 @@ const RestaurantsStatus = () => {
       inData.marketplaceId == 3
         ? inData[statCodeArray[0].key].toLocaleLowerCase()
         : inData[statCodeArray[0].key];
-    return statCodeArray.filter((S) => S.id == restautantStatus)[0].value;
+    return statCodeArray.filter((S) => S.id == restautantStatus)[0]?.value;
   }
 
   //SET THE DATA

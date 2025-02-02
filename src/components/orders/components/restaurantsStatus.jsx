@@ -202,7 +202,7 @@ const RestaurantsStatus = () => {
                           ? rest.name
                           : rest.restaurantName
                           ? rest.restaurantName
-                          : rest.storeName}
+                          : rest.storeName}{" "}
                         Kapalı
                       </p>
                     </div>
@@ -240,7 +240,7 @@ const RestaurantsStatus = () => {
                     ? rest.name
                     : rest.restaurantName
                     ? rest.restaurantName
-                    : rest.storeName}
+                    : rest.storeName}{" "}
                   Kapalı
                 </p>
               </div>

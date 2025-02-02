@@ -89,13 +89,12 @@ export const OrdersContextProvider = ({ children }) => {
   }
 
   function isOrderUnverifiedInDB(order) {
-    console.log(order);
     if (order.status === 325 || order.status === 400 || order.status === 0) {
       dispatch(getTicketById({ ticketId: order.id })).then((res) => {
         if (res?.meta?.requestStatus === "fulfilled") {
-          console.log(res.payload.data);
-        } else {
-          console.log(res);
+          const data = res.payload.data;
+          if (data.id === order.id && data.status != order.status)
+            setStatusChangedOrder(data);
         }
       });
     }
@@ -132,7 +131,7 @@ export const OrdersContextProvider = ({ children }) => {
         (order) =>
           order.status === 325 || order.status === 400 || order.status === 0
       );
-      console.log(hasUnverifiedOrders[0]);
+      // console.log(hasUnverifiedOrders[0]);
       setUnverifiedOrders(hasUnverifiedOrders[0]);
     }
     if (statusChangedOrder) {
@@ -192,13 +191,13 @@ export const OrdersContextProvider = ({ children }) => {
         console.log("Sound played");
       }, 4000);
     } else {
-      console.log("Sound Paused");
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       unverifiedOrderSound.loop = false;
       unverifiedOrderSound.pause();
       unverifiedOrderSound.currentTime = 0;
+      console.log("Sound Paused");
     }
 
     return () => {

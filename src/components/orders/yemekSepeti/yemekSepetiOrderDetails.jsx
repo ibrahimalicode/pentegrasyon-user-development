@@ -14,6 +14,7 @@ import { useFirestore } from "../../../context/FirestoreContext";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
+import { InfoI } from "../../../assets/icon";
 
 const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
@@ -164,17 +165,22 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
           <p className="w-1/2 text-end">
-            {order.customer.deliveryInstructions}
+            {order.customer.deliveryInstructions.replace(
+              order.customerComment,
+              ""
+            )}
           </p>
         </div>
       </div>
 
       <div className="bg-white p-2 rounded-md flex flex-col gap-3">
         {order.customerComment && (
-          <div className="flex rounded-md overflow-clip my-2">
-            <p className="whitespace-nowrap font-bold">Not : </p>
-            <div className="w-full px-2 italic flex flex-col gap-1">
-              {order.customerComment && <p>{order.customerComment}</p>}
+          <div className="flex border border-[--gr-1] rounded-md overflow-clip">
+            <div className="bg-[--gr-1] text-[--gr-1] px-3 flex items-center">
+              <InfoI fill="white" />
+            </div>
+            <div className="w-full p-2 text-xs italic flex flex-col gap-1">
+              <p>{order.customerComment}</p>
             </div>
           </div>
         )}

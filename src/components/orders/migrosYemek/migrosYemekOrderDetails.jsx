@@ -42,8 +42,8 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
       ? currentCourier[0].label
       : order?.courier?.name;
   }
-  // console.log();
-  sideOrder.orders.map((O) => O.options.map((opt) => console.log(opt)));
+  console.log(order);
+  // sideOrder.orders.map((O) => O.options.map((opt) => console.log(opt)));
 
   return (
     <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">

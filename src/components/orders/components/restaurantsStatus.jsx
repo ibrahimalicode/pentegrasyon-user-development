@@ -56,11 +56,15 @@ const RestaurantsStatus = () => {
   //CHECK OPEN/CLOSE STATUS
   function statusValue(inData) {
     const statCodeArray = RestaurantStatuses[inData.marketplaceId];
-    const restautantStatus =
-      inData.marketplaceId == 3
-        ? inData[statCodeArray[0].key].toLocaleLowerCase()
-        : inData[statCodeArray[0].key];
-    return statCodeArray.filter((S) => S.id == restautantStatus)[0]?.value;
+    const restautantStatus = inData[statCodeArray[0].key];
+
+    if (inData.marketplaceId == 3) {
+      const YSRestaurantStat = inData[statCodeArray[0].key].toLocaleLowerCase();
+      return statCodeArray.filter((S) => YSRestaurantStat.includes(S.id))[0]
+        ?.value;
+    } else {
+      return statCodeArray.filter((S) => S.id == restautantStatus)[0]?.value;
+    }
   }
 
   //SET THE DATA

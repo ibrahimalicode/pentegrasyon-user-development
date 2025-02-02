@@ -157,54 +157,57 @@ const GetirYemekRestaurantsStatus = () => {
   }, [updateCourierLoading, updateCourierError]);
 
   return (
-    <main>
-      <div className="w-full text-center py-3 bg-[--getiryemek] text-[--white-1]">
-        Getir Yemek
-      </div>
-      <div className="w-full px-3 text-sm">
-        <table className="w-full mt-2">
-          <thead>
-            <tr>
-              <th className="font-medium pb-3 text-start">İşletme</th>
-              <th className="font-medium pb-3 w-44 text-center">
-                Restoran Durumu
-              </th>
-              <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
-            </tr>
-          </thead>
+    statusData &&
+    Object.keys(statusData).length > 0 && (
+      <main>
+        <div className="w-full text-center py-3 bg-[--getiryemek] text-[--white-1]">
+          Getir Yemek
+        </div>
+        <div className="w-full px-3 text-sm">
+          <table className="w-full mt-2">
+            <thead>
+              <tr>
+                <th className="font-medium pb-3 text-start">İşletme</th>
+                <th className="font-medium pb-3 w-44 text-center">
+                  Restoran Durumu
+                </th>
+                <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {statusData &&
-              Object.keys(statusData).map((key, i) => {
-                const restaurant = statusData[key];
-                return (
-                  <tr key={i}>
-                    <td className="text-start">{restaurant.name}</td>
-                    <td className="w-44 text-center">
-                      <CustomToggle
-                        className="scale-75"
-                        onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].restaurantStatus}
-                        disabled={updateRestaurantLoading}
-                      />
-                    </td>
-                    <td className="w-44 text-end pr-6">
-                      {statusData[key].restaurantStatus && (
+            <tbody>
+              {statusData &&
+                Object.keys(statusData).map((key, i) => {
+                  const restaurant = statusData[key];
+                  return (
+                    <tr key={i}>
+                      <td className="text-start">{restaurant.name}</td>
+                      <td className="w-44 text-center">
                         <CustomToggle
                           className="scale-75"
-                          onChange={() => updateRestaurantCourierStatus(key)}
-                          checked={restaurant.courierStatus}
-                          disabled={updateCourierLoading}
+                          onChange={() => updateRestaurantStatus(key)}
+                          checked={statusData[key].restaurantStatus}
+                          disabled={updateRestaurantLoading}
                         />
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
-    </main>
+                      </td>
+                      <td className="w-44 text-end pr-6">
+                        {statusData[key].restaurantStatus && (
+                          <CustomToggle
+                            className="scale-75"
+                            onChange={() => updateRestaurantCourierStatus(key)}
+                            checked={restaurant.courierStatus}
+                            disabled={updateCourierLoading}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    )
   );
 };
 

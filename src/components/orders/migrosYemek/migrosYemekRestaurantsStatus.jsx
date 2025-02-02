@@ -152,56 +152,61 @@ const MigrosYemekRestaurantsStatus = () => {
   }, [updateCourierLoading, updateCourierError]);
 
   return (
-    <main>
-      <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1] border-y border-[--migrosyemek-1]">
-        Migros Yemek
-      </div>
-      <div className="w-full px-3 text-sm">
-        <table className="w-full mt-2">
-          <thead>
-            <tr>
-              <th className="font-medium pb-3 text-start">İşletme</th>
-              <th className="font-medium pb-3 text-center">Restoran Durumu</th>
-              <th className="font-medium pb-3 text-end">Kurye Durumu</th>
-            </tr>
-          </thead>
+    statusData &&
+    Object.keys(statusData).length > 0 && (
+      <main>
+        <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1] border-y border-[--migrosyemek-1]">
+          Migros Yemek
+        </div>
+        <div className="w-full px-3 text-sm">
+          <table className="w-full mt-2">
+            <thead>
+              <tr>
+                <th className="font-medium pb-3 text-start">İşletme</th>
+                <th className="font-medium pb-3 text-center">
+                  Restoran Durumu
+                </th>
+                <th className="font-medium pb-3 text-end">Kurye Durumu</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {statusData &&
-              Object.keys(statusData).map((key, i) => {
-                const restaurant = statusData[key];
-                return (
-                  <tr key={i}>
-                    <td className="text-start">{restaurant.storeName}</td>
-                    <td className="text-center">
-                      <CustomToggle
-                        className="scale-75"
-                        className1={`${
-                          updateRestaurantLoading && "cursor-not-allowed"
-                        }`}
-                        onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].restaurantStatus}
-                        disabled={updateRestaurantLoading}
-                      />
-                    </td>
-                    <td className="text-end pr-6">
-                      <CustomToggle
-                        className="scale-75"
-                        className1={`${
-                          updateCourierLoading && "cursor-not-allowed"
-                        }`}
-                        onChange={() => updateRestaurantCourierStatus(key)}
-                        checked={restaurant.isCourierAvailable}
-                        disabled={updateCourierLoading}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
-    </main>
+            <tbody>
+              {statusData &&
+                Object.keys(statusData).map((key, i) => {
+                  const restaurant = statusData[key];
+                  return (
+                    <tr key={i}>
+                      <td className="text-start">{restaurant.storeName}</td>
+                      <td className="text-center">
+                        <CustomToggle
+                          className="scale-75"
+                          className1={`${
+                            updateRestaurantLoading && "cursor-not-allowed"
+                          }`}
+                          onChange={() => updateRestaurantStatus(key)}
+                          checked={statusData[key].restaurantStatus}
+                          disabled={updateRestaurantLoading}
+                        />
+                      </td>
+                      <td className="text-end pr-6">
+                        <CustomToggle
+                          className="scale-75"
+                          className1={`${
+                            updateCourierLoading && "cursor-not-allowed"
+                          }`}
+                          onChange={() => updateRestaurantCourierStatus(key)}
+                          checked={restaurant.isCourierAvailable}
+                          disabled={updateCourierLoading}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    )
   );
 };
 

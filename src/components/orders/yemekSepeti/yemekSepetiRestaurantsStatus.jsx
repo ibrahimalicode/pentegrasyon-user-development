@@ -48,6 +48,17 @@ const YemekSepetiRestaurantsStatus = () => {
 
   //UPDATE RESTAURANT STATUS
   function updateRestaurantStatus(id) {
+    if (!statusData[id].changeable) {
+      toast.error(
+        `Yemeksepeti restoran durumu değiştirilemez. ${
+          statusData[id].closedReason
+            ? `Kapanma sebebi ${statusData[id].closedReason}`
+            : ""
+        }`,
+        { id: 1 }
+      );
+      return;
+    }
     const updatedStat = {
       ...statusData,
       [id]: {
@@ -131,10 +142,10 @@ const YemekSepetiRestaurantsStatus = () => {
   //SET RESTAURANT STATUS FROM MAP
   useEffect(() => {
     function statusValue(inData) {
-      return RestaurantStatuses[inData.marketplaceId].filter(
-        (S) =>
-          S.id.toLocaleLowerCase() ==
-          inData.availabilityState.toLocaleLowerCase()
+      return RestaurantStatuses[inData.marketplaceId].filter((S) =>
+        inData.availabilityState
+          .toLocaleLowerCase()
+          .includes(S.id.toLocaleLowerCase())
       )[0]?.value;
     }
 
@@ -178,47 +189,57 @@ const YemekSepetiRestaurantsStatus = () => {
   }, [updateCourierLoading, updateCourierError]);
 
   return (
-    <main>
-      <div className="w-full text-center py-3 bg-[--yemeksepeti] text-[--white-1]">
-        Yemeksepeti
-      </div>
+    statusData &&
+    Object.keys(statusData).length > 0 && (
+      <main>
+        <div className="w-full text-center py-3 bg-[--yemeksepeti] text-[--white-1]">
+          Yemeksepeti
+        </div>
 
-      <div className="w-full px-3 text-sm">
-        <h1 className="pt-2 text-[--red-1]">
-          YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
-          arasında yansımaktadır.
-        </h1>
-        <table className="w-full mt-2">
-          <thead>
-            <tr>
-              <th className="font-medium pb-3 text-start">İşletme</th>
-              <th className="font-medium pb-3 w-44 text-center">
-                Restoran Durumu
-              </th>
-              <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
-            </tr>
-          </thead>
+        <div className="w-full px-3 text-sm">
+          <h1 className="pt-2 text-[--red-1]">
+            YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
+            arasında yansımaktadır.
+          </h1>
+          <table className="w-full mt-2">
+            <thead>
+              <tr>
+                <th className="font-medium pb-3 text-start">İşletme</th>
+                <th className="font-medium pb-3 w-44 text-center">
+                  Restoran Durumu
+                </th>
+                <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {statusData &&
-              Object.keys(statusData).map((key, i) => {
-                const restaurant = statusData[key];
-                return (
-                  <tr key={i}>
-                    <td className="text-start">{restaurant.restaurantName}</td>
-                    <td className="w-44 text-center">
-                      <CustomToggle
-                        className="scale-75"
-                        className1={`${
-                          updateRestaurantLoading && "cursor-not-allowed"
-                        }`}
-                        onChange={() => updateRestaurantStatus(key)}
-                        checked={statusData[key].restaurantStatus}
-                        disabled={updateRestaurantLoading}
-                      />
-                    </td>
-                    <td className="w-44 text-end pr-6">
-                      <CustomToggle
+            <tbody>
+              {statusData &&
+                Object.keys(statusData).map((key, i) => {
+                  const restaurant = statusData[key];
+                  return (
+                    <tr key={i}>
+                      <td className="text-start">
+                        {restaurant.restaurantName}
+                      </td>
+                      <td className="w-44 text-center">
+                        <CustomToggle
+                          className="scale-75"
+                          className1={`${
+                            updateRestaurantLoading && "cursor-not-allowed"
+                          }`}
+                          onChange={() => updateRestaurantStatus(key)}
+                          checked={statusData[key].restaurantStatus}
+                          disabled={updateRestaurantLoading}
+                        />
+                        {!statusData[key].restaurantStatus &&
+                          statusData[key].closedReason && (
+                            <p className="w-full bg-[--white-1] text-[--red-1] text-left">
+                              Sebep: {statusData[key].closedReason}
+                            </p>
+                          )}
+                      </td>
+                      <td className="w-44 text-end pr-6">
+                        {/* <CustomToggle
                         className="scale-75"
                         className1={`${
                           updateCourierLoading && "cursor-not-allowed"
@@ -226,15 +247,16 @@ const YemekSepetiRestaurantsStatus = () => {
                         onChange={() => updateRestaurantCourierStatus(key)}
                         checked={restaurant.isCourierAvailable}
                         disabled={updateCourierLoading}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
-    </main>
+                      /> */}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    )
   );
 };
 

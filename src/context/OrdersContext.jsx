@@ -15,7 +15,6 @@ import { usePopup } from "./PopupContext";
 import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
 import { getTicketById } from "../redux/orders/getTicketByIdSlice";
-import toast from "react-hot-toast";
 
 const OrdersContext = createContext();
 

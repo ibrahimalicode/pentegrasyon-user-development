@@ -84,7 +84,7 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
           </span>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          <p>{isCheckoutToday(order.checkoutDate)}</p>
+          <p>{isCheckoutToday(order.createdDateTime)}</p>
           {order.isScheduled &&
             order.status != 1500 &&
             order.status != 1600 &&

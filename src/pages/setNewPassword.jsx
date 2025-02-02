@@ -94,7 +94,7 @@ const SetNewPassword = () => {
     }
     if (verifyE) {
       toast.dismiss();
-      toast.error(error.message);
+      toast.error(verifyE.message);
       dispatch(resetVerifyCodeState());
     }
   }, [verifyS, verifyE]);

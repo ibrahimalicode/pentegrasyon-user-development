@@ -36,7 +36,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   const sidebarRef = useRef();
   const dispatch = useDispatch();
   const { protectedPages } = useProtectPages();
-  const { isThereUnverifiedOrder } = useOrdersContext();
+  const { unverifiedOrders } = useOrdersContext();
   const { popupContent, contentRef, setContentRef } = usePopup();
 
   const [sidebarData, setSidebarData] = useState(null);
@@ -141,7 +141,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
                         </div>
                         <div>{item.text}</div>
                         <div>
-                          {isThereUnverifiedOrder && index == 4 && (
+                          {unverifiedOrders && index == 4 && (
                             <Lottie
                               className="absolute top-0 bottom-0 right-0 rounded-full overflow-hidden"
                               animationData={bell_anim}

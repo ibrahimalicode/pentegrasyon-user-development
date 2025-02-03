@@ -7,20 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import { usePopup } from "../../context/PopupContext";
 import { BellI, SettingsI, MenuI } from "../../assets/icon";
+import { useMessagesContext } from "../../context/MessagesContext";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
-import { useMessagesContext } from "../../context/MessagesContext";
-import { useFirestore } from "../../context/FirestoreContext";
-import customToast from "../common/customToast";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const toastId = useRef();
   const param = useParams();
   const dispatch = useDispatch();
   const headerSettingsRef = useRef();
-  const { newMessage } = useFirestore();
   const { messagesData } = useMessagesContext();
 
   const { loading, success, error } = useSelector((state) => state.auth.logout);
@@ -45,8 +42,8 @@ function Header({ openSidebar, setOpenSidebar }) {
       toast.dismiss(toastId.current);
     }
     if (error) {
-      // clearAuth();
-      // navigate("/login");
+      clearAuth();
+      window.location.href = "/login";
       dispatch(resetLogoutState());
     }
   }, [success, loading, error]);

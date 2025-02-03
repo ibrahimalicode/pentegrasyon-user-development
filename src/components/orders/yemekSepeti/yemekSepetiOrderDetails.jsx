@@ -165,7 +165,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
           <p className="w-1/2 text-end">
-            {order.customer.deliveryInstructions.replace(
+            {order.customer.deliveryInstructions?.replace(
               order.customerComment,
               ""
             )}

@@ -65,7 +65,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
             <p className="font-bold pr-1">Tarif: </p>
             <div>
               {" "}
-              {order.customer.deliveryInstructions.replace(
+              {order.customer.deliveryInstructions?.replace(
                 order.customerComment,
                 ""
               )}

@@ -60,7 +60,8 @@ export const login = createAsyncThunk(
       return res.data.sessionId;
     } catch (err) {
       const errorMessage = err?.response?.data?.message_TR || err.message;
-      const statusCode = err?.response?.data?.statusCode;
+      const statusCode =
+        err?.status || err?.response?.status || err?.response?.data?.statusCode;
       return rejectWithValue({ message: errorMessage, statusCode });
     }
   }

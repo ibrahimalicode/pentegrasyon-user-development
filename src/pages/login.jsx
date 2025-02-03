@@ -40,9 +40,11 @@ function Login() {
       toastId.current = toast.loading("Giriş Yapılıyor...");
     } else if (error) {
       toast.dismiss(toastId.current);
-      toast.error(error.message);
-      if (error?.statusCode == 422) {
-        navigate("/verify");
+      if (error?.statusCode == 422) navigate("/verify");
+      if (error.statusCode == 403) {
+        toast.error("Hesabınız aktif değil");
+      } else {
+        toast.error(error.message);
       }
       dispatch(resetLoginState());
     } else if (success) {

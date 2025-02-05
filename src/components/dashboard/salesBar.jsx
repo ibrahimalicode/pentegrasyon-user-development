@@ -220,6 +220,7 @@ const SalesBar = () => {
                     <div
                       className="w-[3.5rem] h-full bg-[--primary-1] rounded-xl relative lg:group-hover:scale-105 transition-all duration-300 ease-out"
                       style={{
+                        zIndex: (salesData.length - index) * 10,
                         maxHeight: `${
                           calc(sales.percent.toFixed()).mainHeight
                         }%`,

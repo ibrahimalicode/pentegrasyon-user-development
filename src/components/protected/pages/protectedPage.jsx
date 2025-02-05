@@ -47,7 +47,7 @@ const ProtectPage = () => {
       toast.error("Hiç bir değişiklik yapmadınız.", { id: "safePages" });
       return;
     }
-    if (protectedPages.password.length < 4) {
+    if (isLockedData.password.length < 4) {
       toast.error("Şifreniz en az 4 karakter olmalı.", { id: "safePages" });
       return;
     }
@@ -132,6 +132,7 @@ const ProtectPage = () => {
                   className3="-mt-2.5"
                   className="mt-[0] sm:mt-[0]"
                   className2="max-w-80 mt-[0] sm:mt-[0]"
+                  // minLength={4}
                   maxLength={10}
                   value={isLockedData?.password || ""}
                   onChange={(e) =>

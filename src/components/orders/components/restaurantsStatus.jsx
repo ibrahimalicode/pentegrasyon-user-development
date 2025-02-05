@@ -250,7 +250,10 @@ const RestaurantsStatus = () => {
       </div>
 
       <button
-        onClick={() => setPopupContent(<RestaurantsStatusPopup />)}
+        disabled={!statusesData}
+        onClick={() =>
+          setPopupContent(<RestaurantsStatusPopup inData={statusesData} />)
+        }
         className={`w-full whitespace-nowrap ${
           !closedRestaurants.length
             ? "border border-[--primary-2] text-[--primary-2] text-sm"

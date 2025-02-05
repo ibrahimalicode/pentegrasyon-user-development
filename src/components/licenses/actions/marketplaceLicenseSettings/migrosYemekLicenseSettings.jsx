@@ -201,8 +201,8 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
               <p className="w-2 h-3"></p>
               <CustomInput
                 required
-                label="Store Id"
-                placeholder="Store Id"
+                label="Restoran ID"
+                placeholder="Restoran ID"
                 className="py-[.45rem] text-sm"
                 value={licenseData.storeId}
                 onChange={(e) => {
@@ -220,8 +220,8 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
               <p className="w-2 h-3"></p>
               <CustomInput
                 required
-                label="Store Group Id"
-                placeholder="Store Group Id"
+                label="Zincir ID"
+                placeholder="Zincir ID"
                 className="py-[.45rem] text-sm"
                 value={licenseData.storeGroupId}
                 onChange={(e) => {

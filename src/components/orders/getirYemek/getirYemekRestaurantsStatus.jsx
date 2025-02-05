@@ -11,10 +11,6 @@ import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //REDUX
 import {
-  getirYemekGetRestaurants,
-  resetGetirYemekGetRestaurants,
-} from "../../../redux/getirYemek/getirYemekGetRestaurantsSlice";
-import {
   getirYemekUpdateRestaurantStatus,
   resetGetirYemekUpdateRestaurantStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantStatusSlice";
@@ -23,13 +19,11 @@ import {
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
 
-const GetirYemekRestaurantsStatus = () => {
+const GetirYemekRestaurantsStatus = ({ statRest }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
-  const { loading, success, data, error } = useSelector(
-    (state) => state.getirYemek.getRestaurants
-  );
+
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.getirYemek.updateRestaurants);
 
@@ -103,13 +97,6 @@ const GetirYemekRestaurantsStatus = () => {
     });
   }
 
-  //GET RESTAURANT STATUS
-  useEffect(() => {
-    if (!statusData) {
-      dispatch(getirYemekGetRestaurants());
-    }
-  }, [statusData]);
-
   //TOAST AND SET RESTAURANT STATUS
   useEffect(() => {
     function statusValue(inData) {
@@ -117,22 +104,18 @@ const GetirYemekRestaurantsStatus = () => {
         (S) => S.id == inData.status
       )[0]?.value;
     }
-    if (error) {
-      dispatch(resetGetirYemekGetRestaurants());
-    }
-    if (success) {
+    if (statRest) {
       const formattedData = [];
-      data.map((res) => {
-        formattedData[res.id] = {
+      statRest.map((res) => {
+        formattedData[res.marketplaceRestaurantId] = {
           ...res,
           restaurantStatus: statusValue(res),
           courierStatus: res.isCourierAvailable,
         };
       });
       setStatusData(formattedData);
-      dispatch(resetGetirYemekGetRestaurants());
     }
-  }, [error, success]);
+  }, [statRest]);
 
   //RESTAURANT UPDATE TOAST
   useEffect(() => {
@@ -159,7 +142,7 @@ const GetirYemekRestaurantsStatus = () => {
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (
-      <main>
+      <main className="border-2 border-[--getiryemek] rounded-md mx-2">
         <div className="w-full text-center py-3 bg-[--getiryemek] text-[--white-1]">
           Getir Yemek
         </div>
@@ -168,10 +151,10 @@ const GetirYemekRestaurantsStatus = () => {
             <thead>
               <tr>
                 <th className="font-medium pb-3 text-start">İşletme</th>
-                <th className="font-medium pb-3 w-44 text-center">
+                <th className="font-medium pb-3 w-32 text-center">
                   Restoran Durumu
                 </th>
-                <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
+                <th className="font-medium pb-3 w-28 text-end">Kurye Durumu</th>
               </tr>
             </thead>
 
@@ -182,7 +165,7 @@ const GetirYemekRestaurantsStatus = () => {
                   return (
                     <tr key={i}>
                       <td className="text-start">{restaurant.name}</td>
-                      <td className="w-44 text-center">
+                      <td className="w-32 text-center">
                         <CustomToggle
                           className="scale-75"
                           onChange={() => updateRestaurantStatus(key)}
@@ -190,7 +173,7 @@ const GetirYemekRestaurantsStatus = () => {
                           disabled={updateRestaurantLoading}
                         />
                       </td>
-                      <td className="w-44 text-end pr-6">
+                      <td className="w-28 text-end pr-6">
                         {statusData[key].restaurantStatus && (
                           <CustomToggle
                             className="scale-75"

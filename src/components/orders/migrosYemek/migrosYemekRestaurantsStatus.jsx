@@ -1,17 +1,13 @@
 //MODULES
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import CustomToggle from "../../common/customToggle";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
+import CustomToggle from "../../common/customToggle";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //REDUX
-import {
-  migrosYemekGetRestaurants,
-  resetMigrosYemekGetRestaurants,
-} from "../../../redux/migrosYemek/migrosYemekGetRestaurantsSlice";
 import {
   migrosYemekUpdateRestaurantStatus,
   resetMigrosYemekUpdateRestaurantStatus,
@@ -21,13 +17,11 @@ import {
   resetMigrosYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantCourierStatusSlice";
 
-const MigrosYemekRestaurantsStatus = () => {
+const MigrosYemekRestaurantsStatus = ({ statRest }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
-  const { loading, success, data, error } = useSelector(
-    (state) => state.migrosYemek.getRestaurants
-  );
+
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.migrosYemek.updateRestaurants);
 
@@ -98,13 +92,6 @@ const MigrosYemekRestaurantsStatus = () => {
     });
   }
 
-  //GET RESTAURANT STATUS
-  useEffect(() => {
-    if (!statusData) {
-      dispatch(migrosYemekGetRestaurants());
-    }
-  }, [statusData]);
-
   //TOAST AND SET RESTAURANT STATUS
   useEffect(() => {
     function statusValue(inData) {
@@ -112,12 +99,9 @@ const MigrosYemekRestaurantsStatus = () => {
         (S) => S.id == inData.active
       )[0]?.value;
     }
-    if (error) {
-      dispatch(resetMigrosYemekGetRestaurants());
-    }
-    if (success) {
+    if (statRest) {
       const formattedData = [];
-      data.map((res) => {
+      statRest.map((res) => {
         formattedData[res.id] = {
           ...res,
           restaurantStatus: statusValue(res),
@@ -125,9 +109,8 @@ const MigrosYemekRestaurantsStatus = () => {
         };
       });
       setStatusData(formattedData);
-      dispatch(resetMigrosYemekGetRestaurants());
     }
-  }, [error, success]);
+  }, [statRest]);
 
   //RESTAURANT UPDATE TOAST
   useEffect(() => {
@@ -154,7 +137,7 @@ const MigrosYemekRestaurantsStatus = () => {
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (
-      <main>
+      <main className="border-2 border-[--migrosyemek] rounded-md mx-2">
         <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1] border-y border-[--migrosyemek-1]">
           Migros Yemek
         </div>

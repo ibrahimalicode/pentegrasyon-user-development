@@ -1,7 +1,7 @@
 //MODELS
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // ICONS
@@ -9,15 +9,14 @@ import LoadingI from "../assets/anim/loading";
 import TurnstileWidget from "../components/turnstileWidget";
 
 //REDUX
+import { getAuth } from "../redux/api";
 import { login, resetLoginState } from "../redux/auth/loginSlice";
 
 // COMP
-import { getAuth } from "../redux/api";
 import GlassFrame from "../components/common/glassFrame";
 import CustomInput from "../components/common/customInput";
 
 function Login() {
-  const toastId = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,9 +36,9 @@ function Login() {
 
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Giriş Yapılıyor...");
+      toast.loading("Giriş Yapılıyor...");
     } else if (error) {
-      toast.dismiss(toastId.current);
+      toast.dismiss();
       if (error?.statusCode == 422) navigate("/verify");
       if (error.statusCode == 403) {
         toast.error("Hesabınız aktif değil");
@@ -49,7 +48,7 @@ function Login() {
       dispatch(resetLoginState());
     } else if (success) {
       navigate("/orders");
-      toast.dismiss(toastId.current);
+      toast.dismiss();
       toast.success("Başarıyla Giriş Yapıldı");
       dispatch(resetLoginState());
     }

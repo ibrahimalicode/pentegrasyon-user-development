@@ -11,10 +11,6 @@ import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //REDUX
 import {
-  yemekSepetiGetRestaurants,
-  resetYemekSepetiGetRestaurants,
-} from "../../../redux/yemekSepeti/yemekSepetiGetRestaurantsSlice";
-import {
   yemekSepetiUpdateRestaurantStatus,
   resetYemekSepetiUpdateRestaurantStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantStatusSlice";
@@ -26,15 +22,12 @@ import {
   getRestaurantsMap,
   resetGetRestaurantsMap,
 } from "../../../redux/restaurants/getRestaurantsMapSlice";
+import ToolTip from "../../common/tooltip";
 
-const YemekSepetiRestaurantsStatus = () => {
+const YemekSepetiRestaurantsStatus = ({ statRest }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
-
-  const { success, data, error } = useSelector(
-    (state) => state.yemekSepeti.getRestaurants
-  );
 
   const { entities, error: mapError } = useSelector(
     (state) => state.restaurants.getRestaurantsMap
@@ -122,22 +115,12 @@ const YemekSepetiRestaurantsStatus = () => {
     );
   }
 
-  //GET RESTAURANT STATUS
-  useEffect(() => {
-    if (!statusData) {
-      dispatch(yemekSepetiGetRestaurants());
-    }
-  }, [statusData]);
-
   //TOAST RESTAURANT STATUS AND GET RESTAURANTS NAME
   useEffect(() => {
-    if (error) {
-      dispatch(resetYemekSepetiGetRestaurants());
-    } else if (success) {
-      dispatch(getRestaurantsMap(data));
-      dispatch(resetYemekSepetiGetRestaurants());
+    if (statRest && !statusData) {
+      dispatch(getRestaurantsMap(statRest));
     }
-  }, [error, success]);
+  }, [statRest]);
 
   //SET RESTAURANT STATUS FROM MAP
   useEffect(() => {
@@ -191,13 +174,13 @@ const YemekSepetiRestaurantsStatus = () => {
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (
-      <main>
+      <main className="border-2 border-[--yemeksepeti] rounded-md mx-2">
         <div className="w-full text-center py-3 bg-[--yemeksepeti] text-[--white-1]">
           Yemeksepeti
         </div>
 
         <div className="w-full px-3 text-sm">
-          <h1 className="pt-2 text-[--red-1]">
+          <h1 className="mt-1 py-1 px-4 text-[--red-1] bg-[--light-1] w-full rounded-full">
             YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
             arasında yansımaktadır.
           </h1>
@@ -205,10 +188,10 @@ const YemekSepetiRestaurantsStatus = () => {
             <thead>
               <tr>
                 <th className="font-medium pb-3 text-start">İşletme</th>
-                <th className="font-medium pb-3 w-44 text-center">
+                <th className="font-medium pb-3 w-42 text-center">
                   Restoran Durumu
                 </th>
-                <th className="font-medium pb-3 w-44 text-end">Kurye Durumu</th>
+                <th className="font-medium pb-3 w-28 text-end">Kurye Durumu</th>
               </tr>
             </thead>
 
@@ -221,7 +204,7 @@ const YemekSepetiRestaurantsStatus = () => {
                       <td className="text-start">
                         {restaurant.restaurantName}
                       </td>
-                      <td className="w-44 text-center">
+                      <td className="w-32 text-center relative">
                         <CustomToggle
                           className="scale-75"
                           className1={`${
@@ -233,12 +216,17 @@ const YemekSepetiRestaurantsStatus = () => {
                         />
                         {!statusData[key].restaurantStatus &&
                           statusData[key].closedReason && (
-                            <p className="w-full bg-[--white-1] text-[--red-1] text-left">
-                              Sebep: {statusData[key].closedReason}
-                            </p>
+                            <div className="absolute top-8 w-full bg-[--white-1] text-[--red-1] text-left">
+                              <div className="relative">
+                                <ToolTip className="border-t-[--red-1] rotate-180 bottom-0" />
+                              </div>
+                              <p className="border-[1.5px] border-[--red-1] rounded-md text-center">
+                                Sebep: {statusData[key].closedReason}
+                              </p>
+                            </div>
                           )}
                       </td>
-                      <td className="w-44 text-end pr-6">
+                      <td className="w-28 text-end pr-6">
                         {/* <CustomToggle
                         className="scale-75"
                         className1={`${

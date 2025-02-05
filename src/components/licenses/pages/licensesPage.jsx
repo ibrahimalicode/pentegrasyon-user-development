@@ -333,7 +333,7 @@ const LicensesPage = () => {
                     className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
                     // onClick={() => handleFilter(true)}
                   >
-                    Filtre
+                    Uygula
                   </button>
                 </div>
               </div>

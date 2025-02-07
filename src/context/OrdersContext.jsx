@@ -48,11 +48,9 @@ export const OrdersContextProvider = ({ children }) => {
     marketplace: { value: null, label: "Hepsi", id: null },
   };
   const countInitialParams = {
-    dateRange: null,
-    startDateTime: new Date().toISOString(),
-    endDateTime: new Date(
-      new Date().setFullYear(new Date().getFullYear() + 1)
-    ).toISOString(),
+    dateRange: 7,
+    startDateTime: null,
+    endDateTime: null,
   };
 
   const localItemsPerPage = JSON.parse(

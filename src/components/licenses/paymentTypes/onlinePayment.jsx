@@ -128,7 +128,6 @@ const OnlinePayment = ({
     if (addSuccess) {
       setStep(5);
       toast.remove(toastId.current);
-      dispatch(resetAddByOnlinePay());
       return;
     }
     if (addError) {
@@ -151,13 +150,12 @@ const OnlinePayment = ({
       toastId.current = toast.loading("Loading...");
     }
     if (extendSuccess) {
-      setStep(5);
+      setStep(4);
       toast.remove(toastId.current);
-      dispatch(resetExtendByOnlinePay());
       return;
     }
     if (extendError) {
-      setStep(6);
+      setStep(5);
       setPaymentStatus("failure");
       toast.remove(toastId.current);
       dispatch(resetExtendByOnlinePay());

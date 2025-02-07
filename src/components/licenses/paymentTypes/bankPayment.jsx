@@ -21,11 +21,11 @@ import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import Autoronics from "../../../assets/img/packages/Autoronics.png";
 
 //REDUX
+import { clearCart } from "../../../redux/cart/cartSlice";
 import {
   addByBankPay,
   resetAddByBankPay,
 } from "../../../redux/licenses/addLicense/addByBankPaySlice";
-import { clearCart } from "../../../redux/cart/cartSlice";
 import {
   extendByBankPay,
   resetExtendByBankPay,
@@ -125,7 +125,6 @@ const BankPayment = ({ user, step, setStep, setPaymentStatus }) => {
       dispatch(addByBankPay(formData));
     }
   }
-  console.log(isPageExtend);
 
   // ADD SUCCESS
   useEffect(() => {
@@ -235,7 +234,7 @@ const BankPayment = ({ user, step, setStep, setPaymentStatus }) => {
             text="Geri"
             letIcon={true}
             onClick={() => setStep(step - 1)}
-            disabled={false} //loading}
+            disabled={addLoading || extendLoading}
           />
           <ForwardButton
             text="Devam"

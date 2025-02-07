@@ -35,6 +35,8 @@ const SecondStep = ({
   //SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
+    if (addInvLoading || updateInvLoading) return;
+
     if (
       openFatura &&
       (!invoiceBeforeAfter ||

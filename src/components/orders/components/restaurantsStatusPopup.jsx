@@ -35,7 +35,7 @@ const RestaurantsStatusPopup = ({ inData }) => {
   }, [components.length]);
 
   return (
-    <main className="w-full bg-[--white-1] pb-[4%] pt-2 rounded-md">
+    <main className="w-full bg-[--white-1] pb-[4%] pt-2 rounded-md max-h-[95dvh] overflow-y-auto">
       <div className="flex justify-end">
         <button
           onClick={() => setPopupContent(null)}

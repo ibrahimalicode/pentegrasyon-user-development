@@ -117,13 +117,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
 
   //TOAST RESTAURANT STATUS AND GET RESTAURANTS NAME
   useEffect(() => {
-    if (statRest && !statusData) {
-      dispatch(getRestaurantsMap(statRest));
-    }
-  }, [statRest]);
-
-  //SET RESTAURANT STATUS FROM MAP
-  useEffect(() => {
     function statusValue(inData) {
       return RestaurantStatuses[inData.marketplaceId].filter((S) =>
         inData.availabilityState
@@ -132,11 +125,13 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
       )[0]?.value;
     }
 
-    if (mapError) {
-      dispatch(resetGetRestaurantsMap());
-    } else if (entities) {
+    if (statRest && !statusData) {
+      const uniqueStatRest = statRest.filter(
+        (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+      );
+
       const formattedData = [];
-      entities.map((res) => {
+      uniqueStatRest.map((res) => {
         formattedData[res.restaurantId] = {
           ...res,
           id: res.restaurantId,
@@ -145,9 +140,36 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
         };
       });
       setStatusData(formattedData);
-      dispatch(resetGetRestaurantsMap());
+      // dispatch(getRestaurantsMap(statRest));
     }
-  }, [entities]);
+  }, [statRest]);
+
+  //SET RESTAURANT STATUS FROM MAP
+  // useEffect(() => {
+  //   function statusValue(inData) {
+  //     return RestaurantStatuses[inData.marketplaceId].filter((S) =>
+  //       inData.availabilityState
+  //         .toLocaleLowerCase()
+  //         .includes(S.id.toLocaleLowerCase())
+  //     )[0]?.value;
+  //   }
+
+  //   if (mapError) {
+  //     dispatch(resetGetRestaurantsMap());
+  //   } else if (entities) {
+  //     const formattedData = [];
+  //     entities.map((res) => {
+  //       formattedData[res.restaurantId] = {
+  //         ...res,
+  //         id: res.restaurantId,
+  //         restaurantStatus: statusValue(res),
+  //         courierStatus: res.isCourierAvailable,
+  //       };
+  //     });
+  //     setStatusData(formattedData);
+  //     dispatch(resetGetRestaurantsMap());
+  //   }
+  // }, [entities]);
 
   //RESTAURANT UPDATE TOAST
   useEffect(() => {
@@ -184,66 +206,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
             YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
             arasında yansımaktadır.
           </h1>
-
-          {/* 
-          <table className="w-full mt-2">
-            <thead>
-              <tr>
-                <th className="font-medium pb-3 text-start">İşletme</th>
-                <th className="font-medium pb-3 w-42 text-center">
-                  Restoran Durumu
-                </th>
-                <th className="font-medium pb-3 w-28 text-end">Kurye Durumu</th>
-              </tr>
-            </thead>
-            <tbody>
-              {statusData &&
-                Object.keys(statusData).map((key, i) => {
-                  const restaurant = statusData[key];
-                  return (
-                    <tr key={i}>
-                      <td className="text-start">
-                        {restaurant.restaurantName}
-                      </td>
-                      <td className="w-32 text-center relative">
-                        <CustomToggle
-                          className="scale-75"
-                          className1={`${
-                            updateRestaurantLoading && "cursor-not-allowed"
-                          }`}
-                          onChange={() => updateRestaurantStatus(key)}
-                          checked={statusData[key].restaurantStatus}
-                          disabled={updateRestaurantLoading}
-                        />
-                        {!statusData[key].restaurantStatus &&
-                          statusData[key].closedReason && (
-                            <div className="absolute top-8 w-full bg-[--white-1] text-[--red-1] text-left">
-                              <div className="relative">
-                                <ToolTip className="border-t-[--red-1] rotate-180 bottom-0" />
-                              </div>
-                              <p className="border-[1.5px] border-[--red-1] rounded-md text-center">
-                                Sebep: {statusData[key].closedReason}
-                              </p>
-                            </div>
-                          )}
-                      </td>
-                      <td className="w-28 text-end pr-6">
-                        {/* <CustomToggle
-                        className="scale-75"
-                        className1={`${
-                          updateCourierLoading && "cursor-not-allowed"
-                        }`}
-                        onChange={() => updateRestaurantCourierStatus(key)}
-                        checked={restaurant.isCourierAvailable}
-                        disabled={updateCourierLoading}
-                      /> /}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-           */}
 
           <div className="flex flex-col gap-2">
             {statusData &&

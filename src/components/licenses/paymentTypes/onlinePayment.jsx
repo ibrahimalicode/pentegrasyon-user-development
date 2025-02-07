@@ -1,6 +1,7 @@
 //MODULES
-import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // COMP
@@ -11,6 +12,7 @@ import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
 // REDUX
+import { clearCart } from "../../../redux/cart/cartSlice";
 import {
   addByOnlinePay,
   resetAddByOnlinePay,
@@ -19,8 +21,6 @@ import {
   extendByOnlinePay,
   resetExtendByOnlinePay,
 } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
-import toast from "react-hot-toast";
-import { clearCart } from "../../../redux/cart/cartSlice";
 
 const OnlinePayment = ({
   step,

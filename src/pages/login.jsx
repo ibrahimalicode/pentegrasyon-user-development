@@ -30,7 +30,7 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!emailOrPhone || !password) return;
+    if (!emailOrPhone || !password || loading) return;
     dispatch(login({ emailOrPhone, password }));
   };
 

@@ -112,6 +112,7 @@ const RestaurantsStatus = () => {
   //SET THE STATUSES
   useEffect(() => {
     if (restaurantStatuses) {
+      console.log(restaurantStatuses);
       getRestaurantNames(restaurantStatuses);
     }
   }, [restaurantStatuses]);

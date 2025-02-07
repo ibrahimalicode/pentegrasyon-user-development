@@ -154,7 +154,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                     <p className="text-start max-sm:text-base max-sm:py-2">
                       {restaurant.storeName}
                     </p>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 whitespace-nowrap">
                       <p className="max-w-40 text-center">
                         <CustomToggle
                           label="Restoran Durumu"
@@ -166,8 +166,8 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                           disabled={updateRestaurantLoading}
                         />
                       </p>
-                      <p className="max-w-40 text-end pr-6">
-                        {statusData[key].restaurantStatus && (
+                      {statusData[key].restaurantStatus && (
+                        <p className="max-w-40 text-end pr-2">
                           <CustomToggle
                             label="Kurye Durumu"
                             className="scale-75 order-2"
@@ -177,8 +177,8 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                             checked={restaurant.courierStatus}
                             disabled={updateCourierLoading}
                           />
-                        )}
-                      </p>
+                        </p>
+                      )}
                     </div>
                   </div>
                 );

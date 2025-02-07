@@ -1,6 +1,7 @@
 // MODULES
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import StepBar from "../../common/stepBar";
@@ -17,9 +18,13 @@ import FifthStep from "../addLicenseSteps/5thStep";
 import SixthStep from "../addLicenseSteps/6thStep";
 
 //REDUX
+import { clearCart } from "../../../redux/cart/cartSlice";
 
 const AddLicensePage = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+
   const { user, restaurant, licenses } = location.state || {};
   const currentPath = location.pathname;
 
@@ -55,6 +60,15 @@ const AddLicensePage = () => {
       });
     }
   }, [restaurant]);
+
+  // CLEAR CART
+  useEffect(() => {
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
+  }, []);
 
   return (
     <section className="lg:ml-[280px] pt-28 px-[4%] pb-4 grid grid-cols-1 section_row">

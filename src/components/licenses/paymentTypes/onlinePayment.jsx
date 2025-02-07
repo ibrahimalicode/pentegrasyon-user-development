@@ -15,7 +15,10 @@ import {
   addByOnlinePay,
   resetAddByOnlinePay,
 } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
-import { extendByOnlinePay } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
+import {
+  extendByOnlinePay,
+  resetExtendByOnlinePay,
+} from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
 import toast from "react-hot-toast";
 import { clearCart } from "../../../redux/cart/cartSlice";
 
@@ -35,14 +38,16 @@ const OnlinePayment = ({
   const isPageExtend = actionType === "extend-license";
 
   const {
+    error: addError,
     loading: addLoading,
     success: addSuccess,
-    error: addError,
   } = useSelector((state) => state.licenses.addByPay);
 
-  const { loading: extendLoading } = useSelector(
-    (state) => state.licenses.extendByPay
-  );
+  const {
+    error: extendError,
+    loading: extendLoading,
+    success: extendSuccess,
+  } = useSelector((state) => state.licenses.extendByPay);
 
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -57,6 +62,7 @@ const OnlinePayment = ({
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (addLoading || extendLoading) return;
 
     const { userName, cardNumber, month, year, cvv } = cardData;
     const { email, fullName, phoneNumber } = userData;
@@ -127,8 +133,8 @@ const OnlinePayment = ({
     }
     if (addError) {
       setStep(6);
+      setPaymentStatus("failure");
       toast.remove(toastId.current);
-      window.parent.postMessage({ status: "failed" }, "*");
       dispatch(resetAddByOnlinePay());
     }
 
@@ -138,6 +144,31 @@ const OnlinePayment = ({
       }
     };
   }, [addLoading, addSuccess, addError, dispatch]);
+
+  // EXTEND TOAST
+  useEffect(() => {
+    if (extendLoading) {
+      toastId.current = toast.loading("Loading...");
+    }
+    if (extendSuccess) {
+      setStep(5);
+      toast.remove(toastId.current);
+      dispatch(resetExtendByOnlinePay());
+      return;
+    }
+    if (extendError) {
+      setStep(6);
+      setPaymentStatus("failure");
+      toast.remove(toastId.current);
+      dispatch(resetExtendByOnlinePay());
+    }
+
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
+  }, [extendLoading, extendSuccess, extendError, dispatch]);
 
   return (
     <form onSubmit={handleSubmit} className="w-full">

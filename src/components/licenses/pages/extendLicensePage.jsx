@@ -25,8 +25,6 @@ const ExtendLicensePage = () => {
   const location = useLocation();
   const { user, restaurant } = location.state || {};
   const currentPath = location.pathname;
-  const pathArray = currentPath.split("/");
-  const actionType = pathArray[pathArray.length - 1];
 
   const { success, loading, error } = useSelector(
     (state) => state.licenses.extendByPay
@@ -160,6 +158,7 @@ const ExtendLicensePage = () => {
                     <FourthStep
                       key={3}
                       step={step}
+                      user={userData}
                       setStep={setStep}
                       paymentMethod={paymentMethod}
                       setPaymentStatus={setPaymentStatus}

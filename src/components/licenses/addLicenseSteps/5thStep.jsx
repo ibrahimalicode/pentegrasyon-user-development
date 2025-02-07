@@ -12,10 +12,6 @@ const FifthStep = ({
   paymentMethod,
   setPaymentStatus,
 }) => {
-  const location = useLocation();
-  const pathArray = location.pathname.split("/");
-  const actionType = pathArray[pathArray.length - 1];
-
   const value = paymentMethod.selectedOption.value;
   return (
     step === 5 && (
@@ -31,7 +27,6 @@ const FifthStep = ({
               user={user}
               step={step}
               setStep={setStep}
-              actionType={actionType}
               setPaymentStatus={setPaymentStatus}
             />
           )

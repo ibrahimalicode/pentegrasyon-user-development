@@ -9,14 +9,13 @@ import EditUserInvoice from "../../invoice/editUserInvoice";
 import { useSelector } from "react-redux";
 
 const InvoiceData = ({
-  user,
-  onSubmit,
   title,
-  userInvData,
-  setUserInvData,
+  onSubmit,
   userData,
   openFatura,
+  userInvData,
   setOpenFatura,
+  setUserInvData,
   setInvoiceBeforeAfter,
 }) => {
   const dispatcher = useRef();
@@ -36,7 +35,7 @@ const InvoiceData = ({
     setUserInvoice,
     userInvoiceBefore,
     handleSubmit,
-  } = useEditUserInvoice(dispatcher, user);
+  } = useEditUserInvoice(dispatcher, userData);
 
   useEffect(() => {
     if (userInvData) {

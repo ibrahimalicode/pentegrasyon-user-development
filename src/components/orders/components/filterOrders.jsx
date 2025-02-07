@@ -18,36 +18,42 @@ import { useOrdersContext } from "../../../context/OrdersContext";
 
 //REDUX
 import { getOrders } from "../../../redux/orders/getOrdersSlice";
+import { getTicketCountStatistics } from "../../../redux/dashboard/statistics/getTicketCountStatisticsSlice";
 
 const FilterOrders = () => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
   const { contentRef, setContentRef } = usePopup();
-  const { itemsPerPage, pageNumber, filter, setFilter, filterInitialState } =
-    useOrdersContext();
+  const {
+    countInitialParams,
+    itemsPerPage,
+    pageNumber,
+    filter,
+    setFilter,
+    filterInitialState,
+  } = useOrdersContext();
 
   const [openFilter, setOpenFilter] = useState(false);
 
   function handleFilter(bool) {
     if (bool) {
-      dispatch(
-        getOrders({
-          page: pageNumber,
-          pageSize: itemsPerPage.value,
-          dateRange: filter.dateRange,
-          startDateTime: filter.endDateTime
-            ? formatDate(filter.startDateTime)
-            : null,
-          endDateTime: filter.endDateTime
-            ? formatDate(filter.endDateTime)
-            : null,
-          status: filter.statusId,
-          marketplaceId: filter.marketplaceId,
-        })
-      );
+      const filterData = {
+        page: pageNumber,
+        pageSize: itemsPerPage.value,
+        dateRange: filter.dateRange,
+        startDateTime: filter.endDateTime
+          ? formatDate(filter.startDateTime)
+          : null,
+        endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
+        status: filter.statusId,
+        marketplaceId: filter.marketplaceId,
+      };
+      dispatch(getOrders(filterData));
+      dispatch(getTicketCountStatistics(filterData));
     } else {
       if (!isEqual(filterInitialState, filter)) {
         setFilter(filterInitialState);
+        dispatch(getTicketCountStatistics(countInitialParams));
         dispatch(getOrders({ pageNumber, pageSize: itemsPerPage.value }));
       }
     }

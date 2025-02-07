@@ -15,6 +15,10 @@ import { usePopup } from "./PopupContext";
 import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
 import { getTicketById } from "../redux/orders/getTicketByIdSlice";
+import {
+  getTicketCountStatistics,
+  resetGetTicketCountStatistics,
+} from "../redux/dashboard/statistics/getTicketCountStatisticsSlice";
 
 const OrdersContext = createContext();
 
@@ -28,6 +32,9 @@ export const OrdersContextProvider = ({ children }) => {
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
+  const { data: countData } = useSelector(
+    (state) => state.dashboard.ordersCount
+  );
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
     useFirestore();
 
@@ -40,6 +47,13 @@ export const OrdersContextProvider = ({ children }) => {
     marketplaceId: null,
     marketplace: { value: null, label: "Hepsi", id: null },
   };
+  const countInitialParams = {
+    dateRange: null,
+    startDateTime: new Date().toISOString(),
+    endDateTime: new Date(
+      new Date().setFullYear(new Date().getFullYear() + 1)
+    ).toISOString(),
+  };
 
   const localItemsPerPage = JSON.parse(
     localStorage.getItem("ITEMS_PERPAGE")
@@ -48,6 +62,7 @@ export const OrdersContextProvider = ({ children }) => {
   const [ordersData, setOrdersData] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
+  const [ordersCount, setOrdersCount] = useState(null);
   const [filter, setFilter] = useState(filterInitialState);
   const [unverifiedOrders, setUnverifiedOrders] = useState(false);
 
@@ -99,7 +114,7 @@ export const OrdersContextProvider = ({ children }) => {
     }
   }
 
-  //GET ORDERS
+  //GET ORDERS AND COUNT
   useEffect(() => {
     if (!ordersData && token) {
       dispatch(
@@ -108,8 +123,17 @@ export const OrdersContextProvider = ({ children }) => {
           pageSize: itemsPerPage.value,
         })
       );
+      dispatch(getTicketCountStatistics(countInitialParams));
     }
   }, [ordersData, token]);
+
+  //SET ORDER COUNT
+  useEffect(() => {
+    if (countData) {
+      setOrdersCount(countData);
+      dispatch(resetGetTicketCountStatistics());
+    }
+  }, [countData]);
 
   //TOAST AND SET ORDERS
   useEffect(() => {
@@ -225,6 +249,7 @@ export const OrdersContextProvider = ({ children }) => {
   return (
     <OrdersContext.Provider
       value={{
+        ordersCount,
         itemsPerPage,
         handleItemsPerPage,
         ordersData,
@@ -239,6 +264,7 @@ export const OrdersContextProvider = ({ children }) => {
         filter,
         setFilter,
         filterInitialState,
+        countInitialParams,
       }}
     >
       {children}

@@ -25,6 +25,7 @@ import {
 //UTILS
 import { useOrdersContext } from "../../../context/OrdersContext";
 import { useFirestore } from "../../../context/FirestoreContext";
+import OrdersCount from "../components/ordersCount";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
@@ -96,7 +97,8 @@ const OrdersPage = () => {
           </div>
 
           <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">
-            <div className="flex gap-2 max-sm:w-full">
+            <div className="flex items-end gap-2 max-sm:w-full">
+              <OrdersCount />
               <OnTheWayTime
                 automationDatas={automationDatas}
                 setAutomationDatas={setAutomationDatas}
@@ -114,7 +116,7 @@ const OrdersPage = () => {
       </div>
 
       {/* TABLE */}
-      {ordersData && !loading ? (
+      {ordersData?.length && !loading ? (
         <OrdersTable
           ordersData={ordersData}
           setOrdersData={setOrdersData}

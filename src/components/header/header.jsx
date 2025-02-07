@@ -74,6 +74,13 @@ function Header({ openSidebar, setOpenSidebar }) {
         >
           <MenuI className={`${param["*"] === "orders" ? "" : "lg:hidden"}`} />
         </div>
+
+        <div>
+          <p className="text-3xl max-sm:text-2xl text-[--primary-1] font-[conthrax]">
+            Pentegrasyon
+          </p>
+        </div>
+
         <div className="flex gap-4">
           <Link to="/messages">
             <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer relative">

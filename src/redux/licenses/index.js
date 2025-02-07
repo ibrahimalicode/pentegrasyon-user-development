@@ -11,6 +11,7 @@ import deleteLicenseSlice from "./deleteLicenseSlice";
 import extendByOnlinePaySlice from "./extendLicense/extendByOnlinePaySlice";
 import addByOnlinePaySlice from "./addLicense/addByOnlinePaySlice";
 import addByBankPaySlice from "./addLicense/addByBankPaySlice";
+import extendByBankPaySlice from "./extendLicense/extendByBankPaySlice";
 
 const licensesSlice = combineReducers({
   getLicenses: getLicensesSlice,
@@ -23,6 +24,7 @@ const licensesSlice = combineReducers({
   addByPay: addByOnlinePaySlice,
   extendByPay: extendByOnlinePaySlice,
   addByBank: addByBankPaySlice,
+  extendByBank: extendByBankPaySlice,
 });
 
 export default licensesSlice;

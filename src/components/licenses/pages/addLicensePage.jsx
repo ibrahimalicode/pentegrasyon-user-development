@@ -22,8 +22,6 @@ const AddLicensePage = () => {
   const location = useLocation();
   const { user, restaurant, licenses } = location.state || {};
   const currentPath = location.pathname;
-  const pathArray = currentPath.split("/");
-  const actionType = pathArray[pathArray.length - 1];
 
   const [step, setStep] = useState(1);
   const [steps, setSteps] = useState(6);
@@ -115,25 +113,19 @@ const AddLicensePage = () => {
                   component={[
                     <FirstStep
                       key={0}
+                      setStep={setStep}
+                      licenses={licenses}
+                      restaurant={restaurant}
                       restaurantData={restaurantData}
                       setRestaurantData={setRestaurantData}
-                      licensePackageData={licensePackageData}
-                      setLicensePackageData={setLicensePackageData}
-                      paymentMethod={paymentMethod}
-                      setPaymentMethod={setPaymentMethod}
-                      setStep={setStep}
-                      actionType={actionType}
-                      restaurant={restaurant}
-                      licenses={licenses}
                     />,
                     <SecondStep
                       key={1}
                       step={step}
-                      setSteps={setSteps}
                       setStep={setStep}
+                      setSteps={setSteps}
                       paymentMethod={paymentMethod}
                       setPaymentMethod={setPaymentMethod}
-                      restaurantData={restaurantData}
                     />,
                     <ThirdStep
                       key={2}

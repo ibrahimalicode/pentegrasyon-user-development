@@ -5,12 +5,14 @@ import getRestaurantStatisticsSlice from "./restaurant/getRestaurantStatisticsSl
 import getLicenseStatisticsSlice from "./license/getLicenseStatisticsSlice";
 import getRestaurantSalesStatisticsSlice from "./restaurant/getRestaurantSalesStatisticsSlice";
 import getOrderStatisticsSlice from "./statistics/getOrderStatisticsSlice";
+import getTicketCountStatisticsSlice from "./statistics/getTicketCountStatisticsSlice";
 
 const dashboardSlice = combineReducers({
-  restaurant: getRestaurantStatisticsSlice,
-  restaurantSales: getRestaurantSalesStatisticsSlice,
   license: getLicenseStatisticsSlice,
+  restaurant: getRestaurantStatisticsSlice,
   getOrderStatistics: getOrderStatisticsSlice,
+  restaurantSales: getRestaurantSalesStatisticsSlice,
+  ordersCount: getTicketCountStatisticsSlice,
 });
 
 export default dashboardSlice;

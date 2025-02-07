@@ -1,6 +1,6 @@
 //MODELS
 import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -147,7 +147,7 @@ const GetirYemekRestaurantsStatus = ({ statRest }) => {
           Getir Yemek
         </div>
         <div className="w-full px-3 text-sm">
-          <table className="w-full mt-2">
+          {/* <table className="w-full mt-2">
             <thead>
               <tr>
                 <th className="font-medium pb-3 text-start">İşletme</th>
@@ -163,31 +163,78 @@ const GetirYemekRestaurantsStatus = ({ statRest }) => {
                 Object.keys(statusData).map((key, i) => {
                   const restaurant = statusData[key];
                   return (
-                    <tr key={i}>
-                      <td className="text-start">{restaurant.name}</td>
-                      <td className="w-32 text-center">
+                    <React.Fragment key={i}>
+                      <tr key={i}>
+                        <td className="text-start ">{restaurant.name}</td>
+                        <td className="w-32 text-center">
+                          <CustomToggle
+                            className="scale-75"
+                            onChange={() => updateRestaurantStatus(key)}
+                            checked={statusData[key].restaurantStatus}
+                            disabled={updateRestaurantLoading}
+                          />
+                        </td>
+                        <td className="w-28 text-end pr-6">
+                          {statusData[key].restaurantStatus && (
+                            <CustomToggle
+                              className="scale-75"
+                              onChange={() =>
+                                updateRestaurantCourierStatus(key)
+                              }
+                              checked={restaurant.courierStatus}
+                              disabled={updateCourierLoading}
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
+            </tbody>
+          </table> */}
+
+          <div className="flex flex-col gap-2">
+            {statusData &&
+              Object.keys(statusData).map((key, i) => {
+                const restaurant = statusData[key];
+                return (
+                  <div
+                    key={i}
+                    className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
+                  >
+                    <p className="text-start max-sm:text-base max-sm:py-2">
+                      {restaurant.name}
+                    </p>
+                    <div className="flex gap-4">
+                      <p className="max-w-40 text-center">
                         <CustomToggle
-                          className="scale-75"
+                          label="Restoran Durumu"
+                          className="scale-75 order-2"
+                          className1="flex-col max-sm:items-start"
+                          className2="order-1 ml-[0]"
                           onChange={() => updateRestaurantStatus(key)}
                           checked={statusData[key].restaurantStatus}
                           disabled={updateRestaurantLoading}
                         />
-                      </td>
-                      <td className="w-28 text-end pr-6">
+                      </p>
+                      <p className="max-w-40 text-end pr-6">
                         {statusData[key].restaurantStatus && (
                           <CustomToggle
-                            className="scale-75"
+                            label="Kurye Durumu"
+                            className="scale-75 order-2"
+                            className1="flex-col max-sm:items-start"
+                            className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantCourierStatus(key)}
                             checked={restaurant.courierStatus}
                             disabled={updateCourierLoading}
                           />
                         )}
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </main>
     )

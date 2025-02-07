@@ -213,7 +213,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
                 {(100 /
                   (Number(order.grandTotal) +
                     Number(order.discountAmountTotal))) *
-                  Number(order.discountAmountTotal)}{" "}
+                  Number(order.discountAmountTotal).toFixed(2)}{" "}
                 iskonto :{" "}
               </span>{" "}
               {/* LOOK */}

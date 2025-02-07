@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser, resetGetUserState } from "../../../redux/user/getUserSlice";
 import BackButton from "../stepsAssets/backButton";
 import ForwardButton from "../stepsAssets/forwardButton";
+import { isEqual } from "lodash";
 
 const SecondStep = ({
   step,
@@ -29,18 +30,26 @@ const SecondStep = ({
   );
 
   const [openFatura, setOpenFatura] = useState(false);
+  const [invoiceBeforeAfter, setInvoiceBeforeAfter] = useState(null);
 
   //SUBMIT
   function handleSubmit(e) {
     e.preventDefault();
-    if (openFatura) {
+    if (
+      openFatura &&
+      (!invoiceBeforeAfter ||
+        !isEqual(
+          invoiceBeforeAfter.userInvoice,
+          invoiceBeforeAfter.userInvoiceBefore
+        ))
+    ) {
       if (invoiceHandleSubmit.current) {
         invoiceHandleSubmit.current();
       }
-      return;
+    } else {
+      setOpenFatura(false);
+      setStep(step + 1);
     }
-
-    setStep(3);
   }
 
   //SET USER AND INVOICE
@@ -64,16 +73,16 @@ const SecondStep = ({
       <div className="w-full">
         {userData && (
           <InvoiceData
-            user={userData}
-            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
-            userInvData={userInvData}
-            setUserInvData={setUserInvData}
-            openFatura={openFatura}
-            setOpenFatura={setOpenFatura}
             userData={userData}
+            openFatura={openFatura}
+            userInvData={userInvData}
+            setOpenFatura={setOpenFatura}
+            setUserInvData={setUserInvData}
+            setInvoiceBeforeAfter={setInvoiceBeforeAfter}
             onSubmit={(submitFn) => {
               invoiceHandleSubmit.current = submitFn;
             }}
+            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
           />
         )}
       </div>

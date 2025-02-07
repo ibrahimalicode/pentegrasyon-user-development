@@ -9,7 +9,7 @@ import CustomInput from "../../common/customInput";
 import BackButton from "../stepsAssets/backButton";
 import ForwardButton from "../stepsAssets/forwardButton";
 import CustomFileInput from "../../common/customFileInput";
-import { getPriceWithKDV, groupByRestaurantId } from "../../../utils/utils";
+import { groupByRestaurantId } from "../../../utils/utils";
 
 //IMAGES
 import Getiryemek from "../../../assets/img/packages/Getiryemek.png";
@@ -26,6 +26,10 @@ import {
   resetAddByBankPay,
 } from "../../../redux/licenses/addLicense/addByBankPaySlice";
 import { clearCart } from "../../../redux/cart/cartSlice";
+import {
+  extendByBankPay,
+  resetExtendByBankPay,
+} from "../../../redux/licenses/extendLicense/extendByBankPaySlice";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -37,18 +41,29 @@ const imageSRCs = [
   { src: Autoronics, name: "Autoronics" },
 ];
 
-const BankPayment = ({ user, step, setStep, actionType, setPaymentStatus }) => {
+const BankPayment = ({ user, step, setStep, setPaymentStatus }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
+  const pathArray = location.pathname.split("/");
+  const actionType = pathArray[pathArray.length - 1];
   const { currentLicense } = location?.state || {};
 
   const isPageExtend = actionType === "extend-license";
 
   const cartItems = useSelector((state) => state.cart.items);
-  const { success, loading, error } = useSelector(
-    (state) => state.licenses.addByBank
-  );
+
+  const {
+    error: addError,
+    loading: addLoading,
+    success: addSuccess,
+  } = useSelector((state) => state.licenses.addByBank);
+
+  const {
+    error: extendError,
+    loading: extendLoading,
+    success: extendSuccess,
+  } = useSelector((state) => state.licenses.extendByBank);
 
   const [document, setDocument] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -56,6 +71,7 @@ const BankPayment = ({ user, step, setStep, actionType, setPaymentStatus }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (addLoading || extendLoading) return;
     const { city, district, neighbourhood } = user.userInvoiceAddressDTO;
     const paymentAmount = cartItems.reduce(
       (acc, item) => acc + parseFloat(item.price),
@@ -104,27 +120,28 @@ const BankPayment = ({ user, step, setStep, actionType, setPaymentStatus }) => {
     formData.append("Receipt", document);
 
     if (isPageExtend) {
-      // dispatch(extendByBankPay(data));
+      dispatch(extendByBankPay(formData));
     } else {
       dispatch(addByBankPay(formData));
     }
   }
+  console.log(isPageExtend);
 
   // ADD SUCCESS
   useEffect(() => {
-    if (loading) {
+    if (addLoading) {
       toastId.current = toast.loading("Loading...");
     }
-    if (success) {
+    if (addSuccess) {
       setStep(6);
       toast.remove(toastId.current);
       setPaymentStatus("success");
       dispatch(resetAddByBankPay());
     }
-    if (error) {
+    if (addError) {
       setStep(6);
       toast.remove(toastId.current);
-      window.parent.postMessage({ status: "failed" }, "*");
+      setPaymentStatus("failure");
       dispatch(resetAddByBankPay());
     }
 
@@ -133,7 +150,32 @@ const BankPayment = ({ user, step, setStep, actionType, setPaymentStatus }) => {
         dispatch(clearCart());
       }
     };
-  }, [loading, success, error]);
+  }, [addLoading, addSuccess, addError]);
+
+  // EXTEND SUCCESS
+  useEffect(() => {
+    if (extendLoading) {
+      toastId.current = toast.loading("Loading...");
+    }
+    if (extendSuccess) {
+      setStep(5);
+      toast.remove(toastId.current);
+      setPaymentStatus("success");
+      dispatch(resetExtendByBankPay());
+    }
+    if (extendError) {
+      setStep(5);
+      toast.remove(toastId.current);
+      setPaymentStatus("failure");
+      dispatch(resetExtendByBankPay());
+    }
+
+    return () => {
+      if (cartItems) {
+        dispatch(clearCart());
+      }
+    };
+  }, [extendLoading, extendSuccess, extendError, dispatch]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -199,7 +241,7 @@ const BankPayment = ({ user, step, setStep, actionType, setPaymentStatus }) => {
             text="Devam"
             letIcon={true}
             type="submit"
-            disabled={loading}
+            disabled={addLoading || extendLoading}
           />
         </div>
       </div>

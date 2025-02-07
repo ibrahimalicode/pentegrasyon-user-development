@@ -4,7 +4,13 @@
 import BankPayment from "../paymentTypes/bankPayment";
 import FourthStepOnlinePayment from "./4thStepOnlinePayment";
 
-const FourthStep = ({ step, setStep, paymentMethod, setPaymentStatus }) => {
+const FourthStep = ({
+  user,
+  step,
+  setStep,
+  paymentMethod,
+  setPaymentStatus,
+}) => {
   const value = paymentMethod.selectedOption.value;
   return (
     step === 4 && (
@@ -17,7 +23,12 @@ const FourthStep = ({ step, setStep, paymentMethod, setPaymentStatus }) => {
             />
           ) : (
             value === "bankPayment" && (
-              <BankPayment step={step} setStep={setStep} />
+              <BankPayment
+                user={user}
+                step={step}
+                setStep={setStep}
+                setPaymentStatus={setPaymentStatus}
+              />
             )
           )}
         </div>

@@ -73,17 +73,16 @@ const ThirdStep = ({
       <div className="w-full">
         {userData && (
           <InvoiceData
-            user={userData}
-            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
-            userInvData={userInvData}
-            setUserInvData={setUserInvData}
-            openFatura={openFatura}
-            setOpenFatura={setOpenFatura}
-            setInvoiceBeforeAfter={setInvoiceBeforeAfter}
             userData={userData}
+            openFatura={openFatura}
+            userInvData={userInvData}
+            setOpenFatura={setOpenFatura}
+            setUserInvData={setUserInvData}
+            setInvoiceBeforeAfter={setInvoiceBeforeAfter}
             onSubmit={(submitFn) => {
               invoiceHandleSubmit.current = submitFn;
             }}
+            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
           />
         )}
       </div>

@@ -276,7 +276,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
         <div className="w-full border-t border-[--gr-1]">
           {order.totalDiscountedPrice ? (
             <>
-              <div className="w-full flex items-center justify-end gap-2">
+              <div className="w-full flex items-center justify-between gap-2">
                 <p>Toplam:</p>
                 <p className="text-base">
                   {formatToPrice(
@@ -284,7 +284,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
                   )}
                 </p>
               </div>
-              <div className="w-full flex items-center justify-end gap-2">
+              <div className="w-full flex items-center justify-between gap-2">
                 <p>İndirim:</p>
                 <p className="text-base">
                   {formatToPrice(
@@ -296,7 +296,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
               </div>
             </>
           ) : null}
-          <div className="w-full flex items-center justify-end gap-2">
+          <div className="w-full flex items-center justify-between gap-2">
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {order.totalDiscountedPrice

@@ -184,6 +184,8 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
             YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
             arasında yansımaktadır.
           </h1>
+
+          {/* 
           <table className="w-full mt-2">
             <thead>
               <tr>
@@ -194,7 +196,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                 <th className="font-medium pb-3 w-28 text-end">Kurye Durumu</th>
               </tr>
             </thead>
-
             <tbody>
               {statusData &&
                 Object.keys(statusData).map((key, i) => {
@@ -235,13 +236,44 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                         onChange={() => updateRestaurantCourierStatus(key)}
                         checked={restaurant.isCourierAvailable}
                         disabled={updateCourierLoading}
-                      /> */}
+                      /> /}
                       </td>
                     </tr>
                   );
                 })}
             </tbody>
           </table>
+           */}
+
+          <div className="flex flex-col gap-2">
+            {statusData &&
+              Object.keys(statusData).map((key, i) => {
+                const restaurant = statusData[key];
+                return (
+                  <div
+                    key={i}
+                    className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
+                  >
+                    <p className="text-start max-sm:text-base max-sm:py-2">
+                      {restaurant.name}
+                    </p>
+                    <div className="flex gap-4">
+                      <p className="max-w-40 text-center">
+                        <CustomToggle
+                          label="Restoran Durumu"
+                          className="scale-75 order-2"
+                          className1="flex-col max-sm:items-start"
+                          className2="order-1 ml-[0]"
+                          onChange={() => updateRestaurantStatus(key)}
+                          checked={statusData[key].restaurantStatus}
+                          disabled={updateRestaurantLoading}
+                        />
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </main>
     )

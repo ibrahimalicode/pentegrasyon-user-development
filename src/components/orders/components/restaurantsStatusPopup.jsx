@@ -48,9 +48,11 @@ const RestaurantsStatusPopup = ({ inData }) => {
       clearSearch();
       return;
     }
-    const searchData = inData.filter((D) =>
-      D.name.toLocaleLowerCase().includes(e.toLocaleLowerCase())
-    );
+    const searchData = inData.filter((D) => {
+      return D?.name
+        ? D.name.toLocaleLowerCase().includes(e.toLocaleLowerCase())
+        : D?.storeName.toLocaleLowerCase().includes(e.toLocaleLowerCase());
+    });
     setRestaurantsData(searchData);
   }
 

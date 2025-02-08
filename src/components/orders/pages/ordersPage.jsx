@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import OrdersTable from "../ordersTable";
+import OrdersCount from "../components/ordersCount";
 import SearchOrders from "../components/searchOrders";
 import FilterOrders from "../components/filterOrders";
 import OnTheWayTime from "../components/onTheWayTime";
@@ -23,9 +24,8 @@ import {
 } from "../../../redux/orders/getAutomationVariablesSlice";
 
 //UTILS
-import { useOrdersContext } from "../../../context/OrdersContext";
 import { useFirestore } from "../../../context/FirestoreContext";
-import OrdersCount from "../components/ordersCount";
+import { useOrdersContext } from "../../../context/OrdersContext";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();

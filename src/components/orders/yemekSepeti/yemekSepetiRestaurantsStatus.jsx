@@ -220,7 +220,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                       {restaurant.name}
                     </p>
                     <div className="flex gap-4">
-                      <p className="max-w-40 text-center">
+                      <div className="max-w-40 text-center">
                         <CustomToggle
                           label="Restoran Durumu"
                           className="scale-75 order-2"
@@ -230,7 +230,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                           checked={statusData[key].restaurantStatus}
                           disabled={updateRestaurantLoading}
                         />
-                      </p>
+                      </div>
                     </div>
                   </div>
                 );

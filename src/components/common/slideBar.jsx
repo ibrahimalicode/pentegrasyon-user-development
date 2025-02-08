@@ -27,9 +27,9 @@ const SlideBar = () => {
   return (
     <div
       onClick={handleClickOutside}
-      className={`fixed top-0 left-0 right-0 bottom-0 justify-end items-center transition-colors z-[9999] ${
+      className={`fixed top-0 left-0 right-0 bottom-0 items-center transition-colors z-[9999] ${
         slideBarContent ? "flex bg-black/20" : "hidden"
-      }`}
+      } ${!slideBarContent?.content && "justify-end"}`}
     >
       <div
         ref={slideBarRef}
@@ -37,7 +37,7 @@ const SlideBar = () => {
           slideBarContent ? "translate-x-0" : "translate-x-[200%]"
         }`}
       >
-        {slideBarContent}
+        {slideBarContent?.content || slideBarContent}
       </div>
     </div>
   );

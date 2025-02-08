@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
-import { usePopup } from "../../../context/PopupContext";
+import { useSlideBar } from "../../../context/SlideBarContext";
 import { useFirestore } from "../../../context/FirestoreContext";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
@@ -39,7 +39,7 @@ const MarketPlaceAssets = [
 
 const RestaurantsStatus = () => {
   const dispatch = useDispatch();
-  const { setPopupContent } = usePopup();
+  const { setSlideBarContent } = useSlideBar();
   const { statusChangedRestaurant, setStatusChangedRestaurant } =
     useFirestore();
 
@@ -253,7 +253,9 @@ const RestaurantsStatus = () => {
       <button
         disabled={!statusesData}
         onClick={() =>
-          setPopupContent(<RestaurantsStatusPopup inData={statusesData} />)
+          setSlideBarContent({
+            content: <RestaurantsStatusPopup inData={statusesData} />,
+          })
         }
         className={`w-full whitespace-nowrap ${
           !closedRestaurants.length

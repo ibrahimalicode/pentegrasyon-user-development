@@ -19,7 +19,7 @@ import JCB from "../../../assets/img/card/JCB.png";
 import Troy from "../../../assets/img/card/Troy.png";
 
 function CardFront({ cardData }) {
-  const { userName, cardNumber, month, year, cvv } = cardData;
+  const { userName, cardNumber, month, year } = cardData;
 
   const cleanNumber = cardNumber.replace(/\D/g, "");
   // Format the card number into groups of 4 digits

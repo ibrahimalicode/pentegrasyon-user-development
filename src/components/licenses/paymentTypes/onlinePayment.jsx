@@ -51,6 +51,7 @@ const OnlinePayment = ({
 
   const cartItems = useSelector((state) => state.cart.items);
 
+  const [loading, setLoading] = useState(false);
   const [flip, setFlip] = useState(false);
   const [cardData, setCardData] = useState({
     userName: "", // "PAYTR TEST",
@@ -62,6 +63,8 @@ const OnlinePayment = ({
 
   function handleSubmit(e) {
     e.preventDefault();
+    // setLoading(true);
+    // return;
     if (addLoading || extendLoading) return;
 
     const { userName, cardNumber, month, year, cvv } = cardData;
@@ -168,7 +171,11 @@ const OnlinePayment = ({
     };
   }, [extendLoading, extendSuccess, extendError, dispatch]);
 
-  return (
+  return loading ? (
+    <div>
+      <p>Loading</p>
+    </div>
+  ) : (
     <form onSubmit={handleSubmit} className="w-full">
       <div className="full flex justify-center">
         <div className="w-[325px] flex flex-col">

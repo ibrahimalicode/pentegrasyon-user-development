@@ -58,7 +58,7 @@ const RestaurantsStatusPopup = ({ inData }) => {
     <main className="w-full h-[100dvh] bg-[--white-1] pb-[4%] pt-2 rounded-md overflow-y-auto">
       <div className="flex justify-between mx-2 mb-2">
         <div className="w-full flex items-center max-w-80">
-          <form className="w-full">
+          <div className="w-full">
             <CustomInput
               onChange={(e) => {
                 setSearchVal(e);
@@ -75,7 +75,7 @@ const RestaurantsStatusPopup = ({ inData }) => {
               }
               iconClick={clearSearch}
             />
-          </form>
+          </div>
         </div>
 
         <button

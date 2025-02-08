@@ -11,31 +11,18 @@ import { useSlideBar } from "../../../context/SlideBarContext";
 import { useFirestore } from "../../../context/FirestoreContext";
 
 //UTILS
+import { InfoI } from "../../../assets/icon";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
-import { InfoI } from "../../../assets/icon";
 
 const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
-  const [sideOrder, setSideOrder] = useState(formatOrder());
+  const [sideOrder, setSideOrder] = useState(order);
 
   function isValidDate(date) {
     return date.startsWith("0001-01-01T00:00:00") ? "" : date;
-  }
-
-  function formatOrder() {
-    const formattdOrder = order.orders.flatMap(
-      (order) =>
-        order.options.length > 0
-          ? order.options.map((option) => ({
-              ...order, // Keep all original properties
-              options: [option], // Replace options with a single option
-            }))
-          : [order] // Keep the original order if no options exist
-    );
-    return { ...order, orders: formattdOrder };
   }
 
   useEffect(() => {

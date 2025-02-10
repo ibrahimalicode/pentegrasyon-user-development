@@ -206,6 +206,22 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                     <React.Fragment key={cat.id}>
                       <tr className="text-xs px-2">
                         <td className="pl-2">{cat.name}</td>
+                        <td
+                          className={`pr-2 text-right ${
+                            cat.price > 0
+                              ? "text-[--green-1]"
+                              : "text-[--red-1]"
+                          }`}
+                        >
+                          {cat.price > 0 ? `+` : cat.price < 0 ? `-` : ""}
+                          {cat.price > 0 &&
+                            formatToPrice(
+                              String(Number(cat.price).toFixed(2)).replace(
+                                ".",
+                                ","
+                              )
+                            )}
+                        </td>
                       </tr>
                       {cat.childrens.map((opt) => (
                         <tr key={opt.id} className="text-xs">

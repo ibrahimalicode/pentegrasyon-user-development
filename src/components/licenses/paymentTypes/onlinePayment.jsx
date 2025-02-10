@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PaymentCard from "../../payment/card/card";
 import BackButton from "../stepsAssets/backButton";
 import PayTRForm from "../../payment/form/PayTRForm";
+import { usePopup } from "../../../context/PopupContext";
 import ForwardButton from "../stepsAssets/forwardButton";
 import PaymentCardForm from "../../payment/form/PaymentCardForm";
 
@@ -21,6 +22,7 @@ import {
   extendByOnlinePay,
   resetExtendByOnlinePay,
 } from "../../../redux/licenses/extendLicense/extendByOnlinePaySlice";
+import { PaymentLoader } from "../stepsAssets/paymentLoader";
 
 const OnlinePayment = ({
   step,
@@ -33,6 +35,7 @@ const OnlinePayment = ({
   const toastId = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
+  const { setPopupContent } = usePopup();
 
   const { currentLicense } = location?.state || {};
   const isPageExtend = actionType === "extend-license";
@@ -63,8 +66,7 @@ const OnlinePayment = ({
 
   function handleSubmit(e) {
     e.preventDefault();
-    // setLoading(true);
-    // return;
+
     if (addLoading || extendLoading) return;
 
     const { userName, cardNumber, month, year, cvv } = cardData;
@@ -171,11 +173,14 @@ const OnlinePayment = ({
     };
   }, [extendLoading, extendSuccess, extendError, dispatch]);
 
-  return loading ? (
-    <div>
-      <p>Loading</p>
-    </div>
-  ) : (
+  //LOADING ANIMATION
+  useEffect(() => {
+    if (addLoading || extendLoading) {
+      setPopupContent(<PaymentLoader />);
+    } else setPopupContent(null);
+  }, [addLoading, extendLoading]);
+
+  return (
     <form onSubmit={handleSubmit} className="w-full">
       <div className="full flex justify-center">
         <div className="w-[325px] flex flex-col">

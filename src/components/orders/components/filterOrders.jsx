@@ -24,21 +24,15 @@ const FilterOrders = () => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
   const { contentRef, setContentRef } = usePopup();
-  const {
-    countInitialParams,
-    itemsPerPage,
-    pageNumber,
-    filter,
-    setFilter,
-    filterInitialState,
-  } = useOrdersContext();
+  const { itemsPerPage, setPageNumber, filter, setFilter, filterInitialState } =
+    useOrdersContext();
 
   const [openFilter, setOpenFilter] = useState(false);
 
   function handleFilter(bool) {
     if (bool) {
       const filterData = {
-        page: pageNumber,
+        page: 1,
         pageSize: itemsPerPage.value,
         dateRange: filter.dateRange,
         startDateTime: filter.endDateTime
@@ -53,10 +47,11 @@ const FilterOrders = () => {
     } else {
       if (!isEqual(filterInitialState, filter)) {
         setFilter(filterInitialState);
-        dispatch(getTicketCountStatistics(countInitialParams));
-        dispatch(getOrders({ pageNumber, pageSize: itemsPerPage.value }));
+        dispatch(getTicketCountStatistics(filterInitialState));
+        dispatch(getOrders({ page: 1, pageSize: itemsPerPage.value }));
       }
     }
+    setPageNumber(1);
     setOpenFilter(false);
   }
 

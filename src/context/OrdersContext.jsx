@@ -47,11 +47,6 @@ export const OrdersContextProvider = ({ children }) => {
     marketplaceId: null,
     marketplace: { value: null, label: "Hepsi", id: null },
   };
-  const countInitialParams = {
-    dateRange: 7,
-    startDateTime: null,
-    endDateTime: null,
-  };
 
   const localItemsPerPage = JSON.parse(
     localStorage.getItem("ITEMS_PERPAGE")
@@ -121,7 +116,7 @@ export const OrdersContextProvider = ({ children }) => {
           pageSize: itemsPerPage.value,
         })
       );
-      dispatch(getTicketCountStatistics(countInitialParams));
+      dispatch(getTicketCountStatistics(filterInitialState));
     }
   }, [ordersData, token]);
 
@@ -262,7 +257,6 @@ export const OrdersContextProvider = ({ children }) => {
         filter,
         setFilter,
         filterInitialState,
-        countInitialParams,
       }}
     >
       {children}

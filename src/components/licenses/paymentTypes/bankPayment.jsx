@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import CustomInput from "../../common/customInput";
 import BackButton from "../stepsAssets/backButton";
+import { usePopup } from "../../../context/PopupContext";
 import ForwardButton from "../stepsAssets/forwardButton";
 import CustomFileInput from "../../common/customFileInput";
 import { groupByRestaurantId } from "../../../utils/utils";
@@ -30,6 +31,7 @@ import {
   extendByBankPay,
   resetExtendByBankPay,
 } from "../../../redux/licenses/extendLicense/extendByBankPaySlice";
+import { PaymentLoader } from "../stepsAssets/paymentLoader";
 
 const imageSRCs = [
   { src: Getiryemek, name: "Getiryemek" },
@@ -45,6 +47,7 @@ const BankPayment = ({ user, step, setStep, setPaymentStatus }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const location = useLocation();
+  const { setPopupContent } = usePopup();
   const pathArray = location.pathname.split("/");
   const actionType = pathArray[pathArray.length - 1];
   const { currentLicense } = location?.state || {};
@@ -175,6 +178,13 @@ const BankPayment = ({ user, step, setStep, setPaymentStatus }) => {
       }
     };
   }, [extendLoading, extendSuccess, extendError, dispatch]);
+
+  //LOADING ANIMATION
+  useEffect(() => {
+    if (addLoading || extendLoading) {
+      setPopupContent(<PaymentLoader type={1} />);
+    } else setPopupContent(null);
+  }, [addLoading, extendLoading]);
 
   return (
     <form onSubmit={handleSubmit}>

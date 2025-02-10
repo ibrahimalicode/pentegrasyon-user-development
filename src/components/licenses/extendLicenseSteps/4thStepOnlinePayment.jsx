@@ -45,7 +45,7 @@ const FourthStepOnlinePayment = ({ setStep, setPaymentStatus }) => {
           width="100%"
           height="100%"
           srcDoc={htmlResponse}
-          sandbox="allow-scripts allow-forms allow-same-origin"
+          sandbox="allow-scripts allow-forms allow-same-origin allow-modals"
         />
       )}
     </div>

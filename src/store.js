@@ -19,6 +19,8 @@ import yemekSepetiSlice from "./redux/yemekSepeti";
 import paymentsSlice from "./redux/payments";
 import messagesSlice from "./redux/messages";
 import migrosYemekSlice from "./redux/migrosYemek";
+import smsSlice from "./redux/sms";
+import emailSlice from "./redux/email";
 
 const store = configureStore({
   reducer: {
@@ -40,6 +42,8 @@ const store = configureStore({
     payments: paymentsSlice,
     integrationInfos: integrationInformationsSlice,
     messages: messagesSlice,
+    sms: smsSlice,
+    email: emailSlice,
   },
 });
 

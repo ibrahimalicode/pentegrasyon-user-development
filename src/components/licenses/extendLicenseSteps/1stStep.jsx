@@ -116,7 +116,15 @@ const FirstStep = ({
       );
 
       if (sameMarketplacePKGS.length) {
-        setLicensePackagesData(formatLisansPackages(sameMarketplacePKGS));
+        const formattedPkgs = formatLisansPackages(sameMarketplacePKGS);
+        setLicensePackagesData(formattedPkgs);
+        const defaultPkg = formattedPkgs.find((pkg) => pkg.time === 1);
+        setLicensePackageData(defaultPkg);
+        handleAddToCart({
+          ...defaultPkg,
+          restaurantId: restaurantData.value,
+          restaurantName: restaurantData.label,
+        });
       } else setLicensePackagesData(sameMarketplacePKGS);
 
       dispatch(resetGetKDVParameters());

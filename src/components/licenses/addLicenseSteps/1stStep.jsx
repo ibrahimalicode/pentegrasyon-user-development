@@ -20,10 +20,10 @@ import Vigo from "../../../assets/img/packages/Vigo.png";
 
 //UTILS
 import {
-  formatSelectorData,
-  getPriceWithKDV,
-  groupedLicensePackages,
   formatToPrice,
+  getPriceWithKDV,
+  formatSelectorData,
+  groupedLicensePackages,
 } from "../../../utils/utils";
 
 //REDUX

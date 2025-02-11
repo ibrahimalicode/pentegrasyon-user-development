@@ -54,7 +54,6 @@ const OnlinePayment = ({
 
   const cartItems = useSelector((state) => state.cart.items);
 
-  const [loading, setLoading] = useState(false);
   const [flip, setFlip] = useState(false);
   const [cardData, setCardData] = useState({
     userName: "", // "PAYTR TEST",

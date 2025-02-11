@@ -1,13 +1,20 @@
 //MODULES
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetAddByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
+
+//COMP
+import BackButton from "../stepsAssets/backButton";
 
 //REDUX
+import { resetAddByOnlinePay } from "../../../redux/licenses/addLicense/addByOnlinePaySlice";
 
 const FifthStepOnlinePayment = ({ setStep, setPaymentStatus }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const currentPath = location.pathname;
 
   const [htmlResponse, setHtmlResponse] = useState(null);
   const { data } = useSelector((state) => state.licenses.addByPay);
@@ -38,17 +45,27 @@ const FifthStepOnlinePayment = ({ setStep, setPaymentStatus }) => {
   }, [data, dispatch]);
 
   return (
-    <div className="w-full h-full bg-[--white-1] flex flex-col justify-center items-center relative">
-      {htmlResponse && (
-        <iframe
-          title="3D Secure Frame"
-          width="100%"
-          height="100%"
-          srcDoc={htmlResponse}
-          sandbox="allow-scripts allow-forms allow-same-origin"
+    <>
+      <div className="w-full h-full bg-[--white-1] flex flex-col justify-center items-center relative">
+        {htmlResponse && (
+          <iframe
+            title="3D Secure Frame"
+            width="100%"
+            height="100%"
+            srcDoc={htmlResponse}
+            sandbox="allow-scripts allow-forms allow-same-origin"
+          />
+        )}
+      </div>
+      {/* BTNS */}
+      <div className="flex gap-3 absolute -bottom-20 -right-0 h-12">
+        <BackButton
+          text="İptal"
+          letIcon={true}
+          onClick={() => navigate(currentPath.replace("/add-license", ""))}
         />
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 

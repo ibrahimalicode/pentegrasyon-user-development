@@ -1,6 +1,6 @@
 // MODULES
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -21,6 +21,7 @@ import SixthStep from "../addLicenseSteps/6thStep";
 import { clearCart } from "../../../redux/cart/cartSlice";
 
 const AddLicensePage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
@@ -36,12 +37,6 @@ const AddLicensePage = () => {
 
   const [restaurantData, setRestaurantData] = useState({
     label: "Restoran Seç",
-  });
-  const [licensePackageData, setLicensePackageData] = useState({
-    value: null,
-    label: "Lisans Paketi Seç",
-    id: null,
-    time: null,
   });
   const [paymentMethod, setPaymentMethod] = useState({
     selectedOption: PaymentTypes[0],
@@ -76,8 +71,8 @@ const AddLicensePage = () => {
       <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
         <div
           className="flex items-center gap-1"
-          // onClick={() => navigate(currentPath.replace("/add-license", ""))}
-          onClick={() => window.history.back()}
+          onClick={() => navigate(currentPath.replace("/add-license", ""))}
+          // onClick={() => window.history.back()}
         >
           {currentPath.includes("users") &&
             (user ? (

@@ -1,7 +1,7 @@
 // MODULES
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 //COMP
 import StepBar from "../../common/stepBar";
@@ -20,6 +20,7 @@ import FifthStep from "../extendLicenseSteps/5thStep";
 import { clearCart } from "../../../redux/cart/cartSlice";
 
 const ExtendLicensePage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const { user, restaurant } = location.state || {};
@@ -63,8 +64,8 @@ const ExtendLicensePage = () => {
       <div className="w-max flex gap-1 text-[--gr-1] pt-4 text-sm font-[300] cursor-pointer">
         <div
           className="flex items-center gap-1"
-          // onClick={() => navigate(currentPath.replace("/extend-license", ""))}
-          onClick={() => window.history.back()}
+          onClick={() => navigate(currentPath.replace("/extend-license", ""))}
+          // onClick={() => window.history.back()}
         >
           {currentPath.includes("users") &&
             (user ? (

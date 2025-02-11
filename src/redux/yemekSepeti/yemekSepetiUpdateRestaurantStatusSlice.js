@@ -60,7 +60,7 @@ export const yemekSepetiUpdateRestaurantStatus = createAsyncThunk(
       return res.data;
     } catch (err) {
       console.log(err);
-      if (err?.response?.data) {
+      if (err?.response?.data?.data) {
         return rejectWithValue(err.response.data);
       }
       return rejectWithValue({ message_TR: err.message });

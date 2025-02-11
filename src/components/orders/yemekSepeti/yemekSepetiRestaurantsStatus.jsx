@@ -178,6 +178,15 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
     }
     if (updateRestaurantError) {
       toast.dismiss(toastId.current);
+      if (updateRestaurantError?.data) {
+        try {
+          toast.dismiss();
+          const msg = JSON.parse(updateRestaurantError.data);
+          toast.error(msg?.message);
+        } catch (err) {
+          //Pass
+        }
+      }
       dispatch(resetYemekSepetiUpdateRestaurantStatus());
     }
   }, [updateRestaurantLoading, updateRestaurantError]);

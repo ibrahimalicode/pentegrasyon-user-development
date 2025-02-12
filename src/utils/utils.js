@@ -237,11 +237,21 @@ export const formatLisansPackages = (data) => {
   if (!Array.isArray(data) || data.length === 0) {
     return [];
   }
-  function CustomLabel(label, year, price) {
+  function CustomLabel(label, year, description, price) {
+    const bgColors = [
+      "bg-[#4682B4] border-[#4682B4]",
+      "bg-[--link-1] border-[--link-1]",
+      "bg-[--primary-1] border-[--primary-1]",
+      "bg-[--primary-2] border-[--primary-2]",
+    ];
+
+    const bgColor = bgColors.length > year ? bgColors[year - 1] : bgColors[0];
+
     return `
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <p class='w-36'>${label}</p>
-        <p class='w-20 text-[--link-1]' > ${year} Yıllık </p>
+        <p class='w-20 text-[--link-1] text-center' > ${year} Yıllık </p>
+        <p class='text-xs text-[--white-1] border rounded-full px-1.5 mx-0.5 py-1 whitespace-nowrap ${bgColor}' > ${description} Yıllık </p>
         <p class='w-12' >${price}</p>
       </div>`;
   }
@@ -252,6 +262,7 @@ export const formatLisansPackages = (data) => {
       label: CustomLabel(
         MarketPalceIds[ent.licenseTypeId].label,
         ent.time,
+        ent.description,
         ent.userPrice,
         index
       ),

@@ -19,18 +19,22 @@ const tabs = ["Profili Düzenle", "Fatura Bilgileri", "Güvenlik"];
 const ProfilePage = () => {
   const dispatch = useDispatch();
 
-  const { user, success } = useSelector((state) => state.user.getUser);
   const { cities } = useSelector((state) => state.data.getCities);
+  const { user, success } = useSelector((state) => state.user.getUser);
+  const { success: addSuccess } = useSelector((state) => state.user.addInvoice);
+  const { success: updateSuccess } = useSelector(
+    (state) => state.user.updateInvoice
+  );
 
   const [selected, setSelected] = useState(0);
   const [userData, setUserData] = useState(user);
 
   // GET THE USER
   useEffect(() => {
-    if (!userData && !user) {
+    if (!userData) {
       dispatch(getUser());
     }
-  }, [user]);
+  }, [userData]);
 
   // GET CITIES
   useEffect(() => {
@@ -46,6 +50,11 @@ const ProfilePage = () => {
       dispatch(resetGetUserState());
     }
   }, [user, success]);
+
+  //RESET USER
+  useEffect(() => {
+    if (addSuccess || updateSuccess) setUserData(null);
+  }, [addSuccess || updateSuccess]);
 
   return (
     <section className="lg:ml-[280px] pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">

@@ -20,7 +20,10 @@ const EditUserInvoice = ({ user }) => {
     handleSubmit,
   } = useEditUserInvoice(dispatcher, user);
 
-  const { loading } = useSelector((state) => state.user.updateInvoice);
+  const { loading: addLoading } = useSelector((state) => state.user.addInvoice);
+  const { loading: updateLoading } = useSelector(
+    (state) => state.user.updateInvoice
+  );
 
   return (
     <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
@@ -40,7 +43,7 @@ const EditUserInvoice = ({ user }) => {
             text="Kaydet"
             className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
-            disabled={loading}
+            disabled={addLoading || updateLoading}
           />
         </div>
       </form>

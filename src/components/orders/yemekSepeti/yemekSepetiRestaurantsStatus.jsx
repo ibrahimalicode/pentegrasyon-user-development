@@ -3,11 +3,12 @@ import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-//COMP
-import CustomToggle from "../../common/customToggle";
-
 //UTILS
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
+
+//COMP
+import CustomToggle from "../../common/customToggle";
+import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
 import {
@@ -18,11 +19,6 @@ import {
   yemekSepetiUpdateRestaurantCourierStatus,
   resetYemekSepetiUpdateRestaurantCourierStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantCourierStatusSlice";
-import {
-  getRestaurantsMap,
-  resetGetRestaurantsMap,
-} from "../../../redux/restaurants/getRestaurantsMapSlice";
-import ToolTip from "../../common/tooltip";
 
 const YemekSepetiRestaurantsStatus = ({ statRest }) => {
   const toastId = useRef();
@@ -225,21 +221,24 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                     key={i}
                     className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
                   >
-                    <p className="text-start max-sm:text-base max-sm:py-2">
+                    <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
                       {restaurant.name}
                     </p>
-                    <div className="flex gap-4">
-                      <div className="max-w-40 text-center">
-                        <CustomToggle
-                          label="Restoran Durumu"
-                          className="scale-75 order-2"
-                          className1="flex-col max-sm:items-start"
-                          className2="order-1 ml-[0]"
-                          onChange={() => updateRestaurantStatus(key)}
-                          checked={statusData[key].restaurantStatus}
-                          disabled={updateRestaurantLoading}
-                        />
+                    <div className="w-full flex justify-between">
+                      <div className="flex gap-4">
+                        <div className="max-w-40 text-center">
+                          <CustomToggle
+                            label="Restoran Durumu"
+                            className="scale-75 order-2"
+                            className1="flex-col max-sm:items-start"
+                            className2="order-1 ml-[0]"
+                            onChange={() => updateRestaurantStatus(key)}
+                            checked={statusData[key].restaurantStatus}
+                            disabled={updateRestaurantLoading}
+                          />
+                        </div>
                       </div>
+                      <DeleteIntegrationInfo restaurant={restaurant} />
                     </div>
                   </div>
                 );

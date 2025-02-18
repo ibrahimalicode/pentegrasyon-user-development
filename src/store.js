@@ -21,6 +21,7 @@ import messagesSlice from "./redux/messages";
 import migrosYemekSlice from "./redux/migrosYemek";
 import smsSlice from "./redux/sms";
 import emailSlice from "./redux/email";
+import marketplaceRestaurantsSlice from "./redux/marketplaceRestaurants";
 
 const store = configureStore({
   reducer: {
@@ -44,6 +45,7 @@ const store = configureStore({
     messages: messagesSlice,
     sms: smsSlice,
     email: emailSlice,
+    marketplaceRestaurants: marketplaceRestaurantsSlice,
   },
 });
 

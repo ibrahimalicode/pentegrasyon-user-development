@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 //UTILS
 import CustomToggle from "../../common/customToggle";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
+import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
 import {
@@ -151,84 +152,44 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                     key={i}
                     className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
                   >
-                    <p className="text-start max-sm:text-base max-sm:py-2">
+                    <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
                       {restaurant.storeName}
                     </p>
-                    <div className="flex gap-4 whitespace-nowrap">
-                      <div className="max-w-40 text-center">
-                        <CustomToggle
-                          label="Restoran Durumu"
-                          className="scale-75 order-2"
-                          className1="flex-col max-sm:items-start"
-                          className2="order-1 ml-[0]"
-                          onChange={() => updateRestaurantStatus(key)}
-                          checked={statusData[key].restaurantStatus}
-                          disabled={updateRestaurantLoading}
-                        />
-                      </div>
-                      {statusData[key].restaurantStatus && (
-                        <div className="max-w-40 text-end pr-2">
+                    <div className="w-full flex justify-between">
+                      <div className="flex gap-4 whitespace-nowrap">
+                        <div className="max-w-40 text-center">
                           <CustomToggle
-                            label="Kurye Durumu"
+                            label="Restoran Durumu"
                             className="scale-75 order-2"
                             className1="flex-col max-sm:items-start"
                             className2="order-1 ml-[0]"
-                            onChange={() => updateRestaurantCourierStatus(key)}
-                            checked={restaurant.courierStatus}
-                            disabled={updateCourierLoading}
+                            onChange={() => updateRestaurantStatus(key)}
+                            checked={statusData[key].restaurantStatus}
+                            disabled={updateRestaurantLoading}
                           />
                         </div>
-                      )}
+                        {statusData[key].restaurantStatus && (
+                          <div className="max-w-40 text-end pr-2">
+                            <CustomToggle
+                              label="Kurye Durumu"
+                              className="scale-75 order-2"
+                              className1="flex-col max-sm:items-start"
+                              className2="order-1 ml-[0]"
+                              onChange={() =>
+                                updateRestaurantCourierStatus(key)
+                              }
+                              checked={restaurant.courierStatus}
+                              disabled={updateCourierLoading}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <DeleteIntegrationInfo restaurant={restaurant} />
                     </div>
                   </div>
                 );
               })}
           </div>
-          {/* <table className="w-full mt-2">
-            <thead>
-              <tr>
-                <th className="font-medium pb-3 text-start">İşletme</th>
-                <th className="font-medium pb-3 text-center">
-                  Restoran Durumu
-                </th>
-                <th className="font-medium pb-3 text-end">Kurye Durumu</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {statusData &&
-                Object.keys(statusData).map((key, i) => {
-                  const restaurant = statusData[key];
-                  return (
-                    <tr key={i}>
-                      <td className="text-start">{restaurant.storeName}</td>
-                      <td className="text-center">
-                        <CustomToggle
-                          className="scale-75"
-                          className1={`${
-                            updateRestaurantLoading && "cursor-not-allowed"
-                          }`}
-                          onChange={() => updateRestaurantStatus(key)}
-                          checked={statusData[key].restaurantStatus}
-                          disabled={updateRestaurantLoading}
-                        />
-                      </td>
-                      <td className="text-end pr-6">
-                        <CustomToggle
-                          className="scale-75"
-                          className1={`${
-                            updateCourierLoading && "cursor-not-allowed"
-                          }`}
-                          onChange={() => updateRestaurantCourierStatus(key)}
-                          checked={restaurant.isCourierAvailable}
-                          disabled={updateCourierLoading}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table> */}
         </div>
       </main>
     )

@@ -56,18 +56,18 @@ export const useEditUserInvoice = (dispatcher, user) => {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [neighs, setNeighs] = useState([]);
-  const [userInvoiceBefore, setUserInvoiceBefore] = useState();
+  const [userInvoiceBefore, setUserInvoiceBefore] = useState(null);
   const [userInvoice, setUserInvoice] = useState(initialInvoice);
 
   //TOAST TO UPDATE
   useEffect(() => {
     if (loading) {
-      toastId.current = toast.loading("Updating Invoice...");
+      toastId.current = toast.loading("İşleniyor...");
     } else if (error) {
       dispatch(resetUpdateUserInvoice());
     } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
-      toast.success("Invoice updated successfully");
+      toast.dismiss(toastId.current);
+      toast.success("Fatura bilgileri başarıyla güncelendi.");
       dispatch(resetUpdateUserInvoice());
     }
   }, [loading, success, error, dispatch]);
@@ -75,12 +75,12 @@ export const useEditUserInvoice = (dispatcher, user) => {
   //TOAST TO ADD INVOICE IF THERE IS NO
   useEffect(() => {
     if (addInvoiceLoading) {
-      toastId.current = toast.loading("Updating Invoice...");
+      toastId.current = toast.loading("Fatura bilgileri ekleniyor...");
     } else if (addInvoiceError) {
       dispatch(resetaddUserInvoice());
     } else if (addInvoiceSuccess) {
-      toastId.current && toast.dismiss(toastId.current);
-      toast.success("Invoice added successfully");
+      toast.dismiss(toastId.current);
+      toast.success("Fatura bilgileri başarıyla eklendı.");
       dispatch(resetaddUserInvoice());
     }
   }, [addInvoiceLoading, success, addInvoiceError, dispatch]);
@@ -265,7 +265,7 @@ export const useEditUserInvoice = (dispatcher, user) => {
     e?.preventDefault();
     const equalData = isEqual(userInvoiceBefore, userInvoice);
     if (!equalData && user) {
-      if (userInvoiceBefore) {
+      if (user.userInvoiceAddressDTO) {
         dispatch(updateUserInvoice({ ...userInvoice }));
       } else {
         dispatch(addUserInvoice({ ...userInvoice }));

@@ -57,8 +57,8 @@ const RestaurantsStatusPopup = ({ inData }) => {
   }
 
   return (
-    <main className="w-full h-[100dvh] bg-[--white-1] pb-[4%] pt-2 rounded-md overflow-y-auto">
-      <div className="flex justify-between mx-2 mb-2">
+    <main className="w-full h-[100dvh] bg-[--white-1] pb-[4%] overflow-y-auto">
+      <div className="flex justify-between mx-2 my-2">
         <div className="w-full flex items-center max-w-80">
           <div className="w-full">
             <CustomInput
@@ -68,21 +68,21 @@ const RestaurantsStatusPopup = ({ inData }) => {
               }}
               value={searchVal}
               placeholder="Ara..."
-              className2="mt-[0px] w-full"
-              className="mt-[0px] py-[.5rem] w-[100%] focus:outline-none text-sm rounded-[9999px]"
+              iconClick={clearSearch}
+              className2="mt-[0px] sm:mt-[0px] w-full"
+              className="mt-[0px] sm:mt-[0px] py-[.5rem] w-[100%] focus:outline-none text-sm rounded-[700rem]"
               icon={
                 searchVal ? (
                   <CloseI className="size-4 p-0.5 text-[--red-1] mr-2 border border-[--red-1] rounded-full" />
                 ) : null
               }
-              iconClick={clearSearch}
             />
           </div>
         </div>
 
         <button
           onClick={() => setSlideBarContent(null)}
-          className="text-[--red-1] p-1.5  rounded-full"
+          className="text-[--red-1] px-1.5  rounded-full"
         >
           <CloseI />
         </button>

@@ -123,6 +123,7 @@ export const OrdersContextProvider = ({ children }) => {
   //SET ORDER COUNT
   useEffect(() => {
     if (countData) {
+      console.log(countData);
       setOrdersCount(countData);
       dispatch(resetGetTicketCountStatistics());
     }

@@ -21,11 +21,6 @@ const adduserInvoiceSlice = createSlice({
       state.error = null;
       state.data = null;
     },
-    resetaddUserInvoiceState: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-    },
   },
   extraReducers: (build) => {
     build
@@ -88,6 +83,5 @@ export const addUserInvoice = createAsyncThunk(
   }
 );
 
-export const { resetaddUserInvoice, resetaddUserInvoiceState } =
-  adduserInvoiceSlice.actions;
+export const { resetaddUserInvoice } = adduserInvoiceSlice.actions;
 export default adduserInvoiceSlice.reducer;

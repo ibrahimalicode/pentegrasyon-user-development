@@ -21,7 +21,7 @@ export const marketplaceTableBodies = [
   },
 ];
 
-const OrdersTable = ({ ordersData, setOrdersData }) => {
+const OrdersTable = ({ licenses, ordersData, setOrdersData }) => {
   function getMarketPlaceAssets(order) {
     const TableBodyComp =
       marketplaceTableBodies[order.marketplaceId]?.TableBody;
@@ -30,6 +30,7 @@ const OrdersTable = ({ ordersData, setOrdersData }) => {
       TableBody: (
         <TableBodyComp
           order={order}
+          licenses={licenses}
           totalItems={ordersData?.length}
           setOrdersData={setOrdersData}
         />

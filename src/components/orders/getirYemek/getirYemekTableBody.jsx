@@ -20,7 +20,12 @@ import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 import { GetirYemekAddress } from "../components/marketplaceAddresses";
 
-const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
+const GetirYemekTableBody = ({
+  licenses,
+  order,
+  totalItems,
+  setOrdersData,
+}) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
@@ -49,6 +54,11 @@ const GetirYemekTableBody = ({ order, totalItems, setOrdersData }) => {
   }
 
   function cellClicked() {
+    const currentLicense = licenses.find(
+      (L) => L.restaurantId === order.restaurantId
+    );
+    if (currentLicense && !currentLicense?.isActive) return;
+
     setSlideBarContent(
       <GetirYemekOrderDetails
         order={{

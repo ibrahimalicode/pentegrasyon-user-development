@@ -20,7 +20,12 @@ import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
 import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 import { YemekSepetiAddress } from "../components/marketplaceAddresses";
 
-const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
+const YemekSepetiTableBody = ({
+  licenses,
+  order,
+  totalItems,
+  setOrdersData,
+}) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
@@ -49,6 +54,11 @@ const YemekSepetiTableBody = ({ order, totalItems, setOrdersData }) => {
   }
 
   function cellClicked() {
+    const currentLicense = licenses.find(
+      (L) => L.restaurantId === order.restaurantId
+    );
+    if (currentLicense && !currentLicense?.isActive) return;
+
     setSlideBarContent(
       <YemekSepetiOrderDetails
         order={{

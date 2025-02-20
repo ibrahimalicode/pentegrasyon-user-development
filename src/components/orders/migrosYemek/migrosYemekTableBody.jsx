@@ -19,7 +19,12 @@ import MigrosYemekStatusButton from "./migrosYemekStatusButton";
 import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import { MigrosYemekAddress } from "../components/marketplaceAddresses";
 
-const MigrosYemekTableBody = ({ order, totalItems, setOrdersData }) => {
+const MigrosYemekTableBody = ({
+  licenses,
+  order,
+  totalItems,
+  setOrdersData,
+}) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
 
@@ -48,6 +53,11 @@ const MigrosYemekTableBody = ({ order, totalItems, setOrdersData }) => {
   }
 
   function cellClicked() {
+    const currentLicense = licenses.find(
+      (L) => L.restaurantId === order.restaurantId
+    );
+    if (currentLicense && !currentLicense?.isActive) return;
+
     setSlideBarContent(
       <MigrosYemekOrderDetails order={order} setOrdersData={setOrdersData} />
     );

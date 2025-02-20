@@ -81,6 +81,7 @@ const OrdersPage = () => {
           pageSize: 2,
         })
       );
+      console.log("Distaptch Get Restaurants");
     }
   }, [restaurants]);
 
@@ -88,7 +89,6 @@ const OrdersPage = () => {
   useEffect(() => {
     if (restaurants?.data) {
       if (!(restaurants.data?.length > 0)) {
-        console.log("Nav to rest");
         navigate("/restaurants");
         return;
       } else {
@@ -96,16 +96,17 @@ const OrdersPage = () => {
         if (!licenses) {
           dispatch(
             getLicenses({
-              pageNumber: 1,
-              pageSize: 2,
+              pageNumber: 0,
+              pageSize: 0,
             })
           );
+          console.log("Distaptch Get Licenses");
         }
       }
     }
 
     if (licenses?.data) {
-      console.log(licenses);
+      // console.log(licenses);
       if (!(licenses.data?.length > 0)) {
         navigate("/licenses");
       }
@@ -137,7 +138,7 @@ const OrdersPage = () => {
         <SearchOrders />
         <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2 max-sm:mt-3">
-            <RestaurantsStatus />
+            <RestaurantsStatus licenses={licenses?.data} />
             <AutomaticApproval
               ordersData={ordersData}
               automationDatas={automationDatas}
@@ -165,8 +166,9 @@ const OrdersPage = () => {
       </div>
 
       {/* TABLE */}
-      {ordersData?.length && !loading ? (
+      {ordersData?.length && licenses?.data && !loading ? (
         <OrdersTable
+          licenses={licenses?.data}
           ordersData={ordersData}
           setOrdersData={setOrdersData}
           onSuccess={() => setOrdersData(null)}

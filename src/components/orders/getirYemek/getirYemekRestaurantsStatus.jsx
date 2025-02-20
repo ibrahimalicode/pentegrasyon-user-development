@@ -105,13 +105,20 @@ const GetirYemekRestaurantsStatus = ({ statRest }) => {
         (S) => S.id == inData.status
       )[0]?.value;
     }
+
     if (statRest) {
       const formattedData = [];
+      const seenIds = new Set();
+
       statRest.map((res) => {
+        const isDuplicate = seenIds.has(res.marketplaceRestaurantId);
+        seenIds.add(res.marketplaceRestaurantId);
+
         formattedData[res.marketplaceRestaurantId] = {
           ...res,
           restaurantStatus: statusValue(res),
           courierStatus: res.isCourierAvailable,
+          isDuplicate,
         };
       });
       setStatusData(formattedData);
@@ -189,7 +196,9 @@ const GetirYemekRestaurantsStatus = ({ statRest }) => {
                           </div>
                         )}
                       </div>
-                      <DeleteIntegrationInfo restaurant={restaurant} />
+                      {restaurant.isDuplicate && (
+                        <DeleteIntegrationInfo restaurant={restaurant} />
+                      )}
                     </div>
                   </div>
                 );

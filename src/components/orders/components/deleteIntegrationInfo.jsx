@@ -47,6 +47,7 @@ function DeleteIntegrationInfoPopup({ data, restaurant }) {
   );
 
   function handleDelete() {
+    console.log(data);
     dispatch(deleteRestaurantByMarketplaceRestaurantId(data));
   }
 

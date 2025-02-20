@@ -25,6 +25,7 @@ import {
   getRestaurantsMap,
   resetGetRestaurantsMap,
 } from "../../../redux/restaurants/getRestaurantsMapSlice";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const LicensesPage = () => {
   const [filter, setFilter] = useState({
     city: null,
     district: null,
-    neighbourhood: null,
+    marketplace: null,
   });
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
@@ -298,24 +299,29 @@ const LicensesPage = () => {
                       });
                     }}
                   />
+
                   <CustomSelect
-                    label="neighbourhood"
+                    label="Pazaryeri"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[{ value: null, label: "Hepsi" }, ...neighs]}
                     optionStyle={{ fontSize: ".8rem" }}
+                    options={[
+                      { value: null, label: "Hepsi", id: null },
+                      ...MarketPalceIds,
+                    ]}
                     value={
-                      filter?.neighbourhood
-                        ? filter.neighbourhood
+                      filter?.marketplace
+                        ? filter.marketplace
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          neighbourhood: selectedOption,
+                          marketplaceId: selectedOption.id,
+                          marketplace: selectedOption,
                         };
                       });
                     }}

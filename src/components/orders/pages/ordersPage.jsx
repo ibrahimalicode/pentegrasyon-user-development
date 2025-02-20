@@ -26,8 +26,12 @@ import {
 //UTILS
 import { useFirestore } from "../../../context/FirestoreContext";
 import { useOrdersContext } from "../../../context/OrdersContext";
+import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
+import { getLicenses } from "../../../redux/licenses/getLicensesSlice";
+import { useNavigate } from "react-router-dom";
 
 const OrdersPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { automaticApprovalDatas, setAutomaticApprovalDatas } = useFirestore();
 
@@ -46,6 +50,10 @@ const OrdersPage = () => {
   const { data, error } = useSelector(
     (state) => state.orders.getAutomationVariables
   );
+  const { licenses } = useSelector((state) => state.licenses.getLicenses);
+  const { restaurants } = useSelector(
+    (state) => state.restaurants.getRestaurants
+  );
 
   const [automationDatas, setAutomationDatas] = useState(null);
   const pageNumbers = () => {
@@ -62,6 +70,45 @@ const OrdersPage = () => {
       dispatch(getAutomationVariables());
     }
   }, [automationDatas]);
+
+  //GET RESTAURANTS
+  useEffect(() => {
+    //GET RESTAURANTS
+    if (!restaurants) {
+      dispatch(
+        getRestaurants({
+          pageNumber,
+          pageSize: itemsPerPage,
+        })
+      );
+    }
+  }, [restaurants]);
+
+  //CHEK IF THERE IS NO RESTAURANT OR LICENSE
+  useEffect(() => {
+    if (restaurants) {
+      if (!(restaurants.data?.length > 0)) {
+        navigate("/restaurants");
+        return;
+      } else {
+        //GET LICENSES
+        if (!licenses) {
+          dispatch(
+            getLicenses({
+              pageNumber,
+              pageSize: itemsPerPage,
+            })
+          );
+        }
+      }
+    }
+
+    if (licenses) {
+      if (!(licenses.data?.length > 0)) {
+        navigate("/licenses");
+      }
+    }
+  }, [licenses, restaurants]);
 
   //TOAST AND SET DATA
   useEffect(() => {

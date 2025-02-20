@@ -101,12 +101,18 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
       )[0]?.value;
     }
     if (statRest) {
+      const seenIds = new Set();
+
       const formattedData = [];
       statRest.map((res) => {
+        const isDuplicate = seenIds.has(res.marketplaceRestaurantId);
+        seenIds.add(res.marketplaceRestaurantId);
+
         formattedData[res.id] = {
           ...res,
           restaurantStatus: statusValue(res),
           courierStatus: res.isCourierAvailable,
+          isDuplicate,
         };
       });
       setStatusData(formattedData);
@@ -139,7 +145,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
     statusData &&
     Object.keys(statusData).length > 0 && (
       <main className="border-2 border-[--migrosyemek] rounded-md mx-2">
-        <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1] border-y border-[--migrosyemek-1]">
+        <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1]">
           Migros Yemek
         </div>
         <div className="w-full px-3 text-sm">
@@ -184,7 +190,9 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                           </div>
                         )}
                       </div>
-                      <DeleteIntegrationInfo restaurant={restaurant} />
+                      {restaurant.isDuplicate && (
+                        <DeleteIntegrationInfo restaurant={restaurant} />
+                      )}
                     </div>
                   </div>
                 );

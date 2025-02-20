@@ -127,12 +127,18 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
       );
 
       const formattedData = [];
+      const seenIds = new Set();
+
       uniqueStatRest.map((res) => {
+        const isDuplicate = seenIds.has(res.marketplaceRestaurantId);
+        seenIds.add(res.marketplaceRestaurantId);
+
         formattedData[res.restaurantId] = {
           ...res,
           id: res.restaurantId,
           restaurantStatus: statusValue(res),
           courierStatus: res.isCourierAvailable,
+          isDuplicate,
         };
       });
       setStatusData(formattedData);
@@ -238,7 +244,9 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                           />
                         </div>
                       </div>
-                      <DeleteIntegrationInfo restaurant={restaurant} />
+                      {restaurant.isDuplicate && (
+                        <DeleteIntegrationInfo restaurant={restaurant} />
+                      )}
                     </div>
                   </div>
                 );

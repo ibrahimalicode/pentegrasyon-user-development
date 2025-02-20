@@ -34,10 +34,10 @@ const RestaurantsTable = () => {
   }, [error, data]);
 
   return (
-    <main className="w-full bg-[--white-1] rounded-md max-sm:overflow-x-scroll">
+    <main className="w-full bg-[--white-1] border-2 border-solid border-[--light-1] rounded-md max-sm:overflow-x-auto">
       {restaurantsData && !loading ? (
-        <main className="h-max pb-4 px-2 sm:px-9 border-2 border-solid border-[--light-1]">
-          <table className="w-full text-center text-sm max-sm:min-w-[26rem]">
+        <main className="h-max pb-4 px-2 sm:px-9 w-full max-sm:min-w-[30rem]">
+          <table className="w-full text-center text-sm">
             <thead>
               <tr className="text-[--gr-1] font-light">
                 <th className="font-light py-5 border-b border-solid border-[--light-1] text-start">

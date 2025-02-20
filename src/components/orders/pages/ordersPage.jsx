@@ -77,8 +77,8 @@ const OrdersPage = () => {
     if (!restaurants) {
       dispatch(
         getRestaurants({
-          pageNumber,
-          pageSize: itemsPerPage,
+          pageNumber: 1,
+          pageSize: 2,
         })
       );
     }
@@ -86,8 +86,9 @@ const OrdersPage = () => {
 
   //CHEK IF THERE IS NO RESTAURANT OR LICENSE
   useEffect(() => {
-    if (restaurants) {
+    if (restaurants?.data) {
       if (!(restaurants.data?.length > 0)) {
+        console.log("Nav to rest");
         navigate("/restaurants");
         return;
       } else {
@@ -95,15 +96,16 @@ const OrdersPage = () => {
         if (!licenses) {
           dispatch(
             getLicenses({
-              pageNumber,
-              pageSize: itemsPerPage,
+              pageNumber: 1,
+              pageSize: 2,
             })
           );
         }
       }
     }
 
-    if (licenses) {
+    if (licenses?.data) {
+      console.log(licenses);
       if (!(licenses.data?.length > 0)) {
         navigate("/licenses");
       }

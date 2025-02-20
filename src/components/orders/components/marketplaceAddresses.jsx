@@ -1,12 +1,7 @@
 export const GetirYemekAddress = ({ order }) => {
-  function splittedAddreses() {
-    const adr = order.client.address.replace("Türkiye", "").split(",");
-    // return `${adr[0]}, ${adr[1]}, ${adr[2]}, ${adr[5]}`;
-    return order.client.address;
-  }
   return (
     <>
-      <span>{splittedAddreses()}</span>
+      <span>{order.client.address}</span>
       {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
       {order.client.doorNo && <span> Daire No: {order.client.doorNo}</span>}
       {order.client.floor && <span> Kat: {order.client.floor}</span>}

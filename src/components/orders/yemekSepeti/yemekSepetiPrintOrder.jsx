@@ -52,14 +52,23 @@ const YemekSepetiPrintOrder = ({ order }) => {
             </>
           )}
         </p>
-        <div className="flex">
-          <p className="font-bold pr-1">Adres: </p>
-          <YemekSepetiAddress order={order} />
-        </div>
-        <p>
-          <span className="font-bold">Bölge: </span>{" "}
-          <span> {order?.customer?.deliveryMainArea?.split(" ")[0]}</span>
-        </p>
+
+        {(order.customer.city ||
+          order.customer.deliveryMainArea ||
+          order.customer.street) && (
+          <div className="flex">
+            <p className="font-bold pr-1">Adres: </p>
+            <YemekSepetiAddress order={order} />
+          </div>
+        )}
+
+        {order?.customer?.deliveryMainArea && (
+          <p>
+            <span className="font-bold">Bölge: </span>{" "}
+            <span> {order?.customer?.deliveryMainArea?.split(" ")[0]}</span>
+          </p>
+        )}
+
         {order.customer.deliveryInstructions && (
           <div className="flex">
             <p className="font-bold pr-1">Tarif: </p>

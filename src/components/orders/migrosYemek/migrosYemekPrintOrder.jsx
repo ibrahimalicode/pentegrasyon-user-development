@@ -39,14 +39,23 @@ const MigrosYemekPrintOrder = ({ order }) => {
 
           {order.customer.phoneNumber}
         </p>
-        <div className="flex">
-          <p className="font-bold pr-1">Adres: </p>
-          <MigrosYemekAddress order={order} />
-        </div>
-        <p>
-          <span className="font-bold">Bölge: </span>{" "}
-          <span> {order?.customer?.district}</span>
-        </p>
+
+        {(order.customer.city ||
+          order.customer.district ||
+          order.customer.streetName) && (
+          <div className="flex">
+            <p className="font-bold pr-1">Adres: </p>
+            <MigrosYemekAddress order={order} />
+          </div>
+        )}
+
+        {order?.customer?.district && (
+          <p>
+            <span className="font-bold">Bölge: </span>{" "}
+            <span> {order?.customer?.district}</span>
+          </p>
+        )}
+
         {order.customer.deliveryInstructions && (
           <div className="flex">
             <p className="font-bold pr-1">Tarif: </p>

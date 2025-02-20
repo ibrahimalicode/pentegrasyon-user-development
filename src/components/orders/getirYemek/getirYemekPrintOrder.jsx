@@ -2,18 +2,14 @@ import React from "react";
 
 //COMP
 import QrGenerator from "../../common/qrGenerator";
-import { formatDateString, formatToPrice } from "../../../utils/utils";
 import MarketPalceIds from "../../../enums/marketPlaceIds";
+import { formatDateString, formatToPrice } from "../../../utils/utils";
+import { GetirYemekAddress } from "../components/marketplaceAddresses";
 
 const GetirYemekPrintOrder = ({ order }) => {
   function getLocationLink() {
     const googleMapsUrl = `https://www.google.com/maps?q=${order.client.latitude},${order.client.longitude}`;
     return googleMapsUrl;
-  }
-  function splittedAddreses() {
-    // const adr = order.client.address.replace("Türkiye", "").split(",");
-    // return `${adr[0]}, ${adr[1]}, ${adr[2]}, ${adr[5]}`;
-    return order.client.address;
   }
 
   return (
@@ -45,21 +41,25 @@ const GetirYemekPrintOrder = ({ order }) => {
             </>
           )}
         </p>
-        <p>
-          <span className="font-bold">Adres </span>
-          <span>
-            <span>: {splittedAddreses()}</span>
-            {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
-            {order.client.doorNo && (
-              <span> Daire No: {order.client.doorNo}</span>
-            )}
-            {order.client.floor && <span> Kat: {order.client.floor}</span>}
-          </span>
-        </p>
-        <p>
-          <span className="font-bold">Bölge </span>{" "}
-          <span>: {order?.client?.district}</span>
-        </p>
+        {(order.client.address ||
+          order.client.aptNo ||
+          order.client.doorNo ||
+          order.client.floor) && (
+          <p>
+            <span className="font-bold">Adres: </span>
+            <span>
+              <GetirYemekAddress order={order} />
+            </span>
+          </p>
+        )}
+
+        {order?.client?.district && (
+          <p>
+            <span className="font-bold">Bölge </span>{" "}
+            <span>: {order?.client?.district}</span>
+          </p>
+        )}
+
         {order.client.description && (
           <p>
             <span className="font-bold">Tarif </span>

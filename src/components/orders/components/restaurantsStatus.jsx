@@ -37,7 +37,7 @@ const MarketPlaceAssets = [
   { src: Siparisim },
 ];
 
-const RestaurantsStatus = () => {
+const RestaurantsStatus = ({ licenses }) => {
   const dispatch = useDispatch();
   const { setSlideBarContent } = useSlideBar();
   const { statusChangedRestaurant, setStatusChangedRestaurant } =
@@ -253,7 +253,12 @@ const RestaurantsStatus = () => {
         disabled={!statusesData}
         onClick={() =>
           setSlideBarContent({
-            content: <RestaurantsStatusPopup inData={statusesData} />,
+            content: (
+              <RestaurantsStatusPopup
+                inData={statusesData}
+                licenses={licenses}
+              />
+            ),
           })
         }
         className={`w-full whitespace-nowrap ${

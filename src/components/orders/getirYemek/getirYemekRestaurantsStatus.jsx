@@ -20,7 +20,7 @@ import {
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
 
-const GetirYemekRestaurantsStatus = ({ statRest }) => {
+const GetirYemekRestaurantsStatus = ({ statRest, license }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -177,7 +177,9 @@ const GetirYemekRestaurantsStatus = ({ statRest }) => {
                             className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantStatus(key)}
                             checked={statusData[key].restaurantStatus}
-                            disabled={updateRestaurantLoading}
+                            disabled={
+                              updateRestaurantLoading || !license?.isActive
+                            }
                           />
                         </div>
                         {statusData[key].restaurantStatus && (
@@ -191,7 +193,9 @@ const GetirYemekRestaurantsStatus = ({ statRest }) => {
                                 updateRestaurantCourierStatus(key)
                               }
                               checked={restaurant.courierStatus}
-                              disabled={updateCourierLoading}
+                              disabled={
+                                updateCourierLoading || !license?.isActive
+                              }
                             />
                           </div>
                         )}

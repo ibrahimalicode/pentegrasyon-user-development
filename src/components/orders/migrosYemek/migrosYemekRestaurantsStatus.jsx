@@ -18,7 +18,7 @@ import {
   resetMigrosYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantCourierStatusSlice";
 
-const MigrosYemekRestaurantsStatus = ({ statRest }) => {
+const MigrosYemekRestaurantsStatus = ({ statRest, license }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -171,7 +171,9 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                             className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantStatus(key)}
                             checked={statusData[key].restaurantStatus}
-                            disabled={updateRestaurantLoading}
+                            disabled={
+                              updateRestaurantLoading || !license?.isActive
+                            }
                           />
                         </div>
                         {statusData[key].restaurantStatus && (
@@ -185,7 +187,9 @@ const MigrosYemekRestaurantsStatus = ({ statRest }) => {
                                 updateRestaurantCourierStatus(key)
                               }
                               checked={restaurant.courierStatus}
-                              disabled={updateCourierLoading}
+                              disabled={
+                                updateCourierLoading || !license?.isActive
+                              }
                             />
                           </div>
                         )}

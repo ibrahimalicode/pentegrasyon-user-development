@@ -20,7 +20,7 @@ import {
   resetYemekSepetiUpdateRestaurantCourierStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantCourierStatusSlice";
 
-const YemekSepetiRestaurantsStatus = ({ statRest }) => {
+const YemekSepetiRestaurantsStatus = ({ statRest, license }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -240,7 +240,9 @@ const YemekSepetiRestaurantsStatus = ({ statRest }) => {
                             className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantStatus(key)}
                             checked={statusData[key].restaurantStatus}
-                            disabled={updateRestaurantLoading}
+                            disabled={
+                              updateRestaurantLoading || !license.isActive
+                            }
                           />
                         </div>
                       </div>

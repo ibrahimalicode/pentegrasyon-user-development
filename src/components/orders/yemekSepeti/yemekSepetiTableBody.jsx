@@ -140,7 +140,7 @@ const YemekSepetiTableBody = ({
           >
             {order.expeditionType.toLocaleLowerCase() == "pickup"
               ? "Gel Al"
-              : order?.customer?.deliveryMainArea?.split(" ")[0]}
+              : order?.customer?.deliveryMainArea}
           </button>
         </td>
         <td

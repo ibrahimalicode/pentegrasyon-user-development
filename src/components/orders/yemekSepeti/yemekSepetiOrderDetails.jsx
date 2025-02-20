@@ -216,10 +216,13 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                           {cat.price > 0 ? `+` : cat.price < 0 ? `-` : ""}
                           {cat.price > 0 &&
                             formatToPrice(
-                              String(Number(cat.price).toFixed(2)).replace(
-                                ".",
-                                ","
-                              )
+                              String(
+                                (
+                                  Number(cat.price) *
+                                  Number(cat.quantity) *
+                                  Number(order.quantity)
+                                ).toFixed(2)
+                              ).replace(".", ",")
                             )}
                         </td>
                       </tr>

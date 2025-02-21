@@ -12,21 +12,20 @@ import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
 import LicensesTable from "../../licenses/licensesTable";
 import AddLicense from "../../licenses/actions/addLicense";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
 import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
+import orderFilterDates from "../../../enums/orderFilterDates";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { getCities } from "../../../redux/data/getCitiesSlice";
-import { getNeighs } from "../../../redux/data/getNeighsSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
-import {
-  getRestaurantLicenses,
-  resetGetRestaurantLicenses,
-} from "../../../redux/licenses/getRestaurantLicensesSlice";
 import {
   getRestaurant,
   resetGetRestaurantState,
 } from "../../../redux/restaurants/getRestaurantSlice";
+import {
+  getRestaurantLicenses,
+  resetGetRestaurantLicenses,
+} from "../../../redux/licenses/getRestaurantLicensesSlice";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
@@ -41,116 +40,28 @@ const RestaurantLicensesPage = () => {
   );
 
   const {
-    error: restaurantError,
-    success: restaurantSuccess,
     restaurant,
+    error: restaurantError,
+    loading: restaurantLoading,
+    success: restaurantSuccess,
   } = useSelector((state) => state.restaurants.getRestaurant);
 
-  const { cities: citiesData } = useSelector((state) => state.data.getCities);
-
-  const { districts: districtsData, success: districtsSuccess } = useSelector(
-    (state) => state.data.getDistricts
-  );
-  const { neighs: neighsData, success: neighsSuccess } = useSelector(
-    (state) => state.data.getNeighs
-  );
-
+  const [filter, setFilter] = useState({});
   const [searchVal, setSearchVal] = useState("");
-  const [filter, setFilter] = useState({
-    city: null,
-    district: null,
-    neighbourhood: null,
-  });
-
-  const [restaurantData, setRestaurantData] = useState(restaurantInData);
-  const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
+  const [licensesData, setLicensesData] = useState(null);
+  const [restaurantData, setRestaurantData] = useState(restaurantInData);
 
   const [userData, setuserData] = useState(userInData);
-  const [cities, setCities] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [neighs, setNeighs] = useState([]);
 
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
 
-  function clearSearch() {
-    setSearchVal("");
-    return;
-    // dispatch(
-    //   getRestaurantLicenses({
-    //     pageNumber,
-    //     pageSize: itemsPerPage,
-    //     searchKey: null,
-    //     active: filter?.status?.value,
-    //     city: filter?.city?.value,
-    //     district: filter?.district?.value,
-    //     neighbourhood: filter?.neighbourhood?.value,
-    //   })
-    // );
-  }
-
-  function handleSearch(e) {
-    e.preventDefault();
-    return;
-    // if (!searchVal) return;
-    // dispatch(
-    //   getRestaurantLicenses({
-    //     pageNumber,
-    //     pageSize: itemsPerPage,
-    //     searchKey: searchVal,
-    //     active: filter?.status?.value,
-    //     city: filter?.city?.value,
-    //     district: filter?.district?.value,
-    //     neighbourhood: filter?.neighbourhood?.value,
-    //   })
-    // );
-  }
-
-  function handleFilter(bool) {
-    return;
-    // if (bool) {
-    //   setOpenFilter(false);
-    //   setPageNumber(1);
-    //   dispatch(
-    //     getRestaurantLicenses({
-    //       pageNumber,
-    //       pageSize: itemsPerPage,
-    //       searchKey: searchVal,
-    //       active: filter?.status?.value,
-    //       city: filter?.city?.value,
-    //       district: filter?.district?.value,
-    //       neighbourhood: filter?.neighbourhood?.value,
-    //     })
-    //   );
-    // } else {
-    //   if (filter) {
-    //     dispatch(
-    //       getRestaurantLicenses({
-    //         pageNumber,
-    //         pageSize: itemsPerPage,
-    //         searchKey: null,
-    //         active: null,
-    //         city: null,
-    //         district: null,
-    //         neighbourhood: null,
-    //       })
-    //     );
-    //   }
-    //   setFilter({
-    //     city: null,
-    //     district: null,
-    //     neighbourhood: null,
-    //   });
-    //   setOpenFilter(false);
-    // }
-  }
-
   function handlePageChange(number) {
     dispatch(
       getRestaurantLicenses({
-        restaurantId: restaurant.id,
+        restaurantId,
         pageNumber: number,
         pageSize: itemsPerPage,
         searchKey: searchVal,
@@ -158,6 +69,69 @@ const RestaurantLicensesPage = () => {
         city: filter?.city?.value,
         district: filter?.district?.value,
         neighbourhood: filter?.neighbourhood?.value,
+      })
+    );
+  }
+
+  //SEARCH
+  function handleSearch(e) {
+    e.preventDefault();
+    if (!searchVal) return;
+    dispatch(
+      getRestaurantLicenses({
+        restaurantId,
+        pageNumber: 1,
+        searchKey: searchVal,
+        pageSize: itemsPerPage,
+        isActive: filter?.status?.value,
+        dateRange: filter?.dateRange?.value,
+        licenseTypeId: filter?.licenseTypeId?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
+      })
+    );
+    setPageNumber(1);
+  }
+
+  //FILTER AND CLEAR FILTER
+  function handleFilter(bool) {
+    if (bool) {
+      const filterData = {
+        restaurantId,
+        pageNumber: 1,
+        pageSize: itemsPerPage,
+        isActive: filter?.status?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
+        licenseTypeId: filter?.licenseTypeId?.value,
+        dateRange: filter?.dateRange?.value,
+      };
+      dispatch(getRestaurantLicenses(filterData));
+    } else {
+      dispatch(
+        getRestaurantLicenses({
+          pageNumber,
+          restaurantId,
+          pageSize: itemsPerPage,
+        })
+      );
+      setFilter({});
+    }
+    setPageNumber(1);
+    setOpenFilter(false);
+  }
+
+  //CLEAR SEARCH
+  function clearSearch() {
+    setSearchVal("");
+    dispatch(
+      getRestaurantLicenses({
+        pageNumber,
+        searchKey: null,
+        pageSize: itemsPerPage,
+        restaurantId: restaurant.id,
+        isActive: filter?.status?.value,
+        dateRange: filter?.dateRange?.value,
+        licenseTypeId: filter?.licenseTypeId?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
       })
     );
   }
@@ -224,60 +198,6 @@ const RestaurantLicensesPage = () => {
       dispatch(resetGetRestaurantLicenses());
     }
   }, [restaurantError, restaurantSuccess, restaurant]);
-
-  // GET AND SET CITIES
-  useEffect(() => {
-    if (!citiesData) {
-      dispatch(getCities());
-    } else {
-      setCities(citiesData);
-    }
-  }, [citiesData]);
-
-  // GET DISTRICTS
-  useEffect(() => {
-    if (filter.city?.id) {
-      dispatch(getDistricts({ cityId: filter.city.id }));
-      setFilter((prev) => {
-        return {
-          ...prev,
-          district: null,
-        };
-      });
-    }
-  }, [filter.city]);
-
-  // SET DISTRICTS
-  useEffect(() => {
-    if (districtsSuccess) {
-      setDistricts(districtsData);
-    }
-  }, [districtsSuccess]);
-
-  // GET NEIGHS
-  useEffect(() => {
-    if (filter.district?.id && filter.city?.id) {
-      dispatch(
-        getNeighs({
-          cityId: filter.city.id,
-          districtId: filter.district.id,
-        })
-      );
-      setFilter((prev) => {
-        return {
-          ...prev,
-          neighbourhood: null,
-        };
-      });
-    }
-  }, [filter.district]);
-
-  // SET NEIGHS
-  useEffect(() => {
-    if (neighsSuccess) {
-      setNeighs(neighsData);
-    }
-  }, [neighsSuccess]);
 
   //HIDE POPUP
   const { contentRef, setContentRef } = usePopup();
@@ -382,21 +302,25 @@ const RestaurantLicensesPage = () => {
                   />
 
                   <CustomSelect
-                    label="Şehir"
+                    label="Ayarlar"
                     style={{ padding: "1px 0px" }}
                     className="text-sm"
-                    options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    options={[
+                      { value: null, label: "Hepsi" },
+                      { value: true, label: "Eklenmiş" },
+                      { value: false, label: "Eklenmemiş" },
+                    ]}
                     optionStyle={{ fontSize: ".8rem" }}
                     value={
-                      filter?.city
-                        ? filter.city
+                      filter?.isSettingsAdded
+                        ? filter.isSettingsAdded
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          city: selectedOption,
+                          isSettingsAdded: selectedOption,
                         };
                       });
                     }}
@@ -405,45 +329,52 @@ const RestaurantLicensesPage = () => {
 
                 <div className="flex gap-6">
                   <CustomSelect
-                    label="District"
+                    label="Pazaryeri"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[{ value: null, label: "Hepsi" }, ...districts]}
                     optionStyle={{ fontSize: ".8rem" }}
+                    options={[
+                      { value: null, label: "Hepsi", id: null },
+                      ...MarketPalceIds,
+                    ]}
                     value={
-                      filter?.district
-                        ? filter.district
+                      filter?.licenseTypeId
+                        ? filter.licenseTypeId
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          district: selectedOption,
+                          licenseTypeId: selectedOption,
                         };
                       });
                     }}
                   />
+
                   <CustomSelect
-                    label="neighbourhood"
+                    label="Bitiş Zamanı"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
                     style={{ padding: "0 !important" }}
-                    options={[{ value: null, label: "Hepsi" }, ...neighs]}
                     optionStyle={{ fontSize: ".8rem" }}
+                    options={[
+                      { value: null, label: "Hepsi", id: null },
+                      ...orderFilterDates,
+                    ]}
                     value={
-                      filter?.neighbourhood
-                        ? filter.neighbourhood
+                      filter?.dateRange
+                        ? filter.dateRange
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          neighbourhood: selectedOption,
+                          dateRange: selectedOption,
                         };
                       });
                     }}
@@ -480,12 +411,12 @@ const RestaurantLicensesPage = () => {
       </div>
 
       {/* TABLE */}
-      {licensesData ? (
+      {licensesData && !loading && !restaurantLoading ? (
         <LicensesTable
           inData={licensesData}
           onSuccess={() => setLicensesData(null)}
         />
-      ) : loading ? (
+      ) : loading || restaurantLoading ? (
         <TableSkeleton />
       ) : null}
 

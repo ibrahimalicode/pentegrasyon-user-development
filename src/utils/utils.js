@@ -251,7 +251,7 @@ export const formatLisansPackages = (data) => {
       <div class="flex justify-between items-center">
         <p class='w-36'>${label}</p>
         <p class='w-20 text-[--link-1] text-center' > ${year} Yıllık </p>
-        <p class='text-xs text-[--white-1] border rounded-full px-1.5 mx-0.5 py-1 whitespace-nowrap ${bgColor}' > ${description} Yıllık </p>
+        <p class='text-xs text-[--white-1] border rounded-full px-1.5 mx-0.5 py-1 whitespace-nowrap ${bgColor}' > ${description} </p>
         <p class='w-12' >${price}</p>
       </div>`;
   }

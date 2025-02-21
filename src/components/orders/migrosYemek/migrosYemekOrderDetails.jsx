@@ -24,6 +24,10 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
     return date.startsWith("0001-01-01T00:00:00") ? "" : date;
   }
 
+  function getSign(item) {
+    return item;
+  }
+
   useEffect(() => {
     if (statusChangedOrder) {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
@@ -177,39 +181,91 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
                       {formatToPrice(Order.priceText)}
                     </td>
                   </tr>
-                  {Order.options.map((option) => (
-                    <React.Fragment key={option.id}>
-                      {option.subOptions.length > 0 && (
-                        <tr className="text-xs px-2">
-                          <td className="pl-2">{option.headerName}</td>
-                        </tr>
+
+                  {Order.options.map((option, index) => (
+                    <React.Fragment key={index}>
+                      {option.subOptions.length >= 0 && (
+                        <>
+                          <tr className="text-xs px-2">
+                            <td className="pl-2 font-bold">
+                              {option.headerName}
+                            </td>
+                          </tr>
+
+                          <tr className="text-xs">
+                            <td className="pl-4">{option.itemNames}</td>
+                            <td
+                              className={`pr-2 text-right ${
+                                option.primaryPrice > 0
+                                  ? "text-[--green-1]"
+                                  : "text-[--red-1]"
+                              }`}
+                            >
+                              {option.primaryPrice > 0
+                                ? `+`
+                                : option.primaryPrice < 0
+                                ? `-`
+                                : ""}
+                              {option.primaryPrice > 0 &&
+                                formatToPrice(
+                                  String(
+                                    (
+                                      option.primaryPrice * option.quantity
+                                    ).toFixed(2)
+                                  )
+                                    .replace(".", "#")
+                                    .replace(",", ".")
+                                    .replace("#", ",")
+                                )}
+                            </td>
+                          </tr>
+                        </>
                       )}
+
                       {option.subOptions.map((subOpt) => (
-                        <tr key={subOpt.id} className="text-xs">
-                          <td className="pl-2">
-                            ▸ {subOpt.itemNames}
-                            {subOpt.quantity > 1 && (
-                              <span className="ml-1 text-[--green-1]">
-                                {"(x" + subOpt.quantity + ")"}
-                              </span>
-                            )}
-                          </td>
-                          <td
-                            className={`pr-2 text-right ${
-                              subOpt.primaryPrice > 0
-                                ? "text-[--green-1]"
-                                : "text-[--red-1]"
-                            }`}
-                          >
-                            {subOpt.primaryPrice > 0
-                              ? `+`
-                              : subOpt.primaryPrice < 0
-                              ? `-`
-                              : ""}
-                            {subOpt.primaryPrice > 0 &&
-                              formatToPrice(subOpt.primaryPriceText)}
-                          </td>
-                        </tr>
+                        <React.Fragment key={subOpt.id}>
+                          <tr className="text-xs px-2">
+                            <td className="pl-6 font-bold">
+                              {subOpt.headerName}
+                            </td>
+                          </tr>
+
+                          <tr className="text-xs">
+                            <td className="pl-8">
+                              ▸ {subOpt.itemNames}
+                              {subOpt.quantity > 1 && (
+                                <span className="ml-1 text-[--green-1]">
+                                  {"(x" + subOpt.quantity + ")"}
+                                </span>
+                              )}
+                            </td>
+                            <td
+                              className={`pr-2 text-right ${
+                                subOpt.primaryPrice > 0
+                                  ? "text-[--green-1]"
+                                  : "text-[--red-1]"
+                              }`}
+                            >
+                              {subOpt.primaryPrice > 0
+                                ? `+`
+                                : subOpt.primaryPrice < 0
+                                ? `-`
+                                : ""}
+
+                              {subOpt.primaryPrice > 0 &&
+                                formatToPrice(
+                                  String(
+                                    (
+                                      subOpt.primaryPrice * subOpt.quantity
+                                    ).toFixed(2)
+                                  )
+                                    .replace(".", "#")
+                                    .replace(",", ".")
+                                    .replace("#", ",")
+                                )}
+                            </td>
+                          </tr>
+                        </React.Fragment>
                       ))}
                     </React.Fragment>
                   ))}
@@ -233,25 +289,28 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
         <div className="w-full border-t border-[--gr-1]">
           {order.totalPrice !== order.discountedPrice ? (
             <>
-              <div className="w-full flex items-center justify-end gap-2">
+              <div className="w-full flex items-center justify-between gap-2">
                 <p>Toplam:</p>
                 <p className="text-base">
                   {formatToPrice(order.totalPriceText)}
                 </p>
               </div>
-              <div className="w-full flex items-center justify-end gap-2">
+              <div className="w-full flex items-center justify-between gap-2">
                 <p>İndirim:</p>
                 <p className="text-base">
                   {formatToPrice(
                     String(
                       (order.totalPrice - order.discountedPrice).toFixed(2)
-                    ).replace(".", ",")
+                    )
+                      .replace(".", "#")
+                      .replace(",", ".")
+                      .replace("#", ",")
                   )}
                 </p>
               </div>
             </>
           ) : null}
-          <div className="w-full flex items-center justify-end gap-2">
+          <div className="w-full flex items-center justify-between gap-2">
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {order.totalPrice !== order.discountedPrice

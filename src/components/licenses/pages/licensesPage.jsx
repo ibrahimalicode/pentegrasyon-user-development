@@ -12,20 +12,18 @@ import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
+import orderFilterDates from "../../../enums/orderFilterDates";
 
 // REDUX
 import {
   getLicenses,
   resetGetLicensesState,
 } from "../../../redux/licenses/getLicensesSlice";
-import { getCities } from "../../../redux/data/getCitiesSlice";
-import { getNeighs } from "../../../redux/data/getNeighsSlice";
-import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import {
   getRestaurantsMap,
   resetGetRestaurantsMap,
 } from "../../../redux/restaurants/getRestaurantsMapSlice";
-import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
@@ -40,27 +38,10 @@ const LicensesPage = () => {
     entities,
   } = useSelector((state) => state.restaurants.getRestaurantsMap);
 
-  const { cities: citiesData } = useSelector((state) => state.data.getCities);
-
-  const { districts: districtsData, success: districtsSuccess } = useSelector(
-    (state) => state.data.getDistricts
-  );
-  const { neighs: neighsData, success: neighsSuccess } = useSelector(
-    (state) => state.data.getNeighs
-  );
-
   const [searchVal, setSearchVal] = useState("");
-  const [filter, setFilter] = useState({
-    city: null,
-    district: null,
-    marketplace: null,
-  });
+  const [filter, setFilter] = useState({});
   const [licensesData, setLicensesData] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
-
-  const [cities, setCities] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [neighs, setNeighs] = useState([]);
 
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
@@ -71,6 +52,63 @@ const LicensesPage = () => {
       getLicenses({
         pageNumber: number,
         pageSize: itemsPerPage,
+      })
+    );
+  }
+
+  function handleSearch(e) {
+    e.preventDefault();
+    if (!searchVal) return;
+    console.log(searchVal);
+    dispatch(
+      getLicenses({
+        pageNumber: 1,
+        pageSize: itemsPerPage,
+        searchKey: searchVal,
+        isActive: filter?.status?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
+        licenseTypeId: filter?.licenseTypeId?.value,
+        dateRange: filter?.dateRange?.value,
+      })
+    );
+    setPageNumber(1);
+  }
+
+  function handleFilter(bool) {
+    if (bool) {
+      const filterData = {
+        pageNumber: 1,
+        pageSize: itemsPerPage,
+        isActive: filter?.status?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
+        licenseTypeId: filter?.licenseTypeId?.value,
+        dateRange: filter?.dateRange?.value,
+      };
+      dispatch(getLicenses(filterData));
+    } else {
+      dispatch(
+        getLicenses({
+          pageNumber,
+          pageSize: itemsPerPage,
+        })
+      );
+      setFilter({});
+    }
+    setPageNumber(1);
+    setOpenFilter(false);
+  }
+
+  function clearSearch() {
+    setSearchVal("");
+    dispatch(
+      getLicenses({
+        pageNumber,
+        pageSize: itemsPerPage,
+        searchKey: null,
+        isActive: filter?.status?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
+        licenseTypeId: filter?.licenseTypeId?.value,
+        dateRange: filter?.dateRange?.value,
       })
     );
   }
@@ -112,60 +150,6 @@ const LicensesPage = () => {
     }
   }, [entities, restaurantsError, licenses]);
 
-  // GET AND SET CITIES
-  useEffect(() => {
-    if (!citiesData) {
-      dispatch(getCities());
-    } else {
-      setCities(citiesData);
-    }
-  }, [citiesData]);
-
-  // GET DISTRICTS
-  useEffect(() => {
-    if (filter.city?.id) {
-      dispatch(getDistricts({ cityId: filter.city.id }));
-      setFilter((prev) => {
-        return {
-          ...prev,
-          district: null,
-        };
-      });
-    }
-  }, [filter.city]);
-
-  // SET DISTRICTS
-  useEffect(() => {
-    if (districtsSuccess) {
-      setDistricts(districtsData);
-    }
-  }, [districtsSuccess]);
-
-  // GET NEIGHS
-  useEffect(() => {
-    if (filter.district?.id && filter.city?.id) {
-      dispatch(
-        getNeighs({
-          cityId: filter.city.id,
-          districtId: filter.district.id,
-        })
-      );
-      setFilter((prev) => {
-        return {
-          ...prev,
-          neighbourhood: null,
-        };
-      });
-    }
-  }, [filter.district]);
-
-  // SET NEIGHS
-  useEffect(() => {
-    if (neighsSuccess) {
-      setNeighs(neighsData);
-    }
-  }, [neighsSuccess]);
-
   //HIDE POPUP
   const { contentRef, setContentRef } = usePopup();
   const filterLicense = useRef();
@@ -194,11 +178,11 @@ const LicensesPage = () => {
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
-          <form className="w-full" onSubmit={() => {}}>
+          <form className="w-full" onSubmit={handleSearch}>
             <CustomInput
               onChange={(e) => {
                 setSearchVal(e);
-                // !e && clearSearch();
+                !e && clearSearch();
               }}
               value={searchVal}
               placeholder="Search..."
@@ -208,7 +192,7 @@ const LicensesPage = () => {
               className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
                 searchVal ? "block" : "hidden"
               }`}
-              // iconClick={clearSearch}
+              iconClick={clearSearch}
             />
           </form>
         </div>
@@ -255,21 +239,25 @@ const LicensesPage = () => {
                   />
 
                   <CustomSelect
-                    label="Şehir"
+                    label="Ayarlar"
                     style={{ padding: "1px 0px" }}
                     className="text-sm"
-                    options={[{ value: null, label: "Hepsi" }, ...cities]}
+                    options={[
+                      { value: null, label: "Hepsi" },
+                      { value: true, label: "Eklenmiş" },
+                      { value: false, label: "Eklenmemiş" },
+                    ]}
                     optionStyle={{ fontSize: ".8rem" }}
                     value={
-                      filter?.city
-                        ? filter.city
+                      filter?.isSettingsAdded
+                        ? filter.isSettingsAdded
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          city: selectedOption,
+                          isSettingsAdded: selectedOption,
                         };
                       });
                     }}
@@ -277,29 +265,6 @@ const LicensesPage = () => {
                 </div>
 
                 <div className="flex gap-6">
-                  <CustomSelect
-                    label="District"
-                    className2="sm:mt-[.75rem] mt-1"
-                    className="text-sm sm:mt-[.25rem]"
-                    isSearchable={false}
-                    style={{ padding: "0 !important" }}
-                    options={[{ value: null, label: "Hepsi" }, ...districts]}
-                    optionStyle={{ fontSize: ".8rem" }}
-                    value={
-                      filter?.district
-                        ? filter.district
-                        : { value: null, label: "Hepsi" }
-                    }
-                    onChange={(selectedOption) => {
-                      setFilter((prev) => {
-                        return {
-                          ...prev,
-                          district: selectedOption,
-                        };
-                      });
-                    }}
-                  />
-
                   <CustomSelect
                     label="Pazaryeri"
                     className2="sm:mt-[.75rem] mt-1"
@@ -312,16 +277,41 @@ const LicensesPage = () => {
                       ...MarketPalceIds,
                     ]}
                     value={
-                      filter?.marketplace
-                        ? filter.marketplace
+                      filter?.licenseTypeId
+                        ? filter.licenseTypeId
                         : { value: null, label: "Hepsi" }
                     }
                     onChange={(selectedOption) => {
                       setFilter((prev) => {
                         return {
                           ...prev,
-                          marketplaceId: selectedOption.id,
-                          marketplace: selectedOption,
+                          licenseTypeId: selectedOption,
+                        };
+                      });
+                    }}
+                  />
+
+                  <CustomSelect
+                    label="Bitiş Zamanı"
+                    className2="sm:mt-[.75rem] mt-1"
+                    className="text-sm sm:mt-[.25rem]"
+                    isSearchable={false}
+                    style={{ padding: "0 !important" }}
+                    optionStyle={{ fontSize: ".8rem" }}
+                    options={[
+                      { value: null, label: "Hepsi", id: null },
+                      ...orderFilterDates,
+                    ]}
+                    value={
+                      filter?.dateRange
+                        ? filter.dateRange
+                        : { value: null, label: "Hepsi" }
+                    }
+                    onChange={(selectedOption) => {
+                      setFilter((prev) => {
+                        return {
+                          ...prev,
+                          dateRange: selectedOption,
                         };
                       });
                     }}
@@ -331,13 +321,13 @@ const LicensesPage = () => {
                 <div className="w-full flex gap-2 justify-center pt-10">
                   <button
                     className="text-[--white-1] bg-[--red-1] py-2 px-12 rounded-lg hover:opacity-90"
-                    // onClick={() => handleFilter(false)}
+                    onClick={() => handleFilter(false)}
                   >
                     Temizle
                   </button>
                   <button
                     className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
-                    // onClick={() => handleFilter(true)}
+                    onClick={() => handleFilter(true)}
                   >
                     Uygula
                   </button>
@@ -356,7 +346,7 @@ const LicensesPage = () => {
       </div>
 
       {/* TABLE */}
-      {licensesData ? (
+      {licensesData && !loading && !restaurantsLoading ? (
         <LicensesTable
           inData={licensesData}
           onSuccess={() => setLicensesData(null)}

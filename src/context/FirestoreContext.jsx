@@ -81,6 +81,7 @@ export const FirestoreProvider = ({ children }) => {
         await setDoc(doc(userRef, "restaurantStatus", "data"), {});
         await setDoc(doc(userRef, "ticketAutomation", "data"), {});
         await setDoc(doc(userRef, "userLock", "data"), {});
+        await setDoc(doc(userRef, "courierStatus", "data"), {});
       }
     } catch (error) {
       console.log(error);

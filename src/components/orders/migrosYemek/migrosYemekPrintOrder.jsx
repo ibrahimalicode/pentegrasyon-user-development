@@ -119,42 +119,68 @@ const MigrosYemekPrintOrder = ({ order }) => {
                     {formatToPrice(order.priceText)}
                   </td>
                 </tr>
-                {order.options.map((cat) => (
-                  <React.Fragment key={cat.id}>
-                    {cat.subOptions.length > 0 && (
-                      <tr className="px-2">
-                        <td className="pl-2">{cat.headerName}</td>
-                      </tr>
+
+                {order.options.map((option, index) => (
+                  <React.Fragment key={index}>
+                    {option.subOptions.length >= 0 && (
+                      <>
+                        <tr className="px-2">
+                          <td className="pl-2 font-bold">
+                            {option.headerName}
+                          </td>
+                        </tr>
+
+                        <tr className="text-">
+                          <td className="pl-4">{option.itemNames}</td>
+                          <td className="pr-2 text-right">
+                            {option.primaryPrice > 0 &&
+                              formatToPrice(
+                                String(
+                                  (
+                                    option.primaryPrice * option.quantity
+                                  ).toFixed(2)
+                                )
+                                  .replace(".", "#")
+                                  .replace(",", ".")
+                                  .replace("#", ",")
+                              )}
+                          </td>
+                        </tr>
+                      </>
                     )}
-                    {cat.subOptions.map((opt) => (
-                      <tr key={opt.id} className="">
-                        <td className="pl-2">
-                          ▸ {opt.itemNames}
-                          {opt.quantity > 1 && (
-                            <span className="ml-1 text-[--green-1]">
-                              {"(x" + opt.quantity + ")"}
-                            </span>
-                          )}
-                        </td>
-                        <td
-                          className={`pr-2 text-right ${
-                            opt.primaryPrice > 0
-                              ? "text-[--green-1]"
-                              : "text-[--red-1]"
-                          }`}
-                        >
-                          {opt.primaryPrice > 0
-                            ? `+`
-                            : opt.primaryPrice < 0
-                            ? `-`
-                            : ""}
-                          {opt.primaryPrice > 0 &&
-                            formatToPrice(opt.primaryPriceText)}
-                        </td>
-                      </tr>
+
+                    {option.subOptions.map((subOpt) => (
+                      <React.Fragment key={subOpt.id}>
+                        <tr className="px-2">
+                          <td className="pl-6 font-bold">
+                            {subOpt.headerName}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td className="pl-8">
+                            ▸ {subOpt.itemNames}
+                            {subOpt.quantity > 1 && (
+                              <span className="ml-1">
+                                {"(x" + subOpt.quantity + ")"}
+                              </span>
+                            )}
+                          </td>
+                          <td className="pr-2 text-right">
+                            {subOpt.primaryPrice > 0
+                              ? `+`
+                              : subOpt.primaryPrice < 0
+                              ? `-`
+                              : ""}
+                            {subOpt.primaryPrice > 0 &&
+                              formatToPrice(subOpt.primaryPriceText)}
+                          </td>
+                        </tr>
+                      </React.Fragment>
                     ))}
                   </React.Fragment>
                 ))}
+
                 {order.note && (
                   <tr>
                     <td className="relative text-base">
@@ -184,14 +210,19 @@ const MigrosYemekPrintOrder = ({ order }) => {
             </p>
             <p className="flex justify-between">
               <span>
-                %{(100 / order.totalPrice) * order.discountedPrice} iskonto :{" "}
+                %
+                {(
+                  (100 / order.totalPrice) *
+                  (order.totalPrice - order.discountedPrice)
+                ).toFixed(2)}{" "}
+                iskonto :{" "}
               </span>{" "}
-              {/* LOOK */}
               <span>
                 {formatToPrice(
-                  String(
-                    (order.totalPrice - order.discountedPrice).toFixed(2)
-                  ).replace(".", ",")
+                  String((order.totalPrice - order.discountedPrice).toFixed(2))
+                    .replace(".", "#")
+                    .replace(",", ".")
+                    .replace("#", ",")
                 )}
               </span>
             </p>

@@ -52,19 +52,12 @@ const getRestaurantLicensesSlice = createSlice({
 
 export const getRestaurantLicenses = createAsyncThunk(
   "Licenses/GetLicensesByRestaurantId",
-  async (
-    { restaurantId, pageNumber = null, pageSize = null },
-    { rejectWithValue }
-  ) => {
+  async (data, { rejectWithValue }) => {
     try {
       const res = await api.get(
         `${baseURL}Licenses/GetLicensesByRestaurantId`,
         {
-          params: {
-            restaurantId,
-            pageNumber,
-            pageSize,
-          },
+          params: data,
         }
       );
 

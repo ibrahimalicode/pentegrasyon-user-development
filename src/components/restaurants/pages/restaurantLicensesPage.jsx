@@ -85,7 +85,7 @@ const RestaurantLicensesPage = () => {
         pageSize: itemsPerPage,
         isActive: filter?.status?.value,
         dateRange: filter?.dateRange?.value,
-        licenseTypeId: filter?.licenseTypeId?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
         isSettingsAdded: filter?.isSettingsAdded?.value,
       })
     );
@@ -101,7 +101,7 @@ const RestaurantLicensesPage = () => {
         pageSize: itemsPerPage,
         isActive: filter?.status?.value,
         isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
         dateRange: filter?.dateRange?.value,
       };
       dispatch(getRestaurantLicenses(filterData));
@@ -130,7 +130,7 @@ const RestaurantLicensesPage = () => {
         restaurantId: restaurant.id,
         isActive: filter?.status?.value,
         dateRange: filter?.dateRange?.value,
-        licenseTypeId: filter?.licenseTypeId?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
         isSettingsAdded: filter?.isSettingsAdded?.value,
       })
     );
@@ -248,7 +248,7 @@ const RestaurantLicensesPage = () => {
                 !e && clearSearch();
               }}
               value={searchVal}
-              placeholder="Search..."
+              placeholder="Ara..."
               className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}

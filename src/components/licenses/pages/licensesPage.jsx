@@ -56,6 +56,7 @@ const LicensesPage = () => {
     );
   }
 
+  //SEARCH
   function handleSearch(e) {
     e.preventDefault();
     if (!searchVal) return;
@@ -67,13 +68,14 @@ const LicensesPage = () => {
         searchKey: searchVal,
         isActive: filter?.status?.value,
         isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
         dateRange: filter?.dateRange?.value,
       })
     );
     setPageNumber(1);
   }
 
+  //FILTER AND CLEAR FILTER
   function handleFilter(bool) {
     if (bool) {
       const filterData = {
@@ -81,7 +83,7 @@ const LicensesPage = () => {
         pageSize: itemsPerPage,
         isActive: filter?.status?.value,
         isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
         dateRange: filter?.dateRange?.value,
       };
       dispatch(getLicenses(filterData));
@@ -98,6 +100,7 @@ const LicensesPage = () => {
     setOpenFilter(false);
   }
 
+  //CLEAR SEARCH
   function clearSearch() {
     setSearchVal("");
     dispatch(
@@ -107,7 +110,7 @@ const LicensesPage = () => {
         searchKey: null,
         isActive: filter?.status?.value,
         isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
         dateRange: filter?.dateRange?.value,
       })
     );
@@ -185,7 +188,7 @@ const LicensesPage = () => {
                 !e && clearSearch();
               }}
               value={searchVal}
-              placeholder="Search..."
+              placeholder="Ara..."
               className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}

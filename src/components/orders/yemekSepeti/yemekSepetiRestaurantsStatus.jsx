@@ -20,20 +20,22 @@ import {
   resetYemekSepetiUpdateRestaurantCourierStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantCourierStatusSlice";
 
-const YemekSepetiRestaurantsStatus = ({ statRest, license }) => {
+const YemekSepetiRestaurantsStatus = ({ statRest, licenses }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
-
-  const { entities, error: mapError } = useSelector(
-    (state) => state.restaurants.getRestaurantsMap
-  );
 
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.yemekSepeti.updateRestaurants);
 
   const { loading: updateCourierLoading, error: updateCourierError } =
     useSelector((state) => state.yemekSepeti.updateRestaurantsCourier);
+
+  function isActive(key) {
+    return licenses.filter(
+      (L) => L.restaurantId == statusData[key].restaurantId
+    )[0].isActive;
+  }
 
   //UPDATE RESTAURANT STATUS
   function updateRestaurantStatus(id) {
@@ -240,9 +242,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, license }) => {
                             className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantStatus(key)}
                             checked={statusData[key].restaurantStatus}
-                            disabled={
-                              updateRestaurantLoading || !license.isActive
-                            }
+                            disabled={updateRestaurantLoading || !isActive(key)}
                           />
                         </div>
                       </div>

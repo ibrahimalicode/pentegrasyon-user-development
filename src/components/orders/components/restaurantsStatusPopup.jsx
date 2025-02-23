@@ -95,9 +95,9 @@ const RestaurantsStatusPopup = ({ licenses, inData }) => {
             className={`transition-all duration-700 transform ${sections[i]}`}
           >
             <Comp
-              license={
-                licenses.filter(({ licenseTypeId }) => licenseTypeId === id)[0]
-              }
+              licenses={licenses.filter(
+                ({ licenseTypeId }) => licenseTypeId === id
+              )}
               statRest={restaurantsData.filter(
                 ({ marketplaceId }) => marketplaceId === id
               )}

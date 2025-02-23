@@ -20,7 +20,7 @@ import {
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
 
-const GetirYemekRestaurantsStatus = ({ statRest, license }) => {
+const GetirYemekRestaurantsStatus = ({ statRest, licenses }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -30,6 +30,12 @@ const GetirYemekRestaurantsStatus = ({ statRest, license }) => {
 
   const { loading: updateCourierLoading, error: updateCourierError } =
     useSelector((state) => state.getirYemek.updateRestaurantsCourier);
+
+  function isActive(key) {
+    return licenses.filter(
+      (L) => L.restaurantId == statusData[key].restaurantId
+    )[0].isActive;
+  }
 
   //UPDATE RESTAURANT STATUS
   function updateRestaurantStatus(id) {
@@ -177,9 +183,7 @@ const GetirYemekRestaurantsStatus = ({ statRest, license }) => {
                             className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantStatus(key)}
                             checked={statusData[key].restaurantStatus}
-                            disabled={
-                              updateRestaurantLoading || !license?.isActive
-                            }
+                            disabled={updateRestaurantLoading || !isActive(key)}
                           />
                         </div>
                         {statusData[key].restaurantStatus && (
@@ -193,9 +197,7 @@ const GetirYemekRestaurantsStatus = ({ statRest, license }) => {
                                 updateRestaurantCourierStatus(key)
                               }
                               checked={restaurant.courierStatus}
-                              disabled={
-                                updateCourierLoading || !license?.isActive
-                              }
+                              disabled={updateCourierLoading || !isActive(key)}
                             />
                           </div>
                         )}

@@ -18,7 +18,7 @@ import {
   resetMigrosYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantCourierStatusSlice";
 
-const MigrosYemekRestaurantsStatus = ({ statRest, license }) => {
+const MigrosYemekRestaurantsStatus = ({ statRest, licenses }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -28,6 +28,12 @@ const MigrosYemekRestaurantsStatus = ({ statRest, license }) => {
 
   const { loading: updateCourierLoading, error: updateCourierError } =
     useSelector((state) => state.migrosYemek.updateRestaurantsCourier);
+
+  function isActive(key) {
+    return licenses.filter(
+      (L) => L.restaurantId == statusData[key].restaurantId
+    )[0].isActive;
+  }
 
   function updateRestaurantStatus(id) {
     const updatedStat = {
@@ -171,9 +177,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, license }) => {
                             className2="order-1 ml-[0]"
                             onChange={() => updateRestaurantStatus(key)}
                             checked={statusData[key].restaurantStatus}
-                            disabled={
-                              updateRestaurantLoading || !license?.isActive
-                            }
+                            disabled={updateRestaurantLoading || !isActive(key)}
                           />
                         </div>
                         {statusData[key].restaurantStatus && (
@@ -188,7 +192,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, license }) => {
                               }
                               checked={restaurant.courierStatus}
                               disabled={
-                                updateCourierLoading || !license?.isActive
+                                updateCourierLoading || !licenses?.isActive
                               }
                             />
                           </div>

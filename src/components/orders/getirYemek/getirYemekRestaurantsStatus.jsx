@@ -153,7 +153,6 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses }) => {
     }
   }, [updateCourierLoading, updateCourierError]);
 
-  console.log(statRest);
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (

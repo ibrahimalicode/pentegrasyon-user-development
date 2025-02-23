@@ -52,6 +52,10 @@ const LicensesPage = () => {
       getLicenses({
         pageNumber: number,
         pageSize: itemsPerPage,
+        isActive: filter?.status?.value,
+        isSettingsAdded: filter?.isSettingsAdded?.value,
+        licenseTypeId: filter?.licenseTypeId?.id,
+        dateRange: filter?.dateRange?.value,
       })
     );
   }

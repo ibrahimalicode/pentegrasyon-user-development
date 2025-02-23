@@ -34,7 +34,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   function isActive(key) {
     return licenses.filter(
       (L) => L.restaurantId == statusData[key].restaurantId
-    )[0].isActive;
+    )[0]?.isActive;
   }
 
   //UPDATE RESTAURANT STATUS

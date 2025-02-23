@@ -130,8 +130,8 @@ const YemekSepetiRestaurantsStatus = ({ statRest, license }) => {
       const seenIds = new Set();
 
       uniqueStatRest.map((res) => {
-        const isDuplicate = seenIds.has(res.marketplaceRestaurantId);
-        seenIds.add(res.marketplaceRestaurantId);
+        const isDuplicate = seenIds.has(res.restaurantId);
+        seenIds.add(res.restaurantId);
 
         formattedData[res.restaurantId] = {
           ...res,

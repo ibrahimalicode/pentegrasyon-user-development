@@ -6,7 +6,8 @@ import { useEditUserInvoice } from "../../../../hooks/useEditUserInvoice";
 
 //REDUX
 import EditUserInvoice from "../../invoice/editUserInvoice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../../redux/user/getUserSlice";
 
 const InvoiceData = ({
   title,
@@ -19,6 +20,7 @@ const InvoiceData = ({
   setInvoiceBeforeAfter,
 }) => {
   const dispatcher = useRef();
+  const dispatch = useDispatch();
   const { error: updateInvError, success: updateInvSucc } = useSelector(
     (state) => state.user.updateInvoice
   );
@@ -62,6 +64,7 @@ const InvoiceData = ({
       const district = userInvoice.district?.label;
       const neighbourhood = userInvoice.neighbourhood?.label;
       setUserInvData({ ...userInvoice, city, district, neighbourhood });
+      dispatch(getUser());
     }
   }, [addInvError, updateInvError, addInvSucc, updateInvSucc]);
 

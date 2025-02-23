@@ -10,6 +10,7 @@ import CustomInput from "../../common/customInput";
 import CustomToggle from "../../common/customToggle";
 import sidebarItems from "../../../enums/sidebarItems";
 import CustomCheckbox from "../../common/customCheckbox";
+import AuthorizePopup from "../components/authorizePopup";
 import ConfirmationPopup from "../components/confirmationPopup";
 
 //UTILS
@@ -18,10 +19,9 @@ import { useProtectPages } from "../../../context/ProtectPagesContext";
 
 //REDUX
 import {
-  resetupdateUserLock,
   updateUserLock,
+  resetupdateUserLock,
 } from "../../../redux/user/updateUserLockSlice";
-import AuthorizePopup from "../components/authorizePopup";
 
 const ProtectPage = () => {
   const toastId = useRef();
@@ -63,10 +63,10 @@ const ProtectPage = () => {
     if (!isAuthorized && protectedPages?.lock) {
       setPopupContent(<AuthorizePopup setIsAuthorized={setIsAuthorized} />);
     } else {
-      setIsAuthorized(true);
+      setIsAuthorized(protectedPages ? true : false);
     }
     if (protectedPages) setIsLockedData(protectedPages);
-  }, [isAuthorized && protectedPages]);
+  }, [isAuthorized, protectedPages]);
 
   //UPDATE
   useEffect(() => {

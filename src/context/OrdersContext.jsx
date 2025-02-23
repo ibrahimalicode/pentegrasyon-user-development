@@ -28,7 +28,7 @@ export const OrdersContextProvider = ({ children }) => {
   const dispatch = useDispatch();
   const token = getAuth()?.token;
   const timeoutRef = useRef(null);
-  const { setPopupContent } = usePopup();
+  const { popupContent, setPopupContent } = usePopup();
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
@@ -167,7 +167,7 @@ export const OrdersContextProvider = ({ children }) => {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
 
-    if (audioContext.state === "suspended" && token) {
+    if (audioContext.state === "suspended" && token && !popupContent) {
       const popupContent = (
         <main className="bg-[--white-1] rounded-sm p-5">
           <div className="flex justify-end mb-3">

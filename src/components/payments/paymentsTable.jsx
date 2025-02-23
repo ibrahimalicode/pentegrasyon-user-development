@@ -3,11 +3,24 @@ import { useSelector } from "react-redux";
 
 //UTILS
 import { formatDateString } from "../../utils/utils";
-import PaymentStatus from "../../enums/paymentStatus";
 import PaymentLicenseType from "../../enums/paymentLicenseType";
+import ChangePaymentStatus from "./actions/changePaymentStatus";
 
 const PaymentsTable = ({ inData, totalItems = inData.length, onSuccess }) => {
   const { user } = useSelector((state) => state.user.getUser);
+
+  function formatFilePath(filePath) {
+    if (!filePath) return null;
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+    const formattedPath = filePath.replace(
+      /^C:\\inetpub\\wwwroot\\PentegrasyonAPI/,
+      ""
+    );
+
+    const urlPath = formattedPath.replace(/\\/g, "/");
+    return baseUrl.replace("/api/v1/", "") + urlPath;
+  }
+
   return (
     <main className="max-xl:overflow-x-scroll">
       <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
@@ -16,11 +29,10 @@ const PaymentsTable = ({ inData, totalItems = inData.length, onSuccess }) => {
             <tr className="bg-[--light-3] h-8 text-left">
               <th className="pl-4 font-normal">Ad Soyad</th>
               <th className="font-normal">Sipariş No.</th>
-              <th className="font-normal">Sebep</th>
-              <th className="font-normal">Method</th>
-              <th className="font-normal">Amount</th>
+              <th className="font-normal">Ürün Adı</th>
+              <th className="font-normal">Ödeme Tipi</th>
+              <th className="font-normal">Tutar</th>
               <th className="font-normal">Durum</th>
-              <th className="font-normal">İl</th>
               <th className="font-normal text-center">Tarih</th>
             </tr>
           </thead>
@@ -42,20 +54,27 @@ const PaymentsTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {PaymentLicenseType[data?.type]?.label}
                 </td>
-
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.paymentType}
+                  <a
+                    href={formatFilePath(data.receiptFilePath)}
+                    target="_blank"
+                    className={`px-1 py-1.5 ${
+                      formatFilePath(data.receiptFilePath)
+                        ? "border border-[--primary-1] rounded-md hover:cursor-pointer"
+                        : "pointer-events-none"
+                    }`}
+                  >
+                    {data.provider}
+                  </a>
                 </td>
+
                 <td className="whitespace-nowrap text-[--black-2] font-light">
                   {data.amount}
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {PaymentStatus[data?.status]?.label}
+                  <ChangePaymentStatus payment={data} />
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {user?.city}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className="whitespace-nowrap text-[--black-2] font-light text-center">
                   {formatDateString({ dateString: data.createdDateTime })}
                 </td>
               </tr>

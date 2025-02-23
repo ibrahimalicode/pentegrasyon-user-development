@@ -255,9 +255,9 @@ const RestaurantsStatus = ({ licenses }) => {
           setSlideBarContent({
             content: (
               <RestaurantsStatusPopup
-                inData={statusesData}
                 licenses={licenses}
-                onSuccess={setStatusesData(null)}
+                inData={statusesData}
+                onSuccess={() => setStatusesData(null)}
               />
             ),
           })

@@ -62,9 +62,9 @@ function DeleteIntegrationInfoPopup({ data, restaurant, onSuccess }) {
       toast.dismiss(toastId.current);
       dispatch(resetDeleteRestaurantByMarketplaceRestaurantId());
       if (success) {
+        onSuccess();
         setPopupContent(null);
         setSlideBarContent(null);
-        onSuccess();
         toast.success("Pazaryeri Restoranı Başarıyla Silindi.");
       }
     }

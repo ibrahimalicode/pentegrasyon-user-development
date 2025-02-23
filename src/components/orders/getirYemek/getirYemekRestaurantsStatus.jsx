@@ -34,7 +34,7 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   function isActive(key) {
     return licenses.filter(
       (L) => L.restaurantId == statusData[key].restaurantId
-    )[0].isActive;
+    )[0]?.isActive;
   }
 
   //UPDATE RESTAURANT STATUS
@@ -203,8 +203,8 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                         )}
                       </div>
                       <DeleteIntegrationInfo
-                        restaurant={restaurant}
                         onSuccess={onSuccess}
+                        restaurant={restaurant}
                       />
                     </div>
                   </div>

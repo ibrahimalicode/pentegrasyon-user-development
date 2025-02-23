@@ -111,8 +111,8 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses }) => {
 
       const formattedData = [];
       statRest.map((res) => {
-        const isDuplicate = seenIds.has(res.restaurantId);
-        seenIds.add(res.restaurantId);
+        const isDuplicate = seenIds.has(res.marketplaceRestaurantId);
+        seenIds.add(res.marketplaceRestaurantId);
 
         formattedData[res.id] = {
           ...res,

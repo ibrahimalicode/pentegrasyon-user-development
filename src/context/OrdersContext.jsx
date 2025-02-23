@@ -32,7 +32,7 @@ export const OrdersContextProvider = ({ children }) => {
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
-  const { data: countData } = useSelector(
+  const { data: countData, success: countSuccess } = useSelector(
     (state) => state.dashboard.ordersCount
   );
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
@@ -122,12 +122,12 @@ export const OrdersContextProvider = ({ children }) => {
 
   //SET ORDER COUNT
   useEffect(() => {
-    if (countData) {
+    if (countSuccess) {
       console.log(countData);
       setOrdersCount(countData);
       dispatch(resetGetTicketCountStatistics());
     }
-  }, [countData]);
+  }, [countData, countSuccess]);
 
   //TOAST AND SET ORDERS
   useEffect(() => {

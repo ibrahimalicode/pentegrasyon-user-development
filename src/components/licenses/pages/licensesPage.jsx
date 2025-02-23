@@ -13,7 +13,7 @@ import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 import MarketPalceIds from "../../../enums/marketPlaceIds";
-import orderFilterDates from "../../../enums/orderFilterDates";
+import licenseFilterDates from "../../../enums/licenseFilterDates";
 
 // REDUX
 import {
@@ -206,6 +206,13 @@ const LicensesPage = () => {
 
         <div className="max-sm:w-full flex justify-end">
           <div className="flex gap-2 max-sm:order-1 ">
+            <div>
+              <AddLicense
+                licenses={licensesData}
+                onSuccess={() => setLicensesData(null)}
+              />
+            </div>
+
             <div className="w-full relative" ref={filterLicense}>
               <button
                 className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
@@ -215,7 +222,7 @@ const LicensesPage = () => {
               </button>
 
               <div
-                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
+                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-50 ${
                   openFilter ? "visible" : "hidden"
                 }`}
               >
@@ -307,7 +314,7 @@ const LicensesPage = () => {
                     optionStyle={{ fontSize: ".8rem" }}
                     options={[
                       { value: null, label: "Hepsi", id: null },
-                      ...orderFilterDates,
+                      ...licenseFilterDates,
                     ]}
                     value={
                       filter?.dateRange
@@ -340,13 +347,6 @@ const LicensesPage = () => {
                   </button>
                 </div>
               </div>
-            </div>
-
-            <div>
-              <AddLicense
-                licenses={licensesData}
-                onSuccess={() => setLicensesData(null)}
-              />
             </div>
           </div>
         </div>

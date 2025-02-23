@@ -19,9 +19,8 @@ const EditLicenseIsActive = ({ licenseData, onSuccess }) => {
   const { setPopupContent } = usePopup();
 
   const handleClick = () => {
-    setPopupContent(
-      <EditLicenseIsActivesPopup onSuccess={onSuccess} license={licenseData} />
-    );
+    setPopupContent();
+    // <EditLicenseIsActivesPopup onSuccess={onSuccess} license={licenseData} />
   };
 
   return (

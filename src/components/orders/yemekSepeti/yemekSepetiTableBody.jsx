@@ -57,6 +57,7 @@ const YemekSepetiTableBody = ({
     const currentLicense = licenses.find(
       (L) => L.restaurantId === order.restaurantId
     );
+    console.log(currentLicense);
     if (currentLicense && !currentLicense?.isActive) return;
 
     setSlideBarContent(

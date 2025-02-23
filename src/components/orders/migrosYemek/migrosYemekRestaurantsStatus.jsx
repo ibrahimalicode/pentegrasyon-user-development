@@ -18,7 +18,7 @@ import {
   resetMigrosYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantCourierStatusSlice";
 
-const MigrosYemekRestaurantsStatus = ({ statRest, licenses }) => {
+const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -198,9 +198,10 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses }) => {
                           </div>
                         )}
                       </div>
-                      {restaurant.isDuplicate && (
-                        <DeleteIntegrationInfo restaurant={restaurant} />
-                      )}
+                      <DeleteIntegrationInfo
+                        restaurant={restaurant}
+                        onSuccess={onSuccess}
+                      />
                     </div>
                   </div>
                 );

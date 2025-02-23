@@ -30,7 +30,9 @@ const OrdersTable = ({ licenses, ordersData, setOrdersData }) => {
       TableBody: (
         <TableBodyComp
           order={order}
-          licenses={licenses}
+          licenses={licenses.filter(
+            (L) => L.licenseTypeId == order.marketplaceId
+          )}
           totalItems={ordersData?.length}
           setOrdersData={setOrdersData}
         />

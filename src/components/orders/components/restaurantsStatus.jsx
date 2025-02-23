@@ -257,6 +257,7 @@ const RestaurantsStatus = ({ licenses }) => {
               <RestaurantsStatusPopup
                 inData={statusesData}
                 licenses={licenses}
+                onSuccess={setStatusesData(null)}
               />
             ),
           })

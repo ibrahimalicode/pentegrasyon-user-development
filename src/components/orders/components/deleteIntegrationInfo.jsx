@@ -16,7 +16,7 @@ import {
 } from "../../../redux/marketplaceRestaurants/deleteRestaurantByMarketplaceRestaurantIdSlice";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
-const DeleteIntegrationInfo = ({ restaurant }) => {
+const DeleteIntegrationInfo = ({ restaurant, onSuccess }) => {
   const { setPopupContent } = usePopup();
 
   function handleClick() {
@@ -24,6 +24,7 @@ const DeleteIntegrationInfo = ({ restaurant }) => {
     setPopupContent(
       <DeleteIntegrationInfoPopup
         restaurant={restaurant}
+        onSuccess={onSuccess}
         data={{ marketplaceRestaurantId, marketplace }}
       />
     );
@@ -39,7 +40,7 @@ const DeleteIntegrationInfo = ({ restaurant }) => {
 
 export default DeleteIntegrationInfo;
 
-function DeleteIntegrationInfoPopup({ data, restaurant }) {
+function DeleteIntegrationInfoPopup({ data, restaurant, onSuccess }) {
   const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
@@ -63,6 +64,7 @@ function DeleteIntegrationInfoPopup({ data, restaurant }) {
       if (success) {
         setPopupContent(null);
         setSlideBarContent(null);
+        onSuccess();
         toast.success("Pazaryeri Restoranı Başarıyla Silindi.");
       }
     }

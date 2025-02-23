@@ -20,7 +20,7 @@ import {
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
 
-const GetirYemekRestaurantsStatus = ({ statRest, licenses }) => {
+const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const toastId = useRef();
   const dispatch = useDispatch();
   const [statusData, setStatusData] = useState(null);
@@ -202,9 +202,10 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses }) => {
                           </div>
                         )}
                       </div>
-                      {restaurant.isDuplicate && (
-                        <DeleteIntegrationInfo restaurant={restaurant} />
-                      )}
+                      <DeleteIntegrationInfo
+                        restaurant={restaurant}
+                        onSuccess={onSuccess}
+                      />
                     </div>
                   </div>
                 );

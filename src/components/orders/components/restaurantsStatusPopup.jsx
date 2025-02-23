@@ -9,7 +9,7 @@ import GetirYemekRestaurantsStatus from "../getirYemek/getirYemekRestaurantsStat
 import MigrosYemekRestaurantsStatus from "../migrosYemek/migrosYemekRestaurantsStatus";
 import YemekSepetiRestaurantsStatus from "../yemekSepeti/yemekSepetiRestaurantsStatus";
 
-const RestaurantsStatusPopup = ({ licenses, inData }) => {
+const RestaurantsStatusPopup = ({ licenses, inData, onSuccess }) => {
   const { setSlideBarContent } = useSlideBar();
   const [sections, setSections] = useState(
     new Array(4).fill("-translate-y-full opacity-0")
@@ -95,6 +95,7 @@ const RestaurantsStatusPopup = ({ licenses, inData }) => {
             className={`transition-all duration-700 transform ${sections[i]}`}
           >
             <Comp
+              onSuccess={onSuccess}
               licenses={licenses.filter(
                 ({ licenseTypeId }) => licenseTypeId === id
               )}

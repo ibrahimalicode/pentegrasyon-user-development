@@ -123,7 +123,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
       )[0]?.value;
     }
 
-    if (statRest && !statusData) {
+    if (statRest) {
       const uniqueStatRest = statRest.filter(
         (item, index, self) => index === self.findIndex((t) => t.id === item.id)
       );

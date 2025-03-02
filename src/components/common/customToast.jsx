@@ -33,8 +33,18 @@ export default function CustomToast({ color, message, t }) {
         <div className="flex items-start">
           <div className="flex-shrink-0 pt-0.5"></div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-900">{message.title}</p>
-            <p className="mt-1 text-sm text-gray-500">{message.content}</p>
+            <p
+              className="text-sm font-medium text-gray-900"
+              dangerouslySetInnerHTML={{ __html: message.title }}
+            >
+              {/* {message.title} */}
+            </p>
+            <p
+              className="mt-1 text-sm text-gray-500"
+              dangerouslySetInnerHTML={{ __html: message.content }}
+            >
+              {/* {message.content} */}
+            </p>
           </div>
         </div>
       </div>

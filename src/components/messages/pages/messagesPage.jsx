@@ -45,12 +45,17 @@ const MessagesPage = () => {
                 key={_.id}
                 className="border-2 border-[--border-1] rounded-md p-2 bg-[--light-1]"
               >
-                <p className="font-bold pb-1">{_.title}</p>
+                <p
+                  className="font-bold pb-1"
+                  dangerouslySetInnerHTML={{ __html: _.title }}
+                >
+                  {/* {_.title} */}
+                </p>
                 <p
                   className="text-sm pl-3"
-                  // dangerouslySetInnerHTML={{ __html: _.content }}
+                  dangerouslySetInnerHTML={{ __html: _.content }}
                 >
-                  {_.content}
+                  {/* {_.content} */}
                 </p>
                 <div className="flex justify-end text-xs items-center gap-1.5">
                   <p>

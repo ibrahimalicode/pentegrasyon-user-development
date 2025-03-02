@@ -20,6 +20,12 @@ const YemekSepetiPrintOrder = ({ order }) => {
     return googleMapsUrl;
   }
 
+  function getPhoneNumber() {
+    return order.customer.mobilePhone
+      ? order.customer.mobilePhone
+      : order.customer.customerPhoneNumber.split("/")[0];
+  }
+
   return (
     <main className="flex flex-col justify-center p-4 bg-[--light-3] font-normal mx-auto">
       <div className="text-center mb-2">
@@ -232,10 +238,12 @@ const YemekSepetiPrintOrder = ({ order }) => {
             <p className="flex justify-between">
               <span>
                 %
-                {(100 /
-                  (Number(order.grandTotal) +
-                    Number(order.discountAmountTotal))) *
-                  Number(order.discountAmountTotal).toFixed(2)}{" "}
+                {(
+                  (100 /
+                    (Number(order.grandTotal) +
+                      Number(order.discountAmountTotal))) *
+                  Number(order.discountAmountTotal)
+                ).toFixed(2)}{" "}
                 iskonto :{" "}
               </span>{" "}
               {/* LOOK */}
@@ -262,9 +270,16 @@ const YemekSepetiPrintOrder = ({ order }) => {
       </div>
 
       <div className="text-lg text-center">
-        <p>Müşteri Konumu QR</p>
-        <div className="flex justify-center my-2">
-          <QrGenerator text={getGoogleAddress()} />
+        <div className="flex justify-center gap-4 mb-10">
+          <div className="w-1/3 flex flex-col items-center">
+            <p className="my-5">Müşteri Konumu QR</p>
+            <QrGenerator text={getGoogleAddress()} />
+          </div>
+
+          <div className="w-1/3 flex flex-col items-center">
+            <p className="my-5">Müşteri Telefonu</p>
+            <QrGenerator text={getPhoneNumber()} />
+          </div>
         </div>
         <p>
           <span className="font-bold" style={{ fontFamily: "conthrax" }}>

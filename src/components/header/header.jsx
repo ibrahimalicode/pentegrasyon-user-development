@@ -86,9 +86,9 @@ function Header({ openSidebar, setOpenSidebar }) {
             <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer relative">
               <BellI />
               {messagesData &&
-                messagesData.filter((_) => !_.isRead).length > 0 && (
+                messagesData?.filter((_) => !_.isRead).length > 0 && (
                   <span className="absolute -top-2 -left-2 text-xs border border-[--primary-1] bg-[--primary-1] text-[--white-1] rounded-full size-6 flex justify-center items-center">
-                    {messagesData.filter((_) => !_.isRead).length}
+                    {messagesData?.filter((_) => !_.isRead).length}
                   </span>
                 )}
             </div>

@@ -12,6 +12,12 @@ const GetirYemekPrintOrder = ({ order }) => {
     return googleMapsUrl;
   }
 
+  function getPhoneNumber() {
+    return order.client.clientUnmaskedPhoneNumber
+      ? order.client.clientUnmaskedPhoneNumber
+      : order.client.clientPhoneNumber.split("/")[0];
+  }
+
   return (
     <main className="flex flex-col justify-center p-4 bg-[--light-3] font-normal mx-auto">
       <div className="text-center mb-2">
@@ -232,9 +238,16 @@ const GetirYemekPrintOrder = ({ order }) => {
       </div>
 
       <div className="text-lg text-center">
-        <p>Müşteri Konumu QR</p>
-        <div className="flex justify-center my-2">
-          <QrGenerator text={getLocationLink()} />
+        <div className="flex justify-center gap-4 mb-10">
+          <div className="w-1/3 flex flex-col items-center">
+            <p className="my-5">Müşteri Konumu QR</p>
+            <QrGenerator text={getLocationLink()} />
+          </div>
+
+          <div className="w-1/3 flex flex-col items-center">
+            <p className="my-5">Müşteri Telefonu</p>
+            <QrGenerator text={getPhoneNumber()} />
+          </div>
         </div>
         <p>
           <span className="font-bold" style={{ fontFamily: "conthrax" }}>

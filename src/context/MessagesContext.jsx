@@ -80,7 +80,7 @@ export const MessagesContextProvider = ({ children }) => {
         .filter((msg) => msg.statusCode == 200)
         .map((msg) => ({ ...msg.message, isRead: true }));
 
-      if (updatedMessages.length > 0) {
+      if (updatedMessages.length > 0 && messagesData) {
         const uniqueMessages = messagesData.filter(
           (existingMessage) =>
             !updatedMessages.some(

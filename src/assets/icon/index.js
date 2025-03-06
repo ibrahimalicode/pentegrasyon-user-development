@@ -40,6 +40,8 @@ import RotateI from "./rotate";
 import CloseI from "./close";
 import LockI from "./lock";
 import SeenI from "./seen";
+import SunI from "./sun";
+import MoonI from "./moon";
 
 export {
   DashboardI,
@@ -82,4 +84,6 @@ export {
   CloseI,
   LockI,
   SeenI,
+  SunI,
+  MoonI,
 };

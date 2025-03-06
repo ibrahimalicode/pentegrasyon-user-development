@@ -79,7 +79,7 @@ const OnTheWayTime = ({ automationDatas, setAutomationDatas }) => {
   }, [loading, error]);
 
   return (
-    <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2">
+    <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2 text-[--black-1]">
       <p>Yola Çıkar</p>
       <CustomSelect
         className="mt-[0px] sm:mt-[0px] text-xs"

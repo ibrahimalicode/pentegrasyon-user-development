@@ -10,7 +10,6 @@ import "./index.css";
 import App from "./App";
 import store from "./store";
 import toastOptions from "./config/toast";
-// import { SignalRProvider } from "./context/SignalRContext";
 import { OrdersContextProvider } from "./context/OrdersContext";
 import { PopupProvider } from "./context/PopupContext";
 import { ProtectPagesProvider } from "./context/ProtectPagesContext";
@@ -26,10 +25,8 @@ root.render(
           <FirestoreProvider>
             <OrdersContextProvider>
               <MessagesContextProvider>
-                <div className="light">
-                  <App />
-                  <Toaster toastOptions={toastOptions} />
-                </div>
+                <App />
+                <Toaster toastOptions={toastOptions} />
               </MessagesContextProvider>
             </OrdersContextProvider>
           </FirestoreProvider>

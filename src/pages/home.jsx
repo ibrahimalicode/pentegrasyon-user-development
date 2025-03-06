@@ -22,7 +22,7 @@ import ProtectedPages from "./protectedPages";
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   return (
-    <section>
+    <section className="bg-[--white-1]">
       <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Routes>

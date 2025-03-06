@@ -111,7 +111,9 @@ const SalesBar = () => {
     <main className="w-full px-2 sm:px-9 mt-1.5 bg-[--white-1] rounded-md border-2 border-solid border-[--light-1] max-md:overflow-x-scroll">
       <div className="flex flex-col gap-2.5 w-full min-w-[36rem]">
         <main className="flex w-full justify-between pt-6 z-[51] relative">
-          <h2 className="text-2xl font-bold whitespace-nowrap">Toplam Satış</h2>
+          <h2 className="text-2xl font-bold whitespace-nowrap text-[--black-1]">
+            Toplam Satış
+          </h2>
           <div className="w-full flex justify-end gap-3">
             <CustomSelector
               value={filterData.selectedRestaurant}
@@ -134,9 +136,6 @@ const SalesBar = () => {
                 backgroundColor: "var(--gr-4)",
                 border: "none",
                 fontWeight: "bold",
-              }}
-              singleValueStyle={{
-                color: "#1e3a8a",
               }}
             />
             <CustomSelector
@@ -161,9 +160,6 @@ const SalesBar = () => {
                 border: "none",
                 fontWeight: "bold",
               }}
-              singleValueStyle={{
-                color: "#1e3a8a",
-              }}
             />
             <CustomSelector
               options={[{ label: "Hepsi", value: "" }, ...months]}
@@ -187,9 +183,6 @@ const SalesBar = () => {
                 border: "none",
                 fontWeight: "bold",
               }}
-              singleValueStyle={{
-                color: "#1e3a8a",
-              }}
             />
           </div>
         </main>
@@ -203,7 +196,7 @@ const SalesBar = () => {
             ))}
           </div>
 
-          <div className="flex z-50 w-full pt-2.5">
+          <div className="flex z-50 w-full pt-2.5 text-[--black-1]">
             {salesData &&
               salesData.map((sales, index) => (
                 <div

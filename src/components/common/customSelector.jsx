@@ -57,8 +57,8 @@ const CustomSelect = ({
             ...optionStyle,
           }),
           singleValue: (provided, state) => ({
-            color: "var(--black-2)",
             ...provided,
+            color: "var(--black-2)",
             ...singleValueStyle,
           }),
           menu: (provided, state) => ({

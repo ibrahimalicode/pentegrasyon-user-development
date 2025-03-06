@@ -84,7 +84,9 @@ const StatCard = () => {
             className="w-full flex flex-col px-5 py-3 gap-3 bg-[--white-1] rounded-md border-2 border-solid border-[--light-1]"
           >
             <div className="w-full flex justify-between items-center">
-              <h1 className="font-bold">Toplam {card?.unit}</h1>
+              <h1 className="font-bold text-[--black-1]">
+                Toplam {card?.unit}
+              </h1>
 
               <div
                 className={`w-max flex items-center whitespace-nowrap rounded-[50px] text-xs py-1 px-1.5 ${percentageClass(
@@ -98,7 +100,7 @@ const StatCard = () => {
 
             <div className="w-full flex justify-between">
               <div>
-                <h1 className="text-3xl font-bold">
+                <h1 className="text-3xl font-bold text-[--black-1]">
                   {card?.total.toLocaleString()}
                 </h1>
                 <div className="text-[--gr-2] text-sm mt-1.5">{card?.unit}</div>

@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { usePopup } from "../../context/PopupContext";
-import { BellI, SettingsI, MenuI } from "../../assets/icon";
+import { BellI, SettingsI, MenuI, SunI, MoonI } from "../../assets/icon";
 import { useMessagesContext } from "../../context/MessagesContext";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
+import { getTheme, setTheme } from "../../utils/localStorage";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const toastId = useRef();
@@ -66,7 +67,7 @@ function Header({ openSidebar, setOpenSidebar }) {
   }, [headerSettingsRef, open]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 flex flex-col justify-center h-16 py-3.5 px-[4%] bg-white border-b border-slate-200 max-md:px-5 z-[99]">
+    <header className="fixed top-0 right-0 left-0 flex flex-col justify-center h-16 py-3.5 px-[4%] bg-[--white-1] border-b border-[--border-1] max-md:px-5 z-[99]">
       <nav className="w-full flex justify-between items-center">
         <div
           className="text-[--gr-1] cursor-pointer"
@@ -82,6 +83,13 @@ function Header({ openSidebar, setOpenSidebar }) {
         </div>
 
         <div className="flex gap-4">
+          <button
+            onClick={() => setTheme(getTheme() == "light" ? "dark" : "light")}
+            className="flex justify-center items-center w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl"
+          >
+            {getTheme() == "light" ? <SunI /> : <MoonI />}
+          </button>
+
           <Link to="/messages">
             <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer relative">
               <BellI />

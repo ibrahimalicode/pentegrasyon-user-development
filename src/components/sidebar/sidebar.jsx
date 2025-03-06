@@ -93,7 +93,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
   return (
     <nav
-      className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-white border-r shadow-2xl border-slate-200 w-[280px] h-[100dvh] transition-all ${
+      className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-[--white-1] border-r shadow-2xl border-[--border-1] w-[280px] h-[100dvh] transition-all ${
         !popupContent && "z-[999]"
       } ${openSidebar && "left-[0]"} ${
         path === "orders" && !openSidebar ? "lg:-left-[280px]" : "lg:left-[0px]"

@@ -17,7 +17,7 @@ const OrdersTotalPrice = ({ orders }) => {
   }, 0);
 
   return (
-    <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2">
+    <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2  text-[--black-1]">
       <p>Sayfa Toplamı</p>
       <p className=" py-1.5 px-4">
         {formatToPrice(String(total?.toFixed(2)).replace(".", ","))}

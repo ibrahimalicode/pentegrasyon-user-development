@@ -1,4 +1,5 @@
 //MODULES
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 //COMP
@@ -21,7 +22,7 @@ import { SlideBarProvider } from "./context/SlideBarContext";
 
 function App() {
   return (
-    <>
+    <div>
       <SlideBarProvider>
         <SlideBar />
         <Popup />
@@ -40,7 +41,7 @@ function App() {
           </Route>
         </Routes>
       </SlideBarProvider>
-    </>
+    </div>
   );
 }
 

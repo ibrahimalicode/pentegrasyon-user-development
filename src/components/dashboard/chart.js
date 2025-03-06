@@ -8,6 +8,7 @@ export const getChartOptions = (series, colors, labels) => {
       height: "200",
       width: "100%",
       type: "donut",
+      foreColor: "var(--black-1)",
     },
     stroke: {
       colors: ["transparent"],

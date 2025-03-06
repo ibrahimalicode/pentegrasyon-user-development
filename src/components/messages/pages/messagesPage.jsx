@@ -43,7 +43,7 @@ const MessagesPage = () => {
             .map((_) => (
               <div
                 key={_.id}
-                className="border-2 border-[--border-1] rounded-md p-2 bg-[--light-1]"
+                className="border-2 border-[--border-1] rounded-md p-2 bg-[--light-1] text-[--gr-1]"
               >
                 <p
                   className="font-bold pb-1"

@@ -13,7 +13,7 @@ const PrintComponent = ({ component }) => {
           handlePrint();
           // console.log(contentRef.current);
         }}
-        className="flex justify-center w-full bg-gray-200 py-2 rounded-md"
+        className="flex justify-center w-full bg-[--light-3] py-2 rounded-md"
       >
         <PrinterI />
       </button>

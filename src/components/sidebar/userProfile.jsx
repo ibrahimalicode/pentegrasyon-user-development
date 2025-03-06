@@ -38,7 +38,7 @@ function UserProfile({ setOpenSidebar }) {
       }`}
     >
       <div
-        className={`flex items-center gap-3 px-6 py-4 font-normal whitespace-nowrap border-t text-[--gr-1] border-neutral-200 hover:bg-[--light-1] hover:text-[--primary-1] cursor-pointer group ${
+        className={`flex items-center gap-3 px-6 py-4 font-normal whitespace-nowrap border-t text-[--gr-1] border-[--border-1] hover:bg-[--light-1] hover:text-[--primary-1] cursor-pointer group ${
           param["*"] === "profile" && "bg-[--light-1] text-[--primary-1]"
         }`}
         onClick={() => setOpenSidebar(false)}

@@ -92,7 +92,7 @@ const RestaurantsStatusPopup = ({ licenses, inData, onSuccess }) => {
         {components.map(({ comp: Comp, id }, i) => (
           <div
             key={id}
-            className={`transition-all duration-700 transform ${sections[i]}`}
+            className={`transition-all duration-700 transform text-[--black-1] ${sections[i]}`}
           >
             <Comp
               onSuccess={onSuccess}

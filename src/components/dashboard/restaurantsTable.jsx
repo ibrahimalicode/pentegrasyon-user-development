@@ -55,7 +55,7 @@ const RestaurantsTable = () => {
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="text-[--black-1]">
               {restaurantsData.map((rest, index) => (
                 <tr key={index}>
                   <td className="py-3.5 text-start">{rest.restaurantName}</td>

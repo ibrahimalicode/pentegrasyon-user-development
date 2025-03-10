@@ -110,7 +110,6 @@ export const FirestoreProvider = ({ children }) => {
           "preparationDate",
           "createdDateTime",
           "checkoutDate",
-          "expectedDeliveryTime",
         ];
 
         const convertedData = { ...data[0] };

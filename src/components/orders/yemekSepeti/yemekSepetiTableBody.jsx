@@ -104,12 +104,9 @@ const YemekSepetiTableBody = ({
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           <p>{isCheckoutToday(order.createdDateTime)}</p>
-          {order?.preOrder &&
-            order.status != 1500 &&
-            order.status != 1600 &&
-            order.status != 900 && (
-              <RemainingMinutes date={order.expectedDeliveryTime} />
-            )}
+          {order?.preOrder && order.status != 3 && order.status != 4 && (
+            <RemainingMinutes date={order.expectedDeliveryTime} />
+          )}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.customer.firstName + " " + order.customer.lastName}

@@ -70,18 +70,6 @@ const YemekSepetiTableBody = ({
     );
   }
 
-  function formatOrder() {
-    const formattdOrder = order.orders.flatMap((order) =>
-      order.options.length > 0
-        ? order.options.map((option) => ({
-            ...order,
-            options: [option],
-          }))
-        : [order]
-    );
-    return { ...order, orders: formattdOrder };
-  }
-
   return (
     order && (
       <tr
@@ -191,7 +179,7 @@ const YemekSepetiTableBody = ({
         <td className="w-14 relative">
           {
             <PrintComponent
-              component={<YemekSepetiPrintOrder order={formatOrder()} />}
+              component={<YemekSepetiPrintOrder order={order} />}
             />
           }
         </td>

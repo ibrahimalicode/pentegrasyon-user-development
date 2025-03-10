@@ -61,7 +61,7 @@ const ForgotPassword = () => {
       component={
         !toVerify ? (
           /* Send code via Email or PhoneNumber */
-          <form className="flex flex-col w-full" onSubmit={sendCode}>
+          <form className="flex flex-col w-full light" onSubmit={sendCode}>
             <div className="flex justify-center relative">
               <div className="w-max">
                 <h2 className="text-[2.3rem] font-bold text-[--white-1] tracking-tighter">
@@ -135,7 +135,7 @@ const ForgotPassword = () => {
               <button
                 type="button"
                 onClick={() => (window.location.href = "/login")}
-                className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-1] mt-5 text-center"
+                className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-1] mt-5 text-center text-white"
               >
                 Giriş yap
               </button>

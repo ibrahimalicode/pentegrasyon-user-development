@@ -118,7 +118,7 @@ const VerifyCode = ({
   }, [sendForgotSucc]);
 
   return (
-    <form className="" onSubmit={handleSubmit}>
+    <form className="light" onSubmit={handleSubmit}>
       <div className="flex justify-center relative">
         <div className="absolute left-0 top-0 bottom-0 flex items-center">
           <button

@@ -155,7 +155,7 @@ const Register = () => {
       component={
         !toConfirm ? (
           /* Register Page */
-          <form onSubmit={confirmRegister}>
+          <form onSubmit={confirmRegister} className="light">
             <div className="flex justify-center">
               <h2 className="text-[2.7rem] font-bold text-[--white-1] tracking-tighter">
                 Kayıt ol
@@ -302,7 +302,7 @@ const Register = () => {
             </div>
 
             <div className="flex flex-col mt-4 sm:mt-6 w-full">
-              <div className="flex justify-center gap-2">
+              <div className="flex justify-center gap-2 text-white">
                 <p>Hesabınız var mı ?</p>
                 <a href="/login" className="text-[--link-1]">
                   Giriş Yapın
@@ -327,7 +327,7 @@ export default Register;
 
 const Confirm = ({ phoneNumber, setPopupContent, onClick }) => {
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center light">
       <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--white-1]">
         <div className="text-center">
           <div className="w-full flex justify-center mb-8">

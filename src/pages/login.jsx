@@ -64,7 +64,7 @@ function Login() {
     <GlassFrame
       className="pt-[4rem]"
       component={
-        <form onSubmit={handleLogin} className="text-white">
+        <form onSubmit={handleLogin} className="text-white light">
           <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
           <CustomInput
             label="E-posta/Telefon"

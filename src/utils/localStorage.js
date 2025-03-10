@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-
 export function getTheme() {
   const theme = localStorage.getItem("THEME") || "light";
   document.body.setAttribute("class", theme);
   return theme;
 }
+getTheme();
 
 export function setTheme(theme) {
   localStorage.setItem("THEME", theme);

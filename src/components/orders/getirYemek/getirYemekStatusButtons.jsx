@@ -135,7 +135,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
 
   return (
-    <div className="fixed bottom-0 right-0 left-0 flex gap-2 sm:gap-4 p-2 py-3.5 bg-white border-t border-[--light-4] text-xs whitespace-nowrap">
+    <div className="fixed bottom-0 right-0 left-0 flex gap-2 sm:gap-4 p-2 py-3.5 bg-[--white-1] border-t border-[--light-4] text-xs whitespace-nowrap">
       <button
         onClick={verifyOrder}
         disabled={verifyDisabled}
@@ -260,7 +260,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
           "İptal Et"
         )}
       </button>
-      <div className="w-full max-w-16 bg-gray-200 flex justify-center items-center rounded-md">
+      <div className="w-full max-w-16 bg-[--light-3] flex justify-center items-center rounded-md">
         {<PrintComponent component={<GetirYemekPrintOrder order={order} />} />}
       </div>
     </div>

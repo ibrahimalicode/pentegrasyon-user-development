@@ -165,7 +165,7 @@ function UpdateCourierLoginCodePopup({ courier, onSuccess }) {
               <button
                 disabled={loading}
                 onClick={handleClick}
-                className="py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-lg disabled:cursor-not-allowed"
+                className="py-2 px-3 bg-[--primary-1] text-white rounded-lg disabled:cursor-not-allowed"
               >
                 Kaydet
               </button>

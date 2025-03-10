@@ -259,7 +259,7 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
             <div className="w-full flex justify-end mt-10">
               <button
                 disabled={loading || getLoading}
-                className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-md"
+                className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-white rounded-md"
                 type="submit"
               >
                 Kaydet

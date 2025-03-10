@@ -79,7 +79,7 @@ const SendCode = ({ phoneNumber, setPhoneNumber, setToVerify }) => {
           <button
             disabled={loading}
             type="submit"
-            className="flex justify-center px-7 py-2 text-md rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
+            className="flex justify-center px-7 py-2 text-md rounded-md bg-[--primary-1] text-white hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
           >
             {loading ? <LoadingI className="h-7" /> : "Devam"}
           </button>

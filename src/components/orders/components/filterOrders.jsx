@@ -101,9 +101,8 @@ const FilterOrders = () => {
                         };
                       });
                     }}
-                    className={`p-2 border border-[--border-1] rounded-md w-40 text-center ${
-                      D.id === filter.dateRange &&
-                      "text-[--white-1] bg-[--primary-1]"
+                    className={`p-2 border border-[--border-1] text-[--gr-1] rounded-md w-40 text-center ${
+                      D.id === filter.dateRange && "text-white bg-[--primary-1]"
                     }`}
                   >
                     {D.label}
@@ -215,13 +214,13 @@ const FilterOrders = () => {
 
             <div className="w-full flex gap-2 justify-center pt-10">
               <button
-                className="text-[--white-1] bg-[--red-1] py-2 px-12 rounded-lg hover:opacity-90"
+                className="text-white bg-[--red-1] py-2 px-12 rounded-lg hover:opacity-90"
                 onClick={() => handleFilter(false)}
               >
                 Temizle
               </button>
               <button
-                className="text-[--white-1] bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
+                className="text-white bg-[--primary-1] py-2 px-12 rounded-lg hover:opacity-90"
                 onClick={() => handleFilter(true)}
               >
                 Uygula

@@ -97,7 +97,7 @@ const AuthorizePopup = ({ setIsAuthorized }) => {
   }, [emailSuccess, emailLoading]);
 
   return (
-    <main className="flex justify-center">
+    <main className="flex justify-center text-[--black-1]">
       <div className="w-full bg-[--white-1] p-5 rounded-md max-w-lg">
         {toPassReset ? (
           <h1 className="text-center text-2xl font-bold pt-2">
@@ -113,14 +113,14 @@ const AuthorizePopup = ({ setIsAuthorized }) => {
               <button
                 onClick={() => handleForgetPass(0)}
                 disabled={smsLoading || emailLoading}
-                className="bg-[--primary-1] text-[--white-1] py-1.5 px-10 rounded-md border border-[--primary-1]"
+                className="bg-[--primary-1] text-white py-1.5 px-10 rounded-md border border-[--primary-1]"
               >
                 E-Posta ile gönder
               </button>
               <button
                 onClick={handleForgetPass}
                 disabled={smsLoading || emailLoading}
-                className="bg-[--primary-1] text-[--white-1] py-1.5 px-3 rounded-md border border-[--primary-1]"
+                className="bg-[--primary-1] text-white py-1.5 px-3 rounded-md border border-[--primary-1]"
               >
                 SMS ile gönder
               </button>

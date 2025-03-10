@@ -57,7 +57,6 @@ const YemekSepetiTableBody = ({
     const currentLicense = licenses.find(
       (L) => L.restaurantId === order.restaurantId
     );
-    console.log(currentLicense);
     if (currentLicense && !currentLicense?.isActive) return;
 
     setSlideBarContent(
@@ -105,11 +104,11 @@ const YemekSepetiTableBody = ({
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           <p>{isCheckoutToday(order.createdDateTime)}</p>
-          {order.isScheduled &&
+          {order?.preOrder &&
             order.status != 1500 &&
             order.status != 1600 &&
             order.status != 900 && (
-              <RemainingMinutes date={order.scheduledDate} />
+              <RemainingMinutes date={order.expectedDeliveryTime} />
             )}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
@@ -169,7 +168,9 @@ const YemekSepetiTableBody = ({
               );
               return currentCourier.length
                 ? currentCourier[0].label
-                : order?.courier?.name; //YS kurye adi
+                : order?.expressDelivery
+                ? "Yemek Speti Kuryesi"
+                : "Resoran Kuryesi";
             })()}
           </button>
         </td>

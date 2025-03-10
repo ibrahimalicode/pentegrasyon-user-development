@@ -47,8 +47,8 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
   console.log(order);
 
   return (
-    <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
-      <div className="flex items-center -mx-4 text-base bg-[--getiryemek] text-[--white-1]">
+    <main className="w-full h-[100dvh] bg-[--white-2] text-[--black-2] overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
+      <div className="flex items-center -mx-4 text-base bg-[--getiryemek] text-white">
         <div className="w-full flex justify-center items-center gap-2">
           <p>Sipariș Detayı</p>
         </div>
@@ -60,7 +60,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
         </span>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
         <div className="w-full flex justify-between">
           <p>İşletme</p>
           <p>{order.marketplaceTicketRestaurantName}</p>
@@ -122,7 +122,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
         <div className="flex">
           <p className="w-1/2">Müşteri</p>
           <p className="w-1/2 text-end">{order.client.name}</p>
@@ -154,7 +154,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-3">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-3">
         {order.isScheduled && (
           <div className="flex border border-[--gr-1] rounded-md overflow-clip">
             <div className="bg-[--red-3] text-[--gr-3] px-4 flex items-center">

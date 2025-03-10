@@ -293,7 +293,7 @@ const Register = () => {
               <div className="flex flex-col mt-4 sm:mt-10 w-full">
                 <button
                   type="submit"
-                  className={`flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 `}
+                  className={`flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-white hover:opacity-90 `}
                   disabled={loading}
                 >
                   {loading ? <LoadingI className="h-7" /> : "Devam"}
@@ -349,7 +349,7 @@ const Confirm = ({ phoneNumber, setPopupContent, onClick }) => {
             Düzelt
           </button>
           <button
-            className="py-2 px-6 rounded-lg bg-[--primary-1] text-[--white-1] hover:opacity-90"
+            className="py-2 px-6 rounded-lg bg-[--primary-1] text-white hover:opacity-90"
             onClick={onClick}
           >
             Evet

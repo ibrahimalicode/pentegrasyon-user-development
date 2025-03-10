@@ -15,6 +15,7 @@ import { InfoI } from "../../../assets/icon";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
+import RemainingMinutes from "../components/remainingMinutes";
 
 const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
@@ -46,8 +47,8 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   console.log(sideOrder);
 
   return (
-    <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
-      <div className="flex items-center -mx-4 text-base bg-[--yemeksepeti] text-[--white-1]">
+    <main className="w-full h-[100dvh] bg-[--white-2] text-[--black-2] overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
+      <div className="flex items-center -mx-4 text-base bg-[--yemeksepeti] text-white">
         <div className="w-full flex justify-center items-center gap-2">
           <p>Sipariș Detayı</p>
         </div>
@@ -59,7 +60,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         </span>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
         <div className="w-full flex justify-between">
           <p>İşletme</p>
           <p>{order.restaurantName}</p>
@@ -121,7 +122,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
         <div className="flex">
           <p className="w-1/2">Müşteri</p>
           <p className="w-1/2 text-end">
@@ -143,12 +144,14 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
             )}
           </p>
         </div>
+
         <div className="flex justify-between">
           <p>Adres</p>
           <div className="w-full max-w-[65%] text-end text-[--primary-2]">
             <YemekSepetiAddress order={order} className="justify-end" />
           </div>
         </div>
+
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
           <p className="w-1/2 text-end">
@@ -160,7 +163,28 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-3">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-3">
+        {order.preOrder && (
+          <div className="flex border border-[--gr-1] rounded-md overflow-clip">
+            <div className="bg-[--red-3] text-[--gr-3] px-4 flex items-center">
+              🕑
+            </div>
+            <div className="w-full p-2 text-xs flex gap-4">
+              <p>Teslimat Zamanı:</p>
+              <div className="flex gap-4">
+                {order.expectedDeliveryTime}
+                {order.preOrder &&
+                  order.status != 4 &&
+                  (order.status != 3 ? (
+                    <RemainingMinutes date={order.expectedDeliveryTime} />
+                  ) : (
+                    <span className="text-[--red-1]">İptal edildi</span>
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {order.customerComment && (
           <div className="flex border border-[--gr-1] rounded-md overflow-clip">
             <div className="bg-[--gr-1] text-[--gr-1] px-3 flex items-center">
@@ -187,7 +211,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
                   <tr className={`${i}"-here"`}>
                     <td className="p-2 text-left">
                       <div>
-                        <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
+                        <span className="bg-[--gr-1] text-[--white-1] px-1.5 py-0.5 mr-0.5 rounded-sm">
                           {order.quantity}
                         </span>
                         {order.name}

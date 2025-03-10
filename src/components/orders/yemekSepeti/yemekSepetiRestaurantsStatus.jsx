@@ -209,7 +209,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     statusData &&
     Object.keys(statusData).length > 0 && (
       <main className="border-2 border-[--yemeksepeti] rounded-md mx-2">
-        <div className="w-full text-center py-3 bg-[--yemeksepeti] text-[--white-1]">
+        <div className="w-full text-center py-3 bg-[--yemeksepeti] text-white">
           Yemeksepeti
         </div>
 

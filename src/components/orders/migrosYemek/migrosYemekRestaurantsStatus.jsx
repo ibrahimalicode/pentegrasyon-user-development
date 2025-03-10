@@ -151,7 +151,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     statusData &&
     Object.keys(statusData).length > 0 && (
       <main className="border-2 border-[--migrosyemek] rounded-md mx-2">
-        <div className="w-full text-center py-3 bg-[--migrosyemek] text-[--white-1]">
+        <div className="w-full text-center py-3 bg-[--migrosyemek] text-white">
           Migros Yemek
         </div>
         <div className="w-full px-3 text-sm">

@@ -169,7 +169,7 @@ export const OrdersContextProvider = ({ children }) => {
 
     if (audioContext.state === "suspended" && token && !popupContent) {
       const popupContent = (
-        <main className="bg-[--white-1] rounded-sm p-5">
+        <main className="bg-[--light-1] rounded-sm p-5">
           <div className="flex justify-end mb-3">
             <button
               onClick={() => setPopupContent(null)}
@@ -178,7 +178,7 @@ export const OrdersContextProvider = ({ children }) => {
               <CloseI />
             </button>
           </div>
-          <p>
+          <p className="text-[--black-1]">
             Ses oynatma tarayıcı tarafından engellendi. Pentegrasyon.net&apos;in
             sesi çalmasına izin verin.
           </p>

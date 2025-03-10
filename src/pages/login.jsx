@@ -64,7 +64,7 @@ function Login() {
     <GlassFrame
       className="pt-[4rem]"
       component={
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="text-white">
           <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
           <CustomInput
             label="E-posta/Telefon"
@@ -74,7 +74,7 @@ function Login() {
             onChange={(e) => setEmailOrPhone(e)}
             required={true}
             className="py-2 bg-transparent text-[var(--white-1)]"
-            className5="text-[var(--white-1)]"
+            className5="text-[white]"
             autoComplete="on"
           />
           <CustomInput
@@ -84,7 +84,7 @@ function Login() {
             onChange={(e) => setPassword(e)}
             letIcon={true}
             className="py-2 bg-transparent text-[var(--white-1)]"
-            className5="text-[var(--white-1)]"
+            className5="text-[white]"
             autoComplete="on"
             minLength={4}
             maxLength={20}
@@ -98,7 +98,7 @@ function Login() {
           <button
             disabled={loading}
             type="submit"
-            className="w-full flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 disabled:cursor-not-allowed"
+            className="w-full flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-white mt-10 disabled:cursor-not-allowed"
           >
             {loading ? <LoadingI className="h-7 text-white" /> : "Giriş"}
           </button>

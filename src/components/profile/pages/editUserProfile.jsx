@@ -278,7 +278,7 @@ const EditUserProfile = ({ user, cities }) => {
         <div className="flex justify-end mt-16 sm:mt-52">
           <Button
             text="Kaydet"
-            className="bg-[--primary-1] text-[--white-1] text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+            className="bg-[--primary-1] text-white text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
             type="submit"
             disabled={loading}
           />

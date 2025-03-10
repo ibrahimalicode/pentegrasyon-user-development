@@ -24,10 +24,6 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
     return date.startsWith("0001-01-01T00:00:00") ? "" : date;
   }
 
-  function getSign(item) {
-    return item;
-  }
-
   useEffect(() => {
     if (statusChangedOrder) {
       if (statusChangedOrder.id === order.id && statusChangedOrder) {
@@ -47,10 +43,9 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
       : order?.courier?.name;
   }
   console.log(order);
-  // sideOrder.orders.map((O) => O.options.map((opt) => console.log(opt)));
 
   return (
-    <main className="w-full h-[100dvh] bg-gray-100 text-slate-700 overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
+    <main className="w-full h-[100dvh] bg-[--white-2] text-[--black-2] overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div className="flex items-center -mx-4 text-base bg-[--migrosyemek] text-[--white-1]">
         <div className="w-full flex justify-center items-center gap-2">
           <p>Sipariș Detayı</p>
@@ -63,7 +58,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
         </span>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
         <div className="w-full flex justify-between">
           <p>İşletme</p>
           <p>{order.restaurantName}</p>
@@ -123,7 +118,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-1">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
         <div className="flex">
           <p className="w-1/2">Müşteri</p>
           <p className="w-1/2 text-end">
@@ -146,7 +141,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
         </div>
       </div>
 
-      <div className="bg-white p-2 rounded-md flex flex-col gap-3">
+      <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-3">
         {order.orderNote && (
           <div className="flex rounded-md overflow-clip my-2">
             <p className="whitespace-nowrap font-bold">Not : </p>

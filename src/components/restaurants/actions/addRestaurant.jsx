@@ -449,7 +449,7 @@ function AddRestaurantPopup({ onSuccess }) {
             <div className="w-full flex justify-end mt-10">
               <button
                 disabled={false}
-                className={`py-2 px-3 bg-[--primary-1] text-[--white-1] rounded-lg ${
+                className={`py-2 px-3 bg-[--primary-1] text-white rounded-lg ${
                   isMapOpen && "invisible"
                 }`}
                 type="submit"

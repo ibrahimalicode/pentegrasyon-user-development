@@ -95,7 +95,7 @@ function Header({ openSidebar, setOpenSidebar }) {
               <BellI />
               {messagesData &&
                 messagesData?.filter((_) => !_.isRead).length > 0 && (
-                  <span className="absolute -top-2 -left-2 text-xs border border-[--primary-1] bg-[--primary-1] text-[--white-1] rounded-full size-6 flex justify-center items-center">
+                  <span className="absolute -top-2 -left-2 text-xs border border-[--primary-1] bg-[--primary-1] text-white rounded-full size-6 flex justify-center items-center">
                     {messagesData?.filter((_) => !_.isRead).length}
                   </span>
                 )}
@@ -113,7 +113,7 @@ function Header({ openSidebar, setOpenSidebar }) {
             </div>
 
             <div
-              className={`absolute top-[3rem] right-2 bg-[--white-1] border border-solid border-[--border-1] font-sans rounded-md transition-colors ${
+              className={`absolute top-[3rem] right-2 bg-[--white-1] text-[--gr-1] border border-solid border-[--border-1] font-sans rounded-md transition-colors ${
                 !open && "invisible"
               }`}
             >

@@ -39,6 +39,7 @@ body[class="dark"] {
 
   /* SOLID */
   --white-1: #ffffff;
+  --white-2: #f3f4f6;
   --black-1: #000000;
   --black-2: #232323;
   --black-3: #3a3c40;
@@ -102,7 +103,8 @@ body[class="dark"] {
 
   /* SOLID */
   --white-1: #161717;
-  --black-1: #e0dada;
+  --white-2: #111827;
+  --black-1: #ffffff;
   --black-2: #eeebeb;
   --black-3: #c8c5c5;
   --green-1: #16a34a;

@@ -142,7 +142,7 @@ const SetNewPassword = () => {
               <button
                 disabled={loading}
                 type="submit"
-                className="flex justify-center font-[350] px-7 py-2 text-xl rounded-md bg-[--primary-1] text-[--white-1] mt-10 disabled:opacity-90 disabled:cursor-not-allowed"
+                className="flex justify-center font-[350] px-7 py-2 text-xl rounded-md bg-[--primary-1] text-white mt-10 disabled:opacity-90 disabled:cursor-not-allowed"
               >
                 {loading ? <LoadingI className="h-7" /> : "Kaydet"}
               </button>

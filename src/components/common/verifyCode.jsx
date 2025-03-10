@@ -162,7 +162,7 @@ const VerifyCode = ({
         <div className="flex flex-col mt-10 w-full">
           <button
             type="submit"
-            className="flex justify-center px-7 py-2 text-lg rounded-md bg-[--primary-1] text-[--white-1] hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
+            className="flex justify-center px-7 py-2 text-lg rounded-md bg-[--primary-1] text-white hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
           >
             {loading ? (
               <LoadingI className="h-7" />

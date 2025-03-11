@@ -378,7 +378,7 @@ function PrivacyBtn() {
         <div className="overflow-y-auto h-[95dvh]">
           <div className="absolute top-2 right-3 z-[50]">
             <div
-              className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
+              className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-white transition-colors"
               onClick={closeForm}
             >
               <CancelI />

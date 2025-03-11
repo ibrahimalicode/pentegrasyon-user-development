@@ -260,7 +260,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="px-5 pb-5">
+      <form onSubmit={handleSubmit} className="px-5 pb-5 text-[--black-2]">
         <div>
           <div>
             <h1 className="text-center text-2xl font-bold py-4">
@@ -408,7 +408,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
           <button
             type="submit"
             disabled={loading}
-            className="border border-transparent px-5 py-2 bg-[--primary-2] text-[--white-1] rounded-sm mt-3"
+            className="border border-transparent px-5 py-2 bg-[--primary-2] text-white rounded-sm mt-3"
           >
             Kaydet
           </button>

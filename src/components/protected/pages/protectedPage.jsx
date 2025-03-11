@@ -93,9 +93,9 @@ const ProtectPage = () => {
 
   return (
     isAuthorized && (
-      <section className="lg:ml-[280px] pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+      <section className="lg:ml-[280px] pt-16 px-[4%] pb-4 grid grid-cols-1 section_row text-[--black-2]">
         {/* TITLE */}
-        <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
+        <div className="w-full py-4 text-2xl font-semibold">
           <h2>Yetki Korunması</h2>
         </div>
 

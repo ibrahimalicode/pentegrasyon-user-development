@@ -100,6 +100,9 @@ const YemekSepetiTableBody = ({
           {order.customer.firstName + " " + order.customer.lastName}
         </td>
         <td
+          className={`whitespace-nowrap ${
+            !order?.customer?.deliveryMainArea && "pointer-events-none"
+          }`}
           onClick={() =>
             setPopupContent(
               <GoogleRoute
@@ -114,7 +117,6 @@ const YemekSepetiTableBody = ({
               />
             )
           }
-          className="whitespace-nowrap"
         >
           <button
             className={`border py-2 px-3 rounded-md ${
@@ -129,6 +131,9 @@ const YemekSepetiTableBody = ({
           </button>
         </td>
         <td
+          className={`whitespace-nowrap ${
+            order.expressDelivery && "pointer-events-none"
+          }`}
           onClick={() =>
             setPopupContent(
               <ChooseCourier
@@ -144,19 +149,17 @@ const YemekSepetiTableBody = ({
               />
             )
           }
-          className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {(() => {
-              const currentCourier = courierServiceTypes.filter(
-                (T) => T.licenseTypeId === order.courierTypeId
-              );
-              return currentCourier.length
-                ? currentCourier[0].label
-                : order?.expressDelivery
-                ? "Yemek Speti Kuryesi"
-                : "Resoran Kuryesi";
-            })()}
+            {order.expressDelivery
+              ? "YS Kuryesi"
+              : (() => {
+                  const currentCourier = courierServiceTypes.filter(
+                    (T) => T.licenseTypeId === order.courierTypeId
+                  );
+
+                  return currentCourier?.[0]?.label || "Restoran Kuryesi";
+                })()}
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">

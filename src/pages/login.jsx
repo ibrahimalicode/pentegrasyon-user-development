@@ -64,7 +64,7 @@ function Login() {
     <GlassFrame
       className="pt-[4rem]"
       component={
-        <form onSubmit={handleLogin} className="text-white light">
+        <form onSubmit={handleLogin} className="text-white light customInput">
           <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
           <CustomInput
             label="E-posta/Telefon"
@@ -73,8 +73,7 @@ function Login() {
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e)}
             required={true}
-            className="py-2 bg-transparent text-[var(--white-1)]"
-            className5="text-[white]"
+            className="py-2 bg-transparent"
             autoComplete="on"
           />
           <CustomInput
@@ -83,12 +82,20 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e)}
             letIcon={true}
-            className="py-2 bg-transparent text-[var(--white-1)]"
-            className5="text-[white]"
+            className="py-2 bg-transparent"
             autoComplete="on"
             minLength={4}
             maxLength={20}
           />
+          <style>
+            {`
+              .customInput input {
+                background-color: transparent !important;
+                color: white;
+              }
+            `}
+          </style>
+
           <div className="text-right text-[--link-1] mt-4">
             <a href="/forgotPassword">Şifremi unuttum ?</a>
           </div>

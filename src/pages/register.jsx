@@ -162,7 +162,7 @@ const Register = () => {
               </h2>
             </div>
             <div className="flex flex-col max-w-full">
-              <div className="flex max-sm:flex-col w-full sm:gap-2">
+              <div className="flex max-sm:flex-col w-full sm:gap-2 customInput">
                 <CustomInput
                   // label="Ad"
                   type="text"
@@ -170,9 +170,8 @@ const Register = () => {
                   value={firstName}
                   onChange={(e) => setFirstName(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
                   className2="mt-[5px] sm:mt-[5px]"
-                  className5="text-[var(--white-1)]"
                 />
                 <CustomInput
                   // label="Soyad"
@@ -181,13 +180,12 @@ const Register = () => {
                   value={lastName}
                   onChange={(e) => setLastName(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
                   className2="mt-[5px] sm:mt-[5px]"
-                  className5="text-[var(--white-1)]"
                 />
               </div>
 
-              <div className="flex w-full sm:gap-2 max-sm:flex-col">
+              <div className="flex w-full sm:gap-2 max-sm:flex-col customInput">
                 <CustomPhoneInput
                   // label="Cep Telefonu"
                   type="tel"
@@ -195,9 +193,8 @@ const Register = () => {
                   value={phoneNumber}
                   onChange={(phone) => setPhoneNumber(phone)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
                   className2="mt-[5px] sm:mt-[5px]"
-                  className5="text-[var(--white-1)]"
                   maxLength={14}
                 />
                 <CustomInput
@@ -207,9 +204,8 @@ const Register = () => {
                   value={email}
                   onChange={(e) => setEmail(formatEmail(e))}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
                   className2="mt-[5px] sm:mt-[5px]"
-                  className5="text-[var(--white-1)]"
                 />
               </div>
 
@@ -249,7 +245,7 @@ const Register = () => {
                 />
               </div>
 
-              <div>
+              <div className="customInput">
                 <CustomInput
                   // label="Şifre"
                   placeholder="Şifre"
@@ -270,7 +266,7 @@ const Register = () => {
                   value={password2}
                   onChange={(e) => setPassword2(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-[transparent !important] text-[var(--white-1)]"
                   className2="mt-[5px] sm:mt-[5px]"
                   className3="top-[25%]"
                   className5="text-[var(--white-1)]"
@@ -299,6 +295,15 @@ const Register = () => {
                   {loading ? <LoadingI className="h-7" /> : "Devam"}
                 </button>
               </div>
+
+              <style>
+                {`
+                  .customInput input {
+                    background-color: transparent !important;
+                    color: white;
+                  }
+                `}
+              </style>
             </div>
 
             <div className="flex flex-col mt-4 sm:mt-6 w-full">

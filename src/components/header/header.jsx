@@ -82,7 +82,7 @@ function Header({ openSidebar, setOpenSidebar }) {
           </p>
         </div>
 
-        <div className="flex gap-4 max-sm:gap-2 max-sm:scale-75">
+        <div className="flex gap-4 max-sm:gap-2">
           <button
             onClick={() => setTheme(getTheme() == "light" ? "dark" : "light")}
             className="flex justify-center items-center w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl"

@@ -89,7 +89,7 @@ const ForgotPassword = () => {
                 className2="whitespace-nowrap"
               />
             </div>
-            <div className="flex flex-col max-w-full">
+            <div className="flex flex-col max-w-full customInput">
               {checked ? (
                 <CustomPhoneInput
                   label="Telefon"
@@ -127,6 +127,15 @@ const ForgotPassword = () => {
                 </button>
                 {/* <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" /> */}
               </div>
+
+              <style>
+                {`
+                  .customInput input {
+                    background-color: transparent !important;
+                    color: white;
+                  }
+                `}
+              </style>
             </div>
             <div className="flex flex-col mt-10 w-full">
               <div className="text-sm leading-5 text-[--link-1] w-full text-center">

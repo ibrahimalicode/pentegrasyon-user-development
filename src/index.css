@@ -11,12 +11,76 @@
   scrollbar-width: 0.25rem;
 }
 
+body[class="dark"] {
+  background-color: #161717;
+}
+
 body[class="light"] {
   background-color: white;
 }
 
-body[class="dark"] {
-  background-color: #161717;
+.dark {
+  --primary-1: #4f46e5;
+  --primary-2: #7839cd;
+
+  --gr-1: #94a3b8;
+  --gr-2: #a3a3a3;
+  --gr-3: #cbd5e1;
+  --gr-4: #334155;
+  --gr-5: #475569;
+
+  --light-1: #1e293b;
+  --light-2: #312e81;
+  --light-3: #374151;
+  --light-4: #1d222a;
+
+  --link-1: #3b82f6;
+  --light-green: #14532d;
+
+  /* SOLID */
+  --white-1: #161717;
+  --white-2: #111827;
+  --black-1: #ffffff;
+  --black-2: #eeebeb;
+  --black-3: #c8c5c5;
+  --green-1: #16a34a;
+  --green-2: #15803d;
+  --green-3: #0891b2;
+  --yellow-1: #fbbf24;
+  --red-1: #dc2626;
+  --red-2: #be185d;
+  --blue-1: #2563eb;
+  --purple-1: #9333ea;
+  --orange-1: #ea580c;
+  --pink-1: #db2777;
+  --brown-1: #954007; /* 78350f */
+
+  --border-1: #1e293b;
+
+  /* TABLE */
+  --table: #334155;
+  --table-odd: #1e293b;
+
+  /* STATUS */
+  --status-green: #14532d;
+  --status-red: #7f1d1d;
+  --status-yellow: #854d0e;
+  --status-gray: #475569;
+  --status-blue: #1e40af;
+  --status-purple: #5b21b6;
+  --status-orange: #9a3412;
+  --status-pink: #9d174d;
+  --status-brown: #521a0b; /* 3e1b11; */
+  --status-primary-1: #6d28d9;
+  --status-primary-2: #312e81;
+
+  /* MARKETPLACES */
+  --getiryemek: #5d3ebd;
+  --migrosyemek: #f67c18;
+  --trendyol: #fc903a;
+  --yemeksepeti: #fa0050;
+  --gofody: #f1b62a;
+  --siparisim: #05407a;
 }
 
 .light {
@@ -83,69 +147,6 @@ body[class="dark"] {
   --siparisim: #05407a;
 }
 
-.dark {
-  --primary-1: #4f46e5;
-  --primary-2: #7839cd;
-
-  --gr-1: #94a3b8;
-  --gr-2: #a3a3a3;
-  --gr-3: #cbd5e1;
-  --gr-4: #334155;
-  --gr-5: #475569;
-
-  --light-1: #1e293b;
-  --light-2: #312e81;
-  --light-3: #374151;
-  --light-4: #1d222a;
-
-  --link-1: #3b82f6;
-  --light-green: #14532d;
-
-  /* SOLID */
-  --white-1: #161717;
-  --white-2: #111827;
-  --black-1: #ffffff;
-  --black-2: #eeebeb;
-  --black-3: #c8c5c5;
-  --green-1: #16a34a;
-  --green-2: #15803d;
-  --green-3: #0891b2;
-  --yellow-1: #fbbf24;
-  --red-1: #dc2626;
-  --red-2: #be185d;
-  --blue-1: #2563eb;
-  --purple-1: #9333ea;
-  --orange-1: #ea580c;
-  --pink-1: #db2777;
-  --brown-1: #954007; /* 78350f */
-
-  --border-1: #1e293b;
-
-  /* TABLE */
-  --table: #334155;
-  --table-odd: #1e293b;
-
-  /* STATUS */
-  --status-green: #14532d;
-  --status-red: #7f1d1d;
-  --status-yellow: #854d0e;
-  --status-gray: #475569;
-  --status-blue: #1e40af;
-  --status-purple: #5b21b6;
-  --status-orange: #9a3412;
-  --status-pink: #9d174d;
-  --status-brown: #521a0b; /* 3e1b11; */
-  --status-primary-1: #6d28d9;
-  --status-primary-2: #312e81;
-
-  /* MARKETPLACES */
-  --getiryemek: #5d3ebd;
-  --migrosyemek: #f67c18;
-  --trendyol: #fc903a;
-  --yemeksepeti: #fa0050;
-  --gofody: #f1b62a;
-  --siparisim: #05407a;
-}
 section {
   min-height: 100dvh;
 }
@@ -157,13 +158,13 @@ section {
   grid-template-rows: auto auto auto 1fr;
   background-color: #151515;
 }
-.light input {
-  font-family: "Lexend Deca", sans-serif;
-  background-color: #ffffff;
-}
 .dark input {
   font-family: "Lexend Deca", sans-serif;
   background-color: #1b1a1e;
+}
+.light input {
+  font-family: "Lexend Deca", sans-serif;
+  background-color: #ffffff;
 }
 
 .stroke {

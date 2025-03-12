@@ -44,7 +44,7 @@ const GoogleRoute = ({ data, name1, name2 }) => {
         </button>
       </div>
 
-      <div className="text-sm w-full text-center pb-3">
+      <div className="text-sm w-full text-center pb-3 text-[--black-1]">
         <span className="text-[--primary-1]">{name1}</span>
         <span> ve </span>
         <span className="text-[--primary-1]">{name2}</span>

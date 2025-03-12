@@ -88,27 +88,30 @@ const FilterOrders = () => {
             }`}
           >
             <div className="grid grid-flow-row grid-cols-2 gap-1.5 my-2">
-              {orderFilterDates.map((D) => (
-                <div key={D.id} className="text-sm">
-                  <button
-                    onClick={() => {
-                      setFilter((prev) => {
-                        return {
-                          ...prev,
-                          dateRange: D.id,
-                          startDateTime: "",
-                          endDateTime: "",
-                        };
-                      });
-                    }}
-                    className={`p-2 border border-[--border-1] text-[--gr-1] rounded-md w-40 text-center ${
-                      D.id === filter.dateRange && "text-white bg-[--primary-1]"
-                    }`}
-                  >
-                    {D.label}
-                  </button>
-                </div>
-              ))}
+              {orderFilterDates
+                .filter((D) => D.show)
+                .map((D) => (
+                  <div key={D.id} className="text-sm">
+                    <button
+                      onClick={() => {
+                        setFilter((prev) => {
+                          return {
+                            ...prev,
+                            dateRange: D.id,
+                            startDateTime: "",
+                            endDateTime: "",
+                          };
+                        });
+                      }}
+                      className={`p-2 border border-[--border-1] text-[--gr-1] rounded-md w-40 text-center ${
+                        D.id === filter.dateRange &&
+                        "text-white bg-[--primary-1]"
+                      }`}
+                    >
+                      {D.label}
+                    </button>
+                  </div>
+                ))}
             </div>
 
             <div className="flex gap-6">

@@ -93,20 +93,20 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
   return (
     <nav
-      className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-[--white-1] border-r shadow-2xl border-[--border-1] w-[280px] h-[100dvh] transition-all ${
-        !popupContent && "z-[999]"
-      } ${openSidebar && "left-[0]"} ${
+      className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-[--white-1] border-r shadow-2xl border-[--border-1] w-[280px] h-[100dvh] transition-all z-[999] ${
+        openSidebar && "left-[0]"
+      } ${
         path === "orders" && !openSidebar ? "lg:-left-[280px]" : "lg:left-[0px]"
       }`}
       ref={sidebarRef}
     >
-      <div className="flex flex-col w-full relative">
+      <div className="flex flex-col w-full">
         <header className="flex items-center justify-center p-6 w-full text-xl font-[500] leading-7 text-[--black-2]">
           <Link to="/" className="flex gap-1 w-max mr-6">
             <img
               loading="lazy"
               src={logo}
-              alt=""
+              alt="Pentegrasyon_logo"
               className="shrink-0 w-7 aspect-square"
             />
             <p className="whitespace-nowrap">entegrasyon</p>

@@ -276,13 +276,11 @@ const FirstStep = ({
                     return (
                       <div
                         key={pkg.id}
-                        className="flex items-center text-[12px] leading-snug"
+                        className="flex items-center text-[12px] leading-snug text-white"
                       >
                         <div
                           className={`flex flex-col justify-center py-1.5 px-6 rounded cursor-pointer ${
-                            isSelected
-                              ? "bg-[--primary-1] text-[--white-1]"
-                              : "bg-gray-200"
+                            isSelected ? "bg-[--primary-1]" : "bg-[--light-3]"
                           }`}
                           onClick={() =>
                             handleAddToCart({
@@ -294,20 +292,12 @@ const FirstStep = ({
                             })
                           }
                         >
-                          <div>
-                            <span className="whitespace-nowrap">
-                              {pkg.time} Yıllık{" "}
-                            </span>
-                            <span
-                              className={`whitespace-nowrap ${
-                                isSelected && "text-[--white-1]"
-                              }`}
-                            >
-                              {pkg.price} tl
-                            </span>
+                          <div className="whitespace-nowrap">
+                            <span>{pkg.time} Yıllık </span>
+                            <span>{pkg.price} tl</span>
                           </div>
                           <div>
-                            <span className="font-normal whitespace-nowrap">
+                            <span className="font-normal">
                               {pkg.description}
                             </span>
                           </div>

@@ -44,7 +44,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
       ? currentCourier[0].label
       : order?.courier?.name;
   }
-  console.log(sideOrder);
+  console.log(order);
 
   return (
     <main className="w-full h-[100dvh] bg-[--white-2] text-[--black-2] overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
@@ -172,11 +172,12 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
             <div className="w-full p-2 text-xs flex gap-4">
               <p>Teslimat Zamanı:</p>
               <div className="flex gap-4">
-                {order.expectedDeliveryTime}
+                {order.customer.expectedDeliveryTime}
                 {order.preOrder &&
-                  order.status != 4 &&
-                  (order.status != 3 ? (
-                    <RemainingMinutes date={order.expectedDeliveryTime} />
+                  (order.status != 4 ? (
+                    <RemainingMinutes
+                      date={order.customer.expectedDeliveryTime}
+                    />
                   ) : (
                     <span className="text-[--red-1]">İptal edildi</span>
                   ))}

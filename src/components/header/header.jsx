@@ -1,18 +1,19 @@
 //MODULES
 import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
+import Advert from "./advert";
 import { usePopup } from "../../context/PopupContext";
-import { BellI, SettingsI, MenuI, SunI, MoonI } from "../../assets/icon";
+import { getTheme, setTheme } from "../../utils/localStorage";
 import { useMessagesContext } from "../../context/MessagesContext";
+import { BellI, SettingsI, MenuI, SunI, MoonI } from "../../assets/icon";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
-import { getTheme, setTheme } from "../../utils/localStorage";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const toastId = useRef();
@@ -76,11 +77,7 @@ function Header({ openSidebar, setOpenSidebar }) {
           <MenuI className={`${param["*"] === "orders" ? "" : "lg:hidden"}`} />
         </div>
 
-        <div>
-          <p className="text-3xl max-sm:text-xl text-[--primary-1] font-[conthrax]">
-            Pentegrasyon
-          </p>
-        </div>
+        <Advert />
 
         <div className="flex gap-4 max-sm:gap-2">
           <button

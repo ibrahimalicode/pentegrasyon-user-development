@@ -22,6 +22,8 @@ import migrosYemekSlice from "./redux/migrosYemek";
 import smsSlice from "./redux/sms";
 import emailSlice from "./redux/email";
 import marketplaceRestaurantsSlice from "./redux/marketplaceRestaurants";
+import loadingSlice from "./redux/loadingSlice";
+import loadingMiddleware from "../middlewares/loadingMiddleware";
 
 const store = configureStore({
   reducer: {
@@ -46,7 +48,10 @@ const store = configureStore({
     sms: smsSlice,
     email: emailSlice,
     marketplaceRestaurants: marketplaceRestaurantsSlice,
+    isLoading: loadingSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(loadingMiddleware),
 });
 
 export default store;

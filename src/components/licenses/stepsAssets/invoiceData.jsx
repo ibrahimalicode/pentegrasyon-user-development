@@ -1,12 +1,14 @@
 //MODULES
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 //HOOKS
 import { useEditUserInvoice } from "../../../../hooks/useEditUserInvoice";
 
-//REDUX
+//COMP
 import EditUserInvoice from "../../invoice/editUserInvoice";
-import { useDispatch, useSelector } from "react-redux";
+
+//REDUX
 import { getUser } from "../../../redux/user/getUserSlice";
 
 const InvoiceData = ({
@@ -77,7 +79,7 @@ const InvoiceData = ({
             <button
               type="button"
               onClick={() => setOpenFatura(true)}
-              className="p-2 mt-3 bg-[--primary-2] text-[--white-1] rounded-md hover:text-[--primary-2] hover:bg-[--white-1] transition-colors duration-300 ease-in-out border border-[--primary-2]"
+              className="p-2 mt-3 bg-[--primary-2] text-white rounded-md hover:text-[--primary-2] hover:bg-[--white-1] transition-colors duration-300 ease-in-out border border-[--primary-2]"
             >
               Düzenle
             </button>

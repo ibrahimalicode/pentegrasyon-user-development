@@ -1,12 +1,17 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
+import CustomGeneralLoader from "../components/common/customGeneralLloader";
 
 const PopupContext = createContext();
 
 export const usePopup = () => useContext(PopupContext);
 
 export const PopupProvider = ({ children }) => {
+  const { isLoading } = useSelector((state) => state.isLoading);
+
   const [popupContent, setPopupContent] = useState(null);
   const [contentRef, setContentRef] = useState([]);
+  const [loadingComponent, setLoadingComponent] = useState(null);
 
   const handleClickOutside = (event) => {
     if (contentRef.length > 0) {
@@ -36,6 +41,14 @@ export const PopupProvider = ({ children }) => {
     };
   }, [contentRef]);
 
+  useEffect(() => {
+    if (isLoading) {
+      setLoadingComponent(<CustomGeneralLoader />);
+    } else {
+      setLoadingComponent(false);
+    }
+  }, [isLoading]);
+
   return (
     <PopupContext.Provider
       value={{
@@ -43,6 +56,8 @@ export const PopupProvider = ({ children }) => {
         setPopupContent,
         contentRef,
         setContentRef,
+        loadingComponent,
+        setLoadingComponent,
       }}
     >
       {children}

@@ -262,7 +262,14 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
                 required
                 maxLength={4}
                 minLength={4}
-                label="Platform Satıcı ID"
+                label={
+                  <span>
+                    Platform Satıcı ID{" "}
+                    <span className="text-[--red-1]">
+                      DİKKAT ! BÜYÜK / Küçük harfe duyarlıdır !
+                    </span>
+                  </span>
+                }
                 placeholder="Platform Satıcı ID"
                 className="py-[.45rem] text-sm"
                 value={licenseData.sellerId}

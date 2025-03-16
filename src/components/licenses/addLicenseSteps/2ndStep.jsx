@@ -81,7 +81,7 @@ const SecondStep = ({
                       });
                       option.id == 0 ? setSteps(6) : setSteps(6);
                     }}
-                    className={`py-2.5 px-2  text-[--white-1] text-sm rounded-md ${
+                    className={`py-2.5 px-2  text-white text-sm rounded-md ${
                       option.value === paymentMethod.selectedOption.value
                         ? "bg-[--green-1]"
                         : "bg-[--status-primary-1]"
@@ -117,7 +117,7 @@ const SecondStep = ({
 
                       return (
                         <React.Fragment key={pkg.restaurantId}>
-                          <div className="flex flex-col items-center text-center text-[12px] leading-snug relative">
+                          <div className="flex flex-col items-center text-center text-white text-[12px] leading-snug relative">
                             {i === 0 && (
                               <p className="absolute -top-6 left-0 right-0 text-sm">
                                 Restoran Adı
@@ -129,20 +129,14 @@ const SecondStep = ({
                             <div
                               className={`py-1 px-6 rounded w-28 ${
                                 isSelected
-                                  ? "bg-[--primary-1] text-[--white-1]"
-                                  : "bg-gray-200"
+                                  ? "bg-[--primary-1]"
+                                  : "bg-[--light-3]"
                               }`}
                             >
                               <p className="whitespace-nowrap">
                                 {pkg.time} Yıllık
                               </p>
-                              <p
-                                className={`text-sm whitespace-nowrap ${
-                                  isSelected
-                                    ? "text-[--white-1]"
-                                    : "text-[--gr-1]"
-                                }`}
-                              >
+                              <p className={`text-sm whitespace-nowrap`}>
                                 {pkg.price} ₺
                               </p>
                             </div>

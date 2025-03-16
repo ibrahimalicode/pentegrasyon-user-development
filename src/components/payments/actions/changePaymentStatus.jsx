@@ -21,7 +21,7 @@ const ChangePaymentStatus = ({ payment }) => {
 export default ChangePaymentStatus;
 
 function paymentStatus(payment) {
-  const status = PaymentStatus[payment.status].label.toLocaleLowerCase();
+  const status = PaymentStatus[payment?.status].label.toLocaleLowerCase();
   const waiting = "text-[--yellow-1] bg-[--status-yellow] border-[--yellow-1]";
   const success = "text-[--green-1] bg-[--status-green] border-[--green-1]";
   const canceled = "text-[--red-1] bg-[--status-red] border-[--red-1]";

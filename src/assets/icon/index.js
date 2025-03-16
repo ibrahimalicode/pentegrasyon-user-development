@@ -42,6 +42,7 @@ import LockI from "./lock";
 import SeenI from "./seen";
 import SunI from "./sun";
 import MoonI from "./moon";
+import EyeI from "./eye";
 
 export {
   DashboardI,
@@ -86,4 +87,5 @@ export {
   SeenI,
   SunI,
   MoonI,
+  EyeI,
 };

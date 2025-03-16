@@ -16,7 +16,7 @@ const RemainingMinutes = ({ date }) => {
   }, []);
 
   return (
-    remainingMin && (
+    remainingMin > 0 && (
       <p className="text-[--red-1]">🕑 {remainingMin} Dk. Kaldı</p>
     )
   );

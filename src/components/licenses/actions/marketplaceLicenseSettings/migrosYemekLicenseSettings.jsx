@@ -56,6 +56,7 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
     storeId: "",
     storeGroupId: "",
     commissionRate: "",
+    licenseId: data.id,
     MigrosYemekIntegrationInformationId: "",
   };
 
@@ -72,6 +73,7 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
       toast.error("Herhangi bir değişiklik yapmadınız.");
       return;
     }
+
     if (data.isSettingsAdded) {
       dispatch(updateIntegrationInformation(licenseData));
     } else {

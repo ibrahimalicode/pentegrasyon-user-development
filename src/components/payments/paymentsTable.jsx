@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import { formatDateString } from "../../utils/utils";
 import PaymentLicenseType from "../../enums/paymentLicenseType";
 import ChangePaymentStatus from "./actions/changePaymentStatus";
+import Actions from "./actions/actions";
 
-const PaymentsTable = ({ inData, totalItems = inData.length, onSuccess }) => {
+const PaymentsTable = ({ inData, totalItems = inData.length }) => {
   const { user } = useSelector((state) => state.user.getUser);
 
   function formatFilePath(filePath) {
@@ -33,7 +34,8 @@ const PaymentsTable = ({ inData, totalItems = inData.length, onSuccess }) => {
               <th className="font-normal">Ödeme Tipi</th>
               <th className="font-normal">Tutar</th>
               <th className="font-normal">Durum</th>
-              <th className="font-normal text-center">Tarih</th>
+              <th className="font-normal">Tarih</th>
+              <th className="font-normal text-center">İşlem</th>
             </tr>
           </thead>
 
@@ -76,6 +78,9 @@ const PaymentsTable = ({ inData, totalItems = inData.length, onSuccess }) => {
                 </td>
                 <td className="whitespace-nowrap text-[--black-2] font-light text-center">
                   {formatDateString({ dateString: data.createdDateTime })}
+                </td>
+                <td className="whitespace-nowrap w-14 text-[--black-2] font-light relative">
+                  <Actions payment={data} />
                 </td>
               </tr>
             ))}

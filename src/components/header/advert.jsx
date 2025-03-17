@@ -27,6 +27,7 @@ const Advert = () => {
   //set adverts data
   useEffect(() => {
     if (adverts) {
+      console.log(adverts);
       setAdvertsData(adverts);
       setAdvertData(adverts?.[0]);
       dispatch(resetGetAdverts());
@@ -76,14 +77,14 @@ const Advert = () => {
             muted
             controls
           />
-        ) : isIframe ? (
+        ) : (
           <iframe
             src={advertData.url}
             className="h-full w-full pointer-events-none"
             style={{ border: "none" }}
             allowFullScreen
           />
-        ) : null}
+        )}
       </a>
     </main>
   ) : (

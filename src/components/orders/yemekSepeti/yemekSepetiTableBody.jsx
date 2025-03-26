@@ -154,11 +154,14 @@ const YemekSepetiTableBody = ({
             {order.expressDelivery
               ? "YS Kuryesi"
               : (() => {
+                  const custAdd = order?.customer?.deliveryMainArea;
                   const currentCourier = courierServiceTypes.filter(
                     (T) => T.licenseTypeId === order.courierTypeId
                   );
 
-                  return currentCourier?.[0]?.label || "Restoran Kuryesi";
+                  return custAdd
+                    ? currentCourier?.[0]?.label
+                    : "Platform Kuryesi";
                 })()}
           </button>
         </td>

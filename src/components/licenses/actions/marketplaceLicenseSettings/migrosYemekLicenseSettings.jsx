@@ -55,8 +55,9 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
     apiKey: "",
     storeId: "",
     storeGroupId: "",
-    commissionRate: "",
+    commissionRate: 0,
     licenseId: data.id,
+    restaurantId: data.restaurantId,
     MigrosYemekIntegrationInformationId: "",
   };
 

@@ -38,7 +38,7 @@ const YemekSepetiOrderErrorPopup = ({
   return (
     <main className="bg-[--white-1] rounded-md">
       <div className="flex justify-between items-center mb-4 bg-[--yemeksepeti] px-5 py-3 rounded-t-md">
-        <div className="text-sm text-[--white-1]">
+        <div className="text-sm text-white">
           <p>
             <span>Platform: </span>
             <span>YemekSepeti</span>
@@ -54,13 +54,13 @@ const YemekSepetiOrderErrorPopup = ({
         </div>
         <button
           onClick={() => setPopupContent(null)}
-          className="text-[--white-1] w-max h-max border border-[--white-1] p-2 rounded-full"
+          className="text-white w-max h-max border border-[--white-1] p-2 rounded-full"
         >
           <CloseI />
         </button>
       </div>
 
-      <div className="px-5 pb-5">
+      <div className="px-5 pb-5 text-[--black-2]">
         <div>
           <p>Sipariş durumu aşağıdaki hata kodundan dolayı değiştirilemiyor.</p>
           <p>

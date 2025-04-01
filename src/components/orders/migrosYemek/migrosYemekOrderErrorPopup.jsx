@@ -54,13 +54,13 @@ const MigrosYemekOrderErrorPopup = ({
         </div>
         <button
           onClick={() => setPopupContent(null)}
-          className="text-[--white-1] w-max h-max border border-[--white-1] p-2 rounded-full"
+          className="text-white w-max h-max border border-[--white-1] p-2 rounded-full"
         >
           <CloseI />
         </button>
       </div>
 
-      <div className="px-5 pb-5">
+      <div className="px-5 pb-5 text-[--black-2]">
         <div>
           <p>Sipariş durumu aşağıdaki hata kodundan dolayı değiştirilemiyor.</p>
           <p>

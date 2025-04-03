@@ -156,7 +156,7 @@ export const OrdersContextProvider = ({ children }) => {
         const updatedOrder = prev?.filter(
           (O) => O.id !== statusChangedOrder.id
         );
-        return formatByDate([...updatedOrder, statusChangedOrder]);
+        return formatByDate([...(updatedOrder || []), statusChangedOrder]);
       });
       setStatusChangedOrder(null);
     }

@@ -19,6 +19,7 @@ import YemekSepetiOrderDetails from "./yemekSepetiOrderDetails";
 import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
 import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 import { YemekSepetiAddress } from "../components/marketplaceAddresses";
+import toast from "react-hot-toast";
 
 const YemekSepetiTableBody = ({
   licenses,
@@ -57,7 +58,10 @@ const YemekSepetiTableBody = ({
     const currentLicense = licenses.find(
       (L) => L.restaurantId === order.restaurantId
     );
-    if (currentLicense && !currentLicense?.isActive) return;
+    if (currentLicense && !currentLicense?.isActive) {
+      toast.error("Lisan Süresi Bitmiştir! Lütfen lisansınızı uzatınız.");
+      return;
+    }
 
     setSlideBarContent(
       <YemekSepetiOrderDetails

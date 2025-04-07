@@ -2,9 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 
 //COMP
+import ShowDocument from "./showDocument";
+import ShowBasketPopup from "./showBasket";
 import MenuI from "../../../assets/icon/menu";
 import { usePopup } from "../../../context/PopupContext";
-import ShowBasketPopup from "./showBasket";
 
 const Actions = ({ index, payment }) => {
   const outRef = useRef();
@@ -46,6 +47,7 @@ const Actions = ({ index, payment }) => {
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">
             <ShowBasketPopup payment={payment} />
+            <ShowDocument payment={payment} />
           </ul>
         </div>
       )}

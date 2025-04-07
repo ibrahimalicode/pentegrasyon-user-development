@@ -1,7 +1,7 @@
 const PaymentLicenseType = [
-  { label: "ExtendLicense", id: 0, value: "0" },
-  { label: "NewLicense", id: 1, value: "1" },
-  { label: "Debit", id: 2, value: "2" },
+  { label: "Lisans Uzatma", id: 0, value: "ExtendLicense" },
+  { label: "Yeni Lisans", id: 1, value: "NewLicense" },
+  { label: "Ücretsiz", id: 2, value: "Debit" },
 ];
 
 export default PaymentLicenseType;

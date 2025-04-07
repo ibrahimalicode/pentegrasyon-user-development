@@ -19,6 +19,7 @@ import GetirYemekStatusButton from "./getirYemekStatusButton";
 import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 import { GetirYemekAddress } from "../components/marketplaceAddresses";
+import toast from "react-hot-toast";
 
 const GetirYemekTableBody = ({
   licenses,
@@ -57,7 +58,10 @@ const GetirYemekTableBody = ({
     const currentLicense = licenses.find(
       (L) => L.restaurantId === order.restaurantId
     );
-    if (currentLicense && !currentLicense?.isActive) return;
+    if (currentLicense && !currentLicense?.isActive) {
+      toast.error("Lisan Süresi Bitmiştir! Lütfen lisansınızı uzatınız.");
+      return;
+    }
 
     setSlideBarContent(
       <GetirYemekOrderDetails

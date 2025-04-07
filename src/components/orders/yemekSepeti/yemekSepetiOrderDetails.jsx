@@ -12,10 +12,10 @@ import { useFirestore } from "../../../context/FirestoreContext";
 
 //UTILS
 import { InfoI } from "../../../assets/icon";
+import RemainingMinutes from "../components/remainingMinutes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
-import RemainingMinutes from "../components/remainingMinutes";
 
 const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();

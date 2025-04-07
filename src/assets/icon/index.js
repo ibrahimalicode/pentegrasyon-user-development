@@ -43,6 +43,8 @@ import SeenI from "./seen";
 import SunI from "./sun";
 import MoonI from "./moon";
 import EyeI from "./eye";
+import DocI from "./document";
+import LinkI from "./link";
 
 export {
   DashboardI,
@@ -88,4 +90,6 @@ export {
   SunI,
   MoonI,
   EyeI,
+  DocI,
+  LinkI,
 };

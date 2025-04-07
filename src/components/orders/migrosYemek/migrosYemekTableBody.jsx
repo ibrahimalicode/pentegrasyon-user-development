@@ -18,6 +18,7 @@ import MigrosYemekOrderDetails from "./migrosYemekOrderDetails";
 import MigrosYemekStatusButton from "./migrosYemekStatusButton";
 import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import { MigrosYemekAddress } from "../components/marketplaceAddresses";
+import toast from "react-hot-toast";
 
 const MigrosYemekTableBody = ({
   licenses,
@@ -56,7 +57,10 @@ const MigrosYemekTableBody = ({
     const currentLicense = licenses.find(
       (L) => L.restaurantId === order.restaurantId
     );
-    if (currentLicense && !currentLicense?.isActive) return;
+    if (currentLicense && !currentLicense?.isActive) {
+      toast.error("Lisan Süresi Bitmiştir! Lütfen lisansınızı uzatınız.");
+      return;
+    }
 
     setSlideBarContent(
       <MigrosYemekOrderDetails order={order} setOrdersData={setOrdersData} />

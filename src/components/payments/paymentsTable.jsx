@@ -80,7 +80,13 @@ const PaymentsTable = ({ inData, totalItems = inData.length }) => {
                   {formatDateString({ dateString: data.createdDateTime })}
                 </td>
                 <td className="whitespace-nowrap w-14 text-[--black-2] font-light relative">
-                  <Actions payment={data} />
+                  <Actions
+                    index={index}
+                    payment={{
+                      ...data,
+                      docPath: formatFilePath(data.receiptFilePath),
+                    }}
+                  />
                 </td>
               </tr>
             ))}

@@ -71,7 +71,7 @@ function DeleteIntegrationInfoPopup({ data, restaurant, onSuccess }) {
   }, [error, success, loading]);
 
   return (
-    <main className="bg-[--white-1] rounded-md p-5">
+    <main className="bg-[--white-1] text-[--black-2] border border-[--border-1] rounded-md p-5">
       <div className="flex justify-end mb-3">
         <button
           onClick={() => setPopupContent(null)}
@@ -81,7 +81,10 @@ function DeleteIntegrationInfoPopup({ data, restaurant, onSuccess }) {
         </button>
       </div>
       <p>
-        İşletme <span className="text-[--link-1]">{restaurant?.name}</span>{" "}
+        İşletme{" "}
+        <span className="text-[--link-1]">
+          {restaurant?.name || restaurant?.storeName}
+        </span>{" "}
         {licenseTypeIds[restaurant?.marketplaceId]?.label} Pazaryeri restoranını
         silmek istediğinizden emin misiniz ?
       </p>

@@ -68,73 +68,82 @@ function Header({ openSidebar, setOpenSidebar }) {
   }, [headerSettingsRef, open]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 flex flex-col justify-center h-16 py-3.5 px-[4%] bg-[--white-1] border-b border-[--border-1] max-md:px-5 z-[99]">
-      <nav className="w-full flex justify-between items-center">
-        <div
-          className="text-[--gr-1] cursor-pointer"
-          onClick={() => setOpenSidebar(!openSidebar)}
-        >
-          <MenuI className={`${param["*"] === "orders" ? "" : "lg:hidden"}`} />
-        </div>
-
-        <Advert />
-
-        <div className="flex gap-4 max-sm:gap-2">
-          <button
-            onClick={() => setTheme(getTheme() == "light" ? "dark" : "light")}
-            className="flex justify-center items-center w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl"
-          >
-            {getTheme() == "light" ? <SunI /> : <MoonI />}
-          </button>
-
-          <Link to="/messages">
-            <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer relative">
-              <BellI />
-              {messagesData &&
-                messagesData?.filter((_) => !_.isRead).length > 0 && (
-                  <span className="absolute -top-2 -left-2 text-xs border border-[--primary-1] bg-[--primary-1] text-white rounded-full size-6 flex justify-center items-center">
-                    {messagesData?.filter((_) => !_.isRead).length}
-                  </span>
-                )}
-            </div>
-          </Link>
+    <>
+      <header className="fixed top-0 right-0 left-0 flex flex-col justify-center bg-[--white-1] z-[99]">
+        <nav className="w-full h-16 flex justify-between items-center py-3.5 max-md:px-5 px-[4%] border-b border-[--border-1]">
           <div
-            className="flex justify-center items-center relative"
-            ref={headerSettingsRef}
+            className="text-[--gr-1] cursor-pointer"
+            onClick={() => setOpenSidebar(!openSidebar)}
           >
-            <div
-              className="flex justify-center items-center p-[.5rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer"
-              onClick={() => setOpen(!open)}
-            >
-              <SettingsI strokeWidth={1.5} className="size-7 text-[--gr-1]" />
-            </div>
+            <MenuI
+              className={`${param["*"] === "orders" ? "" : "lg:hidden"}`}
+            />
+          </div>
 
-            <div
-              className={`absolute top-[3rem] right-2 bg-[--white-1] text-[--gr-1] border border-solid border-[--border-1] font-sans rounded-md transition-colors ${
-                !open && "invisible"
-              }`}
+          <p className="flex items-center text-3xl max-sm:text-xl text-[--primary-1] font-[conthrax]">
+            Pentegrasyon
+          </p>
+
+          <div className="flex gap-4 max-sm:gap-2">
+            <button
+              onClick={() => setTheme(getTheme() == "light" ? "dark" : "light")}
+              className="flex justify-center items-center w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl"
             >
-              <ul>
-                <Link to="/profile">
+              {getTheme() == "light" ? <SunI /> : <MoonI />}
+            </button>
+
+            <Link to="/messages">
+              <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer relative">
+                <BellI />
+                {messagesData &&
+                  messagesData?.filter((_) => !_.isRead).length > 0 && (
+                    <span className="absolute -top-2 -left-2 text-xs border border-[--primary-1] bg-[--primary-1] text-white rounded-full size-6 flex justify-center items-center">
+                      {messagesData?.filter((_) => !_.isRead).length}
+                    </span>
+                  )}
+              </div>
+            </Link>
+            <div
+              className="flex justify-center items-center relative"
+              ref={headerSettingsRef}
+            >
+              <div
+                className="flex justify-center items-center p-[.5rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer"
+                onClick={() => setOpen(!open)}
+              >
+                <SettingsI strokeWidth={1.5} className="size-7 text-[--gr-1]" />
+              </div>
+
+              <div
+                className={`absolute top-[3rem] right-2 bg-[--white-1] text-[--gr-1] border border-solid border-[--border-1] font-sans rounded-md transition-colors ${
+                  !open && "invisible"
+                }`}
+              >
+                <ul>
+                  <Link to="/profile">
+                    <li
+                      className="px-6 py-2 pr-16 text-sm hover:bg-[--light-3] border-b border-solid border-[--light-3] cursor-pointer"
+                      onClick={() => setOpen(!open)}
+                    >
+                      Profile
+                    </li>
+                  </Link>
                   <li
-                    className="px-6 py-2 pr-16 text-sm hover:bg-[--light-3] border-b border-solid border-[--light-3] cursor-pointer"
-                    onClick={() => setOpen(!open)}
+                    className="px-6 py-2 pr-16 text-sm hover:bg-[--light-3] cursor-pointer"
+                    onClick={handleLogout}
                   >
-                    Profile
+                    Logout
                   </li>
-                </Link>
-                <li
-                  className="px-6 py-2 pr-16 text-sm hover:bg-[--light-3] cursor-pointer"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </li>
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
-    </header>
+        </nav>
+      </header>
+      <div className="w-full flex justify-center relative z-[9999]">
+        <Advert />
+      </div>
+    </>
   );
 }
 

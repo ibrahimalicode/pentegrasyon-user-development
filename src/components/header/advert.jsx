@@ -55,7 +55,7 @@ const Advert = () => {
     advertData?.url.includes("vimeo.com");
 
   return advertData ? (
-    <main className="h-16">
+    <main className="h-16 -mb-16 mt-16">
       <a
         target="_blank"
         className="h-full w-full object-scale-down"
@@ -87,11 +87,7 @@ const Advert = () => {
         )}
       </a>
     </main>
-  ) : (
-    <p className="flex items-center text-3xl max-sm:text-xl text-[--primary-1] font-[conthrax]">
-      Pentegrasyon
-    </p>
-  );
+  ) : null;
 };
 
 export default Advert;

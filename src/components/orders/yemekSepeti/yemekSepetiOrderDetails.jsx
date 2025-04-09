@@ -37,12 +37,13 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
   }, [statusChangedOrder]);
 
   function getCurrentCourier() {
+    if (order.expressDelivery) return "YS Kuryesi";
+
+    const custAdd = order?.customer?.deliveryMainArea;
     const currentCourier = courierServiceTypes.filter(
       (T) => T.licenseTypeId === order.courierTypeId
     );
-    return currentCourier.length
-      ? currentCourier[0].label
-      : order?.courier?.name;
+    return custAdd ? currentCourier?.[0]?.label : "Platform Kuryesi";
   }
   console.log(order);
 

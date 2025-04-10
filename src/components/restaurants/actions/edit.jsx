@@ -374,7 +374,7 @@ function EditRestaurantPopup({ restaurant, onSuccess }) {
             !isMapOpen && "hidden"
           }`}
         >
-          <div id="map" className="size-full] rounded-t-md"></div>
+          <div id="map" className="size-full rounded-t-md"></div>
 
           <div className="w-full] px-2 py-1 pt-2 flex bg-[--light-1] rounded-b-md">
             <div className="w-full gap-2 flex">

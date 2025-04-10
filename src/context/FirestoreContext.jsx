@@ -75,13 +75,13 @@ export const FirestoreProvider = ({ children }) => {
       if (!docSnapshot.exists()) {
         await setDoc(userRef, {});
 
-        await setDoc(doc(userRef, "newTicket", "data"), {});
-        await setDoc(doc(userRef, "ticketStatus", "data"), {});
-        await setDoc(doc(userRef, "newMessage", "data"), {});
-        await setDoc(doc(userRef, "restaurantStatus", "data"), {});
-        await setDoc(doc(userRef, "ticketAutomation", "data"), {});
-        await setDoc(doc(userRef, "userLock", "data"), {});
-        await setDoc(doc(userRef, "courierStatus", "data"), {});
+        // await setDoc(doc(userRef, "newTicket", "data"), {});
+        // await setDoc(doc(userRef, "ticketStatus", "data"), {});
+        // await setDoc(doc(userRef, "newMessage", "data"), {});
+        // await setDoc(doc(userRef, "restaurantStatus", "data"), {});
+        // await setDoc(doc(userRef, "ticketAutomation", "data"), {});
+        // await setDoc(doc(userRef, "userLock", "data"), {});
+        // await setDoc(doc(userRef, "courierStatus", "data"), {});
       }
     } catch (error) {
       console.log(error);

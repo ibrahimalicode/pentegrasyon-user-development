@@ -69,24 +69,24 @@ export const FirestoreProvider = ({ children }) => {
   const ensureUserDocExists = async () => {
     const userRef = doc(db, "users", userId);
 
-    // try {
-    //   const docSnapshot = await getDoc(userRef);
+    try {
+      const docSnapshot = await getDoc(userRef);
 
-    //   if (!docSnapshot.exists()) {
-    //     await setDoc(userRef, {});
+      if (!docSnapshot.exists()) {
+        await setDoc(userRef, {});
 
-    //     // await setDoc(doc(userRef, "newTicket", "data"), {});
-    //     // await setDoc(doc(userRef, "ticketStatus", "data"), {});
-    //     // await setDoc(doc(userRef, "newMessage", "data"), {});
-    //     // await setDoc(doc(userRef, "restaurantStatus", "data"), {});
-    //     // await setDoc(doc(userRef, "ticketAutomation", "data"), {});
-    //     // await setDoc(doc(userRef, "userLock", "data"), {});
-    //     // await setDoc(doc(userRef, "courierStatus", "data"), {});
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   return;
-    // }
+        await setDoc(doc(userRef, "newTicket", "data"), {});
+        await setDoc(doc(userRef, "ticketStatus", "data"), {});
+        await setDoc(doc(userRef, "newMessage", "data"), {});
+        await setDoc(doc(userRef, "restaurantStatus", "data"), {});
+        await setDoc(doc(userRef, "ticketAutomation", "data"), {});
+        await setDoc(doc(userRef, "userLock", "data"), {});
+        await setDoc(doc(userRef, "courierStatus", "data"), {});
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   };
 
   // Subscribe to subcollections

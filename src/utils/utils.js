@@ -3,7 +3,7 @@ import _ from "lodash";
 import toast from "react-hot-toast";
 
 //UTILS
-import MarketPalceIds from "../enums/marketPlaceIds";
+import licenseTypeIds from "../enums/licenseTypeIds";
 
 export function formatDateString({
   dateString,
@@ -258,9 +258,9 @@ export const formatLisansPackages = (data) => {
 
   const outData = data.map((ent, index) => {
     return {
-      value: MarketPalceIds[ent.licenseTypeId].label,
+      value: licenseTypeIds[ent.licenseTypeId].label,
       label: CustomLabel(
-        MarketPalceIds[ent.licenseTypeId].label,
+        licenseTypeIds[ent.licenseTypeId].label,
         ent.time,
         ent.description,
         ent.userPrice,

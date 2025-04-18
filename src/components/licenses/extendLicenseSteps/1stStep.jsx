@@ -16,6 +16,8 @@ import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import Autoronics from "../../../assets/img/packages/Autoronics.png";
+import Vigo from "../../../assets/img/packages/Vigo.png";
+import PaketNet from "../../../assets/img/packages/PaketNet.png";
 import DefaultMarketplace from "../../../assets/img/packages/Default-Marketplace.png";
 
 //FUNC
@@ -45,6 +47,8 @@ const imageSRCs = [
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
   { src: Autoronics, name: "Autoronics" },
+  { src: Vigo, name: "Vigo" },
+  { src: PaketNet, name: "PaketNet" },
 ];
 
 const FirstStep = ({

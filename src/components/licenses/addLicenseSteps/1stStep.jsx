@@ -17,6 +17,7 @@ import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import Autoronics from "../../../assets/img/packages/Autoronics.png";
 import Vigo from "../../../assets/img/packages/Vigo.png";
+import PaketNet from "../../../assets/img/packages/PaketNet.png";
 
 //UTILS
 import {
@@ -50,6 +51,7 @@ const imageSRCs = [
   { src: Siparisim, name: "Siparisim" },
   { src: Autoronics, name: "Autoronics" },
   { src: Vigo, name: "Vigo" },
+  { src: PaketNet, name: "PaketNet" },
 ];
 
 const FirstStep = ({

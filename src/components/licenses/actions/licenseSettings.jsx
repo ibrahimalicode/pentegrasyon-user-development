@@ -5,16 +5,20 @@ import { usePopup } from "../../../context/PopupContext";
 import GetirYemekLicenseSettings from "./marketplaceLicenseSettings/getirYemekLicenseSettings";
 import YemekSepetiLicenseSettings from "./marketplaceLicenseSettings/yemekSepetiLicenseSettings";
 import MigrosYemekLicenseSettings from "./marketplaceLicenseSettings/migrosYemekLicenseSettings";
+import PaketNetLicenseSettings from "./marketplaceLicenseSettings/paketNetLicenseSettings";
 
 const LicenseSettings = ({ licenseData, onSuccess }) => {
   const { setPopupContent } = usePopup();
+
   const LicenseSettingsPopups = [
-    GetirYemekLicenseSettings,
-    MigrosYemekLicenseSettings,
-    GetirYemekLicenseSettings, //Placeholder
-    YemekSepetiLicenseSettings,
+    { comp: GetirYemekLicenseSettings, id: 0 },
+    { comp: MigrosYemekLicenseSettings, id: 1 },
+    { comp: YemekSepetiLicenseSettings, id: 3 },
+    { comp: PaketNetLicenseSettings, id: 8 },
   ];
-  const LicenseSettingsPopup = LicenseSettingsPopups[licenseData.licenseTypeId];
+  const LicenseSettingsPopup = LicenseSettingsPopups.filter(
+    (P) => P.id == licenseData.licenseTypeId
+  )?.[0]?.comp;
 
   const handlePopup = (event) => {
     event.stopPropagation();

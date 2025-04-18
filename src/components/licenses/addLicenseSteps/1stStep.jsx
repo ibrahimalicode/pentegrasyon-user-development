@@ -279,8 +279,10 @@ const FirstStep = ({
                         className="flex items-center text-[12px] leading-snug text-white"
                       >
                         <div
-                          className={`flex flex-col justify-center py-1.5 px-6 rounded cursor-pointer ${
-                            isSelected ? "bg-[--primary-1]" : "bg-[--light-3]"
+                          className={`flex flex-col justify-center py-1.5 px-6 rounded cursor-pointer text-[--black-1] ${
+                            isSelected
+                              ? "bg-[--primary-1] text-white"
+                              : "bg-[--light-5]"
                           }`}
                           onClick={() =>
                             handleAddToCart({

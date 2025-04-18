@@ -39,6 +39,11 @@ const licenseTypeIds = [
     value: "Vigo",
     id: 7,
   },
+  {
+    label: "PaketNet",
+    value: "PaketNet",
+    id: 8,
+  },
 ];
 
 export default licenseTypeIds;

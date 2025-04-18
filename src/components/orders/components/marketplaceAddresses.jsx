@@ -1,11 +1,11 @@
 export const GetirYemekAddress = ({ order }) => {
   return (
-    <>
+    <span>
       <span>{order.client.address}</span>
       {order.client.aptNo && <span>Apt No: {order.client.aptNo}</span>}
       {order.client.doorNo && <span> Daire No: {order.client.doorNo}</span>}
       {order.client.floor && <span> Kat: {order.client.floor}</span>}
-    </>
+    </span>
   );
 };
 

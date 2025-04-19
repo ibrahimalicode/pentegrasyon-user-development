@@ -109,7 +109,11 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
         const outCurrentOrder = prev.filter((O) => O.id !== order.id);
         return formatByDate([
           ...outCurrentOrder,
-          { ...order, courierId: selectedCourier.id },
+          {
+            ...order,
+            courierId: selectedCourier?.id,
+            courierTypeId: selectedService.licenseTypeId,
+          },
         ]);
       });
       setPopupContent(null);

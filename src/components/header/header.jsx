@@ -140,7 +140,7 @@ function Header({ openSidebar, setOpenSidebar }) {
           </div>
         </nav>
       </header>
-      <div className="w-full flex justify-center relative z-[9999]">
+      <div className="w-full flex justify-center relative">
         <Advert />
       </div>
     </>

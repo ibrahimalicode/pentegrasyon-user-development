@@ -12,9 +12,10 @@ import { usePopup } from "../../../context/PopupContext";
 //UTILS
 import {
   formatByDate,
-  formatSelectorData,
   formatToPrice,
+  formatSelectorData,
 } from "../../../utils/utils";
+import MarketPalceIds from "../../../enums/marketPlaceIds";
 import compensationTypes from "../../../enums/compensationTypes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -32,7 +33,6 @@ import {
   resetGetOrderCompensation,
 } from "../../../redux/orders/getOrderCompensationSlice";
 import { getAvailableCourierServices } from "../../../redux/couriers/getAvailableCourierServicesSlice";
-import MarketPalceIds from "../../../enums/marketPlaceIds";
 
 const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
   const toastId = useRef();
@@ -49,9 +49,9 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
     (state) => state.orders.updateCourier
   );
   const {
-    compensationData: compensation,
     error: compensationError,
     loading: compensationLoading,
+    compensationData: compensation,
   } = useSelector((state) => state.orders.getOrderCompensation);
 
   const [routeData, setRouteData] = useState(null);
@@ -66,7 +66,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!selectedCourier?.id) {
+    if (selectedService.id == 0 && !selectedCourier?.id) {
       toast.error("Lütfen kurye seçin", { id: "kurye-error" });
       return;
     }
@@ -79,8 +79,8 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
         ticketId: order.id,
         marketplaceId: order.marketplaceId,
         courierService: selectedService.licenseTypeId,
-        courierId: selectedCourier.id,
-        courierCompensationType: compensationData.id,
+        courierId: selectedCourier?.id,
+        courierCompensationType: compensationData?.id,
         compensationRate,
       })
     );

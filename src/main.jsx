@@ -23,12 +23,10 @@ root.render(
       <PopupProvider>
         <ProtectPagesProvider>
           <FirestoreProvider>
-            <OrdersContextProvider>
-              <MessagesContextProvider>
-                <App />
-                <Toaster toastOptions={toastOptions} />
-              </MessagesContextProvider>
-            </OrdersContextProvider>
+            <MessagesContextProvider>
+              <App />
+              <Toaster toastOptions={toastOptions} />
+            </MessagesContextProvider>
           </FirestoreProvider>
         </ProtectPagesProvider>
       </PopupProvider>

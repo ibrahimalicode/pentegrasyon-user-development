@@ -19,6 +19,7 @@ import SlideBar from "./components/common/slideBar";
 
 //CONTEXT
 import { SlideBarProvider } from "./context/SlideBarContext";
+import { OrdersContextProvider } from "./context/OrdersContext";
 
 function App() {
   return (
@@ -35,7 +36,13 @@ function App() {
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
-          <Route element={<ProtectedRoute />}>
+          <Route
+            element={
+              <OrdersContextProvider>
+                <ProtectedRoute />
+              </OrdersContextProvider>
+            }
+          >
             <Route path="/*" element={<Home />} />
             <Route path="*" element={<NotFound />} />
           </Route>

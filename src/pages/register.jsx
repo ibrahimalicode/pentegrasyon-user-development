@@ -295,15 +295,6 @@ const Register = () => {
                   {loading ? <LoadingI className="h-7" /> : "Devam"}
                 </button>
               </div>
-
-              <style>
-                {`
-                  .customInput input {
-                    background-color: transparent !important;
-                    color: white;
-                  }
-                `}
-              </style>
             </div>
 
             <div className="flex flex-col mt-4 sm:mt-6 w-full">

@@ -169,6 +169,11 @@ section {
   background-color: #ffffff;
 }
 
+.customInput input {
+  background-color: transparent !important;
+  color: white;
+}
+
 .stroke {
   -webkit-text-stroke-width: 1.5px;
   -webkit-text-stroke-color: black;

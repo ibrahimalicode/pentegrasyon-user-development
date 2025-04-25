@@ -17,8 +17,8 @@ import {
   resetChangePassword,
 } from "../redux/auth/changePasswordSlice";
 import {
-  resetVerifyCodeState,
   codeVerification,
+  resetVerifyCodeState,
 } from "../redux/auth/verifyCodeSlice";
 
 const KEY = import.meta.env.VITE_LOCAL_KEY;
@@ -111,13 +111,13 @@ const SetNewPassword = () => {
   return !credentials && token ? (
     <GlassFrame
       component={
-        <form className="" onSubmit={handleChangePassword}>
+        <form className="light" onSubmit={handleChangePassword}>
           <div className="flex justify-center">
             <h2 className="text-[2rem] font-bold text-[--white-1] tracking-tighter whitespace-nowrap">
               Yeni şifreniz
             </h2>
           </div>
-          <div className="flex flex-col max-w-full">
+          <div className="flex flex-col max-w-full customInput">
             <CustomInput
               label="Yeni Şifre"
               placeholder="Yeni Şifre"

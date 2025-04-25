@@ -87,15 +87,6 @@ function Login() {
             minLength={4}
             maxLength={20}
           />
-          <style>
-            {`
-              .customInput input {
-                background-color: transparent !important;
-                color: white;
-              }
-            `}
-          </style>
-
           <div className="text-right text-[--link-1] mt-4">
             <a href="/forgotPassword">Şifremi unuttum ?</a>
           </div>

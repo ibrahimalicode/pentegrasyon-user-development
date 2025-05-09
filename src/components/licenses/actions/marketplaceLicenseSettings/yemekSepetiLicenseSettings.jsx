@@ -80,7 +80,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     toast.dismiss();
     const confirmation = (t) => {
       return (
-        <div className="max-w-lg w-full bg-[--white-1] shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip p-4 font-normal">
+        <div className="max-w-lg w-full bg-[--white-1] text-[--black-2] shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 border border-[--brown-1] overflow-clip p-4 font-normal">
           <div>
             <p className="text-center font-bold mb-2">ÖNEMLİ BİLGİLENDİRME !</p>
             <p>
@@ -91,7 +91,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
               ve <span className="font-bold">Perşembe</span> günleri olarak
               belirlenmiştir.. Entegrasyon geçişi yapıldığında{" "}
               <span className="font-bold">Chain Code</span> bilgisi
-              <span className="text-[--link-1]">{user.email}</span> mail
+              <span className="text-[--link-1]"> {user.email}</span> mail
               adresinize iletilecektir. Bu kodu girdiğinizde Pentegrasyon
               servisi çalışmaya başlayacaktır.
             </p>

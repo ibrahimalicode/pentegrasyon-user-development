@@ -1,4 +1,5 @@
 //REDUX
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,14 +12,12 @@ import {
 //COMP
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
-import CustomSelect from "../../common/customSelector";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
 
 //UTILS
 import { useGetirYemekOrderActions } from "./useGetirYemekOrderActions";
-import toast from "react-hot-toast";
 
 function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
   const dispatch = useDispatch();
@@ -29,9 +28,8 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
   );
 
   const [optionsData, setOptionsData] = useState(null);
-  const [selectedData, setSelectedData] = useState({ label: "Sebep Seç" });
   const [cancelOrderData, setCancelOrderData] = useState({
-    cancelReasonId: selectedData.cancelReasonId,
+    cancelReasonId: "",
     cancelNote: "",
     ticketId,
   });
@@ -43,7 +41,8 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!selectedData?.value) {
+    console.log(cancelOrderData);
+    if (!cancelOrderData?.cancelReasonId) {
       toast.error("Lütfen  İptal Sebepini Seçiniz");
       return;
     }
@@ -64,8 +63,7 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
     if (options) {
       const formattedOptions = options.map((opt) => {
         return {
-          label: opt.message,
-          value: opt.id,
+          cancelNote: opt.message,
           cancelReasonId: opt.id,
         };
       });
@@ -95,22 +93,19 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
               optionsData.map((opt) => (
                 <button
                   type="button"
-                  key={opt.value}
+                  key={opt.cancelReasonId}
                   onClick={() => {
-                    setSelectedData(opt);
-                    setCancelOrderData((prev) => {
-                      return {
-                        ...prev,
-                        cancelReasonId: opt.cancelReasonId,
-                      };
+                    setCancelOrderData({
+                      ticketId,
+                      ...opt,
                     });
                   }}
                   className={`border bg-[--light-4] py-2 px-3 rounded-sm text-leftm ${
-                    opt.value == selectedData.value &&
+                    opt.cancelReasonId == cancelOrderData.cancelReasonId &&
                     "border-[--green-1] bg-[--light-green] text-[--green-1]"
                   }`}
                 >
-                  {opt.label}
+                  {opt.cancelNote}
                 </button>
               ))}
           </div>
@@ -118,6 +113,7 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
 
         <div>
           <CustomInput
+            required
             label="İptal Notu"
             value={cancelOrderData.cancelNote}
             onChange={(e) =>

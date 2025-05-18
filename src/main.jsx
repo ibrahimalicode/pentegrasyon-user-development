@@ -10,7 +10,6 @@ import "./index.css";
 import App from "./App";
 import store from "./store";
 import toastOptions from "./config/toast";
-import { OrdersContextProvider } from "./context/OrdersContext";
 import { PopupProvider } from "./context/PopupContext";
 import { ProtectPagesProvider } from "./context/ProtectPagesContext";
 import { FirestoreProvider } from "./context/FirestoreContext";

@@ -111,6 +111,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
           ...outCurrentOrder,
           {
             ...order,
+            courier: { ...order.courier, ...selectedCourier },
             courierId: selectedCourier?.id,
             courierTypeId: selectedService.licenseTypeId,
           },

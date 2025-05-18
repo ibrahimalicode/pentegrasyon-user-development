@@ -59,7 +59,55 @@ export const getOrders = createAsyncThunk(
       });
 
       // console.log(res.data);
-      return res.data;
+      const orders = res.data.data;
+
+      const withCourier = orders.filter(
+        (O) =>
+          O.courierTypeId === 0 &&
+          O.courierId &&
+          O.courierId !== "00000000-0000-0000-0000-000000000000"
+      );
+
+      const uniqueCourierIds = [
+        ...new Set(withCourier.map((o) => o.courierId)),
+      ];
+
+      const courierMap = new Map();
+
+      await Promise.all(
+        uniqueCourierIds.map(async (id) => {
+          try {
+            const courierRes = await api.get(
+              `${baseURL}Couriers/GetCourierById`,
+              {
+                params: { courierId: id },
+              }
+            );
+            courierMap.set(id, courierRes.data?.data);
+          } catch (err) {
+            console.error(`Failed to fetch courier with ID ${id}`, err);
+          }
+        })
+      );
+
+      const enrichedOrders = orders.map((order) => {
+        const courierData = courierMap.get(order.courierId);
+        if (order.courierTypeId === 0 && order.courierId && courierData) {
+          return {
+            ...order,
+            courier: {
+              ...order?.courier,
+              ...courierData,
+            },
+          };
+        }
+        return order;
+      });
+
+      return {
+        ...res.data,
+        data: enrichedOrders,
+      };
     } catch (err) {
       // console.log(err);
       const errorMessage = err.message;

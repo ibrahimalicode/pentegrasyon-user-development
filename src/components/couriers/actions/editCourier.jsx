@@ -75,6 +75,7 @@ function EditCourierPopup({ onSuccess, courier }) {
     loginCode,
     compensationTypeId,
     compensationRate,
+    isOnline,
   } = courier;
 
   const [courierData, setCourierData] = useState({
@@ -87,7 +88,7 @@ function EditCourierPopup({ onSuccess, courier }) {
     compensationTypeId,
     compensationRate: Number(compensationRate).toFixed(2).replace(".", ","),
     sendSMSNotify: false,
-    isOnline: true,
+    isOnline,
   });
 
   const [courierDataBefore, setCourierDataBefore] = useState({
@@ -100,7 +101,7 @@ function EditCourierPopup({ onSuccess, courier }) {
     compensationTypeId,
     compensationRate: Number(compensationRate).toFixed(2).replace(".", ","),
     sendSMSNotify: false,
-    isOnline: true,
+    isOnline,
   });
 
   const closeForm = () => {

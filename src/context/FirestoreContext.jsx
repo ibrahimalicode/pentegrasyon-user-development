@@ -49,6 +49,7 @@ export const FirestoreProvider = ({ children }) => {
   const [newOrder, setNewOrder] = useState(null);
   const [statusChangedRestaurant, setStatusChangedRestaurant] = useState(null);
   const [automaticApprovalDatas, setAutomaticApprovalDatas] = useState(null);
+  const [courierStatus, setCourierStatus] = useState(null);
 
   //GET USER
   useEffect(() => {
@@ -162,6 +163,10 @@ export const FirestoreProvider = ({ children }) => {
         "userLock",
         setProtectedPages
       );
+      const unsubCourierStatus = subscribeToSubcollection(
+        "courierStatus",
+        setCourierStatus
+      );
 
       // Cleanup subscriptions on unmount
       return () => {
@@ -171,6 +176,7 @@ export const FirestoreProvider = ({ children }) => {
         unsubRestaurantStatus();
         unsubAutoApproval();
         unsubProtectedPages();
+        unsubCourierStatus();
       };
     };
 
@@ -201,6 +207,8 @@ export const FirestoreProvider = ({ children }) => {
         setStatusChangedRestaurant,
         automaticApprovalDatas,
         setAutomaticApprovalDatas,
+        courierStatus,
+        setCourierStatus,
       }}
     >
       {children}

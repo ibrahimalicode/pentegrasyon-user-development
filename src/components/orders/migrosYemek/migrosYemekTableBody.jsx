@@ -151,9 +151,12 @@ const MigrosYemekTableBody = ({
               const currentCourier = courierServiceTypes.filter(
                 (T) => T.licenseTypeId === order.courierTypeId
               );
+
               return currentCourier.length
-                ? currentCourier[0].label
-                : order?.courier?.name; //MY kurye adi
+                ? currentCourier[0].id === 0 && order?.courier?.username
+                  ? order?.courier?.username
+                  : currentCourier[0].label
+                : "Bilgi Bulunamadı"; //order?.courier?.name; //MY kurye adi
             })()}
           </button>
         </td>

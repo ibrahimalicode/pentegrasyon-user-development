@@ -164,7 +164,9 @@ const YemekSepetiTableBody = ({
                   );
 
                   return custAdd
-                    ? currentCourier?.[0]?.label
+                    ? currentCourier[0].id === 0 && order?.courier?.username
+                      ? order?.courier?.username
+                      : currentCourier[0].label
                     : "Platform Kuryesi";
                 })()}
           </button>

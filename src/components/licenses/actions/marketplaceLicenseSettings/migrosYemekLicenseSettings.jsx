@@ -25,6 +25,7 @@ import {
   resetUpdateIntegrationInformation,
   updateIntegrationInformation,
 } from "../../../../redux/informations/migrosYemek/updateIntegrationInformationSlice";
+import CustomCheckbox from "../../../common/customCheckbox";
 
 const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -59,6 +60,7 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
     licenseId: data.id,
     restaurantId: data.restaurantId,
     MigrosYemekIntegrationInformationId: "",
+    useExternalCourierService: true,
   };
 
   const [licenseData, setLicenseData] = useState(initialData);
@@ -101,6 +103,7 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
         storeGroupId: infoData.storeGroupId,
         commissionRate: infoData.commissionRate,
         MigrosYemekIntegrationInformationId: infoData.id,
+        useExternalCourierService: infoData.useExternalCourierService,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);
@@ -256,6 +259,22 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
                   });
                 }}
                 disabled={getLoading}
+              />
+            </div>
+
+            <div className="mt-6 pl-4">
+              <CustomCheckbox
+                label="Harici Kurye Servisi Kullan"
+                checked={licenseData.useExternalCourierService}
+                onChange={() => {
+                  setLicenseData((prev) => {
+                    return {
+                      ...prev,
+                      useExternalCourierService:
+                        !licenseData.useExternalCourierService,
+                    };
+                  });
+                }}
               />
             </div>
 

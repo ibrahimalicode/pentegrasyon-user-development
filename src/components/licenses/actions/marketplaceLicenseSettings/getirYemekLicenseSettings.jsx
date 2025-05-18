@@ -23,6 +23,7 @@ import {
   updateIntegrationInformation,
 } from "../../../../redux/informations/getirYemek/updateIntegrationInformationSlice";
 import licenseTypeIds from "../../../../enums/licenseTypeIds";
+import CustomCheckbox from "../../../common/customCheckbox";
 
 const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -49,20 +50,17 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     (state) => state.integrationInfos.getirYemek.getIntegrationInfo
   );
 
-  const [licenseData, setLicenseData] = useState({
+  const initialData = {
     restaurantSecretKey: data?.restaurantSecretKey || "",
     restaurantId: data.restaurantId,
     licenseId: data.id,
     commissionRate: 0,
     getirYemekIntegrationInformationId: "",
-  });
-  const [licenseDataBefore, setLicenseDataBefore] = useState({
-    restaurantSecretKey: data?.restaurantSecretKey || "",
-    restaurantId: data.restaurantId,
-    licenseId: data.id,
-    commissionRate: 0,
-    getirYemekIntegrationInformationId: "",
-  });
+    useExternalCourierService: true,
+  };
+
+  const [licenseData, setLicenseData] = useState(initialData);
+  const [licenseDataBefore, setLicenseDataBefore] = useState(initialData);
 
   const closeForm = () => {
     setPopupContent(null);
@@ -98,6 +96,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
         commissionRate: infoData.commissionRate,
         restaurantSecretKey: infoData.restaurantSecretKey,
         getirYemekIntegrationInformationId: infoData.id,
+        useExternalCourierService: infoData.useExternalCourierService,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);
@@ -215,6 +214,22 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
                   });
                 }}
                 disabled={/* data?.isSettingsAdded || */ getLoading}
+              />
+            </div>
+
+            <div className="mt-6 pl-4">
+              <CustomCheckbox
+                label="Harici Kurye Servisi Kullan"
+                checked={licenseData.useExternalCourierService}
+                onChange={() => {
+                  setLicenseData((prev) => {
+                    return {
+                      ...prev,
+                      useExternalCourierService:
+                        !licenseData.useExternalCourierService,
+                    };
+                  });
+                }}
               />
             </div>
 

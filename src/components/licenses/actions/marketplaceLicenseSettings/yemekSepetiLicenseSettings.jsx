@@ -52,7 +52,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     (state) => state.integrationInfos.yemekSepeti.getIntegrationInfo
   );
 
-  const [licenseData, setLicenseData] = useState({
+  const initialData = {
     licenseId: data.id,
     restaurantId: data.restaurantId,
     sellerId: "",
@@ -60,16 +60,11 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     chainCode: "",
     commissionRate: 0,
     sendYemekSepetiEmailNotify: true,
-  });
-  const [licenseDataBefore, setLicenseDataBefore] = useState({
-    licenseId: data.id,
-    restaurantId: data.restaurantId,
-    sellerId: "",
-    remoteId: "",
-    chainCode: "",
-    commissionRate: 0,
-    sendYemekSepetiEmailNotify: true,
-  });
+    useExternalCourierService: true,
+  };
+
+  const [licenseData, setLicenseData] = useState(initialData);
+  const [licenseDataBefore, setLicenseDataBefore] = useState(initialData);
 
   const closeForm = () => {
     toast.remove("LICENSE_ENTEGRATION_COMFIRMATION");
@@ -139,7 +134,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     handleAddOrUpdate(inData);
   }
 
-  //CHECK IF THE SEND EMAIN IS CHOOOSEN
+  //CHECK IF THE SEND EMAIL IS CHOOOSEN
   function isSendShouldBeSent() {
     if (data.isSettingsAdded) {
       if (
@@ -155,9 +150,9 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
 
   function handleAddOrUpdate(inData) {
     if (data.isSettingsAdded) {
-      dispatch(updateIntegrationInformation(inData));
+      // dispatch(updateIntegrationInformation(inData));
     } else {
-      dispatch(addIntegrationInformation(inData));
+      // dispatch(addIntegrationInformation(inData));
     }
   }
 
@@ -197,6 +192,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
         chainCode: infoData.chainCode,
         commissionRate: infoData.commissionRate,
         yemekSepetiIntegrationInformationId: infoData.id,
+        useExternalCourierService: infoData.useExternalCourierService,
       };
       setLicenseData(data);
       setLicenseDataBefore(data);
@@ -343,6 +339,22 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
                   });
                 }}
                 disabled={/* data?.isSettingsAdded || */ getLoading}
+              />
+            </div>
+
+            <div className="mt-3">
+              <CustomCheckbox
+                label="Harici Kurye Servisi Kullan"
+                checked={licenseData.useExternalCourierService}
+                onChange={() => {
+                  setLicenseData((prev) => {
+                    return {
+                      ...prev,
+                      useExternalCourierService:
+                        !licenseData.useExternalCourierService,
+                    };
+                  });
+                }}
               />
             </div>
 

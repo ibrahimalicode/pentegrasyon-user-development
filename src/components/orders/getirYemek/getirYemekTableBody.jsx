@@ -161,7 +161,9 @@ const GetirYemekTableBody = ({
               );
 
               return currentCourier.length && order.deliveryType != 1
-                ? currentCourier[0].label
+                ? currentCourier[0].id === 0 && order?.courier?.username
+                  ? order?.courier?.username
+                  : currentCourier[0].label
                 : "Getir Kuryesi";
             })()}
           </button>

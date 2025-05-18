@@ -1,5 +1,6 @@
 //MODULES
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -26,9 +27,8 @@ import {
 //UTILS
 import { useFirestore } from "../../../context/FirestoreContext";
 import { useOrdersContext } from "../../../context/OrdersContext";
-import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 import { getLicenses } from "../../../redux/licenses/getLicensesSlice";
-import { useNavigate } from "react-router-dom";
+import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
@@ -47,6 +47,7 @@ const OrdersPage = () => {
   } = useOrdersContext();
 
   const { loading } = useSelector((state) => state.orders.get);
+
   const { data, error } = useSelector(
     (state) => state.orders.getAutomationVariables
   );
@@ -81,7 +82,7 @@ const OrdersPage = () => {
           pageSize: 2,
         })
       );
-      console.log("Distaptch Get Restaurants");
+      // console.log("Distaptch Get Restaurants");
     }
   }, [restaurants]);
 
@@ -100,7 +101,7 @@ const OrdersPage = () => {
               pageSize: 0,
             })
           );
-          console.log("Distaptch Get Licenses");
+          // console.log("Distaptch Get Licenses");
         }
       }
     }

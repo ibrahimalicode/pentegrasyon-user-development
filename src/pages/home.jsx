@@ -18,11 +18,13 @@ import Licenses from "./licenses";
 import Dashboard from "./dashboard";
 import Restourants from "./restourants";
 import ProtectedPages from "./protectedPages";
+import CourierStatusChange from "../components/couriers/components/courierStatusChange";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   return (
     <section className="bg-[--white-1]">
+      <CourierStatusChange />
       <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Routes>

@@ -2,9 +2,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
-//REDUX
-import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
-
 //SOUND
 import unverifiedOrderPath from "../assets/sound/unverifiedOrder.mp3";
 
@@ -14,11 +11,14 @@ import { CloseI } from "../assets/icon";
 import { usePopup } from "./PopupContext";
 import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
+
+//REDUX
 import { getTicketById } from "../redux/orders/getTicketByIdSlice";
 import {
   getTicketCountStatistics,
   resetGetTicketCountStatistics,
 } from "../redux/dashboard/statistics/getTicketCountStatisticsSlice";
+import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
 
 const OrdersContext = createContext();
 
@@ -123,7 +123,7 @@ export const OrdersContextProvider = ({ children }) => {
   //SET ORDER COUNT
   useEffect(() => {
     if (countSuccess) {
-      console.log(countData);
+      // console.log(countData);
       setOrdersCount(countData);
       dispatch(resetGetTicketCountStatistics());
     }
@@ -228,18 +228,29 @@ export const OrdersContextProvider = ({ children }) => {
 
   //SET NEW ORDER
   useEffect(() => {
-    if (newOrder) {
-      setOrdersData((prevOrders) => {
-        const existingOrders = prevOrders || [];
-        const isDuplicate = existingOrders.some(
-          (order) => order.id === newOrder.id
-        );
-        return isDuplicate
-          ? existingOrders
-          : formatByDate([newOrder, ...existingOrders]);
+    if (!newOrder) return;
+
+    const existingOrders = ordersData || [];
+    const isDuplicate = existingOrders.some(
+      (order) => order.id === newOrder.id
+    );
+
+    setOrdersData(
+      isDuplicate ? existingOrders : formatByDate([newOrder, ...existingOrders])
+    );
+
+    if (!isDuplicate) {
+      setOrdersCount((prev) => {
+        return {
+          ...prev,
+          totalProcessedOrders: {
+            ...prev.totalProcessedOrders,
+            count: prev.totalProcessedOrders.count + 1,
+          },
+        };
       });
-      setNewOrder(null);
     }
+    setNewOrder(null);
   }, [newOrder]);
 
   return (

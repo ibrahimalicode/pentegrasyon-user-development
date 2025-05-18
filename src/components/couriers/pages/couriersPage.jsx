@@ -3,26 +3,28 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
+import CouriersTable from "../couriersTable";
+import AddCourier from "../actions/addCourier";
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
 import TableSkeleton from "../../common/tableSkeleton";
+import CustomPagination from "../../common/pagination";
+import CustomSelect from "../../common/customSelector";
 
 //CONT
 import { usePopup } from "../../../context/PopupContext";
+import { useFirestore } from "../../../context/FirestoreContext";
 
 // REDUX
 import {
   getCouriers,
   resetgetCouriersState,
 } from "../../../redux/couriers/getCouriersSlice";
-import CouriersTable from "../couriersTable";
-import AddCourier from "../actions/addCourier";
-import CustomPagination from "../../common/pagination";
-import CustomSelect from "../../common/customSelector";
 
 const CouriersPage = () => {
   const dispatch = useDispatch();
   const filterCouriers = useRef();
+  const { courierStatus } = useFirestore();
   const { contentRef, setContentRef } = usePopup();
 
   const { loading, success, error, couriers } = useSelector(
@@ -114,6 +116,28 @@ const CouriersPage = () => {
       dispatch(resetgetCouriersState());
     }
   }, [success, error, couriers]);
+
+  //FIREBASE
+  useEffect(() => {
+    if (!courierStatus) return;
+    if (courierStatus.ticketId) return;
+
+    const currentCourier = couriersData.find((C) => C.id === courierStatus.id);
+    const exsitingCouriers = couriersData.filter(
+      (C) => C.id !== courierStatus.id
+    );
+
+    if (!currentCourier) return;
+
+    setCouriersData([
+      ...exsitingCouriers,
+      {
+        ...currentCourier,
+        isOnline:
+          courierStatus?.status?.toLowerCase() == "offline" ? false : true,
+      },
+    ]);
+  }, [courierStatus]);
 
   //HIDE POPUP
   useEffect(() => {

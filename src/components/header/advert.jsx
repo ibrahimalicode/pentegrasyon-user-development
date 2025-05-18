@@ -27,7 +27,7 @@ const Advert = () => {
   //set adverts data
   useEffect(() => {
     if (adverts) {
-      console.log(adverts);
+      // console.log(adverts);
       setAdvertsData(adverts);
       setAdvertData(adverts?.[0]);
       dispatch(resetGetAdverts());

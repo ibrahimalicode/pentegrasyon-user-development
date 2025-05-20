@@ -121,6 +121,8 @@ const GetirYemekTableBody = ({
                 }}
                 name1={order.marketplaceTicketRestaurantName}
                 name2={order.client.name}
+                order={order}
+                setOrdersData={setOrdersData}
               />
             )
           }

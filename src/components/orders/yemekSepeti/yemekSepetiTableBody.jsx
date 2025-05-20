@@ -118,6 +118,8 @@ const YemekSepetiTableBody = ({
                 }}
                 name1={order.restaurantName}
                 name2={order.customer.firstName}
+                order={order}
+                setOrdersData={setOrdersData}
               />
             )
           }

@@ -155,7 +155,10 @@ const MigrosYemekTableBody = ({
               />
             )
           }
-          className="whitespace-nowrap"
+          className={`whitespace-nowrap ${
+            order?.deliveryProvider?.toUpperCase() !== "RESTAURANT" &&
+            "pointer-events-none"
+          }`}
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
             {order?.deliveryProvider?.toUpperCase() == "RESTAURANT"

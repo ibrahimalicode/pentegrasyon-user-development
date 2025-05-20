@@ -244,8 +244,8 @@ export const OrdersContextProvider = ({ children }) => {
         return {
           ...prev,
           totalProcessedOrders: {
-            ...prev.totalProcessedOrders,
-            count: prev.totalProcessedOrders.count + 1,
+            ...prev?.totalProcessedOrders,
+            count: prev?.totalProcessedOrders?.count + 1,
           },
         };
       });

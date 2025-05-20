@@ -31,8 +31,9 @@ const CourierStatusChange = () => {
     });
 
     //handle migrosyemek courier status change
-    if (courierStatus.ticket) {
-      const currentOrder = ordersData.find(
+    if (courierStatus.ticketId) {
+      console.log(courierStatus);
+      const currentOrder = ordersData?.find(
         (O) => O.id === courierStatus.ticketId
       );
       const existingOrders = ordersData.filter(
@@ -44,7 +45,7 @@ const CourierStatusChange = () => {
         ...existingOrders,
         {
           ...currentOrder,
-          courier: { ...currentOrder.courier, status: courierStatus.status },
+          courierStatus,
         },
       ];
       setOrdersData(formatByDate(updatedOrders));

@@ -1,4 +1,8 @@
 //MODULES
+import ReactDOM from "react-dom";
+import Lottie from "lottie-react";
+import toast from "react-hot-toast";
+import { useRef, useState } from "react";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
@@ -10,15 +14,23 @@ import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
+import ToolTip from "../../common/tooltip";
 import GoogleRoute from "../components/googleRoute";
 import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
 import MigrosYemekPrintOrder from "./migrosYemekPrintOrder";
 import MigrosYemekOrderDetails from "./migrosYemekOrderDetails";
 import MigrosYemekStatusButton from "./migrosYemekStatusButton";
+import MigrosCourierStatus from "../../../enums/migrosCourierStatus";
 import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import { MigrosYemekAddress } from "../components/marketplaceAddresses";
-import toast from "react-hot-toast";
+
+//ANIMATIONS
+import ASSIGNED_FOR_DELIVERY_ANIM from "../../../assets/anim/lottie/ASSIGNED_FOR_DELIVERY.json";
+import COURIER_APPROACHED_ANIM from "../../../assets/anim/lottie/COURIER_APPROACHED.json";
+import COURIER_ARRIVED_ANIM from "../../../assets/anim/lottie/COURIER_ARRIVED.json";
+import IN_DELIVERY_ANIM from "../../../assets/anim/lottie/IN_DELIVERY.json";
+import DELIVERED_ANIM from "../../../assets/anim/lottie/DELIVERED.json";
 
 const MigrosYemekTableBody = ({
   licenses,
@@ -106,7 +118,9 @@ const MigrosYemekTableBody = ({
           {order.customer.firstName + " " + order.customer.lastName}
         </td>
         <td
-          onClick={() =>
+          className={`whitespace-nowrap`}
+          onClick={() => {
+            if (order?.deliveryProvider?.toUpperCase() !== "RESTAURANT") return;
             setPopupContent(
               <GoogleRoute
                 data={{
@@ -117,16 +131,13 @@ const MigrosYemekTableBody = ({
                 }}
                 name1={order.restaurantName}
                 name2={order.customer.firstName}
+                order={order}
+                setOrdersData={setOrdersData}
               />
-            )
-          }
-          className="whitespace-nowrap"
+            );
+          }}
         >
-          <button
-            className={`border py-2 px-3 rounded-md border-[--primary-1]`}
-          >
-            {order.customer.district}
-          </button>
+          <CourierCell order={order} />
         </td>
         <td
           onClick={() =>
@@ -147,17 +158,19 @@ const MigrosYemekTableBody = ({
           className="whitespace-nowrap"
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
-            {(() => {
-              const currentCourier = courierServiceTypes.filter(
-                (T) => T.licenseTypeId === order.courierTypeId
-              );
+            {order?.deliveryProvider?.toUpperCase() == "RESTAURANT"
+              ? (() => {
+                  const currentCourier = courierServiceTypes.filter(
+                    (T) => T.licenseTypeId === order.courierTypeId
+                  );
 
-              return currentCourier.length
-                ? currentCourier[0].id === 0 && order?.courier?.username
-                  ? order?.courier?.username
-                  : currentCourier[0].label
-                : "Bilgi Bulunamadı"; //order?.courier?.name; //MY kurye adi
-            })()}
+                  return currentCourier.length
+                    ? currentCourier[0].id === 0 && order?.courier?.username
+                      ? order?.courier?.username
+                      : currentCourier[0].label
+                    : "Bilgi Bulunamadı"; //order?.courier?.name; //MY kurye adi
+                })()
+              : "Platform Kuryesi"}
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
@@ -194,3 +207,89 @@ const MigrosYemekTableBody = ({
 };
 
 export default MigrosYemekTableBody;
+
+function CourierCell({ order }) {
+  const courierStatAnim = [
+    ASSIGNED_FOR_DELIVERY_ANIM,
+    COURIER_APPROACHED_ANIM,
+    COURIER_ARRIVED_ANIM,
+    IN_DELIVERY_ANIM,
+    DELIVERED_ANIM,
+  ];
+  const buttonRef = useRef(null);
+  const [tooltipPos, setTooltipPos] = useState(null);
+
+  const courierStat = MigrosCourierStatus.find(
+    (S) => S.value == order?.courierStatus?.status?.toUpperCase()
+  );
+
+  function showTooltip() {
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (rect) {
+      setTooltipPos({
+        top: rect.top + window.scrollY - rect.height - 100,
+        left: rect.left + window.scrollX + rect.width / 2 - 110,
+      });
+    }
+  }
+
+  function hideTooltip() {
+    setTooltipPos(null);
+  }
+
+  return (
+    <button
+      ref={buttonRef}
+      onMouseEnter={showTooltip}
+      onMouseLeave={hideTooltip}
+      className="border rounded-md border-[--primary-1] relative group"
+    >
+      {order?.deliveryProvider?.toUpperCase() == "RESTAURANT" ? (
+        <p className="py-2 px-3">{order.customer.district}</p>
+      ) : (
+        (() => {
+          if (!courierStat || !order?.courierStatus)
+            return <p className="py-2 px-3">{order.customer.district}</p>;
+
+          return (
+            <div>
+              <Lottie
+                className="h-[45px] w-20 overflow-hidden"
+                animationData={courierStatAnim[courierStat?.id]}
+                loop={true}
+              />
+              {tooltipPos &&
+                ReactDOM.createPortal(
+                  <div
+                    className="absolute min-w-max w-56 flex justify-center bg-[--white-1] border-2 border-[--primary-1] p-1 rounded-md invisible- group-hover:visible z-[99999]"
+                    style={{
+                      top: tooltipPos.top,
+                      left: tooltipPos.left,
+                    }}
+                  >
+                    <div className="">
+                      <p className="text-center font-bold text-[--primary-2]">
+                        {courierStat?.text}
+                      </p>
+                      <div className="w-full h-32 flex items-center justify-center">
+                        <Lottie
+                          className="w-full h-full object-contain"
+                          animationData={courierStatAnim[courierStat?.id]}
+                          loop={true}
+                        />
+                      </div>
+                      <ToolTip
+                        color="--primary-1"
+                        className="scale-150 -mb-1"
+                      />
+                    </div>
+                  </div>,
+                  document.body
+                )}
+            </div>
+          );
+        })()
+      )}
+    </button>
+  );
+}

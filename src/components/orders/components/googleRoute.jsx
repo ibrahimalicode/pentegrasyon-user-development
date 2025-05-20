@@ -1,18 +1,27 @@
+//MODELS
 import { useState } from "react";
-import CloseI from "../../../assets/icon/close";
-import { usePopup } from "../../../context/PopupContext";
-import {
-  GoogleMap,
-  DirectionsService,
-  DirectionsRenderer,
-  Marker,
-} from "@react-google-maps/api";
+import { DirectionsRenderer, Marker } from "@react-google-maps/api";
+import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
-const GoogleRoute = ({ data, name1, name2 }) => {
+//COMP
+import CloseI from "../../../assets/icon/close";
+
+//UTILS & CONT
+import { usePopup } from "../../../context/PopupContext";
+import CourierLocationMin from "./courierLocationMin";
+
+const GoogleRoute = ({
+  data,
+  name1,
+  name2,
+  order = null,
+  setOrdersData = null,
+}) => {
   const { setPopupContent } = usePopup();
+
+  const { lat1, lng1, lat2, lng2 } = data;
   const [response, setResponse] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
-  const { lat1, lng1, lat2, lng2 } = data;
 
   const directionsCallback = (result, status) => {
     if (status === "OK" && !response) {
@@ -27,10 +36,11 @@ const GoogleRoute = ({ data, name1, name2 }) => {
   };
 
   function addDot(num) {
-    console.log(num);
-    return parseFloat(
+    const out = parseFloat(
       num.toString().slice(0, 2) + "." + num.toString().slice(2)
     );
+    // console.log(out);
+    return out;
   }
 
   return (
@@ -70,14 +80,18 @@ const GoogleRoute = ({ data, name1, name2 }) => {
                 position={response.routes[0].legs[0].start_location}
                 icon={{
                   url: "https://cdn-icons-png.freepik.com/512/12522/12522999.png", //Origin
+                  // eslint-disable-next-line no-undef
                   scaledSize: new google.maps.Size(50, 50),
                 }}
               />
+
+              <CourierLocationMin order={order} setOrdersData={setOrdersData} />
 
               <Marker
                 position={response.routes[0].legs[0].end_location}
                 icon={{
                   url: "https://cdn-icons-png.flaticon.com/512/1189/1189458.png", //Destination
+                  // eslint-disable-next-line no-undef
                   scaledSize: new google.maps.Size(50, 50),
                 }}
               />
@@ -109,6 +123,7 @@ export default GoogleRoute;
 
 export const RouteInfo = ({ lat1, lng1, lat2, lng2 }) => {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService();
 
     function addDot(num) {

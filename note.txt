@@ -1,9 +1,6 @@
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Allow access to user-specific subcollections
-    match /users/{userId}/{subcollection}/{documentId} {
-      allow read, write: if resource.data.userId == userId;
-    }
-  }
-}
+MigrosYemekCourierNotifyEnum:
+ASSIGNED_FOR_DELIVERY
+COURIER_APPROACHED
+COURIER_ARRIVED
+IN_DELIVERY
+DELIVERED

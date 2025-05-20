@@ -1,6 +1,6 @@
 //MODULES
 import { useDispatch, useSelector } from "react-redux";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 //FIREBASE
 import { db } from "../config/firebase";
@@ -50,6 +50,7 @@ export const FirestoreProvider = ({ children }) => {
   const [statusChangedRestaurant, setStatusChangedRestaurant] = useState(null);
   const [automaticApprovalDatas, setAutomaticApprovalDatas] = useState(null);
   const [courierStatus, setCourierStatus] = useState(null);
+  const [courierLocation, setCourierLocation] = useState(null);
 
   //GET USER
   useEffect(() => {
@@ -167,6 +168,10 @@ export const FirestoreProvider = ({ children }) => {
         "courierStatus",
         setCourierStatus
       );
+      const unsubCourierLocation = subscribeToSubcollection(
+        "courierLocation",
+        setCourierLocation
+      );
 
       // Cleanup subscriptions on unmount
       return () => {
@@ -177,6 +182,7 @@ export const FirestoreProvider = ({ children }) => {
         unsubAutoApproval();
         unsubProtectedPages();
         unsubCourierStatus();
+        unsubCourierLocation();
       };
     };
 
@@ -209,6 +215,8 @@ export const FirestoreProvider = ({ children }) => {
         setAutomaticApprovalDatas,
         courierStatus,
         setCourierStatus,
+        courierLocation,
+        setCourierLocation,
       }}
     >
       {children}

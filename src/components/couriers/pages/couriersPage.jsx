@@ -119,12 +119,15 @@ const CouriersPage = () => {
 
   //FIREBASE
   useEffect(() => {
+    if (!couriersData) return;
     if (!courierStatus) return;
     if (courierStatus.ticketId) return;
 
-    const currentCourier = couriersData.find((C) => C.id === courierStatus.id);
+    const currentCourier = couriersData.find(
+      (C) => C.id === courierStatus.courierId
+    );
     const exsitingCouriers = couriersData.filter(
-      (C) => C.id !== courierStatus.id
+      (C) => C.id !== courierStatus.courierId
     );
 
     if (!currentCourier) return;

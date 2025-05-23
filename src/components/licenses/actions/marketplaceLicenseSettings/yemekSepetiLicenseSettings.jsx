@@ -150,9 +150,9 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
 
   function handleAddOrUpdate(inData) {
     if (data.isSettingsAdded) {
-      // dispatch(updateIntegrationInformation(inData));
+      dispatch(updateIntegrationInformation(inData));
     } else {
-      // dispatch(addIntegrationInformation(inData));
+      dispatch(addIntegrationInformation(inData));
     }
   }
 

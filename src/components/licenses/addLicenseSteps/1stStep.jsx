@@ -49,9 +49,9 @@ const imageSRCs = [
   { src: Yemeksepeti, name: "Yemeksepeti" },
   { src: GoFody, name: "GoFody" },
   { src: Siparisim, name: "Siparisim" },
-  { src: Autoronics, name: "Autoronics" },
-  { src: Vigo, name: "Vigo" },
-  { src: PaketNet, name: "PaketNet" },
+  { src: Autoronics, name: "Autoronics", isCourier: true },
+  { src: Vigo, name: "Vigo", isCourier: true },
+  { src: PaketNet, name: "PaketNet", isCourier: true },
 ];
 
 const FirstStep = ({
@@ -222,12 +222,21 @@ const FirstStep = ({
       )
         return;
     }
+
+    if (cartItems.some((C) => C.isCourier) && pkg.isCourier) {
+      toast.error("Aynı anda birden fazla kurye lisansı alınamaz.", {
+        id: "isCourier",
+      });
+      return;
+    }
+
     const data = kdvData ? kdvData : {};
     dispatch(addItemToCart({ ...pkg, ...data }));
     toast.success(`${pkg.time} Yıllık lısans sepete eklendi`, {
       id: "add-licese",
     });
   };
+  console.log(cartItems);
 
   return (
     <form
@@ -293,6 +302,9 @@ const FirstStep = ({
                               restaurantName: restaurantData.label,
                               marketPlaceName:
                                 imageSRCs[licensePkg[0]?.licenseTypeId]?.name,
+                              isCourier:
+                                imageSRCs[licensePkg[0]?.licenseTypeId]
+                                  ?.isCourier,
                             })
                           }
                         >

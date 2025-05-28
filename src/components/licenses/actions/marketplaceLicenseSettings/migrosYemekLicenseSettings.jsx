@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import { CancelI } from "../../../../assets/icon";
 import CustomInput from "../../../common/customInput";
+import CustomCheckbox from "../../../common/customCheckbox";
 
 //UTILS
 import { usePopup } from "../../../../context/PopupContext";
@@ -25,7 +26,6 @@ import {
   resetUpdateIntegrationInformation,
   updateIntegrationInformation,
 } from "../../../../redux/informations/migrosYemek/updateIntegrationInformationSlice";
-import CustomCheckbox from "../../../common/customCheckbox";
 
 const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -60,7 +60,7 @@ const MigrosYemekLicenseSettings = ({ data, onSuccess }) => {
     licenseId: data.id,
     restaurantId: data.restaurantId,
     MigrosYemekIntegrationInformationId: "",
-    useExternalCourierService: true,
+    useExternalCourierService: false,
   };
 
   const [licenseData, setLicenseData] = useState(initialData);

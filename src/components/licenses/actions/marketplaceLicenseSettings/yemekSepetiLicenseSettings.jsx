@@ -60,7 +60,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     chainCode: "",
     commissionRate: 0,
     sendYemekSepetiEmailNotify: true,
-    useExternalCourierService: true,
+    useExternalCourierService: false,
   };
 
   const [licenseData, setLicenseData] = useState(initialData);

@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { CancelI } from "../../../../assets/icon";
 import CustomInput from "../../../common/customInput";
 import { usePopup } from "../../../../context/PopupContext";
+import CustomCheckbox from "../../../common/customCheckbox";
+import licenseTypeIds from "../../../../enums/licenseTypeIds";
 
 //REDUX
 import {
@@ -22,8 +24,6 @@ import {
   resetUpdateIntegrationInformation,
   updateIntegrationInformation,
 } from "../../../../redux/informations/getirYemek/updateIntegrationInformationSlice";
-import licenseTypeIds from "../../../../enums/licenseTypeIds";
-import CustomCheckbox from "../../../common/customCheckbox";
 
 const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
   const toastId = useRef();
@@ -56,7 +56,7 @@ const GetirYemekLicenseSettings = ({ data, onSuccess }) => {
     licenseId: data.id,
     commissionRate: 0,
     getirYemekIntegrationInformationId: "",
-    useExternalCourierService: true,
+    useExternalCourierService: false,
   };
 
   const [licenseData, setLicenseData] = useState(initialData);

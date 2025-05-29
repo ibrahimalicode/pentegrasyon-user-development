@@ -223,7 +223,16 @@ const FirstStep = ({
         return;
     }
 
-    if (cartItems.some((C) => C.isCourier) && pkg.isCourier) {
+    const isCourierInLicenses = imageSRCs.some(
+      (img, index) =>
+        img.isCourier &&
+        licenses.some((license) => license.licenseTypeId === index)
+    );
+
+    if (
+      (cartItems.some((C) => C.isCourier) && pkg.isCourier) ||
+      isCourierInLicenses
+    ) {
       toast.error("Aynı anda birden fazla kurye lisansı alınamaz.", {
         id: "isCourier",
       });
@@ -236,7 +245,6 @@ const FirstStep = ({
       id: "add-licese",
     });
   };
-  console.log(cartItems);
 
   return (
     <form

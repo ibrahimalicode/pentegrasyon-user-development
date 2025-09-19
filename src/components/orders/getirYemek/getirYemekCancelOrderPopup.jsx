@@ -74,7 +74,7 @@ function GetirYemekCancelOrderPopup({ ticketId, setOrdersData }) {
   }, [options, error]);
 
   return (
-    <main className="w-full bg-[--white-1] text-[--black-1] p-5 rounded-md">
+    <main className="w-full bg-[--white-1] text-[--black-1] p-5 rounded-md max-h-[90dvh] overflow-y-auto">
       <div className="flex justify-end">
         <button
           onClick={() => setPopupContent(null)}

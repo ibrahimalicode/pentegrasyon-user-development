@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 //COMP
 import { CloseI } from "../../../assets/icon";
+import { formatDate } from "../../../utils/utils";
 import CustomInput from "../../common/customInput";
 
 //CONTEXT
@@ -14,13 +15,28 @@ import { getOrders } from "../../../redux/orders/getOrdersSlice";
 
 const SearchOrders = () => {
   const dispatch = useDispatch();
-  const { itemsPerPage, pageNumber, setPageNumber } = useOrdersContext();
+  const {
+    itemsPerPage,
+    pageNumber,
+    setPageNumber,
+    filter,
+    searchVal,
+    setSearchVal,
+  } = useOrdersContext();
 
-  const [searchVal, setSearchVal] = useState("");
+  const filterData = {
+    dateRange: filter.dateRange,
+    startDateTime: filter.endDateTime ? formatDate(filter.startDateTime) : null,
+    endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
+    status: filter.statusId,
+    marketplaceId: filter.marketplaceId,
+  };
 
   function clearSearch() {
     setSearchVal("");
-    dispatch(getOrders({ pageNumber, pageSize: itemsPerPage.value }));
+    dispatch(
+      getOrders({ pageNumber, pageSize: itemsPerPage.value, ...filterData })
+    );
   }
 
   function handleSearch(e) {
@@ -31,6 +47,7 @@ const SearchOrders = () => {
         pageNumber: 1,
         searchKey: searchVal,
         pageSize: itemsPerPage.value,
+        ...filterData,
       })
     );
     setPageNumber(1);

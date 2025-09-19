@@ -58,6 +58,7 @@ export const OrdersContextProvider = ({ children }) => {
   const [ordersCount, setOrdersCount] = useState(null);
   const [filter, setFilter] = useState(filterInitialState);
   const [unverifiedOrders, setUnverifiedOrders] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
 
   function handlePageChange(number) {
     dispatch(
@@ -271,6 +272,8 @@ export const OrdersContextProvider = ({ children }) => {
         filter,
         setFilter,
         filterInitialState,
+        searchVal,
+        setSearchVal,
       }}
     >
       {children}

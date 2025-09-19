@@ -173,7 +173,11 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData }) => {
             <div className="w-full p-2 text-xs flex gap-4">
               <p>Teslimat Zamanı:</p>
               <div className="flex gap-4">
-                {order.customer.expectedDeliveryTime}
+                {formatDateString({
+                  dateString: order.customer.expectedDeliveryTime,
+                  hour: true,
+                  min: true,
+                })}
                 {order.preOrder &&
                   (order.status != 4 ? (
                     <RemainingMinutes

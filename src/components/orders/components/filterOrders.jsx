@@ -24,8 +24,14 @@ const FilterOrders = () => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
   const { contentRef, setContentRef } = usePopup();
-  const { itemsPerPage, setPageNumber, filter, setFilter, filterInitialState } =
-    useOrdersContext();
+  const {
+    itemsPerPage,
+    setPageNumber,
+    filter,
+    setFilter,
+    filterInitialState,
+    searchVal,
+  } = useOrdersContext();
 
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -33,6 +39,7 @@ const FilterOrders = () => {
     if (bool) {
       const filterData = {
         page: 1,
+        searchKey: searchVal,
         pageSize: itemsPerPage.value,
         dateRange: filter.dateRange,
         startDateTime: filter.endDateTime

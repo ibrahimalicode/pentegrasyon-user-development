@@ -1,6 +1,5 @@
-import React from "react";
-import GobackI from "../assets/icon/goback";
 import WarnI from "../assets/icon/warn";
+import GobackI from "../assets/icon/goback";
 
 const NotFound = ({ showGoBack = true }) => {
   const goBack = () => {

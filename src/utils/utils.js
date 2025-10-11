@@ -521,3 +521,9 @@ export const formatByDate = (inData, lastInLast) => {
     }
   });
 };
+
+export function checkLeng(inChar) {
+  if (inChar?.length > 25) {
+    return `${inChar?.slice(0, 25)}...`;
+  } else return inChar;
+}

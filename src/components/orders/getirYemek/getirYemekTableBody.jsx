@@ -2,7 +2,7 @@
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 
 //UTILS
-import { formatToPrice } from "../../../utils/utils";
+import { checkLeng, formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -130,10 +130,15 @@ const GetirYemekTableBody = ({
             order.deliveryType == 1 && "pointer-events-none"
           }`}
         >
-          <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+          <button className="border relative group border-[--primary-1] py-2 px-3 rounded-md">
             {order.deliveryType == 1
               ? "Kurye Bilgisinde"
-              : order?.client?.district}
+              : checkLeng(order?.client?.district)}
+            {order?.client?.district.length > 25 && (
+              <span className="absolute -left-1 -top-1 group-hover:opacity-100 opacity-0 bg-[--white-1] z-[999] p-3 rounded-md border border-[--primary-2] scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-150 ease-out">
+                <p className="w-full">{order?.client?.district}</p>
+              </span>
+            )}
           </button>
         </td>
         <td

@@ -1,11 +1,12 @@
 //MODULES
+import toast from "react-hot-toast";
 
 //CONTEXT
 import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 //UTILS
-import { formatToPrice } from "../../../utils/utils";
+import { checkLeng, formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -19,7 +20,6 @@ import YemekSepetiOrderDetails from "./yemekSepetiOrderDetails";
 import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
 import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 import { YemekSepetiAddress } from "../components/marketplaceAddresses";
-import toast from "react-hot-toast";
 
 const YemekSepetiTableBody = ({
   licenses,
@@ -125,7 +125,7 @@ const YemekSepetiTableBody = ({
           }
         >
           <button
-            className={`border py-2 px-3 rounded-md ${
+            className={`border relative group py-2 px-3 rounded-md ${
               order.expeditionType.toLocaleLowerCase() == "pickup"
                 ? "border-[--green-1] text-[--green-1]"
                 : "border-[--primary-1]"
@@ -133,7 +133,14 @@ const YemekSepetiTableBody = ({
           >
             {order.expeditionType.toLocaleLowerCase() == "pickup"
               ? "Gel Al"
-              : order?.customer?.deliveryMainArea || "Kurye Bilgisinde"}
+              : checkLeng(order?.customer?.deliveryMainArea) ||
+                "Kurye Bilgisinde"}
+
+            {order?.customer?.deliveryMainArea?.length > 25 && (
+              <span className="absolute -left-1 -top-1 group-hover:opacity-100 opacity-0 bg-[--white-1] z-[999] p-3 rounded-md border border-[--primary-2] scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-150 ease-out">
+                <p className="w-full">{order?.customer?.deliveryMainArea}</p>
+              </span>
+            )}
           </button>
         </td>
         <td

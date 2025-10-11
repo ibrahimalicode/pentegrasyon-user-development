@@ -9,7 +9,7 @@ import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 //UTILS
-import { formatToPrice } from "../../../utils/utils";
+import { checkLeng, formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
@@ -248,11 +248,29 @@ function CourierCell({ order }) {
       className="border rounded-md border-[--primary-1] relative group"
     >
       {order?.deliveryProvider?.toUpperCase() == "RESTAURANT" ? (
-        <p className="py-2 px-3">{order.customer.district}</p>
+        <>
+          <p className="py-2 px-3">{checkLeng(order.customer.district)}</p>
+          {order.customer.district?.length > 25 && (
+            <span className="absolute -left-1 -top-1 group-hover:opacity-100 opacity-0 bg-[--white-1] z-[999] p-3 rounded-md border border-[--primary-2] scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-150 ease-out">
+              <p className="w-full">{order.customer.district}</p>
+            </span>
+          )}
+        </>
       ) : (
         (() => {
           if (!courierStat || !order?.courierStatus)
-            return <p className="py-2 px-3">{order.customer.district}</p>;
+            return (
+              <>
+                <p className="py-2 px-3">
+                  {checkLeng(order.customer.district)}
+                </p>
+                {order.customer.district?.length > 25 && (
+                  <span className="absolute -left-1 -top-1 group-hover:opacity-100 opacity-0 bg-[--white-1] z-[999] p-3 rounded-md border border-[--primary-2] scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-150 ease-out">
+                    <p className="w-full">{order.customer.district}</p>
+                  </span>
+                )}
+              </>
+            );
 
           return (
             <div>

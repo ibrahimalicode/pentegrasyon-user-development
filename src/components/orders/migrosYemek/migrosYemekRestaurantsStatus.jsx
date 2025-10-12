@@ -159,7 +159,6 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
             {statusData &&
               Object.keys(statusData).map((key, i) => {
                 const restaurant = statusData[key];
-                console.log(updateRestaurantLoading || !isActive(key));
                 return (
                   <div
                     key={i}

@@ -37,7 +37,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   const dispatch = useDispatch();
   const { protectedPages } = useProtectPages();
   const { unverifiedOrders } = useOrdersContext();
-  const { popupContent, contentRef, setContentRef } = usePopup();
+  const { contentRef, setContentRef } = usePopup();
 
   const [sidebarData, setSidebarData] = useState(null);
 

@@ -30,9 +30,12 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     useSelector((state) => state.migrosYemek.updateRestaurantsCourier);
 
   function isActive(key) {
-    return licenses.filter(
+    const outLicense = licenses.filter(
       (L) => L.restaurantId == statusData[key].restaurantId
-    )[0]?.isActive;
+    )[0];
+
+    console.log(outLicense);
+    return outLicense[0]?.isActive;
   }
 
   function updateRestaurantStatus(id) {
@@ -191,9 +194,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                                 updateRestaurantCourierStatus(key)
                               }
                               checked={restaurant.courierStatus}
-                              disabled={
-                                updateCourierLoading || !licenses?.isActive
-                              }
+                              disabled={updateCourierLoading || !isActive(key)}
                             />
                           </div>
                         )}

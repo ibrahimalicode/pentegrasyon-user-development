@@ -34,6 +34,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
       (L) => L.restaurantId == statusData[key].restaurantId
     )[0];
 
+    console.log(outLicense);
     return outLicense?.isActive;
   }
 

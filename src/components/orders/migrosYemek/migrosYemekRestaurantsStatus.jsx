@@ -30,12 +30,9 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     useSelector((state) => state.migrosYemek.updateRestaurantsCourier);
 
   function isActive(key) {
-    const outLicense = licenses.filter(
+    return licenses.filter(
       (L) => L.restaurantId == statusData[key].restaurantId
-    )[0];
-
-    console.log(outLicense);
-    return outLicense?.isActive;
+    )[0]?.isActive;
   }
 
   function updateRestaurantStatus(id) {

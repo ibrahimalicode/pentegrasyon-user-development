@@ -34,8 +34,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
       (L) => L.restaurantId == statusData[key].restaurantId
     )[0];
 
-    console.log(outLicense);
-    return outLicense[0]?.isActive;
+    return outLicense?.isActive;
   }
 
   function updateRestaurantStatus(id) {
@@ -162,6 +161,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
             {statusData &&
               Object.keys(statusData).map((key, i) => {
                 const restaurant = statusData[key];
+                console.log(updateRestaurantLoading || !isActive(key));
                 return (
                   <div
                     key={i}

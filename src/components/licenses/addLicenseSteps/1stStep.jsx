@@ -165,11 +165,7 @@ const FirstStep = ({
 
   const handleAddToCart = (pkg) => {
     if (!pkg.restaurantId) {
-      toast.error(
-        "Lütfen restoran seçın 😊",
-        { id: "choose_restaurant" },
-        { id: "add-licese" }
-      );
+      toast.error("Lütfen restoran seçın 😊", { id: "1st_step_add_license" });
       return;
     }
 
@@ -199,7 +195,7 @@ const FirstStep = ({
           <span> sayfasından uzatabılırsınız.</span>
         </div>
       );
-      toast(toastComp, { id: "add-licese" });
+      toast(toastComp, { id: "1st_step_add_license" });
       return;
     }
 
@@ -226,7 +222,8 @@ const FirstStep = ({
     const isCourierInLicenses = imageSRCs.some(
       (img, index) =>
         img.isCourier &&
-        licenses.some((license) => license.licenseTypeId === index)
+        existingLicenses.some((license) => license.licenseTypeId === index) &&
+        pkg.isCourier
     );
 
     if (
@@ -234,7 +231,7 @@ const FirstStep = ({
       isCourierInLicenses
     ) {
       toast.error("Aynı anda birden fazla kurye lisansı alınamaz.", {
-        id: "isCourier",
+        id: "1st_step_add_license",
       });
       return;
     }
@@ -242,7 +239,7 @@ const FirstStep = ({
     const data = kdvData ? kdvData : {};
     dispatch(addItemToCart({ ...pkg, ...data }));
     toast.success(`${pkg.time} Yıllık lısans sepete eklendi`, {
-      id: "add-licese",
+      id: "1st_step_add_license",
     });
   };
 

@@ -28,6 +28,13 @@ const sidebarItems = [
     show: true,
   },
   {
+    text: "Stok Takibi",
+    to: "/stocks",
+    path: "stocks",
+    id: "stocks",
+    show: true,
+  },
+  {
     text: "Siparişler",
     to: "/orders",
     path: "orders",

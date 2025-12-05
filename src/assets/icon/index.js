@@ -10,6 +10,7 @@ import LogI from "./log";
 import PaymentI from "./payment";
 import ParamsI from "./parameters";
 import CourierI from "./courier";
+import ArchiveI from "./archive";
 
 import WarnI from "./warn";
 import GobackI from "./goback";
@@ -92,4 +93,5 @@ export {
   EyeI,
   DocI,
   LinkI,
+  ArchiveI,
 };

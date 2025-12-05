@@ -1,4 +1,4 @@
-import { CloudI, NoOrdersI } from "../../../assets/icon";
+import { NoOrdersI } from "../../../assets/icon";
 
 const NoOrdersPlaceholder = () => {
   return (

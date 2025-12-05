@@ -24,6 +24,7 @@ import emailSlice from "./redux/email";
 import marketplaceRestaurantsSlice from "./redux/marketplaceRestaurants";
 import loadingSlice from "./redux/loadingSlice";
 import loadingMiddleware from "../middlewares/loadingMiddleware";
+import stocksSlice from "./redux/stocks";
 
 const store = configureStore({
   reducer: {
@@ -49,6 +50,7 @@ const store = configureStore({
     email: emailSlice,
     marketplaceRestaurants: marketplaceRestaurantsSlice,
     isLoading: loadingSlice,
+    stocks: stocksSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(loadingMiddleware),

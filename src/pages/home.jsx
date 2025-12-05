@@ -19,6 +19,7 @@ import Dashboard from "./dashboard";
 import Restourants from "./restourants";
 import ProtectedPages from "./protectedPages";
 import CourierStatusChange from "../components/couriers/components/courierStatusChange";
+import Stocks from "./stocks";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -32,6 +33,7 @@ const Home = () => {
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/restaurants/*" element={<Restourants />} />
         <Route path="/licenses/*" element={<Licenses />} />
+        <Route path="/stocks/*" element={<Stocks />} />
         <Route path="/profile/*" element={<Profile />} />
         <Route path="/orders/*" element={<Orders />} />
         <Route path="/couriers/*" element={<Couriers />} />

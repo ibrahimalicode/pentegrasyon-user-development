@@ -4,3 +4,13 @@ COURIER_APPROACHED
 COURIER_ARRIVED
 IN_DELIVERY
 DELIVERED
+
+
+Platform Satıcı ID DİKKAT ! BÜYÜK / Küçük harfe duyarlıdır !
+vsxk
+Chain Code
+N3p6qDHf
+remoteId
+6bd1ab8a-22cf-41ad-a2ee-e9cccc02f2b9
+dfdac140-5725-433f-98a2-766cf24b3910
+d86cdf4a-7222-483a-9f31-320a527ba4e6

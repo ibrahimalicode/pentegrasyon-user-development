@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import StocksTable from "../stocksTable";
-import CloseI from "../../../assets/icon/close";
+import { CloseI } from "../../../assets/icon";
+import StockI from "../../../assets/icon/trendUp";
 import CustomInput from "../../common/customInput";
+import NoTableData from "../../common/noTableData";
 import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
@@ -338,7 +340,12 @@ const StocksPage = () => {
         />
       ) : loading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoTableData
+          Icon={StockI}
+          text="Henüz herhangi bir stok kaydınız yok."
+        />
+      )}
 
       {/* PAGINATION */}
       {stocksData && typeof totalItems === "number" && (

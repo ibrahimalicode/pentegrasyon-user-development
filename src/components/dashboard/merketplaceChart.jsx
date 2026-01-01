@@ -1,19 +1,50 @@
-import React, { useEffect } from "react";
 import { initChart } from "./chart";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { resetGetOrderStatistics } from "../../redux/dashboard/statistics/getOrderStatisticsSlice";
 
-const data = {
-  series: [35.1, 23.5, 2.4, 5.4, 10],
+const initialData = {
+  series: [0, 0, 0, 0, 0, 0],
   colors: [
-    "var(--red-1)",
-    "var(--primary-1)",
-    "var(--yellow-1)",
-    "var(--red-2)",
-    "var(--green-3)",
+    "var(--getiryemek)",
+    "var(--migrosyemek)",
+    "var(--trendyol)",
+    "var(--yemeksepeti)",
+    "var(--gofody)",
+    "var(--siparisim)",
   ],
-  labels: ["Yemeksepeti", "GetirYemek", "MigrosYemek", "Siparişim+", "GoFody"],
+  labels: [
+    "GetirYemek",
+    "MigrosYemek",
+    "Trendyol",
+    "Yemeksepeti",
+    "GoFody",
+    "Siparişim+",
+  ],
 };
 
 const MarketplaceChart = () => {
+  const dispatch = useDispatch();
+  const { data: ordersData } = useSelector(
+    (state) => state.dashboard.getOrderStatistics
+  );
+  const [data, setData] = useState(initialData);
+
+  useEffect(() => {
+    if (!ordersData) return;
+    ordersData.map((d) =>
+      setData((prev) => {
+        const updatedData = [...prev.series];
+        updatedData[d.marketplaceId] = d.totalCount;
+        return {
+          ...prev,
+          series: [...updatedData],
+        };
+      })
+    );
+    dispatch(resetGetOrderStatistics());
+  }, [ordersData]);
+
   useEffect(() => {
     const chartElement = document.getElementById("donut-chart");
     const cleanup = initChart(chartElement, data);
@@ -22,7 +53,7 @@ const MarketplaceChart = () => {
     return () => {
       if (cleanup) cleanup();
     };
-  }, []);
+  }, [data]);
 
   return (
     <main className="max-md:w-full w-max flex justify-center bg-[--white-1] rounded-md border-2 border-solid border-[--light-1]">

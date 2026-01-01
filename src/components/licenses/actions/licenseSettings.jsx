@@ -6,6 +6,7 @@ import GetirYemekLicenseSettings from "./marketplaceLicenseSettings/getirYemekLi
 import YemekSepetiLicenseSettings from "./marketplaceLicenseSettings/yemekSepetiLicenseSettings";
 import MigrosYemekLicenseSettings from "./marketplaceLicenseSettings/migrosYemekLicenseSettings";
 import PaketNetLicenseSettings from "./marketplaceLicenseSettings/paketNetLicenseSettings";
+import TrendyolYemekLicenseSettings from "./marketplaceLicenseSettings/trendyolYemekLicenseSettings";
 
 const LicenseSettings = ({ licenseData, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -13,6 +14,7 @@ const LicenseSettings = ({ licenseData, onSuccess }) => {
   const LicenseSettingsPopups = [
     { comp: GetirYemekLicenseSettings, id: 0 },
     { comp: MigrosYemekLicenseSettings, id: 1 },
+    { comp: TrendyolYemekLicenseSettings, id: 2 },
     { comp: YemekSepetiLicenseSettings, id: 3 },
     { comp: PaketNetLicenseSettings, id: 8 },
   ];

@@ -37,7 +37,7 @@ const SalesBar = () => {
     month: "",
     selectedYear: { label: "Yıl" },
     selectedMonth: { label: "Ay" },
-    selectedRestaurant: { label: "Restoran" },
+    selectedRestaurant: { label: "Hepsi" },
   });
 
   function handleFilter(inData) {

@@ -22,6 +22,8 @@ import {
 import { getCities } from "../../../redux/data/getCitiesSlice";
 import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
+import { RestourantI } from "../../../assets/icon";
+import NoTableData from "../../common/noTableData";
 
 const RestaurantsPage = () => {
   const dispatch = useDispatch();
@@ -258,7 +260,7 @@ const RestaurantsPage = () => {
                 !e && clearSearch();
               }}
               value={searchVal}
-              placeholder="Search..."
+              placeholder="Ara..."
               className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}
@@ -414,7 +416,12 @@ const RestaurantsPage = () => {
         />
       ) : loading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoTableData
+          Icon={RestourantI}
+          text={"Henuz Restoranınız Yok. Lütfen Restoran Ekleyin."}
+        />
+      )}
 
       {/* PAGINATION */}
       {restaurantsData && typeof totalItems === "number" && (

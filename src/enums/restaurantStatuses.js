@@ -7,7 +7,10 @@ const RestaurantStatuses = [
     { label: "Açık", value: true, id: true, key: "active" },
     { label: "Kapalı", value: false, id: false },
   ],
-  [],
+  [
+    { label: "Açık", value: true, id: "active", key: "availabilityState" },
+    { label: "Kapalı", value: false, id: "deactive" },
+  ],
   [
     { label: "Açık", value: true, id: "open", key: "availabilityState" },
     { label: "Kapalı", value: false, id: "closed" },

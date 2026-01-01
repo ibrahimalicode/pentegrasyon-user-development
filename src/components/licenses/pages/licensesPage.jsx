@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import LicensesTable from "../licensesTable";
 import AddLicense from "../actions/addLicense";
 import CloseI from "../../../assets/icon/close";
+import { LicenseI } from "../../../assets/icon";
+import NoTableData from "../../common/noTableData";
 import CustomInput from "../../common/customInput";
 import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
@@ -360,7 +362,12 @@ const LicensesPage = () => {
         />
       ) : loading || restaurantsLoading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoTableData
+          Icon={LicenseI}
+          text="Lisansınız bulunmamaktadır. Lütfen lisans ekleyin."
+        />
+      )}
 
       {/* PAGINATION */}
       {licensesData && typeof totalItems === "number" && (

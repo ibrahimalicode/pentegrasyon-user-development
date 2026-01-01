@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 //COMP
-import { SeenI } from "../../../assets/icon";
 import CustomPing from "../../common/customPing";
+import NoTableData from "../../common/noTableData";
+import { MessagesI, SeenI } from "../../../assets/icon";
 
 //UTILS
 import { formatDateString } from "../../../utils/utils";
@@ -37,7 +38,7 @@ const MessagesPage = () => {
       </div>
 
       <main className="flex flex-col gap-4">
-        {messagesData &&
+        {messagesData?.length ? (
           messagesData
             .filter((M) => M.platforms == 2)
             .map((_) => (
@@ -77,7 +78,13 @@ const MessagesPage = () => {
                   </p>
                 </div>
               </div>
-            ))}
+            ))
+        ) : (
+          <NoTableData
+            Icon={MessagesI}
+            text="Henüz herhangi bir mesajınız yok."
+          />
+        )}
       </main>
     </section>
   );

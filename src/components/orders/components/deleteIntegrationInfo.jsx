@@ -8,13 +8,13 @@ import { CloseI } from "../../../assets/icon";
 import DeleteI from "../../../assets/icon/delete";
 import { usePopup } from "../../../context/PopupContext";
 import licenseTypeIds from "../../../enums/licenseTypeIds";
+import { useSlideBar } from "../../../context/SlideBarContext";
 
 //REDUX
 import {
   deleteRestaurantByMarketplaceRestaurantId,
   resetDeleteRestaurantByMarketplaceRestaurantId,
 } from "../../../redux/marketplaceRestaurants/deleteRestaurantByMarketplaceRestaurantIdSlice";
-import { useSlideBar } from "../../../context/SlideBarContext";
 
 const DeleteIntegrationInfo = ({ restaurant, onSuccess }) => {
   const { setPopupContent } = usePopup();

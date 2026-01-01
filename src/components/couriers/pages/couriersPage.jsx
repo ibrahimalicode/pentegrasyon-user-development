@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import CouriersTable from "../couriersTable";
 import AddCourier from "../actions/addCourier";
 import CloseI from "../../../assets/icon/close";
+import { CourierI } from "../../../assets/icon";
+import NoTableData from "../../common/noTableData";
 import CustomInput from "../../common/customInput";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
@@ -175,7 +177,7 @@ const CouriersPage = () => {
                 !e && clearSearch();
               }}
               value={searchVal}
-              placeholder="Search..."
+              placeholder="Ara..."
               className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}
@@ -285,7 +287,12 @@ const CouriersPage = () => {
         />
       ) : loading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoTableData
+          Icon={CourierI}
+          text="Kuryeniz bulunmamaktadır. Lütfen kurye ekleyin."
+        />
+      )}
 
       {/* PAGINATION */}
       {couriersData && typeof totalItems === "number" && (

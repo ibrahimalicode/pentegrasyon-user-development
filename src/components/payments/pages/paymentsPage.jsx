@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import PaymentsTable from "../paymentsTable";
 import CustomInput from "../../common/customInput";
-import CustomSelect from "../../common/customSelector";
+import NoTableData from "../../common/noTableData";
 import TableSkeleton from "../../common/tableSkeleton";
 import CustomPagination from "../../common/pagination";
 
 //UTILS
-import { CloseI } from "../../../assets/icon";
+import { CloseI, PaymentI } from "../../../assets/icon";
 import { usePopup } from "../../../context/PopupContext";
 
 //REDUX
@@ -109,7 +109,7 @@ const PaymentsPage = () => {
   useEffect(() => {
     if (error) dispatch(resetGetPayments());
     if (success) {
-      console.log(payments);
+      // console.log(payments);
       setTotalItems(payments.totalCount);
       setPaymentsData(payments.data);
       dispatch(resetGetPayments());
@@ -149,7 +149,7 @@ const PaymentsPage = () => {
                 !e && clearSearch();
               }}
               value={searchVal}
-              placeholder="Search..."
+              placeholder="Ara..."
               className2="mt-[0px] w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}
@@ -252,14 +252,19 @@ const PaymentsPage = () => {
       </div>
 
       {/* TABLE */}
-      {paymentsData ? (
+      {!paymentsData ? (
         <PaymentsTable
           inData={paymentsData}
           onSuccess={() => setPaymentsData(null)}
         />
       ) : loading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoTableData
+          Icon={PaymentI}
+          text="Henüz herhangi bir ödeme kaydınız yok."
+        />
+      )}
 
       {/* PAGINATION */}
       {paymentsData && typeof totalItems === "number" && (

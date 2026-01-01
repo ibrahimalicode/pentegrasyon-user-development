@@ -25,6 +25,7 @@ import marketplaceRestaurantsSlice from "./redux/marketplaceRestaurants";
 import loadingSlice from "./redux/loadingSlice";
 import loadingMiddleware from "../middlewares/loadingMiddleware";
 import stocksSlice from "./redux/stocks";
+import trendyolYemekSlice from "./redux/trendyol";
 
 const store = configureStore({
   reducer: {
@@ -41,6 +42,7 @@ const store = configureStore({
     getirYemek: getirYemekSlice,
     yemekSepeti: yemekSepetiSlice,
     migrosYemek: migrosYemekSlice,
+    trendyolYemek: trendyolYemekSlice,
     dashboard: dashboardSlice,
     couriers: couriersSlice,
     payments: paymentsSlice,

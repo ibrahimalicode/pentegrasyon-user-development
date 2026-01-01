@@ -51,7 +51,7 @@ const CustomPagination = ({
   };
 
   return (
-    <div>
+    <div className="mt-3 relative w-full flex justify-center">
       <div className="flex gap-1">
         <button
           onClick={handlePrevious}
@@ -93,6 +93,14 @@ const CustomPagination = ({
           <ArrowIR className="w-4" />
         </button>
       </div>
+
+      {totalItems ? (
+        <div className="absolute top-0 bottom-0 right-0 flex items-center">
+          <span className="text-sm text-[--link-1]">
+            Toplam Sayım: {totalItems}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };

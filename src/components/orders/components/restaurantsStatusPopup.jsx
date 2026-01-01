@@ -8,6 +8,7 @@ import { useSlideBar } from "../../../context/SlideBarContext";
 import GetirYemekRestaurantsStatus from "../getirYemek/getirYemekRestaurantsStatus";
 import MigrosYemekRestaurantsStatus from "../migrosYemek/migrosYemekRestaurantsStatus";
 import YemekSepetiRestaurantsStatus from "../yemekSepeti/yemekSepetiRestaurantsStatus";
+import TrendyolYemekRestaurantsStatus from "../trendyolYemek/trendyolYemekRestaurantsStatus";
 
 const RestaurantsStatusPopup = ({ licenses, inData, onSuccess }) => {
   const { setSlideBarContent } = useSlideBar();
@@ -19,6 +20,7 @@ const RestaurantsStatusPopup = ({ licenses, inData, onSuccess }) => {
   const components = [
     { comp: GetirYemekRestaurantsStatus, id: 0 },
     { comp: MigrosYemekRestaurantsStatus, id: 1 },
+    { comp: TrendyolYemekRestaurantsStatus, id: 2 },
     { comp: YemekSepetiRestaurantsStatus, id: 3 },
   ].filter(({ id }) =>
     restaurantsData.some(({ marketplaceId }) => marketplaceId === id)

@@ -26,6 +26,8 @@ import {
   getRestaurantLicenses,
   resetGetRestaurantLicenses,
 } from "../../../redux/licenses/getRestaurantLicensesSlice";
+import NoTableData from "../../common/noTableData";
+import { LicenseI } from "../../../assets/icon";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
@@ -411,14 +413,19 @@ const RestaurantLicensesPage = () => {
       </div>
 
       {/* TABLE */}
-      {licensesData && !loading && !restaurantLoading ? (
+      {licensesData?.length > 0 && !loading && !restaurantLoading ? (
         <LicensesTable
           inData={licensesData}
           onSuccess={() => setLicensesData(null)}
         />
       ) : loading || restaurantLoading ? (
         <TableSkeleton />
-      ) : null}
+      ) : (
+        <NoTableData
+          Icon={LicenseI}
+          text="Lisansınız bulunmamaktadır. Lütfen lisans ekleyin."
+        />
+      )}
 
       {/* PAGINATION */}
       {licensesData && typeof totalItems === "number" && (

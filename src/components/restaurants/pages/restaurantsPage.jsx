@@ -407,7 +407,7 @@ const RestaurantsPage = () => {
       </div>
 
       {/* TABLE */}
-      {restaurantsData ? (
+      {restaurantsData?.length > 0 ? (
         <RestaurantsTable
           inData={restaurantsData}
           Actions={Actions}

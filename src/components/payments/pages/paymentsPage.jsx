@@ -244,7 +244,7 @@ const PaymentsPage = () => {
       </div>
 
       {/* TABLE */}
-      {paymentsData ? (
+      {paymentsData?.length > 0 ? (
         <PaymentsTable inData={paymentsData} />
       ) : loading ? (
         <TableSkeleton />

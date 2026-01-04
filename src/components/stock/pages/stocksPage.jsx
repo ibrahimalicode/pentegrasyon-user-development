@@ -300,7 +300,7 @@ const StocksPage = () => {
       </div>
 
       {/* TABLE */}
-      {stocksData && !loading ? (
+      {stocksData?.length > 0 && !loading ? (
         <StocksTable
           inData={stocksData}
           onSuccess={() => setStocksData(null)}

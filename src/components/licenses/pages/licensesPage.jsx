@@ -323,7 +323,7 @@ const LicensesPage = () => {
       </div>
 
       {/* TABLE */}
-      {licensesData && !loading && !restaurantsLoading ? (
+      {licensesData?.length > 0 && !loading && !restaurantsLoading ? (
         <LicensesTable
           inData={licensesData}
           onSuccess={() => setLicensesData(null)}

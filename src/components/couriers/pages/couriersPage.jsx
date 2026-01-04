@@ -263,7 +263,7 @@ const CouriersPage = () => {
       </div>
 
       {/* TABLE */}
-      {couriersData ? (
+      {couriersData?.length > 0 ? (
         <CouriersTable
           inData={couriersData}
           onSuccess={() => setCouriersData(null)}

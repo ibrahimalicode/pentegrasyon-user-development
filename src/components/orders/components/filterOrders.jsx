@@ -20,7 +20,7 @@ import { useOrdersContext } from "../../../context/OrdersContext";
 import { getOrders } from "../../../redux/orders/getOrdersSlice";
 import { getTicketCountStatistics } from "../../../redux/dashboard/statistics/getTicketCountStatisticsSlice";
 
-const FilterOrders = () => {
+const FilterOrders = ({ licenses }) => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
   const { contentRef, setContentRef } = usePopup();
@@ -34,6 +34,12 @@ const FilterOrders = () => {
   } = useOrdersContext();
 
   const [openFilter, setOpenFilter] = useState(false);
+  const uniqueAndActiveLicenses = [
+    ...new Set(licenses?.filter((L) => L.isActive).map((L) => L.licenseTypeId)),
+  ];
+  const filteredMarketplaces = MarketPalceIds.filter((M) =>
+    uniqueAndActiveLicenses.includes(M.id)
+  );
 
   function handleFilter(bool) {
     if (bool) {
@@ -121,6 +127,7 @@ const FilterOrders = () => {
                 ))}
             </div>
 
+            {/* 
             <div className="flex gap-6">
               <div>
                 <CustomDatePicker
@@ -174,6 +181,7 @@ const FilterOrders = () => {
                 </style>
               </div>
             </div>
+            */}
 
             <div className="flex gap-6">
               <CustomSelect
@@ -207,7 +215,7 @@ const FilterOrders = () => {
                 style={{ padding: "0 !important" }}
                 options={[
                   { value: null, label: "Hepsi", id: null },
-                  ...MarketPalceIds,
+                  ...filteredMarketplaces,
                 ]}
                 value={filter.marketplace}
                 onChange={(selectedOption) => {

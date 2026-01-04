@@ -7,7 +7,7 @@ import PaymentLicenseType from "../../enums/paymentLicenseType";
 import ChangePaymentStatus from "./actions/changePaymentStatus";
 import Actions from "./actions/actions";
 
-const PaymentsTable = ({ inData, totalItems = inData.length }) => {
+const PaymentsTable = ({ inData, totalItems = inData?.length }) => {
   const { user } = useSelector((state) => state.user.getUser);
 
   function formatFilePath(filePath) {
@@ -30,7 +30,7 @@ const PaymentsTable = ({ inData, totalItems = inData.length }) => {
             <tr className="bg-[--light-3] h-8 text-left">
               <th className="pl-4 font-normal">Ad Soyad</th>
               <th className="font-normal">Sipariş No.</th>
-              <th className="font-normal">Ürün Adı</th>
+              <th className="font-normal">Ödeme Nedeni</th>
               <th className="font-normal">Ödeme Tipi</th>
               <th className="font-normal">Tutar</th>
               <th className="font-normal">Durum</th>

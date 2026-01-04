@@ -20,7 +20,7 @@ const ShowBasket = ({ payment }) => {
   return (
     <ActionButton
       element={<EyeI className="w-5" strokeWidth="1.8" />}
-      element2="Basket"
+      element2="Sip İçeriği"
       onClick={handleClick}
     />
   );
@@ -84,19 +84,13 @@ function ShowBasketPopup({ payment }) {
                               scope="col"
                               className="px-3 py-3 text-left text-xs font-medium text-[--gr-1] uppercase tracking-wider"
                             >
-                              Lisans Türü
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3 text-left text-xs font-medium text-[--gr-1] uppercase tracking-wider"
-                            >
-                              Süre (Yıl)
+                              Süresi (Yıl)
                             </th>
                             <th
                               scope="col"
                               className="px-3 py-3 text-xs font-medium text-[--gr-1] uppercase tracking-wider"
                             >
-                              Fiyat (₺)
+                              Fiyatı (₺)
                             </th>
                           </tr>
                         </thead>
@@ -105,13 +99,6 @@ function ShowBasketPopup({ payment }) {
                             <tr key={license.LicenseId}>
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[--gr-1]">
                                 {license.LicensePackageName}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-[--gr-1]">
-                                {
-                                  PaymentLicenseType[
-                                    license?.LicensePackageTypeId
-                                  ]?.label
-                                }
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-[--gr-1]">
                                 {license.LicensePackageTime}

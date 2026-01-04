@@ -45,11 +45,15 @@ const CouriersPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
 
-  function handlePageChange(number) {
+  //HANDLE GET COURIERS
+  function handleGetCouriers(number, searchVal) {
     dispatch(
       getCouriers({
-        pageNumber: number,
+        pageNumber: number || pageNumber,
         pageSize: itemsPerPage,
+        [searchVal ? "searchKey" : ""]: searchVal || null,
+        online: filter?.online?.value,
+        active: filter?.active?.value,
       })
     );
   }
@@ -58,24 +62,13 @@ const CouriersPage = () => {
     if (bool) {
       setOpenFilter(false);
       setPageNumber(1);
-      dispatch(
-        getCouriers({
-          pageNumber,
-          pageSize: itemsPerPage,
-          searchKey: searchVal,
-          online: filter?.online?.value,
-          active: filter?.active?.value,
-        })
-      );
+      handleGetCouriers(1);
     } else {
       if (filter) {
         dispatch(
           getCouriers({
             pageNumber,
             pageSize: itemsPerPage,
-            searchKey: null,
-            active: null,
-            online: null,
           })
         );
       }
@@ -89,23 +82,13 @@ const CouriersPage = () => {
 
   function clearSearch() {
     setSearchVal("");
-    dispatch(
-      getCouriers({
-        pageNumber,
-        pageSize: itemsPerPage,
-      })
-    );
+    handleGetCouriers();
   }
 
   // GET COURIERS
   useEffect(() => {
     if (!couriersData) {
-      dispatch(
-        getCouriers({
-          pageNumber,
-          pageSize: itemsPerPage,
-        })
-      );
+      handleGetCouriers();
     }
   }, [couriersData]);
 
@@ -302,7 +285,7 @@ const CouriersPage = () => {
             setPageNumber={setPageNumber}
             itemsPerPage={itemsPerPage}
             totalItems={totalItems}
-            handlePageChange={handlePageChange}
+            handlePageChange={handleGetCouriers}
           />
         </div>
       )}

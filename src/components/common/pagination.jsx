@@ -1,4 +1,7 @@
 import { ArrowIL, ArrowIR } from "../../assets/icon/index";
+import { usePopup } from "../../context/popupContext";
+import PrivacyPolicy from "../../pages/privacyPolicy";
+import { CancelI } from "../../assets/icon";
 
 const CustomPagination = ({
   pageNumber,
@@ -7,6 +10,7 @@ const CustomPagination = ({
   itemsPerPage,
   handlePageChange,
 }) => {
+  const { setPopupContent } = usePopup();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePrevious = () => {
@@ -52,6 +56,15 @@ const CustomPagination = ({
 
   return (
     <div className="mt-3 relative w-full flex justify-center">
+      <div className="absolute top-0 bottom-0 right-0 flex items-center">
+        <button
+          className="text-sm text-[--link-1]"
+          onClick={() => setPopupContent(<PrivacyPopup />)}
+        >
+          Kullanım Şartları
+        </button>
+      </div>
+
       <div className="flex gap-1">
         <button
           onClick={handlePrevious}
@@ -95,7 +108,7 @@ const CustomPagination = ({
       </div>
 
       {totalItems ? (
-        <div className="absolute top-0 bottom-0 right-0 flex items-center">
+        <div className="absolute top-0 bottom-0 left-0 flex items-center">
           <span className="text-sm text-[--link-1]">
             Toplam Sayım: {totalItems}
           </span>
@@ -106,3 +119,22 @@ const CustomPagination = ({
 };
 
 export default CustomPagination;
+
+const PrivacyPopup = () => {
+  const { setPopupContent } = usePopup();
+  return (
+    <div className="pt-8 bg-[--white-1] rounded-lg overflow-clip">
+      <div className="overflow-y-auto h-[95dvh]">
+        <div className="absolute top-2 right-3 z-[50]">
+          <div
+            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-white transition-colors"
+            onClick={() => setPopupContent(null)}
+          >
+            <CancelI />
+          </div>
+        </div>
+        <PrivacyPolicy />
+      </div>
+    </div>
+  );
+};

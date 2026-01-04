@@ -21,7 +21,12 @@ export const marketplaceTableBodies = [
   },
 ];
 
-const OrdersTable = ({ licenses, ordersData, setOrdersData }) => {
+const OrdersTable = ({
+  licenses,
+  ordersData,
+  setOrdersData,
+  canSelectCourier,
+}) => {
   function getMarketPlaceAssets(order) {
     const TableBodyComp =
       marketplaceTableBodies[order.marketplaceId]?.TableBody;
@@ -33,8 +38,9 @@ const OrdersTable = ({ licenses, ordersData, setOrdersData }) => {
           licenses={licenses.filter(
             (L) => L.licenseTypeId == order.marketplaceId
           )}
-          totalItems={ordersData?.length}
           setOrdersData={setOrdersData}
+          totalItems={ordersData?.length}
+          canSelectCourier={canSelectCourier}
         />
       ),
     };

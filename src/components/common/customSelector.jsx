@@ -21,6 +21,23 @@ const CustomSelect = ({
     <div dangerouslySetInnerHTML={{ __html: label }} />
   );
 
+  const normalizeTurkish = (str = "") =>
+    str
+      .toLowerCase()
+      .replace(/ç/g, "c")
+      .replace(/ğ/g, "g")
+      .replace(/ı/g, "i")
+      .replace(/i̇/g, "i")
+      .replace(/ö/g, "o")
+      .replace(/ş/g, "s")
+      .replace(/ü/g, "u");
+
+  const filterOption = (option, inputValue) => {
+    const label = normalizeTurkish(option.label);
+    const input = normalizeTurkish(inputValue);
+    return label.includes(input);
+  };
+
   return (
     <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
       <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
@@ -34,6 +51,7 @@ const CustomSelect = ({
         required={required}
         className={`mt-1 sm:mt-2.5 text-base font-[350] ${className}`}
         isDisabled={disabled}
+        filterOption={filterOption}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
         formatOptionLabel={formatOptionLabel}
         menuPlacement={menuPlacement || "bottom"}

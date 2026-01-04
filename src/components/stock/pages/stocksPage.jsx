@@ -38,12 +38,13 @@ const StocksPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
 
-  //PAGINATION
-  function handlePageChange(number) {
+  //GET STOCKS HANDLER
+  function getStocksHandler(number, searchVal) {
     dispatch(
       getStocks({
-        pageNumber: number,
+        pageNumber: number || pageNumber,
         pageSize: itemsPerPage,
+        [searchVal ? "searchKey" : null]: searchVal || null,
         isActive: filter?.status?.value,
         isSettingsAdded: filter?.isSettingsAdded?.value,
         licenseTypeId: filter?.licenseTypeId?.id,
@@ -56,33 +57,14 @@ const StocksPage = () => {
   function handleSearch(e) {
     e.preventDefault();
     if (!searchVal) return;
-    console.log(searchVal);
-    dispatch(
-      getStocks({
-        pageNumber: 1,
-        pageSize: itemsPerPage,
-        searchKey: searchVal,
-        isActive: filter?.status?.value,
-        isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.id,
-        dateRange: filter?.dateRange?.value,
-      })
-    );
+    getStocksHandler(1, searchVal);
     setPageNumber(1);
   }
 
   //FILTER AND CLEAR FILTER
   function handleFilter(bool) {
     if (bool) {
-      const filterData = {
-        pageNumber: 1,
-        pageSize: itemsPerPage,
-        isActive: filter?.status?.value,
-        isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.id,
-        dateRange: filter?.dateRange?.value,
-      };
-      dispatch(getStocks(filterData));
+      getStocksHandler(1);
     } else {
       dispatch(
         getStocks({
@@ -99,28 +81,13 @@ const StocksPage = () => {
   //CLEAR SEARCH
   function clearSearch() {
     setSearchVal("");
-    dispatch(
-      getStocks({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: null,
-        isActive: filter?.status?.value,
-        isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.id,
-        dateRange: filter?.dateRange?.value,
-      })
-    );
+    getStocksHandler();
   }
 
   // GET LICENSES
   useEffect(() => {
     if (!stocksData) {
-      dispatch(
-        getStocks({
-          pageNumber,
-          pageSize: itemsPerPage,
-        })
-      );
+      getStocksHandler();
     }
   }, [stocksData]);
 
@@ -355,7 +322,7 @@ const StocksPage = () => {
             setPageNumber={setPageNumber}
             itemsPerPage={itemsPerPage}
             totalItems={totalItems}
-            handlePageChange={handlePageChange}
+            handlePageChange={getStocksHandler}
           />
         </div>
       )}

@@ -27,8 +27,15 @@ import {
 //UTILS
 import { useFirestore } from "../../../context/FirestoreContext";
 import { useOrdersContext } from "../../../context/OrdersContext";
-import { getLicenses } from "../../../redux/licenses/getLicensesSlice";
+import {
+  getLicenses,
+  resetGetLicensesState,
+} from "../../../redux/licenses/getLicensesSlice";
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
+import {
+  getCouriers,
+  resetgetCouriersState,
+} from "../../../redux/couriers/getCouriersSlice";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
@@ -51,12 +58,29 @@ const OrdersPage = () => {
   const { data, error } = useSelector(
     (state) => state.orders.getAutomationVariables
   );
-  const { licenses } = useSelector((state) => state.licenses.getLicenses);
+  const {
+    success,
+    licenses,
+    error: licensesError,
+  } = useSelector((state) => state.licenses.getLicenses);
+
   const { restaurants } = useSelector(
     (state) => state.restaurants.getRestaurants
   );
 
+  const { error: couriersError, couriers } = useSelector(
+    (state) => state.couriers.get
+  );
+
+  const [couriersData, setCouriersData] = useState(null);
+  const [licensesData, setLicensesData] = useState(null);
   const [automationDatas, setAutomationDatas] = useState(null);
+  const hasCourier = couriersData?.length > 0;
+  const hasCourierLicense =
+    licensesData?.filter((L) => L.licenseTypeId === 7 || L.licenseTypeId === 8)
+      .length > 0;
+  const canSelectCourier = hasCourier && hasCourierLicense;
+
   const pageNumbers = () => {
     const numbersColl = [];
     for (let i = 20; i < 101; i += 5) {
@@ -86,7 +110,7 @@ const OrdersPage = () => {
     }
   }, [restaurants]);
 
-  //CHEK IF THERE IS NO RESTAURANT OR LICENSE
+  //GET LICENSES
   useEffect(() => {
     if (restaurants?.data) {
       if (!(restaurants.data?.length > 0)) {
@@ -94,25 +118,52 @@ const OrdersPage = () => {
         return;
       } else {
         //GET LICENSES
-        if (!licenses) {
+        if (!licensesData) {
           dispatch(
             getLicenses({
               pageNumber: 0,
               pageSize: 0,
             })
           );
-          // console.log("Distaptch Get Licenses");
         }
       }
     }
+  }, [licensesData, restaurants]);
 
-    if (licenses?.data) {
-      // console.log(licenses);
-      if (!(licenses.data?.length > 0)) {
-        navigate("/licenses");
-      }
+  //GET COURIERS DATA
+  useEffect(() => {
+    if (!couriersData) {
+      dispatch(getCouriers());
     }
-  }, [licenses, restaurants]);
+  }, [couriersData]);
+
+  //SET LICENSES DATA
+  useEffect(() => {
+    if (success) {
+      if (licenses?.data) {
+        if (!(licenses.data?.length > 0)) {
+          navigate("/licenses");
+        }
+        setLicensesData(licenses.data);
+        dispatch(resetGetLicensesState());
+      }
+    } else if (licensesError) {
+      navigate("/licenses");
+      dispatch(resetGetLicensesState());
+    }
+  }, [licenses, success, licensesError]);
+
+  //SET COURIERS DATA
+  useEffect(() => {
+    if (couriers) {
+      if (couriers?.data) {
+        setCouriersData(couriers.data);
+        dispatch(resetgetCouriersState());
+      }
+    } else if (couriersError) {
+      dispatch(resetgetCouriersState());
+    }
+  }, [couriers, couriersError]);
 
   //TOAST AND SET DATA
   useEffect(() => {
@@ -139,7 +190,7 @@ const OrdersPage = () => {
         <SearchOrders />
         <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2 max-sm:mt-3">
-            <RestaurantsStatus licenses={licenses?.data} />
+            <RestaurantsStatus licenses={licensesData} />
             <AutomaticApproval
               ordersData={ordersData}
               automationDatas={automationDatas}
@@ -161,18 +212,20 @@ const OrdersPage = () => {
               <OrdersTotalPrice orders={ordersData} />
             </div>
 
-            <FilterOrders pageNumber={pageNumber} itemsPerPage={itemsPerPage} />
+            <FilterOrders licenses={licensesData} />
           </main>
         </main>
       </div>
 
       {/* TABLE */}
-      {ordersData?.length && licenses?.data && !loading ? (
+      {ordersData?.length && licensesData && !loading ? (
         <OrdersTable
-          licenses={licenses?.data}
+          licenses={licensesData}
           ordersData={ordersData}
+          hasCourier={hasCourier}
           setOrdersData={setOrdersData}
-          onSuccess={() => setOrdersData(null)}
+          canSelectCourier={canSelectCourier}
+          hasCourierLicense={hasCourierLicense}
         />
       ) : loading ? (
         <TableSkeleton row={11} />

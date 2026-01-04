@@ -26,6 +26,7 @@ const GetirYemekTableBody = ({
   order,
   totalItems,
   setOrdersData,
+  canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
@@ -158,7 +159,8 @@ const GetirYemekTableBody = ({
             )
           }
           className={`whitespace-nowrap ${
-            order.deliveryType == 1 && "pointer-events-none"
+            (order.deliveryType == 1 || !canSelectCourier) &&
+            "pointer-events-none"
           }`}
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">

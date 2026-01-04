@@ -42,7 +42,28 @@ const ProtectPage = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLockedData, setIsLockedData] = useState(protectedPages);
 
+  function handleToggle() {
+    setIsLockedData((prev) => {
+      return {
+        ...prev,
+        lock: !isLockedData?.lock,
+      };
+    });
+    dispatch(
+      updateUserLock({
+        ...protectedPages,
+        lock: !isLockedData?.lock,
+      })
+    );
+  }
+
+  const validPasswords = ["0000", "1234", "1111", "2222"];
   function handleSubmit() {
+    if (validPasswords.includes(isLockedData?.password)) {
+      toast.error("Lütfen geçerli bir parola giriniz.", { id: "safePages" });
+      return;
+    }
+
     if (isEqual(protectedPagesBefore, isLockedData)) {
       toast.error("Hiç bir değişiklik yapmadınız.", { id: "safePages" });
       return;
@@ -107,20 +128,7 @@ const ProtectPage = () => {
                 <CustomToggle
                   className="scale-[.8] peer-checked:bg-[--green-1]"
                   checked={isLockedData?.lock || false}
-                  onChange={() => {
-                    setIsLockedData((prev) => {
-                      return {
-                        ...prev,
-                        lock: !isLockedData?.lock,
-                      };
-                    });
-                    dispatch(
-                      updateUserLock({
-                        ...protectedPages,
-                        lock: !isLockedData?.lock,
-                      })
-                    );
-                  }}
+                  onChange={handleToggle}
                 />
               </div>
 

@@ -21,6 +21,7 @@ const DeleteIntegrationInfo = ({ restaurant, onSuccess }) => {
 
   function handleClick() {
     const { marketplaceRestaurantId, marketplaceId: marketplace } = restaurant;
+    console.log(restaurant);
     setPopupContent(
       <DeleteIntegrationInfoPopup
         restaurant={restaurant}

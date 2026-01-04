@@ -50,7 +50,7 @@ const Actions = ({ index, restaurant, onSuccess }) => {
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">
             <UserRestaurantLicenses restaurant={restaurant} />
-            <TransferRestaurant restaurant={restaurant} />
+            {/* <TransferRestaurant restaurant={restaurant} /> */}
             <EditRestaurant restaurant={restaurant} onSuccess={onSuccess} />
             <DeleteRetaurant restaurant={restaurant} onSuccess={onSuccess} />
           </ul>

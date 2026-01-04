@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
+import { getRemainingDays } from "../../../utils/utils";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //COMP
@@ -35,6 +36,13 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     return licenses.filter(
       (L) => L.restaurantId == statusData[key].restaurantId
     )[0]?.isActive;
+  }
+
+  function remainingDays(restaurantId) {
+    const endDate = licenses.filter((L) => L.restaurantId == restaurantId)[0]
+      ?.endDateTime;
+    const remainingDays = getRemainingDays(endDate);
+    return remainingDays;
   }
 
   //UPDATE RESTAURANT STATUS
@@ -214,6 +222,24 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                             disabled={updateRestaurantLoading || !isActive(key)}
                           />
                         </div>
+                      </div>
+                      <div className="flex items-center">
+                        {(() => {
+                          const remaining = remainingDays(
+                            restaurant.restaurantId
+                          );
+                          return (
+                            Number.isFinite(remaining) && (
+                              <p
+                                className={`${
+                                  remaining < 15 && "text-[--red-1]"
+                                }`}
+                              >
+                                {remaining} gün kaldı
+                              </p>
+                            )
+                          );
+                        })()}
                       </div>
                       <DeleteIntegrationInfo
                         restaurant={restaurant}

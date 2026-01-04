@@ -40,40 +40,38 @@ const PaymentsPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
 
-  function handlePageChange(number) {
-    if (number === pageNumber) return;
+  // GET PAYMENTS HANDLER
+  function getPaymentsHandler(number) {
     dispatch(
       getPayments({
-        pageNumber: number,
+        pageNumber: number || pageNumber,
         pageSize: itemsPerPage,
+        [searchVal ? "searchKey" : null]: searchVal || null,
+        online: filter?.online?.value,
+        active: filter?.active?.value,
       })
     );
+  }
+
+  function handlePageChange(number) {
+    if (number === pageNumber) return;
+    getPaymentsHandler(number);
   }
 
   function handleFilter(bool) {
     if (bool) {
       setOpenFilter(false);
       setPageNumber(1);
-      // dispatch(
-      //   getPayments({
-      //     pageNumber,
-      //     pageSize: itemsPerPage,
-      //     searchKey: searchVal,
-      //     online: filter?.online?.value,
-      //     active: filter?.active?.value,
-      //   })
-      // );
+      getPaymentsHandler(1);
     } else {
       if (filter) {
-        // dispatch(
-        //   getPayments({
-        //     pageNumber,
-        //     pageSize: itemsPerPage,
-        //     searchKey: null,
-        //     active: null,
-        //     online: null,
-        //   })
-        // );
+        dispatch(
+          getPayments({
+            pageNumber,
+            pageSize: itemsPerPage,
+            [searchVal ? "searchKey" : null]: searchVal || null,
+          })
+        );
       }
       setFilter({
         online: null,
@@ -85,23 +83,18 @@ const PaymentsPage = () => {
 
   function clearSearch() {
     setSearchVal("");
-    // dispatch(
-    //   getPayments({
-    //     pageNumber,
-    //     pageSize: itemsPerPage,
-    //   })
-    // );
+    dispatch(
+      getPayments({
+        pageNumber,
+        pageSize: itemsPerPage,
+      })
+    );
   }
 
   // GET PAYMENTS
   useEffect(() => {
     if (!paymentsData) {
-      dispatch(
-        getPayments({
-          pageNumber,
-          pageSize: itemsPerPage,
-        })
-      );
+      getPaymentsHandler();
     }
   }, [paymentsData]);
 
@@ -109,7 +102,6 @@ const PaymentsPage = () => {
   useEffect(() => {
     if (error) dispatch(resetGetPayments());
     if (success) {
-      // console.log(payments);
       setTotalItems(payments.totalCount);
       setPaymentsData(payments.data);
       dispatch(resetGetPayments());
@@ -252,11 +244,8 @@ const PaymentsPage = () => {
       </div>
 
       {/* TABLE */}
-      {!paymentsData ? (
-        <PaymentsTable
-          inData={paymentsData}
-          onSuccess={() => setPaymentsData(null)}
-        />
+      {paymentsData ? (
+        <PaymentsTable inData={paymentsData} />
       ) : loading ? (
         <TableSkeleton />
       ) : (

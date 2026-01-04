@@ -337,7 +337,7 @@ const RestaurantsPage = () => {
 
                 <div className="flex gap-6">
                   <CustomSelect
-                    label="District"
+                    label="İlçe"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}
@@ -359,7 +359,7 @@ const RestaurantsPage = () => {
                     }}
                   />
                   <CustomSelect
-                    label="neighbourhood"
+                    label="Mahalle"
                     className2="sm:mt-[.75rem] mt-1"
                     className="text-sm sm:mt-[.25rem]"
                     isSearchable={false}

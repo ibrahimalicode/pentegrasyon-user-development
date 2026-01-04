@@ -122,17 +122,17 @@ function Header({ openSidebar, setOpenSidebar }) {
                 <ul>
                   <Link to="/profile">
                     <li
-                      className="px-6 py-2 pr-16 text-sm hover:bg-[--light-3] border-b border-solid border-[--light-3] cursor-pointer"
+                      className="px-6 py-2 pr-10 text-sm hover:bg-[--light-3] border-b border-solid border-[--light-3] cursor-pointer"
                       onClick={() => setOpen(!open)}
                     >
-                      Profile
+                      Profil
                     </li>
                   </Link>
                   <li
-                    className="px-6 py-2 pr-16 text-sm hover:bg-[--light-3] cursor-pointer"
+                    className="px-6 py-2 pr-7 text-sm hover:bg-[--light-3] cursor-pointer whitespace-nowrap"
                     onClick={handleLogout}
                   >
-                    Logout
+                    Çıkış Yap
                   </li>
                 </ul>
               </div>

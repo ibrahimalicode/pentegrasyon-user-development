@@ -37,6 +37,7 @@ const MigrosYemekTableBody = ({
   order,
   totalItems,
   setOrdersData,
+  canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
@@ -156,7 +157,8 @@ const MigrosYemekTableBody = ({
             )
           }
           className={`whitespace-nowrap ${
-            order?.deliveryProvider?.toUpperCase() !== "RESTAURANT" &&
+            (order?.deliveryProvider?.toUpperCase() !== "RESTAURANT" ||
+              !canSelectCourier) &&
             "pointer-events-none"
           }`}
         >

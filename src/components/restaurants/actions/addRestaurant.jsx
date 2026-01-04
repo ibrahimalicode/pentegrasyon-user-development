@@ -31,6 +31,10 @@ import {
   addRestaurant,
   resetAddRestaurantState,
 } from "../../../redux/restaurants/addRestaurantSlice";
+import {
+  getUserAddress,
+  resetGetUserAddress,
+} from "../../../redux/data/getUserAddressSlice";
 
 const AddRestaurant = ({ onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -71,12 +75,13 @@ function AddRestaurantPopup({ onSuccess }) {
     (state) => state.data.getNeighs
   );
 
-  const {
-    loading: locationLoading,
-    success: locationSuccess,
-    error: locationError,
-    location,
-  } = useSelector((state) => state.data.getLocation);
+  const { success: locationSuccess, location } = useSelector(
+    (state) => state.data.getLocation
+  );
+
+  const { address, error: addressErr } = useSelector(
+    (state) => state.data.getUserAddress
+  );
 
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
@@ -156,12 +161,6 @@ function AddRestaurantPopup({ onSuccess }) {
   useEffect(() => {
     if (restaurantData.city?.id) {
       dispatch(getDistricts({ cityId: restaurantData.city.id }));
-      setRestaurantData((prev) => {
-        return {
-          ...prev,
-          district: null,
-        };
-      });
     }
   }, [restaurantData.city]);
 
@@ -169,6 +168,27 @@ function AddRestaurantPopup({ onSuccess }) {
   useEffect(() => {
     if (districtsSuccess) {
       setDistricts(districtsData);
+      //check if there is a district with no id, coz it only comes from getUserAddress
+      if (restaurantData.district && !restaurantData.district.id) {
+        const foundDistrict = districtsData.find(
+          (d) => d.value === restaurantData.district.value
+        );
+        if (foundDistrict) {
+          setRestaurantData((prev) => {
+            return {
+              ...prev,
+              district: foundDistrict,
+            };
+          });
+        }
+      } else {
+        setRestaurantData((prev) => {
+          return {
+            ...prev,
+            district: null,
+          };
+        });
+      }
       dispatch(resetGetDistrictsState());
     }
   }, [districtsSuccess]);
@@ -182,12 +202,6 @@ function AddRestaurantPopup({ onSuccess }) {
           districtId: restaurantData.district.id,
         })
       );
-      setRestaurantData((prev) => {
-        return {
-          ...prev,
-          neighbourhood: null,
-        };
-      });
     }
   }, [restaurantData.district]);
 
@@ -196,6 +210,27 @@ function AddRestaurantPopup({ onSuccess }) {
     if (neighsSuccess) {
       setNeighs(neighsData);
       dispatch(resetGetNeighsState());
+    }
+    //check if there is a neighbourhood with no id, coz it only comes from getUserAddress
+    if (restaurantData.neighbourhood && !restaurantData.neighbourhood.id) {
+      const foundDistrict = neighsData.find(
+        (d) => d.value === restaurantData.neighbourhood.value
+      );
+      if (foundDistrict) {
+        setRestaurantData((prev) => {
+          return {
+            ...prev,
+            neighbourhood: foundDistrict,
+          };
+        });
+      }
+    } else {
+      setRestaurantData((prev) => {
+        return {
+          ...prev,
+          neighbourhood: null,
+        };
+      });
     }
   }, [neighsSuccess]);
 
@@ -247,6 +282,60 @@ function AddRestaurantPopup({ onSuccess }) {
       dispatch(resetGetLocationState());
     }
   }, [locationSuccess]);
+
+  //GET THE USER ADDRESS
+  useEffect(() => {
+    if (!restaurantData.city) {
+      dispatch(getUserAddress());
+    }
+  }, [restaurantData.city]);
+
+  //SET THE USER ADDRESS
+  useEffect(() => {
+    if (address) {
+      const city_ = address.city;
+      const district_ = address.district;
+      const neigh_ = address.neighbourhood;
+
+      setRestaurantData((prev) => {
+        return {
+          ...prev,
+          city: {
+            label: city_,
+            value: city_,
+            id:
+              citiesData?.filter((city) => city.value === city_)[0]?.id || null,
+          },
+          district: {
+            label: district_,
+            value: district_,
+            id: null,
+          },
+          neighbourhood: {
+            label: neigh_,
+            value: neigh_,
+            id: null,
+          },
+          longitude: address.lng,
+          latitude: address.lat,
+          address: address.address,
+        };
+      });
+      setLocationData((prev) => {
+        return {
+          ...prev,
+          before: address.address,
+        };
+      });
+
+      const address_ = `${city_}, ${district_}, ${neigh_}`;
+      dispatch(getLocation({ address: address_ }));
+      dispatch(resetGetUserAddress());
+    }
+    if (address || addressErr) {
+      dispatch(resetGetUserAddress());
+    }
+  }, [address, addressErr]);
 
   return (
     <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base overflow-visible relative">

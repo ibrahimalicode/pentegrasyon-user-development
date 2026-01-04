@@ -1,8 +1,5 @@
-//https://api.pentegrasyon.net:9007/api/v1/CityDistrictNeighbourhood/GetCities
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api";
-import toast from "react-hot-toast";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 

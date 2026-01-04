@@ -49,12 +49,14 @@ const LicensesPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
 
-  function handlePageChange(number) {
+  //HANDLER
+  function handleGetLicenses(number, searchVal) {
     dispatch(
       getLicenses({
-        pageNumber: number,
+        pageNumber: number || pageNumber,
         pageSize: itemsPerPage,
         isActive: filter?.status?.value,
+        [searchVal ? "searchKey" : ""]: searchVal || null,
         isSettingsAdded: filter?.isSettingsAdded?.value,
         licenseTypeId: filter?.licenseTypeId?.id,
         dateRange: filter?.dateRange?.value,
@@ -66,33 +68,14 @@ const LicensesPage = () => {
   function handleSearch(e) {
     e.preventDefault();
     if (!searchVal) return;
-    console.log(searchVal);
-    dispatch(
-      getLicenses({
-        pageNumber: 1,
-        pageSize: itemsPerPage,
-        searchKey: searchVal,
-        isActive: filter?.status?.value,
-        isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.id,
-        dateRange: filter?.dateRange?.value,
-      })
-    );
+    handleGetLicenses(1, searchVal);
     setPageNumber(1);
   }
 
   //FILTER AND CLEAR FILTER
   function handleFilter(bool) {
     if (bool) {
-      const filterData = {
-        pageNumber: 1,
-        pageSize: itemsPerPage,
-        isActive: filter?.status?.value,
-        isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.id,
-        dateRange: filter?.dateRange?.value,
-      };
-      dispatch(getLicenses(filterData));
+      handleGetLicenses(1);
     } else {
       dispatch(
         getLicenses({
@@ -109,28 +92,13 @@ const LicensesPage = () => {
   //CLEAR SEARCH
   function clearSearch() {
     setSearchVal("");
-    dispatch(
-      getLicenses({
-        pageNumber,
-        pageSize: itemsPerPage,
-        searchKey: null,
-        isActive: filter?.status?.value,
-        isSettingsAdded: filter?.isSettingsAdded?.value,
-        licenseTypeId: filter?.licenseTypeId?.id,
-        dateRange: filter?.dateRange?.value,
-      })
-    );
+    handleGetLicenses();
   }
 
   // GET LICENSES
   useEffect(() => {
     if (!licensesData) {
-      dispatch(
-        getLicenses({
-          pageNumber,
-          pageSize: itemsPerPage,
-        })
-      );
+      handleGetLicenses();
     }
   }, [licensesData]);
 
@@ -377,7 +345,7 @@ const LicensesPage = () => {
             setPageNumber={setPageNumber}
             itemsPerPage={itemsPerPage}
             totalItems={totalItems}
-            handlePageChange={handlePageChange}
+            handlePageChange={handleGetLicenses}
           />
         </div>
       )}

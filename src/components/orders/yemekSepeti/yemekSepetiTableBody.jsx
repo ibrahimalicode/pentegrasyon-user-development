@@ -22,10 +22,11 @@ import YemekSepeti from "../../../assets/img/orders/YemekSepeti.png";
 import { YemekSepetiAddress } from "../components/marketplaceAddresses";
 
 const YemekSepetiTableBody = ({
-  licenses,
   order,
+  licenses,
   totalItems,
   setOrdersData,
+  canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
@@ -145,8 +146,9 @@ const YemekSepetiTableBody = ({
         </td>
         <td
           className={`whitespace-nowrap ${
-            order.expressDelivery && "pointer-events-none"
-          }`}
+            (order.expressDelivery || !canSelectCourier) &&
+            "pointer-events-none"
+          } `}
           onClick={() =>
             setPopupContent(
               <ChooseCourier

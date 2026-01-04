@@ -60,6 +60,9 @@ const EditUserPassword = ({ user }) => {
   return (
     <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
       <form className="w-full" onSubmit={handleSubmit}>
+        <p className="py-4 text-3xl text-[--primary-1] font-bold">
+          Şifrenızı Değiştirin
+        </p>
         <div className="flex gap-4 mt-4 max-sm:flex-col">
           <CustomInput
             required
@@ -103,7 +106,7 @@ const EditUserPassword = ({ user }) => {
           <button
             type="submit"
             disabled={loading}
-            className="text-[--white-1] bg-[--primary-1] rounded-md px-5 py-2.5"
+            className="text-white bg-[--primary-1] rounded-md px-5 py-2.5"
           >
             Kaydet
           </button>

@@ -19,6 +19,7 @@ import {
   getirYemekUpdateRestaurantCourierStatus,
   resetgetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
+import { getRemainingDays } from "../../../utils/utils";
 
 const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const toastId = useRef();
@@ -35,6 +36,13 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     return licenses.filter(
       (L) => L.restaurantId == statusData[key].restaurantId
     )[0]?.isActive;
+  }
+
+  function remainingDays(restaurantId) {
+    const endDate = licenses.filter((L) => L.restaurantId == restaurantId)[0]
+      ?.endDateTime;
+    const remainingDays = getRemainingDays(endDate);
+    return remainingDays;
   }
 
   //UPDATE RESTAURANT STATUS
@@ -201,6 +209,24 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                             />
                           </div>
                         )}
+                      </div>
+                      <div className="flex items-center">
+                        {(() => {
+                          const remaining = remainingDays(
+                            restaurant.restaurantId
+                          );
+                          return (
+                            Number.isFinite(remaining) && (
+                              <p
+                                className={`${
+                                  remaining < 15 && "text-[--red-1]"
+                                }`}
+                              >
+                                {remaining} gün kaldı
+                              </p>
+                            )
+                          );
+                        })()}
                       </div>
                       <DeleteIntegrationInfo
                         onSuccess={onSuccess}

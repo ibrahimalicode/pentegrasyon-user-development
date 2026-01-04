@@ -10,7 +10,7 @@ const integrationInformationsSlice = combineReducers({
   yemekSepeti: yemekSepetiSlice,
   migrosYemek: migrosYemekSlice,
   paketNet: paketNetSlice,
-  trendyol: trendyolYemekSlice,
+  trendyolYemek: trendyolYemekSlice,
 });
 
 export default integrationInformationsSlice;

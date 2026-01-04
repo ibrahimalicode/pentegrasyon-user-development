@@ -26,6 +26,7 @@ const TrendyolYemekTableBody = ({
   licenses,
   totalItems,
   setOrdersData,
+  licenseSettings,
   canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
@@ -71,10 +72,11 @@ const TrendyolYemekTableBody = ({
           checkedScheduledDate: isCheckoutToday(order.scheduledDate),
         }}
         setOrdersData={setOrdersData}
+        licenseSettings={licenseSettings}
       />
     );
   }
-  console.log(order);
+  // console.log(order);
 
   return (
     order && (

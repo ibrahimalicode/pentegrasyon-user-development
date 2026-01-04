@@ -26,6 +26,7 @@ const YemekSepetiTableBody = ({
   licenses,
   totalItems,
   setOrdersData,
+  licenseSettings,
   canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
@@ -71,6 +72,7 @@ const YemekSepetiTableBody = ({
           checkedScheduledDate: isCheckoutToday(order.scheduledDate),
         }}
         setOrdersData={setOrdersData}
+        licenseSettings={licenseSettings}
       />
     );
   }

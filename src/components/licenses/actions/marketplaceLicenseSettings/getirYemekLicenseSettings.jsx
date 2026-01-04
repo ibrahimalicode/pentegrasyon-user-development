@@ -21,8 +21,8 @@ import {
   resetGetIntegrationInformationByLicenseId,
 } from "../../../../redux/informations/getirYemek/getIntegrationInformationByLicenseIdSlice";
 import {
-  resetUpdateIntegrationInformation,
   updateIntegrationInformation,
+  resetUpdateIntegrationInformation,
 } from "../../../../redux/informations/getirYemek/updateIntegrationInformationSlice";
 
 const GetirYemekLicenseSettings = ({ data, onSuccess }) => {

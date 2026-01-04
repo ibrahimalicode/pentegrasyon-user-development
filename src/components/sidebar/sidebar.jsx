@@ -145,7 +145,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
                         </div>
                         <div>{item.text}</div>
                         <div>
-                          {unverifiedOrders && index == 4 && (
+                          {unverifiedOrders && index == 5 && (
                             <Lottie
                               className="absolute top-0 bottom-0 right-0 rounded-full overflow-hidden"
                               animationData={bell_anim}

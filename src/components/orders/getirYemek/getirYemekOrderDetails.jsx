@@ -17,7 +17,7 @@ import { useSlideBar } from "../../../context/SlideBarContext";
 import { useFirestore } from "../../../context/FirestoreContext";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
-const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
+const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(order);
@@ -65,6 +65,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
           <p>İşletme</p>
           <p>{order.marketplaceTicketRestaurantName}</p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Sipariş durumu</p>
           <p
@@ -83,6 +84,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             }
           </p>
         </div>
+
         {isValidDate(sideOrder.cancelDate) && (
           <div className="w-full flex justify-between">
             <p>İptal notu</p>
@@ -91,10 +93,12 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             </p>
           </div>
         )}
+
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
           <p>{order.marketplaceTicketPaymentMethodName}</p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Sipariş Tarihi</p>
           <p>
@@ -105,6 +109,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             })}
           </p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Kurye</p>
           <p className="flex items-center">
@@ -114,12 +119,22 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             {getCurrentCourier()}
           </p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Onay Kodu</p>
           <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
             {order.confirmationId}
           </p>
         </div>
+
+        {licenseSettings && (
+          <div className="w-full flex justify-between">
+            <p>Komisyon Oranı</p>
+            <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
+              {licenseSettings.commissionRate}%
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">
@@ -127,6 +142,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
           <p className="w-1/2">Müşteri</p>
           <p className="w-1/2 text-end">{order.client.name}</p>
         </div>
+
         <div className="flex">
           <p className="w-1/2">Tel</p>
           <p className="w-1/2 text-end">
@@ -142,12 +158,14 @@ const GetirYemekOrderDetails = ({ order, setOrdersData }) => {
             )}
           </p>
         </div>
+
         <div className="flex justify-between">
           <p>Adres</p>
           <div className="w-full max-w-[65%] text-end text-[--primary-2]">
             <GetirYemekAddress order={order} />
           </div>
         </div>
+
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
           <p className="w-1/2 text-end">{order.client.description}</p>

@@ -56,9 +56,9 @@ const CustomPagination = ({
 
   return (
     <div className="mt-3 relative w-full flex justify-center">
-      <div className="absolute top-0 bottom-0 right-0 flex items-center">
+      <div className="absolute top-0 bottom-0 right-0 flex items-center max-sm:top-14">
         <button
-          className="text-sm text-[--link-1]"
+          className="text-sm text-[--link-1] max-sm:text-xs"
           onClick={() => setPopupContent(<PrivacyPopup />)}
         >
           Kullanım Şartları
@@ -108,8 +108,8 @@ const CustomPagination = ({
       </div>
 
       {totalItems ? (
-        <div className="absolute top-0 bottom-0 left-0 flex items-center">
-          <span className="text-sm text-[--link-1]">
+        <div className="absolute top-0 bottom-0 left-0 flex items-center max-sm:top-14 max-sm:pb-6 max-sm:-left-14">
+          <span className="text-sm text-[--link-1] max-sm:text-xs">
             Toplam Sayım: {totalItems}
           </span>
         </div>

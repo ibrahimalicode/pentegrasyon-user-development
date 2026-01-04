@@ -15,7 +15,7 @@ import MigrosYemekStatusButtons from "./migrosYemekStatusButtons";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import migrosYemekiOrderStatuses from "../../../enums/migrosYemekiOrderStatuses";
 
-const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
+const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
   const [sideOrder, setSideOrder] = useState(order);
@@ -63,6 +63,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
           <p>İşletme</p>
           <p>{order.restaurantName}</p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Sipariş durumu</p>
           <p
@@ -81,16 +82,19 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
             }
           </p>
         </div>
+
         {isValidDate(sideOrder.cancelDate) && (
           <div className="w-full flex justify-between">
             <p>İptal notu</p>
             <p>{sideOrder.cancelMessage}</p>
           </div>
         )}
+
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
           <p>{order.marketplaceTicketPaymentTypeDescription}</p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Sipariş Tarihi</p>
           <p>
@@ -101,6 +105,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
             })}
           </p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Kurye</p>
           <p className="flex items-center">
@@ -110,12 +115,22 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData }) => {
             {getCurrentCourier()}
           </p>
         </div>
+
         <div className="w-full flex justify-between">
           <p>Onay Kodu</p>
           <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
             {order.shortCode}
           </p>
         </div>
+
+        {licenseSettings && (
+          <div className="w-full flex justify-between">
+            <p>Komisyon Oranı</p>
+            <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
+              {licenseSettings.commissionRate}%
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="bg-[--white-1] p-2 rounded-md flex flex-col gap-1">

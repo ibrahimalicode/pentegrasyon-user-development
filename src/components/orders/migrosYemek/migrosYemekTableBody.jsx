@@ -26,17 +26,18 @@ import MigrosYemek from "../../../assets/img/orders/MigrosYemek.png";
 import { MigrosYemekAddress } from "../components/marketplaceAddresses";
 
 //ANIMATIONS
-import ASSIGNED_FOR_DELIVERY_ANIM from "../../../assets/anim/lottie/ASSIGNED_FOR_DELIVERY.json";
-import COURIER_APPROACHED_ANIM from "../../../assets/anim/lottie/COURIER_APPROACHED.json";
-import COURIER_ARRIVED_ANIM from "../../../assets/anim/lottie/COURIER_ARRIVED.json";
-import IN_DELIVERY_ANIM from "../../../assets/anim/lottie/IN_DELIVERY.json";
 import DELIVERED_ANIM from "../../../assets/anim/lottie/DELIVERED.json";
+import IN_DELIVERY_ANIM from "../../../assets/anim/lottie/IN_DELIVERY.json";
+import COURIER_ARRIVED_ANIM from "../../../assets/anim/lottie/COURIER_ARRIVED.json";
+import COURIER_APPROACHED_ANIM from "../../../assets/anim/lottie/COURIER_APPROACHED.json";
+import ASSIGNED_FOR_DELIVERY_ANIM from "../../../assets/anim/lottie/ASSIGNED_FOR_DELIVERY.json";
 
 const MigrosYemekTableBody = ({
   licenses,
   order,
   totalItems,
   setOrdersData,
+  licenseSettings,
   canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
@@ -76,7 +77,11 @@ const MigrosYemekTableBody = ({
     }
 
     setSlideBarContent(
-      <MigrosYemekOrderDetails order={order} setOrdersData={setOrdersData} />
+      <MigrosYemekOrderDetails
+        order={order}
+        setOrdersData={setOrdersData}
+        licenseSettings={licenseSettings}
+      />
     );
   }
 

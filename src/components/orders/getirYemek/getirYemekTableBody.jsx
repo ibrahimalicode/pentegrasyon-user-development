@@ -1,9 +1,12 @@
+//MODULES
+import toast from "react-hot-toast";
+
 // IMAGES
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 
 //UTILS
-import { checkLeng, formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
+import { checkLeng, formatToPrice } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
@@ -19,13 +22,13 @@ import GetirYemekStatusButton from "./getirYemekStatusButton";
 import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 import { GetirYemekAddress } from "../components/marketplaceAddresses";
-import toast from "react-hot-toast";
 
 const GetirYemekTableBody = ({
-  licenses,
   order,
+  licenses,
   totalItems,
   setOrdersData,
+  licenseSettings,
   canSelectCourier,
 }) => {
   const { setPopupContent } = usePopup();
@@ -71,9 +74,11 @@ const GetirYemekTableBody = ({
           checkedScheduledDate: isCheckoutToday(order.scheduledDate),
         }}
         setOrdersData={setOrdersData}
+        licenseSettings={licenseSettings}
       />
     );
   }
+  // console.log(licenses);
 
   return (
     order && (

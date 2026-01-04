@@ -183,6 +183,8 @@ const OrdersPage = () => {
     }
   }, [automaticApprovalDatas]);
 
+  // console.log(licensesData.filter((L) => L.isSettingsAdded));
+
   return (
     <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">
       {/* ACTIONS/BUTTONS */}
@@ -236,7 +238,7 @@ const OrdersPage = () => {
       {/* PAGINATION */}
       {ordersData && typeof totalItems === "number" && (
         <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
-          <div className="scale-[.8]">
+          <div className="scale-[.8] min-w-20">
             <CustomSelect
               className="mt-[0] sm:mt-[0]"
               className2="mt-[0] sm:mt-[0]"

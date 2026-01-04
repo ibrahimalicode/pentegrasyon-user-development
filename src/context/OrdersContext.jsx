@@ -13,11 +13,11 @@ import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
 
 //REDUX
-import { getTicketById } from "../redux/orders/getTicketByIdSlice";
 import {
   getTicketCountStatistics,
   resetGetTicketCountStatistics,
 } from "../redux/dashboard/statistics/getTicketCountStatisticsSlice";
+import { getTicketById } from "../redux/orders/getTicketByIdSlice";
 import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
 
 const OrdersContext = createContext();

@@ -64,3 +64,18 @@ export const MigrosYemekAddress = ({ order, className }) => {
     </div>
   );
 };
+
+export const TrendyolYemekAddress = ({ order }) => {
+  return (
+    <span>
+      <span>{order.customer.address1}</span>
+      {order.customer.apartmentNumber && (
+        <span>Apt No: {order.customer.apartmentNumber}</span>
+      )}
+      {order.customer.doorNumber && (
+        <span> Daire No: {order.customer.doorNumber}</span>
+      )}
+      {order.customer.floor && <span> Kat: {order.customer.floor}</span>}
+    </span>
+  );
+};

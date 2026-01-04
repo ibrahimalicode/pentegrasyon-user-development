@@ -5,6 +5,7 @@ import React from "react";
 import GetirYemekTableBody from "./getirYemek/getirYemekTableBody";
 import YemekSepetiTableBody from "./yemekSepeti/yemekSepetiTableBody";
 import MigrosYemekTableBody from "./migrosYemek/migrosYemekTableBody";
+import TrendyolYemekTableBody from "./trendyolYemek/trendyolYemekTableBody";
 
 export const marketplaceTableBodies = [
   {
@@ -14,7 +15,7 @@ export const marketplaceTableBodies = [
     TableBody: MigrosYemekTableBody,
   },
   {
-    TableBody: YemekSepetiTableBody,
+    TableBody: TrendyolYemekTableBody,
   },
   {
     TableBody: YemekSepetiTableBody,

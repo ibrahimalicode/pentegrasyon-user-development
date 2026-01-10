@@ -147,7 +147,10 @@ export const OrdersContextProvider = ({ children }) => {
     if (ordersData?.length) {
       const hasUnverifiedOrders = ordersData.filter(
         (order) =>
-          order.status === 325 || order.status === 400 || order.status === 0
+          order.status === 325 ||
+          order.status === 400 ||
+          (order.status === 0 && order.marketplaceId !== 2) ||
+          order.packageStatus === "Created"
       );
       // console.log(hasUnverifiedOrders[0]);
       setUnverifiedOrders(hasUnverifiedOrders[0]);

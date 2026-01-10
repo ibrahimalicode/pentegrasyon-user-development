@@ -17,7 +17,7 @@ import PrintComponent from "../components/printComponent";
 import RemainingMinutes from "../components/remainingMinutes";
 import TrendyolOrderDetails from "./trendyolYemekOrderDetails";
 import TrendyolYemekPrintOrder from "./trendyolYemekPrintOrder";
-// import YemekSepetiStatusButton from "./yemekSepetiStatusButton";
+import TrendyolYemekStatusButton from "./trendyolYemekStatusButton";
 import Trendyol from "../../../assets/img/orders/TrendyolYemek.png";
 import { TrendyolYemekAddress } from "../components/marketplaceAddresses";
 
@@ -191,7 +191,7 @@ const TrendyolYemekTableBody = ({
           )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
-          {/* <YemekSepetiStatusButton
+          <TrendyolYemekStatusButton
             order={{
               ...order,
               approvalDate: isValidDate(order.approvalDate),
@@ -200,7 +200,7 @@ const TrendyolYemekTableBody = ({
               preparationDate: isValidDate(order.preparationDate),
             }}
             setOrdersData={setOrdersData}
-          /> */}
+          />
         </td>
         <td className="w-14 relative">
           {

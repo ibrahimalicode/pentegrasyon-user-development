@@ -42,7 +42,7 @@ const store = configureStore({
     getirYemek: getirYemekSlice,
     yemekSepeti: yemekSepetiSlice,
     migrosYemek: migrosYemekSlice,
-    trendyolYemek: trendyolYemekSlice,
+    trendyol: trendyolYemekSlice,
     dashboard: dashboardSlice,
     couriers: couriersSlice,
     payments: paymentsSlice,

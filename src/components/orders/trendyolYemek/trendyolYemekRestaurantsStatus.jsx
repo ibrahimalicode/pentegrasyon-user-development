@@ -27,10 +27,10 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const [statusData, setStatusData] = useState(null);
 
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
-    useSelector((state) => state.trendyolYemek.updateRestaurants);
+    useSelector((state) => state.trendyol.updateRestaurants);
 
   const { loading: updateCourierLoading, error: updateCourierError } =
-    useSelector((state) => state.trendyolYemek.updateRestaurantsCourier);
+    useSelector((state) => state.trendyol.updateRestaurantsCourier);
 
   function isActive(key) {
     return licenses.filter(

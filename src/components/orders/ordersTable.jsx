@@ -55,7 +55,7 @@ const OrdersTable = ({
     (s) => s.integrationInfos.migrosYemek.getIntegrationInfo
   );
   const { infoData: trendInfo, error: trendErr } = useSelector(
-    (s) => s.integrationInfos.trendyolYemek.getIntegrationInfo
+    (s) => s.integrationInfos.trendyol.getIntegrationInfo
   );
   const { infoData: ysInfo, error: ysErr } = useSelector(
     (s) => s.integrationInfos.yemekSepeti.getIntegrationInfo

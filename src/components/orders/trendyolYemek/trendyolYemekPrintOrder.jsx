@@ -10,11 +10,6 @@ import QrGenerator from "../../common/qrGenerator";
 import { TrendyolYemekAddress } from "../components/marketplaceAddresses";
 
 const TrendyolYemekPrintOrder = ({ order }) => {
-  const customerAddress = `
-  ${order.customer.city ?? ""},
-  ${order.customer.addressDescription ?? ""},
-  ${order.customer.address1 ?? ""},`;
-
   function getGoogleAddress() {
     const googleMapsUrl = `https://www.google.com/maps?q=${order.customer.latitude},${order.customer.longitude}`;
     return googleMapsUrl;
@@ -47,41 +42,25 @@ const TrendyolYemekPrintOrder = ({ order }) => {
         </p>
         <p>
           <span className="font-bold">Tel: </span>
-
-          {order.customer.phone ? (
-            <span> {order.customer.phone}</span>
-          ) : (
-            <>
-              {order.customer.phone.split("/")[0]}
-              <span className="font-bold">Ext: </span>
-              <span> {order.customer.phone.split("/")[1]}</span>
-            </>
-          )}
+          <span> {order.customer.phone}</span>
         </p>
 
-        {(order.customer.city ||
-          order.customer.addressDescription ||
-          order.customer.address1) && (
-          <div className="flex">
-            <p className="font-bold pr-1">Adres: </p>
-            <TrendyolYemekAddress order={order} />
-          </div>
-        )}
+        <div className="flex">
+          <p className="font-bold pr-1">Adres: </p>
+          <TrendyolYemekAddress order={order} />
+        </div>
 
-        {order?.customer?.addressDescription && (
+        {order?.customer?.district && (
           <p>
             <span className="font-bold">Bölge: </span>{" "}
-            <span> {order?.customer?.addressDescription?.split(" ")[0]}</span>
+            <span> {order?.customer?.district}</span>
           </p>
         )}
 
-        {order.customer.customerNote && (
+        {order.customer.addressDescription && (
           <div className="flex">
             <p className="font-bold pr-1">Tarif: </p>
-            <div>
-              {" "}
-              {order.customer.customerNote?.replace(order.customerNote, "")}
-            </div>
+            <div> {order.customer.addressDescription}</div>
           </div>
         )}
         <p>
@@ -105,19 +84,11 @@ const TrendyolYemekPrintOrder = ({ order }) => {
         </p>
       </div>
 
-      {order?.isScheduled && (
-        <div className="flex items-center text-lg mt-2 border rounded-md border-gray-700 overflow-clip">
-          <div className="px-1 mt-1.5 mr-1 bg-[--gr-1]">🕑</div>
-          <div>Teslim Zamanı : </div>
-          <div className="font-medium">{order.checkedScheduledDate}</div>
-        </div>
-      )}
-
-      {order.customerNote && (
+      {order.customer.customerNote && (
         <div className="flex rounded-md overflow-clip my-2">
           <p className="whitespace-nowrap font-bold">Not : </p>
           <div className="w-full px-2 italic flex flex-col gap-1">
-            {order.customerNote && <p>{order.customerNote}</p>}
+            <p>{order.customer.customerNote}</p>
           </div>
         </div>
       )}
@@ -137,68 +108,74 @@ const TrendyolYemekPrintOrder = ({ order }) => {
 
           <tbody>
             {order.orders?.length > 0 &&
-              order.orders.map((order, i) => (
+              order.orders.map((item, i) => (
                 <React.Fragment key={i}>
                   <tr>
                     <td className="px-2 text-left">
                       <div className="font-bold">
                         <span className="mr-0.5 rounded-sm">
-                          {order?.orders?.length}{" "}
+                          {item?.items?.length}{" "}
                         </span>
-                        x {order.name}
+                        x {item.name}
                       </div>
                     </td>
                     <td className="p-2 flex justify-end items-start">
                       {formatToPrice(
-                        String(Number(order.price).toFixed(2)).replace(".", ",")
+                        String(Number(item.price).toFixed(2)).replace(".", ",")
                       )}
                     </td>
                   </tr>
-                  {order?.options?.length > 0 &&
-                    order.options.map((cat) => (
-                      <React.Fragment key={cat.id}>
+                  {item?.modifiers?.length > 0 &&
+                    item.modifiers.map((mod) => (
+                      <React.Fragment key={mod.id}>
                         <tr className="px-2">
-                          <td className="pl-2">{cat.name}</td>
+                          <td className="pl-2">{mod.name}</td>
                           <td
                             className={`pr-2 text-right ${
-                              cat.price > 0
+                              mod.price > 0
                                 ? "text-[--green-1]"
                                 : "text-[--red-1]"
                             }`}
                           >
-                            {cat.price > 0 &&
+                            {mod.price > 0 &&
                               formatToPrice(
-                                String(Number(cat.price).toFixed(2)).replace(
+                                String(Number(mod.price).toFixed(2)).replace(
                                   ".",
                                   ","
                                 )
                               )}
                           </td>
                         </tr>
-                        {cat.childrens.map((opt) => (
-                          <tr key={opt.id} className="">
-                            <td className="pl-2">▸ {opt.name}</td>
+                        {(Array.isArray(mod.subModifier)
+                          ? mod.subModifier
+                          : JSON.parse(mod.subModifier || "[]")
+                        ).map((subMod) => (
+                          <tr key={subMod.id} className="">
+                            <td className="pl-2">▸ {subMod.name}</td>
                             <td
                               className={`pr-2 text-right ${
-                                opt.price > 0
+                                subMod.price > 0
                                   ? "text-[--green-1]"
                                   : "text-[--red-1]"
                               }`}
                             >
-                              {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
-                              {opt.price > 0 &&
+                              {subMod.price > 0
+                                ? `+`
+                                : subMod.price < 0
+                                ? `-`
+                                : ""}
+                              {subMod.price > 0 &&
                                 formatToPrice(
-                                  String(Number(opt.price).toFixed(2)).replace(
-                                    ".",
-                                    ","
-                                  )
+                                  String(
+                                    Number(subMod.price).toFixed(2)
+                                  ).replace(".", ",")
                                 )}
                             </td>
                           </tr>
                         ))}
                       </React.Fragment>
                     ))}
-                  {(order.comment || order.description) && (
+                  {/* {(order.comment || order.description) && (
                     <tr>
                       <td className="relative text-base">
                         <p className="invisible px-2 py-1 flex gap-1">
@@ -210,7 +187,7 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                         </span>
                       </td>
                     </tr>
-                  )}
+                  )} */}
                 </React.Fragment>
               ))}
           </tbody>
@@ -226,7 +203,7 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                 {formatToPrice(
                   String(
                     (
-                      Number(order.grandTotal) +
+                      Number(order.totalPrice) +
                       Number(order.discountAmountTotal)
                     ).toFixed(2)
                   ).replace(".", ",")
@@ -238,7 +215,7 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                 %
                 {(
                   (100 /
-                    (Number(order.grandTotal) +
+                    (Number(order.totalPrice) +
                       Number(order.discountAmountTotal))) *
                   Number(order.discountAmountTotal)
                 ).toFixed(2)}{" "}
@@ -261,7 +238,7 @@ const TrendyolYemekPrintOrder = ({ order }) => {
           <span>Ödenecek Tutar : </span>
           <span className="font-bold">
             {formatToPrice(
-              String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+              String(Number(order.totalPrice).toFixed(2)).replace(".", ",")
             )}
           </span>
         </p>

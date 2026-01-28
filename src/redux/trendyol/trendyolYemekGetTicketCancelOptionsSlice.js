@@ -37,7 +37,7 @@ const trendyolYemekGetTicketCancelOptionsSlice = createSlice({
           state.success = true;
           state.error = null;
           state.options = action.payload;
-        }
+        },
       )
       .addCase(
         trendyolYemekGetTicketCancelOptions.rejected,
@@ -46,16 +46,16 @@ const trendyolYemekGetTicketCancelOptionsSlice = createSlice({
           state.success = false;
           state.error = action.payload;
           state.options = null;
-        }
+        },
       );
   },
 });
 
 export const trendyolYemekGetTicketCancelOptions = createAsyncThunk(
-  "TrendyolYemek/TicketCancelOptions",
+  "Trendyol/TicketCancelOptions",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${baseURL}TrendyolYemek/TicketCancelOptions`, {
+      const res = await api.get(`${baseURL}Trendyol/TicketCancelOptions`, {
         params: { ...data },
       });
 
@@ -68,7 +68,7 @@ export const trendyolYemekGetTicketCancelOptions = createAsyncThunk(
       }
       return rejectWithValue({ message_TR: err.message });
     }
-  }
+  },
 );
 
 export const { resetTrendyolYemekGetTicketCancelOptions } =

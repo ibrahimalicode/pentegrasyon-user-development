@@ -37,7 +37,7 @@ const trendyolYemekUpdateRestaurantCourierStatusSlice = createSlice({
           state.success = true;
           state.error = null;
           state.data = action.payload;
-        }
+        },
       )
       .addCase(
         trendyolYemekUpdateRestaurantCourierStatus.rejected,
@@ -46,19 +46,19 @@ const trendyolYemekUpdateRestaurantCourierStatusSlice = createSlice({
           state.success = false;
           state.error = action.payload;
           state.data = null;
-        }
+        },
       );
   },
 });
 
 export const trendyolYemekUpdateRestaurantCourierStatus = createAsyncThunk(
-  "TrendyolYemek/UpdateRestaurantCourierStatus",
+  "Trendyol/UpdateRestaurantCourierStatus",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.put(
-        `${baseURL}TrendyolYemek/UpdateRestaurantCourierStatus`,
+        `${baseURL}Trendyol/UpdateRestaurantCourierStatus`,
         { ...data },
-        { params: { ...data } }
+        { params: { ...data } },
       );
 
       // console.log(res);
@@ -70,7 +70,7 @@ export const trendyolYemekUpdateRestaurantCourierStatus = createAsyncThunk(
       }
       return rejectWithValue({ message_TR: err.message });
     }
-  }
+  },
 );
 
 export const { resetTrendyolYemekUpdateRestaurantCourierStatus } =

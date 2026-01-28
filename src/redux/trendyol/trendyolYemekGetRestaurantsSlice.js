@@ -46,10 +46,10 @@ const trendyolYemekGetRestaurantsSlice = createSlice({
 });
 
 export const trendyolYemekGetRestaurants = createAsyncThunk(
-  "TrendyolYemek/GetRestaurants",
+  "Trendyol/GetRestaurants",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${baseURL}TrendyolYemek/GetRestaurants`);
+      const res = await api.get(`${baseURL}Trendyol/GetRestaurants`);
 
       // console.log(res);
       return res.data.data;
@@ -60,7 +60,7 @@ export const trendyolYemekGetRestaurants = createAsyncThunk(
       }
       return rejectWithValue({ message_TR: err.message });
     }
-  }
+  },
 );
 
 export const { resetTrendyolYemekGetRestaurants } =

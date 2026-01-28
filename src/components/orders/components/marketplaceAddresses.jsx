@@ -65,17 +65,28 @@ export const MigrosYemekAddress = ({ order, className }) => {
   );
 };
 
-export const TrendyolYemekAddress = ({ order }) => {
+export const TrendyolYemekAddress = ({ order, className }) => {
+  const customerAddress = `
+    ${order.customer.city},
+    ${order.customer.district},
+    ${order.customer.address1}`;
+
   return (
-    <span>
-      <span>{order.customer.address1}</span>
+    <div className={`flex flex-wrap ${className}`}>
+      <p>{customerAddress && customerAddress}</p>
       {order.customer.apartmentNumber && (
-        <span>Apt No: {order.customer.apartmentNumber}</span>
+        <p className="min-w-max px-0.5">
+          Apt No: {order.customer.apartmentNumber}
+        </p>
       )}
       {order.customer.doorNumber && (
-        <span> Daire No: {order.customer.doorNumber}</span>
+        <p className="min-w-max px-0.5">
+          Daire No: {order.customer.doorNumber}
+        </p>
       )}
-      {order.customer.floor && <span> Kat: {order.customer.floor}</span>}
-    </span>
+      {order.customer.floor && (
+        <p className="min-w-max px-0.5"> Kat: {order.customer.floor}</p>
+      )}
+    </div>
   );
 };

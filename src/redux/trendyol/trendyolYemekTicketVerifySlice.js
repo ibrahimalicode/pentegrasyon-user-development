@@ -46,13 +46,13 @@ const trendyolYemekTicketVerifySlice = createSlice({
 });
 
 export const trendyolYemekTicketVerify = createAsyncThunk(
-  "TrendyolYemek/TicketVerify",
+  "Trendyol/TicketVerify",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.post(
-        `${baseURL}TrendyolYemek/TicketVerify`,
+        `${baseURL}Trendyol/TicketVerify`,
         {},
-        { params: { ...data } }
+        { params: { ...data } },
       );
 
       // console.log(res);
@@ -64,7 +64,7 @@ export const trendyolYemekTicketVerify = createAsyncThunk(
       }
       return rejectWithValue({ message_TR: err.message });
     }
-  }
+  },
 );
 
 export const { resetTrendyolYemekTicketVerify } =

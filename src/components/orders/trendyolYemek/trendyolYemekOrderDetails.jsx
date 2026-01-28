@@ -16,6 +16,7 @@ import RemainingMinutes from "../components/remainingMinutes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
+import { PaymentMethods } from "../../../enums/trendyolPaymentMethods";
 
 const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
@@ -41,7 +42,7 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
     const custAdd = order?.customer?.deliveryMainArea;
     const currentCourier = courierServiceTypes.filter(
-      (T) => T.licenseTypeId === order.courierTypeId
+      (T) => T.licenseTypeId === order.courierTypeId,
     );
     return custAdd ? currentCourier?.[0]?.label : "Platform Kuryesi";
   }
@@ -73,14 +74,14 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             style={{
               color: `var(${
                 trendyolYemekOrderStatuses.filter(
-                  (col) => col.id === sideOrder.packageStatus
+                  (col) => col.id === sideOrder.packageStatus,
                 )[0]?.color
               })`,
             }}
           >
             {
               trendyolYemekOrderStatuses.filter(
-                (stat) => stat.id === sideOrder.packageStatus
+                (stat) => stat.id === sideOrder.packageStatus,
               )[0]?.label
             }
           </p>
@@ -94,11 +95,17 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             </p>
           </div>
         )}
-        {/* 
+
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
-          <p>{order.marketplaceTicketPaymentMethodName}</p>
-        </div> */}
+          <p>
+            {
+              PaymentMethods.filter(
+                (method) => method.value === order.payment.paymentType,
+              )[0]?.label
+            }
+          </p>
+        </div>
 
         <div className="w-full flex justify-between">
           <p>Sipariş Tarihi</p>
@@ -224,7 +231,10 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                     </td>
                     <td className="p-2 flex justify-end items-start">
                       {formatToPrice(
-                        String(Number(order.price).toFixed(2)).replace(".", ",")
+                        String(Number(order.price).toFixed(2)).replace(
+                          ".",
+                          ",",
+                        ),
                       )}
                     </td>
                   </tr>
@@ -247,8 +257,8 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                                   Number(mod.price) *
                                   // Number(mod.quantity) *
                                   Number(order.items.length)
-                                ).toFixed(2)
-                              ).replace(".", ",")
+                                ).toFixed(2),
+                              ).replace(".", ","),
                             )}
                         </td>
                       </tr>
@@ -268,14 +278,14 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                             {subMod.price > 0
                               ? `+`
                               : subMod.price < 0
-                              ? `-`
-                              : ""}
+                                ? `-`
+                                : ""}
                             {subMod.price > 0 &&
                               formatToPrice(
                                 String(Number(subMod.price).toFixed(2)).replace(
                                   ".",
-                                  ","
-                                )
+                                  ",",
+                                ),
                               )}
                           </td>
                         </tr>
@@ -311,8 +321,8 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       (
                         Number(order.grandTotal) +
                         Number(order.discountAmountTotal)
-                      ).toFixed(2)
-                    ).replace(".", ",")
+                      ).toFixed(2),
+                    ).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -321,8 +331,8 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p className="text-base">
                   {formatToPrice(
                     String(
-                      Number(order.discountAmountTotal).toFixed(2)
-                    ).replace(".", ",")
+                      Number(order.discountAmountTotal).toFixed(2),
+                    ).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -332,7 +342,7 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {formatToPrice(
-                String(Number(order.totalPrice).toFixed(2)).replace(".", ",")
+                String(Number(order.totalPrice).toFixed(2)).replace(".", ","),
               )}
             </p>
           </div>

@@ -15,8 +15,8 @@ import { useTrendyolYemekOrderActions } from "./useTrendyolYemekOrderActions";
 import PrintComponent from "../components/printComponent";
 import TrendyolYemekPrintOrder from "./trendyolYemekPrintOrder";
 import RemainingSeconds from "../components/remainingSeconds";
-// import YemekSepetoOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
-// import YemekSepetiCancelOrderPopup from "./yemekSepetiCancelOrderPopup";
+import TrendyolYemekCancelOrderPopup from "./trendyolYemekCancelOrderPopup";
+import TrendyolYemekOrderErrorPopup from "./trendyolYemekOrderErrorPopup";
 
 const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const { setPopupContent } = usePopup();
@@ -32,29 +32,30 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     });
 
   const { loading: verifyLoading, error: verifyErr } = useSelector(
-    (state) => state.trendyol.verifyTicket
+    (state) => state.trendyol.verifyTicket,
   );
 
   const { loading: prepareLoading, error: prepareErr } = useSelector(
-    (state) => state.trendyol.prepareTicket
+    (state) => state.trendyol.prepareTicket,
   );
 
   const { loading: deliverLoading, error: deliverErr } = useSelector(
-    (state) => state.trendyol.deliverTicket
+    (state) => state.trendyol.deliverTicket,
   );
 
   const { loading: cancelLoading, error: cancelErr } = useSelector(
-    (state) => state.trendyol.cancelTicket
+    (state) => state.trendyol.cancelTicket,
   );
 
   function cancelOrder() {
     setSlideBarContent(null);
-    setPopupContent();
-    // <YemekSepetiCancelOrderPopup
-    //   order={order}
-    //   ticketId={ticketId}
-    //   setOrdersData={setOrdersData}
-    // />
+    setPopupContent(
+      <TrendyolYemekCancelOrderPopup
+        order={order}
+        ticketId={ticketId}
+        setOrdersData={setOrdersData}
+      />,
+    );
   }
 
   function xMinuteAhead(date, x) {
@@ -78,15 +79,17 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const [secState, setSecState] = useState(0);
 
   const [verifyDisabled, setVerifyDisabled] = useState(
-    disabled || order.packageStatus != "Created"
+    disabled || order.packageStatus != "Created",
   );
   const [prepareDisabled, setPrepareDisabled] = useState(
-    disabled || order.packageStatus != "Picking" || xMinWait(order.approvalDate)
+    disabled ||
+      order.packageStatus != "Picking" ||
+      xMinWait(order.approvalDate),
   );
   const [deliverDisabled, setDeliverDisabled] = useState(
     disabled ||
       order.packageStatus != "Invoiced" ||
-      xMinWait(order.preparationDate, 10)
+      xMinWait(order.preparationDate, 10),
   );
   const [cancelDisabled, setCancelDisabled] = useState(
     disabled ||
@@ -94,7 +97,7 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       order.packageStatus == "Delivered" ||
       order.packageStatus == "Cancelled" ||
       order.packageStatus == "UnSupplied" ||
-      order.cancelDate
+      order.cancelDate,
   );
 
   useEffect(() => {
@@ -102,12 +105,12 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     setPrepareDisabled(
       disabled ||
         order.packageStatus != "Picking" ||
-        xMinWait(order.approvalDate)
+        xMinWait(order.approvalDate),
     );
     setDeliverDisabled(
       disabled ||
         order.packageStatus != "Invoiced" ||
-        xMinWait(order.preparationDate, 10)
+        xMinWait(order.preparationDate, 10),
     );
     setCancelDisabled(
       disabled ||
@@ -115,7 +118,7 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         order.packageStatus == "Delivered" ||
         order.packageStatus == "Cancelled" ||
         order.packageStatus == "UnSupplied" ||
-        order.cancelDate
+        order.cancelDate,
     );
   }, [
     secState,
@@ -131,13 +134,14 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
 
       if (actionError.ticketId == order.id && actionError.statusCode == 400) {
-        setPopupContent();
-        // <YemekSepetoOrderErrorPopup
-        //   order={order}
-        //   ticketId={ticketId}
-        //   setOrdersData={setOrdersData}
-        //   setSideOrder={setSideOrder}
-        // />
+        setPopupContent(
+          <TrendyolYemekOrderErrorPopup
+            order={order}
+            ticketId={ticketId}
+            setOrdersData={setOrdersData}
+            setSideOrder={setSideOrder}
+          />,
+        );
       }
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);

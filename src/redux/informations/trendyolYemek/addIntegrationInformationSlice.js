@@ -51,7 +51,7 @@ export const addIntegrationInformation = createAsyncThunk(
     try {
       const res = await api.post(
         `${baseURL}IntegrationInformations/AddTrendyolIntegrationInformation`,
-        { ...data }
+        { ...data },
       );
 
       // console.log(res);
@@ -63,7 +63,7 @@ export const addIntegrationInformation = createAsyncThunk(
         data: err?.response?.data?.data,
       });
     }
-  }
+  },
 );
 
 export const { resetAddIntegrationInformation } =

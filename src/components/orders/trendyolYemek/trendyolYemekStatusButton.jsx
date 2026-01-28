@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
-// import YemekSepetiOrderErrorPopup from "./yemekSepetiOrderErrorPopup";
 import { useTrendyolYemekOrderActions } from "./useTrendyolYemekOrderActions";
 
 //UTILS
@@ -13,8 +12,9 @@ import toastStatusError from "../components/toastOrderStatError";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
 import { useOrdersContext } from "../../../context/OrdersContext";
 import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
+import TrendyolYemekOrderErrorPopup from "./trendyolYemekOrderErrorPopup";
 
-const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
+const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
   const ticketId = order.id;
   const { setPopupContent } = usePopup();
   const { pageNumber } = useOrdersContext();
@@ -23,26 +23,26 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     useTrendyolYemekOrderActions({ order, ticketId, setOrdersData });
 
   const { loading: verifyLoading, error: verifyErr } = useSelector(
-    (state) => state.trendyol.verifyTicket
+    (state) => state.trendyol.verifyTicket,
   );
 
   const { loading: prepareLoading, error: prepareErr } = useSelector(
-    (state) => state.trendyol.prepareTicket
+    (state) => state.trendyol.prepareTicket,
   );
 
   const { loading: deliverLoading, error: deliverErr } = useSelector(
-    (state) => state.trendyol.deliverTicket
+    (state) => state.trendyol.deliverTicket,
   );
 
   const { loading: cancelLoading, error: cancelErr } = useSelector(
-    (state) => state.trendyol.cancelTicket
+    (state) => state.trendyol.cancelTicket,
   );
 
   let orderStatus = trendyolYemekOrderStatuses.filter(
-    (stat) => stat.id === order.packageStatus
+    (stat) => stat.id === order.packageStatus,
   )[0];
   const nextId = trendyolYemekOrderStatuses.filter(
-    (S) => S.id == order.packageStatus
+    (S) => S.id == order.packageStatus,
   )[0]?.nextId;
 
   if (nextId) {
@@ -94,13 +94,14 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
       const actionError = verifyErr || prepareErr || deliverErr || cancelErr;
 
       if (actionError.ticketId == order.id && actionError.statusCode != 408) {
-        setPopupContent();
-        // <YemekSepetiOrderErrorPopup
-        //   order={order}
-        //   ticketId={ticketId}
-        //   setOrdersData={setOrdersData}
-        //   errorDetails={verifyErr || prepareErr || deliverErr || cancelErr}
-        // />
+        setPopupContent(
+          <TrendyolYemekOrderErrorPopup
+            order={order}
+            ticketId={ticketId}
+            setOrdersData={setOrdersData}
+            errorDetails={verifyErr || prepareErr || deliverErr || cancelErr}
+          />,
+        );
       }
     }
   }, [verifyErr, prepareErr, deliverErr, cancelErr]);
@@ -126,4 +127,4 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
   );
 };
 
-export default YemekSepetiStatusButton;
+export default TrendyolYemekStatusButton;

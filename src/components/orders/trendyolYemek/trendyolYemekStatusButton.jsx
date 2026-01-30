@@ -64,14 +64,16 @@ const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
     if (order.packageStatus === "Created") {
       verifyOrder();
       return;
-    } else if (order.packageStatus === "Picking") {
+    } else if (order.packageStatus === "Preparing") {
+      // Picking
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
       } else toastStatusError(order.approvalDate, 1);
     } else if (order.packageStatus === "Invoiced") {
-      if (!(remSec(order.preparationDate, 10) > 0)) {
+      if (!(remSec(order.preparationDate, 0) > 0)) {
+        // it was 10
         deliverOrder();
-      } else toastStatusError(order.preparationDate, 10);
+      } else toastStatusError(order.preparationDate, 1); // it was 10
     }
   }
 

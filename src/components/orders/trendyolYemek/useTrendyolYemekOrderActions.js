@@ -72,7 +72,7 @@ export const useTrendyolYemekOrderActions = ({
           setPopupContent(null);
           setOrdersData((prev) => {
             const unChangedOrders = prev.filter(
-              (p) => p.id !== res.meta.arg.ticketId
+              (p) => p.id !== res.meta.arg.ticketId,
             );
             const updatedData = [
               ...unChangedOrders,
@@ -87,7 +87,7 @@ export const useTrendyolYemekOrderActions = ({
               approvalDate: currentDate,
             });
         }
-      }
+      },
     );
   };
 
@@ -101,7 +101,7 @@ export const useTrendyolYemekOrderActions = ({
           setPopupContent(null);
           setOrdersData((prev) => {
             const unChangedOrders = prev.filter(
-              (p) => p.id !== res.meta.arg.ticketId
+              (p) => p.id !== res.meta.arg.ticketId,
             );
             const updatedData = [
               ...unChangedOrders,
@@ -120,7 +120,7 @@ export const useTrendyolYemekOrderActions = ({
               preparationDate: currentDate,
             });
         }
-      }
+      },
     );
   };
 
@@ -134,7 +134,7 @@ export const useTrendyolYemekOrderActions = ({
           setPopupContent(null);
           setOrdersData((prev) => {
             const unChangedOrders = prev.filter(
-              (p) => p.id !== res.meta.arg.ticketId
+              (p) => p.id !== res.meta.arg.ticketId,
             );
             const updatedData = [
               ...unChangedOrders,
@@ -150,7 +150,7 @@ export const useTrendyolYemekOrderActions = ({
               deliveryDate: currentDate,
             });
         }
-      }
+      },
     );
   };
 
@@ -163,7 +163,7 @@ export const useTrendyolYemekOrderActions = ({
         setPopupContent(null);
         setOrdersData((prev) => {
           const unChangedOrders = prev.filter(
-            (p) => p.id !== res.meta.arg.ticketId
+            (p) => p.id !== res.meta.arg.ticketId,
           );
           const updatedData = [
             ...unChangedOrders,

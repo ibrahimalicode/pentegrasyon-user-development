@@ -23,7 +23,7 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
 
   const { success, loading, error } = useSelector(
-    (state) => state.auth.forgotPassword
+    (state) => state.auth.forgotPassword,
   );
 
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ const ForgotPassword = () => {
     e?.preventDefault();
     if (checked && phoneNumber) {
       dispatch(
-        forgotPassword({ toAddress: phoneNumber.slice(1), isEmail: false })
+        forgotPassword({ toAddress: phoneNumber.slice(1), isEmail: false }),
       );
     } else if (email) {
       dispatch(forgotPassword({ toAddress: email, isEmail: true }));

@@ -12,7 +12,7 @@ const yemekSepetiOrderStatuses = [
     color: "--green-1",
     label: "Hazırlanıyor",
     value: true,
-    id: "Picking",
+    id: "Preparing", // Picking
     text: "Onayla",
     nextId: "Invoiced",
   },

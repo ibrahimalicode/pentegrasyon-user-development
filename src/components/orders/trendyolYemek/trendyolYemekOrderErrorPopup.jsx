@@ -28,7 +28,9 @@ const TrendyolYemekOrderErrorPopup = ({
 
   function getTheMessage() {
     try {
-      return JSON?.parse(errorDetails?.data)?.message;
+      return errorDetails?.message_TR
+        ? errorDetails?.message_TR
+        : JSON?.parse(errorDetails?.data)?.message;
     } catch (error) {
       console.log(error);
       return "";
@@ -37,7 +39,7 @@ const TrendyolYemekOrderErrorPopup = ({
 
   return (
     <main className="bg-[--white-1] rounded-md">
-      <div className="flex justify-between items-center mb-4 bg-[--trendyolYemek] px-5 py-3 rounded-t-md">
+      <div className="flex justify-between items-center mb-4 bg-[--trendyol] px-5 py-3 rounded-t-md">
         <div className="text-sm text-white">
           <p>
             <span>Platform: </span>

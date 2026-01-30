@@ -30,7 +30,7 @@ const TrendyolYemekLicenseSettings = ({ data, onSuccess }) => {
   const { setPopupContent } = usePopup();
 
   const { loading, success, error } = useSelector(
-    (state) => state.integrationInfos.trendyol.addIntegrationInfo
+    (state) => state.integrationInfos.trendyol.addIntegrationInfo,
   );
 
   const {
@@ -38,7 +38,7 @@ const TrendyolYemekLicenseSettings = ({ data, onSuccess }) => {
     success: updateSucc,
     error: updateErr,
   } = useSelector(
-    (state) => state.integrationInfos.trendyol.updateIntegrationInfo
+    (state) => state.integrationInfos.trendyol.updateIntegrationInfo,
   );
 
   const {
@@ -46,7 +46,7 @@ const TrendyolYemekLicenseSettings = ({ data, onSuccess }) => {
     error: getError,
     infoData,
   } = useSelector(
-    (state) => state.integrationInfos.trendyol.getIntegrationInfo
+    (state) => state.integrationInfos.trendyol.getIntegrationInfo,
   );
 
   const initialData = {
@@ -223,8 +223,8 @@ const TrendyolYemekLicenseSettings = ({ data, onSuccess }) => {
             <div className="flex max-sm:flex-col gap-2">
               <CustomInput
                 required
-                label="Mağaza ID"
-                placeholder="Mağaza ID"
+                label="Restoran ID"
+                placeholder="Restoran ID"
                 className="py-[.45rem] text-sm"
                 value={licenseData.storeId}
                 onChange={(e) => {

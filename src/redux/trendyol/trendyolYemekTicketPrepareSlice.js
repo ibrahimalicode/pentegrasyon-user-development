@@ -46,11 +46,11 @@ const trendyolYemekTicketPrepareSlice = createSlice({
 });
 
 export const trendyolYemekTicketPrepare = createAsyncThunk(
-  "Trendyol/TicketPrepared",
+  "Trendyol/TicketShipped",
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.post(
-        `${baseURL}Trendyol/TicketPrepared`,
+        `${baseURL}Trendyol/TicketShipped`,
         {},
         { params: { ...data } },
       );

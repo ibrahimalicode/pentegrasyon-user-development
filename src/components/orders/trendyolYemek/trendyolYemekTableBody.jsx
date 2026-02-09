@@ -99,7 +99,7 @@ const TrendyolYemekTableBody = ({
           {order.restaurantName}
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          <p>{isCheckoutToday(order.createdDateTime)}</p>
+          <p>{isCheckoutToday(order.packageCreationDate)}</p>
           {/* {order?.preOrder && order.status != 3 && order.status != 4 && (
             <RemainingMinutes date={order.expectedDeliveryTime} />
           )} */}

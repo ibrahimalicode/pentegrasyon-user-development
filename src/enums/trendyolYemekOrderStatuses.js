@@ -1,4 +1,4 @@
-const yemekSepetiOrderStatuses = [
+const trendyolYemekOrderStatuses = [
   {
     bg: "--status-yellow",
     color: "--yellow-1",
@@ -12,7 +12,7 @@ const yemekSepetiOrderStatuses = [
     color: "--green-1",
     label: "Hazırlanıyor",
     value: true,
-    id: "Preparing", // Picking
+    id: "Picking",
     text: "Onayla",
     nextId: "Invoiced",
   },
@@ -23,16 +23,16 @@ const yemekSepetiOrderStatuses = [
     value: true,
     id: "Invoiced",
     text: "Yola Çıkart",
-    nextId: "Shipped",
+    nextId: "Delivered",
   },
   {
-    bg: "--status-green",
-    color: "--green-1",
-    transColor: "rgba(57, 186, 109, 0.8)",
-    label: "Teslim Edildi",
+    bg: "--status-purple",
+    color: "--purple-1",
+    label: "Yola Çıktı",
     value: true,
-    text: "Teslim Et",
     id: "Shipped",
+    text: "Yola Çıkart",
+    nextId: "Delivered",
   },
   {
     bg: "--status-green",
@@ -71,4 +71,4 @@ const yemekSepetiOrderStatuses = [
 // Cancelled = 5 //Cancelled by customer
 // UnSupplied = 5 //Cancelled by restaurant
 
-export default yemekSepetiOrderStatuses;
+export default trendyolYemekOrderStatuses;

@@ -95,8 +95,9 @@ const TrendyolYemekCancelOrderPopup = ({ ticketId, order, setOrdersData }) => {
                     setCancelOrderData(() => {
                       return {
                         ticketId,
+                        packageId: order.packageId,
                         message: opt.message,
-                        reason: opt.reason,
+                        reasonId: opt.reason,
                         cancelNote: opt.message,
                       };
                     });

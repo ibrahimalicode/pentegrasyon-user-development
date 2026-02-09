@@ -8,6 +8,7 @@ import { formatDateString, formatToPrice } from "../../../utils/utils";
 //COMP
 import QrGenerator from "../../common/qrGenerator";
 import { TrendyolYemekAddress } from "../components/marketplaceAddresses";
+import { PaymentMethods } from "../../../enums/trendyolPaymentMethods";
 
 const TrendyolYemekPrintOrder = ({ order }) => {
   function getGoogleAddress() {
@@ -76,7 +77,14 @@ const TrendyolYemekPrintOrder = ({ order }) => {
         </p>
         <p>
           <span className="font-bold">Ödeme </span>
-          <span>: {order?.marketplaceTicketPaymentMethodName}</span>
+          <span>
+            :{" "}
+            {
+              PaymentMethods.filter(
+                (method) => method.value === order.payment.paymentType,
+              )[0]?.label
+            }
+          </span>
         </p>
         <p>
           <span className="font-bold">Sip No: </span>
@@ -121,7 +129,7 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                     </td>
                     <td className="p-2 flex justify-end items-start">
                       {formatToPrice(
-                        String(Number(item.price).toFixed(2)).replace(".", ",")
+                        String(Number(item.price).toFixed(2)).replace(".", ","),
                       )}
                     </td>
                   </tr>
@@ -141,8 +149,8 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                               formatToPrice(
                                 String(Number(mod.price).toFixed(2)).replace(
                                   ".",
-                                  ","
-                                )
+                                  ",",
+                                ),
                               )}
                           </td>
                         </tr>
@@ -162,13 +170,13 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                               {subMod.price > 0
                                 ? `+`
                                 : subMod.price < 0
-                                ? `-`
-                                : ""}
+                                  ? `-`
+                                  : ""}
                               {subMod.price > 0 &&
                                 formatToPrice(
                                   String(
-                                    Number(subMod.price).toFixed(2)
-                                  ).replace(".", ",")
+                                    Number(subMod.price).toFixed(2),
+                                  ).replace(".", ","),
                                 )}
                             </td>
                           </tr>
@@ -205,8 +213,8 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                     (
                       Number(order.totalPrice) +
                       Number(order.discountAmountTotal)
-                    ).toFixed(2)
-                  ).replace(".", ",")
+                    ).toFixed(2),
+                  ).replace(".", ","),
                 )}
               </span>
             </p>
@@ -226,8 +234,8 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                 {formatToPrice(
                   String(Number(order.discountAmountTotal).toFixed(2)).replace(
                     ".",
-                    ","
-                  )
+                    ",",
+                  ),
                 )}
               </span>
             </p>
@@ -238,7 +246,7 @@ const TrendyolYemekPrintOrder = ({ order }) => {
           <span>Ödenecek Tutar : </span>
           <span className="font-bold">
             {formatToPrice(
-              String(Number(order.totalPrice).toFixed(2)).replace(".", ",")
+              String(Number(order.totalPrice).toFixed(2)).replace(".", ","),
             )}
           </span>
         </p>

@@ -11,8 +11,8 @@ import { usePopup } from "../../../context/PopupContext";
 import toastStatusError from "../components/toastOrderStatError";
 import { compareWithCurrentDateTime } from "../../../utils/utils";
 import { useOrdersContext } from "../../../context/OrdersContext";
-import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
 import TrendyolYemekOrderErrorPopup from "./trendyolYemekOrderErrorPopup";
+import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
 
 const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
   const ticketId = order.id;
@@ -58,22 +58,20 @@ const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
   }
 
   function handleClick() {
-    function remSec(date, min = 1) {
+    function remSec(date, min = 0) {
       return compareWithCurrentDateTime(date, null, min).remainingSeconds;
     }
     if (order.packageStatus === "Created") {
       verifyOrder();
       return;
-    } else if (order.packageStatus === "Preparing") {
-      // Picking
+    } else if (order.packageStatus === "Picking") {
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
-      } else toastStatusError(order.approvalDate, 1);
+      } else toastStatusError(order.approvalDate, 0);
     } else if (order.packageStatus === "Invoiced") {
       if (!(remSec(order.preparationDate, 0) > 0)) {
-        // it was 10
         deliverOrder();
-      } else toastStatusError(order.preparationDate, 1); // it was 10
+      } else toastStatusError(order.preparationDate, 0);
     }
   }
 

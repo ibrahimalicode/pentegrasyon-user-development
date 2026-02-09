@@ -15,8 +15,8 @@ import { InfoI } from "../../../assets/icon";
 import RemainingMinutes from "../components/remainingMinutes";
 import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
-import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
 import { PaymentMethods } from "../../../enums/trendyolPaymentMethods";
+import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
 
 const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();

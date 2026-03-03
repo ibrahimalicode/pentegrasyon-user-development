@@ -33,7 +33,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
 
   const { user } = useSelector((state) => state.user.getUser);
   const { loading, success, error } = useSelector(
-    (state) => state.integrationInfos.yemekSepeti.addIntegrationInfo
+    (state) => state.integrationInfos.yemekSepeti.addIntegrationInfo,
   );
 
   const {
@@ -41,7 +41,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     success: updateSucc,
     error: updateErr,
   } = useSelector(
-    (state) => state.integrationInfos.yemekSepeti.updateIntegrationInfo
+    (state) => state.integrationInfos.yemekSepeti.updateIntegrationInfo,
   );
 
   const {
@@ -49,7 +49,7 @@ const YemekSepetiLicenseSettings = ({ data, onSuccess }) => {
     error: getError,
     infoData,
   } = useSelector(
-    (state) => state.integrationInfos.yemekSepeti.getIntegrationInfo
+    (state) => state.integrationInfos.yemekSepeti.getIntegrationInfo,
   );
 
   const initialData = {

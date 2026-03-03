@@ -82,7 +82,7 @@ export const formatToISO = (date, offsetHours = 0) => {
 
   // Adjust for the timezone offset
   const adjustedDate = new Date(
-    miliDate.getTime() + offsetHours * 60 * 60 * 1000
+    miliDate.getTime() + offsetHours * 60 * 60 * 1000,
   );
 
   // Extract milliseconds and nanoseconds
@@ -198,11 +198,11 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
     sortedData = dataCopy.sort((a, b) => a.name.localeCompare(b.name, "tr"));
   } else if (data[0]?.fullName) {
     sortedData = dataCopy.sort((a, b) =>
-      a.fullName.localeCompare(b.fullName, "tr")
+      a.fullName.localeCompare(b.fullName, "tr"),
     );
   } else if (data[0]?.username) {
     sortedData = dataCopy.sort((a, b) =>
-      a.username.localeCompare(b.username, "tr")
+      a.username.localeCompare(b.username, "tr"),
     );
   }
   if (withPhoneNumber && sortedData[0]?.phoneNumber) {
@@ -223,8 +223,8 @@ export const formatSelectorData = (data, withPhoneNumber = false) => {
         label: ent?.name
           ? ent.name
           : ent?.fullName
-          ? ent.fullName
-          : ent?.username,
+            ? ent.fullName
+            : ent?.username,
         id: ent.id,
         userId: ent?.userId,
       };
@@ -264,7 +264,7 @@ export const formatLisansPackages = (data) => {
         ent.time,
         ent.description,
         ent.userPrice,
-        index
+        index,
       ),
       id: ent.licenseTypeId,
       time: ent.time,
@@ -288,7 +288,7 @@ export function groupedLicensePackages(data) {
   }, {});
 
   const sortedArray = Object.values(groupedData).map((group) =>
-    group.sort((a, b) => a.time - b.time)
+    group.sort((a, b) => a.time - b.time),
   );
 
   return sortedArray;
@@ -368,7 +368,7 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
     const latitude = e.latLng.lat();
     const longitude = e.latLng.lng();
     //console.log(latitude, longitude);
-    if (isPositionWithinBounds(latitude, longitude)) {
+    if (true /* isPositionWithinBounds(latitude, longitude) */) {
       if (marker) {
         marker.setMap(null);
       }
@@ -485,14 +485,14 @@ export function getCardProvider(cardNumber, src) {
 export function compareWithCurrentDateTime(
   givenDateTime,
   secondDate,
-  givenXMinAhead
+  givenXMinAhead,
 ) {
   let now = secondDate ? new Date(secondDate) : new Date();
   let targetDateTime = new Date(givenDateTime);
 
   if (givenXMinAhead) {
     targetDateTime = new Date(
-      new Date(givenDateTime).getTime() + 60000 * givenXMinAhead
+      new Date(givenDateTime).getTime() + 60000 * givenXMinAhead,
     );
   }
 

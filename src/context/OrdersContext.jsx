@@ -33,7 +33,7 @@ export const OrdersContextProvider = ({ children }) => {
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
   const { data: countData, success: countSuccess } = useSelector(
-    (state) => state.dashboard.ordersCount
+    (state) => state.dashboard.ordersCount,
   );
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
     useFirestore();
@@ -49,7 +49,7 @@ export const OrdersContextProvider = ({ children }) => {
   };
 
   const localItemsPerPage = JSON.parse(
-    localStorage.getItem("ITEMS_PERPAGE")
+    localStorage.getItem("ITEMS_PERPAGE"),
   ) || { label: "20", value: 20 };
   const [itemsPerPage, setItemsPerPage] = useState(localItemsPerPage);
   const [ordersData, setOrdersData] = useState(null);
@@ -72,7 +72,7 @@ export const OrdersContextProvider = ({ children }) => {
         endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
         status: filter.statusId,
         marketplaceId: filter.marketplaceId,
-      })
+      }),
     );
   }
 
@@ -88,7 +88,7 @@ export const OrdersContextProvider = ({ children }) => {
         endDateTime: filter.endDateTime ? formatDate(filter.endDateTime) : null,
         status: filter.statusId,
         marketplaceId: filter.marketplaceId,
-      })
+      }),
     );
     const localData = { label: `${number}`, value: number };
     localStorage.removeItem("ITEMS_PERPAGE");
@@ -115,7 +115,7 @@ export const OrdersContextProvider = ({ children }) => {
         getOrders({
           pageNumber,
           pageSize: itemsPerPage.value,
-        })
+        }),
       );
       dispatch(getTicketCountStatistics(filterInitialState));
     }
@@ -150,7 +150,7 @@ export const OrdersContextProvider = ({ children }) => {
           order.status === 325 ||
           order.status === 400 ||
           (order.status === 0 && order.marketplaceId !== 2) ||
-          order.packageStatus === "Created"
+          order.packageStatus === "Created",
       );
       // console.log(hasUnverifiedOrders[0]);
       setUnverifiedOrders(hasUnverifiedOrders[0]);
@@ -158,7 +158,7 @@ export const OrdersContextProvider = ({ children }) => {
     if (statusChangedOrder) {
       setOrdersData((prev) => {
         const updatedOrder = prev?.filter(
-          (O) => O.id !== statusChangedOrder.id
+          (O) => O.id !== statusChangedOrder.id,
         );
         return formatByDate([...(updatedOrder || []), statusChangedOrder]);
       });
@@ -170,8 +170,9 @@ export const OrdersContextProvider = ({ children }) => {
   useEffect(() => {
     const unverifiedOrderSound = unverifiedOrderSoundRef.current;
 
-    const audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+    const audioContext = new (
+      window.AudioContext || window.webkitAudioContext
+    )();
 
     if (audioContext.state === "suspended" && token && !popupContent) {
       const popupContent = (
@@ -200,7 +201,7 @@ export const OrdersContextProvider = ({ children }) => {
       );
       setPopupContent(popupContent);
       console.warn(
-        "Audio context is suspended due to lack of user interaction."
+        "Audio context is suspended due to lack of user interaction.",
       );
     }
 
@@ -236,11 +237,13 @@ export const OrdersContextProvider = ({ children }) => {
 
     const existingOrders = ordersData || [];
     const isDuplicate = existingOrders.some(
-      (order) => order.id === newOrder.id
+      (order) => order.id === newOrder.id,
     );
 
     setOrdersData(
-      isDuplicate ? existingOrders : formatByDate([newOrder, ...existingOrders])
+      isDuplicate
+        ? existingOrders
+        : formatByDate([newOrder, ...existingOrders]),
     );
 
     if (!isDuplicate) {

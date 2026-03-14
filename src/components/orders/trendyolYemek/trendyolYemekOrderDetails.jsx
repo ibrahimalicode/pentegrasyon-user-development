@@ -99,11 +99,9 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
         <div className="w-full flex justify-between">
           <p>Ödeme Yöntemi</p>
           <p>
-            {
-              PaymentMethods.filter(
-                (method) => method.value === order.payment.paymentType,
-              )[0]?.label
-            }
+            {PaymentMethods.filter(
+              (method) => method.value === order.payment.paymentType,
+            )[0]?.label || order.payment.paymentType}
           </p>
         </div>
 

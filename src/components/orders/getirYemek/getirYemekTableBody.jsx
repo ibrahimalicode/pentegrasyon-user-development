@@ -60,7 +60,7 @@ const GetirYemekTableBody = ({
 
   function cellClicked() {
     const currentLicense = licenses.find(
-      (L) => L.restaurantId === order.restaurantId
+      (L) => L.restaurantId === order.restaurantId,
     );
     if (currentLicense && !currentLicense?.isActive) {
       toast.error("Lisan Süresi Bitmiştir! Lütfen lisansınızı uzatınız.");
@@ -75,7 +75,7 @@ const GetirYemekTableBody = ({
         }}
         setOrdersData={setOrdersData}
         licenseSettings={licenseSettings}
-      />
+      />,
     );
   }
   // console.log(licenses);
@@ -129,7 +129,7 @@ const GetirYemekTableBody = ({
                 name2={order.client.name}
                 order={order}
                 setOrdersData={setOrdersData}
-              />
+              />,
             )
           }
           className={`whitespace-nowrap ${
@@ -160,7 +160,7 @@ const GetirYemekTableBody = ({
                   lat2: order.client.latitude,
                   lng2: order.client.longitude,
                 }}
-              />
+              />,
             )
           }
           className={`whitespace-nowrap ${
@@ -171,7 +171,7 @@ const GetirYemekTableBody = ({
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
             {(() => {
               const currentCourier = courierServiceTypes.filter(
-                (T) => T.licenseTypeId === order.courierTypeId
+                (T) => T.licenseTypeId === order.courierTypeId,
               );
 
               return currentCourier.length && order.deliveryType != 1
@@ -185,10 +185,10 @@ const GetirYemekTableBody = ({
         <td onClick={cellClicked} className="whitespace-nowrap">
           {order.totalDiscountedPrice
             ? formatToPrice(
-                String(order.totalDiscountedPrice.toFixed(2)).replace(".", ",")
+                String(order.totalDiscountedPrice.toFixed(2)).replace(".", ","),
               )
             : formatToPrice(
-                String(order.totalPrice.toFixed(2)).replace(".", ",")
+                String(order.totalPrice.toFixed(2)).replace(".", ","),
               )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">

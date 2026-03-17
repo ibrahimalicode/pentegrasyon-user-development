@@ -1,5 +1,6 @@
 //MODULES
 import Lottie from "lottie-react";
+import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { usePopup } from "../../context/PopupContext";
@@ -32,7 +33,6 @@ import {
 
 //REDUX
 import { getUserLock } from "../../redux/user/getUserLockSlice";
-import { useDispatch } from "react-redux";
 
 function Sidebar({ openSidebar, setOpenSidebar }) {
   const param = useParams();

@@ -20,6 +20,7 @@ import Restourants from "./restourants";
 import ProtectedPages from "./protectedPages";
 import CourierStatusChange from "../components/couriers/components/courierStatusChange";
 import Stocks from "./stocks";
+import Logs from "./logs";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -40,6 +41,7 @@ const Home = () => {
         <Route path="/locked-pages/*" element={<ProtectedPages />} />
         <Route path="/payments/*" element={<Payments />} />
         <Route path="/messages/*" element={<Messages />} />
+        <Route path="/activity-logs/*" element={<Logs />} />
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

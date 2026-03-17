@@ -16,6 +16,7 @@ const CustomDatePicker = ({
   popperClassName,
   calendarClassName = "custom-datepicker",
   dateFormat = "dd.MM.yyyy HH:mm",
+  hideTimeClassName = true,
 }) => {
   //const { i18n } = useTranslation();
   registerLocale("tr", tr);
@@ -35,7 +36,11 @@ const CustomDatePicker = ({
         className={`px-4 sm:py-3 mt-1 sm:mt-2.5 border border-[--border-1] border-solid rounded-md bg-[--btn-txt] text-[--gr-1] font-[350] text-sm cursor-pointer ${className}`}
         disabled={isDisabled}
         popperClassName={popperClassName}
-        calendarClassName={calendarClassName}
+        calendarClassName={
+          calendarClassName +
+          " " +
+          (hideTimeClassName ? "hideTimeClassName" : "")
+        }
       />
     </div>
   ); //left 60px 640px-950px

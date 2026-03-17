@@ -31,7 +31,7 @@ const LicensesPage = () => {
   const dispatch = useDispatch();
 
   const { loading, success, error, licenses } = useSelector(
-    (state) => state.licenses.getLicenses
+    (state) => state.licenses.getLicenses,
   );
 
   const {
@@ -60,7 +60,7 @@ const LicensesPage = () => {
         isSettingsAdded: filter?.isSettingsAdded?.value,
         licenseTypeId: filter?.licenseTypeId?.id,
         dateRange: filter?.dateRange?.value,
-      })
+      }),
     );
   }
 
@@ -81,7 +81,7 @@ const LicensesPage = () => {
         getLicenses({
           pageNumber,
           pageSize: itemsPerPage,
-        })
+        }),
       );
       setFilter({});
     }

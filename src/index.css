@@ -289,7 +289,7 @@ input[type="number"] {
 }
 
 .custom-datepicker {
-  min-width: 20.5rem;
+  /* min-width: 20.5rem; */
 }
 
 .custom-popper-left {
@@ -297,6 +297,12 @@ input[type="number"] {
 }
 .custom-popper-right {
   right: -22rem;
+}
+.hideTimeClassName .react-datepicker__time-container {
+  display: none;
+}
+.hideTimeClassName .react-datepicker__month-container {
+  /* width: 100%; */
 }
 
 /* CUSTOM SCROLL BAR */

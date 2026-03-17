@@ -20,7 +20,7 @@ import Restourants from "./restourants";
 import ProtectedPages from "./protectedPages";
 import CourierStatusChange from "../components/couriers/components/courierStatusChange";
 import Stocks from "./stocks";
-import Logs from "./logs";
+import Logs from "./activityLogs";
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);

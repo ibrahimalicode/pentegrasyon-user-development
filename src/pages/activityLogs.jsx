@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import NotFound from "./404";
-import LogsPage from "../components/logs/pages/logsPage";
+import LogsPage from "../components/activityLogs/pages/logsPage";
 
 const Logs = () => {
   return (

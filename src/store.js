@@ -26,7 +26,7 @@ import loadingSlice from "./redux/loadingSlice";
 import loadingMiddleware from "../middlewares/loadingMiddleware";
 import stocksSlice from "./redux/stocks";
 import trendyolYemekSlice from "./redux/trendyol";
-import logsSlice from "./redux/logs";
+import logsSlice from "./redux/activityLogs";
 
 const store = configureStore({
   reducer: {

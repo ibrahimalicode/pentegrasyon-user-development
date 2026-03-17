@@ -1,6 +1,6 @@
 const PrivacyPolicy = () => {
   return (
-    <section className="px-[4%] flex justify-center font-sans">
+    <section className="px-[4%] flex justify-center font-timesNewRoman">
       <div className="bg-light-1 text-[--black-2] p-8 max-w-[70rem] w-full">
         <section className="min-h-0">
           <h1 className="text-primary-1 text-2xl font-bold mb-4">

@@ -32,7 +32,8 @@ function App() {
           <Route path="/setNewPassword" element={<SetNewPassword />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/verify" element={<Verify />} />
-          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route

@@ -56,7 +56,7 @@ const OrdersPage = () => {
   const { loading } = useSelector((state) => state.orders.get);
 
   const { data, error } = useSelector(
-    (state) => state.orders.getAutomationVariables
+    (state) => state.orders.getAutomationVariables,
   );
   const {
     success,
@@ -65,11 +65,11 @@ const OrdersPage = () => {
   } = useSelector((state) => state.licenses.getLicenses);
 
   const { restaurants } = useSelector(
-    (state) => state.restaurants.getRestaurants
+    (state) => state.restaurants.getRestaurants,
   );
 
   const { error: couriersError, couriers } = useSelector(
-    (state) => state.couriers.get
+    (state) => state.couriers.get,
   );
 
   const [couriersData, setCouriersData] = useState(null);
@@ -104,7 +104,7 @@ const OrdersPage = () => {
         getRestaurants({
           pageNumber: 1,
           pageSize: 2,
-        })
+        }),
       );
       // console.log("Distaptch Get Restaurants");
     }
@@ -123,7 +123,7 @@ const OrdersPage = () => {
             getLicenses({
               pageNumber: 0,
               pageSize: 0,
-            })
+            }),
           );
         }
       }

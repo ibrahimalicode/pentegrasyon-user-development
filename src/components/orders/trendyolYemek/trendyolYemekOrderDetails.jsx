@@ -102,6 +102,11 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             {PaymentMethods.filter(
               (method) => method.value === order.payment.paymentType,
             )[0]?.label || order.payment.paymentType}
+            {order?.payment?.mealCard?.cardSourceType} && (
+            <span className="ml-2">
+              {order?.payment?.mealCard?.cardSourceType}
+            </span>
+            )
           </p>
         </div>
 

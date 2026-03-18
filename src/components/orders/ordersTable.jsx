@@ -49,16 +49,16 @@ const OrdersTable = ({
 }) => {
   const dispatch = useDispatch();
   const { infoData: getirInfo, error: getirErr } = useSelector(
-    (s) => s.integrationInfos.getirYemek.getIntegrationInfo
+    (s) => s.integrationInfos.getirYemek.getIntegrationInfo,
   );
   const { infoData: migrosInfo, error: migrosErr } = useSelector(
-    (s) => s.integrationInfos.migrosYemek.getIntegrationInfo
+    (s) => s.integrationInfos.migrosYemek.getIntegrationInfo,
   );
   const { infoData: trendInfo, error: trendErr } = useSelector(
-    (s) => s.integrationInfos.trendyol.getIntegrationInfo
+    (s) => s.integrationInfos.trendyol.getIntegrationInfo,
   );
   const { infoData: ysInfo, error: ysErr } = useSelector(
-    (s) => s.integrationInfos.yemekSepeti.getIntegrationInfo
+    (s) => s.integrationInfos.yemekSepeti.getIntegrationInfo,
   );
 
   const settingsAddedLicenses = licenses.filter((L) => L.isSettingsAdded);
@@ -142,7 +142,7 @@ const OrdersTable = ({
         <TableBodyComp
           order={order}
           licenses={licenses.filter(
-            (L) => L.licenseTypeId == order.marketplaceId
+            (L) => L.licenseTypeId == order.marketplaceId,
           )}
           setOrdersData={setOrdersData}
           totalItems={ordersData?.length}

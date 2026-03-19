@@ -8,8 +8,8 @@ const OrdersTotalPrice = ({ orders }) => {
         (order?.totalPrice
           ? Number(order.totalPrice) //getir
           : order?.grandTotal
-          ? Number(order.grandTotal) //YS
-          : 0)
+            ? Number(order.grandTotal) //YS
+            : 0)
       );
     } else {
       return sum;

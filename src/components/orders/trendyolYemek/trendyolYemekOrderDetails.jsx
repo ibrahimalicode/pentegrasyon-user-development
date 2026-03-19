@@ -17,6 +17,7 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import { PaymentMethods } from "../../../enums/trendyolPaymentMethods";
 import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
+import { calculateTrendyolOrderTotals } from "./orderTotals";
 
 const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
@@ -47,45 +48,11 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
     return custAdd ? currentCourier?.[0]?.label : "Platform Kuryesi";
   }
 
-  function toNumber(value) {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-
-  const calculatedGrossTotal = (Array.isArray(sideOrder?.orders)
-    ? sideOrder.orders
-    : []
-  ).reduce((sum, lineItem) => {
-    const quantity = Math.max(lineItem?.items?.length || 0, 1);
-    const lineBaseTotal = toNumber(lineItem?.price) * quantity;
-
-    const lineModifiersTotal = (Array.isArray(lineItem?.modifiers)
-      ? lineItem.modifiers
-      : []
-    ).reduce((modifierSum, modifier) => {
-      const modifierPrice = toNumber(modifier?.price);
-      const parsedSubModifiers = Array.isArray(modifier?.subModifier)
-        ? modifier.subModifier
-        : JSON.parse(modifier?.subModifier || "[]");
-
-      const subModifiersTotal = (Array.isArray(parsedSubModifiers)
-        ? parsedSubModifiers
-        : []
-      ).reduce((subSum, subModifier) => {
-        return subSum + toNumber(subModifier?.price);
-      }, 0);
-
-      return modifierSum + (modifierPrice + subModifiersTotal) * quantity;
-    }, 0);
-
-    return sum + lineBaseTotal + lineModifiersTotal;
-  }, 0);
-
-  const calculatedDiscount = toNumber(sideOrder?.discountAmountTotal);
-  const calculatedPayableTotal = Math.max(
-    calculatedGrossTotal - calculatedDiscount,
-    0,
-  );
+  const {
+    grossTotal: calculatedGrossTotal,
+    discountTotal: calculatedDiscount,
+    payableTotal: calculatedPayableTotal,
+  } = calculateTrendyolOrderTotals(sideOrder);
 
   console.log(order);
 

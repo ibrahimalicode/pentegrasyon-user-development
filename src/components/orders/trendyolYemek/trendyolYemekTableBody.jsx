@@ -20,6 +20,7 @@ import TrendyolYemekPrintOrder from "./trendyolYemekPrintOrder";
 import TrendyolYemekStatusButton from "./trendyolYemekStatusButton";
 import Trendyol from "../../../assets/img/orders/TrendyolYemek.png";
 import { TrendyolYemekAddress } from "../components/marketplaceAddresses";
+import { calculateTrendyolOrderTotals } from "./orderTotals";
 
 const TrendyolYemekTableBody = ({
   order,
@@ -31,6 +32,7 @@ const TrendyolYemekTableBody = ({
 }) => {
   const { setPopupContent } = usePopup();
   const { setSlideBarContent } = useSlideBar();
+  const { payableTotal } = calculateTrendyolOrderTotals(order);
 
   function isValidDate(date) {
     return date.startsWith("0001-01-01T00:00:00") ? "" : date;
@@ -186,9 +188,7 @@ const TrendyolYemekTableBody = ({
           </button>
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
-          {formatToPrice(
-            String(Number(order.totalPrice).toFixed(2)).replace(".", ","),
-          )}
+          {formatToPrice(String(payableTotal.toFixed(2)).replace(".", ","))}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">
           <TrendyolYemekStatusButton

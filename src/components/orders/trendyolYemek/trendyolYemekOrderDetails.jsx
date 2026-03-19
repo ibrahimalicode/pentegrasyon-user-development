@@ -46,6 +46,47 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
     );
     return custAdd ? currentCourier?.[0]?.label : "Platform Kuryesi";
   }
+
+  function toNumber(value) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  const calculatedGrossTotal = (Array.isArray(sideOrder?.orders)
+    ? sideOrder.orders
+    : []
+  ).reduce((sum, lineItem) => {
+    const quantity = Math.max(lineItem?.items?.length || 0, 1);
+    const lineBaseTotal = toNumber(lineItem?.price) * quantity;
+
+    const lineModifiersTotal = (Array.isArray(lineItem?.modifiers)
+      ? lineItem.modifiers
+      : []
+    ).reduce((modifierSum, modifier) => {
+      const modifierPrice = toNumber(modifier?.price);
+      const parsedSubModifiers = Array.isArray(modifier?.subModifier)
+        ? modifier.subModifier
+        : JSON.parse(modifier?.subModifier || "[]");
+
+      const subModifiersTotal = (Array.isArray(parsedSubModifiers)
+        ? parsedSubModifiers
+        : []
+      ).reduce((subSum, subModifier) => {
+        return subSum + toNumber(subModifier?.price);
+      }, 0);
+
+      return modifierSum + (modifierPrice + subModifiersTotal) * quantity;
+    }, 0);
+
+    return sum + lineBaseTotal + lineModifiersTotal;
+  }, 0);
+
+  const calculatedDiscount = toNumber(sideOrder?.discountAmountTotal);
+  const calculatedPayableTotal = Math.max(
+    calculatedGrossTotal - calculatedDiscount,
+    0,
+  );
+
   console.log(order);
 
   return (
@@ -221,27 +262,27 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
           <tbody>
             {sideOrder &&
-              sideOrder.orders.map((order, i) => (
+              sideOrder.orders.map((lineItem, i) => (
                 <React.Fragment key={i}>
                   <tr className={`${i}"-here"`}>
                     <td className="p-2 text-left">
                       <div>
                         <span className="bg-[--gr-1] text-[--white-1] px-1.5 py-0.5 mr-0.5 rounded-sm">
-                          {order.items.length}
+                          {lineItem.items.length}
                         </span>
-                        {order.name}
+                        {lineItem.name}
                       </div>
                     </td>
                     <td className="p-2 flex justify-end items-start">
                       {formatToPrice(
-                        String(Number(order.price).toFixed(2)).replace(
+                        String(Number(lineItem.price).toFixed(2)).replace(
                           ".",
                           ",",
                         ),
                       )}
                     </td>
                   </tr>
-                  {order.modifiers.map((mod) => (
+                  {lineItem.modifiers.map((mod) => (
                     <React.Fragment key={mod.id}>
                       <tr className="text-xs px-2">
                         <td className="pl-2">{mod.name}</td>
@@ -259,7 +300,7 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                                 (
                                   Number(mod.price) *
                                   // Number(mod.quantity) *
-                                  Number(order.items.length)
+                                  Number(lineItem.items.length)
                                 ).toFixed(2),
                               ).replace(".", ","),
                             )}
@@ -295,15 +336,15 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       ))}
                     </React.Fragment>
                   ))}
-                  {(order.comment || order.description) && (
+                  {(lineItem.comment || lineItem.description) && (
                     <tr>
                       <td className="relative text-sm">
                         <p className="invisible px-2 py-1 flex gap-1">
-                          👉 {order.comment}, {order.description}
+                          👉 {lineItem.comment}, {lineItem.description}
                         </p>
                         <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                          👉 {order.comment}{" "}
-                          {order.description && `, ${order.description}`}
+                          👉 {lineItem.comment}{" "}
+                          {lineItem.description && `, ${lineItem.description}`}
                         </span>
                       </td>
                     </tr>
@@ -314,18 +355,13 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
         </table>
 
         <div className="w-full border-t border-[--gr-1]">
-          {Number(order.discountAmountTotal) ? (
+          {calculatedDiscount ? (
             <>
               <div className="w-full flex items-center justify-between gap-2">
                 <p>Toplam:</p>
                 <p className="text-base">
                   {formatToPrice(
-                    String(
-                      (
-                        Number(order.grandTotal) +
-                        Number(order.discountAmountTotal)
-                      ).toFixed(2),
-                    ).replace(".", ","),
+                    String(calculatedGrossTotal.toFixed(2)).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -333,9 +369,7 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p>İndirim:</p>
                 <p className="text-base">
                   {formatToPrice(
-                    String(
-                      Number(order.discountAmountTotal).toFixed(2),
-                    ).replace(".", ","),
+                    String(calculatedDiscount.toFixed(2)).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -345,7 +379,7 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {formatToPrice(
-                String(Number(order.totalPrice).toFixed(2)).replace(".", ","),
+                String(calculatedPayableTotal.toFixed(2)).replace(".", ","),
               )}
             </p>
           </div>

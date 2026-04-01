@@ -34,7 +34,7 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   function isActive(key) {
     return licenses.filter(
-      (L) => L.restaurantId == statusData[key].restaurantId
+      (L) => L.restaurantId == statusData[key].restaurantId,
     )[0]?.isActive;
   }
 
@@ -54,7 +54,7 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
             ? `Kapanma sebebi ${statusData[id].closedReason}`
             : ""
         }`,
-        { id: 1 }
+        { id: 1 },
       );
       return;
     }
@@ -86,7 +86,7 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
           toast.success(comp, { id: "success" });
           dispatch(resetTrendyolYemekUpdateRestaurantStatus());
         }
-      }
+      },
     );
   }
 
@@ -119,7 +119,7 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
           setStatusData(updatedStat);
           dispatch(resetTrendyolYemekUpdateRestaurantCourierStatus());
         }
-      }
+      },
     );
   }
 
@@ -127,15 +127,16 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   useEffect(() => {
     function statusValue(inData) {
       return RestaurantStatuses[inData.marketplaceId].filter((S) =>
-        inData.availabilityState
+        inData.workingStatus
           ?.toLocaleLowerCase()
-          .includes(S.id.toLocaleLowerCase())
+          .includes(S.id.toLocaleLowerCase()),
       )[0]?.value;
     }
 
     if (statRest) {
       const uniqueStatRest = statRest.filter(
-        (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+        (item, index, self) =>
+          index === self.findIndex((t) => t.id === item.id),
       );
 
       const formattedData = [];
@@ -226,7 +227,7 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                       <div className="flex items-center">
                         {(() => {
                           const remaining = remainingDays(
-                            restaurant.restaurantId
+                            restaurant.restaurantId,
                           );
                           return (
                             Number.isFinite(remaining) && (

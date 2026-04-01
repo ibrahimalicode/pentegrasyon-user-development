@@ -303,6 +303,28 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       ))}
                     </React.Fragment>
                   ))}
+                  {Array.isArray(lineItem.removedIngredients) &&
+                    lineItem.removedIngredients.map((removedIngredient) => (
+                      <tr
+                        key={removedIngredient.id}
+                        className="text-xs text-[--red-1]"
+                      >
+                        <td className="pl-2">- {removedIngredient.name}</td>
+                        <td className="pr-2 text-right text-[--red-1]">
+                          {removedIngredient.price > 0
+                            ? `-`
+                            : removedIngredient.price < 0
+                              ? `+`
+                              : ""}
+                          {removedIngredient.price > 0 &&
+                            formatToPrice(
+                              String(
+                                Number(removedIngredient.price).toFixed(2),
+                              ).replace(".", ","),
+                            )}
+                        </td>
+                      </tr>
+                    ))}
                   {(lineItem.comment || lineItem.description) && (
                     <tr>
                       <td className="relative text-sm">

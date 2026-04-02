@@ -222,7 +222,7 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                         return (
                           Number.isFinite(remaining) && (
                             <div
-                              className={`w-full flex items-center justify-center mt-2 ${remaining < 15 ? "bg-[--status-red] text-[--red-1]" : "bg-[--getiryemek] text-white"}`}
+                              className={`w-full flex items-center justify-center mt-2 ${remaining < 15 ? "bg-[--status-red] text-[--red-1]" : "bg-[--migrosyemek] text-white"}`}
                             >
                               <p>
                                 {remaining > 0

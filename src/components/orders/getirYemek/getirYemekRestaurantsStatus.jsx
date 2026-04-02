@@ -218,7 +218,8 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                         />
                       </div>
                     </div>
-                    <div className="w-full flex items-center justify-center bg-[--gr-1]">
+
+                    <div className="w-full flex items-center justify-center bg-[--gr-1] mt-2">
                       {(() => {
                         const remaining = remainingDays(
                           restaurant.restaurantId,
@@ -230,7 +231,9 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                                 remaining < 15 && "text-[--red-1]"
                               }`}
                             >
-                              Lisans süresi kalan gün: {remaining}
+                              {remaining > 0
+                                ? `Lisansın bitimine ${remaining} gün kaldı`
+                                : "Lisans süresi doldu"}
                             </p>
                           )
                         );

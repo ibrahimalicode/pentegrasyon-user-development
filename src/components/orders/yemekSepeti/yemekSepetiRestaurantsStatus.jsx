@@ -34,7 +34,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   function isActive(key) {
     return licenses.filter(
-      (L) => L.restaurantId == statusData[key].restaurantId
+      (L) => L.restaurantId == statusData[key].restaurantId,
     )[0]?.isActive;
   }
   function remainingDays(restaurantId) {
@@ -53,7 +53,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
             ? `Kapanma sebebi ${statusData[id].closedReason}`
             : ""
         }`,
-        { id: 1 }
+        { id: 1 },
       );
       return;
     }
@@ -116,7 +116,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
           setStatusData(updatedStat);
           dispatch(resetYemekSepetiUpdateRestaurantCourierStatus());
         }
-      }
+      },
     );
   }
 
@@ -126,13 +126,14 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
       return RestaurantStatuses[inData.marketplaceId].filter((S) =>
         inData.availabilityState
           .toLocaleLowerCase()
-          .includes(S.id.toLocaleLowerCase())
+          .includes(S.id.toLocaleLowerCase()),
       )[0]?.value;
     }
 
     if (statRest) {
       const uniqueStatRest = statRest.filter(
-        (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+        (item, index, self) =>
+          index === self.findIndex((t) => t.id === item.id),
       );
 
       const formattedData = [];
@@ -220,42 +221,53 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
           Yemeksepeti
         </div>
 
-        <div className="w-full px-3 text-sm">
+        <div className="w-full text-sm">
           <h1 className="mt-1 py-1 px-4 text-[--red-1] bg-[--light-1] w-full rounded-full">
             YemekSepeti Restoran Aç/Kapat işlemleri canlı ortamda 30sn ile 5dk
             arasında yansımaktadır.
           </h1>
 
-          <div className="flex flex-col gap-2">
-            {statusData &&
-              Object.keys(statusData).map((key, i) => {
-                const restaurant = statusData[key];
-                return (
-                  <div
-                    key={i}
-                    className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
-                  >
-                    <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
-                      {restaurant.name}
-                    </p>
-                    <div className="w-full flex justify-between">
-                      <div className="flex gap-4">
-                        <div className="max-w-40 text-center">
-                          <CustomToggle
-                            label="Restoran Durumu"
-                            className="scale-75 order-2"
-                            className1="flex-col max-sm:items-start"
-                            className2="order-1 ml-[0]"
-                            onChange={() => updateRestaurantStatus(key)}
-                            checked={statusData[key].restaurantStatus}
-                            disabled={updateRestaurantLoading || !isActive(key)}
+          <div className="w-full px-3 text-sm">
+            <div className="flex flex-col gap-2">
+              {statusData &&
+                Object.keys(statusData).map((key, i) => {
+                  const restaurant = statusData[key];
+                  return (
+                    <main key={i}>
+                      <div
+                        key={i}
+                        className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
+                      >
+                        <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
+                          {restaurant.name}
+                        </p>
+                        <div className="w-full flex justify-between">
+                          <div className="flex gap-4">
+                            <div className="max-w-40 text-center">
+                              <CustomToggle
+                                label="Restoran Durumu"
+                                className="scale-75 order-2"
+                                className1="flex-col max-sm:items-start"
+                                className2="order-1 ml-[0]"
+                                onChange={() => updateRestaurantStatus(key)}
+                                checked={statusData[key].restaurantStatus}
+                                disabled={
+                                  updateRestaurantLoading || !isActive(key)
+                                }
+                              />
+                            </div>
+                          </div>
+                          <DeleteIntegrationInfo
+                            restaurant={restaurant}
+                            onSuccess={onSuccess}
                           />
                         </div>
                       </div>
-                      <div className="flex items-center">
+
+                      <div className="w-full flex items-center justify-center bg-[--gr-1] mt-2">
                         {(() => {
                           const remaining = remainingDays(
-                            restaurant.restaurantId
+                            restaurant.restaurantId,
                           );
                           return (
                             Number.isFinite(remaining) && (
@@ -264,20 +276,18 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                                   remaining < 15 && "text-[--red-1]"
                                 }`}
                               >
-                                {remaining} gün kaldı
+                                {remaining > 0
+                                  ? `Lisansın bitimine ${remaining} gün kaldı`
+                                  : "Lisans süresi doldu"}
                               </p>
                             )
                           );
                         })()}
                       </div>
-                      <DeleteIntegrationInfo
-                        restaurant={restaurant}
-                        onSuccess={onSuccess}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+                    </main>
+                  );
+                })}
+            </div>
           </div>
         </div>
       </main>

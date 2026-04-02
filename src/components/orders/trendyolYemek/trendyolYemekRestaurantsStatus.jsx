@@ -203,51 +203,56 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
               Object.keys(statusData).map((key, i) => {
                 const restaurant = statusData[key];
                 return (
-                  <div
-                    key={i}
-                    className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
-                  >
-                    <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
-                      {restaurant.name}
-                    </p>
-                    <div className="w-full flex justify-between">
-                      <div className="flex gap-4">
-                        <div className="max-w-40 text-center">
-                          <CustomToggle
-                            label="Restoran Durumu"
-                            className="scale-75 order-2"
-                            className1="flex-col max-sm:items-start"
-                            className2="order-1 ml-[0]"
-                            onChange={() => updateRestaurantStatus(key)}
-                            checked={statusData[key].restaurantStatus}
-                            disabled={updateRestaurantLoading || !isActive(key)}
-                          />
+                  <main key={i}>
+                    <div className="flex justify-between items-center max-sm:flex-col max-sm:items-start">
+                      <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
+                        {restaurant.name}
+                      </p>
+                      <div className="w-full flex justify-between">
+                        <div className="flex gap-4">
+                          <div className="max-w-40 text-center">
+                            <CustomToggle
+                              label="Restoran Durumu"
+                              className="scale-75 order-2"
+                              className1="flex-col max-sm:items-start"
+                              className2="order-1 ml-[0]"
+                              onChange={() => updateRestaurantStatus(key)}
+                              checked={statusData[key].restaurantStatus}
+                              disabled={
+                                updateRestaurantLoading || !isActive(key)
+                              }
+                            />
+                          </div>
                         </div>
+
+                        <DeleteIntegrationInfo
+                          restaurant={restaurant}
+                          onSuccess={onSuccess}
+                        />
                       </div>
-                      <div className="flex items-center">
-                        {(() => {
-                          const remaining = remainingDays(
-                            restaurant.restaurantId,
-                          );
-                          return (
-                            Number.isFinite(remaining) && (
-                              <p
-                                className={`${
-                                  remaining < 15 && "text-[--red-1]"
-                                }`}
-                              >
-                                {remaining} gün kaldı
-                              </p>
-                            )
-                          );
-                        })()}
-                      </div>
-                      <DeleteIntegrationInfo
-                        restaurant={restaurant}
-                        onSuccess={onSuccess}
-                      />
                     </div>
-                  </div>
+
+                    <div className="w-full flex items-center justify-center bg-[--gr-1] mt-2">
+                      {(() => {
+                        const remaining = remainingDays(
+                          restaurant.restaurantId,
+                        );
+                        return (
+                          Number.isFinite(remaining) && (
+                            <p
+                              className={`${
+                                remaining < 15 && "text-[--red-1]"
+                              }`}
+                            >
+                              {remaining > 0
+                                ? `Lisansın bitimine ${remaining} gün kaldı`
+                                : "Lisans süresi doldu"}
+                            </p>
+                          )
+                        );
+                      })()}
+                    </div>
+                  </main>
                 );
               })}
           </div>

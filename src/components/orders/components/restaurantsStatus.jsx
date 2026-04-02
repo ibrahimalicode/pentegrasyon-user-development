@@ -44,11 +44,11 @@ const RestaurantsStatus = ({ licenses }) => {
     useFirestore();
 
   const { restaurantStatuses } = useSelector(
-    (state) => state.orders.getRestaurantsStatus
+    (state) => state.orders.getRestaurantsStatus,
   );
 
   const { entities, error: mapError } = useSelector(
-    (state) => state.restaurants.getRestaurantsMap
+    (state) => state.restaurants.getRestaurantsMap,
   );
   const [statusesData, setStatusesData] = useState(null);
   const [closedRestaurants, setClosedRestaurants] = useState([]);
@@ -137,7 +137,7 @@ const RestaurantsStatus = ({ licenses }) => {
   useEffect(() => {
     if (statusChangedRestaurant && statusesData) {
       const uniqueRestaurants = statusesData.filter(
-        (R) => R.id !== statusChangedRestaurant.id
+        (R) => R.id !== statusChangedRestaurant.id,
       );
       getRestaurantNames([statusChangedRestaurant, ...uniqueRestaurants]);
       setStatusChangedRestaurant(null);
@@ -201,12 +201,12 @@ const RestaurantsStatus = ({ licenses }) => {
                         {rest.name
                           ? rest.name
                           : rest.restaurantName
-                          ? rest.restaurantName
-                          : rest.storeName}{" "}
+                            ? rest.restaurantName
+                            : rest.storeName}{" "}
                         Kapalı
                       </p>
                     </div>
-                  )
+                  ),
                 )}
               </div>
               <style>
@@ -239,8 +239,8 @@ const RestaurantsStatus = ({ licenses }) => {
                   {rest.name
                     ? rest.name
                     : rest.restaurantName
-                    ? rest.restaurantName
-                    : rest.storeName}{" "}
+                      ? rest.restaurantName
+                      : rest.storeName}{" "}
                   Kapalı
                 </p>
               </div>

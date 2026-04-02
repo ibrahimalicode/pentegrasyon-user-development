@@ -227,7 +227,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
             arasında yansımaktadır.
           </h1>
 
-          <div className="w-full px-3 text-sm">
+          <div className="w-full text-sm">
             <div className="flex flex-col gap-2">
               {statusData &&
                 Object.keys(statusData).map((key, i) => {
@@ -236,7 +236,7 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                     <main key={i}>
                       <div
                         key={i}
-                        className="flex justify-between items-center max-sm:flex-col max-sm:items-start"
+                        className="flex justify-between items-center max-sm:flex-col max-sm:items-start px-3"
                       >
                         <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
                           {restaurant.name}
@@ -264,26 +264,26 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                         </div>
                       </div>
 
-                      <div className="w-full flex items-center justify-center bg-[--gr-1] mt-2">
+                      <>
                         {(() => {
                           const remaining = remainingDays(
                             restaurant.restaurantId,
                           );
                           return (
                             Number.isFinite(remaining) && (
-                              <p
-                                className={`${
-                                  remaining < 15 && "text-[--red-1]"
-                                }`}
+                              <div
+                                className={`w-full flex items-center justify-center mt-2 ${remaining < 15 ? "bg-[--status-red] text-[--red-1]" : "bg-[--getiryemek] text-white"}`}
                               >
-                                {remaining > 0
-                                  ? `Lisansın bitimine ${remaining} gün kaldı`
-                                  : "Lisans süresi doldu"}
-                              </p>
+                                <p>
+                                  {remaining > 0
+                                    ? `Lisansın bitimine ${remaining} gün kaldı`
+                                    : "Lisans süresi doldu"}
+                                </p>
+                              </div>
                             )
                           );
                         })()}
-                      </div>
+                      </>
                     </main>
                   );
                 })}

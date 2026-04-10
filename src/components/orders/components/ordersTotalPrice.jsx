@@ -2,14 +2,31 @@ import { formatToPrice } from "../../../utils/utils";
 
 const OrdersTotalPrice = ({ orders }) => {
   const total = orders?.reduce((sum, order) => {
-    if (order.status !== 1500 && order.status !== 1600 && order.status !== 4) {
+    const isGetirNotCancelled = order.status !== 1500 && order.status !== 1600;
+    const isMigrosNOtCancelled = order.status !== 10 && order.status !== 9;
+    const isTrendyolNotCancelled =
+      order.packageStatus !== "Cancelled" &&
+      order.packageStatus !== "UnSupplied";
+    const isYSNotCancelled = order.status !== 4;
+
+    const isNotCancelledArray = [
+      isGetirNotCancelled,
+      isMigrosNOtCancelled,
+      isTrendyolNotCancelled,
+      isYSNotCancelled,
+    ];
+    const isNotCancelled = isNotCancelledArray[order.marketplaceId];
+
+    if (isNotCancelled) {
       return (
         sum +
-        (order?.totalPrice
-          ? Number(order.totalPrice) //getir
-          : order?.grandTotal
-            ? Number(order.grandTotal) //YS
-            : 0)
+        (order.totalDiscountedPrice
+          ? Number(order.totalDiscountedPrice) //getir iskontolu
+          : order?.totalPrice
+            ? Number(order.totalPrice) //getir, trendyol
+            : order?.grandTotal
+              ? Number(order.grandTotal) //YS
+              : 0)
       );
     } else {
       return sum;

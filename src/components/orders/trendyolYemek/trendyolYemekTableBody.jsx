@@ -111,7 +111,7 @@ const TrendyolYemekTableBody = ({
         </td>
         <td
           className={`whitespace-nowrap ${
-            !order?.customer?.deliveryMainArea && "pointer-events-none"
+            !order?.customer?.addressDescription && "pointer-events-none"
           }`}
           onClick={() =>
             setPopupContent(
@@ -119,8 +119,8 @@ const TrendyolYemekTableBody = ({
                 data={{
                   lat1: order.restaurantLatitude,
                   lng1: order.restaurantLongitude,
-                  lat2: order.customer.latitude,
-                  lng2: order.customer.longitude,
+                  lat2: Number(order.customer.latitude),
+                  lng2: Number(order.customer.longitude),
                 }}
                 name1={order.restaurantName}
                 name2={order.customer.firstName}
@@ -132,12 +132,12 @@ const TrendyolYemekTableBody = ({
         >
           <button
             className={`border relative group py-2 px-3 rounded-md ${
-              order?.deliveryType?.toLocaleLowerCase() == "pickup"
+              order?.deliveryType?.toLocaleLowerCase() !== "store"
                 ? "border-[--green-1] text-[--green-1]"
                 : "border-[--primary-1]"
             }`}
           >
-            {order?.deliveryType?.toLocaleLowerCase() == "pickup"
+            {order?.deliveryType?.toLocaleLowerCase() !== "store"
               ? "Gel Al"
               : checkLeng(order?.customer?.addressDescription) ||
                 "Kurye Bilgisinde"}

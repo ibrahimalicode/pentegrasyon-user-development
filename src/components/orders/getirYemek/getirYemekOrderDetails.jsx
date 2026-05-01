@@ -38,7 +38,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
   function getCurrentCourier() {
     const currentCourier = courierServiceTypes.filter(
-      (T) => T.licenseTypeId === order.courierTypeId
+      (T) => T.licenseTypeId === order.courierTypeId,
     );
     return currentCourier.length && order.deliveryType != 1
       ? currentCourier[0].label
@@ -72,14 +72,14 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             style={{
               color: `var(${
                 getirYemekOrderStatuses.filter(
-                  (col) => col.id === sideOrder.status
+                  (col) => col.id === sideOrder.status,
                 )[0]?.color
               })`,
             }}
           >
             {
               getirYemekOrderStatuses.filter(
-                (stat) => stat.id === sideOrder.status
+                (stat) => stat.id === sideOrder.status,
               )[0]?.label
             }
           </p>
@@ -219,74 +219,60 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <thead className="bg-[--light-3]">
             <tr>
               <th className="p-2 font-normal text-left">Ürün</th>
+              <th className="p-2 font-normal">Adet</th>
+              <th className="p-2 font-normal">Fiyat</th>
               <th className="p-2 font-normal text-right">Tutar</th>
             </tr>
           </thead>
 
           <tbody>
             {order.orders.map((order) => (
-              <React.Fragment key={order.id}>
+              <>
                 <tr>
-                  <td className="p-2 text-left">
-                    <div>
-                      <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
-                        {order.count}
-                      </span>
-                      {order.name}
-                    </div>
-                  </td>
-
-                  <td className="p-2 flex justify-end items-start">
-                    {formatToPrice(
-                      String((order.price * order.count).toFixed(2)).replace(
-                        ".",
-                        ","
-                      )
-                    )}
+                  <td className="text-[--primary-2]" colSpan={3}>
+                    <div>{order.name}</div>
                   </td>
                 </tr>
-                {order.optionCategories.map((cat) => (
-                  <React.Fragment key={cat.id}>
-                    <tr className="text-xs px-2">
-                      <td className="pl-2">{cat.name}</td>
+
+                {order.displayInfoOptions ? (
+                  <React.Fragment key={order.id}>
+                    <tr className="text-xs">
+                      <td className="pl-1">
+                        {order.displayInfoOptions
+                          .split(",")
+                          .map((info, index) => (
+                            <span key={index} className="block">
+                              {info}
+                            </span>
+                          ))}
+                      </td>
+
+                      <td className="font-bold text-center">{order.count}</td>
+                      <td className="font-bold text-center">
+                        {formatToPrice(String(order.price).replace(".", ","))}
+                      </td>
+                      <td className="text-right font-bold pr-1">
+                        {formatToPrice(
+                          String(order.totalPriceWithOption).replace(".", ","),
+                        )}
+                      </td>
                     </tr>
-                    {cat.options.map((opt) => (
-                      <tr key={opt.id} className="text-xs">
-                        <td className="pl-2">▸ {opt.name}</td>
-                        <td
-                          className={`pr-2 text-right ${
-                            opt.price > 0
-                              ? "text-[--green-1]"
-                              : "text-[--red-1]"
-                          }`}
-                        >
-                          {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
-                          {opt.price > 0 &&
-                            formatToPrice(
-                              String(
-                                (opt.price * order.count).toFixed(2)
-                              ).replace(".", ",")
-                            )}
-                        </td>
-                      </tr>
-                    ))}
                   </React.Fragment>
-                ))}
-                {order.note && (
+                ) : (
                   <tr>
-                    <td className="relative text-xs">
-                      <p className="invisible px-2 py-1 flex gap-1">
-                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
-                        {order.note}
-                      </p>
-                      <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                        <InfoI className="size-[16px]" strokeWidth={2} />{" "}
-                        {order.note}
-                      </span>
+                    <td className="text-xs">{order.displayInfoTitle}</td>
+                    <td className="font-bold text-center">{order.count}</td>
+                    <td className="font-bold text-center">
+                      {formatToPrice(String(order.price).replace(".", ","))}
+                    </td>
+                    <td className="text-right font-bold pr-1">
+                      {formatToPrice(
+                        String(order.totalPriceWithOption).replace(".", ","),
+                      )}
                     </td>
                   </tr>
                 )}
-              </React.Fragment>
+              </>
             ))}
           </tbody>
         </table>
@@ -298,7 +284,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p>Toplam:</p>
                 <p className="text-base">
                   {formatToPrice(
-                    String(order.totalPrice.toFixed(2)).replace(".", ",")
+                    String(order.totalPrice.toFixed(2)).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -307,8 +293,10 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p className="text-base">
                   {formatToPrice(
                     String(
-                      (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
-                    ).replace(".", ",")
+                      (order.totalPrice - order.totalDiscountedPrice).toFixed(
+                        2,
+                      ),
+                    ).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -321,11 +309,11 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 ? formatToPrice(
                     String(order.totalDiscountedPrice.toFixed(2)).replace(
                       ".",
-                      ","
-                    )
+                      ",",
+                    ),
                   )
                 : formatToPrice(
-                    String(order.totalPrice.toFixed(2)).replace(".", ",")
+                    String(order.totalPrice.toFixed(2)).replace(".", ","),
                   )}
             </p>
           </div>

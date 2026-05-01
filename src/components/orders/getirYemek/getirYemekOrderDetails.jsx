@@ -219,8 +219,6 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <thead className="bg-[--light-3]">
             <tr>
               <th className="p-2 font-normal text-left">Ürün</th>
-              <th className="p-2 font-normal">Adet</th>
-              <th className="p-2 font-normal">Fiyat</th>
               <th className="p-2 font-normal text-right">Tutar</th>
             </tr>
           </thead>
@@ -229,8 +227,18 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             {order.orders.map((order) => (
               <>
                 <tr>
-                  <td className="text-[--primary-2]" colSpan={3}>
-                    <div>{order.name}</div>
+                  <td className="text-[--primary-2]">
+                    <div>
+                      <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
+                        {order.count}
+                      </span>
+                      {order.name}
+                    </div>
+                  </td>
+                  <td className="text-right pr-1">
+                    {formatToPrice(
+                      String(order.totalPriceWithOption).replace(".", ","),
+                    )}
                   </td>
                 </tr>
 
@@ -245,16 +253,6 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                               {info}
                             </span>
                           ))}
-                      </td>
-
-                      <td className="font-bold text-center">{order.count}</td>
-                      <td className="font-bold text-center">
-                        {formatToPrice(String(order.price).replace(".", ","))}
-                      </td>
-                      <td className="text-right font-bold pr-1">
-                        {formatToPrice(
-                          String(order.totalPriceWithOption).replace(".", ","),
-                        )}
                       </td>
                     </tr>
                   </React.Fragment>

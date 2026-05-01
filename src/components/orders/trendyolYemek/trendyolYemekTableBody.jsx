@@ -111,7 +111,9 @@ const TrendyolYemekTableBody = ({
         </td>
         <td
           className={`whitespace-nowrap ${
-            !order?.customer?.addressDescription && "pointer-events-none"
+            (!order?.customer?.addressDescription ||
+              order?.deliveryType?.toLocaleLowerCase() == "go") &&
+            "pointer-events-none"
           }`}
           onClick={() =>
             setPopupContent(
@@ -132,14 +134,17 @@ const TrendyolYemekTableBody = ({
         >
           <button
             className={`border relative group py-2 px-3 rounded-md ${
-              order?.deliveryType?.toLocaleLowerCase() !== "store"
+              order?.deliveryType?.toLocaleLowerCase() !== "store" &&
+              order?.deliveryType?.toLocaleLowerCase() !== "go"
                 ? "border-[--green-1] text-[--green-1]"
                 : "border-[--primary-1]"
             }`}
           >
-            {order?.deliveryType?.toLocaleLowerCase() !== "store"
+            {order?.deliveryType?.toLocaleLowerCase() !== "store" &&
+            order?.deliveryType?.toLocaleLowerCase() !== "go"
               ? "Gel Al"
-              : checkLeng(order?.customer?.addressDescription) ||
+              : (order.customer.addressDescription != "Trendyol Yemek" &&
+                  checkLeng(order?.customer?.addressDescription)) ||
                 "Kurye Bilgisinde"}
 
             {order?.customer?.addressDescription?.length > 25 && (
@@ -151,7 +156,8 @@ const TrendyolYemekTableBody = ({
         </td>
         <td
           className={`whitespace-nowrap ${
-            (order.expressDelivery || !canSelectCourier) &&
+            (!canSelectCourier ||
+              order?.deliveryType?.toLocaleLowerCase() == "go") &&
             "pointer-events-none"
           } `}
           onClick={() =>
@@ -172,7 +178,7 @@ const TrendyolYemekTableBody = ({
         >
           <button className="border border-[--primary-1] py-2 px-3 rounded-md">
             {order.expressDelivery
-              ? "YS Kuryesi"
+              ? "Trendyol Kuryesi"
               : (() => {
                   const custAdd = order?.customer?.deliveryMainArea;
                   const currentCourier = courierServiceTypes.filter(

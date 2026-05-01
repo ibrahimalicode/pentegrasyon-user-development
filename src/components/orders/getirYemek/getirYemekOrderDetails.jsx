@@ -227,7 +227,7 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             {order.orders.map((order) => (
               <>
                 <tr>
-                  <td className="text-[--primary-2]">
+                  <td className="font-medium">
                     <div>
                       <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
                         {order.count}

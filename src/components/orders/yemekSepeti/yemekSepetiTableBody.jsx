@@ -58,7 +58,7 @@ const YemekSepetiTableBody = ({
 
   function cellClicked() {
     const currentLicense = licenses.find(
-      (L) => L.restaurantId === order.restaurantId
+      (L) => L.restaurantId === order.restaurantId,
     );
     if (currentLicense && !currentLicense?.isActive) {
       toast.error("Lisan Süresi Bitmiştir! Lütfen lisansınızı uzatınız.");
@@ -73,7 +73,7 @@ const YemekSepetiTableBody = ({
         }}
         setOrdersData={setOrdersData}
         licenseSettings={licenseSettings}
-      />
+      />,
     );
   }
 
@@ -123,7 +123,7 @@ const YemekSepetiTableBody = ({
                 name2={order.customer.firstName}
                 order={order}
                 setOrdersData={setOrdersData}
-              />
+              />,
             )
           }
         >
@@ -163,7 +163,7 @@ const YemekSepetiTableBody = ({
                   lat2: order.customer.latitude,
                   lng2: order.customer.longitude,
                 }}
-              />
+              />,
             )
           }
         >
@@ -173,7 +173,7 @@ const YemekSepetiTableBody = ({
               : (() => {
                   const custAdd = order?.customer?.deliveryMainArea;
                   const currentCourier = courierServiceTypes.filter(
-                    (T) => T.licenseTypeId === order.courierTypeId
+                    (T) => T.licenseTypeId === order.courierTypeId,
                   );
 
                   return custAdd
@@ -186,7 +186,7 @@ const YemekSepetiTableBody = ({
         </td>
         <td onClick={cellClicked} className="whitespace-nowrap">
           {formatToPrice(
-            String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+            String(Number(order.grandTotal).toFixed(2)).replace(".", ","),
           )}
         </td>
         <td onClick={() => {}} className="whitespace-nowrap">

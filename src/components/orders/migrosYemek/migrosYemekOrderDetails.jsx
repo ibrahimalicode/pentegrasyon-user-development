@@ -36,7 +36,7 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
   function getCurrentCourier() {
     const currentCourier = courierServiceTypes.filter(
-      (T) => T.licenseTypeId === order.courierTypeId
+      (T) => T.licenseTypeId === order.courierTypeId,
     );
     return currentCourier.length
       ? currentCourier[0].label
@@ -70,14 +70,14 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             style={{
               color: `var(${
                 migrosYemekiOrderStatuses.filter(
-                  (col) => col.id === sideOrder.status
+                  (col) => col.id === sideOrder.status,
                 )[0]?.color
               })`,
             }}
           >
             {
               migrosYemekiOrderStatuses.filter(
-                (stat) => stat.id === sideOrder.status
+                (stat) => stat.id === sideOrder.status,
               )[0]?.label
             }
           </p>
@@ -127,7 +127,14 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <div className="w-full flex justify-between">
             <p>Komisyon Oranı</p>
             <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
-              {licenseSettings.commissionRate}%
+              {formatToPrice(
+                String(
+                  (
+                    (order.discountedPrice / 100) *
+                    licenseSettings.commissionRate
+                  ).toFixed(2),
+                ).replace(".", ","),
+              )}
             </p>
           </div>
         )}
@@ -214,18 +221,18 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                               {option.primaryPrice > 0
                                 ? `+`
                                 : option.primaryPrice < 0
-                                ? `-`
-                                : ""}
+                                  ? `-`
+                                  : ""}
                               {option.primaryPrice > 0 &&
                                 formatToPrice(
                                   String(
                                     (
                                       option.primaryPrice * option.quantity
-                                    ).toFixed(2)
+                                    ).toFixed(2),
                                   )
                                     .replace(".", "#")
                                     .replace(",", ".")
-                                    .replace("#", ",")
+                                    .replace("#", ","),
                                 )}
                             </td>
                           </tr>
@@ -259,19 +266,19 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                               {subOpt.primaryPrice > 0
                                 ? `+`
                                 : subOpt.primaryPrice < 0
-                                ? `-`
-                                : ""}
+                                  ? `-`
+                                  : ""}
 
                               {subOpt.primaryPrice > 0 &&
                                 formatToPrice(
                                   String(
                                     (
                                       subOpt.primaryPrice * subOpt.quantity
-                                    ).toFixed(2)
+                                    ).toFixed(2),
                                   )
                                     .replace(".", "#")
                                     .replace(",", ".")
-                                    .replace("#", ",")
+                                    .replace("#", ","),
                                 )}
                             </td>
                           </tr>
@@ -310,11 +317,11 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p className="text-base">
                   {formatToPrice(
                     String(
-                      (order.totalPrice - order.discountedPrice).toFixed(2)
+                      (order.totalPrice - order.discountedPrice).toFixed(2),
                     )
                       .replace(".", "#")
                       .replace(",", ".")
-                      .replace("#", ",")
+                      .replace("#", ","),
                   )}
                 </p>
               </div>

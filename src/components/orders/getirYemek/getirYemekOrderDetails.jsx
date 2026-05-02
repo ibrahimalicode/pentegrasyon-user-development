@@ -131,7 +131,14 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <div className="w-full flex justify-between">
             <p>Komisyon Oranı</p>
             <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
-              {licenseSettings.commissionRate}%
+              {formatToPrice(
+                String(
+                  (
+                    (order.totalDiscountedPrice / 100) *
+                    licenseSettings.commissionRate
+                  ).toFixed(2),
+                ).replace(".", ","),
+              )}
             </p>
           </div>
         )}

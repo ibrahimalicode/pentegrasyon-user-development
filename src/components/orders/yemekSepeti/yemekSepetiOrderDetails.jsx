@@ -41,7 +41,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
     const custAdd = order?.customer?.deliveryMainArea;
     const currentCourier = courierServiceTypes.filter(
-      (T) => T.licenseTypeId === order.courierTypeId
+      (T) => T.licenseTypeId === order.courierTypeId,
     );
     return custAdd ? currentCourier?.[0]?.label : "Platform Kuryesi";
   }
@@ -73,14 +73,14 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             style={{
               color: `var(${
                 yemekSepetiOrderStatuses.filter(
-                  (col) => col.id === sideOrder.status
+                  (col) => col.id === sideOrder.status,
                 )[0]?.color
               })`,
             }}
           >
             {
               yemekSepetiOrderStatuses.filter(
-                (stat) => stat.id === sideOrder.status
+                (stat) => stat.id === sideOrder.status,
               )[0]?.label
             }
           </p>
@@ -132,7 +132,14 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <div className="w-full flex justify-between">
             <p>Komisyon Oranı</p>
             <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
-              {licenseSettings.commissionRate}%
+              {formatToPrice(
+                String(
+                  (
+                    (order.grandTotal / 100) *
+                    licenseSettings.commissionRate
+                  ).toFixed(2),
+                ).replace(".", ","),
+              )}
             </p>
           </div>
         )}
@@ -173,7 +180,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <p className="w-1/2 text-end">
             {order.customer.deliveryInstructions?.replace(
               order.customerComment,
-              ""
+              "",
             )}
           </p>
         </div>
@@ -242,8 +249,8 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       {formatToPrice(
                         String(Number(order.paidPrice).toFixed(2)).replace(
                           ".",
-                          ","
-                        )
+                          ",",
+                        ),
                       )}
                     </td>
                   </tr>
@@ -266,8 +273,8 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                                   Number(cat.price) *
                                   Number(cat.quantity) *
                                   Number(order.quantity)
-                                ).toFixed(2)
-                              ).replace(".", ",")
+                                ).toFixed(2),
+                              ).replace(".", ","),
                             )}
                         </td>
                       </tr>
@@ -286,8 +293,8 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                               formatToPrice(
                                 String(Number(opt.price).toFixed(2)).replace(
                                   ".",
-                                  ","
-                                )
+                                  ",",
+                                ),
                               )}
                           </td>
                         </tr>
@@ -323,8 +330,8 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       (
                         Number(order.grandTotal) +
                         Number(order.discountAmountTotal)
-                      ).toFixed(2)
-                    ).replace(".", ",")
+                      ).toFixed(2),
+                    ).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -333,8 +340,8 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p className="text-base">
                   {formatToPrice(
                     String(
-                      Number(order.discountAmountTotal).toFixed(2)
-                    ).replace(".", ",")
+                      Number(order.discountAmountTotal).toFixed(2),
+                    ).replace(".", ","),
                   )}
                 </p>
               </div>
@@ -344,7 +351,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">
               {formatToPrice(
-                String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+                String(Number(order.grandTotal).toFixed(2)).replace(".", ","),
               )}
             </p>
           </div>

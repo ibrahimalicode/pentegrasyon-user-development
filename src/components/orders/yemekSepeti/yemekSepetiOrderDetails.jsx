@@ -130,7 +130,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
         {licenseSettings && (
           <div className="w-full flex justify-between">
-            <p>Komisyon Oranı</p>
+            <p>Komisyon Tutarı</p>
             <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
               {formatToPrice(
                 String(

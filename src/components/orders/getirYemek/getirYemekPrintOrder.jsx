@@ -133,63 +133,52 @@ const GetirYemekPrintOrder = ({ order }) => {
 
           <tbody>
             {order.orders.map((order) => (
-              <React.Fragment key={order.id}>
+              <>
                 <tr>
-                  <td className="px-2 text-left">
-                    <div className="font-bold">
-                      <span className="mr-0.5 rounded-sm">{order.count} </span>x{" "}
+                  <td className="font-medium">
+                    <div>
+                      <span className="bg-[--gr-1] px-1.5 py-0.5 mr-0.5 rounded-sm">
+                        {order.count} x
+                      </span>
                       {order.name}
                     </div>
                   </td>
-                  <td className="px-2 flex justify-end items-start">
+                  <td className="text-right pr-1">
                     {formatToPrice(
-                      String((order.price * order.count).toFixed(2)).replace(
-                        ".",
-                        ","
-                      )
+                      String(order.totalPriceWithOption).replace(".", ","),
                     )}
                   </td>
                 </tr>
-                {order.optionCategories.map((cat) => (
-                  <React.Fragment key={cat.id}>
-                    <tr className="px-2">
-                      <td className="pl-2">{cat.name}</td>
+
+                {order.displayInfoOptions ? (
+                  <React.Fragment key={order.id}>
+                    <tr className="text-xs">
+                      <td className="pl-1">
+                        {order.displayInfoOptions
+                          .split(",")
+                          .map((info, index) => (
+                            <span key={index} className="block">
+                              {info}
+                            </span>
+                          ))}
+                      </td>
                     </tr>
-                    {cat.options.map((opt) => (
-                      <tr key={opt.id} className="">
-                        <td className="pl-2">▸ {opt.name}</td>
-                        <td
-                          className={`pr-2 text-right ${
-                            opt.price > 0
-                              ? "text-[--green-1]"
-                              : "text-[--red-1]"
-                          }`}
-                        >
-                          {opt.price > 0 ? `+` : opt.price < 0 ? `-` : ""}
-                          {opt.price > 0 &&
-                            formatToPrice(
-                              String(
-                                (opt.price * order.count).toFixed(2)
-                              ).replace(".", ",")
-                            )}
-                        </td>
-                      </tr>
-                    ))}
                   </React.Fragment>
-                ))}
-                {order.note && (
+                ) : (
                   <tr>
-                    <td className="relative text-base">
-                      <p className="invisible px-2 py-1 flex gap-1">
-                        👉 {order.note}
-                      </p>
-                      <span className="absolute top-0 left-0 right-0 bg-[--light-3] px-2 py-1 flex gap-1">
-                        👉 {order.note}
-                      </span>
+                    <td className="text-xs">{order.displayInfoTitle}</td>
+                    <td className="font-bold text-center">{order.count}</td>
+                    <td className="font-bold text-center">
+                      {formatToPrice(String(order.price).replace(".", ","))}
+                    </td>
+                    <td className="text-right font-bold pr-1">
+                      {formatToPrice(
+                        String(order.totalPriceWithOption).replace(".", ","),
+                      )}
                     </td>
                   </tr>
                 )}
-              </React.Fragment>
+              </>
             ))}
           </tbody>
         </table>
@@ -202,7 +191,7 @@ const GetirYemekPrintOrder = ({ order }) => {
               <span>Hesap Toplamı : </span>
               <span className="font-bold">
                 {formatToPrice(
-                  String(order.totalPrice.toFixed(2).replace(".", ","))
+                  String(order.totalPrice.toFixed(2).replace(".", ",")),
                 )}
               </span>
             </p>
@@ -212,8 +201,8 @@ const GetirYemekPrintOrder = ({ order }) => {
                 -
                 {formatToPrice(
                   String(
-                    (order.totalPrice - order.totalDiscountedPrice).toFixed(2)
-                  ).replace(".", ",")
+                    (order.totalPrice - order.totalDiscountedPrice).toFixed(2),
+                  ).replace(".", ","),
                 )}
               </span>
             </p>
@@ -227,11 +216,11 @@ const GetirYemekPrintOrder = ({ order }) => {
               ? formatToPrice(
                   String(order.totalDiscountedPrice.toFixed(2)).replace(
                     ".",
-                    ","
-                  )
+                    ",",
+                  ),
                 )
               : formatToPrice(
-                  String(order.totalPrice.toFixed(2)).replace(".", ",")
+                  String(order.totalPrice.toFixed(2)).replace(".", ","),
                 )}
           </span>
         </p>

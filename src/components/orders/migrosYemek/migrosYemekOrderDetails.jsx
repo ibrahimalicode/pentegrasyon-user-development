@@ -125,7 +125,12 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
         {licenseSettings && (
           <div className="w-full flex justify-between">
-            <p>Komisyon Tutarı</p>
+            <p>
+              Komisyon Tutarı{" "}
+              <span className="text-xs text-[--primary-1] italic ml-1">
+                ({licenseSettings.commissionRate}%)
+              </span>
+            </p>
             <p className="bg-[--gr-1] text-[--white-1] px-2 rounded-sm">
               {formatToPrice(
                 String(

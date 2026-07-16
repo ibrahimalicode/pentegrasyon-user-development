@@ -254,10 +254,11 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                     </td>
                     <td className="p-2 flex justify-end items-start">
                       {formatToPrice(
-                        String(Number(lineItem.price).toFixed(2)).replace(
-                          ".",
-                          ",",
-                        ),
+                        String(
+                          Number(
+                            lineItem.price * lineItem.items.length,
+                          ).toFixed(2),
+                        ).replace(".", ","),
                       )}
                     </td>
                   </tr>
@@ -278,7 +279,6 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                               String(
                                 (
                                   Number(mod.price) *
-                                  // Number(mod.quantity) *
                                   Number(lineItem.items.length)
                                 ).toFixed(2),
                               ).replace(".", ","),

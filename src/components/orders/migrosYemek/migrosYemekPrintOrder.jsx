@@ -137,11 +137,11 @@ const MigrosYemekPrintOrder = ({ order }) => {
                                 String(
                                   (
                                     option.primaryPrice * option.quantity
-                                  ).toFixed(2)
+                                  ).toFixed(2),
                                 )
                                   .replace(".", "#")
                                   .replace(",", ".")
-                                  .replace("#", ",")
+                                  .replace("#", ","),
                               )}
                           </td>
                         </tr>
@@ -169,8 +169,8 @@ const MigrosYemekPrintOrder = ({ order }) => {
                             {subOpt.primaryPrice > 0
                               ? `+`
                               : subOpt.primaryPrice < 0
-                              ? `-`
-                              : ""}
+                                ? `-`
+                                : ""}
                             {subOpt.primaryPrice > 0 &&
                               formatToPrice(subOpt.primaryPriceText)}
                           </td>
@@ -221,7 +221,7 @@ const MigrosYemekPrintOrder = ({ order }) => {
                   String((order.totalPrice - order.discountedPrice).toFixed(2))
                     .replace(".", "#")
                     .replace(",", ".")
-                    .replace("#", ",")
+                    .replace("#", ","),
                 )}
               </span>
             </p>

@@ -82,7 +82,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
               {" "}
               {order.customer.deliveryInstructions?.replace(
                 order.customerComment,
-                ""
+                "",
               )}
             </div>
           </div>
@@ -154,8 +154,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
                     {formatToPrice(
                       String(Number(order.paidPrice).toFixed(2)).replace(
                         ".",
-                        ","
-                      )
+                        ",",
+                      ),
                     )}
                   </td>
                 </tr>
@@ -172,8 +172,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
                           formatToPrice(
                             String(Number(cat.price).toFixed(2)).replace(
                               ".",
-                              ","
-                            )
+                              ",",
+                            ),
                           )}
                       </td>
                     </tr>
@@ -192,8 +192,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
                             formatToPrice(
                               String(Number(opt.price).toFixed(2)).replace(
                                 ".",
-                                ","
-                              )
+                                ",",
+                              ),
                             )}
                         </td>
                       </tr>
@@ -230,8 +230,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
                     (
                       Number(order.grandTotal) +
                       Number(order.discountAmountTotal)
-                    ).toFixed(2)
-                  ).replace(".", ",")
+                    ).toFixed(2),
+                  ).replace(".", ","),
                 )}
               </span>
             </p>
@@ -251,8 +251,8 @@ const YemekSepetiPrintOrder = ({ order }) => {
                 {formatToPrice(
                   String(Number(order.discountAmountTotal).toFixed(2)).replace(
                     ".",
-                    ","
-                  )
+                    ",",
+                  ),
                 )}
               </span>
             </p>
@@ -263,7 +263,7 @@ const YemekSepetiPrintOrder = ({ order }) => {
           <span>Ödenecek Tutar : </span>
           <span className="font-bold">
             {formatToPrice(
-              String(Number(order.grandTotal).toFixed(2)).replace(".", ",")
+              String(Number(order.grandTotal).toFixed(2)).replace(".", ","),
             )}
           </span>
         </p>

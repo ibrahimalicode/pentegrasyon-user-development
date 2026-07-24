@@ -1,66 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  smsParameters: null,
-};
-
-const sendSMSUserLockPasswordResetSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "sendSMSUserLockPasswordReset",
-  initialState: initialState,
-  reducers: {
-    resetSendSMSUserLockPasswordReset: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.smsParameters = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(sendSMSUserLockPasswordReset.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.smsParameters = null;
-      })
-      .addCase(sendSMSUserLockPasswordReset.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.smsParameters = action.payload;
-      })
-      .addCase(sendSMSUserLockPasswordReset.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.smsParameters = null;
-      });
-  },
+  actionType: "GeneralVariables/SendSMSUserLockPasswordReset",
+  dataKey: "smsParameters",
+  request: async () =>
+    // POST since backend PR #170 — side-effectful GETs were re-fireable by
+    // prefetchers/retries. Identity comes from the JWT; no body needed.
+    (await api.post("SMS/SendSMSUserLockPasswordReset")).data.data,
 });
 
-export const sendSMSUserLockPasswordReset = createAsyncThunk(
-  "GeneralVariables/SendSMSUserLockPasswordReset",
-  async (_, { rejectWithValue }) => {
-    try {
-      // POST since backend PR #170 — side-effectful GETs were re-fireable by
-      // prefetchers/retries. Identity comes from the JWT; no body needed.
-      const res = await api.post(`${baseURL}SMS/SendSMSUserLockPasswordReset`);
-
-      return res.data.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetSendSMSUserLockPasswordReset } =
-  sendSMSUserLockPasswordResetSlice.actions;
-export default sendSMSUserLockPasswordResetSlice.reducer;
+export const sendSMSUserLockPasswordReset = thunk;
+export const { reset: resetSendSMSUserLockPasswordReset } = actions;
+export default reducer;

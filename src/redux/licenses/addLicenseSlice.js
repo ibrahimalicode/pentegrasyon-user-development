@@ -1,73 +1,24 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: null,
-  data: null,
-};
-
-const addLicenseSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "addLicense",
-  initialState: initialState,
-  reducers: {
-    resetAddLicense: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
-    resetAddLicenseState: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(addLicense.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-        state.data = null;
-      })
-      .addCase(addLicense.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.data = action.payload;
-      })
-      .addCase(addLicense.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.data = null;
-      });
-  },
-});
-
-export const addLicense = createAsyncThunk(
-  "Licenses/AddLicense",
-  async (
-    {
-      restaurantId,
-      userId,
-      marketplaceId,
-      startDateTime,
-      endDateTime,
-      isActive,
-      licensePackageTime,
-      licensePackageTotalPrice,
-      licensePackageId,
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const res = await api.post(`${baseURL}Licenses/AddLicense`, {
+  actionType: "Licenses/AddLicense",
+  request: async ({
+    restaurantId,
+    userId,
+    marketplaceId,
+    startDateTime,
+    endDateTime,
+    isActive,
+    licensePackageTime,
+    licensePackageTotalPrice,
+    licensePackageId,
+  }) =>
+    (
+      await api.post("Licenses/AddLicense", {
         restaurantId,
         userId,
         marketplaceId,
@@ -77,17 +28,11 @@ export const addLicense = createAsyncThunk(
         licensePackageTime,
         licensePackageTotalPrice,
         licensePackageId,
-      });
+      })
+    ).data,
+});
 
-      // console.log(res);
-      return res.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetAddLicense, resetAddLicenseState } =
-  addLicenseSlice.actions;
-export default addLicenseSlice.reducer;
+export const addLicense = thunk;
+export const { reset: resetAddLicense, resetState: resetAddLicenseState } =
+  actions;
+export default reducer;

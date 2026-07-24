@@ -1,69 +1,23 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  data: null,
-};
-
-const deleteCourierSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "deleteCourier",
-  initialState: initialState,
-  reducers: {
-    resetDeleteCourier: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(deleteCourier.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.data = null;
-      })
-      .addCase(deleteCourier.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.data = action.payload;
-      })
-      .addCase(deleteCourier.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.data = null;
-      });
+  actionType: "Couriers/DeleteCourierById",
+  request: async (data) => {
+    console.log(data);
+    const res = await api.delete("Couriers/DeleteCourierById", {
+      params: {
+        ...data,
+      },
+    });
+
+    return res.data.data;
   },
 });
 
-export const deleteCourier = createAsyncThunk(
-  "Couriers/DeleteCourierById",
-  async (data, { rejectWithValue }) => {
-    try {
-      console.log(data);
-      const res = await api.delete(`${baseURL}Couriers/DeleteCourierById`, {
-        params: {
-          ...data,
-        },
-      });
-
-      // console.log(res.data);
-      return res.data.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetDeleteCourier } = deleteCourierSlice.actions;
-export default deleteCourierSlice.reducer;
+export const deleteCourier = thunk;
+export const { reset: resetDeleteCourier } = actions;
+export default reducer;

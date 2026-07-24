@@ -1,66 +1,20 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../../api";
+import { createApiSlice } from "../../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  adverts: null,
-};
-
-const getAdvertsSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getAdverts",
-  initialState: initialState,
-  reducers: {
-    resetGetAdverts: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.adverts = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getAdverts.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.adverts = null;
-      })
-      .addCase(getAdverts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.adverts = action.payload;
-      })
-      .addCase(getAdverts.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.adverts = null;
-      });
+  actionType: "Adverts/GetAdvertsDisplay",
+  dataKey: "adverts",
+  request: async () => (await api.get("Adverts/GetAdvertsDisplay")).data.data,
+  mapError: (err) => {
+    console.log(err);
+    if (err?.response?.data) return err.response.data;
+    return { message_TR: err.message };
   },
 });
 
-export const getAdverts = createAsyncThunk(
-  "Adverts/GetAdvertsDisplay",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get(`${baseURL}Adverts/GetAdvertsDisplay`);
-
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
-    }
-  }
-);
-
-export const { resetGetAdverts } = getAdvertsSlice.actions;
-export default getAdvertsSlice.reducer;
+export const getAdverts = thunk;
+export const { reset: resetGetAdverts } = actions;
+export default reducer;

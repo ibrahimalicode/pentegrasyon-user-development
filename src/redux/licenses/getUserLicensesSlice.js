@@ -1,79 +1,27 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  userLicenses: null,
-};
-
-const getUserLicensesSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getUserLicenses",
-  initialState: initialState,
-  reducers: {
-    resetGetUserLicensesState: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-    },
-    resetGetUserLicenses: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.userLicenses = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getUserLicenses.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.userLicenses = null;
-      })
-      .addCase(getUserLicenses.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.userLicenses = action.payload;
-      })
-      .addCase(getUserLicenses.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.userLicenses = null;
-      });
-  },
-});
-
-export const getUserLicenses = createAsyncThunk(
-  "Licenses/GetLicensesByUserId",
-  async (
-    { userId, pageNumber = null, pageSize = null },
-    { rejectWithValue }
-  ) => {
-    try {
-      const res = await api.get(`${baseURL}Licenses/GetLicensesByUserId`, {
+  actionType: "Licenses/GetLicensesByUserId",
+  dataKey: "userLicenses",
+  request: async ({ userId, pageNumber = null, pageSize = null }) =>
+    (
+      await api.get("Licenses/GetLicensesByUserId", {
         params: {
           userId,
           pageNumber,
           pageSize,
         },
-      });
+      })
+    ).data,
+});
 
-      // console.log(res.data);
-      return res.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetGetUserLicensesState, resetGetUserLicenses } =
-  getUserLicensesSlice.actions;
-export default getUserLicensesSlice.reducer;
+export const getUserLicenses = thunk;
+export const {
+  resetState: resetGetUserLicensesState,
+  reset: resetGetUserLicenses,
+} = actions;
+export default reducer;

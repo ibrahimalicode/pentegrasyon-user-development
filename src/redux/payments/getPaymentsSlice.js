@@ -1,70 +1,20 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  payments: null,
-};
-
-const getPaymentsSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getPayments",
-  initialState: initialState,
-  reducers: {
-    resetGetPayments: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.payments = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getPayments.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.payments = null;
-      })
-      .addCase(getPayments.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.payments = action.payload;
-      })
-      .addCase(getPayments.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.payments = null;
-      });
-  },
+  actionType: "Payments/GetPayments",
+  dataKey: "payments",
+  request: async (data) =>
+    (await api.get("Payments/GetPayments", { params: data })).data,
+  mapError: (err) => ({
+    message: err.message,
+    status: err?.response?.status,
+  }),
 });
 
-export const getPayments = createAsyncThunk(
-  "Payments/GetPayments",
-  async (data, { rejectWithValue }) => {
-    try {
-      const res = await api.get(`${baseURL}Payments/GetPayments`, {
-        params: data,
-      });
-
-      // console.log(res.data);
-      return res.data;
-    } catch (err) {
-      // console.log(err);
-      const errorMessage = err.message;
-      return rejectWithValue({
-        message: errorMessage,
-        status: err?.response?.status,
-      });
-    }
-  }
-);
-
-export const { resetGetPayments } = getPaymentsSlice.actions;
-export default getPaymentsSlice.reducer;
+export const getPayments = thunk;
+export const { reset: resetGetPayments } = actions;
+export default reducer;

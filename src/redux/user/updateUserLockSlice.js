@@ -1,65 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: null,
-  data: null,
-};
-
-const updateUserLockSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "updateUserLock",
-  initialState: initialState,
-  reducers: {
-    resetUpdateUserLock: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(updateUserLock.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-        state.data = null;
-      })
-      .addCase(updateUserLock.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.data = action.payload;
-      })
-      .addCase(updateUserLock.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.data = null;
-      });
+  actionType: "Users/UpdateUserLock",
+  request: async (data) => {
+    // Backend binds UpdateUserLockDTO from body only — no query params.
+    const res = await api.put("Users/UpdateUserLock", { ...data });
+    return res.data;
   },
 });
 
-export const updateUserLock = createAsyncThunk(
-  "Users/UpdateUserLock",
-  async (data, { rejectWithValue }) => {
-    try {
-      // Backend binds UpdateUserLockDTO from body only — no query params.
-      const res = await api.put(`${baseURL}Users/UpdateUserLock`, { ...data });
-
-      // console.log(res.data);
-      return res.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetUpdateUserLock } = updateUserLockSlice.actions;
-export default updateUserLockSlice.reducer;
+export const updateUserLock = thunk;
+export const { reset: resetUpdateUserLock } = actions;
+export default reducer;

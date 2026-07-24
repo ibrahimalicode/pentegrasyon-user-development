@@ -1,69 +1,23 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  data: null,
-};
-
-const updateCourierSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "updateCourier",
-  initialState: initialState,
-  reducers: {
-    resetUpdateCourier: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(updateCourier.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.data = null;
-      })
-      .addCase(updateCourier.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.data = action.payload;
-      })
-      .addCase(updateCourier.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.data = null;
-      });
+  actionType: "Couriers/UpdateCourier",
+  request: async (data) => {
+    // Backend binds UpdateCourierDTO from body; only courierId binds from query.
+    const res = await api.put(
+      "Couriers/UpdateCourier",
+      { ...data },
+      { params: { courierId: data.courierId } }
+    );
+
+    return res.data.data;
   },
 });
 
-export const updateCourier = createAsyncThunk(
-  "Couriers/UpdateCourier",
-  async (data, { rejectWithValue }) => {
-    try {
-      // Backend binds UpdateCourierDTO from body; only courierId binds from query.
-      const res = await api.put(
-        `${baseURL}Couriers/UpdateCourier`,
-        { ...data },
-        { params: { courierId: data.courierId } }
-      );
-
-      // console.log(res.data);
-      return res.data.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetUpdateCourier } = updateCourierSlice.actions;
-export default updateCourierSlice.reducer;
+export const updateCourier = thunk;
+export const { reset: resetUpdateCourier } = actions;
+export default reducer;

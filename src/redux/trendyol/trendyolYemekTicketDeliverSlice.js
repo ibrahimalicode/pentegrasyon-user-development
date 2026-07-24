@@ -1,72 +1,22 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: null,
-  data: null,
-};
-
-const trendyolYemekTicketDeliverSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "trendyolYemekTicketDeliver",
-  initialState: initialState,
-  reducers: {
-    resetTrendyolYemekTicketDeliver: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
+  actionType: "Trendyol/TicketDeliver",
+  request: async (data) => {
+    // backend binds these POSTs entirely from query; body stays empty
+    const res = await api.post("Trendyol/TicketDeliver", {}, {
+      params: { ...data },
+    });
+    return res.data;
   },
-  extraReducers: (build) => {
-    build
-      .addCase(trendyolYemekTicketDeliver.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-        state.data = null;
-      })
-      .addCase(trendyolYemekTicketDeliver.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.data = action.payload;
-      })
-      .addCase(trendyolYemekTicketDeliver.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = { ...action.payload, ticketId: action.meta.arg.ticketId };
-        state.data = null;
-      });
-  },
+  // orders UI shows the failure on the right row via error.ticketId
+  mapRejected: (payload, arg) => ({ ...payload, ticketId: arg.ticketId }),
 });
 
-export const trendyolYemekTicketDeliver = createAsyncThunk(
-  "Trendyol/TicketDeliver",
-  async (data, { rejectWithValue }) => {
-    try {
-      const res = await api.post(
-        `${baseURL}Trendyol/TicketDeliver`,
-        {},
-        { params: { ...data } },
-      );
-
-      // console.log(res);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
-    }
-  },
-);
-
-export const { resetTrendyolYemekTicketDeliver } =
-  trendyolYemekTicketDeliverSlice.actions;
-export default trendyolYemekTicketDeliverSlice.reducer;
+export const trendyolYemekTicketDeliver = thunk;
+export const { reset: resetTrendyolYemekTicketDeliver } = actions;
+export default reducer;

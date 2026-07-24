@@ -163,7 +163,48 @@ of sidebar sections, dashboard charts still render.
 
 ---
 
-## Phase 3 — Redux standardization (the 127-slice problem)
+## Phase 3 — Redux standardization ✅ DONE 2026-07-24
+
+> 97 of 122 slices migrated to `createApiSlice` (net −4,700 lines). Factory ported from
+> admin with two deliberate extensions: default rejected payload always carries BOTH
+> `message` and `message_TR` (components here read either), and an optional
+> `mapRejected(payload, arg)` for the 16 ticket-action slices that stamp `ticketId` onto
+> errors. loadingMiddleware replaced by matcher counting in loadingSlice; 401 clears auth
+> and redirects once (skips when already on /login).
+>
+> **25 deliberately preserved** (non-conforming; reasons in file-level detail): auth
+> login/verifyCode/userVerification (localStorage writes); updateLicenseDateSlice
+> (two thunks); the 4 bank/online pay slices (non-template reducers); 6 slices with
+> data-only resets (getCities, getLocation, getKDVParameters, getSMSParameters,
+> getCouriers, getLicenses, getRestaurants, getRestaurant, getStocks); 5 no-data-field
+> delete slices; getDistricts/getNeighs (store `action.error`); getUserAddress
+> (missing-return bug would change behavior).
+>
+> **Latent pre-existing bugs surfaced (preserved, not fixed — bugfix-pass candidates):**
+> - `getUserAddressSlice`: missing `return` before `rejectWithValue` in 4 catch branches —
+>   geolocation failures fulfill with `undefined`.
+> - `getDistricts`/`getNeighs`: rejected stores `action.error`, discarding the payload.
+> - `yemekSepeti`/`trendyol` UpdateRestaurantStatus: error gate checks
+>   `err?.response?.data?.data` (extra `.data`) so most backend errors show generic text.
+> - `migrosYemekGetTicketCancelOptions`: triple unwrap `res.data.data.data`.
+> - `addByOnlinePay`/`extendByOnlinePay`: `throw new Error(object)` → "[object Object]".
+> - `getStocksSlice`: initialState declares `licenses` but handlers write `state.stocks`.
+> - Action-type/endpoint mismatches preserved verbatim: `Users/addUserInvoice` →
+>   `Invoices/AddUserInvoiceAddress` (and update twin); `getOrderStatistics` →
+>   `Statistics/GetTicketStatistics`; `Tickets/UpdateOrderCourier` →
+>   `Tickets/UpdateTicketCourier`; garbled `"Tickets/GetTicGetTicket...ket"` compensation
+>   type; migros informations types prefixed `Licenses/`.
+> - `sendEmailUserLockPasswordReset` stores its data under `smsParameters` (copy-paste).
+> - Body+query duplication remains on addCourier, updateCourierLoginCode,
+>   updateOrderCourier, updateTicketAutomationVariable (endpoints not in the backend
+>   binding table — ask backend before stripping).
+> - `getCourierById` stored a phantom `resetGetCourierByIdState` export (destructured
+>   `undefined`, zero importers — dropped during migration) and keeps the courier under
+>   state key `ticket`.
+>
+> Verified: build green, lint 0 errors (337 warnings), store hydrates with all 25 keys and
+> historical sub-keys in dev, login page console clean. Runtime CRUD flows need an
+> authenticated click-through (per-feature list/add/edit/delete) as final acceptance.
 
 All 127 slices are hand-copied variants of one 70–100 line template with drift
 (`error: false` vs `null`, `throw` vs `rejectWithValue`, redundant `${baseURL}` prefixes —

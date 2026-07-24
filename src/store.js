@@ -23,7 +23,6 @@ import smsSlice from "./redux/sms";
 import emailSlice from "./redux/email";
 import marketplaceRestaurantsSlice from "./redux/marketplaceRestaurants";
 import loadingSlice from "./redux/loadingSlice";
-import loadingMiddleware from "@/middlewares/loadingMiddleware";
 import stocksSlice from "./redux/stocks";
 import trendyolYemekSlice from "./redux/trendyol";
 import logsSlice from "./redux/activityLogs";
@@ -56,8 +55,6 @@ const store = configureStore({
     stocks: stocksSlice,
     logs: logsSlice,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(loadingMiddleware),
 });
 
 export default store;

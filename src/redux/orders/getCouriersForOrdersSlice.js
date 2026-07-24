@@ -1,96 +1,50 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  orders: null,
-};
-
-const getCouriersForOrdersSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getCouriersForOrders",
-  initialState: initialState,
-  reducers: {
-    resetGetCouriersForOrders: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.orders = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getCouriersForOrders.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.orders = null;
+  actionType: "Tickets/GetCouriersForTickets",
+  dataKey: "orders",
+  request: async (orders) => {
+    const withCourier = orders.filter(
+      (O) =>
+        O.courierTypeId === 0 &&
+        O.courierId &&
+        O.courierId !== "00000000-0000-0000-0000-000000000000"
+    );
+
+    const enriched = await Promise.all(
+      withCourier.map(async (O) => {
+        try {
+          const res = await api.get("Couriers/GetCourierById", {
+            params: { courierId: O.courierId },
+          });
+
+          return {
+            ...O,
+            courier: {
+              ...O?.courier,
+              ...res.data?.data, // adjust based on actual response structure
+            },
+          };
+        } catch (error) {
+          console.error(`Failed to fetch courier for ID: ${O.courierId}`, error);
+          return O; // fallback to original
+        }
       })
-      .addCase(getCouriersForOrders.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.orders = action.payload;
-      })
-      .addCase(getCouriersForOrders.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.orders = null;
-      });
+    );
+
+    const updatedOrders = orders.map((order) => {
+      const match = enriched.find((e) => e.id === order.id);
+      return match || order;
+    });
+
+    return updatedOrders;
   },
 });
 
-export const getCouriersForOrders = createAsyncThunk(
-  "Tickets/GetCouriersForTickets",
-  async (orders, { rejectWithValue }) => {
-    try {
-      const withCourier = orders.filter(
-        (O) =>
-          O.courierTypeId === 0 &&
-          O.courierId &&
-          O.courierId !== "00000000-0000-0000-0000-000000000000"
-      );
-
-      const enriched = await Promise.all(
-        withCourier.map(async (O) => {
-          try {
-            const res = await api.get(`${baseURL}Couriers/GetCourierById`, {
-              params: { courierId: O.courierId },
-            });
-
-            return {
-              ...O,
-              courier: {
-                ...O?.courier,
-                ...res.data?.data, // adjust based on actual response structure
-              },
-            };
-          } catch (error) {
-            console.error(
-              `Failed to fetch courier for ID: ${O.courierId}`,
-              error
-            );
-            return O; // fallback to original
-          }
-        })
-      );
-
-      const updatedOrders = orders.map((order) => {
-        const match = enriched.find((e) => e.id === order.id);
-        return match || order;
-      });
-
-      return updatedOrders;
-    } catch (err) {
-      return rejectWithValue({ message: err.message });
-    }
-  }
-);
-
-export const { resetGetCouriersForOrders } = getCouriersForOrdersSlice.actions;
-export default getCouriersForOrdersSlice.reducer;
+export const getCouriersForOrders = thunk;
+export const { reset: resetGetCouriersForOrders } = actions;
+export default reducer;

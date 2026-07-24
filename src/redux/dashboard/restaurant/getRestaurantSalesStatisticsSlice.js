@@ -1,69 +1,22 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../../api";
+import { createApiSlice } from "../../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  data: null,
-};
-
-const getRestaurantSalesStatisticsSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getRestaurantSalesStatistics",
-  initialState: initialState,
-  reducers: {
-    resetGetRestaurantSalesStatistics: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getRestaurantSalesStatistics.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.data = null;
-      })
-      .addCase(getRestaurantSalesStatistics.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.data = action.payload;
-      })
-      .addCase(getRestaurantSalesStatistics.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.data = null;
-      });
+  actionType: "Statistics/getRestaurantSalesStatistics",
+  request: async () =>
+    (await api.get("Statistics/getRestaurantSalesStatistics")).data.data,
+  mapError: (err) => {
+    console.log(err);
+    if (err?.response?.data) {
+      return err.response.data;
+    }
+    return { message_TR: err.message };
   },
 });
 
-export const getRestaurantSalesStatistics = createAsyncThunk(
-  "Statistics/getRestaurantSalesStatistics",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get(
-        `${baseURL}Statistics/getRestaurantSalesStatistics`
-      );
-
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
-    }
-  }
-);
-
-export const { resetGetRestaurantSalesStatistics } =
-  getRestaurantSalesStatisticsSlice.actions;
-export default getRestaurantSalesStatisticsSlice.reducer;
+export const getRestaurantSalesStatistics = thunk;
+export const { reset: resetGetRestaurantSalesStatistics } = actions;
+export default reducer;

@@ -1,68 +1,20 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  services: null,
-};
-
-const getAvailableCourierServicesSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getAvailableCourierServices",
-  initialState: initialState,
-  reducers: {
-    resetGetAvailableCourierServices: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.services = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getAvailableCourierServices.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.services = null;
+  actionType: "Couriers/GetAvailableCourierServices",
+  dataKey: "services",
+  request: async (data) =>
+    (
+      await api.get("Couriers/GetAvailableCourierServices", {
+        params: { ...data },
       })
-      .addCase(getAvailableCourierServices.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.services = action.payload;
-      })
-      .addCase(getAvailableCourierServices.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.services = null;
-      });
-  },
+    ).data.data,
 });
 
-export const getAvailableCourierServices = createAsyncThunk(
-  "Couriers/GetAvailableCourierServices",
-  async (data, { rejectWithValue }) => {
-    try {
-      const res = await api.get(
-        `${baseURL}Couriers/GetAvailableCourierServices`,
-        { params: { ...data } }
-      );
-
-      // console.log(res.data);
-      return res.data.data;
-    } catch (err) {
-      const errorMessage = err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetGetAvailableCourierServices } =
-  getAvailableCourierServicesSlice.actions;
-export default getAvailableCourierServicesSlice.reducer;
+export const getAvailableCourierServices = thunk;
+export const { reset: resetGetAvailableCourierServices } = actions;
+export default reducer;

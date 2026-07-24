@@ -61,8 +61,11 @@ axiosPrivate.interceptors.response.use(
 
     if (error.response?.status === 401) {
       clearAuth();
-      errorMessage = "Yetkili Değılziniz.";
-      window.location.href = "/login";
+      errorMessage = "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.";
+      // redirect once; parallel 401s and the login page itself don't re-trigger it
+      if (!window.location.pathname.startsWith("/login")) {
+        window.location.replace("/login");
+      }
     }
 
     if (error.response?.status === 403) {

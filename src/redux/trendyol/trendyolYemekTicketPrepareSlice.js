@@ -1,72 +1,24 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: null,
-  data: null,
-};
-
-const trendyolYemekTicketPrepareSlice = createSlice({
+  // Trendyol names this transition TicketShipped (TicketPrepared also exists
+  // backend-side; both are valid — probe-verified 2026-07-24).
+const { thunk, reducer, actions } = createApiSlice({
   name: "trendyolYemekTicketPrepare",
-  initialState: initialState,
-  reducers: {
-    resetTrendyolYemekTicketPrepare: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
+  actionType: "Trendyol/TicketShipped",
+  request: async (data) => {
+    // backend binds these POSTs entirely from query; body stays empty
+    const res = await api.post("Trendyol/TicketShipped", {}, {
+      params: { ...data },
+    });
+    return res.data;
   },
-  extraReducers: (build) => {
-    build
-      .addCase(trendyolYemekTicketPrepare.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-        state.data = null;
-      })
-      .addCase(trendyolYemekTicketPrepare.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.data = action.payload;
-      })
-      .addCase(trendyolYemekTicketPrepare.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = { ...action.payload, ticketId: action.meta.arg.ticketId };
-        state.data = null;
-      });
-  },
+  // orders UI shows the failure on the right row via error.ticketId
+  mapRejected: (payload, arg) => ({ ...payload, ticketId: arg.ticketId }),
 });
 
-export const trendyolYemekTicketPrepare = createAsyncThunk(
-  "Trendyol/TicketShipped",
-  async (data, { rejectWithValue }) => {
-    try {
-      const res = await api.post(
-        `${baseURL}Trendyol/TicketShipped`,
-        {},
-        { params: { ...data } },
-      );
-
-      // console.log(res);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
-    }
-  },
-);
-
-export const { resetTrendyolYemekTicketPrepare } =
-  trendyolYemekTicketPrepareSlice.actions;
-export default trendyolYemekTicketPrepareSlice.reducer;
+export const trendyolYemekTicketPrepare = thunk;
+export const { reset: resetTrendyolYemekTicketPrepare } = actions;
+export default reducer;

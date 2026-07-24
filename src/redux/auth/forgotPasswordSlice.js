@@ -1,65 +1,21 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api";
+import { createApiSlice } from "../createApiSlice";
 
-const baseURL = import.meta.env.VITE_BASE_URL;
-
-const initialState = {
-  loading: false,
-  success: false,
-  error: null,
-};
-
-const forgotPasswordSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "forgotPassword",
-  initialState: initialState,
-  reducers: {
-    resetForgotPassword: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(forgotPassword.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-        state.sessionId = null;
-      })
-      .addCase(forgotPassword.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-      })
-      .addCase(forgotPassword.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-      });
+  actionType: "Auth/forgotPassword",
+  request: async ({ toAddress, isEmail }) => {
+    const API = isEmail
+      ? "Email/SendEmailPasswordReset"
+      : "SMS/SendSMSPasswordReset";
+    // POST since backend PR #170 — the recipient no longer travels in the URL.
+    const res = await api.post(API, {
+      [isEmail ? "toAddress" : "phoneNumber"]: toAddress,
+    });
+    return res.data;
   },
 });
 
-export const forgotPassword = createAsyncThunk(
-  "Auth/forgotPassword",
-  async ({ toAddress, isEmail }, { rejectWithValue }) => {
-    const API = isEmail
-      ? `${baseURL}Email/SendEmailPasswordReset`
-      : `${baseURL}SMS/SendSMSPasswordReset`;
-    try {
-      // POST since backend PR #170 — the recipient no longer travels in the URL.
-      const res = await api.post(API, {
-        [isEmail ? "toAddress" : "phoneNumber"]: toAddress,
-      });
-      // console.log(res.data);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      const errorMessage = err.response.data.message_TR || err.message;
-      return rejectWithValue({ message: errorMessage });
-    }
-  }
-);
-
-export const { resetForgotPassword } = forgotPasswordSlice.actions;
-export default forgotPasswordSlice.reducer;
+export const forgotPassword = thunk;
+export const { resetState: resetForgotPassword } = actions;
+export default reducer;

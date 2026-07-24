@@ -1,73 +1,24 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../api";
+import { createApiSlice } from "../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: null,
-  data: null,
-};
-
-const yemekSepetiTicketCancelSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "yemekSepetiTicketCancel",
-  initialState: initialState,
-  reducers: {
-    resetYemekSepetiTicketCancel: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
+  actionType: "YemekSepeti/TicketCancel",
+  request: async (data) => {
+    console.log(data);
+    // cancel additionally sends the cancel-reason DTO in the body;
+    // backend still binds ticketId/onlyInDatabase from query
+    const res = await api.post("YemekSepeti/TicketCancel", { ...data }, {
+      params: { ...data },
+    });
+    return res.data;
   },
-  extraReducers: (build) => {
-    build
-      .addCase(yemekSepetiTicketCancel.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-        state.data = null;
-      })
-      .addCase(yemekSepetiTicketCancel.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = null;
-        state.data = action.payload;
-      })
-      .addCase(yemekSepetiTicketCancel.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = { ...action.payload, ticketId: action.meta.arg.ticketId };
-        state.data = null;
-      });
-  },
+  // orders UI shows the failure on the right row via error.ticketId
+  mapRejected: (payload, arg) => ({ ...payload, ticketId: arg.ticketId }),
 });
 
-export const yemekSepetiTicketCancel = createAsyncThunk(
-  "YemekSepeti/TicketCancel",
-  async (data, { rejectWithValue }) => {
-    try {
-      console.log(data);
-      const res = await api.post(
-        `${baseURL}YemekSepeti/TicketCancel`,
-        { ...data },
-        { params: { ...data } }
-      );
-
-      // console.log(res);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
-    }
-  }
-);
-
-export const { resetYemekSepetiTicketCancel } =
-  yemekSepetiTicketCancelSlice.actions;
-export default yemekSepetiTicketCancelSlice.reducer;
+export const yemekSepetiTicketCancel = thunk;
+export const { reset: resetYemekSepetiTicketCancel } = actions;
+export default reducer;

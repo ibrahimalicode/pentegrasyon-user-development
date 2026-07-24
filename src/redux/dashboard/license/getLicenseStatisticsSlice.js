@@ -1,68 +1,22 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { privateApi } from "../../api";
+import { createApiSlice } from "../../createApiSlice";
 
 const api = privateApi();
-const baseURL = import.meta.env.VITE_BASE_URL;
 
-const initialState = {
-  loading: false,
-  success: false,
-  error: false,
-  data: null,
-};
-
-const getLicenseStatisticsSlice = createSlice({
+const { thunk, reducer, actions } = createApiSlice({
   name: "getLicenseStatistics",
-  initialState: initialState,
-  reducers: {
-    resetGetLicenseStatistics: (state) => {
-      state.loading = false;
-      state.success = false;
-      state.error = null;
-      state.data = null;
-    },
-  },
-  extraReducers: (build) => {
-    build
-      .addCase(getLicenseStatistics.pending, (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = false;
-        state.data = null;
-      })
-      .addCase(getLicenseStatistics.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
-        state.data = action.payload;
-      })
-      .addCase(getLicenseStatistics.rejected, (state, action) => {
-        state.loading = false;
-        state.success = false;
-        state.error = action.payload;
-        state.data = null;
-      });
+  actionType: "Statistics/GetLicenseStatistics",
+  request: async () =>
+    (await api.get("Statistics/GetLicenseStatistics")).data.data,
+  mapError: (err) => {
+    console.log(err);
+    if (err?.response?.data) {
+      return err.response.data;
+    }
+    return { message_TR: err.message };
   },
 });
 
-export const getLicenseStatistics = createAsyncThunk(
-  "Statistics/GetLicenseStatistics",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get(
-        `${baseURL}Statistics/GetLicenseStatistics`
-      );
-
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-      if (err?.response?.data) {
-        return rejectWithValue(err.response.data);
-      }
-      return rejectWithValue({ message_TR: err.message });
-    }
-  }
-);
-
-export const { resetGetLicenseStatistics } = getLicenseStatisticsSlice.actions;
-export default getLicenseStatisticsSlice.reducer;
+export const getLicenseStatistics = thunk;
+export const { reset: resetGetLicenseStatistics } = actions;
+export default reducer;

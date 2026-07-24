@@ -15,7 +15,7 @@ const sendEmailUserLockPasswordResetSlice = createSlice({
   name: "sendEmailUserLockPasswordReset",
   initialState: initialState,
   reducers: {
-    restSendEmailUserLockPasswordReset: (state) => {
+    resetSendEmailUserLockPasswordReset: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -49,7 +49,9 @@ export const sendEmailUserLockPasswordReset = createAsyncThunk(
   "GeneralVariables/sendEmailUserLockPasswordReset",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(
+      // POST since backend PR #170 — side-effectful GETs were re-fireable by
+      // prefetchers/retries. Identity comes from the JWT; no body needed.
+      const res = await api.post(
         `${baseURL}Email/sendEmailUserLockPasswordReset`
       );
 
@@ -61,6 +63,6 @@ export const sendEmailUserLockPasswordReset = createAsyncThunk(
   }
 );
 
-export const { restSendEmailUserLockPasswordReset } =
+export const { resetSendEmailUserLockPasswordReset } =
   sendEmailUserLockPasswordResetSlice.actions;
 export default sendEmailUserLockPasswordResetSlice.reducer;

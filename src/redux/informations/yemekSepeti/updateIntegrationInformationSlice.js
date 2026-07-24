@@ -52,7 +52,14 @@ export const updateIntegrationInformation = createAsyncThunk(
       const res = await api.put(
         `${baseURL}IntegrationInformations/UpdateYemekSepetiIntegrationInformation`,
         { ...data },
-        { params: data }
+        // Backend binds the DTO from body; only the record id binds from query.
+        // Sending the full DTO as query leaked API keys into server logs.
+        {
+          params: {
+            yemekSepetiIntegrationInformationId:
+              data.yemekSepetiIntegrationInformationId,
+          },
+        }
       );
 
       // console.log(res);

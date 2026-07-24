@@ -2,7 +2,6 @@ import { combineReducers } from "@reduxjs/toolkit";
 
 // Slices
 import getOrdersSlice from "./getOrdersSlice";
-import updateTicketStatusSlice from "./updateTicketStatusSlice";
 import updateTicketAutomationVariableSlice from "./updateTicketAutomationVariableSlice";
 import updateOrderCourierSlice from "./updateOrderCourierSlice";
 import getOrderCompensationSlice from "./getOrderCompensationSlice";
@@ -14,7 +13,6 @@ import getCouriersForOrdersSlice from "./getCouriersForOrdersSlice";
 const ordersSlice = combineReducers({
   get: getOrdersSlice,
   getByID: getTicketByIdSlice,
-  update: updateTicketStatusSlice,
   updateCourier: updateOrderCourierSlice,
   getWithCouriers: getCouriersForOrdersSlice,
   getAutomationVariables: getAutomationVariablesSlice,

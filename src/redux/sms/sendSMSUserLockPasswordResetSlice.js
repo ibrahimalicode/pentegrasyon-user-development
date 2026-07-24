@@ -15,7 +15,7 @@ const sendSMSUserLockPasswordResetSlice = createSlice({
   name: "sendSMSUserLockPasswordReset",
   initialState: initialState,
   reducers: {
-    restSendSMSUserLockPasswordReset: (state) => {
+    resetSendSMSUserLockPasswordReset: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -49,7 +49,9 @@ export const sendSMSUserLockPasswordReset = createAsyncThunk(
   "GeneralVariables/SendSMSUserLockPasswordReset",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`${baseURL}SMS/SendSMSUserLockPasswordReset`);
+      // POST since backend PR #170 — side-effectful GETs were re-fireable by
+      // prefetchers/retries. Identity comes from the JWT; no body needed.
+      const res = await api.post(`${baseURL}SMS/SendSMSUserLockPasswordReset`);
 
       return res.data.data;
     } catch (err) {
@@ -59,6 +61,6 @@ export const sendSMSUserLockPasswordReset = createAsyncThunk(
   }
 );
 
-export const { restSendSMSUserLockPasswordReset } =
+export const { resetSendSMSUserLockPasswordReset } =
   sendSMSUserLockPasswordResetSlice.actions;
 export default sendSMSUserLockPasswordResetSlice.reducer;

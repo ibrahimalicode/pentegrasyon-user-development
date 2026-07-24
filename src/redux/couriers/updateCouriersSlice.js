@@ -15,7 +15,7 @@ const updateCourierSlice = createSlice({
   name: "updateCourier",
   initialState: initialState,
   reducers: {
-    resetupdateCourier: (state) => {
+    resetUpdateCourier: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -49,15 +49,11 @@ export const updateCourier = createAsyncThunk(
   "Couriers/UpdateCourier",
   async (data, { rejectWithValue }) => {
     try {
-      console.log(data);
+      // Backend binds UpdateCourierDTO from body; only courierId binds from query.
       const res = await api.put(
         `${baseURL}Couriers/UpdateCourier`,
         { ...data },
-        {
-          params: {
-            ...data,
-          },
-        }
+        { params: { courierId: data.courierId } }
       );
 
       // console.log(res.data);
@@ -69,5 +65,5 @@ export const updateCourier = createAsyncThunk(
   }
 );
 
-export const { resetupdateCourier } = updateCourierSlice.actions;
+export const { resetUpdateCourier } = updateCourierSlice.actions;
 export default updateCourierSlice.reducer;

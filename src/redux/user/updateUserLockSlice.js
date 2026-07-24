@@ -15,7 +15,7 @@ const updateUserLockSlice = createSlice({
   name: "updateUserLock",
   initialState: initialState,
   reducers: {
-    resetupdateUserLock: (state) => {
+    resetUpdateUserLock: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -49,11 +49,8 @@ export const updateUserLock = createAsyncThunk(
   "Users/UpdateUserLock",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.put(
-        `${baseURL}Users/UpdateUserLock`,
-        { ...data },
-        { params: data }
-      );
+      // Backend binds UpdateUserLockDTO from body only — no query params.
+      const res = await api.put(`${baseURL}Users/UpdateUserLock`, { ...data });
 
       // console.log(res.data);
       return res.data;
@@ -64,5 +61,5 @@ export const updateUserLock = createAsyncThunk(
   }
 );
 
-export const { resetupdateUserLock } = updateUserLockSlice.actions;
+export const { resetUpdateUserLock } = updateUserLockSlice.actions;
 export default updateUserLockSlice.reducer;

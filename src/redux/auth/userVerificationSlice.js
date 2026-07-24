@@ -48,11 +48,11 @@ export const sendUserVerificationCode = createAsyncThunk(
       ? `${baseURL}Email/SendEmailUserVerify`
       : `${baseURL}SMS/SendSMSUserVerify`;
     try {
-      const res = await api.get(API, {
-        params: {
-          phoneNumber,
-        },
-      });
+      // SMS/SendSMSUserVerify accepts POST since backend PR #170; the email
+      // variant was not converted (and no caller passes isEmail today).
+      const res = isEmail
+        ? await api.get(API, { params: { phoneNumber } })
+        : await api.post(API, { phoneNumber });
 
       let data;
       if (res.data?.data?.token) {

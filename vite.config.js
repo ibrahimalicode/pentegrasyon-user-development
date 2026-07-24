@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   server: {
     host: "0.0.0.0",
     port: 9006,
@@ -13,4 +13,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-});
+  // Strip console/debugger from production bundles only; dev keeps logging.
+  esbuild: command === "build" ? { drop: ["console", "debugger"] } : undefined,
+}));

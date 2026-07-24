@@ -52,7 +52,13 @@ export const updateIntegrationInformation = createAsyncThunk(
       const res = await api.put(
         `${baseURL}IntegrationInformations/UpdatePaketNetIntegrationInformation`,
         { ...data },
-        { params: data }
+        // Backend binds the DTO from body; only the record id binds from query.
+        {
+          params: {
+            PaketNetIntegrationInformationId:
+              data.PaketNetIntegrationInformationId,
+          },
+        }
       );
 
       // console.log(res);

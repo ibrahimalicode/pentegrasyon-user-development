@@ -47,10 +47,9 @@ export const forgotPassword = createAsyncThunk(
       ? `${baseURL}Email/SendEmailPasswordReset`
       : `${baseURL}SMS/SendSMSPasswordReset`;
     try {
-      const res = await api.get(API, {
-        params: {
-          [isEmail ? "toAddress" : "phoneNumber"]: toAddress,
-        },
+      // POST since backend PR #170 — the recipient no longer travels in the URL.
+      const res = await api.post(API, {
+        [isEmail ? "toAddress" : "phoneNumber"]: toAddress,
       });
       // console.log(res.data);
       return res.data;

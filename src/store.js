@@ -23,7 +23,7 @@ import smsSlice from "./redux/sms";
 import emailSlice from "./redux/email";
 import marketplaceRestaurantsSlice from "./redux/marketplaceRestaurants";
 import loadingSlice from "./redux/loadingSlice";
-import loadingMiddleware from "../middlewares/loadingMiddleware";
+import loadingMiddleware from "@/middlewares/loadingMiddleware";
 import stocksSlice from "./redux/stocks";
 import trendyolYemekSlice from "./redux/trendyol";
 import logsSlice from "./redux/activityLogs";

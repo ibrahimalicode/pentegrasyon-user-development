@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
-import CustomGeneralLoader from "../components/common/customGeneralLloader";
+import CustomGeneralLoader from "../components/common/customGeneralLoader";
 
 const PopupContext = createContext();
 

@@ -17,7 +17,7 @@ const getSMSParametersSlice = createSlice({
   name: "getSMSParameters",
   initialState: initialState,
   reducers: {
-    resetgetSMSParametersState: (state) => {
+    resetGetSMSParametersState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -63,6 +63,6 @@ export const getSMSParameters = createAsyncThunk(
   }
 );
 
-export const { resetgetSMSParametersState, restgetSMSParameters } =
+export const { resetGetSMSParametersState, restgetSMSParameters } =
   getSMSParametersSlice.actions;
 export default getSMSParametersSlice.reducer;

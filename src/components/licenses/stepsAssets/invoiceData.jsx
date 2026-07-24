@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //HOOKS
-import { useEditUserInvoice } from "../../../../hooks/useEditUserInvoice";
+import { useEditUserInvoice } from "@/hooks/useEditUserInvoice";
 
 //COMP
 import EditUserInvoice from "../../invoice/editUserInvoice";

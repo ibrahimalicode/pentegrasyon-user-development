@@ -15,7 +15,7 @@ const updateOrderCourierSlice = createSlice({
   name: "updateOrderCourier",
   initialState: initialState,
   reducers: {
-    resetupdateOrderCourier: (state) => {
+    resetUpdateOrderCourier: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -68,5 +68,5 @@ export const updateOrderCourier = createAsyncThunk(
   }
 );
 
-export const { resetupdateOrderCourier } = updateOrderCourierSlice.actions;
+export const { resetUpdateOrderCourier } = updateOrderCourierSlice.actions;
 export default updateOrderCourierSlice.reducer;

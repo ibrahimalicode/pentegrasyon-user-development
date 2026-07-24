@@ -15,7 +15,7 @@ const getExchangeParametersSlice = createSlice({
   name: "getExchangeParameter",
   initialState: initialState,
   reducers: {
-    resetgetExchangeParameter: (state) => {
+    resetGetExchangeParameter: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -61,5 +61,5 @@ export const getExchangeParameter = createAsyncThunk(
   }
 );
 
-export const { resetgetExchangeParameter } = getExchangeParametersSlice.actions;
+export const { resetGetExchangeParameter } = getExchangeParametersSlice.actions;
 export default getExchangeParametersSlice.reducer;

@@ -15,7 +15,7 @@ const yemekSepetiTicketPrepareSlice = createSlice({
   name: "yemekSepetiTicketPrepare",
   initialState: initialState,
   reducers: {
-    resetyemekSepetiTicketPrepare: (state) => {
+    resetYemekSepetiTicketPrepare: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -67,6 +67,6 @@ export const yemekSepetiTicketPrepare = createAsyncThunk(
   }
 );
 
-export const { resetyemekSepetiTicketPrepare } =
+export const { resetYemekSepetiTicketPrepare } =
   yemekSepetiTicketPrepareSlice.actions;
 export default yemekSepetiTicketPrepareSlice.reducer;

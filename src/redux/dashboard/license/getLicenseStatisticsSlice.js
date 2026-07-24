@@ -15,7 +15,7 @@ const getLicenseStatisticsSlice = createSlice({
   name: "getLicenseStatistics",
   initialState: initialState,
   reducers: {
-    resetgetLicenseStatistics: (state) => {
+    resetGetLicenseStatistics: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -64,5 +64,5 @@ export const getLicenseStatistics = createAsyncThunk(
   }
 );
 
-export const { resetgetLicenseStatistics } = getLicenseStatisticsSlice.actions;
+export const { resetGetLicenseStatistics } = getLicenseStatisticsSlice.actions;
 export default getLicenseStatisticsSlice.reducer;

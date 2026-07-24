@@ -7,7 +7,7 @@ import Button from "../../common/button";
 
 //UTILS
 import EditUserInvoiceById from "../../invoice/editUserInvoice";
-import { useEditUserInvoice } from "../../../../hooks/useEditUserInvoice";
+import { useEditUserInvoice } from "@/hooks/useEditUserInvoice";
 
 const EditUserInvoice = ({ user }) => {
   const dispatcher = useRef();

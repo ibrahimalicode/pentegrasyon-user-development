@@ -85,7 +85,6 @@ function DeleteRetaurantPopup({ restaurant, onSuccess }) {
         console.log(restaurantLicenses);
       }
       dispatch(resetGetRestaurantLicenses());
-    } else {
     }
   }, [restaurantLicensesSuccess, restaurantLicenses, dispatch]);
 

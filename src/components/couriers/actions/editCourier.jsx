@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 //REDUX
 
 import {
-  resetupdateCourier,
+  resetUpdateCourier,
   updateCourier,
 } from "../../../redux/couriers/updateCouriersSlice";
 import {
   generateLoginCode,
-  resetgenerateLoginCode,
+  resetGenerateLoginCode,
 } from "../../../redux/couriers/generateLoginCodeSlice";
 
 //CONTEXT
@@ -132,14 +132,14 @@ function EditCourierPopup({ onSuccess, courier }) {
     }
     if (error) {
       toast.dismiss(toastId.current);
-      dispatch(resetupdateCourier());
+      dispatch(resetUpdateCourier());
     }
     if (success) {
       toast.dismiss(toastId.current);
       onSuccess();
       closeForm();
       toast.success("Kurye başarıyla düzenlendi");
-      dispatch(resetupdateCourier());
+      dispatch(resetUpdateCourier());
     }
   }, [loading, success, error]);
 
@@ -153,7 +153,7 @@ function EditCourierPopup({ onSuccess, courier }) {
           loginCode: code,
         };
       });
-      dispatch(resetgenerateLoginCode());
+      dispatch(resetGenerateLoginCode());
     }
   }, [code]);
 

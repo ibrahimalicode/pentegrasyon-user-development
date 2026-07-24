@@ -12,7 +12,7 @@ import CustomCheckbox from "../../common/customCheckbox";
 
 //REDUX
 import {
-  resetupdateCourier,
+  resetUpdateCourier,
   updateCourier,
 } from "../../../redux/couriers/updateCouriersSlice";
 
@@ -76,7 +76,7 @@ function EditCourierIsActivesPopup({ onSuccess, courier }) {
     }
     if (error) {
       toast.dismiss(toastId.current);
-      dispatch(resetupdateCourier());
+      dispatch(resetUpdateCourier());
     }
     if (success) {
       toast.dismiss(toastId.current);
@@ -87,7 +87,7 @@ function EditCourierIsActivesPopup({ onSuccess, courier }) {
           courier.isActive ? "Pasifleştirildi" : "Aktifleştirildi"
         } 🥳🥳`
       );
-      dispatch(resetupdateCourier());
+      dispatch(resetUpdateCourier());
     }
   }, [loading, success, error]);
 

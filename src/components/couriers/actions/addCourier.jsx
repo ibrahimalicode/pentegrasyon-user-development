@@ -15,11 +15,11 @@ import CustomPhoneInput from "../../common/customPhoneInput";
 //REDUX
 import {
   addCourier,
-  resetaddCourier,
+  resetAddCourier,
 } from "../../../redux/couriers/addCourierSlice";
 import {
   generateLoginCode,
-  resetgenerateLoginCode,
+  resetGenerateLoginCode,
 } from "../../../redux/couriers/generateLoginCodeSlice";
 
 //UTILS
@@ -92,14 +92,14 @@ function AddCourierPopup({ onSuccess }) {
     }
     if (error) {
       toast.dismiss(toastId.current);
-      dispatch(resetaddCourier());
+      dispatch(resetAddCourier());
     }
     if (success) {
       toast.dismiss(toastId.current);
       onSuccess();
       closeForm();
       toast.success("Kurye başarıyla eklendi");
-      dispatch(resetaddCourier());
+      dispatch(resetAddCourier());
     }
   }, [loading, success, error]);
 
@@ -113,7 +113,7 @@ function AddCourierPopup({ onSuccess }) {
           loginCode: code,
         };
       });
-      dispatch(resetgenerateLoginCode());
+      dispatch(resetGenerateLoginCode());
     }
   }, [code]);
 

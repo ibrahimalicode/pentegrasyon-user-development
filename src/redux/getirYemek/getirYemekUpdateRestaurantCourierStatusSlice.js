@@ -15,7 +15,7 @@ const getirYemekUpdateRestaurantCourierStatusSlice = createSlice({
   name: "getirYemekUpdateRestaurantCourierStatus",
   initialState: initialState,
   reducers: {
-    resetgetirYemekUpdateRestaurantCourierStatus: (state) => {
+    resetGetirYemekUpdateRestaurantCourierStatus: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -73,6 +73,6 @@ export const getirYemekUpdateRestaurantCourierStatus = createAsyncThunk(
   }
 );
 
-export const { resetgetirYemekUpdateRestaurantCourierStatus } =
+export const { resetGetirYemekUpdateRestaurantCourierStatus } =
   getirYemekUpdateRestaurantCourierStatusSlice.actions;
 export default getirYemekUpdateRestaurantCourierStatusSlice.reducer;

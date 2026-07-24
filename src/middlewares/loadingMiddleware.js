@@ -1,4 +1,4 @@
-import { setIsLoading } from "../src/redux/loadingSlice";
+import { setIsLoading } from "@/redux/loadingSlice";
 
 let loadingCount = 0;
 

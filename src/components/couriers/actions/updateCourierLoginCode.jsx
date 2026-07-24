@@ -17,7 +17,7 @@ import {
 } from "../../../redux/couriers/updateCourierLoginCodeSlice";
 import {
   generateLoginCode,
-  resetgenerateLoginCode,
+  resetGenerateLoginCode,
 } from "../../../redux/couriers/generateLoginCodeSlice";
 
 const UpdateCourierLoginCode = ({ courier, onSuccess }) => {
@@ -92,7 +92,7 @@ function UpdateCourierLoginCodePopup({ courier, onSuccess }) {
           loginCode: code,
         };
       });
-      dispatch(resetgenerateLoginCode());
+      dispatch(resetGenerateLoginCode());
     }
   }, [code]);
 

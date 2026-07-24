@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from "react-datepicker";
 import tr from "date-fns/locale/tr"; // Import Turkish locale from date-fns
-//import { useTranslation } from "react-i18next";
 
 const CustomDatePicker = ({
   label,

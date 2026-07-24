@@ -20,7 +20,7 @@ import { useProtectPages } from "../../../context/ProtectPagesContext";
 //REDUX
 import {
   updateUserLock,
-  resetupdateUserLock,
+  resetUpdateUserLock,
 } from "../../../redux/user/updateUserLockSlice";
 
 const ProtectPage = () => {
@@ -101,14 +101,14 @@ const ProtectPage = () => {
           lock: !isLockedData?.lock,
         };
       });
-      dispatch(resetupdateUserLock());
+      dispatch(resetUpdateUserLock());
     } else if (success) {
       setPopupContent(null);
       toast.dismiss(toastId.current);
       toast.success("Başarıyla Güncelendi", { id: "safePages" });
       setProtectedPages(isLockedData);
       setProtectedPagesBefore(isLockedData);
-      dispatch(resetupdateUserLock());
+      dispatch(resetUpdateUserLock());
     }
   }, [loading, error, success]);
 

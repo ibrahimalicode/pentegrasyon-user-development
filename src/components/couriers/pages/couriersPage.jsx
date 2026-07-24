@@ -20,7 +20,7 @@ import { useFirestore } from "../../../context/FirestoreContext";
 // REDUX
 import {
   getCouriers,
-  resetgetCouriersState,
+  resetGetCouriersState,
 } from "../../../redux/couriers/getCouriersSlice";
 
 const CouriersPage = () => {
@@ -94,11 +94,11 @@ const CouriersPage = () => {
 
   // TOAST AND SET COURIERS
   useEffect(() => {
-    if (error) dispatch(resetgetCouriersState());
+    if (error) dispatch(resetGetCouriersState());
     if (success) {
       setCouriersData(couriers.data);
       setTotalItems(couriers.totalCount);
-      dispatch(resetgetCouriersState());
+      dispatch(resetGetCouriersState());
     }
   }, [success, error, couriers]);
 

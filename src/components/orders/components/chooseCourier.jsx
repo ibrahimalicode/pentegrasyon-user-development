@@ -22,11 +22,11 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 //REDUX
 import {
   updateOrderCourier,
-  resetupdateOrderCourier,
+  resetUpdateOrderCourier,
 } from "../../../redux/orders/updateOrderCourierSlice";
 import {
   getAvailableCouriers,
-  resetgetAvailableCouriers,
+  resetGetAvailableCouriers,
 } from "../../../redux/couriers/getAvailableCouriersSlice";
 import {
   getOrderCompensation,
@@ -118,11 +118,11 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
         ]);
       });
       setPopupContent(null);
-      dispatch(resetupdateOrderCourier());
+      dispatch(resetUpdateOrderCourier());
     }
     if (error) {
       toast.dismiss(toastId);
-      dispatch(resetupdateOrderCourier());
+      dispatch(resetUpdateOrderCourier());
     }
   }, [loading, error, success]);
 
@@ -161,7 +161,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
     }
     return () => {
       if (couriers) {
-        dispatch(resetgetAvailableCouriers());
+        dispatch(resetGetAvailableCouriers());
       }
     };
   }, [couriers]);

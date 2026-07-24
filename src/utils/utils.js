@@ -368,7 +368,10 @@ export function googleMap(lat, lng, setLat, setLng, boundaryCoords, zoom = 15) {
     const latitude = e.latLng.lat();
     const longitude = e.latLng.lng();
     //console.log(latitude, longitude);
-    if (true /* isPositionWithinBounds(latitude, longitude) */) {
+    // Bounds check deliberately disabled; swap back to
+    // isPositionWithinBounds(latitude, longitude) to re-enable the else branch.
+    const withinBounds = true;
+    if (withinBounds) {
       if (marker) {
         marker.setMap(null);
       }

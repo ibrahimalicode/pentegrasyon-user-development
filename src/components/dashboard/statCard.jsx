@@ -11,7 +11,7 @@ import {
 } from "../../redux/dashboard/restaurant/getRestaurantStatisticsSlice";
 import {
   getLicenseStatistics,
-  resetgetLicenseStatistics,
+  resetGetLicenseStatistics,
 } from "../../redux/dashboard/license/getLicenseStatisticsSlice";
 
 const StatCard = () => {
@@ -39,7 +39,7 @@ const StatCard = () => {
   }
 
   function resetStates() {
-    dispatch(resetgetLicenseStatistics());
+    dispatch(resetGetLicenseStatistics());
     dispatch(resetGetRestaurantStatistics());
   }
 

@@ -17,7 +17,7 @@ const getUserLockSlice = createSlice({
   name: "getUserLock",
   initialState: initialState,
   reducers: {
-    resetgetUserLock: (state) => {
+    resetGetUserLock: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -62,5 +62,5 @@ export const getUserLock = createAsyncThunk(
   }
 );
 
-export const { resetgetUserLock } = getUserLockSlice.actions;
+export const { resetGetUserLock } = getUserLockSlice.actions;
 export default getUserLockSlice.reducer;

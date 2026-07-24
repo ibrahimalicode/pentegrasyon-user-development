@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createContext, useContext, useEffect, useState } from "react";
 
 //REDUX
-import { resetgetUserLock } from "../redux/user/getUserLockSlice";
+import { resetGetUserLock } from "../redux/user/getUserLockSlice";
 
 const ProtectPagesContext = createContext();
 
@@ -21,12 +21,12 @@ export const ProtectPagesProvider = ({ children }) => {
   //SET, THE GET IS IN THE SIDEBAR COMPONENT
   useEffect(() => {
     if (error) {
-      dispatch(resetgetUserLock());
+      dispatch(resetGetUserLock());
     }
     if (success) {
       setProtectedPages(data);
       setProtectedPagesBefore(data);
-      dispatch(resetgetUserLock());
+      dispatch(resetGetUserLock());
     }
   }, [success, data, error]);
 

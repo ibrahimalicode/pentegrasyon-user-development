@@ -14,15 +14,15 @@ import {
 } from "../../../redux/yemekSepeti/yemekSepetiTicketVerifySlice";
 import {
   yemekSepetiTicketPrepare,
-  resetyemekSepetiTicketPrepare,
+  resetYemekSepetiTicketPrepare,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketPrepareSlice";
 import {
   yemekSepetiTicketDeliver,
-  resetyemekSepetiTicketDeliver,
+  resetYemekSepetiTicketDeliver,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketDeliverSlice";
 import {
   yemekSepetiTicketCancel,
-  resetyemekSepetiTicketCancel,
+  resetYemekSepetiTicketCancel,
 } from "../../../redux/yemekSepeti/yemekSepetiTicketCancelSlice";
 import toastStatusError from "../components/toastOrderStatError";
 
@@ -202,12 +202,12 @@ export const useYemekSepetiOrderActions = ({
           toastStatusError(order.approvalDate);
         }
       }
-      dispatch(resetyemekSepetiTicketPrepare());
+      dispatch(resetYemekSepetiTicketPrepare());
     }
     if (prepareSuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetyemekSepetiTicketPrepare());
+      dispatch(resetYemekSepetiTicketPrepare());
     }
   }, [prepareLoading, prepareSuccess, prepareErr]);
 
@@ -222,12 +222,12 @@ export const useYemekSepetiOrderActions = ({
           toastStatusError(order.preparationDate, 10);
         }
       }
-      dispatch(resetyemekSepetiTicketDeliver());
+      dispatch(resetYemekSepetiTicketDeliver());
     }
     if (deliverSuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetyemekSepetiTicketDeliver());
+      dispatch(resetYemekSepetiTicketDeliver());
     }
   }, [deliverLoading, deliverSuccess, deliverErr]);
 
@@ -237,12 +237,12 @@ export const useYemekSepetiOrderActions = ({
       toastId.current = toast.loading("İşleniyor...", { id: "isleniyor" });
     }
     if (cancelErr) {
-      dispatch(resetyemekSepetiTicketCancel());
+      dispatch(resetYemekSepetiTicketCancel());
     }
     if (cancelSuccess) {
       toast.dismiss(toastId.current);
       toast.success("İşlem başarılı", { id: "order-stat-success" });
-      dispatch(resetyemekSepetiTicketCancel());
+      dispatch(resetYemekSepetiTicketCancel());
     }
   }, [cancelLoading, cancelSuccess, cancelErr]);
 

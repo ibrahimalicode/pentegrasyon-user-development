@@ -13,7 +13,7 @@ import CustomCheckbox from "../../common/customCheckbox";
 //REDUX
 import {
   deleteCourier,
-  resetdeleteCourier,
+  resetDeleteCourier,
 } from "../../../redux/couriers/deleteCourierSlice";
 
 const DeleteCourier = ({ courier, onSuccess }) => {
@@ -62,14 +62,14 @@ function DeleteCourierPopup({ courier, onSuccess }) {
       toastId.current = toast.loading("İşleniyor...");
     }
     if (error) {
-      dispatch(resetdeleteCourier());
+      dispatch(resetDeleteCourier());
     }
     if (success) {
       onSuccess();
       closeForm();
       toast.dismiss(toastId.current);
       toast.success("Başarıyla Silindi");
-      dispatch(resetdeleteCourier());
+      dispatch(resetDeleteCourier());
     }
   }, [loading, success, error, dispatch]);
 

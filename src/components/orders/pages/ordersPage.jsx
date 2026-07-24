@@ -34,7 +34,7 @@ import {
 import { getRestaurants } from "../../../redux/restaurants/getRestaurantsSlice";
 import {
   getCouriers,
-  resetgetCouriersState,
+  resetGetCouriersState,
 } from "../../../redux/couriers/getCouriersSlice";
 
 const OrdersPage = () => {
@@ -158,10 +158,10 @@ const OrdersPage = () => {
     if (couriers) {
       if (couriers?.data) {
         setCouriersData(couriers.data);
-        dispatch(resetgetCouriersState());
+        dispatch(resetGetCouriersState());
       }
     } else if (couriersError) {
-      dispatch(resetgetCouriersState());
+      dispatch(resetGetCouriersState());
     }
   }, [couriers, couriersError]);
 

@@ -5,17 +5,17 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //REDUX
-import { getDistricts } from "../src/redux/data/getDistrictsSlice";
-import { getNeighs } from "../src/redux/data/getNeighsSlice";
-import { getCities } from "../src/redux/data/getCitiesSlice";
+import { getDistricts } from "@/redux/data/getDistrictsSlice";
+import { getNeighs } from "@/redux/data/getNeighsSlice";
+import { getCities } from "@/redux/data/getCitiesSlice";
 import {
   resetUpdateUserInvoice,
   updateUserInvoice,
-} from "../src/redux/user/updateUserInvoiceSlice";
+} from "@/redux/user/updateUserInvoiceSlice";
 import {
   addUserInvoice,
-  resetaddUserInvoice,
-} from "../src/redux/user/addUserInvoiceSlice";
+  resetAddUserInvoice,
+} from "@/redux/user/addUserInvoiceSlice";
 
 export const useEditUserInvoice = (dispatcher, user) => {
   const toastId = useRef();
@@ -77,11 +77,11 @@ export const useEditUserInvoice = (dispatcher, user) => {
     if (addInvoiceLoading) {
       toastId.current = toast.loading("Fatura bilgileri ekleniyor...");
     } else if (addInvoiceError) {
-      dispatch(resetaddUserInvoice());
+      dispatch(resetAddUserInvoice());
     } else if (addInvoiceSuccess) {
       toast.dismiss(toastId.current);
       toast.success("Fatura bilgileri başarıyla eklendı.");
-      dispatch(resetaddUserInvoice());
+      dispatch(resetAddUserInvoice());
     }
   }, [addInvoiceLoading, success, addInvoiceError, dispatch]);
 

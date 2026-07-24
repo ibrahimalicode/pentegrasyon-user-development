@@ -17,7 +17,7 @@ import {
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantStatusSlice";
 import {
   getirYemekUpdateRestaurantCourierStatus,
-  resetgetirYemekUpdateRestaurantCourierStatus,
+  resetGetirYemekUpdateRestaurantCourierStatus,
 } from "../../../redux/getirYemek/getirYemekUpdateRestaurantCourierStatusSlice";
 import { getRemainingDays } from "../../../utils/utils";
 
@@ -107,7 +107,7 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
         );
         toast.success(comp, { id: "success" });
         setStatusData(updatedStat);
-        dispatch(resetgetirYemekUpdateRestaurantCourierStatus());
+        dispatch(resetGetirYemekUpdateRestaurantCourierStatus());
       }
     });
   }
@@ -157,7 +157,7 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     }
     if (updateCourierError) {
       toast.dismiss(toastId.current);
-      dispatch(resetgetirYemekUpdateRestaurantCourierStatus());
+      dispatch(resetGetirYemekUpdateRestaurantCourierStatus());
     }
   }, [updateCourierLoading, updateCourierError]);
 

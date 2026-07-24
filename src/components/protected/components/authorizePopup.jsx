@@ -12,10 +12,10 @@ import { useProtectPages } from "../../../context/ProtectPagesContext";
 //REDUX
 import {
   sendSMSUserLockPasswordReset,
-  restSendSMSUserLockPasswordReset,
+  resetSendSMSUserLockPasswordReset,
 } from "../../../redux/sms/sendSMSUserLockPasswordResetSlice";
 import {
-  restSendEmailUserLockPasswordReset,
+  resetSendEmailUserLockPasswordReset,
   sendEmailUserLockPasswordReset,
 } from "../../../redux/email/sendEmailUserLockPasswordResetSlice";
 
@@ -76,7 +76,7 @@ const AuthorizePopup = ({ setIsAuthorized }) => {
       );
       toast.success(elmnt);
     }
-    dispatch(restSendSMSUserLockPasswordReset());
+    dispatch(resetSendSMSUserLockPasswordReset());
   }, [smsSuccess, smsLoading]);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const AuthorizePopup = ({ setIsAuthorized }) => {
       );
       toast.success(elmnt);
     }
-    dispatch(restSendEmailUserLockPasswordReset());
+    dispatch(resetSendEmailUserLockPasswordReset());
   }, [emailSuccess, emailLoading]);
 
   return (

@@ -18,7 +18,17 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "react/prop-types": "off",
-    "react-hooks/exhaustive-deps": "off", // warn
-    "no-unused-vars": "off",
+    // Warnings are triaged gradually (Phases 3-4); errors still fail the lint script.
+    "react-hooks/exhaustive-deps": "warn",
+    "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    // Static Turkish copy trips this constantly; not worth escaping.
+    "react/no-unescaped-entities": "off",
   },
+  overrides: [
+    {
+      // Node-context config files use CommonJS globals.
+      files: ["*.config.js", "*.config.cjs"],
+      env: { node: true },
+    },
+  ],
 };

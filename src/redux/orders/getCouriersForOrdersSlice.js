@@ -15,7 +15,7 @@ const getCouriersForOrdersSlice = createSlice({
   name: "getCouriersForOrders",
   initialState: initialState,
   reducers: {
-    resetgetCouriersForOrders: (state) => {
+    resetGetCouriersForOrders: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -92,5 +92,5 @@ export const getCouriersForOrders = createAsyncThunk(
   }
 );
 
-export const { resetgetCouriersForOrders } = getCouriersForOrdersSlice.actions;
+export const { resetGetCouriersForOrders } = getCouriersForOrdersSlice.actions;
 export default getCouriersForOrdersSlice.reducer;

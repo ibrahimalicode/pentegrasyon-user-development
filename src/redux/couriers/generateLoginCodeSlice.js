@@ -15,7 +15,7 @@ const generateLoginCodeSlice = createSlice({
   name: "generateLoginCode",
   initialState: initialState,
   reducers: {
-    resetgenerateLoginCode: (state) => {
+    resetGenerateLoginCode: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -66,5 +66,5 @@ export const generateLoginCode = createAsyncThunk(
   }
 );
 
-export const { resetgenerateLoginCode } = generateLoginCodeSlice.actions;
+export const { resetGenerateLoginCode } = generateLoginCodeSlice.actions;
 export default generateLoginCodeSlice.reducer;

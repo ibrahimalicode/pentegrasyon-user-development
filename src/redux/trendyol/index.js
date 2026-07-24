@@ -7,7 +7,6 @@ import trendyolYemekTicketDeliverSlice from "./trendyolYemekTicketDeliverSlice";
 import trendyolYemekTicketCancelSlice from "./trendyolYemekTicketCancelSlice";
 import trendyolYemekGetRestaurantsSlice from "./trendyolYemekGetRestaurantsSlice";
 import trendyolYemekUpdateRestaurantStatusSlice from "./trendyolYemekUpdateRestaurantStatusSlice";
-import trendyolYemekUpdateRestaurantCourierStatusSlice from "./trendyolYemekUpdateRestaurantCourierStatusSlice";
 import trendyolYemekGetTicketCancelOptionsSlice from "./trendyolYemekGetTicketCancelOptionsSlice";
 
 const trendyolYemekSlice = combineReducers({
@@ -17,7 +16,6 @@ const trendyolYemekSlice = combineReducers({
   cancelTicket: trendyolYemekTicketCancelSlice,
   getRestaurants: trendyolYemekGetRestaurantsSlice,
   updateRestaurants: trendyolYemekUpdateRestaurantStatusSlice,
-  updateRestaurantsCourier: trendyolYemekUpdateRestaurantCourierStatusSlice,
   getTicketCancelOptions: trendyolYemekGetTicketCancelOptionsSlice,
 });
 

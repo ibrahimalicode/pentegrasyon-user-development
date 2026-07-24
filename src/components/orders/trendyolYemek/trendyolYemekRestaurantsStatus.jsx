@@ -16,10 +16,6 @@ import {
   trendyolYemekUpdateRestaurantStatus,
   resetTrendyolYemekUpdateRestaurantStatus,
 } from "../../../redux/trendyol/trendyolYemekUpdateRestaurantStatusSlice";
-import {
-  trendyolYemekUpdateRestaurantCourierStatus,
-  resetTrendyolYemekUpdateRestaurantCourierStatus,
-} from "../../../redux/trendyol/trendyolYemekUpdateRestaurantCourierStatusSlice";
 
 const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const toastId = useRef();
@@ -28,9 +24,6 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.trendyol.updateRestaurants);
-
-  const { loading: updateCourierLoading, error: updateCourierError } =
-    useSelector((state) => state.trendyol.updateRestaurantsCourier);
 
   function isActive(key) {
     return licenses.filter(
@@ -90,39 +83,6 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     );
   }
 
-  //UPDATE COURIER STATUS
-  function updateRestaurantCourierStatus(id) {
-    const updatedStat = {
-      ...statusData,
-      [id]: {
-        ...statusData[id],
-        isCourierAvailable: !statusData[id].isCourierAvailable,
-      },
-    };
-    dispatch(trendyolYemekUpdateRestaurantCourierStatus(updatedStat[id])).then(
-      (res) => {
-        if (res.meta.requestStatus === "fulfilled") {
-          toast.dismiss(toastId.current);
-          const text =
-            updatedStat[id].isCourierAvailable === true ? "Açıldı" : "Kapandı";
-          const className =
-            updatedStat[id].isCourierAvailable === true
-              ? "text-[--green-1]"
-              : "text-[--red-1]";
-          const comp = (
-            <div>
-              {updatedStat[id].name} Kuriye durumu
-              <span className={className}> {text}</span>
-            </div>
-          );
-          toast.success(comp, { id: "success" });
-          setStatusData(updatedStat);
-          dispatch(resetTrendyolYemekUpdateRestaurantCourierStatus());
-        }
-      },
-    );
-  }
-
   //TOAST RESTAURANT STATUS AND GET RESTAURANTS NAME
   useEffect(() => {
     function statusValue(inData) {
@@ -177,17 +137,6 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
       dispatch(resetTrendyolYemekUpdateRestaurantStatus());
     }
   }, [updateRestaurantLoading, updateRestaurantError]);
-
-  //COURIER UPDATE TOAST
-  useEffect(() => {
-    if (updateCourierLoading) {
-      toastId.current = toast.loading("İşleniyor...");
-    }
-    if (updateCourierError) {
-      toast.dismiss(toastId.current);
-      dispatch(resetTrendyolYemekUpdateRestaurantCourierStatus());
-    }
-  }, [updateCourierLoading, updateCourierError]);
 
   return (
     statusData &&

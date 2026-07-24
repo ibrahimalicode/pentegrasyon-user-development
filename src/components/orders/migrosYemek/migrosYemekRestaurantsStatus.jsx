@@ -14,10 +14,6 @@ import {
   migrosYemekUpdateRestaurantStatus,
   resetMigrosYemekUpdateRestaurantStatus,
 } from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantStatusSlice";
-import {
-  migrosYemekUpdateRestaurantCourierStatus,
-  resetMigrosYemekUpdateRestaurantCourierStatus,
-} from "../../../redux/migrosYemek/migrosYemekUpdateRestaurantCourierStatusSlice";
 
 const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const toastId = useRef();
@@ -26,9 +22,6 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.migrosYemek.updateRestaurants);
-
-  const { loading: updateCourierLoading, error: updateCourierError } =
-    useSelector((state) => state.migrosYemek.updateRestaurantsCourier);
 
   function isActive(key) {
     return licenses.filter(
@@ -75,38 +68,6 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     );
   }
 
-  function updateRestaurantCourierStatus(id) {
-    const updatedStat = {
-      ...statusData,
-      [id]: {
-        ...statusData[id],
-        isCourierAvailable: !statusData[id].isCourierAvailable,
-      },
-    };
-    dispatch(
-      migrosYemekUpdateRestaurantCourierStatus({ ...updatedStat[id] }),
-    ).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        toast.dismiss(toastId.current);
-        const text =
-          updatedStat[id].isCourierAvailable === true ? "Açıldı" : "Kapandı";
-        const className =
-          updatedStat[id].isCourierAvailable === true
-            ? "text-[--green-1]"
-            : "text-[--red-1]";
-        const comp = (
-          <div>
-            {updatedStat[id].storeName} Kuriye durumu
-            <span className={className}> {text}</span>
-          </div>
-        );
-        toast.success(comp, { id: "success" });
-        setStatusData(updatedStat);
-        dispatch(resetMigrosYemekUpdateRestaurantCourierStatus());
-      }
-    });
-  }
-
   //TOAST AND SET RESTAURANT STATUS
   useEffect(() => {
     function statusValue(inData) {
@@ -144,17 +105,6 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
     }
   }, [updateRestaurantLoading, updateRestaurantError]);
 
-  //COURIER UPDATE TOAST
-  useEffect(() => {
-    if (updateCourierLoading) {
-      toastId.current = toast.loading("İşleniyor...");
-    }
-    if (updateCourierError) {
-      toast.dismiss(toastId.current);
-      dispatch(resetMigrosYemekUpdateRestaurantCourierStatus());
-    }
-  }, [updateCourierLoading, updateCourierError]);
-
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (
@@ -188,23 +138,9 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                               }
                             />
                           </div>
-                          {statusData[key].restaurantStatus && (
-                            <div className="max-w-40 text-end pr-2">
-                              <CustomToggle
-                                label="Kurye Durumu"
-                                className="scale-75 order-2"
-                                className1="flex-col max-sm:items-start"
-                                className2="order-1 ml-[0]"
-                                onChange={() =>
-                                  updateRestaurantCourierStatus(key)
-                                }
-                                checked={restaurant.courierStatus}
-                                disabled={
-                                  updateCourierLoading || !isActive(key)
-                                }
-                              />
-                            </div>
-                          )}
+                          {/* Kurye Durumu toggle removed — the backend endpoint
+                              MigrosYemek/UpdateRestaurantCourierStatus does not
+                              exist (only GetirYemek has one); it always 404'd. */}
                         </div>
 
                         <DeleteIntegrationInfo

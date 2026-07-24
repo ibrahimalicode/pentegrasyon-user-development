@@ -16,10 +16,6 @@ import {
   yemekSepetiUpdateRestaurantStatus,
   resetYemekSepetiUpdateRestaurantStatus,
 } from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantStatusSlice";
-import {
-  yemekSepetiUpdateRestaurantCourierStatus,
-  resetYemekSepetiUpdateRestaurantCourierStatus,
-} from "../../../redux/yemekSepeti/yemekSepetiUpdateRestaurantCourierStatusSlice";
 
 const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   const toastId = useRef();
@@ -28,9 +24,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   const { loading: updateRestaurantLoading, error: updateRestaurantError } =
     useSelector((state) => state.yemekSepeti.updateRestaurants);
-
-  const { loading: updateCourierLoading, error: updateCourierError } =
-    useSelector((state) => state.yemekSepeti.updateRestaurantsCourier);
 
   function isActive(key) {
     return licenses.filter(
@@ -85,39 +78,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
         dispatch(resetYemekSepetiUpdateRestaurantStatus());
       }
     });
-  }
-
-  //UPDATE COURIER STATUS
-  function updateRestaurantCourierStatus(id) {
-    const updatedStat = {
-      ...statusData,
-      [id]: {
-        ...statusData[id],
-        isCourierAvailable: !statusData[id].isCourierAvailable,
-      },
-    };
-    dispatch(yemekSepetiUpdateRestaurantCourierStatus(updatedStat[id])).then(
-      (res) => {
-        if (res.meta.requestStatus === "fulfilled") {
-          toast.dismiss(toastId.current);
-          const text =
-            updatedStat[id].isCourierAvailable === true ? "Açıldı" : "Kapandı";
-          const className =
-            updatedStat[id].isCourierAvailable === true
-              ? "text-[--green-1]"
-              : "text-[--red-1]";
-          const comp = (
-            <div>
-              {updatedStat[id].name} Kuriye durumu
-              <span className={className}> {text}</span>
-            </div>
-          );
-          toast.success(comp, { id: "success" });
-          setStatusData(updatedStat);
-          dispatch(resetYemekSepetiUpdateRestaurantCourierStatus());
-        }
-      },
-    );
   }
 
   //TOAST RESTAURANT STATUS AND GET RESTAURANTS NAME
@@ -201,17 +161,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
       dispatch(resetYemekSepetiUpdateRestaurantStatus());
     }
   }, [updateRestaurantLoading, updateRestaurantError]);
-
-  //COURIER UPDATE TOAST
-  useEffect(() => {
-    if (updateCourierLoading) {
-      toastId.current = toast.loading("İşleniyor...");
-    }
-    if (updateCourierError) {
-      toast.dismiss(toastId.current);
-      dispatch(resetYemekSepetiUpdateRestaurantCourierStatus());
-    }
-  }, [updateCourierLoading, updateCourierError]);
 
   return (
     statusData &&

@@ -7,7 +7,6 @@ import migrosYemekTicketDeliverSlice from "./migrosYemekTicketDeliverSlice";
 import migrosYemekTicketCancelSlice from "./migrosYemekTicketCancelSlice";
 import migrosYemekGetRestaurantsSlice from "./migrosYemekGetRestaurantsSlice";
 import migrosYemekUpdateRestaurantStatusSlice from "./migrosYemekUpdateRestaurantStatusSlice";
-import migrosYemekUpdateRestaurantCourierStatusSlice from "./migrosYemekUpdateRestaurantCourierStatusSlice";
 import migrosYemekGetTicketCancelOptionsSlice from "./migrosYemekGetTicketCancelOptionsSlice";
 
 const migrosYemekSlice = combineReducers({
@@ -17,7 +16,6 @@ const migrosYemekSlice = combineReducers({
   cancelTicket: migrosYemekTicketCancelSlice,
   getRestaurants: migrosYemekGetRestaurantsSlice,
   updateRestaurants: migrosYemekUpdateRestaurantStatusSlice,
-  updateRestaurantsCourier: migrosYemekUpdateRestaurantCourierStatusSlice,
   getTicketCancelOptions: migrosYemekGetTicketCancelOptionsSlice,
 });
 

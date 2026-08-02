@@ -22,7 +22,7 @@ import {
 const PaymentsPage = () => {
   const dispatch = useDispatch();
   const filterPayments = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
 
   const { loading, success, error, payments } = useSelector(
     (state) => state.payments.get
@@ -111,16 +111,11 @@ const PaymentsPage = () => {
   //HIDE POPUP
   useEffect(() => {
     if (filterPayments) {
-      const refs = contentRef.filter((ref) => ref.id !== "paymentsFilter");
-      setContentRef([
-        ...refs,
-        {
-          id: "paymentsFilter",
-          outRef: null,
-          ref: filterPayments,
-          callback: () => setOpenFilter(false),
-        },
-      ]);
+      registerClickOutside("paymentsFilter", {
+        ref: filterPayments,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
     }
   }, [filterPayments]);
 

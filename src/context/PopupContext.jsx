@@ -1,4 +1,11 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import { useSelector } from "react-redux";
 import CustomGeneralLoader from "../components/common/customGeneralLoader";
 
@@ -10,36 +17,35 @@ export const PopupProvider = ({ children }) => {
   const { isLoading } = useSelector((state) => state.isLoading);
 
   const [popupContent, setPopupContent] = useState(null);
-  const [contentRef, setContentRef] = useState([]);
   const [loadingComponent, setLoadingComponent] = useState(null);
 
-  const handleClickOutside = (event) => {
-    if (contentRef.length > 0) {
-      contentRef.forEach((content) => {
-        if (content.ref.current) {
-          if (content.outRef?.current) {
-            if (
-              !content.ref.current.contains(event.target) &&
-              !content.outRef.current.contains(event.target)
-            ) {
-              content.callback();
-            }
-          } else {
-            if (!content.ref.current.contains(event.target)) {
-              content.callback();
-            }
-          }
-        }
-      });
-    }
-  };
+  // Click-outside registry lives in a ref so registering never re-renders the
+  // provider or re-binds the document listener. Entries are upserted by id and
+  // deliberately never auto-removed (same semantics as the old state array —
+  // the handler skips entries whose ref is no longer mounted).
+  const clickOutsideRegistry = useRef(new Map());
+
+  const registerClickOutside = useCallback((id, { ref, outRef, callback }) => {
+    clickOutsideRegistry.current.set(id, { ref, outRef, callback });
+  }, []);
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      clickOutsideRegistry.current.forEach(({ ref, outRef, callback }) => {
+        if (!ref?.current) return;
+        const insideMain = ref.current.contains(event.target);
+        const insideOut = outRef?.current
+          ? outRef.current.contains(event.target)
+          : false;
+        if (!insideMain && !insideOut) callback();
+      });
+    };
+
     document.addEventListener("click", handleClickOutside, true);
     return () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
-  }, [contentRef]);
+  }, []);
 
   useEffect(() => {
     if (isLoading) {
@@ -54,8 +60,7 @@ export const PopupProvider = ({ children }) => {
       value={{
         popupContent,
         setPopupContent,
-        contentRef,
-        setContentRef,
+        registerClickOutside,
         loadingComponent,
         setLoadingComponent,
       }}

@@ -10,9 +10,9 @@ import TrendyolYemek from "../../../assets/img/packages/TrendyolYemek.png";
 import GoFody from "../../../assets/img/packages/GoFody.png";
 import Yemeksepeti from "../../../assets/img/packages/Yemeksepeti.png";
 import CustomCheckbox from "../../common/customCheckbox";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Button from "../../common/button";
-import toast from "react-hot-toast";
+import { useAsyncActionToast } from "@/hooks/useAsyncActionToast";
 
 import {
   deleteLicense,
@@ -52,7 +52,6 @@ const DeleteLicense = ({ licenseData, setOpenMenu, onSuccess }) => {
 export default DeleteLicense;
 
 const DeleteLicensePopup = ({ data, onSuccess }) => {
-  const toastId = useRef();
   const dispatch = useDispatch();
   const { loading, success, error } = useSelector(
     (state) => state.licenses.deleteLicense
@@ -70,26 +69,20 @@ const DeleteLicensePopup = ({ data, onSuccess }) => {
   }
 
   // TOAST
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
+  useAsyncActionToast(
+    { loading, success, error },
+    {
+      loadingMessage: "İşleniyor 🤩...",
+      successMessage: "Lisans başarıyla silindi 🥳🥳",
+      errorMessage: (error) =>
+        error?.message_TR ? error.message_TR + "🙁" : "Something went wrong",
+      onSuccess: () => {
+        onSuccess();
+        closeForm();
+      },
+      reset: resetDeleteLicense,
     }
-    if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetDeleteLicense());
-    } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
-      onSuccess();
-      closeForm();
-      toast.success("Lisans başarıyla silindi 🥳🥳");
-      dispatch(resetDeleteLicense());
-    }
-  }, [loading, success, error]);
+  );
 
   return (
     <div className="flex flex-col items-center w-full text-base">

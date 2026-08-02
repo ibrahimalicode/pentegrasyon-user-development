@@ -9,7 +9,7 @@ import TransferRestaurant from "./transfer";
 const Actions = ({ index, restaurant, onSuccess }) => {
   const outRef = useRef();
   const restaurantMenuRef = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
@@ -18,16 +18,11 @@ const Actions = ({ index, restaurant, onSuccess }) => {
 
   useEffect(() => {
     if (restaurantMenuRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "restaurantActions");
-      setContentRef([
-        ...refs,
-        {
-          id: "restaurantActions",
-          outRef: outRef.current ? outRef : null,
-          ref: restaurantMenuRef,
-          callback: () => setOpenMenu(null),
-        },
-      ]);
+      registerClickOutside("restaurantActions", {
+        ref: restaurantMenuRef,
+        outRef: outRef.current ? outRef : null,
+        callback: () => setOpenMenu(null),
+      });
     }
   }, [restaurantMenuRef, outRef, openMenu]);
   return (

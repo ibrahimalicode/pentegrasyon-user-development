@@ -12,7 +12,7 @@ import UseStock from "./useStock";
 
 const StocksActions = ({ index, stockData, itemsPerPage, onSuccess }) => {
   const stockDatasMenuRef = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
@@ -21,16 +21,11 @@ const StocksActions = ({ index, stockData, itemsPerPage, onSuccess }) => {
 
   useEffect(() => {
     if (stockDatasMenuRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "stockDatasMenuRef");
-      setContentRef([
-        ...refs,
-        {
-          id: "stockDatasMenuRef",
-          outRef: null,
-          ref: stockDatasMenuRef,
-          callback: () => setOpenMenu(null),
-        },
-      ]);
+      registerClickOutside("stockDatasMenuRef", {
+        ref: stockDatasMenuRef,
+        outRef: null,
+        callback: () => setOpenMenu(null),
+      });
     }
   }, [stockDatasMenuRef, openMenu]);
 

@@ -50,20 +50,15 @@ function Header({ openSidebar, setOpenSidebar }) {
     }
   }, [success, loading, error]);
 
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
 
   useEffect(() => {
     if (headerSettingsRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "headerSettings");
-      setContentRef([
-        ...refs,
-        {
-          id: "headerSettings",
-          outRef: null,
-          ref: headerSettingsRef,
-          callback: () => setOpen(false),
-        },
-      ]);
+      registerClickOutside("headerSettings", {
+        ref: headerSettingsRef,
+        outRef: null,
+        callback: () => setOpen(false),
+      });
     }
   }, [headerSettingsRef, open]);
 

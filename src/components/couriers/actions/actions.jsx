@@ -8,7 +8,7 @@ import UpdateCourierLoginCode from "./updateCourierLoginCode";
 const Actions = ({ index, courier, onSuccess }) => {
   const outRef = useRef();
   const courierMenuRef = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
@@ -17,16 +17,11 @@ const Actions = ({ index, courier, onSuccess }) => {
 
   useEffect(() => {
     if (courierMenuRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "courierActions");
-      setContentRef([
-        ...refs,
-        {
-          id: "courierActions",
-          outRef: outRef.current ? outRef : null,
-          ref: courierMenuRef,
-          callback: () => setOpenMenu(null),
-        },
-      ]);
+      registerClickOutside("courierActions", {
+        ref: courierMenuRef,
+        outRef: outRef.current ? outRef : null,
+        callback: () => setOpenMenu(null),
+      });
     }
   }, [courierMenuRef, outRef, openMenu]);
 

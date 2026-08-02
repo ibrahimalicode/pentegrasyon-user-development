@@ -233,7 +233,34 @@ still works.
 
 ---
 
-## Phase 4 — Component-layer deduplication (the marketplace ×4 problem)
+## Phase 4 — Component-layer deduplication 🔶 ITEMS 1–4 DONE 2026-08-01
+
+> **Done:**
+> - `useMarketplaceOrderActions` (orders/components/): the four ~250-line
+>   use<Marketplace>OrderActions hooks are now ~40-line config wrappers. Intentional
+>   unification: the 408 "time exceeded" toast now fires for all marketplaces (three
+>   compared `statusCode === 408` against a string and never fired).
+> - `useAsyncActionToast` (src/hooks/): adopted in 5 conforming components (addCourier,
+>   editCourier, updateCourierIsActive, deleteLicense, updateLicenseIsActive). 16
+>   candidates skipped for behavior differences — 9 of them share a latent bug (no
+>   `toast.dismiss` on the error path → stuck loading toast on failure); adopting the
+>   hook there would fix it but needs sign-off on the behavior change.
+> - PopupContext rework: registry in a `useRef`, one stable document listener,
+>   `registerClickOutside(id, {ref, outRef, callback})`; all 16 consumer files migrated
+>   off the contentRef filter-and-recreate dance. Live-verified: header settings and
+>   licenses filter dropdowns open/close correctly.
+> - `MarketplaceSettingsForm` (marketplaceLicenseSettings/): shared 191-line skeleton;
+>   getirYemek/migros/paketNet/trendyol wrappers shrank 1,117 → 589 lines.
+>   **yemekSepeti deliberately untouched** (custom confirmation-toast flow).
+>   New bugs surfaced (preserved): trendyol's fill mapping leaks a stray
+>   `yemekSepetiIntegrationInformationId` + `restaurantSecretKey` into its payload and
+>   its add flow can submit without `commissionRate`; shared quirk — unparseable error
+>   body leaves the loading toast up.
+>
+> **Remaining (items 5–6):** `useListPage` skeleton for the 5 list pages; god-component
+> splits (restaurants edit 578 / addRestaurant 554 / chooseCourier 426).
+> Acceptance still needed: authenticated click-through of order flows (verify → prepare
+> → print → deliver/cancel per marketplace) and one settings save per marketplace.
 
 This panel's biggest duplication is unique to it: **every marketplace is implemented 4–6×
 in parallel.** `src/components/orders/` alone is ~9,600 lines:

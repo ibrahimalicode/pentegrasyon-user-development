@@ -40,7 +40,7 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   const dispatch = useDispatch();
   const { protectedPages } = useProtectPages();
   const { unverifiedOrders } = useOrdersContext();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
 
   const [sidebarData, setSidebarData] = useState(null);
 
@@ -82,16 +82,11 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
   useEffect(() => {
     if (sidebarRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "sidebar");
-      setContentRef([
-        ...refs,
-        {
-          id: "sidebar",
-          outRef: null,
-          ref: sidebarRef,
-          callback: () => setOpenSidebar(false),
-        },
-      ]);
+      registerClickOutside("sidebar", {
+        ref: sidebarRef,
+        outRef: null,
+        callback: () => setOpenSidebar(false),
+      });
     }
   }, [sidebarRef, openSidebar]);
 

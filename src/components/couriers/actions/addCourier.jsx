@@ -1,6 +1,5 @@
 //MODULES
-import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -25,6 +24,7 @@ import {
 //UTILS
 import compensationTypes from "../../../enums/compensationTypes";
 import { formatToPrice } from "../../../utils/utils";
+import { useAsyncActionToast } from "@/hooks/useAsyncActionToast";
 
 const AddCourier = ({ onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -49,7 +49,6 @@ export default AddCourier;
 ///
 ////
 function AddCourierPopup({ onSuccess }) {
-  const toastId = useRef();
   const dispatch = useDispatch();
   const { loading, success, error } = useSelector(
     (state) => state.couriers.add
@@ -86,22 +85,18 @@ function AddCourierPopup({ onSuccess }) {
   }
 
   // TOAST FOR ADD
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
+  useAsyncActionToast(
+    { loading, success, error },
+    {
+      loadingMessage: "İşleniyor 🤩...",
+      successMessage: "Kurye başarıyla eklendi",
+      onSuccess: () => {
+        onSuccess();
+        closeForm();
+      },
+      reset: resetAddCourier,
     }
-    if (error) {
-      toast.dismiss(toastId.current);
-      dispatch(resetAddCourier());
-    }
-    if (success) {
-      toast.dismiss(toastId.current);
-      onSuccess();
-      closeForm();
-      toast.success("Kurye başarıyla eklendi");
-      dispatch(resetAddCourier());
-    }
-  }, [loading, success, error]);
+  );
 
   // SET THE CODE
   useEffect(() => {

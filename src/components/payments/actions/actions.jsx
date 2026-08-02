@@ -10,7 +10,7 @@ import { usePopup } from "../../../context/PopupContext";
 const Actions = ({ index, payment }) => {
   const outRef = useRef();
   const paymentsRef = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
@@ -19,16 +19,11 @@ const Actions = ({ index, payment }) => {
 
   useEffect(() => {
     if (paymentsRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "paymentsActions");
-      setContentRef([
-        ...refs,
-        {
-          id: "paymentsActions",
-          outRef: outRef.current ? outRef : null,
-          ref: paymentsRef,
-          callback: () => setOpenMenu(null),
-        },
-      ]);
+      registerClickOutside("paymentsActions", {
+        ref: paymentsRef,
+        outRef: outRef.current ? outRef : null,
+        callback: () => setOpenMenu(null),
+      });
     }
   }, [paymentsRef, outRef, openMenu]);
   return (

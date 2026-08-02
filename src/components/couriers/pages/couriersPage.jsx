@@ -27,7 +27,7 @@ const CouriersPage = () => {
   const dispatch = useDispatch();
   const filterCouriers = useRef();
   const { courierStatus } = useFirestore();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
 
   const { loading, success, error, couriers } = useSelector(
     (state) => state.couriers.get
@@ -130,16 +130,11 @@ const CouriersPage = () => {
   //HIDE POPUP
   useEffect(() => {
     if (filterCouriers) {
-      const refs = contentRef.filter((ref) => ref.id !== "couriersFilter");
-      setContentRef([
-        ...refs,
-        {
-          id: "couriersFilter",
-          outRef: null,
-          ref: filterCouriers,
-          callback: () => setOpenFilter(false),
-        },
-      ]);
+      registerClickOutside("couriersFilter", {
+        ref: filterCouriers,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
     }
   }, [filterCouriers]);
 

@@ -1,6 +1,5 @@
 //MODULES
-import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
@@ -8,6 +7,7 @@ import { CancelI } from "../../../assets/icon";
 import CustomInput from "../../common/customInput";
 import { usePopup } from "../../../context/PopupContext";
 import CustomCheckbox from "../../common/customCheckbox";
+import { useAsyncActionToast } from "@/hooks/useAsyncActionToast";
 
 //REDUX
 import {
@@ -44,7 +44,6 @@ export default EditLicenseIsActive;
 // EDIT licenseData POPUP
 function EditLicenseIsActivesPopup({ onSuccess, license }) {
   const dispatch = useDispatch();
-  const toastId = useRef();
   const licenseDataIsActiveRef = useRef();
 
   const { setPopupContent } = usePopup();
@@ -73,30 +72,23 @@ function EditLicenseIsActivesPopup({ onSuccess, license }) {
   };
 
   // TOAST
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
-    }
-    if (error) {
-      toastId.current && toast.dismiss(toastId.current);
-      if (error?.message_TR) {
-        toast.error(error.message_TR + "🙁");
-      } else {
-        toast.error("Something went wrong");
-      }
-      dispatch(resetUpdateLicenseIsActiveState());
-    } else if (success) {
-      toastId.current && toast.dismiss(toastId.current);
-      onSuccess();
-      setPopupContent(null);
-      toast.success(
+  useAsyncActionToast(
+    { loading, success, error },
+    {
+      loadingMessage: "İşleniyor 🤩...",
+      successMessage: () =>
         `Lisans başarıyla ${
           license.isActive ? "Pasifleştirildi" : "Aktifleştirildi"
-        } 🥳🥳`
-      );
-      dispatch(resetUpdateLicenseIsActiveState());
+        } 🥳🥳`,
+      errorMessage: (error) =>
+        error?.message_TR ? error.message_TR + "🙁" : "Something went wrong",
+      onSuccess: () => {
+        onSuccess();
+        setPopupContent(null);
+      },
+      reset: resetUpdateLicenseIsActiveState,
     }
-  }, [loading, success, error]);
+  );
 
   return (
     <div className="w-full flex justify-center">

@@ -224,22 +224,15 @@ const RestaurantsPage = () => {
   }, [neighsSuccess]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const filterRestaurant = useRef();
   useEffect(() => {
     if (filterRestaurant) {
-      const refs = contentRef.filter(
-        (ref) => ref.id !== "usersRestaurantFilter"
-      );
-      setContentRef([
-        ...refs,
-        {
-          id: "usersRestaurantFilter",
-          outRef: null,
-          ref: filterRestaurant,
-          callback: () => setOpenFilter(false),
-        },
-      ]);
+      registerClickOutside("usersRestaurantFilter", {
+        ref: filterRestaurant,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
     }
   }, [filterRestaurant]);
 

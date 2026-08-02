@@ -1,7 +1,7 @@
 //MODULES
 import { isEqual } from "lodash";
 import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //REDUX
@@ -29,6 +29,7 @@ import { CancelI, EditI, TransferI } from "../../../assets/icon";
 //UTILS
 import { formatToPrice } from "../../../utils/utils";
 import compensationTypes from "../../../enums/compensationTypes";
+import { useAsyncActionToast } from "@/hooks/useAsyncActionToast";
 
 const EditCourier = ({ courier, onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -52,7 +53,6 @@ export default EditCourier;
 //
 ///
 function EditCourierPopup({ onSuccess, courier }) {
-  const toastId = useRef();
   const dispatch = useDispatch();
   const { setPopupContent } = usePopup();
 
@@ -126,22 +126,18 @@ function EditCourierPopup({ onSuccess, courier }) {
   }
 
   // TOAST FOR ADD
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
+  useAsyncActionToast(
+    { loading, success, error },
+    {
+      loadingMessage: "İşleniyor 🤩...",
+      successMessage: "Kurye başarıyla düzenlendi",
+      onSuccess: () => {
+        onSuccess();
+        closeForm();
+      },
+      reset: resetUpdateCourier,
     }
-    if (error) {
-      toast.dismiss(toastId.current);
-      dispatch(resetUpdateCourier());
-    }
-    if (success) {
-      toast.dismiss(toastId.current);
-      onSuccess();
-      closeForm();
-      toast.success("Kurye başarıyla düzenlendi");
-      dispatch(resetUpdateCourier());
-    }
-  }, [loading, success, error]);
+  );
 
   // SET THE CODE
   useEffect(() => {

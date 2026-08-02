@@ -202,20 +202,15 @@ const RestaurantLicensesPage = () => {
   }, [restaurantError, restaurantSuccess, restaurant]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const filterLicense = useRef();
   useEffect(() => {
     if (filterLicense) {
-      const refs = contentRef.filter((ref) => ref.id !== "licensesFilter");
-      setContentRef([
-        ...refs,
-        {
-          id: "licensesFilter",
-          outRef: null,
-          ref: filterLicense,
-          callback: () => setOpenFilter(false),
-        },
-      ]);
+      registerClickOutside("licensesFilter", {
+        ref: filterLicense,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
     }
   }, [filterLicense]);
 

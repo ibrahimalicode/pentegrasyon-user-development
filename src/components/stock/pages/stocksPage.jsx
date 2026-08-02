@@ -105,20 +105,15 @@ const StocksPage = () => {
   }, [success, error, stocks]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const filterStocks = useRef();
   useEffect(() => {
     if (filterStocks) {
-      const refs = contentRef.filter((ref) => ref.id !== "stocksFilter");
-      setContentRef([
-        ...refs,
-        {
-          id: "stocksFilter",
-          outRef: null,
-          ref: filterStocks,
-          callback: () => setOpenFilter(false),
-        },
-      ]);
+      registerClickOutside("stocksFilter", {
+        ref: filterStocks,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
     }
   }, [filterStocks]);
 

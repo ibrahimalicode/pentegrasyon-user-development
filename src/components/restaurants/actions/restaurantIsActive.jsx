@@ -45,7 +45,7 @@ function ChangeRestaurantStatusPopup({ restaurant, onSuccess }) {
   const dispatch = useDispatch();
   const toastId = useRef();
   const restaurantStatusRef = useRef();
-  const { setPopupContent, contentRef, setContentRef } = usePopup();
+  const { setPopupContent, registerClickOutside } = usePopup();
 
   const { loading, success, error } = useSelector(
     (state) => state.restaurants.updateRestaurant
@@ -113,18 +113,11 @@ function ChangeRestaurantStatusPopup({ restaurant, onSuccess }) {
 
   useEffect(() => {
     if (restaurantStatusRef) {
-      const refs = contentRef.filter(
-        (ref) => ref.id !== "restaurantStatusPopup"
-      );
-      setContentRef([
-        ...refs,
-        {
-          id: "restaurantStatusPopup",
-          outRef: null,
-          ref: restaurantStatusRef,
-          callback: () => closeThePopup(),
-        },
-      ]);
+      registerClickOutside("restaurantStatusPopup", {
+        ref: restaurantStatusRef,
+        outRef: null,
+        callback: () => closeThePopup(),
+      });
     }
   }, [restaurantStatusRef]);
 

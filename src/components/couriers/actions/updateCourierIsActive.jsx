@@ -1,6 +1,5 @@
 //MODULES
-import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //CONTEXT
@@ -9,6 +8,7 @@ import { usePopup } from "../../../context/PopupContext";
 //COMP
 import { CancelI } from "../../../assets/icon";
 import CustomCheckbox from "../../common/customCheckbox";
+import { useAsyncActionToast } from "@/hooks/useAsyncActionToast";
 
 //REDUX
 import {
@@ -44,7 +44,6 @@ export default EditCourierIsActive;
 /////////////
 // EDIT courierData POPUP
 function EditCourierIsActivesPopup({ onSuccess, courier }) {
-  const toastId = useRef();
   const dispatch = useDispatch();
 
   const { setPopupContent } = usePopup();
@@ -70,26 +69,21 @@ function EditCourierIsActivesPopup({ onSuccess, courier }) {
   };
 
   // TOAST
-  useEffect(() => {
-    if (loading) {
-      toastId.current = toast.loading("İşleniyor 🤩...");
-    }
-    if (error) {
-      toast.dismiss(toastId.current);
-      dispatch(resetUpdateCourier());
-    }
-    if (success) {
-      toast.dismiss(toastId.current);
-      onSuccess();
-      setPopupContent(null);
-      toast.success(
+  useAsyncActionToast(
+    { loading, success, error },
+    {
+      loadingMessage: "İşleniyor 🤩...",
+      successMessage: () =>
         `Kurye başarıyla ${
           courier.isActive ? "Pasifleştirildi" : "Aktifleştirildi"
-        } 🥳🥳`
-      );
-      dispatch(resetUpdateCourier());
+        } 🥳🥳`,
+      onSuccess: () => {
+        onSuccess();
+        setPopupContent(null);
+      },
+      reset: resetUpdateCourier,
     }
-  }, [loading, success, error]);
+  );
 
   return (
     <div className="w-full flex justify-center">

@@ -196,29 +196,21 @@ const LogsPage = () => {
   }, [deleteByIdsSuccess, deleteByIdsError]);
 
   //HIDE POPUP
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const filterLogs = useRef();
   const deleteByDateLogs = useRef();
   useEffect(() => {
     if (filterLogs) {
-      const refs = contentRef.filter(
-        (ref) => ref.id !== "logsFilter" && ref.id !== "logsDeleteByDate",
-      );
-      setContentRef([
-        ...refs,
-        {
-          id: "logsFilter",
-          outRef: null,
-          ref: filterLogs,
-          callback: () => setOpenFilter(false),
-        },
-        {
-          id: "logsDeleteByDate",
-          outRef: null,
-          ref: deleteByDateLogs,
-          callback: () => setOpenDeleteByDate(false),
-        },
-      ]);
+      registerClickOutside("logsFilter", {
+        ref: filterLogs,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
+      registerClickOutside("logsDeleteByDate", {
+        ref: deleteByDateLogs,
+        outRef: null,
+        callback: () => setOpenDeleteByDate(false),
+      });
     }
   }, [filterLogs, deleteByDateLogs]);
 

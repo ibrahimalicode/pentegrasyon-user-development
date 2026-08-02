@@ -23,7 +23,7 @@ import { getTicketCountStatistics } from "../../../redux/dashboard/statistics/ge
 const FilterOrders = ({ licenses }) => {
   const dispatch = useDispatch();
   const filterOrdersRef = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const {
     itemsPerPage,
     setPageNumber,
@@ -71,16 +71,11 @@ const FilterOrders = ({ licenses }) => {
   //HIDE FILTER
   useEffect(() => {
     if (filterOrdersRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "ordersFilter");
-      setContentRef([
-        ...refs,
-        {
-          id: "ordersFilter",
-          outRef: null,
-          ref: filterOrdersRef,
-          callback: () => setOpenFilter(false),
-        },
-      ]);
+      registerClickOutside("ordersFilter", {
+        ref: filterOrdersRef,
+        outRef: null,
+        callback: () => setOpenFilter(false),
+      });
     }
   }, [filterOrdersRef]);
 

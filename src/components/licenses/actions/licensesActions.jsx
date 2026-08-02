@@ -11,7 +11,7 @@ import LicenseSettings from "./licenseSettings";
 
 const LicensesActions = ({ index, licenseData, itemsPerPage, onSuccess }) => {
   const licenseDatasMenuRef = useRef();
-  const { contentRef, setContentRef } = usePopup();
+  const { registerClickOutside } = usePopup();
   const [openMenu, setOpenMenu] = useState(null);
 
   const handleClick = () => {
@@ -20,16 +20,11 @@ const LicensesActions = ({ index, licenseData, itemsPerPage, onSuccess }) => {
 
   useEffect(() => {
     if (licenseDatasMenuRef) {
-      const refs = contentRef.filter((ref) => ref.id !== "licenseDatasMenuRef");
-      setContentRef([
-        ...refs,
-        {
-          id: "licenseDatasMenuRef",
-          outRef: null,
-          ref: licenseDatasMenuRef,
-          callback: () => setOpenMenu(null),
-        },
-      ]);
+      registerClickOutside("licenseDatasMenuRef", {
+        ref: licenseDatasMenuRef,
+        outRef: null,
+        callback: () => setOpenMenu(null),
+      });
     }
   }, [licenseDatasMenuRef, openMenu]);
 

@@ -147,16 +147,17 @@ const RestaurantsStatus = ({ licenses }) => {
   const buttonClass =
     "text-white bg-[--red-1] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.7 animate-pulse relative after:absolute after:inset-0 after:rounded-lg after:border-2 after:border-red-500 after:animate-[emergencyRipple_1s_ease-out_infinite] before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-red-600 before:animate-[emergencyRipple_1s_ease-out_infinite] before:delay-500 flex items-center justify-center transition-all duration-[.3] ease-in-out";
 
-  const toolTipClass = `w-max absolute top-14 left-1/2 -translate-x-1/2 bg-red-100 text-red-800 
-                   px-4 py-1 rounded-md border border-red-200 shadow-lg
+  // Anchored to the button's left edge (not centered) so it can't overflow
+  // the viewport when the button sits near the screen edge.
+  const toolTipClass = `w-max max-w-[26rem] absolute top-14 left-0 bg-red-100 text-red-800
+                   px-4 py-1 rounded-lg border border-red-200 shadow-dropdown
                    transition-all duration-300 transform z-50
                    ${
                      closedRestaurants.length
                        ? "opacity-100 translate-y-0"
                        : "opacity-0 translate-y-2 pointer-events-none"
                    }
-                   whitespace-nowrap
-                   after:content-[''] after:absolute after:left-1/2 after:-top-2
+                   after:content-[''] after:absolute after:left-8 after:-top-2
                    after:w-4 after:h-4 after:bg-red-100 after:rotate-45
                    after:-translate-x-1/2 after:border-t after:border-l after:border-red-200`;
 

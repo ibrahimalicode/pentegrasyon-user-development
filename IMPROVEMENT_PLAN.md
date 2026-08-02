@@ -303,6 +303,23 @@ print layout unchanged.
 
 ---
 
+## UI refresh — round 1 ✅ 2026-08-03 (clean-modern-SaaS direction)
+
+> Foundation: token values retuned in place (names frozen — no file churn); dark mode
+> unified on one slate family; light canvas #f8fafc; Tailwind font-weight remap removed
+> (normal was 350 → whole app rendered near-hairline); elevation scale added
+> (shadow-card/dropdown/modal). Primitives: Button, CustomInput, CustomTextarea,
+> CustomSelect (focus rings, hover states, dropdown shadow), pagination (filled current
+> page), popup backdrop (darker + blur), toast chrome (theme-aware card). Screens:
+> login rewritten (Turkish heading, helper copy, real placeholders), orders toolbar
+> chips unified, status-alert tooltip no longer overflows viewport, time-selects no
+> longer clip values. Live-verified light+dark on the orders page.
+>
+> Round 2 candidates: order-details popups, dashboard cards, tables (row hover/density),
+> sidebar, register page, empty-state illustrations.
+
+---
+
 ## Phase 5 — Quality polish (ongoing / lower priority)
 
 1. **Remove `dangerouslySetInnerHTML`** (5 files: customSelector/checkbox/radiobox pattern) —

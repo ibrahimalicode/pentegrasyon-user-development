@@ -11,52 +11,57 @@
   scrollbar-width: 0.25rem;
 }
 
+/* Design tokens, retuned 2026-08 (UI refresh): variable NAMES are frozen —
+   231 files reference them — only the values changed. Dark mode is a single
+   slate family; light mode is white surfaces on a soft slate canvas with
+   indigo as the one brand hue. */
+
 body[class="dark"] {
-  background-color: #161717;
+  background-color: #0f172a;
 }
 
 body[class="light"] {
-  background-color: white;
+  background-color: #f8fafc;
 }
 
 .dark {
-  --primary-1: #4f46e5;
-  --primary-2: #7839cd;
+  --primary-1: #6366f1;
+  --primary-2: #8b5cf6;
 
   --gr-1: #94a3b8;
-  --gr-2: #a3a3a3;
+  --gr-2: #94a3b8;
   --gr-3: #cbd5e1;
   --gr-4: #334155;
   --gr-5: #475569;
 
   --light-1: #1e293b;
   --light-2: #312e81;
-  --light-3: #374151;
-  --light-4: #1d222a;
+  --light-3: #334155;
+  --light-4: #172033;
   --light-5: #3e4a5b;
 
-  --link-1: #3b82f6;
+  --link-1: #60a5fa;
   --light-green: #14532d;
 
   /* SOLID */
-  --white-1: #161717;
-  --white-2: #111827;
-  --black-1: #ffffff;
-  --black-2: #eeebeb;
-  --black-3: #c8c5c5;
-  --green-1: #16a34a;
-  --green-2: #15803d;
-  --green-3: #0891b2;
+  --white-1: #0f172a;
+  --white-2: #1e293b;
+  --black-1: #f8fafc;
+  --black-2: #e2e8f0;
+  --black-3: #cbd5e1;
+  --green-1: #22c55e;
+  --green-2: #16a34a;
+  --green-3: #06b6d4;
   --yellow-1: #fbbf24;
-  --red-1: #dc2626;
-  --red-2: #be185d;
-  --blue-1: #2563eb;
-  --purple-1: #9333ea;
-  --orange-1: #ea580c;
-  --pink-1: #db2777;
-  --brown-1: #954007; /* 78350f */
+  --red-1: #f87171;
+  --red-2: #ec4899;
+  --blue-1: #60a5fa;
+  --purple-1: #a78bfa;
+  --orange-1: #fb923c;
+  --pink-1: #f472b6;
+  --brown-1: #b45309;
 
-  --border-1: #1e293b;
+  --border-1: #293548;
 
   /* TABLE */
   --table: #334155;
@@ -86,46 +91,46 @@ body[class="light"] {
 
 .light {
   --primary-1: #4f46e5;
-  --primary-2: #7839cd;
+  --primary-2: #6d28d9;
 
   --gr-1: #64748b;
-  --gr-2: #808080;
-  --gr-3: #718ebf;
-  --gr-4: #f5f5f5;
-  --gr-5: #d6d3d1;
+  --gr-2: #6b7280;
+  --gr-3: #94a3b8;
+  --gr-4: #f1f5f9;
+  --gr-5: #cbd5e1;
 
   --light-1: #eef2ff;
-  --light-2: #f4eefb;
-  --light-3: #eceef6;
-  --light-4: #e4e4e4;
-  --light-5: #eeeded;
+  --light-2: #f5f3ff;
+  --light-3: #f1f5f9;
+  --light-4: #e2e8f0;
+  --light-5: #f8fafc;
 
-  --link-1: #007aff;
-  --light-green: #e9ffef;
+  --link-1: #2563eb;
+  --light-green: #dcfce7;
 
   /* SOLID */
   --white-1: #ffffff;
-  --white-2: #f3f4f6;
-  --black-1: #000000;
-  --black-2: #232323;
-  --black-3: #3a3c40;
-  --green-1: #42a86b;
-  --green-2: #409261;
-  --green-3: #16bdca;
-  --yellow-1: #dc9362;
-  --red-1: #ff3753;
-  --red-2: #e74694;
-  --red-3: #dc5a65;
-  --blue-1: #3478f6;
-  --purple-1: #a459d1;
-  --orange-1: #ff7b3d;
-  --pink-1: #ff5da2;
-  --brown-1: #8b5e34;
-  --border-1: #dfeaf2;
+  --white-2: #f8fafc;
+  --black-1: #0f172a;
+  --black-2: #1e293b;
+  --black-3: #475569;
+  --green-1: #16a34a;
+  --green-2: #15803d;
+  --green-3: #0d9488;
+  --yellow-1: #d97706;
+  --red-1: #dc2626;
+  --red-2: #db2777;
+  --red-3: #ef4444;
+  --blue-1: #2563eb;
+  --purple-1: #9333ea;
+  --orange-1: #ea580c;
+  --pink-1: #db2777;
+  --brown-1: #92400e;
+  --border-1: #e2e8f0;
 
   /* TABLE */
-  --table: #d9d9d9;
-  --table-odd: #f9fafc;
+  --table: #f1f5f9;
+  --table-odd: #f8fafc;
 
   /* STATUS */
   --status-green: #e9ffef;
@@ -158,11 +163,11 @@ section {
 }
 .dark .section_row {
   grid-template-rows: auto auto auto 1fr;
-  background-color: #151515;
+  background-color: #0f172a;
 }
 .dark input {
   font-family: "Lexend Deca", sans-serif;
-  background-color: #1b1a1e;
+  background-color: #1e293b;
 }
 .light input {
   font-family: "Lexend Deca", sans-serif;
@@ -312,10 +317,15 @@ input[type="number"] {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #bababa;
+  background: var(--gr-5);
   border-radius: 1rem;
+}
+
+::selection {
+  background-color: var(--primary-1);
+  color: #ffffff;
 }

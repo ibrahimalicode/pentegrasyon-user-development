@@ -65,11 +65,14 @@ function Login() {
       className="pt-[4rem]"
       component={
         <form onSubmit={handleLogin} className="text-white light customInput">
-          <h1 className="text-4xl font-bold text-center mb-8">Login</h1>
+          <h1 className="text-3xl font-bold text-center mb-2">Giriş Yap</h1>
+          <p className="text-center text-sm text-[--gr-3] mb-8">
+            Restoran panelinize devam etmek için giriş yapın
+          </p>
           <CustomInput
             label="E-posta/Telefon"
             type="text"
-            placeholder="E-posta/Telefon"
+            placeholder="ornek@mail.com veya 5xx xxx xx xx"
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e)}
             required={true}
@@ -78,7 +81,7 @@ function Login() {
           />
           <CustomInput
             label="Şifre"
-            placeholder="Şifre"
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e)}
             letIcon={true}
@@ -87,8 +90,10 @@ function Login() {
             minLength={4}
             maxLength={20}
           />
-          <div className="text-right text-[--link-1] mt-4">
-            <a href="/forgotPassword">Şifremi unuttum ?</a>
+          <div className="text-right text-sm text-[--link-1] mt-3">
+            <a href="/forgotPassword" className="hover:underline">
+              Şifremi unuttum?
+            </a>
           </div>
 
           <TurnstileWidget setToken={setTurnstileToken} pageName={"login"} />
@@ -96,14 +101,14 @@ function Login() {
           <button
             disabled={loading}
             type="submit"
-            className="w-full flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-white mt-10 disabled:cursor-not-allowed"
+            className="w-full flex justify-center px-7 py-2.5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white mt-8 transition-colors hover:bg-[#4338ca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? <LoadingI className="h-7 text-white" /> : "Giriş"}
           </button>
 
-          <div className="flex mt-4 justify-center gap-2">
-            <p>Hesabınız yok mu ?</p>
-            <a href="/register" className="text-[--link-1]">
+          <div className="flex mt-4 justify-center gap-2 text-sm">
+            <p className="text-[--gr-3]">Hesabınız yok mu?</p>
+            <a href="/register" className="text-[--link-1] hover:underline">
               Kayıt ol
             </a>
           </div>

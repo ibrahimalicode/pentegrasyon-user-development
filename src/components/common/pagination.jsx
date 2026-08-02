@@ -82,10 +82,10 @@ const CustomPagination = ({
             ) : (
               <button
                 key={index}
-                className={`py-2 px-4 text-sm border-2 border-solid hover:border-[--border-1] rounded-md ${
+                className={`py-2 px-4 text-sm rounded-lg transition-colors ${
                   pageNumber === page
-                    ? "border-[--border-1]"
-                    : "border-transparent"
+                    ? "bg-[--primary-1] text-white font-medium"
+                    : "hover:bg-[--light-3]"
                 }`}
                 onClick={() => {
                   setPageNumber(page);

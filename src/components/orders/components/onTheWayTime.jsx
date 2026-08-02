@@ -79,12 +79,12 @@ const OnTheWayTime = ({ automationDatas, setAutomationDatas }) => {
   }, [loading, error]);
 
   return (
-    <div className="max-sm:w-full border border-[--light-1] rounded-md py-1 px-2 text-xs text-center flex flex-col gap-2 text-[--black-1]">
+    <div className="max-sm:w-full border border-[--border-1] bg-[--white-1] rounded-lg py-1 px-2 text-xs text-center flex flex-col gap-2 text-[--black-1]">
       <p>Yola Çıkar</p>
       <CustomSelect
         className="mt-[0px] sm:mt-[0px] text-xs"
         className2="mt-[0px] sm:mt-[0px]"
-        style={{ padding: "0px 0px" }}
+        style={{ padding: "0px 0px", minWidth: "4.75rem" }}
         value={handleSetData(automationDatas?.onTheWayTime)}
         options={formatMins()}
         isSearchable={false}

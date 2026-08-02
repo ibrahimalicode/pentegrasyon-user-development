@@ -49,7 +49,7 @@ const CustomSelect = ({
         onChange={onChange}
         options={options}
         required={required}
-        className={`mt-1 sm:mt-2.5 text-base font-[350] ${className}`}
+        className={`mt-1 sm:mt-2 text-base ${className}`}
         isDisabled={disabled}
         filterOption={filterOption}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
@@ -58,20 +58,31 @@ const CustomSelect = ({
         styles={{
           control: (provided, state) => ({
             ...provided,
-            boxShadow: "none",
             cursor: "pointer",
-            border: "1px solid var(--border-1)",
+            border: state.isFocused
+              ? "1px solid var(--primary-1)"
+              : "1px solid var(--border-1)",
+            boxShadow: state.isFocused
+              ? "0 0 0 3px rgb(79 70 229 / 0.15)"
+              : "none",
+            "&:hover": { borderColor: "var(--primary-1)" },
             backgroundColor: "var(--white-1)",
-            borderRadius: ".375rem",
+            borderRadius: ".5rem",
             padding: "4px 0px",
+            transition: "box-shadow 150ms, border-color 150ms",
             ...style,
           }),
           option: (provided, state) => ({
             ...provided,
             backgroundColor:
-              state.label === value.label ? "var(--light-1)" : "var(--white-1)",
+              state.label === value.label
+                ? "var(--light-1)"
+                : state.isFocused
+                  ? "var(--light-3)"
+                  : "var(--white-1)",
             color:
-              state.label === value.label ? "var(--black-2)" : "var(--black-1)",
+              state.label === value.label ? "var(--primary-1)" : "var(--black-1)",
+            cursor: "pointer",
             ...optionStyle,
           }),
           singleValue: (provided, state) => ({
@@ -82,6 +93,11 @@ const CustomSelect = ({
           menu: (provided, state) => ({
             ...provided,
             backgroundColor: "var(--white-1)",
+            border: "1px solid var(--border-1)",
+            borderRadius: ".5rem",
+            overflow: "hidden",
+            boxShadow:
+              "0 4px 6px -1px rgb(15 23 42 / 0.07), 0 2px 4px -2px rgb(15 23 42 / 0.06)",
             zIndex: "9999",
           }),
           menuList: (provided, state) => ({

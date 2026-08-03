@@ -150,19 +150,18 @@ const Register = () => {
 
   return (
     <GlassFrame
-      className="pt-[3.5rem] sm:pt-[4.5rem] pb-16 overflow-y-auto"
       className2="pt-[0rem] pb-[1rem] sm:max-w-[34rem]"
       component={
         !toConfirm ? (
           /* Register Page */
-          <form onSubmit={confirmRegister} className="light">
+          <form onSubmit={confirmRegister} className="">
             <div className="flex justify-center">
-              <h2 className="text-[2.7rem] font-bold text-[--white-1] tracking-tighter">
+              <h2 className="text-[2.7rem] font-bold text-[--black-1] tracking-tighter">
                 Kayıt ol
               </h2>
             </div>
             <div className="flex flex-col max-w-full">
-              <div className="flex max-sm:flex-col w-full sm:gap-2 customInput">
+              <div className="flex max-sm:flex-col w-full sm:gap-2">
                 <CustomInput
                   // label="Ad"
                   type="text"
@@ -170,7 +169,7 @@ const Register = () => {
                   value={firstName}
                   onChange={(e) => setFirstName(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
                   className2="mt-[5px] sm:mt-[5px]"
                 />
                 <CustomInput
@@ -180,12 +179,12 @@ const Register = () => {
                   value={lastName}
                   onChange={(e) => setLastName(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
                   className2="mt-[5px] sm:mt-[5px]"
                 />
               </div>
 
-              <div className="flex w-full sm:gap-2 max-sm:flex-col customInput">
+              <div className="flex w-full sm:gap-2 max-sm:flex-col">
                 <CustomPhoneInput
                   // label="Cep Telefonu"
                   type="tel"
@@ -193,7 +192,7 @@ const Register = () => {
                   value={phoneNumber}
                   onChange={(phone) => setPhoneNumber(phone)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
                   className2="mt-[5px] sm:mt-[5px]"
                   maxLength={14}
                 />
@@ -204,7 +203,7 @@ const Register = () => {
                   value={email}
                   onChange={(e) => setEmail(formatEmail(e))}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
                   className2="mt-[5px] sm:mt-[5px]"
                 />
               </div>
@@ -220,7 +219,6 @@ const Register = () => {
                     fontSize: ".8rem",
                     backgroundColor: "transparent",
                   }}
-                  inputStyle={{ color: "var(--white-1)" }}
                   singleValueStyle={{ color: "white" }}
                   className="text-sm mt-[5px] sm:mt-[5px]"
                   className2="container-class mt-[0px] sm:mt-[0px]"
@@ -238,24 +236,23 @@ const Register = () => {
                     fontSize: ".8rem",
                     backgroundColor: "transparent",
                   }}
-                  inputStyle={{ color: "var(--white-1)" }}
                   singleValueStyle={{ color: "white" }}
                   className="text-sm mt-[5px] sm:mt-[5px]"
                   className2="container-class mt-[0px] sm:mt-[0px]"
                 />
               </div>
 
-              <div className="customInput">
+              <div className="">
                 <CustomInput
                   // label="Şifre"
                   placeholder="Şifre"
                   value={password}
                   onChange={(e) => setPassword(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-transparent text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
                   className2="mt-[5px] sm:mt-[5px]"
                   className3="top-[25%]"
-                  className5="text-[var(--white-1)]"
+                  className5=""
                   letIcon={true}
                   minLength={4}
                   maxLength={20}
@@ -266,10 +263,10 @@ const Register = () => {
                   value={password2}
                   onChange={(e) => setPassword2(e)}
                   required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-[transparent !important] text-[var(--white-1)]"
+                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-[transparent !important]"
                   className2="mt-[5px] sm:mt-[5px]"
                   className3="top-[25%]"
-                  className5="text-[var(--white-1)]"
+                  className5=""
                   letIcon={true}
                   minLength={4}
                   maxLength={20}
@@ -289,7 +286,7 @@ const Register = () => {
               <div className="flex flex-col mt-4 sm:mt-10 w-full">
                 <button
                   type="submit"
-                  className={`flex justify-center px-7 py-2 text-xl rounded-md bg-[--primary-1] text-white hover:opacity-90 `}
+                  className="flex justify-center px-7 py-2.5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white transition-colors hover:bg-[#4338ca]"
                   disabled={loading}
                 >
                   {loading ? <LoadingI className="h-7" /> : "Devam"}
@@ -324,7 +321,7 @@ export default Register;
 const Confirm = ({ phoneNumber, setPopupContent, onClick }) => {
   return (
     <div className="w-full flex justify-center light">
-      <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--white-1]">
+      <div className="w-full max-w-[35rem] bg-[--white-1] shadow-lg py-10 px-5 rounded-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 border border-[--gr-1] text-[--black-1]">
         <div className="text-center">
           <div className="w-full flex justify-center mb-8">
             <p className="text-[--primary-2] text-4xl">

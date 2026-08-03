@@ -57,14 +57,13 @@ const ForgotPassword = () => {
 
   return (
     <GlassFrame
-      className="pt-[4rem]"
       component={
         !toVerify ? (
           /* Send code via Email or PhoneNumber */
-          <form className="flex flex-col w-full light" onSubmit={sendCode}>
+          <form className="flex flex-col w-full" onSubmit={sendCode}>
             <div className="flex justify-center relative">
               <div className="w-max">
-                <h2 className="text-[2.3rem] font-bold text-[--white-1] tracking-tighter">
+                <h2 className="text-[2.3rem] font-bold text-[--black-1] tracking-tighter">
                   Şifre Hatırlatma
                 </h2>
               </div>
@@ -89,15 +88,15 @@ const ForgotPassword = () => {
                 className2="whitespace-nowrap"
               />
             </div>
-            <div className="flex flex-col max-w-full customInput">
+            <div className="flex flex-col max-w-full">
               {checked ? (
                 <CustomPhoneInput
                   label="Telefon"
                   placeholder="Telefon"
                   value={phoneNumber}
                   onChange={(phone) => setPhoneNumber(phone)}
-                  className="py-2 bg-transparent text-[var(--white-1)]"
-                  className5="text-[var(--white-1)]"
+                  className="py-2"
+                  className5=""
                 />
               ) : (
                 <CustomInput
@@ -107,8 +106,8 @@ const ForgotPassword = () => {
                   value={email}
                   onChange={(e) => setEmail(e)}
                   required={true}
-                  className="py-2 bg-transparent text-[var(--white-1)]"
-                  className5="text-[var(--white-1)]"
+                  className="py-2"
+                  className5=""
                 />
               )}
               <div className="flex flex-col w-full">
@@ -121,7 +120,7 @@ const ForgotPassword = () => {
                 <button
                   disabled={loading}
                   type="submit"
-                  className="flex justify-center px-7 py-2 mt-5 text-lg rounded-md bg-[--primary-1] text-white hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
+                  className="flex justify-center px-7 py-2.5 mt-5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white transition-colors hover:bg-[#4338ca] disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {loading ? <LoadingI className="h-7" /> : "Gönder"}
                 </button>
@@ -135,7 +134,7 @@ const ForgotPassword = () => {
               <button
                 type="button"
                 onClick={() => (window.location.href = "/login")}
-                className="px-7 py-2 text-xl rounded-md border border-solid border-[--gr-1] mt-5 text-center text-white"
+                className="px-7 py-2 text-base font-medium rounded-lg border border-solid border-[--border-1] mt-5 text-center text-[--black-2] hover:bg-[--light-3] transition-colors"
               >
                 Giriş yap
               </button>

@@ -62,9 +62,8 @@ function Login() {
 
   return (
     <GlassFrame
-      className="pt-[4rem]"
       component={
-        <form onSubmit={handleLogin} className="text-white light customInput">
+        <form onSubmit={handleLogin} className="">
           <h1 className="text-3xl font-bold text-center mb-2">Giriş Yap</h1>
           <p className="text-center text-sm text-[--gr-3] mb-8">
             Restoran panelinize devam etmek için giriş yapın
@@ -76,7 +75,7 @@ function Login() {
             value={emailOrPhone}
             onChange={(e) => setEmailOrPhone(e)}
             required={true}
-            className="py-2 bg-transparent"
+            className="py-2"
             autoComplete="on"
           />
           <CustomInput
@@ -85,7 +84,7 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e)}
             letIcon={true}
-            className="py-2 bg-transparent"
+            className="py-2"
             autoComplete="on"
             minLength={4}
             maxLength={20}

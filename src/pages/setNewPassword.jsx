@@ -111,13 +111,13 @@ const SetNewPassword = () => {
   return !credentials && token ? (
     <GlassFrame
       component={
-        <form className="light" onSubmit={handleChangePassword}>
+        <form className="" onSubmit={handleChangePassword}>
           <div className="flex justify-center">
-            <h2 className="text-[2rem] font-bold text-[--white-1] tracking-tighter whitespace-nowrap">
+            <h2 className="text-[2rem] font-bold text-[--black-1] tracking-tighter whitespace-nowrap">
               Yeni şifreniz
             </h2>
           </div>
-          <div className="flex flex-col max-w-full customInput">
+          <div className="flex flex-col max-w-full">
             <CustomInput
               label="Yeni Şifre"
               placeholder="Yeni Şifre"
@@ -125,8 +125,8 @@ const SetNewPassword = () => {
               onChange={(e) => setPassword(e)}
               letIcon={true}
               required={true}
-              className="py-2 bg-transparent text-[var(--white-1)]"
-              className5="text-[var(--white-1)]"
+              className="py-2"
+              className5=""
             />
             <CustomInput
               label="Şifreyi Onayla"
@@ -135,14 +135,14 @@ const SetNewPassword = () => {
               onChange={(e) => setPassword2(e)}
               letIcon={true}
               required={true}
-              className="py-2 bg-transparent text-[var(--white-1)]"
-              className5="text-[var(--white-1)]"
+              className="py-2"
+              className5=""
             />
             <div className="flex flex-col w-full mb-8">
               <button
                 disabled={loading}
                 type="submit"
-                className="flex justify-center font-[350] px-7 py-2 text-xl rounded-md bg-[--primary-1] text-white mt-10 disabled:opacity-90 disabled:cursor-not-allowed"
+                className="flex justify-center px-7 py-2.5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white mt-10 transition-colors hover:bg-[#4338ca] disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? <LoadingI className="h-7" /> : "Kaydet"}
               </button>

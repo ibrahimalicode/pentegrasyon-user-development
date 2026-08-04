@@ -21,7 +21,12 @@ import {
   resetGetRestaurants,
 } from "../../redux/restaurants/getRestaurantsSlice";
 
-const SalesBar = () => {
+// onTotalsChange lifts the KPI figures up to the dashboard page. The order
+// statistics slice is already consumed-and-reset by both this chart and the
+// donut, so deriving the totals here (the component that owns the fetch and
+// the filters) avoids adding a third racing consumer — and it means the
+// KPIs follow the chart's restaurant/year/month filter.
+const SalesBar = ({ onTotalsChange }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.dashboard.getOrderStatistics);
   const { restaurants } = useSelector(
@@ -69,6 +74,12 @@ const SalesBar = () => {
         };
       });
       setSalesData(updatedData);
+      onTotalsChange?.({
+        // totalCount (not approvedCount) so the KPI agrees with the donut
+        // and the restaurants table, which both count every order.
+        orders: data.reduce((sum, s) => sum + (s.totalCount || 0), 0),
+        revenue: salesSum,
+      });
       dispatch(resetGetOrderStatistics());
     }
   }, [data]);

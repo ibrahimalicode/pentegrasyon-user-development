@@ -109,7 +109,7 @@ const SalesBar = () => {
 
   return (
     <main className="w-full p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card max-md:overflow-x-auto">
-      <div className="flex flex-col gap-2.5 w-full min-w-[36rem]">
+      <div className="flex flex-col gap-2.5 w-full min-w-0">
         <main className="flex w-full justify-between items-center gap-4 z-[51] relative">
           <h2 className="text-base font-semibold whitespace-nowrap text-[--black-1]">
             Toplam Satış
@@ -163,70 +163,74 @@ const SalesBar = () => {
           </div>
         </main>
 
-        <main className="w-full flex pt-6 relative">
-          <div className="flex flex-col gap-6 text-[--gr-1] text-sm text-right tabular-nums whitespace-nowrap">
+        {/* Axis column + plot are siblings, and the bar row and label row
+            share identical flex geometry — that is what keeps marketplace
+            names centred under their bars regardless of axis label width
+            (they used to be a separate row with a guessed pl-8 offset). */}
+        <div className="flex gap-3 pt-8">
+          <div className="flex flex-col justify-between h-[200px] shrink-0 text-xs text-[--gr-1] text-right tabular-nums whitespace-nowrap">
             {axisTicks.map((tick, index) => (
-              <p key={index} className="leading-5">
+              <span key={index} className="leading-none">
                 {tick}
-              </p>
+              </span>
             ))}
           </div>
 
-          <div className="flex z-50 w-full pt-2.5 text-[--black-1]">
-            {salesData &&
-              salesData.map((sales, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-4 items-center justify-end pl-4 w-[6rem]"
-                >
-                  <div className="w-max h-full flex items-end relative group">
-                    <div
-                      className="w-12 h-full bg-[--primary-1] rounded-t-md relative transition-[filter] duration-200 group-hover:brightness-110"
-                      style={{
-                        zIndex: (salesData.length - index) * 10,
-                        maxHeight: `${barHeight(sales.approvedValue)}%`,
-                      }}
-                    >
-                      <div className="absolute -top-10 left-0 right-0 min-w-full flex justify-center opacity-0 group-hover:opacity-100 transition-all ease-in">
-                        <ToolTip data={sales} />
-                      </div>
-                      <div className="absolute -top-5 left-0 right-0 min-w-full text-center text-xs group-hover:opacity-0">
-                        {sales.approvedAmount}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-
-          <div className="absolute top-0 left-0 h-full w-full flex flex-col pt-[25px] gap-6 px-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="w-full flex items-center h-5 last:items-end"
-              >
-                <span
-                  className={`w-full h-1 border-b`}
-                  style={{
-                    borderImage: `repeating-linear-gradient(to right, var(--gr-5), var(--gr-5), transparent 6px, transparent 10px) 1 / 1 / 0 stretch`,
-                  }}
-                ></span>
+          <div className="flex-1 min-w-0">
+            <div className="relative h-[200px]">
+              <div className="absolute inset-0 flex flex-col justify-between">
+                {axisTicks.map((_, i) => (
+                  <span
+                    key={i}
+                    className="w-full border-t border-dashed border-[--border-1]"
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-        </main>
 
-        <main className="flex  pl-8  w-max">
-          {salesData &&
-            salesData.map((sales, index) => (
-              <p
-                key={index}
-                className="w-[6rem] h-max py-2 text-[--gr-1] text-center whitespace-nowrap text-xs"
-              >
-                {MarketPalceIds[sales.marketplaceId]?.label}
-              </p>
-            ))}
-        </main>
+              <div className="relative h-full flex items-end justify-center gap-6 sm:gap-10 px-2">
+                {salesData &&
+                  salesData.map((sales, index) => {
+                    const h = barHeight(sales.approvedValue);
+                    return (
+                      <div
+                        key={index}
+                        className="group relative flex-1 max-w-[6.5rem] h-full"
+                      >
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-[--primary-1] rounded-t-md transition-[filter] duration-200 group-hover:brightness-110"
+                          style={{ height: `${h}%` }}
+                        />
+                        <span
+                          className="absolute left-0 right-0 text-center text-xs font-medium text-[--black-2] whitespace-nowrap transition-opacity group-hover:opacity-0"
+                          style={{ bottom: `calc(${h}% + 0.375rem)` }}
+                        >
+                          {sales.approvedAmount}
+                        </span>
+                        <div
+                          className="absolute left-1/2 -translate-x-1/2 z-30 opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none"
+                          style={{ bottom: `calc(${h}% + 0.375rem)` }}
+                        >
+                          <ToolTip data={sales} />
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div className="flex justify-center gap-6 sm:gap-10 px-2 mt-2">
+              {salesData &&
+                salesData.map((sales, index) => (
+                  <p
+                    key={index}
+                    className="flex-1 max-w-[6.5rem] text-center text-xs text-[--gr-1] truncate"
+                  >
+                    {MarketPalceIds[sales.marketplaceId]?.label}
+                  </p>
+                ))}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

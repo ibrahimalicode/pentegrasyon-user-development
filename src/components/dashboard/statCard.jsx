@@ -81,7 +81,7 @@ const StatCard = () => {
         statData.map((card, index) => (
           <div
             key={index}
-            className="flex flex-col gap-4 p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card"
+            className="flex flex-col gap-2.5 px-5 py-4 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card"
           >
             <div className="w-full flex justify-between items-center gap-2">
               <h2 className="text-sm font-medium text-[--gr-1]">
@@ -99,7 +99,7 @@ const StatCard = () => {
             </div>
 
             <div className="w-full flex justify-between items-end gap-4">
-              <p className="text-3xl font-bold text-[--black-1] leading-none">
+              <p className="text-2xl font-bold text-[--black-1] leading-none">
                 {card?.total.toLocaleString()}
               </p>
 
@@ -122,8 +122,8 @@ const StatCard = () => {
         ))
       ) : (
         <>
-          <div className="h-[6.5rem] rounded-xl border border-solid border-[--border-1] bg-[--light-3] fade"></div>
-          <div className="h-[6.5rem] rounded-xl border border-solid border-[--border-1] bg-[--light-3] fade"></div>
+          <div className="h-[5.5rem] rounded-xl border border-solid border-[--border-1] bg-[--light-3] fade"></div>
+          <div className="h-[5.5rem] rounded-xl border border-solid border-[--border-1] bg-[--light-3] fade"></div>
         </>
       )}
     </main>

@@ -112,7 +112,7 @@ const MigrosYemekTableBody = ({
           <img
             alt="perntegrasyon-marketplace"
             src={MigrosYemek}
-            className="size-10 rounded-full"
+            className="size-8 rounded-full"
           />
         </td>
         <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
@@ -193,7 +193,7 @@ const MigrosYemekTableBody = ({
               : "Platform Kuryesi"}
           </button>
         </td>
-        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap text-right tabular-nums")}>
           {order.discountedPrice == order.totalPrice
             ? formatToPrice(
                 String(order.totalPrice.toFixed(2)).replace(".", ",")
@@ -214,7 +214,7 @@ const MigrosYemekTableBody = ({
             setOrdersData={setOrdersData}
           />
         </td>
-        <td className={cn(TD, "w-14 relative")}>
+        <td className={cn(TD, "w-14 relative text-center")}>
           {
             <PrintComponent
               component={<MigrosYemekPrintOrder order={formatOrder()} />}

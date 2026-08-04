@@ -1,8 +1,9 @@
 //MODULES
 import { lazy, Suspense, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 //COMP
+import { cn } from "../lib/utils";
 import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
 import CourierStatusChange from "../components/couriers/components/courierStatusChange";
@@ -23,14 +24,28 @@ const Logs = lazy(() => import("./activityLogs"));
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
+  const { pathname } = useLocation();
+
+  // Orders is the operational main screen and its table is wide, so the
+  // sidebar collapses there and is opened on demand from the header.
+  const isOrdersPage = pathname.startsWith("/orders");
+
   return (
     <section className="bg-[--white-1]">
       <CourierStatusChange />
-      <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-      <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+      <Header
+        openSidebar={openSidebar}
+        setOpenSidebar={setOpenSidebar}
+        isOrdersPage={isOrdersPage}
+      />
+      <Sidebar
+        openSidebar={openSidebar}
+        setOpenSidebar={setOpenSidebar}
+        isOrdersPage={isOrdersPage}
+      />
       {/* Single place that reserves room for the permanent lg+ sidebar —
           pages used to each repeat lg:ml-[280px], and orders never had it. */}
-      <div className="lg:pl-[280px]">
+      <div className={cn(!isOrdersPage && "lg:pl-[280px]")}>
         <Suspense fallback={<CustomGeneralLoader />}>
           <Routes>
           <Route path="/*" element={<Navigate to="/orders" />} />

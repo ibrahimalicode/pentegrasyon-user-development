@@ -4,13 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import { cn } from "../../lib/utils";
-import {
-  TABLE,
-  TABLE_CARD,
-  TABLE_SCROLL,
-  THEAD_ROW,
-  TH,
-} from "../common/tableStyles";
+import { TABLE, THEAD_ROW, TH } from "../common/tableStyles";
 import GetirYemekTableBody from "./getirYemek/getirYemekTableBody";
 import YemekSepetiTableBody from "./yemekSepeti/yemekSepetiTableBody";
 import MigrosYemekTableBody from "./migrosYemek/migrosYemekTableBody";
@@ -161,11 +155,17 @@ const OrdersTable = ({
     };
   }
 
+  // The bordered card IS the scroll container. Keeping them separate meant
+  // the card's overflow-hidden clipped the sticky header, so it scrolled
+  // away with the rows instead of pinning.
   return (
-    <main className={TABLE_SCROLL}>
-      <div className={cn(TABLE_CARD, "min-w-max")}>
-        <table className={TABLE}>
-          <thead>
+    <main className="w-full overflow-auto rounded-xl border border-[--border-1] bg-[--white-1]">
+      {/* Denser rows than the standard table: this is the operational
+          screen, so more orders on screen matters more than airiness. */}
+      <div className="min-w-max">
+        <table className={cn(TABLE, "[&_td]:py-2")}>
+          {/* Header sticks while the order list scrolls under it. */}
+          <thead className="sticky top-0 z-20">
             <tr className={THEAD_ROW}>
               <th className={cn(TH, "w-14")}></th>
               <th className={TH}>Onay Kodu</th>

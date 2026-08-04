@@ -95,7 +95,7 @@ const GetirYemekTableBody = ({
           <img
             alt="perntegrasyon-marketplace"
             src={GetirYemek}
-            className="size-10 rounded-full"
+            className="size-8 rounded-full"
           />
         </td>
         <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
@@ -198,7 +198,7 @@ const GetirYemekTableBody = ({
             })()}
           </button>
         </td>
-        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap text-right tabular-nums")}>
           {order.totalDiscountedPrice
             ? formatToPrice(
                 String(order.totalDiscountedPrice.toFixed(2)).replace(".", ","),
@@ -219,7 +219,7 @@ const GetirYemekTableBody = ({
             setOrdersData={setOrdersData}
           />
         </td>
-        <td className={cn(TD, "w-14 relative")}>
+        <td className={cn(TD, "w-14 relative text-center")}>
           {
             <PrintComponent
               component={

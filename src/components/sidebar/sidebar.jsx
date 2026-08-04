@@ -35,7 +35,7 @@ import {
 //REDUX
 import { getUserLock } from "../../redux/user/getUserLockSlice";
 
-function Sidebar({ openSidebar, setOpenSidebar }) {
+function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
   const param = useParams();
   const sidebarRef = useRef();
   const dispatch = useDispatch();
@@ -93,10 +93,12 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
 
   return (
     <>
-      {/* Dim backdrop for the mobile drawer */}
+      {/* Dim backdrop for the drawer. On orders the sidebar is a drawer at
+          every width, so the backdrop must not be hidden at lg there. */}
       <div
         className={cn(
-          "fixed inset-0 z-[998] bg-slate-950/40 backdrop-blur-[1px] transition-opacity lg:hidden",
+          "fixed inset-0 z-[998] bg-slate-950/40 backdrop-blur-[1px] transition-opacity",
+          !isOrdersPage && "lg:hidden",
           openSidebar
             ? "opacity-100"
             : "opacity-0 pointer-events-none invisible"
@@ -110,9 +112,10 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
           "fixed left-0 top-0 z-[999] flex flex-col justify-between w-[280px] h-[100dvh]",
           "bg-[--white-1] border-r border-[--border-1]",
           "transition-transform duration-300 ease-out",
-          // Drawer below lg, permanent from lg up.
+          // Drawer below lg, permanent from lg up — except on orders, where
+          // it stays a drawer so the wide table gets the full width.
           openSidebar ? "translate-x-0 shadow-modal" : "-translate-x-full",
-          "lg:translate-x-0 lg:shadow-none"
+          !isOrdersPage && "lg:translate-x-0 lg:shadow-none"
         )}
       >
         <div className="flex flex-col w-full min-h-0">

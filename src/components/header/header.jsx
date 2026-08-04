@@ -22,7 +22,7 @@ import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
 const iconButton =
   "flex justify-center items-center size-9 rounded-lg text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/40";
 
-function Header({ openSidebar, setOpenSidebar }) {
+function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
   const toastId = useRef();
   const param = useParams();
   const dispatch = useDispatch();
@@ -79,13 +79,20 @@ function Header({ openSidebar, setOpenSidebar }) {
 
   return (
     <>
-      <header className="fixed top-0 right-0 left-0 z-[99] lg:pl-[280px] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1]">
+      <header
+        className={cn(
+          "fixed top-0 right-0 left-0 z-[99] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1]",
+          !isOrdersPage && "lg:pl-[280px]"
+        )}
+      >
         <nav className="w-full h-16 flex justify-between items-center gap-3 max-md:px-4 px-[4%]">
           <div className="flex items-center gap-3 min-w-0">
+            {/* On orders the sidebar is collapsed at every width, so the
+                toggle has to stay reachable on desktop too. */}
             <button
               type="button"
               aria-label="Menüyü aç/kapat"
-              className={cn(iconButton, "lg:hidden")}
+              className={cn(iconButton, !isOrdersPage && "lg:hidden")}
               onClick={() => setOpenSidebar(!openSidebar)}
             >
               <MenuI />

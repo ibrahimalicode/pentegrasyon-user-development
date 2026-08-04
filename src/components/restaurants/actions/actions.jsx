@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { cn } from "../../../lib/utils";
 import MenuI from "../../../assets/icon/menu";
 import UserRestaurantLicenses from "./licenses";
 import { usePopup } from "../../../context/PopupContext";
@@ -6,7 +7,9 @@ import EditRestaurant from "./edit";
 import DeleteRetaurant from "./delete";
 import TransferRestaurant from "./transfer";
 
-const Actions = ({ index, restaurant, onSuccess }) => {
+// menuClassName lets a card anchor the dropdown to itself; the default
+// keeps the original table-row placement.
+const Actions = ({ index, restaurant, onSuccess, menuClassName }) => {
   const outRef = useRef();
   const restaurantMenuRef = useRef();
   const { registerClickOutside } = usePopup();
@@ -38,9 +41,10 @@ const Actions = ({ index, restaurant, onSuccess }) => {
       </div>
       {openMenu === index && (
         <div
-          className={`absolute right-10 border-2 border-solid border-[--light-3] rounded-sm z-10 shadow-lg overflow-hidden ${
-            index < 5 ? "top-5" : "bottom-5"
-          }`}
+          className={cn(
+            "absolute z-20 border border-solid border-[--border-1] rounded-xl shadow-dropdown overflow-hidden",
+            menuClassName || `right-10 ${index < 5 ? "top-5" : "bottom-5"}`
+          )}
           ref={outRef}
         >
           <ul className="bg-[--white-1] text-[--gr-1] w-48">

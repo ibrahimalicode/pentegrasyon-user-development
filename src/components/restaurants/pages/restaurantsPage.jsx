@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import AddRestaurant from "../actions/addRestaurant";
 import CloseI from "../../../assets/icon/close";
 import CustomInput from "../../common/customInput";
-import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import CustomPagination from "../../common/pagination";
 import { usePopup } from "../../../context/PopupContext";
-import RestaurantsTable from "../restaurantsTable";
+import RestaurantsCards, {
+  RestaurantsCardsSkeleton,
+} from "../restaurantsCards";
 import Actions from "../actions/actions";
 
 // REDUX
@@ -397,14 +398,14 @@ const RestaurantsPage = () => {
 
       {/* TABLE */}
       {restaurantsData?.length > 0 ? (
-        <RestaurantsTable
+        <RestaurantsCards
           inData={restaurantsData}
           Actions={Actions}
           totalItems={restaurantsData.length}
           onSuccess={() => handleFilter(true)}
         />
       ) : loading ? (
-        <TableSkeleton />
+        <RestaurantsCardsSkeleton />
       ) : (
         <NoTableData
           Icon={RestourantI}

@@ -11,12 +11,12 @@ import {
 } from "../redux/auth/forgotPasswordSlice";
 
 //COMP
-import LoadingI from "../assets/anim/loading";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
 import CustomInput from "../components/common/customInput";
 import CustomCheckbox from "../components/common/customCheckbox";
 import CustomPhoneInput from "../components/common/customPhoneInput";
+import { AuthHeader, AuthSubmit } from "../components/common/authKit";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -61,14 +61,11 @@ const ForgotPassword = () => {
         !toVerify ? (
           /* Send code via Email or PhoneNumber */
           <form className="flex flex-col w-full" onSubmit={sendCode}>
-            <div className="flex justify-center relative">
-              <div className="w-max">
-                <h2 className="text-[2.3rem] font-bold text-[--black-1] tracking-tighter">
-                  Şifre Hatırlatma
-                </h2>
-              </div>
-            </div>
-            <div className="w-full flex justify-center gap-4 mt-16">
+            <AuthHeader
+              title="Şifre Hatırlatma"
+              subtitle="Onay kodu göndermek için sistemde kayıtlı olan telefon numaranızı veya mail adresinizi giriniz."
+            />
+            <div className="w-full flex gap-4">
               <CustomCheckbox
                 checked={checked}
                 onChange={() => {
@@ -88,57 +85,37 @@ const ForgotPassword = () => {
                 className2="whitespace-nowrap"
               />
             </div>
-            <div className="flex flex-col max-w-full">
-              {checked ? (
-                <CustomPhoneInput
-                  label="Telefon"
-                  placeholder="Telefon"
-                  value={phoneNumber}
-                  onChange={(phone) => setPhoneNumber(phone)}
-                  className="py-2"
-                  className5=""
-                />
-              ) : (
-                <CustomInput
-                  label="E-Posta"
-                  type="email"
-                  placeholder="E-Posta"
-                  value={email}
-                  onChange={(e) => setEmail(e)}
-                  required={true}
-                  className="py-2"
-                  className5=""
-                />
-              )}
-              <div className="flex flex-col w-full">
-                <div className="font-[300] text-[--link-1] mt-5 text-sm">
-                  <p>
-                    Onay kodu göndermek için sistemde kayıtlı olan telefon
-                    numaranızı veya mail adresinizi giriniz.
-                  </p>
-                </div>
-                <button
-                  disabled={loading}
-                  type="submit"
-                  className="flex justify-center px-7 py-2.5 mt-5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white transition-colors hover:bg-[#4338ca] disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {loading ? <LoadingI className="h-7" /> : "Gönder"}
-                </button>
-                {/* <div className="shrink-0 mt-5 h-px bg-slate-200 w-full" /> */}
-              </div>
-            </div>
-            <div className="flex flex-col mt-10 w-full">
-              <div className="text-sm leading-5 text-[--link-1] w-full text-center">
-                {/* <p>Zaten Hesabınız var mı ?</p> */}
-              </div>
-              <button
-                type="button"
-                onClick={() => (window.location.href = "/login")}
-                className="px-7 py-2 text-base font-medium rounded-lg border border-solid border-[--border-1] mt-5 text-center text-[--black-2] hover:bg-[--light-3] transition-colors"
-              >
-                Giriş yap
-              </button>
-            </div>
+            {checked ? (
+              <CustomPhoneInput
+                label="Telefon"
+                placeholder="Telefon"
+                value={phoneNumber}
+                onChange={(phone) => setPhoneNumber(phone)}
+                className="py-2"
+                className5=""
+              />
+            ) : (
+              <CustomInput
+                label="E-Posta"
+                type="email"
+                placeholder="E-Posta"
+                value={email}
+                onChange={(e) => setEmail(e)}
+                required={true}
+                className="py-2"
+                className5=""
+              />
+            )}
+
+            <AuthSubmit loading={loading}>Gönder</AuthSubmit>
+
+            <button
+              type="button"
+              onClick={() => (window.location.href = "/login")}
+              className="w-full h-11 mt-3 text-base font-medium rounded-lg border border-solid border-[--border-1] text-[--black-2] hover:bg-[--light-3] transition-colors"
+            >
+              Giriş Yap
+            </button>
           </form>
         ) : (
           /* Verify the code */

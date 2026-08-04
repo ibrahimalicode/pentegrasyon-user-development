@@ -15,6 +15,11 @@ import { login, resetLoginState } from "../redux/auth/loginSlice";
 // COMP
 import GlassFrame from "../components/common/glassFrame";
 import CustomInput from "../components/common/customInput";
+import {
+  AuthHeader,
+  AuthSubmit,
+  AuthFooter,
+} from "../components/common/authKit";
 
 function Login() {
   const dispatch = useDispatch();
@@ -63,11 +68,11 @@ function Login() {
   return (
     <GlassFrame
       component={
-        <form onSubmit={handleLogin} className="">
-          <h1 className="text-3xl font-bold text-center mb-2">Giriş Yap</h1>
-          <p className="text-center text-sm text-[--gr-3] mb-8">
-            Restoran panelinize devam etmek için giriş yapın
-          </p>
+        <form onSubmit={handleLogin}>
+          <AuthHeader
+            title="Giriş Yap"
+            subtitle="Restoran panelinize devam etmek için giriş yapın"
+          />
           <CustomInput
             label="E-posta/Telefon"
             type="text"
@@ -89,28 +94,24 @@ function Login() {
             minLength={4}
             maxLength={20}
           />
-          <div className="text-right text-sm text-[--link-1] mt-3">
-            <a href="/forgotPassword" className="hover:underline">
+          <div className="text-right text-sm mt-3">
+            <a
+              href="/forgotPassword"
+              className="font-medium text-[--primary-1] hover:underline"
+            >
               Şifremi unuttum?
             </a>
           </div>
 
           <TurnstileWidget setToken={setTurnstileToken} pageName={"login"} />
 
-          <button
-            disabled={loading}
-            type="submit"
-            className="w-full flex justify-center px-7 py-2.5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white mt-8 transition-colors hover:bg-[#4338ca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {loading ? <LoadingI className="h-7 text-white" /> : "Giriş"}
-          </button>
+          <AuthSubmit loading={loading}>Giriş Yap</AuthSubmit>
 
-          <div className="flex mt-4 justify-center gap-2 text-sm">
-            <p className="text-[--gr-3]">Hesabınız yok mu?</p>
-            <a href="/register" className="text-[--link-1] hover:underline">
-              Kayıt ol
-            </a>
-          </div>
+          <AuthFooter
+            question="Hesabınız yok mu?"
+            linkText="Kayıt Ol"
+            to="/register"
+          />
         </form>
       }
     />

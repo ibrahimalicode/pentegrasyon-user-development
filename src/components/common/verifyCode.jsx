@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 //COMP
 import { GobackI } from "../../assets/icon";
 import MinuteCountdown from "./minuteCountdown";
-import LoadingI from "../../assets/anim/loading";
+import { AuthHeader, AuthSubmit } from "./authKit";
 import VerificationInputs from "./customVerificationInputs";
 import { EmailUserMessage, PhoneUserMessage } from "./messages";
 
@@ -119,23 +119,16 @@ const VerifyCode = ({
 
   return (
     <form className="light" onSubmit={handleSubmit}>
-      <div className="flex justify-center relative">
-        <div className="absolute left-0 top-0 bottom-0 flex items-center">
-          <button
-            type="button"
-            onClick={() => setToConfirm(false)}
-            className="flex items-center justify-center sm:px-5 py-2 text-sm transition-colors duration-200 border-0 rounded-lg gap-x-2 text-[--white-1]"
-          >
-            <GobackI strokeWidth={2} className="size-[1.7rem]" />
-            {/* <span>Geri dön</span> */}
-          </button>
-        </div>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setToConfirm(false)}
+          className="absolute right-0 top-1 flex items-center gap-x-2 text-sm text-[--gr-1] hover:text-[--black-1] transition-colors"
+        >
+          <GobackI strokeWidth={2} className="size-[1.7rem]" />
+        </button>
 
-        <div className="w-max">
-          <h2 className="text-[2.7rem] font-bold text-[--white-1] tracking-tighter">
-            Onayla
-          </h2>
-        </div>
+        <AuthHeader title="Onayla" />
       </div>
 
       <div>
@@ -151,7 +144,7 @@ const VerifyCode = ({
           disabled={minutes <= 0}
         />
 
-        <div className="mt-10 text-[--white-1]">
+        <div className="mt-10 text-[--black-1]">
           {isEmail ? (
             <EmailUserMessage mail={phoneNumber} />
           ) : (
@@ -159,19 +152,9 @@ const VerifyCode = ({
           )}
         </div>
 
-        <div className="flex flex-col mt-10 w-full">
-          <button
-            type="submit"
-            className="flex justify-center px-7 py-2 text-lg rounded-md bg-[--primary-1] text-white hover:opacity-90 disabled:opacity-90 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <LoadingI className="h-7" />
-            ) : (
-              `${minutes === 0 ? "Tekrar Gönder" : "Doğrula"}`
-            )}
-          </button>
-          <div className="shrink-0 h-px bg-slate-200 w-full mt-24" />
-        </div>
+        <AuthSubmit loading={loading}>
+          {minutes === 0 ? "Tekrar Gönder" : "Doğrula"}
+        </AuthSubmit>
       </div>
     </form>
   );

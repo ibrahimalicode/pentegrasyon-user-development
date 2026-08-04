@@ -6,9 +6,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 //COMP
 import NotFound from "./404";
-import LoadingI from "../assets/anim/loading";
 import GlassFrame from "../components/common/glassFrame";
 import CustomInput from "../components/common/customInput";
+import { AuthHeader, AuthSubmit } from "../components/common/authKit";
 
 //REDUX
 import { clearAuth } from "../redux/api";
@@ -111,43 +111,33 @@ const SetNewPassword = () => {
   return !credentials && token ? (
     <GlassFrame
       component={
-        <form className="" onSubmit={handleChangePassword}>
-          <div className="flex justify-center">
-            <h2 className="text-[2rem] font-bold text-[--black-1] tracking-tighter whitespace-nowrap">
-              Yeni şifreniz
-            </h2>
-          </div>
-          <div className="flex flex-col max-w-full">
-            <CustomInput
-              label="Yeni Şifre"
-              placeholder="Yeni Şifre"
-              value={password}
-              onChange={(e) => setPassword(e)}
-              letIcon={true}
-              required={true}
-              className="py-2"
-              className5=""
-            />
-            <CustomInput
-              label="Şifreyi Onayla"
-              placeholder="Şifreyi Onayla"
-              value={password2}
-              onChange={(e) => setPassword2(e)}
-              letIcon={true}
-              required={true}
-              className="py-2"
-              className5=""
-            />
-            <div className="flex flex-col w-full mb-8">
-              <button
-                disabled={loading}
-                type="submit"
-                className="flex justify-center px-7 py-2.5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white mt-10 transition-colors hover:bg-[#4338ca] disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {loading ? <LoadingI className="h-7" /> : "Kaydet"}
-              </button>
-            </div>
-          </div>
+        <form onSubmit={handleChangePassword}>
+          <AuthHeader
+            title="Yeni Şifre Belirle"
+            subtitle="Hesabınız için yeni bir şifre oluşturun"
+          />
+          <CustomInput
+            label="Yeni Şifre"
+            placeholder="Yeni Şifre"
+            value={password}
+            onChange={(e) => setPassword(e)}
+            letIcon={true}
+            required={true}
+            className="py-2"
+            className5=""
+          />
+          <CustomInput
+            label="Şifreyi Onayla"
+            placeholder="Şifreyi Onayla"
+            value={password2}
+            onChange={(e) => setPassword2(e)}
+            letIcon={true}
+            required={true}
+            className="py-2"
+            className5=""
+          />
+
+          <AuthSubmit loading={loading}>Kaydet</AuthSubmit>
         </form>
       }
     />

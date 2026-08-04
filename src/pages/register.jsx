@@ -7,11 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import PrivacyPolicy from "./privacyPolicy";
-import LoadingI from "../assets/anim/loading";
 import CustomInput from "../components/common/customInput";
 import CustomSelect from "../components/common/customSelector";
 import CustomCheckbox from "../components/common/customCheckbox";
 import CustomPhoneInput from "../components/common/customPhoneInput";
+import {
+  AuthHeader,
+  AuthSubmit,
+  AuthFooter,
+} from "../components/common/authKit";
 
 //FUNC
 import { formatEmail, spacePhoneNumber } from "../utils/utils";
@@ -154,150 +158,96 @@ const Register = () => {
       component={
         !toConfirm ? (
           /* Register Page */
-          <form onSubmit={confirmRegister} className="">
-            <div className="flex justify-center">
-              <h2 className="text-[2.7rem] font-bold text-[--black-1] tracking-tighter">
-                Kayıt ol
-              </h2>
-            </div>
-            <div className="flex flex-col max-w-full">
-              <div className="flex max-sm:flex-col w-full sm:gap-2">
-                <CustomInput
-                  // label="Ad"
-                  type="text"
-                  placeholder="Ad"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e)}
-                  required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
-                  className2="mt-[5px] sm:mt-[5px]"
-                />
-                <CustomInput
-                  // label="Soyad"
-                  type="text"
-                  placeholder="Soyad"
-                  value={lastName}
-                  onChange={(e) => setLastName(e)}
-                  required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
-                  className2="mt-[5px] sm:mt-[5px]"
-                />
-              </div>
-
-              <div className="flex w-full sm:gap-2 max-sm:flex-col">
-                <CustomPhoneInput
-                  // label="Cep Telefonu"
-                  type="tel"
-                  placeholder="+90"
-                  value={phoneNumber}
-                  onChange={(phone) => setPhoneNumber(phone)}
-                  required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
-                  className2="mt-[5px] sm:mt-[5px]"
-                  maxLength={14}
-                />
-                <CustomInput
-                  // label="E-Posta"
-                  type="email"
-                  placeholder="E-Posta"
-                  value={email}
-                  onChange={(e) => setEmail(formatEmail(e))}
-                  required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
-                  className2="mt-[5px] sm:mt-[5px]"
-                />
-              </div>
-
-              <div className="flex w-full sm:gap-2 max-sm:flex-col">
-                <CustomSelect
-                  // label="Şehir"
-                  options={citiesData}
-                  value={city ? city : { value: null, label: "Şehir" }}
-                  onChange={setCity}
-                  style={{
-                    padding: "1px 0px",
-                    fontSize: ".8rem",
-                  }}
-                  className="text-sm mt-[5px] sm:mt-[5px]"
-                  className2="container-class mt-[0px] sm:mt-[0px]"
-                />
-                <CustomSelect
-                  required={true}
-                  // label="İlçe"
-                  value={
-                    district ? district : { value: null, label: "İlçe seç" }
-                  }
-                  options={[{ value: null, label: "İlçe seç" }, ...districts]}
-                  onChange={setDistrict}
-                  style={{
-                    padding: "1px 0px",
-                    fontSize: ".8rem",
-                  }}
-                  className="text-sm mt-[5px] sm:mt-[5px]"
-                  className2="container-class mt-[0px] sm:mt-[0px]"
-                />
-              </div>
-
-              <div className="">
-                <CustomInput
-                  // label="Şifre"
-                  placeholder="Şifre"
-                  value={password}
-                  onChange={(e) => setPassword(e)}
-                  required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem]"
-                  className2="mt-[5px] sm:mt-[5px]"
-                  className3="top-[25%]"
-                  className5=""
-                  letIcon={true}
-                  minLength={4}
-                  maxLength={20}
-                />
-                <CustomInput
-                  // label="Şifreyi onayla"
-                  placeholder="Şifre Tekrar"
-                  value={password2}
-                  onChange={(e) => setPassword2(e)}
-                  required={true}
-                  className="mt-[0px] sm:mt-[0px] py-[.5rem] bg-[transparent !important]"
-                  className2="mt-[5px] sm:mt-[5px]"
-                  className3="top-[25%]"
-                  className5=""
-                  letIcon={true}
-                  minLength={4}
-                  maxLength={20}
-                />
-              </div>
-
-              <div className="flex w-full mt-4">
-                {/* /privacyPolicy target='_blank' rel='noopener noreferrer */}
-                <CustomCheckbox
-                  label={<PrivacyBtn />}
-                  className="text-sm"
-                  checked={checked}
-                  onChange={() => setChecked(!checked)}
-                />
-              </div>
-
-              <div className="flex flex-col mt-4 sm:mt-10 w-full">
-                <button
-                  type="submit"
-                  className="flex justify-center px-7 py-2.5 text-lg font-semibold rounded-lg bg-[--primary-1] text-white transition-colors hover:bg-[#4338ca]"
-                  disabled={loading}
-                >
-                  {loading ? <LoadingI className="h-7" /> : "Devam"}
-                </button>
-              </div>
+          <form onSubmit={confirmRegister}>
+            <AuthHeader
+              title="Kayıt Ol"
+              subtitle="Ücretsiz hesabınızı oluşturun"
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3">
+              <CustomInput
+                label="Ad"
+                type="text"
+                placeholder="Ad"
+                value={firstName}
+                onChange={(e) => setFirstName(e)}
+                required={true}
+              />
+              <CustomInput
+                label="Soyad"
+                type="text"
+                placeholder="Soyad"
+                value={lastName}
+                onChange={(e) => setLastName(e)}
+                required={true}
+              />
+              <CustomPhoneInput
+                label="Telefon"
+                type="tel"
+                placeholder="+90"
+                value={phoneNumber}
+                onChange={(phone) => setPhoneNumber(phone)}
+                required={true}
+                maxLength={14}
+              />
+              <CustomInput
+                label="E-Posta"
+                type="email"
+                placeholder="E-Posta"
+                value={email}
+                onChange={(e) => setEmail(formatEmail(e))}
+                required={true}
+              />
+              <CustomSelect
+                label="Şehir"
+                options={citiesData}
+                value={city ? city : { value: null, label: "Şehir" }}
+                onChange={setCity}
+              />
+              <CustomSelect
+                label="İlçe"
+                required={true}
+                value={district ? district : { value: null, label: "İlçe seç" }}
+                options={[{ value: null, label: "İlçe seç" }, ...districts]}
+                onChange={setDistrict}
+              />
+              <CustomInput
+                label="Şifre"
+                placeholder="Şifre"
+                value={password}
+                onChange={(e) => setPassword(e)}
+                required={true}
+                letIcon={true}
+                minLength={4}
+                maxLength={20}
+              />
+              <CustomInput
+                label="Şifre Tekrar"
+                placeholder="Şifre Tekrar"
+                value={password2}
+                onChange={(e) => setPassword2(e)}
+                required={true}
+                letIcon={true}
+                minLength={4}
+                maxLength={20}
+              />
             </div>
 
-            <div className="flex flex-col mt-4 sm:mt-6 w-full">
-              <div className="flex justify-center gap-2 text-sm text-[--gr-1] mt-2">
-                <p>Hesabınız var mı ?</p>
-                <a href="/login" className="text-[--link-1]">
-                  Giriş Yapın
-                </a>
-              </div>
+            <div className="flex w-full mt-4">
+              <CustomCheckbox
+                label={<PrivacyBtn />}
+                className="text-sm"
+                checked={checked}
+                onChange={() => setChecked(!checked)}
+              />
             </div>
+
+            <AuthSubmit loading={loading}>Devam</AuthSubmit>
+
+            <AuthFooter
+              question="Hesabınız var mı?"
+              linkText="Giriş Yapın"
+              to="/login"
+            />
           </form>
         ) : (
           /* Verify Page*/

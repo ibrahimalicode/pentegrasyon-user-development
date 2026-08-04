@@ -76,20 +76,20 @@ const StatCard = () => {
   }, [restError, licenseError]);
 
   return (
-    <main className="w-full flex gap-4 max-md:flex-col">
+    <main className="w-full grid grid-cols-1 sm:grid-cols-2 gap-5">
       {statData && !restLoading && !licenseLoading ? (
         statData.map((card, index) => (
           <div
             key={index}
-            className="w-full flex flex-col px-5 py-3 gap-3 bg-[--white-1] rounded-md border-2 border-solid border-[--light-1]"
+            className="flex flex-col gap-4 p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card"
           >
-            <div className="w-full flex justify-between items-center">
-              <h1 className="font-bold text-[--black-1]">
+            <div className="w-full flex justify-between items-center gap-2">
+              <h2 className="text-sm font-medium text-[--gr-1]">
                 Toplam {card?.unit}
-              </h1>
+              </h2>
 
               <div
-                className={`w-max flex items-center whitespace-nowrap rounded-[50px] text-xs py-1 px-1.5 ${percentageClass(
+                className={`flex items-center gap-1 whitespace-nowrap rounded-full text-xs font-medium py-1 px-2 [&>svg]:size-3.5 ${percentageClass(
                   card?.changeRate
                 )}`}
               >
@@ -98,36 +98,33 @@ const StatCard = () => {
               </div>
             </div>
 
-            <div className="w-full flex justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-[--black-1]">
-                  {card?.total.toLocaleString()}
-                </h1>
-                <div className="text-[--gr-2] text-sm mt-1.5">{card?.unit}</div>
-              </div>
+            <div className="w-full flex justify-between items-end gap-4">
+              <p className="text-3xl font-bold text-[--black-1] leading-none">
+                {card?.total.toLocaleString()}
+              </p>
 
-              <div>
-                <div className="flex gap-1.5 justify-between items-center text-xs text-[--green-1] font-bold">
-                  <span>{card?.totalActive}</span>
-                  <span className="px-4 py-1 border border-solid border-green-500 border-opacity-50 rounded-[54px]">
-                    Aktif
+              <div className="flex gap-2">
+                <div className="flex items-center gap-1.5 rounded-full bg-[--status-green] px-2.5 py-1">
+                  <span className="text-xs font-semibold text-[--green-1]">
+                    {card?.totalActive}
                   </span>
+                  <span className="text-xs text-[--green-1]">Aktif</span>
                 </div>
-                <div className="flex gap-1.5 justify-between items-center text-xs text-[--gr-1] font-bold mt-1.5">
-                  <span>{card?.totalPassive}</span>
-                  <span className="px-4 py-1 border border-solid border-slate-500 border-opacity-50 rounded-[54px]">
-                    Pasif
+                <div className="flex items-center gap-1.5 rounded-full bg-[--light-3] px-2.5 py-1">
+                  <span className="text-xs font-semibold text-[--gr-1]">
+                    {card?.totalPassive}
                   </span>
+                  <span className="text-xs text-[--gr-1]">Pasif</span>
                 </div>
               </div>
             </div>
           </div>
         ))
       ) : (
-        <div className="flex max-sm:flex-col gap-4 w-full text-sm font-light overflow-hidden fade">
-          <div className="border border-solid border-[--border-1] w-full h-32 bg-[--light-3] rounded-lg"></div>
-          <div className="border border-solid border-[--border-1] w-full h-32 bg-[--light-3] rounded-lg"></div>
-        </div>
+        <>
+          <div className="h-[6.5rem] rounded-xl border border-solid border-[--border-1] bg-[--light-3] fade"></div>
+          <div className="h-[6.5rem] rounded-xl border border-solid border-[--border-1] bg-[--light-3] fade"></div>
+        </>
       )}
     </main>
   );

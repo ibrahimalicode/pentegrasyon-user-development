@@ -56,8 +56,13 @@ const MarketplaceChart = () => {
   }, [data]);
 
   return (
-    <main className="max-md:w-full w-max flex justify-center bg-[--white-1] rounded-md border-2 border-solid border-[--light-1]">
-      <div className="w-[26rem] max-lg:w-full h-[220px] overflow-hidden">
+    <main className="w-full flex flex-col bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card p-5">
+      <h2 className="text-base font-semibold text-[--black-1] mb-2">
+        Pazaryeri Dağılımı
+      </h2>
+      {/* No fixed height: the rendered donut is taller than the old 240px
+          box, so overflow-hidden was clipping its bottom edge. */}
+      <div className="w-full">
         <div className="w-full" id="donut-chart"></div>
       </div>
     </main>

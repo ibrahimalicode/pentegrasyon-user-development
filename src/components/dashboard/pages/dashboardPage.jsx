@@ -5,12 +5,16 @@ import MarketplaceChart from "../merketplaceChart";
 
 const DashboardPage = () => {
   return (
-    <section className="pt-20 min-h-0">
-      <div className="flex flex-col px-16 max-md:px-5">
+    // px-[4%] matches every other page; the old px-16 made the dashboard
+    // the only screen with a different gutter.
+    <section className="pt-16 px-[4%] pb-6 min-h-0">
+      <div className="flex flex-col gap-5 py-6">
         <StatCard />
         <SalesBar />
-        <div className="flex gap-5 w-full max-md:flex-col mt-3">
-          <RestaurantsTable />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 w-full items-start">
+          <div className="lg:col-span-2 min-w-0">
+            <RestaurantsTable />
+          </div>
           <MarketplaceChart />
         </div>
       </div>

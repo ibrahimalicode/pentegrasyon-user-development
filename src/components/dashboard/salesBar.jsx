@@ -8,7 +8,6 @@ import CustomSelector from "../common/customSelector";
 //UTILS
 import years from "../../enums/years";
 import months from "../../enums/months";
-import TotalSales from "../../enums/totalSales";
 import MarketPalceIds from "../../enums/marketPlaceIds";
 import { formatSelectorData, formatToPrice } from "../../utils/utils";
 
@@ -41,7 +40,6 @@ const SalesBar = () => {
   });
 
   function handleFilter(inData) {
-    console.log(inData);
     dispatch(getOrderStatistics(inData));
   }
 
@@ -63,9 +61,11 @@ const SalesBar = () => {
       const updatedData = data.map((stat) => {
         return {
           ...stat,
+          // keep the raw number: bar heights and the axis scale off it
+          approvedValue: stat.approvedAmount,
           approvedAmount: format(stat.approvedAmount),
           rejectedAmount: format(stat.rejectedAmount),
-          percent: (stat.approvedAmount / salesSum) * 100,
+          percent: salesSum ? (stat.approvedAmount / salesSum) * 100 : 0,
         };
       });
       setSalesData(updatedData);
@@ -88,33 +88,33 @@ const SalesBar = () => {
     }
   }, [restaurants]);
 
-  //CALCLULATE THE HEIGHT
-  function calc(price) {
-    let max = 1;
-    TotalSales.map((sales) => {
-      sales.price > max ? (max = sales.price) : null;
-    });
+  // Bars scale against the largest value in the CURRENT dataset, so the
+  // tallest bar fills the plot. (This used to scale against a hardcoded
+  // TotalSales fixture, which only lined up by coincidence.)
+  const maxValue = salesData?.length
+    ? Math.max(...salesData.map((s) => s.approvedValue || 0))
+    : 0;
 
-    const mainHeight = (100 / max) * price;
-    const bgHeight =
-      mainHeight +
-      mainHeight * (mainHeight > 50 ? 0.15 : mainHeight > 25 ? 0.3 : 0.5);
-
-    return {
-      mainHeight,
-      bgHeight,
-      max,
-    };
+  function barHeight(value) {
+    if (!maxValue) return 0;
+    // floor at 2% so a non-zero marketplace is still visible
+    return Math.max((value / maxValue) * 100, value > 0 ? 2 : 0);
   }
 
+  // Axis ticks are real amounts derived from the max, not bare percentages.
+  // Six ticks keeps the existing gridline rhythm.
+  const axisTicks = [1, 0.8, 0.6, 0.4, 0.2, 0].map((f) =>
+    formatToPrice(String(Math.round(maxValue * f)))
+  );
+
   return (
-    <main className="w-full px-2 sm:px-9 mt-1.5 bg-[--white-1] rounded-md border-2 border-solid border-[--light-1] max-md:overflow-x-scroll">
+    <main className="w-full p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card max-md:overflow-x-auto">
       <div className="flex flex-col gap-2.5 w-full min-w-[36rem]">
-        <main className="flex w-full justify-between pt-6 z-[51] relative">
-          <h2 className="text-2xl font-bold whitespace-nowrap text-[--black-1]">
+        <main className="flex w-full justify-between items-center gap-4 z-[51] relative">
+          <h2 className="text-base font-semibold whitespace-nowrap text-[--black-1]">
             Toplam Satış
           </h2>
-          <div className="w-full flex justify-end gap-3">
+          <div className="flex justify-end gap-2">
             <CustomSelector
               value={filterData.selectedRestaurant}
               options={[{ label: "Hepsi", value: "" }, ...restaurantsData]}
@@ -127,16 +127,8 @@ const SalesBar = () => {
                 setFilterData(updatedData);
                 handleFilter(updatedData);
               }}
-              className2="mt-[0] sm:mt-[0] max-w-48"
+              className2="mt-[0] sm:mt-[0] w-48"
               className="mt-[0] sm:mt-[0]"
-              style={{
-                borderRadius: ".7rem",
-                fontSize: "13px",
-                padding: "1px 0",
-                backgroundColor: "var(--gr-4)",
-                border: "none",
-                fontWeight: "bold",
-              }}
             />
             <CustomSelector
               options={[{ label: "Hepsi", value: "" }, ...years]}
@@ -150,16 +142,8 @@ const SalesBar = () => {
                 setFilterData(updatedData);
                 handleFilter(updatedData);
               }}
-              className2="mt-[0] sm:mt-[0] max-w-20"
+              className2="mt-[0] sm:mt-[0] w-28"
               className="mt-[0] sm:mt-[0]"
-              style={{
-                borderRadius: ".7rem",
-                fontSize: ".875rem",
-                padding: "1px 0",
-                backgroundColor: "var(--gr-4)",
-                border: "none",
-                fontWeight: "bold",
-              }}
             />
             <CustomSelector
               options={[{ label: "Hepsi", value: "" }, ...months]}
@@ -173,25 +157,17 @@ const SalesBar = () => {
                 setFilterData(updatedData);
                 handleFilter(updatedData);
               }}
-              className2="mt-[0] sm:mt-[0] max-w-20"
+              className2="mt-[0] sm:mt-[0] w-28"
               className="mt-[0] sm:mt-[0]"
-              style={{
-                borderRadius: ".7rem",
-                fontSize: ".875rem",
-                padding: "1px 0",
-                backgroundColor: "var(--gr-4)",
-                border: "none",
-                fontWeight: "bold",
-              }}
             />
           </div>
         </main>
 
         <main className="w-full flex pt-6 relative">
-          <div className="flex flex-col gap-6 text-[--gr-5] text-sm">
-            {["%100", "%80", "%60", "%40", "%20", "%0"].map((rate, index) => (
-              <p key={index} className={`${rate == "0" && "invisiblee"}`}>
-                {rate}
+          <div className="flex flex-col gap-6 text-[--gr-1] text-sm text-right tabular-nums whitespace-nowrap">
+            {axisTicks.map((tick, index) => (
+              <p key={index} className="leading-5">
+                {tick}
               </p>
             ))}
           </div>
@@ -205,18 +181,10 @@ const SalesBar = () => {
                 >
                   <div className="w-max h-full flex items-end relative group">
                     <div
-                      className="absolute bottom-0 left-0 right-0 h-full bg-[--light-2] rounded-xl"
-                      style={{
-                        maxHeight: `${calc(sales.percent.toFixed()).bgHeight}%`,
-                      }}
-                    ></div>
-                    <div
-                      className="w-[3.5rem] h-full bg-[--primary-1] rounded-xl relative lg:group-hover:scale-105 transition-all duration-300 ease-out"
+                      className="w-12 h-full bg-[--primary-1] rounded-t-md relative transition-[filter] duration-200 group-hover:brightness-110"
                       style={{
                         zIndex: (salesData.length - index) * 10,
-                        maxHeight: `${
-                          calc(sales.percent.toFixed()).mainHeight
-                        }%`,
+                        maxHeight: `${barHeight(sales.approvedValue)}%`,
                       }}
                     >
                       <div className="absolute -top-10 left-0 right-0 min-w-full flex justify-center opacity-0 group-hover:opacity-100 transition-all ease-in">
@@ -269,7 +237,7 @@ export default SalesBar;
 function ToolTip({ data }) {
   return (
     <div className="relative flex items-center justify-center -mt-3 z-50">
-      <div className="bg-[--white-1] text-white whitespace-nowrap text-xs px-2 py-1 rounded-md shadow-lg border border-[--primary-1]">
+      <div className="bg-[--white-1] text-[--black-2] whitespace-nowrap text-xs px-2.5 py-1.5 rounded-lg shadow-dropdown border border-[--border-1]">
         <p className="text-[--green-1] flex gap-1 justify-between">
           <span>Onaylanmış: {data.approvedAmount}</span>
           <span className="text-[--primary-1]">({data.approvedCount})</span>

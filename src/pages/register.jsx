@@ -150,7 +150,7 @@ const Register = () => {
 
   return (
     <GlassFrame
-      className2="pt-[0rem] pb-[1rem] sm:max-w-[34rem]"
+      className2="sm:max-w-[34rem]"
       component={
         !toConfirm ? (
           /* Register Page */
@@ -217,9 +217,7 @@ const Register = () => {
                   style={{
                     padding: "1px 0px",
                     fontSize: ".8rem",
-                    backgroundColor: "transparent",
                   }}
-                  singleValueStyle={{ color: "white" }}
                   className="text-sm mt-[5px] sm:mt-[5px]"
                   className2="container-class mt-[0px] sm:mt-[0px]"
                 />
@@ -234,9 +232,7 @@ const Register = () => {
                   style={{
                     padding: "1px 0px",
                     fontSize: ".8rem",
-                    backgroundColor: "transparent",
                   }}
-                  singleValueStyle={{ color: "white" }}
                   className="text-sm mt-[5px] sm:mt-[5px]"
                   className2="container-class mt-[0px] sm:mt-[0px]"
                 />
@@ -295,7 +291,7 @@ const Register = () => {
             </div>
 
             <div className="flex flex-col mt-4 sm:mt-6 w-full">
-              <div className="flex justify-center gap-2 text-white">
+              <div className="flex justify-center gap-2 text-sm text-[--gr-1] mt-2">
                 <p>Hesabınız var mı ?</p>
                 <a href="/login" className="text-[--link-1]">
                   Giriş Yapın

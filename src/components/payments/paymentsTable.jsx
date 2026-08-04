@@ -6,6 +6,17 @@ import { formatDateString } from "../../utils/utils";
 import PaymentLicenseType from "../../enums/paymentLicenseType";
 import ChangePaymentStatus from "./actions/changePaymentStatus";
 import Actions from "./actions/actions";
+import {
+  CELL_CHIP,
+  TABLE,
+  TABLE_CARD,
+  TABLE_SCROLL,
+  TD,
+  TH,
+  THEAD_ROW,
+  TR,
+} from "../common/tableStyles";
+import { cn } from "../../lib/utils";
 
 const PaymentsTable = ({ inData, totalItems = inData?.length }) => {
   const { user } = useSelector((state) => state.user.getUser);
@@ -23,63 +34,50 @@ const PaymentsTable = ({ inData, totalItems = inData?.length }) => {
   }
 
   return (
-    <main className="max-xl:overflow-x-scroll">
-      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
-        <table className="w-full text-sm font-light">
+    <main className={TABLE_SCROLL}>
+      <div className={cn(TABLE_CARD, "min-h-[30rem] min-w-[60rem]")}>
+        <table className={TABLE}>
           <thead>
-            <tr className="bg-[--light-3] h-8 text-left">
-              <th className="pl-4 font-normal">Ad Soyad</th>
-              <th className="font-normal">Sipariş No.</th>
-              <th className="font-normal">Ödeme Nedeni</th>
-              <th className="font-normal">Ödeme Tipi</th>
-              <th className="font-normal">Tutar</th>
-              <th className="font-normal">Durum</th>
-              <th className="font-normal">Tarih</th>
-              <th className="font-normal text-center">İşlem</th>
+            <tr className={THEAD_ROW}>
+              <th className={TH}>Ad Soyad</th>
+              <th className={TH}>Sipariş No.</th>
+              <th className={TH}>Ödeme Nedeni</th>
+              <th className={TH}>Ödeme Tipi</th>
+              <th className={TH}>Tutar</th>
+              <th className={TH}>Durum</th>
+              <th className={TH}>Tarih</th>
+              <th className={cn(TH, "text-center")}>İşlem</th>
             </tr>
           </thead>
 
           <tbody>
             {inData.map((data, index) => (
-              <tr
-                key={data.id}
-                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors ${
-                  totalItems < 8 ? "" : "last:border-b-0"
-                } `}
-              >
-                <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
-                  {user.fullName}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.orderNumber}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {PaymentLicenseType[data?.type]?.label}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+              <tr key={data.id} className={TR}>
+                <td className={TD}>{user.fullName}</td>
+                <td className={TD}>{data.orderNumber}</td>
+                <td className={TD}>{PaymentLicenseType[data?.type]?.label}</td>
+                <td className={TD}>
                   <a
                     href={formatFilePath(data.receiptFilePath)}
                     target="_blank"
-                    className={`px-1 py-1.5 ${
+                    className={
                       formatFilePath(data.receiptFilePath)
-                        ? "border border-[--primary-1] rounded-md hover:cursor-pointer"
+                        ? cn(CELL_CHIP, "hover:cursor-pointer")
                         : "pointer-events-none"
-                    }`}
+                    }
                   >
                     {data.provider}
                   </a>
                 </td>
 
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.amount}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>{data.amount}</td>
+                <td className={TD}>
                   <ChangePaymentStatus payment={data} />
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light text-center">
+                <td className={cn(TD, "text-center")}>
                   {formatDateString({ dateString: data.createdDateTime })}
                 </td>
-                <td className="whitespace-nowrap w-14 text-[--black-2] font-light relative">
+                <td className={cn(TD, "w-14 relative")}>
                   <Actions
                     index={index}
                     payment={{

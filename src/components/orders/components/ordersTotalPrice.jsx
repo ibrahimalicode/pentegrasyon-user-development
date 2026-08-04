@@ -1,4 +1,10 @@
 import { formatToPrice } from "../../../utils/utils";
+import { cn } from "../../../lib/utils";
+import {
+  TOOLBAR_STAT,
+  TOOLBAR_STAT_LABEL,
+  TOOLBAR_STAT_VALUE,
+} from "../../common/toolbarStyles";
 
 const OrdersTotalPrice = ({ orders }) => {
   const total = orders?.reduce((sum, order) => {
@@ -34,9 +40,9 @@ const OrdersTotalPrice = ({ orders }) => {
   }, 0);
 
   return (
-    <div className="max-sm:hidden border border-[--light-1] rounded-md py-1 px-2 text-xs flex flex-col gap-2  text-[--black-1]">
-      <p>Sayfa Toplamı</p>
-      <p className=" py-1.5 px-4">
+    <div className={cn(TOOLBAR_STAT, "max-sm:hidden")}>
+      <p className={TOOLBAR_STAT_LABEL}>Sayfa Toplamı</p>
+      <p className={TOOLBAR_STAT_VALUE}>
         {formatToPrice(String(total?.toFixed(2)).replace(".", ","))}
       </p>
     </div>

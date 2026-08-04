@@ -13,6 +13,7 @@ import NoTableData from "../../common/noTableData";
 import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
 import { usePopup } from "../../../context/PopupContext";
+import { TOOLBAR_BTN } from "../../../components/common/toolbarStyles";
 
 // REDUX
 import {
@@ -253,7 +254,7 @@ const LogsPage = () => {
 
             <div className="relative" ref={filterLogs}>
               <button
-                className="h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+                className={TOOLBAR_BTN}
                 onClick={() => {
                   setOpenDeleteByDate(false);
                   setOpenFilter(!openFilter);

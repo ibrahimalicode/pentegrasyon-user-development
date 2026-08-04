@@ -5,11 +5,13 @@ import toast from "react-hot-toast";
 import GetirYemek from "../../../assets/img/orders/GetirYemek.png";
 
 //UTILS
+import { cn } from "../../../lib/utils";
 import { formatDateString } from "../../../utils/utils";
 import { checkLeng, formatToPrice } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
+import { TR, TD, CELL_CHIP } from "../../common/tableStyles";
 import GoogleRoute from "../components/googleRoute";
 import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
@@ -83,27 +85,32 @@ const GetirYemekTableBody = ({
   return (
     order && (
       <tr
-        className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors text-[--black-1] font-normal cursor-pointer ${
-          totalItems < 8 ? "" : "last:border-b-0"
-        }`}
+        className={cn(
+          TR,
+          "text-[--black-1] cursor-pointer",
+          totalItems < 8 ? "" : "last:border-b-0",
+        )}
       >
-        <td onClick={cellClicked} className="pl-4">
+        <td onClick={cellClicked} className={cn(TD)}>
           <img
             alt="perntegrasyon-marketplace"
             src={GetirYemek}
             className="size-10 rounded-full"
           />
         </td>
-        <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           {order.confirmationId}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap relative">
+        <td
+          onClick={cellClicked}
+          className={cn(TD, "relative max-w-[16rem] truncate")}
+        >
           {order.marketplaceTicketRestaurantName}
           <span className="absolute top-2 left-0 bg-[--status-green] border border-[--green-1] py-1.5 px-3 rounded-md opacity-0 hover:opacity-100">
             {order.restaurantName}
           </span>
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           <p>{isCheckoutToday(order.createdDateTime)}</p>
           {order.isScheduled &&
             order.status != 1500 &&
@@ -112,7 +119,7 @@ const GetirYemekTableBody = ({
               <RemainingMinutes date={order.scheduledDate} />
             )}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD)}>
           {order?.client?.name}
         </td>
         <td
@@ -132,11 +139,14 @@ const GetirYemekTableBody = ({
               />,
             )
           }
-          className={`whitespace-nowrap ${
-            order.deliveryType == 1 && "pointer-events-none"
-          }`}
+          className={cn(TD, order.deliveryType == 1 && "pointer-events-none")}
         >
-          <button className="border relative group border-[--primary-1] py-2 px-3 rounded-md">
+          <button
+            className={cn(
+              CELL_CHIP,
+              "relative group text-clip overflow-visible whitespace-nowrap cursor-pointer hover:bg-[--light-1] hover:text-[--primary-1] transition-colors",
+            )}
+          >
             {order.deliveryType == 1
               ? "Kurye Bilgisinde"
               : checkLeng(order?.client?.district)}
@@ -163,12 +173,18 @@ const GetirYemekTableBody = ({
               />,
             )
           }
-          className={`whitespace-nowrap ${
+          className={cn(
+            TD,
             (order.deliveryType == 1 || !canSelectCourier) &&
-            "pointer-events-none"
-          }`}
+              "pointer-events-none",
+          )}
         >
-          <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+          <button
+            className={cn(
+              CELL_CHIP,
+              "cursor-pointer hover:bg-[--light-1] hover:text-[--primary-1] transition-colors",
+            )}
+          >
             {(() => {
               const currentCourier = courierServiceTypes.filter(
                 (T) => T.licenseTypeId === order.courierTypeId,
@@ -182,7 +198,7 @@ const GetirYemekTableBody = ({
             })()}
           </button>
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           {order.totalDiscountedPrice
             ? formatToPrice(
                 String(order.totalDiscountedPrice.toFixed(2)).replace(".", ","),
@@ -191,7 +207,7 @@ const GetirYemekTableBody = ({
                 String(order.totalPrice.toFixed(2)).replace(".", ","),
               )}
         </td>
-        <td onClick={() => {}} className="whitespace-nowrap">
+        <td onClick={() => {}} className={cn(TD, "whitespace-nowrap")}>
           <GetirYemekStatusButton
             order={{
               ...order,
@@ -203,7 +219,7 @@ const GetirYemekTableBody = ({
             setOrdersData={setOrdersData}
           />
         </td>
-        <td className="w-14 relative">
+        <td className={cn(TD, "w-14 relative")}>
           {
             <PrintComponent
               component={

@@ -5,6 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import minutes from "../../../enums/minutes";
+import {
+  TOOLBAR_SELECT_GROUP,
+  TOOLBAR_SELECT_CONTROL,
+  TOOLBAR_STAT_LABEL,
+} from "../../common/toolbarStyles";
 import CustomSelect from "../../common/customSelector";
 
 //REDUX
@@ -80,12 +85,12 @@ const DeliveryTime = ({ automationDatas, setAutomationDatas }) => {
   }, [automationDatas?.onTheWayTime]);
 
   return (
-    <div className="max-sm:w-full border border-[--border-1] bg-[--white-1] rounded-lg py-1 px-2 text-xs text-center flex flex-col gap-2 text-[--black-1]">
-      <p>Teslim Et</p>
+    <div className={TOOLBAR_SELECT_GROUP}>
+      <span className={TOOLBAR_STAT_LABEL}>Teslim Et</span>
       <CustomSelect
         className="mt-[0px] sm:mt-[0px] text-xs"
-        className2="mt-[0px] sm:mt-[0px]"
-        style={{ padding: "0px 0px", minWidth: "4.75rem" }}
+        className2="mt-[0px] sm:mt-[0px] w-auto"
+        style={TOOLBAR_SELECT_CONTROL}
         value={handleSetData(automationDatas?.deliveryTime)}
         options={optionsData}
         isSearchable={false}

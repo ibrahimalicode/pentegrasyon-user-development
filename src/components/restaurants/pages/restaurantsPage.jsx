@@ -24,6 +24,7 @@ import { getNeighs } from "../../../redux/data/getNeighsSlice";
 import { getDistricts } from "../../../redux/data/getDistrictsSlice";
 import { RestourantI } from "../../../assets/icon";
 import NoTableData from "../../common/noTableData";
+import { TOOLBAR_BTN } from "../../../components/common/toolbarStyles";
 
 const RestaurantsPage = () => {
   const dispatch = useDispatch();
@@ -264,7 +265,7 @@ const RestaurantsPage = () => {
           <div className="flex gap-2 max-sm:order-1 ">
             <div className="w-full relative" ref={filterRestaurant}>
               <button
-                className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+                className={TOOLBAR_BTN}
                 onClick={() => setOpenFilter(!openFilter)}
               >
                 Filtre

@@ -6,11 +6,13 @@ import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 //UTILS
+import { cn } from "../../../lib/utils";
 import { formatDateString } from "../../../utils/utils";
 import { checkLeng, formatToPrice } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
+import { TR, TD, CELL_CHIP } from "../../common/tableStyles";
 import GoogleRoute from "../components/googleRoute";
 import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
@@ -83,38 +85,41 @@ const TrendyolYemekTableBody = ({
   return (
     order && (
       <tr
-        className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors text-[--black-1] font-normal cursor-pointer ${
-          totalItems < 8 ? "" : "last:border-b-0"
-        }`}
+        className={cn(
+          TR,
+          "text-[--black-1] cursor-pointer",
+          totalItems < 8 ? "" : "last:border-b-0",
+        )}
       >
-        <td onClick={cellClicked} className="pl-4">
+        <td onClick={cellClicked} className={cn(TD)}>
           <img
             alt="perntegrasyon-marketplace"
             src={Trendyol}
             className="size-10 rounded-full"
           />
         </td>
-        <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           {order.orderCode}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "max-w-[16rem] truncate")}>
           {order.restaurantName}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           <p>{isCheckoutToday(order.createdDateTime)}</p>
           {/* {order?.preOrder && order.status != 3 && order.status != 4 && (
             <RemainingMinutes date={order.expectedDeliveryTime} />
           )} */}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD)}>
           {order.customer.firstName + " " + order.customer.lastName}
         </td>
         <td
-          className={`whitespace-nowrap ${
+          className={cn(
+            TD,
             (!order?.customer?.addressDescription ||
               order?.deliveryType?.toLocaleLowerCase() == "go") &&
-            "pointer-events-none"
-          }`}
+              "pointer-events-none",
+          )}
           onClick={() =>
             setPopupContent(
               <GoogleRoute
@@ -133,12 +138,13 @@ const TrendyolYemekTableBody = ({
           }
         >
           <button
-            className={`border relative group py-2 px-3 rounded-md ${
+            className={cn(
+              CELL_CHIP,
+              "relative group text-clip overflow-visible whitespace-nowrap cursor-pointer hover:bg-[--light-1] hover:text-[--primary-1] transition-colors",
               order?.deliveryType?.toLocaleLowerCase() !== "store" &&
-              order?.deliveryType?.toLocaleLowerCase() !== "go"
-                ? "border-[--green-1] text-[--green-1]"
-                : "border-[--primary-1]"
-            }`}
+                order?.deliveryType?.toLocaleLowerCase() !== "go" &&
+                "text-[--green-1]",
+            )}
           >
             {order?.deliveryType?.toLocaleLowerCase() !== "store" &&
             order?.deliveryType?.toLocaleLowerCase() !== "go"
@@ -155,11 +161,12 @@ const TrendyolYemekTableBody = ({
           </button>
         </td>
         <td
-          className={`whitespace-nowrap ${
+          className={cn(
+            TD,
             (!canSelectCourier ||
               order?.deliveryType?.toLocaleLowerCase() == "go") &&
-            "pointer-events-none"
-          } `}
+              "pointer-events-none",
+          )}
           onClick={() =>
             setPopupContent(
               <ChooseCourier
@@ -176,7 +183,12 @@ const TrendyolYemekTableBody = ({
             )
           }
         >
-          <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+          <button
+            className={cn(
+              CELL_CHIP,
+              "cursor-pointer hover:bg-[--light-1] hover:text-[--primary-1] transition-colors",
+            )}
+          >
             {order.expressDelivery
               ? "Trendyol Kuryesi"
               : (() => {
@@ -193,10 +205,10 @@ const TrendyolYemekTableBody = ({
                 })()}
           </button>
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           {formatToPrice(String(payableTotal.toFixed(2)).replace(".", ","))}
         </td>
-        <td onClick={() => {}} className="whitespace-nowrap">
+        <td onClick={() => {}} className={cn(TD, "whitespace-nowrap")}>
           <TrendyolYemekStatusButton
             order={{
               ...order,
@@ -208,7 +220,7 @@ const TrendyolYemekTableBody = ({
             setOrdersData={setOrdersData}
           />
         </td>
-        <td className="w-14 relative">
+        <td className={cn(TD, "w-14 relative")}>
           {
             <PrintComponent
               component={<TrendyolYemekPrintOrder order={order} />}

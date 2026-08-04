@@ -1,12 +1,17 @@
 import { useOrdersContext } from "../../../context/OrdersContext";
+import {
+  TOOLBAR_STAT,
+  TOOLBAR_STAT_LABEL,
+  TOOLBAR_STAT_VALUE,
+} from "../../common/toolbarStyles";
 
 const OrdersCount = () => {
   const { ordersCount } = useOrdersContext();
 
   return (
-    <div className="border border-[--border-1] rounded-md text-center px-2 pb-0.5 whitespace-nowrap max-h-max">
-      <p className="text-xs text-[--black-1] pb-0.5">Sipariş Sayısı</p>
-      <p className="border border-[--border-1] rounded-md text-[--red-1]">
+    <div className={TOOLBAR_STAT}>
+      <p className={TOOLBAR_STAT_LABEL}>Sipariş Sayısı</p>
+      <p className={TOOLBAR_STAT_VALUE}>
         {ordersCount?.totalProcessedOrders?.count || 0}
       </p>
     </div>

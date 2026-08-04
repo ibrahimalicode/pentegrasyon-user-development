@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { TOOLBAR_BTN_PRIMARY } from "../../../components/common/toolbarStyles";
 
 const AddLicense = ({ user, restaurant, licenses }) => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const AddLicense = ({ user, restaurant, licenses }) => {
 
   return (
     <button
-      className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+      className={TOOLBAR_BTN_PRIMARY}
       onClick={handleClick}
       disabled={!licenses}
     >

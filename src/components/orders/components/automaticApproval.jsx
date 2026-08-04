@@ -8,6 +8,8 @@ import { usePopup } from "../../../context/PopupContext";
 
 //COMP
 import CustomToggle from "../../common/customToggle";
+import { cn } from "../../../lib/utils";
+import { TOOLBAR_BTN } from "../../common/toolbarStyles";
 
 //REDUX
 import {
@@ -70,11 +72,13 @@ const AutomaticApproval = ({ automationDatas, setAutomationDatas }) => {
     <div className="flex items-end">
       <button
         onClick={updateAutomaticApproval}
-        className={`w-full flex items-center border text-sm py-1.5 pl-4 rounded-md whitespace-nowrap ${
+        className={cn(
+          TOOLBAR_BTN,
+          "pr-1",
           automationDatas?.automaticApproval
-            ? "border-[--green-1] text-[--green-1]"
-            : "border-[--red-1] text-[--red-1]"
-        }`}
+            ? "border-[--green-1] text-[--green-1] hover:border-[--green-1] hover:text-[--green-1]"
+            : "text-[--gr-1]"
+        )}
       >
         <span>Otomatik Onay </span>
         <CustomToggle

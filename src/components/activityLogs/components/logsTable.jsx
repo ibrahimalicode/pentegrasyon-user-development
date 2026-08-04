@@ -6,6 +6,16 @@ import {
   activitySeverity,
   activitySource,
 } from "../../../enums/logsEnums";
+import {
+  TABLE,
+  TABLE_CARD,
+  TABLE_SCROLL,
+  TD,
+  TH,
+  THEAD_ROW,
+  TR,
+} from "../../common/tableStyles";
+import { cn } from "../../../lib/utils";
 
 const LogsTable = ({
   inData = [],
@@ -69,13 +79,13 @@ const LogsTable = ({
   };
 
   return (
-    <main className="max-xl:overflow-x-scroll">
-      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[72rem] overflow-hidden">
-        <table className="w-full text-sm font-light">
+    <main className={TABLE_SCROLL}>
+      <div className={cn(TABLE_CARD, "min-h-[30rem] min-w-[72rem]")}>
+        <table className={TABLE}>
           <thead>
-            <tr className="bg-[--light-3] h-8 text-left">
+            <tr className={THEAD_ROW}>
               {isSelectMode && (
-                <th className="pl-4 font-normal w-12">
+                <th className={cn(TH, "w-12")}>
                   <CustomCheckbox
                     id="logs-select-all"
                     checked={isAllSelected}
@@ -84,26 +94,21 @@ const LogsTable = ({
                   />
                 </th>
               )}
-              <th className="pl-4 font-normal">Tarih</th>
-              <th className="font-normal">İşlem</th>
-              <th className="font-normal">Varlık</th>
-              <th className="font-normal">Kaynak</th>
-              <th className="font-normal">Pazaryeri</th>
-              <th className="font-normal">Seviye</th>
-              <th className="font-normal pr-4">Mesaj</th>
+              <th className={TH}>Tarih</th>
+              <th className={TH}>İşlem</th>
+              <th className={TH}>Varlık</th>
+              <th className={TH}>Kaynak</th>
+              <th className={TH}>Pazaryeri</th>
+              <th className={TH}>Seviye</th>
+              <th className={TH}>Mesaj</th>
             </tr>
           </thead>
 
           <tbody>
             {inData.map((data, index) => (
-              <tr
-                key={data.id || index}
-                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors ${
-                  inData.length < 8 ? "" : "last:border-b-0"
-                }`}
-              >
+              <tr key={data.id || index} className={TR}>
                 {isSelectMode && (
-                  <td className="pl-4">
+                  <td className={TD}>
                     <CustomCheckbox
                       id={`logs-select-${data.id}`}
                       checked={selectedIds.includes(data.id)}
@@ -114,20 +119,20 @@ const LogsTable = ({
                     />
                   </td>
                 )}
-                <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
+                <td className={TD}>
                   {formatDateString({
                     dateString: data.createdAt,
                     hour: true,
                     min: true,
                   })}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>
                   {getEnumLabel(activityActionType, data.actionType)}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>
                   {getEnumLabel(activityEntityType, data.entityType)}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>
                   <span
                     className={`text-xs font-normal px-2.5 py-1 border border-solid rounded-full ${getSourceClass(
                       data.source,
@@ -136,10 +141,8 @@ const LogsTable = ({
                     {getEnumLabel(activitySource, data.source)}
                   </span>
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
-                  {data.marketplace || "-"}
-                </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>{data.marketplace || "-"}</td>
+                <td className={TD}>
                   <span
                     className={`text-xs font-normal px-2.5 py-1 border border-solid rounded-full ${getSeverityClass(
                       data.severity,
@@ -148,7 +151,7 @@ const LogsTable = ({
                     ● {getEnumLabel(activitySeverity, data.severity)}
                   </span>
                 </td>
-                <td className="text-[--black-2] font-light pr-4 relative group">
+                <td className={cn(TD, "relative group")}>
                   <p
                     className="max-w-[28rem] truncate"
                     title={data.message || ""}

@@ -3,6 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
+import { cn } from "../../lib/utils";
+import {
+  TABLE,
+  TABLE_CARD,
+  TABLE_SCROLL,
+  THEAD_ROW,
+  TH,
+} from "../common/tableStyles";
 import GetirYemekTableBody from "./getirYemek/getirYemekTableBody";
 import YemekSepetiTableBody from "./yemekSepeti/yemekSepetiTableBody";
 import MigrosYemekTableBody from "./migrosYemek/migrosYemekTableBody";
@@ -154,21 +162,21 @@ const OrdersTable = ({
   }
 
   return (
-    <main className="overflow-x-auto">
-      <div className="border border-solid border-[--light-4] rounded-lg min-w-max">
-        <table className="w-full text-sm font-light">
+    <main className={TABLE_SCROLL}>
+      <div className={cn(TABLE_CARD, "min-w-max")}>
+        <table className={TABLE}>
           <thead>
-            <tr className="bg-[--light-3] h-10 text-left">
-              <th></th>
-              <th>Onay Kodu</th>
-              <th>Restoran</th>
-              <th>Tarih</th>
-              <th>Müşteri Adı</th>
-              <th>Bölge</th>
-              <th>Kurye</th>
-              <th>Tutar</th>
-              <th className="w-28">Durum</th>
-              <th className="pr-2">Yazdır</th>
+            <tr className={THEAD_ROW}>
+              <th className={cn(TH, "w-14")}></th>
+              <th className={TH}>Onay Kodu</th>
+              <th className={TH}>Restoran</th>
+              <th className={TH}>Tarih</th>
+              <th className={TH}>Müşteri Adı</th>
+              <th className={TH}>Bölge</th>
+              <th className={TH}>Kurye</th>
+              <th className={cn(TH, "text-right")}>Tutar</th>
+              <th className={cn(TH, "w-28")}>Durum</th>
+              <th className={cn(TH, "text-center")}>Yazdır</th>
             </tr>
           </thead>
 

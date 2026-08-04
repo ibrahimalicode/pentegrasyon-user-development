@@ -3,57 +3,62 @@ import LicensesActions from "./actions/licensesActions";
 import { formatDateString, getRemainingDays } from "../../utils/utils";
 import EditLicenseIsActive from "./actions/updateLicenseIsActive";
 import CustomPing from "../common/customPing";
+import {
+  TABLE,
+  TABLE_CARD,
+  TABLE_SCROLL,
+  TD,
+  TH,
+  THEAD_ROW,
+  TR,
+} from "../common/tableStyles";
+import { cn } from "../../lib/utils";
 
 const LicensesTable = ({ inData, totalItems, onSuccess }) => {
   return (
-    <main className="max-xl:overflow-x-scroll">
-      <div className="min-h-[30rem] border border-solid border-[--light-4] rounded-lg min-w-[60rem] overflow-hidden">
-        <table className="w-full text-sm font-light">
+    <main className={TABLE_SCROLL}>
+      <div className={cn(TABLE_CARD, "min-h-[30rem] min-w-[60rem]")}>
+        <table className={TABLE}>
           <thead>
-            <tr className="bg-[--light-3] h-8 text-left">
-              <th className="pl-4 font-normal">Pazaryeri</th>
-              <th className="font-normal">Restoran</th>
-              <th className="font-normal">Bitiş Tarihi</th>
-              <th className="font-normal">Kalan Gün</th>
-              <th className="font-normal">Durum</th>
-              <th className="font-normal text-center">İşlem</th>
+            <tr className={THEAD_ROW}>
+              <th className={TH}>Pazaryeri</th>
+              <th className={TH}>Restoran</th>
+              <th className={TH}>Bitiş Tarihi</th>
+              <th className={TH}>Kalan Gün</th>
+              <th className={TH}>Durum</th>
+              <th className={cn(TH, "text-center")}>İşlem</th>
             </tr>
           </thead>
 
           <tbody>
             {inData.map((data, index) => (
-              <tr
-                key={data.id}
-                className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors ${
-                  totalItems < 8 ? "" : "last:border-b-0"
-                } `}
-              >
-                <td className="whitespace-nowrap text-[--black-2] pl-4 font-normal">
+              <tr key={data.id} className={TR}>
+                <td className={TD}>
                   {licenseTypeIds[data?.licenseTypeId]?.value}
                 </td>
-                <td className="w-max whitespace-nowrap text-[--black-2] font-light">
+                <td className={cn(TD, "w-max")}>
                   <div className="w-max flex items-center gap-1">
                     {!data?.isSettingsAdded && <CustomPing />}
                     <span>{data.restaurantName}</span>
                   </div>
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>
                   {formatDateString({ dateString: data.endDateTime })}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>
                   {getRemainingDays(data.endDateTime) > 0 ? (
                     getRemainingDays(data.endDateTime)
                   ) : (
                     <p className="text-[--red-1] font-bold">Süresi bitmiş</p>
                   )}
                 </td>
-                <td className="whitespace-nowrap text-[--black-2] font-light">
+                <td className={TD}>
                   <EditLicenseIsActive
                     licenseData={data}
                     onSuccess={onSuccess}
                   />
                 </td>
-                <td className="whitespace-nowrap w-14 text-[--black-2] font-light relative">
+                <td className={cn(TD, "w-14 relative")}>
                   <LicensesActions
                     index={index}
                     licenseData={data}

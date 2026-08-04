@@ -28,6 +28,7 @@ import {
 } from "../../../redux/licenses/getRestaurantLicensesSlice";
 import NoTableData from "../../common/noTableData";
 import { LicenseI } from "../../../assets/icon";
+import { TOOLBAR_BTN } from "../../../components/common/toolbarStyles";
 
 const RestaurantLicensesPage = () => {
   const dispatch = useDispatch();
@@ -270,7 +271,7 @@ const RestaurantLicensesPage = () => {
 
             <div className="w-full relative" ref={filterLicense}>
               <button
-                className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+                className={TOOLBAR_BTN}
                 onClick={() => setOpenFilter(!openFilter)}
               >
                 Filtre

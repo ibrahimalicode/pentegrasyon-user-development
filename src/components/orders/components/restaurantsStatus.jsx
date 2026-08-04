@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
+import { cn } from "../../../lib/utils";
+import { TOOLBAR_BTN } from "../../common/toolbarStyles";
 import { useSlideBar } from "../../../context/SlideBarContext";
 import { useFirestore } from "../../../context/FirestoreContext";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
@@ -263,11 +265,13 @@ const RestaurantsStatus = ({ licenses }) => {
             ),
           })
         }
-        className={`w-full whitespace-nowrap ${
-          !closedRestaurants.length
-            ? "border border-[--primary-2] text-[--primary-2] text-sm"
-            : buttonClass
-        } py-2.5 px-4 rounded-md`}
+        className={cn(
+          TOOLBAR_BTN,
+          // When restaurants are closed the button becomes an alert.
+          closedRestaurants.length &&
+            "border-transparent hover:border-transparent hover:text-white " +
+              buttonClass
+        )}
       >
         Restoran Durumları
       </button>

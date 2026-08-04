@@ -10,6 +10,16 @@ import {
   resetGetRestaurantSalesStatistics,
 } from "../../redux/dashboard/restaurant/getRestaurantSalesStatisticsSlice";
 import TableSkeleton from "../common/tableSkeleton";
+import {
+  TABLE,
+  TABLE_CARD,
+  TABLE_SCROLL,
+  TD,
+  TH,
+  THEAD_ROW,
+  TR,
+} from "../common/tableStyles";
+import { cn } from "../../lib/utils";
 
 const RestaurantsTable = () => {
   const dispatch = useDispatch();
@@ -34,41 +44,33 @@ const RestaurantsTable = () => {
   }, [error, data]);
 
   return (
-    <main className="w-full bg-[--white-1] border-2 border-solid border-[--light-1] rounded-md max-sm:overflow-x-auto">
+    <main className={cn(TABLE_CARD, "w-full")}>
       {restaurantsData && !loading ? (
-        <main className="h-max pb-4 px-2 sm:px-9 w-full max-sm:min-w-[30rem]">
-          <table className="w-full text-center text-sm">
+        <div className={TABLE_SCROLL}>
+          <table className={cn(TABLE, "max-sm:min-w-[30rem]")}>
             <thead>
-              <tr className="text-[--gr-1] font-light">
-                <th className="font-light py-5 border-b border-solid border-[--light-1] text-start">
-                  Restoran Adı
-                </th>
-                <th className="font-light py-5 border-b border-solid border-[--light-1]">
-                  Toplam Satış
-                </th>
-                <th className="font-light py-5 border-b border-solid border-[--light-1]">
-                  Toplam Tutarı
-                </th>
-                <th className="font-light py-5 border-b border-solid border-[--light-1] text-end">
-                  İl
-                </th>
+              <tr className={THEAD_ROW}>
+                <th className={TH}>Restoran Adı</th>
+                <th className={cn(TH, "text-center")}>Toplam Satış</th>
+                <th className={cn(TH, "text-center")}>Toplam Tutarı</th>
+                <th className={cn(TH, "text-right")}>İl</th>
               </tr>
             </thead>
 
-            <tbody className="text-[--black-1]">
+            <tbody>
               {restaurantsData.map((rest, index) => (
-                <tr key={index}>
-                  <td className="py-3.5 text-start">{rest.restaurantName}</td>
-                  <td className="py-3.5">{rest.totalCount}</td>
-                  <td className="py-3.5">
+                <tr key={index} className={TR}>
+                  <td className={TD}>{rest.restaurantName}</td>
+                  <td className={cn(TD, "text-center")}>{rest.totalCount}</td>
+                  <td className={cn(TD, "text-center")}>
                     {formatToPrice(String(rest.totalAmount).replace(".", ","))}
                   </td>
-                  <td className="py-3.5 text-end">{rest.city}</td>
+                  <td className={cn(TD, "text-right")}>{rest.city}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </main>
+        </div>
       ) : (
         <TableSkeleton row={3} headerClass="h-14" />
       )}

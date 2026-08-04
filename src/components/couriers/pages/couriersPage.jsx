@@ -16,6 +16,7 @@ import CustomSelect from "../../common/customSelector";
 //CONT
 import { usePopup } from "../../../context/PopupContext";
 import { useFirestore } from "../../../context/FirestoreContext";
+import { TOOLBAR_BTN } from "../../../components/common/toolbarStyles";
 
 // REDUX
 import {
@@ -166,7 +167,7 @@ const CouriersPage = () => {
           <div className="flex gap-2 max-sm:order-1 ">
             <div className="w-full relative" ref={filterCouriers}>
               <button
-                className="w-full h-11 flex items-center justify-center text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+                className={TOOLBAR_BTN}
                 onClick={() => setOpenFilter(!openFilter)}
               >
                 Filtre

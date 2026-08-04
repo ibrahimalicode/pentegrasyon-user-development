@@ -25,6 +25,7 @@ import {
 import compensationTypes from "../../../enums/compensationTypes";
 import { formatToPrice } from "../../../utils/utils";
 import { useAsyncActionToast } from "@/hooks/useAsyncActionToast";
+import { TOOLBAR_BTN_PRIMARY } from "../../../components/common/toolbarStyles";
 
 const AddCourier = ({ onSuccess }) => {
   const { setPopupContent } = usePopup();
@@ -35,7 +36,7 @@ const AddCourier = ({ onSuccess }) => {
 
   return (
     <button
-      className="h-11 whitespace-nowrap text-[--primary-2] px-3 rounded-md text-sm font-normal border-[1.5px] border-solid border-[--primary-2]"
+      className={TOOLBAR_BTN_PRIMARY}
       onClick={handleClick}
     >
       Kurye Ekle

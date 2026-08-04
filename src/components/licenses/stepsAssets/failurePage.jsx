@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import failed_card from "../../../assets/img/failed_card.png";
+import { TOOLBAR_BTN_PRIMARY } from "../../../components/common/toolbarStyles";
+import { cn } from "../../../lib/utils";
 const FailurePage = ({ currentPath, actionType }) => {
   return (
     <main className="flex flex-col justify-start items-center pt-16">
@@ -18,7 +20,7 @@ const FailurePage = ({ currentPath, actionType }) => {
       <div className="w-full flex justify-center pt-4">
         <Link
           to={currentPath?.replace(`/${actionType}`, "")}
-          className="flex items-center py-2.5 whitespace-nowrap px-4 rounded-md text-sm border-[1.5px] disabled:cursor-not-allowed justify-center text-[--white-1] bg-[--primary-1] border-[--primary-1] group border-none"
+          className={cn(TOOLBAR_BTN_PRIMARY, "group")}
         >
           Lisanslara git
         </Link>

@@ -9,12 +9,14 @@ import { usePopup } from "../../../context/PopupContext";
 import { useSlideBar } from "../../../context/SlideBarContext";
 
 //UTILS
+import { cn } from "../../../lib/utils";
 import { checkLeng, formatToPrice } from "../../../utils/utils";
 import { formatDateString } from "../../../utils/utils";
 import courierServiceTypes from "../../../enums/courierServiceType";
 
 //COMP
 import ToolTip from "../../common/tooltip";
+import { TR, TD, CELL_CHIP } from "../../common/tableStyles";
 import GoogleRoute from "../components/googleRoute";
 import ChooseCourier from "../components/chooseCourier";
 import PrintComponent from "../components/printComponent";
@@ -100,31 +102,33 @@ const MigrosYemekTableBody = ({
   return (
     order && (
       <tr
-        className={`odd:bg-[--white-1] even:bg-[--table-odd] h-14 border border-solid border-[--light-4] border-x-0 hover:bg-[--light-3] transition-colors text-[--black-1] font-normal cursor-pointer ${
+        className={cn(
+          TR,
+          "text-[--black-1] cursor-pointer",
           totalItems < 8 ? "" : "last:border-b-0"
-        }`}
+        )}
       >
-        <td onClick={cellClicked} className="pl-4">
+        <td onClick={cellClicked} className={cn(TD)}>
           <img
             alt="perntegrasyon-marketplace"
             src={MigrosYemek}
             className="size-10 rounded-full"
           />
         </td>
-        <td onClick={cellClicked} className="pl-4 whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           {order.shortCode}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "max-w-[16rem] truncate")}>
           {order.restaurantName}
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           <p>{isCheckoutToday(order.createdDateTime)}</p>
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD)}>
           {order.customer.firstName + " " + order.customer.lastName}
         </td>
         <td
-          className={`whitespace-nowrap`}
+          className={cn(TD)}
           onClick={() => {
             if (order?.deliveryProvider?.toUpperCase() !== "RESTAURANT") return;
             setPopupContent(
@@ -161,13 +165,19 @@ const MigrosYemekTableBody = ({
               />
             )
           }
-          className={`whitespace-nowrap ${
+          className={cn(
+            TD,
             (order?.deliveryProvider?.toUpperCase() !== "RESTAURANT" ||
               !canSelectCourier) &&
-            "pointer-events-none"
-          }`}
+              "pointer-events-none"
+          )}
         >
-          <button className="border border-[--primary-1] py-2 px-3 rounded-md">
+          <button
+            className={cn(
+              CELL_CHIP,
+              "cursor-pointer hover:bg-[--light-1] hover:text-[--primary-1] transition-colors"
+            )}
+          >
             {order?.deliveryProvider?.toUpperCase() == "RESTAURANT"
               ? (() => {
                   const currentCourier = courierServiceTypes.filter(
@@ -183,7 +193,7 @@ const MigrosYemekTableBody = ({
               : "Platform Kuryesi"}
           </button>
         </td>
-        <td onClick={cellClicked} className="whitespace-nowrap">
+        <td onClick={cellClicked} className={cn(TD, "whitespace-nowrap")}>
           {order.discountedPrice == order.totalPrice
             ? formatToPrice(
                 String(order.totalPrice.toFixed(2)).replace(".", ",")
@@ -192,7 +202,7 @@ const MigrosYemekTableBody = ({
                 String(order.discountedPrice.toFixed(2)).replace(".", ",")
               )}
         </td>
-        <td onClick={() => {}} className="whitespace-nowrap">
+        <td onClick={() => {}} className={cn(TD, "whitespace-nowrap")}>
           <MigrosYemekStatusButton
             order={{
               ...order,
@@ -204,7 +214,7 @@ const MigrosYemekTableBody = ({
             setOrdersData={setOrdersData}
           />
         </td>
-        <td className="w-14 relative">
+        <td className={cn(TD, "w-14 relative")}>
           {
             <PrintComponent
               component={<MigrosYemekPrintOrder order={formatOrder()} />}
@@ -252,11 +262,14 @@ function CourierCell({ order }) {
       ref={buttonRef}
       onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
-      className="border rounded-md border-[--primary-1] relative group"
+      className={cn(
+        CELL_CHIP,
+        "relative group text-clip overflow-visible whitespace-nowrap cursor-pointer hover:bg-[--light-1] hover:text-[--primary-1] transition-colors"
+      )}
     >
       {order?.deliveryProvider?.toUpperCase() == "RESTAURANT" ? (
         <>
-          <p className="py-2 px-3">{checkLeng(order.customer.district)}</p>
+          <p>{checkLeng(order.customer.district)}</p>
           {order.customer.district?.length > 25 && (
             <span className="absolute -left-1 -top-1 group-hover:opacity-100 opacity-0 bg-[--white-1] z-[999] p-3 rounded-md border border-[--primary-2] scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-150 ease-out">
               <p className="w-full">{order.customer.district}</p>
@@ -268,9 +281,7 @@ function CourierCell({ order }) {
           if (!courierStat || !order?.courierStatus)
             return (
               <>
-                <p className="py-2 px-3">
-                  {checkLeng(order.customer.district)}
-                </p>
+                <p>{checkLeng(order.customer.district)}</p>
                 {order.customer.district?.length > 25 && (
                   <span className="absolute -left-1 -top-1 group-hover:opacity-100 opacity-0 bg-[--white-1] z-[999] p-3 rounded-md border border-[--primary-2] scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-150 ease-out">
                     <p className="w-full">{order.customer.district}</p>

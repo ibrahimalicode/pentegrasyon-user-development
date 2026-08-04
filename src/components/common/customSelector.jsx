@@ -1,5 +1,6 @@
-import React from "react";
 import Select from "react-select";
+import { cn } from "../../lib/utils";
+import { FIELD_LABEL, FIELD_WRAPPER, SELECT_STYLES } from "./fieldStyles";
 
 const CustomSelect = ({
   label,
@@ -17,10 +18,6 @@ const CustomSelect = ({
   singleValueStyle,
   menuPlacement,
 }) => {
-  const formatOptionLabel = ({ label }) => (
-    <div dangerouslySetInnerHTML={{ __html: label }} />
-  );
-
   const normalizeTurkish = (str = "") =>
     str
       .toLowerCase()
@@ -39,77 +36,34 @@ const CustomSelect = ({
   };
 
   return (
-    <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
-      <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
-        {label}
-      </label>
+    <div className={cn(FIELD_WRAPPER, className2)}>
+      {label && <label className={FIELD_LABEL}>{label}</label>}
       <Select
-        // menuIsOpen={true}
         value={value}
         onChange={onChange}
         options={options}
         required={required}
-        className={`mt-1 sm:mt-2 text-base ${className}`}
+        className={cn("text-sm", className)}
         isDisabled={disabled}
         filterOption={filterOption}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
-        formatOptionLabel={formatOptionLabel}
         menuPlacement={menuPlacement || "bottom"}
         styles={{
+          ...SELECT_STYLES,
           control: (provided, state) => ({
-            ...provided,
-            cursor: "pointer",
-            border: state.isFocused
-              ? "1px solid var(--primary-1)"
-              : "1px solid var(--border-1)",
-            boxShadow: state.isFocused
-              ? "0 0 0 3px rgb(79 70 229 / 0.15)"
-              : "none",
-            "&:hover": { borderColor: "var(--primary-1)" },
-            backgroundColor: "var(--white-1)",
-            borderRadius: ".5rem",
-            padding: "4px 0px",
-            transition: "box-shadow 150ms, border-color 150ms",
+            ...SELECT_STYLES.control(provided, state),
             ...style,
           }),
           option: (provided, state) => ({
-            ...provided,
-            backgroundColor:
-              state.label === value.label
-                ? "var(--light-1)"
-                : state.isFocused
-                  ? "var(--light-3)"
-                  : "var(--white-1)",
-            color:
-              state.label === value.label ? "var(--primary-1)" : "var(--black-1)",
-            cursor: "pointer",
+            ...SELECT_STYLES.option(provided, state),
             ...optionStyle,
           }),
           singleValue: (provided, state) => ({
-            ...provided,
-            color: "var(--black-2)",
+            ...SELECT_STYLES.singleValue(provided, state),
             ...singleValueStyle,
           }),
-          menu: (provided, state) => ({
-            ...provided,
-            backgroundColor: "var(--white-1)",
-            border: "1px solid var(--border-1)",
-            borderRadius: ".5rem",
-            overflow: "hidden",
-            boxShadow:
-              "0 4px 6px -1px rgb(15 23 42 / 0.07), 0 2px 4px -2px rgb(15 23 42 / 0.06)",
-            zIndex: "9999",
-          }),
-          menuList: (provided, state) => ({
-            ...provided,
-            maxHeight: "16rem",
-            borderBottomLeftRadius: ".3rem",
-            borderBottomRightRadius: ".3rem",
-            paddingBottom: "0",
-          }),
           input: (provided, state) => ({
-            ...provided,
-            color: "var(--black-1)",
+            ...SELECT_STYLES.input(provided, state),
             ...inputStyle,
           }),
         }}
@@ -122,7 +76,7 @@ const CustomSelect = ({
           onChange={() => {}}
           style={{
             position: "absolute",
-            top: 50,
+            bottom: 0,
             left: 0,
             opacity: 0,
             width: "100%",

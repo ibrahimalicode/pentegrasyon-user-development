@@ -1,6 +1,7 @@
-// import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { cn } from "../../lib/utils";
+import { FIELD_BASE, FIELD_LABEL, FIELD_WRAPPER } from "./fieldStyles";
 
 const CustomPhoneInput = ({
   label,
@@ -14,8 +15,6 @@ const CustomPhoneInput = ({
   className5,
   disabled,
 }) => {
-  // const [phone, setPhone] = useState(value);
-
   const handleChange = (value) => {
     if (!value.startsWith("90")) {
       if (value.startsWith("9")) {
@@ -27,16 +26,11 @@ const CustomPhoneInput = ({
       }
     }
 
-    // setPhone(value);
     onChange(value);
   };
 
-  // useEffect(() => {
-  //   handleChange(value);
-  // }, [value]);
-
   return (
-    <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
+    <div className={cn(FIELD_WRAPPER, className2)}>
       <style>{`
         .hide-flag .flag-dropdown,
         .hide-flag .selected-flag {
@@ -47,11 +41,7 @@ const CustomPhoneInput = ({
           padding-left: 0;
         }
       `}</style>
-      <label
-        className={`text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left ${className5}`}
-      >
-        {label}
-      </label>
+      {label && <label className={cn(FIELD_LABEL, className5)}>{label}</label>}
       <PhoneInput
         country={"tr"}
         value={value}
@@ -65,7 +55,7 @@ const CustomPhoneInput = ({
           required: required,
           pattern: "\\+90\\s[0-9]{3}\\s[0-9]{3}\\s[0-9]{2}\\s[0-9]{2}",
           autoComplete: autoComplete,
-          className: `px-4 py-2.5 mt-1 sm:mt-2.5 text-base font-[300] rounded-md border border-solid border-[--border-1] text-[--black-2] max-md:pr-5 w-full autofill:shadow-white autofill:outline-none ${className}`,
+          className: cn(FIELD_BASE, className),
         }}
       />
     </div>

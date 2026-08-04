@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { cn } from "../../lib/utils";
 
 // Auth layout (historically "GlassFrame", name kept — 4 pages import it).
 // Split-screen: brand panel with the looping product video under an indigo
@@ -12,7 +13,7 @@ const FEATURES = [
 
 const GlassFrame = ({ component, className, className2 }) => {
   return (
-    <section className={`min-h-[100dvh] flex ${className}`}>
+    <section className={cn("min-h-[100dvh] flex", className)}>
       {/* Brand panel */}
       <aside className="hidden lg:flex flex-col justify-between w-[42%] max-w-[34rem] p-10 xl:p-14 text-white relative overflow-hidden">
         <video
@@ -77,7 +78,10 @@ const GlassFrame = ({ component, className, className2 }) => {
 
         <div className="flex-1 flex items-center justify-center px-6 py-10 relative">
           <div
-            className={`w-full max-w-md rounded-2xl border border-[--border-1] bg-[--white-1]/70 backdrop-blur-xl shadow-modal p-8 max-sm:p-6 ${className2}`}
+            className={cn(
+              "w-full max-w-md rounded-2xl border border-[--border-1] bg-[--white-1]/95 backdrop-blur-xl shadow-modal p-8 max-sm:p-6",
+              className2
+            )}
           >
             {component}
           </div>

@@ -1,4 +1,11 @@
-import CheckI from "../../assets/icon/check";
+import { cn } from "../../lib/utils";
+
+// Sizes must be literal strings for Tailwind to emit them.
+const SIZES = {
+  4: "size-4",
+  5: "size-5",
+  6: "size-5",
+};
 
 const CustomRadiobox = ({
   id,
@@ -7,38 +14,46 @@ const CustomRadiobox = ({
   onClick,
   className,
   className2,
-  size = 6,
+  size = 5,
   name,
 }) => {
   return (
-    <div className={`max-w-max flex items-center cursor-pointer ${className}`}>
+    <label
+      htmlFor={id}
+      className={cn(
+        "max-w-max flex items-center gap-2.5 cursor-pointer group",
+        className
+      )}
+    >
       <input
         id={id}
         type="radio"
         checked={checked}
         onClick={onClick}
-        className="hidden"
+        onChange={() => {}}
+        className="sr-only peer"
         name={name}
       />
       <span
-        className={`flex justify-center items-center bg-[--white-1] border-[3px] border-[--border-1] rounded-full relative size-${size} ${
-          checked ? "border-[--primary-2]" : "border-[--gr-1]"
-        }`}
+        className={cn(
+          "flex shrink-0 justify-center items-center rounded-full border-2 bg-[--white-1] transition-colors",
+          SIZES[size] || SIZES[5],
+          checked
+            ? "border-[--primary-1]"
+            : "border-[--gr-5] group-hover:border-[--primary-1]",
+          "peer-focus-visible:ring-2 peer-focus-visible:ring-[--primary-1]/30"
+        )}
       >
-        <div
-          className={`size-3 rounded-full ${
-            checked ? "bg-[--primary-2]" : "bg-[--white-2]"
-          }`}
-        ></div>
+        {checked && (
+          <span className="size-2 rounded-full bg-[--primary-1]"></span>
+        )}
       </span>
       {label && (
-        <label
-          htmlFor={id}
-          className={`ml-2 text-[--gr-1] ${className2}`}
-          dangerouslySetInnerHTML={{ __html: label }}
-        ></label>
+        <span className={cn("text-sm text-[--black-3]", className2)}>
+          {label}
+        </span>
       )}
-    </div>
+    </label>
   );
 };
 

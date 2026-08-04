@@ -167,7 +167,7 @@ const Register = () => {
               <CustomInput
                 label="Ad"
                 type="text"
-                placeholder="Ad"
+                placeholder="Adınız"
                 value={firstName}
                 onChange={(e) => setFirstName(e)}
                 required={true}
@@ -175,7 +175,7 @@ const Register = () => {
               <CustomInput
                 label="Soyad"
                 type="text"
-                placeholder="Soyad"
+                placeholder="Soyadınız"
                 value={lastName}
                 onChange={(e) => setLastName(e)}
                 required={true}
@@ -192,7 +192,7 @@ const Register = () => {
               <CustomInput
                 label="E-Posta"
                 type="email"
-                placeholder="E-Posta"
+                placeholder="ornek@mail.com"
                 value={email}
                 onChange={(e) => setEmail(formatEmail(e))}
                 required={true}
@@ -212,7 +212,7 @@ const Register = () => {
               />
               <CustomInput
                 label="Şifre"
-                placeholder="Şifre"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e)}
                 required={true}
@@ -222,7 +222,7 @@ const Register = () => {
               />
               <CustomInput
                 label="Şifre Tekrar"
-                placeholder="Şifre Tekrar"
+                placeholder="••••••••"
                 value={password2}
                 onChange={(e) => setPassword2(e)}
                 required={true}

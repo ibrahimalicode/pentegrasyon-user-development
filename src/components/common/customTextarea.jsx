@@ -1,3 +1,6 @@
+import { cn } from "../../lib/utils";
+import { FIELD_BASE, FIELD_LABEL, FIELD_WRAPPER } from "./fieldStyles";
+
 const CustomTextarea = ({
   icon,
   onClick,
@@ -14,25 +17,31 @@ const CustomTextarea = ({
   autoComplete = "new-password",
 }) => {
   return (
-    <div className={`flex flex-col mt-3 sm:mt-6 w-full relative ${className2}`}>
-      <label className="text-xs font-[600] tracking-wide text-[--gr-1] max-md:max-w-full text-left">
-        {label}
-      </label>
-      <textarea
-        type={type}
-        value={value}
-        required={required}
-        placeholder={placeholder}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-        autoComplete={autoComplete}
-        className={`px-4 pt-2 h-20 mt-1 sm:mt-2.5 text-base rounded-lg border border-solid border-[--border-1] text-[--black-2] placeholder:text-[--gr-3] max-md:pr-5 w-full transition-shadow focus:border-[--primary-1] focus:ring-2 focus:ring-[--primary-1]/20 outline-none autofill:shadow-[--white-1] bg-[--white-1] autofill:outline-none ${className}`}
-      />
-      <div
-        className={`absolute right-4 top-1/2 text-2xl cursor-pointer text-[--gr-1] ${className3}`}
-        onClick={onClick}
-      >
-        {icon}
+    <div className={cn(FIELD_WRAPPER, className2)}>
+      {label && <label className={FIELD_LABEL}>{label}</label>}
+      <div className="relative w-full">
+        <textarea
+          type={type}
+          value={value}
+          required={required}
+          placeholder={placeholder}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          autoComplete={autoComplete}
+          // Same treatment as FIELD_BASE, but auto-height instead of h-11.
+          className={cn(FIELD_BASE, "h-24 py-2.5 resize-y", className)}
+        />
+        {icon && (
+          <div
+            className={cn(
+              "absolute right-3 top-3 cursor-pointer text-[--gr-3] hover:text-[--black-3] transition-colors",
+              className3
+            )}
+            onClick={onClick}
+          >
+            {icon}
+          </div>
+        )}
       </div>
     </div>
   );

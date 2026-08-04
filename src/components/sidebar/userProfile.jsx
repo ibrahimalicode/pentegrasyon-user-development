@@ -4,13 +4,20 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 //ASSETS
-import { UserI } from "../../assets/icon";
 import ArrowIR from "../../assets/icon/arrowR";
 
 //UTILS
+import { cn } from "../../lib/utils";
 import { useProtectPages } from "../../context/ProtectPagesContext";
 
-//REDUX
+const initialsOf = (name = "") =>
+  name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toLocaleUpperCase("tr");
 
 function UserProfile({ setOpenSidebar }) {
   const param = useParams();
@@ -28,39 +35,55 @@ function UserProfile({ setOpenSidebar }) {
     }
   }, [user]);
 
+  const isActive = param["*"] === "profile";
+  const fullName = userData?.fullName || "Kullanıcı";
+
   return (
-    <Link
-      to="/profile"
-      className={`${
-        protectedPages?.profile &&
-        protectedPages?.lock &&
-        "pointer-events-none opacity-60"
-      }`}
-    >
-      <div
-        className={`flex items-center gap-3 px-6 py-4 font-normal whitespace-nowrap border-t text-[--gr-1] border-[--border-1] hover:bg-[--light-1] hover:text-[--primary-1] cursor-pointer group ${
-          param["*"] === "profile" && "bg-[--light-1] text-[--primary-1]"
-        }`}
-        onClick={() => setOpenSidebar(false)}
+    <div className="p-3 border-t border-[--border-1] shrink-0">
+      <Link
+        to="/profile"
+        className={cn(
+          protectedPages?.profile &&
+            protectedPages?.lock &&
+            "pointer-events-none opacity-50"
+        )}
       >
-        <div className="flex flex-1 gap-3">
-          <div className="flex justify-center items-center">
-            <UserI className="size-9" />
+        <div
+          className={cn(
+            "group flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors",
+            isActive ? "bg-[--light-1]" : "hover:bg-[--light-3]"
+          )}
+          onClick={() => setOpenSidebar(false)}
+        >
+          <div
+            className={cn(
+              "flex shrink-0 justify-center items-center size-9 rounded-full text-xs font-semibold",
+              isActive
+                ? "bg-[--primary-1] text-white"
+                : "bg-[--light-1] text-[--primary-1]"
+            )}
+          >
+            {initialsOf(fullName) || "K"}
           </div>
-          <div className="flex flex-col flex-1">
-            <div className="text-sm leading-5 text-[--black-2]">
-              {userData ? userData.fullName : "User"}
-            </div>
-            <div className="text-xs leading-5">
-              {userData ? userData.rol : "Kullanıcı"}
-            </div>
+
+          <div className="flex flex-col flex-1 min-w-0">
+            <span
+              className={cn(
+                "text-sm font-medium truncate",
+                isActive ? "text-[--primary-1]" : "text-[--black-1]"
+              )}
+            >
+              {fullName}
+            </span>
+            <span className="text-xs text-[--gr-1] truncate">
+              {userData?.rol || "Kullanıcı"}
+            </span>
           </div>
+
+          <ArrowIR className="size-4 shrink-0 text-[--gr-3] group-hover:translate-x-0.5 group-hover:text-[--primary-1] transition-all" />
         </div>
-        <div className="">
-          <ArrowIR className="font-bold group-hover:translate-x-2 transition-transform duration-300 ease-in-out" />
-        </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 

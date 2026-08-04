@@ -28,8 +28,11 @@ const Home = () => {
       <CourierStatusChange />
       <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-      <Suspense fallback={<CustomGeneralLoader />}>
-        <Routes>
+      {/* Single place that reserves room for the permanent lg+ sidebar —
+          pages used to each repeat lg:ml-[280px], and orders never had it. */}
+      <div className="lg:pl-[280px]">
+        <Suspense fallback={<CustomGeneralLoader />}>
+          <Routes>
           <Route path="/*" element={<Navigate to="/orders" />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/restaurants/*" element={<Restaurants />} />
@@ -41,9 +44,10 @@ const Home = () => {
           <Route path="/locked-pages/*" element={<ProtectedPages />} />
           <Route path="/payments/*" element={<Payments />} />
           <Route path="/messages/*" element={<Messages />} />
-          <Route path="/activity-logs/*" element={<Logs />} />
-        </Routes>
-      </Suspense>
+            <Route path="/activity-logs/*" element={<Logs />} />
+          </Routes>
+        </Suspense>
+      </div>
     </section>
   );
 };

@@ -13,6 +13,7 @@ import logo from "../../assets/img/logo.png";
 import bell_anim from "../../assets/anim/lottie/bell_anim.json";
 
 //UTILS
+import { cn } from "../../lib/utils";
 import sidebarItems from "../../enums/sidebarItems";
 import { useOrdersContext } from "../../context/OrdersContext";
 import { useProtectPages } from "../../context/ProtectPagesContext";
@@ -91,77 +92,103 @@ function Sidebar({ openSidebar, setOpenSidebar }) {
   }, [sidebarRef, openSidebar]);
 
   return (
-    <nav
-      className={`fixed -left-[280px] top-0 flex flex-col justify-between bg-[--white-1] border-r shadow-2xl border-[--border-1] w-[280px] h-[100dvh] transition-all z-[999] ${
-        openSidebar && "left-[0]"
-      } ${
-        path === "orders" && !openSidebar ? "lg:-left-[280px]" : "lg:left-[0px]"
-      }`}
-      ref={sidebarRef}
-    >
-      <div className="flex flex-col w-full">
-        <header className="flex items-center justify-center p-6 w-full text-xl font-[500] leading-7 text-[--black-2]">
-          <Link to="/" className="flex gap-1 w-max mr-6">
-            <img
-              loading="lazy"
-              src={logo}
-              alt="Pentegrasyon_logo"
-              className="shrink-0 w-7 aspect-square"
-            />
-            <p className="whitespace-nowrap">entegrasyon</p>
-          </Link>
-        </header>
+    <>
+      {/* Dim backdrop for the mobile drawer */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[998] bg-slate-950/40 backdrop-blur-[1px] transition-opacity lg:hidden",
+          openSidebar
+            ? "opacity-100"
+            : "opacity-0 pointer-events-none invisible"
+        )}
+        onClick={() => setOpenSidebar(false)}
+      />
 
-        <div className="flex flex-col justify-center w-full">
-          <div className="flex flex-col gap-1 px-6 pb-4 w-full">
+      <nav
+        ref={sidebarRef}
+        className={cn(
+          "fixed left-0 top-0 z-[999] flex flex-col justify-between w-[280px] h-[100dvh]",
+          "bg-[--white-1] border-r border-[--border-1]",
+          "transition-transform duration-300 ease-out",
+          // Drawer below lg, permanent from lg up.
+          openSidebar ? "translate-x-0 shadow-modal" : "-translate-x-full",
+          "lg:translate-x-0 lg:shadow-none"
+        )}
+      >
+        <div className="flex flex-col w-full min-h-0">
+          <header className="flex items-center h-16 px-5 shrink-0">
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                loading="lazy"
+                src={logo}
+                alt="Pentegrasyon"
+                className="shrink-0 w-7 aspect-square"
+              />
+              <p className="text-lg font-semibold tracking-tight text-[--black-1] whitespace-nowrap">
+                entegrasyon
+              </p>
+            </Link>
+          </header>
+
+          <p className="px-5 pt-3 pb-2 text-[0.68rem] font-semibold uppercase tracking-wider text-[--gr-3]">
+            Menü
+          </p>
+
+          <div className="flex flex-col gap-0.5 px-3 pb-4 w-full overflow-y-auto">
             {sidebarData &&
-              sidebarData.map((item, index) => (
-                <Link
-                  to={item.to}
-                  key={index}
-                  className={`${
-                    item.locked &&
-                    protectedPages.lock &&
-                    "pointer-events-none opacity-60"
-                  }`}
-                >
-                  <div
-                    onClick={() => {
-                      setOpenSidebar(false);
-                    }}
-                    className={`flex flex-col justify-center px-4 py-2 rounded-[99px] text-sm text-[--gr-1] cursor-pointer sidebar-item hover:bg-[--light-1] hover:text-[--primary-1] transition-colors relative ${
-                      path === item.path && "bg-[--light-1] text-[--primary-1]"
-                    }`}
+              sidebarData.map((item, index) => {
+                const isActive = path === item.path;
+                const isLocked = item.locked && protectedPages.lock;
+
+                return (
+                  <Link
+                    to={item.to}
+                    key={index}
+                    className={cn(isLocked && "pointer-events-none opacity-50")}
+                    onClick={() => setOpenSidebar(false)}
                   >
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-3">
-                        <div className="flex justify-center items-center p-1">
-                          {item.icon}
-                        </div>
-                        <div>{item.text}</div>
-                        <div>
-                          {unverifiedOrders && index == 5 && (
-                            <Lottie
-                              className="absolute top-0 bottom-0 right-0 rounded-full overflow-hidden"
-                              animationData={bell_anim}
-                              loop={true}
-                            />
+                    <div
+                      className={cn(
+                        "group relative flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                        isActive
+                          ? "bg-[--primary-1] text-white font-medium shadow-card"
+                          : "text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1]"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span
+                          className={cn(
+                            "shrink-0 [&>svg]:size-5 transition-colors",
+                            isActive
+                              ? "text-white"
+                              : "text-[--gr-3] group-hover:text-[--primary-1]"
                           )}
-                        </div>
+                        >
+                          {item.icon}
+                        </span>
+                        <span className="truncate">{item.text}</span>
                       </div>
-                      <div>
-                        {item.locked && protectedPages.lock && <LockI />}
+
+                      <div className="flex items-center shrink-0">
+                        {unverifiedOrders && index == 5 && (
+                          <Lottie
+                            className="size-6 rounded-full overflow-hidden"
+                            animationData={bell_anim}
+                            loop={true}
+                          />
+                        )}
+                        {isLocked && <LockI className="size-4" />}
                       </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
           </div>
         </div>
-      </div>
 
-      <UserProfile setOpenSidebar={setOpenSidebar} />
-    </nav>
+        <UserProfile setOpenSidebar={setOpenSidebar} />
+      </nav>
+    </>
   );
 }
 

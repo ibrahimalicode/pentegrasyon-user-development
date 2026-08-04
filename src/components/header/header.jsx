@@ -9,11 +9,18 @@ import Advert from "./advert";
 import { usePopup } from "../../context/PopupContext";
 import { getTheme, setTheme } from "../../utils/localStorage";
 import { useMessagesContext } from "../../context/MessagesContext";
-import { BellI, SettingsI, MenuI, SunI, MoonI } from "../../assets/icon";
+import { BellI, SettingsI, MenuI, SunI, MoonI, UserI } from "../../assets/icon";
+
+//UTILS
+import sidebarItems from "../../enums/sidebarItems";
+import { cn } from "../../lib/utils";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
+
+const iconButton =
+  "flex justify-center items-center size-9 rounded-lg text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/40";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const toastId = useRef();
@@ -25,6 +32,14 @@ function Header({ openSidebar, setOpenSidebar }) {
   const { loading, success, error } = useSelector((state) => state.auth.logout);
 
   const [open, setOpen] = useState(false);
+
+  // Page title from the route, so the header always says where you are.
+  const route = (param["*"] || "").split("/")[0] || "orders";
+  const pageTitle =
+    sidebarItems.find((item) => item.path === route)?.text ||
+    (route === "profile" ? "Profil" : "Pentegrasyon");
+
+  const unreadCount = messagesData?.filter((m) => !m.isRead).length || 0;
 
   const handleLogout = () => {
     const userSessionId = getAuth().sessionId;
@@ -64,78 +79,94 @@ function Header({ openSidebar, setOpenSidebar }) {
 
   return (
     <>
-      <header className="fixed top-0 right-0 left-0 flex flex-col justify-center bg-[--white-1] z-[99]">
-        <nav className="w-full h-16 flex justify-between items-center py-3.5 max-md:px-5 px-[4%] border-b border-[--border-1]">
-          <div
-            className="text-[--gr-1] cursor-pointer"
-            onClick={() => setOpenSidebar(!openSidebar)}
-          >
-            <MenuI
-              className={`${param["*"] === "orders" ? "" : "lg:hidden"}`}
-            />
+      <header className="fixed top-0 right-0 left-0 z-[99] lg:pl-[280px] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1]">
+        <nav className="w-full h-16 flex justify-between items-center gap-3 max-md:px-4 px-[4%]">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              aria-label="Menüyü aç/kapat"
+              className={cn(iconButton, "lg:hidden")}
+              onClick={() => setOpenSidebar(!openSidebar)}
+            >
+              <MenuI />
+            </button>
+
+            <h1 className="text-lg font-semibold text-[--black-1] truncate">
+              {pageTitle}
+            </h1>
           </div>
 
-          <p className="flex items-center text-3xl max-sm:text-xl text-[--primary-1] font-[conthrax]">
-            Pentegrasyon
-          </p>
-
-          <div className="flex gap-4 max-sm:gap-2">
+          <div className="flex items-center gap-1">
             <button
+              type="button"
+              aria-label="Temayı değiştir"
               onClick={() => setTheme(getTheme() == "light" ? "dark" : "light")}
-              className="flex justify-center items-center w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl"
+              className={iconButton}
             >
               {getTheme() == "light" ? <SunI /> : <MoonI />}
             </button>
 
-            <Link to="/messages">
-              <div className="flex justify-center items-center p-[.7rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer relative">
+            <Link to="/messages" aria-label="Mesajlar" className="relative">
+              <div className={iconButton}>
                 <BellI />
-                {messagesData &&
-                  messagesData?.filter((_) => !_.isRead).length > 0 && (
-                    <span className="absolute -top-2 -left-2 text-xs border border-[--primary-1] bg-[--primary-1] text-white rounded-full size-6 flex justify-center items-center">
-                      {messagesData?.filter((_) => !_.isRead).length}
-                    </span>
-                  )}
               </div>
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[1.15rem] h-[1.15rem] px-1 text-[0.65rem] font-semibold bg-[--red-1] text-white rounded-full flex justify-center items-center ring-2 ring-[--white-1]">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
             </Link>
-            <div
-              className="flex justify-center items-center relative"
-              ref={headerSettingsRef}
-            >
-              <div
-                className="flex justify-center items-center p-[.5rem] w-10 h-10 bg-[--light-1] text-[--primary-1] rounded-3xl cursor-pointer"
+
+            <div className="relative flex items-center" ref={headerSettingsRef}>
+              <button
+                type="button"
+                aria-label="Ayarlar"
+                className={cn(iconButton, open && "bg-[--light-3]")}
                 onClick={() => setOpen(!open)}
               >
-                <SettingsI strokeWidth={1.5} className="size-7 text-[--gr-1]" />
-              </div>
+                <SettingsI strokeWidth={1.7} className="size-5" />
+              </button>
 
               <div
-                className={`absolute top-[3rem] right-2 bg-[--white-1] text-[--gr-1] border border-solid border-[--border-1] font-sans rounded-md transition-colors ${
-                  !open && "invisible"
-                }`}
+                className={cn(
+                  "absolute top-11 right-0 w-48 p-1.5 bg-[--white-1] border border-solid border-[--border-1] rounded-xl shadow-dropdown transition-all origin-top-right",
+                  open
+                    ? "visible opacity-100 scale-100"
+                    : "invisible opacity-0 scale-95"
+                )}
               >
-                <ul>
-                  <Link to="/profile">
-                    <li
-                      className="px-6 py-2 pr-10 text-sm hover:bg-[--light-3] border-b border-solid border-[--light-3] cursor-pointer"
-                      onClick={() => setOpen(!open)}
-                    >
-                      Profil
-                    </li>
-                  </Link>
-                  <li
-                    className="px-6 py-2 pr-7 text-sm hover:bg-[--light-3] cursor-pointer whitespace-nowrap"
-                    onClick={handleLogout}
+                <Link to="/profile" onClick={() => setOpen(false)}>
+                  <div className="flex items-center gap-2.5 px-3 py-2 text-sm text-[--black-2] rounded-lg hover:bg-[--light-3] cursor-pointer">
+                    <UserI className="size-4 shrink-0" />
+                    Profil
+                  </div>
+                </Link>
+                <button
+                  type="button"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[--red-1] rounded-lg hover:bg-[--status-red] cursor-pointer whitespace-nowrap"
+                  onClick={handleLogout}
+                >
+                  <svg
+                    className="size-4 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    Çıkış Yap
-                  </li>
-                </ul>
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
+                  Çıkış Yap
+                </button>
               </div>
             </div>
           </div>
         </nav>
       </header>
-      <div className="w-full flex justify-center relative">
+      <div className="w-full flex justify-center relative lg:pl-[280px]">
         <Advert />
       </div>
     </>

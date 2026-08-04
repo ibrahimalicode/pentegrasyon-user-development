@@ -5,7 +5,7 @@ import MarketplaceChart from "../merketplaceChart";
 
 const DashboardPage = () => {
   return (
-    <section className="lg:ml-[280px] pt-20 min-h-0">
+    <section className="pt-20 min-h-0">
       <div className="flex flex-col px-16 max-md:px-5">
         <StatCard />
         <SalesBar />

@@ -31,12 +31,7 @@ const MessagesPage = () => {
   }, [messagesData, newMessage]);
 
   return (
-    <section className="lg:ml-[280px] pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
-      {/* TITLE */}
-      <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
-        <h2>Mesajlar</h2>
-      </div>
-
+    <section className="pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
       <main className="flex flex-col gap-4">
         {messagesData?.length ? (
           messagesData

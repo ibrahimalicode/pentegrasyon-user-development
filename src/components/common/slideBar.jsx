@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useSlideBar } from "../../context/SlideBarContext";
+import { cn } from "../../lib/utils";
 
 const SlideBar = () => {
   const slideBarRef = useRef();
@@ -27,15 +28,21 @@ const SlideBar = () => {
   return (
     <div
       onClick={handleClickOutside}
-      className={`fixed top-0 left-0 right-0 bottom-0 items-center transition-colors z-[9999] ${
-        slideBarContent ? "flex bg-black/20" : "hidden"
-      } ${!slideBarContent?.content && "justify-end"}`}
+      className={cn(
+        "fixed inset-0 items-center transition-colors z-[9999]",
+        slideBarContent
+          ? "flex bg-[--black-1]/40 backdrop-blur-[2px]"
+          : "hidden",
+        !slideBarContent?.content && "justify-end"
+      )}
     >
       <div
         ref={slideBarRef}
-        className={`bg-[--btn-txt] w-[90%] max-w-[35rem] rounded-xl transition-all duration-1000 ${
+        className={cn(
+          "w-[90%] max-w-[35rem] rounded-xl border border-solid border-[--border-1] bg-[--white-1] shadow-modal",
+          "transition-transform duration-500 ease-out",
           slideBarContent ? "translate-x-0" : "translate-x-[200%]"
-        }`}
+        )}
       >
         {slideBarContent?.content || slideBarContent}
       </div>

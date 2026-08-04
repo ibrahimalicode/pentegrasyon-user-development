@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CloudUI } from "../../assets/icon";
 import toast from "react-hot-toast";
+import { cn } from "../../lib/utils";
 
 //image/png, image/jpeg, image/gif, application/pdf
 
@@ -68,35 +69,44 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
   return (
     <label
       htmlFor="dropzone-file"
-      className={`flex flex-col items-center justify-center w-full h-64 text-[--gr-1] border-2 border-[--light-1] border-dashed rounded-lg cursor-pointer bg-[--white-1] relative ${
-        isDragging ? "border-[--primary-1] bg-[--light-3]" : ""
-      } ${className}`}
+      className={cn(
+        "relative flex flex-col items-center justify-center w-full h-64 px-4 text-center",
+        "rounded-xl border-2 border-dashed border-[--border-1] bg-[--white-1] text-[--gr-1]",
+        "cursor-pointer transition-colors hover:border-[--primary-1] hover:bg-[--light-3]",
+        "focus-within:border-[--primary-1] focus-within:ring-2 focus-within:ring-[--primary-1]/20",
+        isDragging && "border-[--primary-1] bg-[--light-1]",
+        className
+      )}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-1">
         {!value ? (
           <>
-            <CloudUI className="size-[2.5rem]" strokeWidth={1.5} />
-            <p className="mb-2 text-sm">
-              <span className="font-semibold">Yüklemek için tıklayın</span> veya
-              sürükleyip bırakın
+            <span className="flex items-center justify-center size-14 mb-2 rounded-full bg-[--light-3] text-[--gr-1]">
+              <CloudUI className="size-[1.75rem]" strokeWidth={1.5} />
+            </span>
+            <p className="text-sm text-[--black-2]">
+              <span className="font-semibold text-[--primary-1]">
+                Yüklemek için tıklayın
+              </span>{" "}
+              veya sürükleyip bırakın
             </p>
-            <p className="text-xs">
+            <p className="text-xs text-[--gr-1]">
               {getReadableAcceptText(accept)} (MAX. 800x400px)
             </p>
           </>
         ) : (
           <>
-            <p className="mb-2 text-sm">
+            <p className="mb-1 text-sm text-[--black-2]">
               <span className="font-semibold">Seçilen dosya: </span>
               <span className="font-semibold text-[--primary-1]">
                 {value.name}
               </span>
             </p>
-            <p className="text-xs">
+            <p className="text-xs text-[--gr-1]">
               Boyut: {(value.size / 1024).toFixed(2)} KB
             </p>
           </>

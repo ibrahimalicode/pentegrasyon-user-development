@@ -1,21 +1,32 @@
 import CloseI from "../../assets/icon/close";
+import { cn } from "../../lib/utils";
 
 const CustomTag = ({ onClick, data }) => {
   return (
     <div
       key={data.id}
-      className="w-44 flex items-center justify-between py-2 px-3 border border-solid border-[--border-1] rounded-md text-xs text-[--gr-1] whitespace-nowrap"
+      className={cn(
+        "w-44 flex items-center justify-between gap-2 py-1.5 pl-3 pr-1.5 rounded-full",
+        "border border-solid border-[--border-1] bg-[--light-3]",
+        "text-xs text-[--black-3] whitespace-nowrap"
+      )}
     >
-      <p>
+      <p className="truncate">
         {data.label.slice(0, 16)}
         {data.label.length > 16 && "..."}
       </p>
-      <span
-        className="p-1 bg-[--light-1] rounded-full cursor-pointer hover:bg-[--light-4]"
+      <button
+        type="button"
+        aria-label="Kaldır"
+        className={cn(
+          "shrink-0 p-1 rounded-full text-[--gr-1] transition-colors",
+          "hover:bg-[--light-4] hover:text-[--red-1]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/30"
+        )}
         onClick={onClick}
       >
         <CloseI className="size-[1rem]" />
-      </span>
+      </button>
     </div>
   );
 };

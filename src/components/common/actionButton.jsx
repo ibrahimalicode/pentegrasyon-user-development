@@ -1,7 +1,21 @@
+import { cn } from "../../lib/utils";
+
+// Row inside a dropdown/action menu. Styled as a menu item (compact, rounded,
+// hover-filled) rather than a bordered full-width bar.
 const ActionButton = ({ className, element, element2, onClick }) => {
   return (
     <button
-      className={`w-full flex items-center gap-2 py-2 pl-6 text-left border-b border-solid border-[--border-1] cursor-pointer hover:bg-[--light-3] transition-colors ${className}`}
+      type="button"
+      role="menuitem"
+      className={cn(
+        "w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm",
+        // No hover text colour: call sites tint destructive items red via
+        // `className` and that tint must survive the hover state.
+        "text-[--black-2] cursor-pointer transition-colors",
+        "hover:bg-[--light-3]",
+        "focus-visible:outline-none focus-visible:bg-[--light-3] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[--primary-1]/30",
+        className
+      )}
       onClick={onClick}
     >
       {element} {element2}

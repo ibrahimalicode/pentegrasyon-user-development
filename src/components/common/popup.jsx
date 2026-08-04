@@ -24,7 +24,7 @@ const Popup = () => {
         }`}
       >
         <div
-          className={`bg-[--btn-txt] w-full max-w-[45rem] rounded-xl transition-all ${
+          className={`w-full max-w-[45rem] rounded-xl transition-all ${
             loadingComponent ? "scale-100 opacity-100" : "scale-125 opacity-0"
           }`}
         >
@@ -38,7 +38,7 @@ const Popup = () => {
         }`}
       >
         <div
-          className={`bg-[--btn-txt] w-full max-w-[45rem] rounded-xl transition-all ${
+          className={`w-full max-w-[45rem] rounded-xl transition-all ${
             popupContent ? "scale-100 opacity-100" : "scale-125 opacity-0"
           }`}
         >

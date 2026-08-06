@@ -308,7 +308,9 @@ input[type="number"] {
 :where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--primary-2);
   outline-offset: 1px;
-  border-radius: inherit;
+  /* NOTE: no `border-radius: inherit` here. It squares the corners of every
+     focused control (measured: a 6px input rendering 0px on focus) because it
+     overrides the element's own radius rather than following it. */
 }
 :focus:not(:focus-visible) {
   outline: none;

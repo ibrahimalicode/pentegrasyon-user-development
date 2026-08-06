@@ -33,7 +33,7 @@ const CustomToggle = ({
           "relative shrink-0 w-11 h-6 rounded-full bg-[--gr-5] transition-colors duration-300",
           "after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-card after:transition-transform after:duration-300 after:ease-in-out",
           "peer-checked:bg-[--primary-1] peer-checked:after:translate-x-5 rtl:peer-checked:after:-translate-x-5",
-          "peer-focus-visible:ring-2 peer-focus-visible:ring-[--primary-1]/30 peer-focus-visible:ring-offset-1",
+          "peer-focus-visible:ring-2 peer-focus-visible:ring-[--primary-2] peer-focus-visible:ring-offset-1",
           className
         )}
       ></div>

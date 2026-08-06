@@ -30,8 +30,11 @@ const Home = () => {
   // sidebar collapses there and is opened on demand from the header.
   const isOrdersPage = pathname.startsWith("/orders");
 
+  // The shell sits on the RECESSED plane (--gr-4). Data surfaces (tables,
+  // cards, popovers) stay on --white-1 so they read as the brightest thing on
+  // screen instead of the chrome around them.
   return (
-    <section className="bg-[--white-1]">
+    <section className="bg-[--gr-4]">
       <CourierStatusChange />
       <Header
         openSidebar={openSidebar}
@@ -44,8 +47,11 @@ const Home = () => {
         isOrdersPage={isOrdersPage}
       />
       {/* Single place that reserves room for the permanent lg+ sidebar —
-          pages used to each repeat lg:ml-[280px], and orders never had it. */}
-      <div className={cn(!isOrdersPage && "lg:pl-[280px]")}>
+          pages used to each repeat lg:ml-[280px], and orders never had it.
+          The fixed-header spacer is still owned by each page section (pt-16
+          today, pt-12 once batches 3A–3H land); adding it here as well would
+          double the offset on every route. */}
+      <div className={cn(!isOrdersPage && "lg:pl-60")}>
         <Suspense fallback={<CustomGeneralLoader />}>
           <Routes>
           <Route path="/*" element={<Navigate to="/orders" />} />

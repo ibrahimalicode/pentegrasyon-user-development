@@ -413,7 +413,7 @@ const ChooseCourier = ({ order, Address, locatioData, setOrdersData }) => {
           <button
             type="submit"
             disabled={loading}
-            className="border border-transparent px-5 py-2 bg-[--primary-2] text-white rounded-sm mt-3"
+            className="border border-transparent px-5 py-2 bg-[--primary-2] text-[--white-1] rounded-sm mt-3"
           >
             Kaydet
           </button>

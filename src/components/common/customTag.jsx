@@ -21,7 +21,7 @@ const CustomTag = ({ onClick, data }) => {
         className={cn(
           "shrink-0 p-1 rounded-full text-[--gr-1] transition-colors",
           "hover:bg-[--light-4] hover:text-[--red-1]",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/30"
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary-1)_30%,transparent)]"
         )}
         onClick={onClick}
       >

@@ -109,8 +109,8 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
       <nav
         ref={sidebarRef}
         className={cn(
-          "fixed left-0 top-0 z-[999] flex flex-col justify-between w-[280px] h-[100dvh]",
-          "bg-[--white-1] border-r border-[--border-1]",
+          "fixed left-0 top-0 z-[999] flex flex-col justify-between w-60 h-[100dvh]",
+          "bg-[--gr-4] border-r border-[--border-1]",
           "transition-transform duration-300 ease-out",
           // Drawer below lg, permanent from lg up — except on orders, where
           // it stays a drawer so the wide table gets the full width.
@@ -119,13 +119,15 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
         )}
       >
         <div className="flex flex-col w-full min-h-0">
-          <header className="flex items-center h-16 px-5 shrink-0">
+          {/* Same 48px as the header bar, so the wordmark and the page title
+              sit on one baseline across the sidebar seam. */}
+          <header className="flex items-center h-12 px-3 shrink-0">
             <Link to="/" className="flex items-center gap-2">
               <img
                 loading="lazy"
                 src={logo}
                 alt="Pentegrasyon"
-                className="shrink-0 w-7 aspect-square"
+                className="shrink-0 w-6 aspect-square"
               />
               <p className="text-lg font-semibold tracking-tight text-[--black-1] whitespace-nowrap">
                 entegrasyon
@@ -133,10 +135,24 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
             </Link>
           </header>
 
-          <p className="px-5 pt-3 pb-2 text-[0.68rem] font-semibold uppercase tracking-wider text-[--gr-3]">
+          {/* Label role: muted text on a filled band is always --gr-1, never
+              --gr-3 (3.79:1 on --light-3). text-2xs already carries the
+              0.04em tracking, so no tracking utility here. */}
+          <p className="px-3 pt-3 pb-2 text-2xs font-semibold uppercase text-[--gr-1]">
             Menü
           </p>
 
+          {/* NOTE on `item.show` (sidebarItems.js): it is `false` on
+              "Siparişler" and "Yetki Koruması", and it is deliberately still
+              not honoured. Both are the ONLY navigation entry point to their
+              route — nothing else in the app links to /orders (only the
+              implicit "/" redirect) or to /locked-pages — and the
+              unverified-order bell is rendered on the orders item itself.
+              Filtering on `show` would strand /locked-pages entirely and
+              remove the operator's labelled way back to the main screen, so
+              the flag stays inert until those routes get another entry point.
+              Item order is also load-bearing: `sidebarIcons[i]` and the
+              `index == 5` bell are positional. */}
           <div className="flex flex-col gap-0.5 px-3 pb-4 w-full overflow-y-auto">
             {sidebarData &&
               sidebarData.map((item, index) => {
@@ -152,19 +168,20 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
                   >
                     <div
                       className={cn(
-                        "group relative flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                        "group relative flex items-center justify-between gap-2 h-8 px-2.5 rounded-md text-sm transition-colors",
+                        // No filled pill: the active item is a neutral tint
+                        // plus a 2px accent rail — the same language the
+                        // selected table row uses.
                         isActive
-                          ? "bg-[--primary-1] text-white font-medium shadow-card"
+                          ? "relative bg-[--light-3] text-[--black-1] font-medium before:absolute before:left-0 before:top-1 before:bottom-1 before:w-[2px] before:rounded-full before:bg-[--primary-2]"
                           : "text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1]"
                       )}
                     >
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0">
                         <span
                           className={cn(
-                            "shrink-0 [&>svg]:size-5 transition-colors",
-                            isActive
-                              ? "text-white"
-                              : "text-[--gr-3] group-hover:text-[--primary-1]"
+                            "shrink-0 [&>svg]:size-4 transition-colors",
+                            isActive ? "text-[--primary-2]" : "text-[--gr-3]"
                           )}
                         >
                           {item.icon}
@@ -175,7 +192,7 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
                       <div className="flex items-center shrink-0">
                         {unverifiedOrders && index == 5 && (
                           <Lottie
-                            className="size-6 rounded-full overflow-hidden"
+                            className="size-5 rounded-full overflow-hidden"
                             animationData={bell_anim}
                             loop={true}
                           />

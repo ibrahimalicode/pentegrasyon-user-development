@@ -32,8 +32,9 @@ const CustomInput = ({
   className5,
   pattern,
 }) => {
-  const eyeIconVis = <EyeI className="w-5" strokeWidth={2} />;
-  const eyeIconInv = <EyeInv className="w-5" strokeWidth={2} />;
+  // Icon size is bound to the control size: a 36px field takes a 16px icon.
+  const eyeIconVis = <EyeI className="size-4" strokeWidth={1.5} />;
+  const eyeIconInv = <EyeInv className="size-4" strokeWidth={1.5} />;
 
   const [eyeIcon, setEyeIcon] = useState(eyeIconInv);
   const [inputType, setInputType] = useState("password");
@@ -75,7 +76,7 @@ const CustomInput = ({
           onFocus={onFocus}
           onBlur={onBlur}
           pattern={pattern}
-          className={cn(FIELD_BASE, hasTrailing && "pr-11", className)}
+          className={cn(FIELD_BASE, hasTrailing && "pr-9", className)}
         />
 
         {letIcon && !icon && (
@@ -84,7 +85,7 @@ const CustomInput = ({
             tabIndex={-1}
             aria-label="Şifreyi göster/gizle"
             className={cn(
-              "absolute right-3 top-1/2 -translate-y-1/2 text-[--gr-3] hover:text-[--black-3] transition-colors",
+              "absolute right-2 top-1/2 -translate-y-1/2 text-[--gr-3] hover:text-[--black-3] transition-colors",
               className3
             )}
             onClick={eyeIconClick}
@@ -96,7 +97,7 @@ const CustomInput = ({
         {icon && !letIcon && (
           <div
             className={cn(
-              "absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[--gr-3] hover:text-[--black-3] transition-colors",
+              "absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-[--gr-3] hover:text-[--black-3] transition-colors",
               className4
             )}
             onClick={iconClick}

@@ -18,16 +18,16 @@ export const AuthSubmit = ({ children, loading, disabled, className = "" }) => (
   <button
     type="submit"
     disabled={disabled || loading}
-    className={`w-full flex justify-center items-center h-11 mt-6 text-base font-semibold rounded-lg bg-[--primary-1] text-white transition-colors hover:bg-[#4338ca] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 ${className}`}
+    className={`w-full flex justify-center items-center h-11 mt-6 text-base font-semibold rounded-md bg-[--primary-1] text-[--white-1] transition-colors hover:bg-[--primary-2] active:brightness-95 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-45 ${className}`}
   >
-    {loading ? <LoadingI className="h-6 text-white" /> : children}
+    {loading ? <LoadingI className="h-6 text-[--white-1]" /> : children}
   </button>
 );
 
 export const AuthFooter = ({ question, linkText, to }) => (
   <p className="mt-6 text-center text-sm text-[--gr-1]">
     {question}{" "}
-    <Link to={to} className="font-medium text-[--primary-1] hover:underline">
+    <Link to={to} className="font-medium text-[--link-1] hover:underline">
       {linkText}
     </Link>
   </p>

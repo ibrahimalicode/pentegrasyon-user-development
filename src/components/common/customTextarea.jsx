@@ -28,13 +28,13 @@ const CustomTextarea = ({
           onChange={onChange}
           onKeyDown={onKeyDown}
           autoComplete={autoComplete}
-          // Same treatment as FIELD_BASE, but auto-height instead of h-11.
-          className={cn(FIELD_BASE, "h-24 py-2.5 resize-y", className)}
+          // Same treatment as FIELD_BASE, but multi-line instead of h-9.
+          className={cn(FIELD_BASE, "h-24 py-2 resize-y", className)}
         />
         {icon && (
           <div
             className={cn(
-              "absolute right-3 top-3 cursor-pointer text-[--gr-3] hover:text-[--black-3] transition-colors",
+              "absolute right-2 top-2 cursor-pointer text-[--gr-3] hover:text-[--black-3] transition-colors",
               className3
             )}
             onClick={onClick}

@@ -66,8 +66,8 @@ const GlassFrame = ({ component, className, className2 }) => {
       {/* Form panel */}
       <main className="flex-1 flex flex-col bg-[--white-2] text-[--black-1] relative overflow-hidden">
         {/* Soft glows behind the glass card */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[--primary-1]/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -left-24 w-96 h-96 rounded-full bg-[--primary-2]/10 blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[color-mix(in_srgb,var(--primary-1)_15%,transparent)] blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -left-24 w-96 h-96 rounded-full bg-[color-mix(in_srgb,var(--primary-2)_10%,transparent)] blur-3xl pointer-events-none" />
 
         <Link
           to="/"
@@ -79,7 +79,7 @@ const GlassFrame = ({ component, className, className2 }) => {
         <div className="flex-1 flex items-center justify-center px-6 py-10 relative">
           <div
             className={cn(
-              "w-full max-w-md rounded-2xl border border-[--border-1] bg-[--white-1]/95 backdrop-blur-xl shadow-modal p-8 max-sm:p-6",
+              "w-full max-w-md rounded-2xl border border-[--border-1] bg-[color-mix(in_srgb,var(--white-1)_95%,transparent)] backdrop-blur-xl shadow-modal p-8 max-sm:p-6",
               className2
             )}
           >

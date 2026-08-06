@@ -19,8 +19,10 @@ import { cn } from "../../lib/utils";
 import { getAuth, clearAuth } from "../../redux/api";
 import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
 
+// 32px control with a 16px glyph. No focus classes — the global
+// :focus-visible rule in index.css owns the outline for every control.
 const iconButton =
-  "flex justify-center items-center size-9 rounded-lg text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/40";
+  "flex justify-center items-center size-8 rounded-md text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1] transition-colors [&>svg]:size-4";
 
 function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
   const toastId = useRef();
@@ -81,11 +83,15 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
     <>
       <header
         className={cn(
-          "fixed top-0 right-0 left-0 z-[99] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1]",
-          !isOrdersPage && "lg:pl-[280px]"
+          // 90% --gr-4 written as color-mix on purpose: the `/90` opacity
+          // modifier emits NO rule at all against a hex-valued CSS variable,
+          // which is why the old bg-[color-mix(in_srgb,var(--white-1)_85%,transparent)] header was fully
+          // transparent and the blur was doing all the work.
+          "fixed top-0 right-0 left-0 z-[99] bg-[color-mix(in_srgb,var(--gr-4)_90%,transparent)] backdrop-blur-md border-b border-[--border-1]",
+          !isOrdersPage && "lg:pl-60"
         )}
       >
-        <nav className="w-full h-16 flex justify-between items-center gap-3 max-md:px-4 px-[4%]">
+        <nav className="w-full h-12 flex justify-between items-center gap-3 px-5 max-sm:px-4">
           <div className="flex items-center gap-3 min-w-0">
             {/* On orders the sidebar is collapsed at every width, so the
                 toggle has to stay reachable on desktop too. */}
@@ -98,7 +104,7 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
               <MenuI />
             </button>
 
-            <h1 className="text-lg font-semibold text-[--black-1] truncate">
+            <h1 className="text-lg font-semibold tracking-[-0.008em] text-[--black-1] truncate">
               {pageTitle}
             </h1>
           </div>
@@ -118,7 +124,7 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
                 <BellI />
               </div>
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[1.15rem] h-[1.15rem] px-1 text-[0.65rem] font-semibold bg-[--red-1] text-white rounded-full flex justify-center items-center ring-2 ring-[--white-1]">
+                <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 text-2xs font-semibold bg-[--red-1] text-[--white-1] rounded-full flex justify-center items-center ring-2 ring-[--gr-4]">
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </span>
               )}
@@ -131,26 +137,26 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
                 className={cn(iconButton, open && "bg-[--light-3]")}
                 onClick={() => setOpen(!open)}
               >
-                <SettingsI strokeWidth={1.7} className="size-5" />
+                <SettingsI strokeWidth={1.7} />
               </button>
 
               <div
                 className={cn(
-                  "absolute top-11 right-0 w-48 p-1.5 bg-[--white-1] border border-solid border-[--border-1] rounded-xl shadow-dropdown transition-all origin-top-right",
+                  "absolute top-[calc(100%+4px)] right-0 w-48 p-1 bg-[--white-1] border border-[--border-1] rounded-[10px] shadow-dropdown transition-all origin-top-right",
                   open
                     ? "visible opacity-100 scale-100"
                     : "invisible opacity-0 scale-95"
                 )}
               >
                 <Link to="/profile" onClick={() => setOpen(false)}>
-                  <div className="flex items-center gap-2.5 px-3 py-2 text-sm text-[--black-2] rounded-lg hover:bg-[--light-3] cursor-pointer">
+                  <div className="flex items-center gap-2 h-7 px-2 text-sm text-[--black-2] rounded hover:bg-[--light-3] cursor-pointer">
                     <UserI className="size-4 shrink-0" />
                     Profil
                   </div>
                 </Link>
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[--red-1] rounded-lg hover:bg-[--status-red] cursor-pointer whitespace-nowrap"
+                  className="w-full flex items-center gap-2 h-7 px-2 text-sm text-[--red-1] rounded hover:bg-[--status-red] cursor-pointer whitespace-nowrap"
                   onClick={handleLogout}
                 >
                   <svg
@@ -173,9 +179,10 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
           </div>
         </nav>
       </header>
-      <div className="w-full flex justify-center relative lg:pl-[280px]">
-        <Advert />
-      </div>
+      {/* Advert owns its own wrapper so that when there is no advert it emits
+          nothing at all — an empty wrapper here would push every page down by
+          the header offset. */}
+      <Advert />
     </>
   );
 }

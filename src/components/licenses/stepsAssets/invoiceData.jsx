@@ -79,7 +79,7 @@ const InvoiceData = ({
             <button
               type="button"
               onClick={() => setOpenFatura(true)}
-              className="p-2 mt-3 bg-[--primary-2] text-white rounded-md hover:text-[--primary-2] hover:bg-[--white-1] transition-colors duration-300 ease-in-out border border-[--primary-2]"
+              className="p-2 mt-3 bg-[--primary-2] text-[--white-1] rounded-md hover:text-[--primary-2] hover:bg-[--white-1] transition-colors duration-300 ease-in-out border border-[--primary-2]"
             >
               Düzenle
             </button>

@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils";
 const SIZES = {
   4: "size-4",
   5: "size-5",
-  6: "size-5",
+  6: "size-6",
 };
 
 const CustomRadiobox = ({
@@ -14,7 +14,7 @@ const CustomRadiobox = ({
   onClick,
   className,
   className2,
-  size = 5,
+  size = "5",
   name,
 }) => {
   return (
@@ -40,8 +40,8 @@ const CustomRadiobox = ({
           SIZES[size] || SIZES[5],
           checked
             ? "border-[--primary-1]"
-            : "border-[--gr-5] group-hover:border-[--primary-1]",
-          "peer-focus-visible:ring-2 peer-focus-visible:ring-[--primary-1]/30"
+            : "border-[--border-1] group-hover:border-[--gr-2]",
+          "peer-focus-visible:ring-2 peer-focus-visible:ring-[--primary-2]"
         )}
       >
         {checked && (

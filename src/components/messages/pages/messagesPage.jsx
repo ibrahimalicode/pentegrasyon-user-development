@@ -31,7 +31,7 @@ const MessagesPage = () => {
   }, [messagesData, newMessage]);
 
   return (
-    <section className="pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row">
       <main className="flex flex-col gap-4">
         {messagesData?.length ? (
           messagesData

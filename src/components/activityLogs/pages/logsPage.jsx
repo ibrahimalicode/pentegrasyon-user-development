@@ -216,7 +216,7 @@ const LogsPage = () => {
   }, [filterLogs, deleteByDateLogs]);
 
   return (
-    <section className="pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* TITLE */}
       <div className="w-full text-[--black-2] pt-4 text-2xl font-semibold">
         <h2>Logs</h2>

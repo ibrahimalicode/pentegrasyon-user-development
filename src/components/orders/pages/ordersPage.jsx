@@ -193,7 +193,9 @@ const OrdersPage = () => {
   // console.log(licensesData.filter((L) => L.isSettingsAdded));
 
   return (
-    <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">
+    // The fixed header is h-16 (64px), so the old sm:pt-16 put the toolbar
+    // flush against it — 5.25rem leaves a 20px gutter below the header.
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">
       {/* ACTIONS/BUTTONS
           One flat wrapping row instead of nested fixed-width groups: the
           search now sits inline with the controls on wide screens, and on a

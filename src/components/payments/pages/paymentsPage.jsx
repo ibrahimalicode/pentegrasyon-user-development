@@ -121,7 +121,7 @@ const PaymentsPage = () => {
   }, [filterPayments]);
 
   return (
-    <section className="pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row">
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">

@@ -244,7 +244,7 @@ const RestaurantsPage = () => {
     // row landed BELOW the pagination and left it hugging the cards with
     // dead space underneath. Here the content area grows and pagination
     // settles at the foot of the page.
-    <section className="pt-16 px-[4%] pb-4 flex flex-col min-h-[100dvh] bg-[--white-1]">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 flex flex-col min-h-[100dvh] bg-[--white-1]">
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">

@@ -239,7 +239,12 @@ const RestaurantsPage = () => {
   }, [filterRestaurant]);
 
   return (
-    <section className="pt-16 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row">
+    // flex column rather than section_row: that grid declares four rows
+    // (auto auto auto 1fr) but this page has three children, so the growth
+    // row landed BELOW the pagination and left it hugging the cards with
+    // dead space underneath. Here the content area grows and pagination
+    // settles at the foot of the page.
+    <section className="pt-16 px-[4%] pb-4 flex flex-col min-h-[100dvh] bg-[--white-1]">
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
@@ -396,26 +401,28 @@ const RestaurantsPage = () => {
         </div>
       </div>
 
-      {/* TABLE */}
-      {restaurantsData?.length > 0 ? (
-        <RestaurantsCards
-          inData={restaurantsData}
-          Actions={Actions}
-          totalItems={restaurantsData.length}
-          onSuccess={() => handleFilter(true)}
-        />
-      ) : loading ? (
-        <RestaurantsCardsSkeleton />
-      ) : (
-        <NoTableData
-          Icon={RestourantI}
-          text={"Henuz Restoranınız Yok. Lütfen Restoran Ekleyin."}
-        />
-      )}
+      {/* CARDS */}
+      <div className="flex-1 min-h-0">
+        {restaurantsData?.length > 0 ? (
+          <RestaurantsCards
+            inData={restaurantsData}
+            Actions={Actions}
+            totalItems={restaurantsData.length}
+            onSuccess={() => handleFilter(true)}
+          />
+        ) : loading ? (
+          <RestaurantsCardsSkeleton />
+        ) : (
+          <NoTableData
+            Icon={RestourantI}
+            text={"Henuz Restoranınız Yok. Lütfen Restoran Ekleyin."}
+          />
+        )}
+      </div>
 
       {/* PAGINATION */}
       {restaurantsData && typeof totalItems === "number" && (
-        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
+        <div className="w-full flex justify-center pt-4 mt-4 border-t border-[--border-1] text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}

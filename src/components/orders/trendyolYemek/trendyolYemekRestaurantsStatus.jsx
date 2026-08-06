@@ -8,7 +8,9 @@ import { getRemainingDays } from "../../../utils/utils";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //COMP
-import CustomToggle from "../../common/customToggle";
+import RestaurantStatusToggle, {
+  staleNote,
+} from "../components/restaurantStatusToggle";
 import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
@@ -40,6 +42,10 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   //UPDATE RESTAURANT STATUS
   function updateRestaurantStatus(id) {
+    // Stale availability: the marketplace mapping is not responding,
+    // so the update would fail. The toggle is disabled too.
+    if (statusData[id]?.isAvailabilityStale) return;
+
     if (!statusData[id].changeable) {
       toast.error(
         `Trendyol Yemek restoran durumu değiştirilemez. ${
@@ -160,16 +166,13 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                       <div className="w-full flex justify-between">
                         <div className="flex gap-4">
                           <div className="max-w-40 text-center">
-                            <CustomToggle
+                            <RestaurantStatusToggle
                               label="Restoran Durumu"
-                              className="scale-75 order-2"
-                              className1="flex-col max-sm:items-start"
-                              className2="order-1 ml-[0]"
                               onChange={() => updateRestaurantStatus(key)}
                               checked={statusData[key].restaurantStatus}
-                              disabled={
-                                updateRestaurantLoading || !isActive(key)
-                              }
+                              disabled={updateRestaurantLoading || !isActive(key)}
+                              stale={restaurant.isAvailabilityStale}
+                              note={staleNote(restaurant)}
                             />
                           </div>
                         </div>

@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
-import CustomToggle from "../../common/customToggle";
+import RestaurantStatusToggle, {
+  staleNote,
+} from "../components/restaurantStatusToggle";
 import { getRemainingDays } from "../../../utils/utils";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
@@ -37,6 +39,10 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   }
 
   function updateRestaurantStatus(id) {
+    // Stale availability: the marketplace mapping is not responding,
+    // so the update would fail. The toggle is disabled too.
+    if (statusData[id]?.isAvailabilityStale) return;
+
     const updatedStat = {
       ...statusData,
       [id]: {
@@ -126,16 +132,13 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                       <div className="w-full flex justify-between">
                         <div className="flex gap-4 whitespace-nowrap">
                           <div className="max-w-40 text-center">
-                            <CustomToggle
+                            <RestaurantStatusToggle
                               label="Restoran Durumu"
-                              className="scale-75 order-2"
-                              className1="flex-col max-sm:items-start"
-                              className2="order-1 ml-[0]"
                               onChange={() => updateRestaurantStatus(key)}
                               checked={statusData[key].restaurantStatus}
-                              disabled={
-                                updateRestaurantLoading || !isActive(key)
-                              }
+                              disabled={updateRestaurantLoading || !isActive(key)}
+                              stale={restaurant.isAvailabilityStale}
+                              note={staleNote(restaurant)}
                             />
                           </div>
                           {/* Kurye Durumu toggle removed — the backend endpoint

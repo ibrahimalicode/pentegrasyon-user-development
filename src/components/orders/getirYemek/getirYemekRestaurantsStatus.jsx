@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import RestaurantStatuses from "../../../enums/restaurantStatuses";
 
 //COMP
-import CustomToggle from "../../common/customToggle";
+import RestaurantStatusToggle, {
+  staleNote,
+} from "../components/restaurantStatusToggle";
 import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
@@ -47,6 +49,10 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   //UPDATE RESTAURANT STATUS
   function updateRestaurantStatus(id) {
+    // Stale availability: the marketplace mapping is not responding,
+    // so the update would fail. The toggle is disabled too.
+    if (statusData[id]?.isAvailabilityStale) return;
+
     const updatedStat = {
       ...statusData,
       [id]: {
@@ -80,6 +86,10 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
 
   //UPDATE COURIER STATUS
   function updateRestaurantCourierStatus(id) {
+    // Stale availability: the marketplace mapping is not responding,
+    // so the update would fail. The toggle is disabled too.
+    if (statusData[id]?.isAvailabilityStale) return;
+
     const updatedStat = {
       ...statusData,
       [id]: {
@@ -182,32 +192,24 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                       <div className="w-full flex justify-between">
                         <div className="flex gap-4 whitespace-nowrap">
                           <div className="max-w-40 text-center">
-                            <CustomToggle
+                            <RestaurantStatusToggle
                               label="Restoran Durumu"
-                              className="scale-75 order-2"
-                              className1="flex-col max-sm:items-start"
-                              className2="order-1 ml-[0]"
                               onChange={() => updateRestaurantStatus(key)}
                               checked={statusData[key].restaurantStatus}
-                              disabled={
-                                updateRestaurantLoading || !isActive(key)
-                              }
+                              disabled={updateRestaurantLoading || !isActive(key)}
+                              stale={restaurant.isAvailabilityStale}
+                              note={staleNote(restaurant)}
                             />
                           </div>
                           {statusData[key].restaurantStatus && (
                             <div className="max-w-40 text-end pr-2">
-                              <CustomToggle
+                              <RestaurantStatusToggle
                                 label="Kurye Durumu"
-                                className="scale-75 order-2"
-                                className1="flex-col max-sm:items-start"
-                                className2="order-1 ml-[0]"
-                                onChange={() =>
-                                  updateRestaurantCourierStatus(key)
-                                }
+                                onChange={() => updateRestaurantCourierStatus(key)}
                                 checked={restaurant.courierStatus}
-                                disabled={
-                                  updateCourierLoading || !isActive(key)
-                                }
+                                disabled={updateCourierLoading || !isActive(key)}
+                                stale={restaurant.isAvailabilityStale}
+                                note={staleNote(restaurant)}
                               />
                             </div>
                           )}

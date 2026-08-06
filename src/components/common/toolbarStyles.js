@@ -3,10 +3,7 @@
 // control height as form fields and buttons, so a toolbar row reads as one
 // family instead of a pile of differently-sized boxes.
 
-// gap-3, not gap-2: the row wraps, so this is also the vertical gutter
-// between wrapped lines, and it has to leave room for controls that paint a
-// little outside their box (e.g. the closed-restaurants alert halo).
-export const TOOLBAR_ROW = "flex flex-wrap items-center gap-3";
+export const TOOLBAR_ROW = "flex flex-wrap items-center gap-2";
 
 export const TOOLBAR_STAT =
   "flex flex-col justify-center h-11 px-3 rounded-lg border border-[--border-1] bg-[--white-1] text-center whitespace-nowrap";

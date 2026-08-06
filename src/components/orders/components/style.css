@@ -3,16 +3,11 @@
   height: 55px;
   background: url("../../../assets/img/courier.png") no-repeat center;
   background-size: contain;
-  animation: courierPulse 1.5s infinite ease-in-out;
+  animation: pulse 1.5s infinite ease-in-out;
   border-radius: 9999;
 }
 
-/* Named courierPulse, not pulse: @keyframes are global, so calling this
-   "pulse" silently overrode Tailwind's built-in animate-pulse for the whole
-   app — every animate-pulse element gained a transform:scale(1.1) it was
-   never meant to have, and scaled elements paint outside their layout box
-   into their neighbours. */
-@keyframes courierPulse {
+@keyframes pulse {
   0% {
     transform: scale(1);
     opacity: 1;

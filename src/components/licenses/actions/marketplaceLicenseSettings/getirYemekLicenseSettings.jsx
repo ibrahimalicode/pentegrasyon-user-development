@@ -57,8 +57,8 @@ const CONFIG = {
         <p className="w-2 h-3"></p>
         <CustomInput
           required
-          label="Restauran Secret Key"
-          placeholder="Restauran Secret Key"
+          label="Restoran Secret Key"
+          placeholder="Restoran Secret Key"
           className="py-[.45rem] text-sm"
           value={licenseData.restaurantSecretKey}
           onChange={(e) => {

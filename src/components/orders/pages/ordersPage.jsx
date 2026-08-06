@@ -15,7 +15,9 @@ import TableSkeleton from "../../common/tableSkeleton";
 import CustomSelect from "../../common/customSelector";
 import OrdersTotalPrice from "../components/ordersTotalPrice";
 import AutomaticApproval from "../components/automaticApproval";
-import RestaurantsStatus from "../components/restaurantsStatus";
+import RestaurantsStatus, {
+  ClosedRestaurantsBanner,
+} from "../components/restaurantsStatus";
 import NoOrdersPlaceholder from "../components/noOrdersPlaceholder";
 
 // REDUX
@@ -75,6 +77,9 @@ const OrdersPage = () => {
   const [couriersData, setCouriersData] = useState(null);
   const [licensesData, setLicensesData] = useState(null);
   const [automationDatas, setAutomationDatas] = useState(null);
+  // Lifted out of RestaurantsStatus so the alert can render above the table
+  // instead of floating over its first row.
+  const [closedInfo, setClosedInfo] = useState({ closed: [], openPanel: null });
   const hasCourier = couriersData?.length > 0;
   const hasCourierLicense =
     licensesData?.filter((L) => L.licenseTypeId === 7 || L.licenseTypeId === 8)
@@ -192,7 +197,10 @@ const OrdersPage = () => {
         <SearchOrders />
         <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
           <div className="flex gap-2 max-sm:mt-3">
-            <RestaurantsStatus licenses={licensesData} />
+            <RestaurantsStatus
+              licenses={licensesData}
+              onClosedChange={setClosedInfo}
+            />
             <AutomaticApproval
               ordersData={ordersData}
               automationDatas={automationDatas}
@@ -218,6 +226,12 @@ const OrdersPage = () => {
           </main>
         </main>
       </div>
+
+      {/* Closed-restaurant alert sits in the flow so it never covers an order */}
+      <ClosedRestaurantsBanner
+        closed={closedInfo.closed}
+        onOpen={closedInfo.openPanel}
+      />
 
       {/* TABLE */}
       {ordersData?.length && licensesData && !loading ? (

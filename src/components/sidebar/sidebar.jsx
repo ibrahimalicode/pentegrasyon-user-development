@@ -174,10 +174,12 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
                         // selected table row uses.
                         isActive
                           // Linear keeps the accent out of navigation
-                          // entirely: the selected item is a plain tint with
-                          // the text and icon promoted to primary.
-                          ? "bg-[--light-3] text-[--black-1] font-medium"
-                          : "text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1]"
+                          // entirely. Selected is a RAISED chip — a surface
+                          // step above the sidebar plus a hairline ring — so
+                          // it is visible without colour. Hover is the weaker
+                          // tint, so the two states are distinguishable.
+                          ? "bg-[--white-1] text-[--black-1] font-medium shadow-card"
+                          : "text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-2]"
                       )}
                     >
                       <div className="flex items-center gap-2 min-w-0">

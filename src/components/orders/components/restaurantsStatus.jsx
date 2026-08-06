@@ -63,7 +63,10 @@ export const ClosedRestaurantsBanner = ({ closed = [], onOpen }) => {
         {closed.length} restoran kapalı
       </span>
 
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5">
+      {/* Below sm the names drop to their own line (order-last), because
+          sharing the row with the count and the button squeezed them into a
+          ~100px column that broke every name one word per line. */}
+      <div className="order-last flex w-full min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5 sm:order-none sm:w-auto sm:flex-1">
         {closed.map((rest, i) => (
           <span
             key={`${rest.id}-${i}`}

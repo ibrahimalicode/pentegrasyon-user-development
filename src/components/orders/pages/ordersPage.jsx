@@ -27,6 +27,8 @@ import {
 } from "../../../redux/orders/getAutomationVariablesSlice";
 
 //UTILS
+import { cn } from "../../../lib/utils";
+import { TOOLBAR_ROW } from "../../common/toolbarStyles";
 import { useFirestore } from "../../../context/FirestoreContext";
 import { useOrdersContext } from "../../../context/OrdersContext";
 import {
@@ -192,39 +194,36 @@ const OrdersPage = () => {
 
   return (
     <section className="pt-20 sm:pt-16 px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">
-      {/* ACTIONS/BUTTONS */}
-      <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2 min-h-max">
+      {/* ACTIONS/BUTTONS
+          One flat wrapping row instead of nested fixed-width groups: the
+          search now sits inline with the controls on wide screens, and on a
+          phone every control wraps onto the next line instead of being forced
+          side by side and overflowing the viewport horizontally. */}
+      <div className={cn(TOOLBAR_ROW, "w-full mb-4")}>
         <SearchOrders />
-        <main className="flex items-end gap-4 max-sm:flex-col max-sm:w-full max-sm:items-start">
-          <div className="flex gap-2 max-sm:mt-3">
-            <RestaurantsStatus
-              licenses={licensesData}
-              onClosedChange={setClosedInfo}
-            />
-            <AutomaticApproval
-              ordersData={ordersData}
-              automationDatas={automationDatas}
-              setAutomationDatas={setAutomationDatas}
-            />
-          </div>
 
-          <main className="flex items-end gap-4 max-sm:w-full max-sm:justify-between">
-            <div className="flex items-end gap-2 max-sm:w-full">
-              <OrdersCount />
-              <OnTheWayTime
-                automationDatas={automationDatas}
-                setAutomationDatas={setAutomationDatas}
-              />
-              <DeliveryTime
-                automationDatas={automationDatas}
-                setAutomationDatas={setAutomationDatas}
-              />
-              <OrdersTotalPrice orders={ordersData} />
-            </div>
+        <RestaurantsStatus
+          licenses={licensesData}
+          onClosedChange={setClosedInfo}
+        />
+        <AutomaticApproval
+          ordersData={ordersData}
+          automationDatas={automationDatas}
+          setAutomationDatas={setAutomationDatas}
+        />
 
-            <FilterOrders licenses={licensesData} />
-          </main>
-        </main>
+        <OrdersCount />
+        <OnTheWayTime
+          automationDatas={automationDatas}
+          setAutomationDatas={setAutomationDatas}
+        />
+        <DeliveryTime
+          automationDatas={automationDatas}
+          setAutomationDatas={setAutomationDatas}
+        />
+        <OrdersTotalPrice orders={ordersData} />
+
+        <FilterOrders licenses={licensesData} />
       </div>
 
       {/* Closed-restaurant alert sits in the flow so it never covers an order */}

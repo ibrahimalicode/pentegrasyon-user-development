@@ -54,7 +54,9 @@ const SearchOrders = () => {
   }
 
   return (
-    <div className="flex items-center w-full max-w-80">
+    // Full width on a phone (it gets its own line), then an inline toolbar
+    // control that absorbs the slack up to a readable cap on wider screens.
+    <div className="flex items-center w-full sm:w-auto sm:flex-1 sm:min-w-56 sm:max-w-80">
       <form className="w-full" onSubmit={handleSearch}>
         <CustomInput
           onChange={(e) => {
@@ -63,7 +65,9 @@ const SearchOrders = () => {
           }}
           value={searchVal}
           placeholder="Ara...Onay kodu veya Müşteri Adı"
-          className2="mt-[0px] w-full"
+          // sm:mt-0 too: CustomInput reserves a top margin for a form label,
+          // which made the search 64px tall next to 44px toolbar controls.
+          className2="mt-0 sm:mt-0 w-full"
           className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none text-sm"
           icon={<CloseI className="w-4 text-[--red-1]" />}
           className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${

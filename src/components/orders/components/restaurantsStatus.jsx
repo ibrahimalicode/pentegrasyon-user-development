@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
 import { cn } from "../../../lib/utils";
+import { checkLeng } from "../../../utils/utils";
 import { WarnI } from "../../../assets/icon";
 import { TOOLBAR_BTN } from "../../common/toolbarStyles";
 import { useSlideBar } from "../../../context/SlideBarContext";
@@ -50,40 +51,41 @@ export const ClosedRestaurantsBanner = ({ closed = [], onOpen }) => {
   if (!closed.length) return null;
 
   return (
+    // One line: the count, the names and the action share a row and only wrap
+    // when they genuinely run out of width, so the alert costs the table a
+    // single row of height instead of three.
     <div
       role="status"
-      className="w-full mb-4 flex items-start gap-3 rounded-lg border border-solid border-[--red-1] bg-[--status-red] px-4 py-3"
+      className="w-full mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg border border-solid border-[--red-1] bg-[--status-red] px-3 py-2"
     >
-      <WarnI className="size-5 shrink-0 mt-0.5 text-[--red-1]" />
+      <span className="flex shrink-0 items-center gap-2 text-sm font-semibold text-[--red-1]">
+        <WarnI className="size-4 shrink-0" />
+        {closed.length} restoran kapalı
+      </span>
 
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-[--red-1]">
-          {closed.length} restoran kapalı
-        </p>
-
-        {/* Chips wrap, so a long list grows the banner instead of needing the
-            marquee the cramped tooltip used to rely on. */}
-        <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1.5">
-          {closed.map((rest, i) => (
-            <span
-              key={`${rest.id}-${i}`}
-              className="flex items-center gap-1.5 text-xs text-[--black-2]"
-            >
-              <img
-                alt=""
-                className="size-4 rounded-full"
-                src={MarketPlaceAssets[rest.marketplaceId]?.src}
-              />
-              {nameOf(rest)}
-            </span>
-          ))}
-        </div>
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5">
+        {closed.map((rest, i) => (
+          <span
+            key={`${rest.id}-${i}`}
+            // Full name in the title so truncation never hides which
+            // restaurant is down.
+            title={nameOf(rest)}
+            className="flex items-center gap-1.5 text-xs text-[--black-2]"
+          >
+            <img
+              alt=""
+              className="size-4 shrink-0 rounded-full"
+              src={MarketPlaceAssets[rest.marketplaceId]?.src}
+            />
+            {checkLeng(nameOf(rest))}
+          </span>
+        ))}
       </div>
 
       <button
         type="button"
         onClick={onOpen}
-        className="shrink-0 self-center rounded-md border border-solid border-[--red-1] px-3 py-1.5 text-xs font-medium text-[--red-1] transition-colors hover:bg-[--red-1] hover:text-[--white-1]"
+        className="ml-auto shrink-0 rounded-md border border-solid border-[--red-1] px-2.5 py-1 text-xs font-medium text-[--red-1] transition-colors hover:bg-[--red-1] hover:text-[--white-1]"
       >
         Detaylar
       </button>

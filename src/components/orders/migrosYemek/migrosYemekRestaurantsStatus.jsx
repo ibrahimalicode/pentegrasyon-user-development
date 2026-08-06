@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //UTILS
+import { getRemainingDays } from "../../../utils/utils";
+import RestaurantStatuses from "../../../enums/restaurantStatuses";
+
+//COMP
 import RestaurantStatusToggle, {
   staleNote,
 } from "../components/restaurantStatusToggle";
-import { getRemainingDays } from "../../../utils/utils";
-import RestaurantStatuses from "../../../enums/restaurantStatuses";
+import { StatusCard, StatusRow } from "../components/statusCard";
 import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
@@ -114,71 +117,39 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (
-      <main className="border-2 border-[--migrosyemek] rounded-md mx-2">
-        <div className="w-full text-center py-3 bg-[--migrosyemek] text-white">
-          Migros Yemek
-        </div>
-        <div className="w-full text-sm">
-          <div className="flex flex-col gap-2">
-            {statusData &&
-              Object.keys(statusData).map((key, i) => {
-                const restaurant = statusData[key];
-                return (
-                  <main key={i}>
-                    <div className="flex justify-between items-center max-sm:flex-col max-sm:items-start px-3">
-                      <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
-                        {restaurant.storeName}
-                      </p>
-                      <div className="w-full flex justify-between">
-                        <div className="flex gap-4 whitespace-nowrap">
-                          <div className="max-w-40 text-center">
-                            <RestaurantStatusToggle
-                              label="Restoran Durumu"
-                              onChange={() => updateRestaurantStatus(key)}
-                              checked={statusData[key].restaurantStatus}
-                              disabled={updateRestaurantLoading || !isActive(key)}
-                              stale={restaurant.isAvailabilityStale}
-                              note={staleNote(restaurant)}
-                            />
-                          </div>
-                          {/* Kurye Durumu toggle removed — the backend endpoint
-                              MigrosYemek/UpdateRestaurantCourierStatus does not
-                              exist (only GetirYemek has one); it always 404'd. */}
-                        </div>
-
-                        <DeleteIntegrationInfo
-                          restaurant={restaurant}
-                          onSuccess={onSuccess}
-                        />
-                      </div>
-                    </div>
-
-                    <>
-                      {(() => {
-                        const remaining = remainingDays(
-                          restaurant.restaurantId,
-                        );
-                        return (
-                          Number.isFinite(remaining) && (
-                            <div
-                              className={`w-full flex items-center justify-center mt-2 ${remaining < 15 ? "bg-[--status-red] text-[--red-1]" : "bg-[--migrosyemek] text-white"}`}
-                            >
-                              <p>
-                                {remaining > 0
-                                  ? `Lisansın bitimine ${remaining} gün kaldı`
-                                  : "Lisans süresi doldu"}
-                              </p>
-                            </div>
-                          )
-                        );
-                      })()}
-                    </>
-                  </main>
-                );
-              })}
-          </div>
-        </div>
-      </main>
+      <StatusCard brandVar="--migrosyemek" title="Migros Yemek">
+        {Object.keys(statusData).map((key, i) => {
+          const restaurant = statusData[key];
+          return (
+            <StatusRow
+              key={i}
+              name={restaurant.storeName}
+              remainingDays={remainingDays(restaurant.restaurantId)}
+              controls={
+                <>
+                  <RestaurantStatusToggle
+                    label="Restoran Durumu"
+                    onChange={() => updateRestaurantStatus(key)}
+                    checked={statusData[key].restaurantStatus}
+                    disabled={updateRestaurantLoading || !isActive(key)}
+                    stale={restaurant.isAvailabilityStale}
+                    note={staleNote(restaurant)}
+                  />
+                  {/* Kurye Durumu toggle removed — the backend endpoint
+                      MigrosYemek/UpdateRestaurantCourierStatus does not
+                      exist (only GetirYemek has one); it always 404'd. */}
+                </>
+              }
+              action={
+                <DeleteIntegrationInfo
+                  onSuccess={onSuccess}
+                  restaurant={restaurant}
+                />
+              }
+            />
+          );
+        })}
+      </StatusCard>
     )
   );
 };

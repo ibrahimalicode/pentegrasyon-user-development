@@ -59,54 +59,61 @@ const RestaurantsStatusPopup = ({ licenses, inData, onSuccess }) => {
   }
 
   return (
-    <main className="w-full h-[100dvh] bg-[--white-1] pb-[4%] overflow-y-auto">
-      <div className="flex justify-between mx-2 my-2">
-        <div className="w-full flex items-center max-w-80">
-          <div className="w-full">
-            <CustomInput
-              onChange={(e) => {
-                setSearchVal(e);
-                handleSearch(e);
-              }}
-              value={searchVal}
-              placeholder="Ara..."
-              iconClick={clearSearch}
-              className2="mt-[0px] sm:mt-[0px] w-full"
-              className="mt-[0px] sm:mt-[0px] py-[.5rem] w-[100%] focus:outline-none text-sm rounded-[700rem]"
-              icon={
-                searchVal ? (
-                  <CloseI className="size-4 p-0.5 text-[--red-1] mr-2 border border-[--red-1] rounded-full" />
-                ) : null
-              }
-            />
-          </div>
-        </div>
-
+    // Column layout: the header and search stay put while only the card list
+    // scrolls, so the close button is always reachable in a tall panel.
+    <main className="w-full h-[100dvh] bg-[--white-1] flex flex-col">
+      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-solid border-[--border-1] px-4 py-3">
+        <h2 className="text-base font-semibold text-[--black-1]">
+          Restoran Durumları
+        </h2>
         <button
+          type="button"
+          aria-label="Kapat"
           onClick={() => setSlideBarContent(null)}
-          className="text-[--red-1] px-1.5  rounded-full"
+          className="flex size-8 items-center justify-center rounded-lg text-[--gr-1] transition-colors hover:bg-[--light-3] hover:text-[--black-1]"
         >
-          <CloseI />
+          <CloseI className="size-5" />
         </button>
+      </header>
+
+      <div className="shrink-0 px-4 pt-3">
+        <CustomInput
+          onChange={(e) => {
+            setSearchVal(e);
+            handleSearch(e);
+          }}
+          value={searchVal}
+          placeholder="Restoran ara..."
+          iconClick={clearSearch}
+          className2="mt-0 sm:mt-0 w-full max-w-sm"
+          className="mt-0 sm:mt-0"
+          icon={
+            searchVal ? <CloseI className="size-4 text-[--gr-1]" /> : null
+          }
+        />
       </div>
 
-      <div className="flex flex-col gap-2">
-        {components.map(({ comp: Comp, id }, i) => (
-          <div
-            key={id}
-            className={`transition-all duration-700 transform text-[--black-1] ${sections[i]}`}
-          >
-            <Comp
-              onSuccess={onSuccess}
-              licenses={licenses.filter(
-                ({ licenseTypeId }) => licenseTypeId === id
-              )}
-              statRest={restaurantsData.filter(
-                ({ marketplaceId }) => marketplaceId === id
-              )}
-            />
-          </div>
-        ))}
+      {/* max-w keeps the rows readable instead of stretching a two-control
+          row across the full width of a 90% panel. */}
+      <div className="flex-1 overflow-y-auto px-4 py-3">
+        <div className="flex max-w-3xl flex-col gap-3">
+          {components.map(({ comp: Comp, id }, i) => (
+            <div
+              key={id}
+              className={`transition-all duration-700 transform text-[--black-1] ${sections[i]}`}
+            >
+              <Comp
+                onSuccess={onSuccess}
+                licenses={licenses.filter(
+                  ({ licenseTypeId }) => licenseTypeId === id
+                )}
+                statRest={restaurantsData.filter(
+                  ({ marketplaceId }) => marketplaceId === id
+                )}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );

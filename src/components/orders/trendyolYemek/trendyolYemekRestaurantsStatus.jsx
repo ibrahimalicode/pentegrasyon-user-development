@@ -12,6 +12,7 @@ import RestaurantStatusToggle, {
   staleNote,
 } from "../components/restaurantStatusToggle";
 import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
+import { StatusCard, StatusRow } from "../components/statusCard";
 
 //REDUX
 import {
@@ -147,69 +148,34 @@ const TrendyolYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
   return (
     statusData &&
     Object.keys(statusData).length > 0 && (
-      <main className="border-2 border-[--trendyol] rounded-md mx-2">
-        <div className="w-full text-center py-3 bg-[--trendyol] text-white">
-          Trendyol Yemek
-        </div>
-
-        <div className="w-full text-sm">
-          <div className="flex flex-col gap-2">
-            {statusData &&
-              Object.keys(statusData).map((key, i) => {
-                const restaurant = statusData[key];
-                return (
-                  <main key={i}>
-                    <div className="flex justify-between items-center max-sm:flex-col max-sm:items-start px-3">
-                      <p className="text-start max-sm:text-base max-sm:py-2 min-w-56">
-                        {restaurant.name}
-                      </p>
-                      <div className="w-full flex justify-between">
-                        <div className="flex gap-4">
-                          <div className="max-w-40 text-center">
-                            <RestaurantStatusToggle
-                              label="Restoran Durumu"
-                              onChange={() => updateRestaurantStatus(key)}
-                              checked={statusData[key].restaurantStatus}
-                              disabled={updateRestaurantLoading || !isActive(key)}
-                              stale={restaurant.isAvailabilityStale}
-                              note={staleNote(restaurant)}
-                            />
-                          </div>
-                        </div>
-
-                        <DeleteIntegrationInfo
-                          restaurant={restaurant}
-                          onSuccess={onSuccess}
-                        />
-                      </div>
-                    </div>
-
-                    <>
-                      {(() => {
-                        const remaining = remainingDays(
-                          restaurant.restaurantId,
-                        );
-                        return (
-                          Number.isFinite(remaining) && (
-                            <div
-                              className={`w-full flex items-center justify-center mt-2 ${remaining < 15 ? "bg-[--status-red] text-[--red-1]" : "bg-[--trendyol] text-white"}`}
-                            >
-                              <p>
-                                {remaining > 0
-                                  ? `Lisansın bitimine ${remaining} gün kaldı`
-                                  : "Lisans süresi doldu"}
-                              </p>
-                            </div>
-                          )
-                        );
-                      })()}
-                    </>
-                  </main>
-                );
-              })}
-          </div>
-        </div>
-      </main>
+      <StatusCard brandVar="--trendyol" title="Trendyol Yemek">
+        {Object.keys(statusData).map((key, i) => {
+          const restaurant = statusData[key];
+          return (
+            <StatusRow
+              key={i}
+              name={restaurant.name}
+              remainingDays={remainingDays(restaurant.restaurantId)}
+              controls={
+                <RestaurantStatusToggle
+                  label="Restoran Durumu"
+                  onChange={() => updateRestaurantStatus(key)}
+                  checked={statusData[key].restaurantStatus}
+                  disabled={updateRestaurantLoading || !isActive(key)}
+                  stale={restaurant.isAvailabilityStale}
+                  note={staleNote(restaurant)}
+                />
+              }
+              action={
+                <DeleteIntegrationInfo
+                  restaurant={restaurant}
+                  onSuccess={onSuccess}
+                />
+              }
+            />
+          );
+        })}
+      </StatusCard>
     )
   );
 };

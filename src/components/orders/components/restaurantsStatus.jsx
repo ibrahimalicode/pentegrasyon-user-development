@@ -222,8 +222,12 @@ const RestaurantsStatus = ({ licenses, onClosedChange }) => {
     onClosedChange?.({ closed: closedRestaurants, openPanel });
   }, [closedRestaurants, openPanel]);
 
+  // Alert styling for the button when restaurants are closed. Two dropped
+  // classes used to live here: `shadow-[0_0_20px_rgba(220,38,38,0.7` (missing
+  // its closing paren+bracket) and `duration-[.3]` (no unit) — both were
+  // silently discarded by Tailwind, so the intended red glow never rendered.
   const buttonClass =
-    "text-white bg-[--red-1] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.7 animate-pulse relative after:absolute after:inset-0 after:rounded-lg after:border-2 after:border-red-500 after:animate-[emergencyRipple_1s_ease-out_infinite] before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-red-600 before:animate-[emergencyRipple_1s_ease-out_infinite] before:delay-500 flex items-center justify-center transition-all duration-[.3] ease-in-out";
+    "text-white bg-[--red-1] transition-colors duration-300 animate-[alertPulse_1.6s_ease-in-out_infinite] relative after:absolute after:inset-0 after:rounded-lg after:border-2 after:border-red-500 after:animate-[emergencyRipple_1s_ease-out_infinite] before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-red-600 before:animate-[emergencyRipple_1s_ease-out_infinite] before:delay-500 flex items-center justify-center";
 
 
   return (
@@ -255,17 +259,30 @@ const RestaurantsStatus = ({ licenses, onClosedChange }) => {
       </button>
       <style>
         {`
+        /* Not Tailwind's animate-pulse: that bottoms out at opacity .5, which
+           on a solid red button reads as disabled. The original intent here
+           was a gentle throb, so this keeps it well above that. */
+        @keyframes alertPulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.85; }
+        }
+
+        /* Expands by a fixed 5px rather than transform: scale(1.15). Scale is
+           proportional to the button's width, so the halo grew with the label
+           and painted ~13px past the button into the search field and the
+           toggle beside it. A fixed inset keeps the overshoot inside the
+           toolbar's gap no matter how long the text gets. */
         @keyframes emergencyRipple {
           0% {
-            transform: scale(1);
-            opacity: 0.8;
+            inset: 0;
+            opacity: 0.7;
           }
-          50% {
-            transform: scale(1.15);
+          70% {
+            inset: -5px;
             opacity: 0;
           }
           100% {
-            transform: scale(1);
+            inset: -5px;
             opacity: 0;
           }
         }`}

@@ -25,10 +25,11 @@ export const StatusCard = ({ brandVar, title, logo, notice, children }) => (
   </div>
 );
 
-// Licence health at a glance. The ring depletes as expiry approaches — full
-// green is healthy, a shrinking red arc is urgent — so the number doesn't
-// have to be read to notice a problem.
-const RING_WINDOW_DAYS = 90;
+// Licence health at a glance. The ring shows how much of a one-year licence
+// is left, so it depletes steadily toward expiry — a 64-day licence reads as
+// nearly spent rather than nearly full — while the colour carries the
+// urgency tier independently.
+const RING_WINDOW_DAYS = 365;
 
 export const licenseTone = (days) =>
   days < 30 ? "--red-1" : days < 60 ? "--yellow-1" : "--green-1";

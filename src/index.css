@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500&display=swap");
 @import url("https://fonts.cdnfonts.com/css/conthrax");
 
 @tailwind base;
@@ -17,68 +17,68 @@
    indigo as the one brand hue. */
 
 body[class="dark"] {
-  background-color: #0f172a;
+  background-color: #070a0f;
 }
 
 body[class="light"] {
-  background-color: #f8fafc;
+  background-color: #edf0f4;
 }
 
 .dark {
-  --primary-1: #6366f1;
-  --primary-2: #8b5cf6;
+  --primary-1: #2e6ad1;
+  --primary-2: #6ba5f5;
 
-  --gr-1: #94a3b8;
-  --gr-2: #94a3b8;
-  --gr-3: #cbd5e1;
-  --gr-4: #334155;
-  --gr-5: #475569;
+  --gr-1: #8c99ac;
+  --gr-2: #414e63;
+  --gr-3: #7b8899;
+  --gr-4: #0a0f16;
+  --gr-5: #4a5668;
 
-  --light-1: #1e293b;
-  --light-2: #312e81;
-  --light-3: #334155;
-  --light-4: #172033;
-  --light-5: #3e4a5b;
+  --light-1: #16233a;
+  --light-2: #1e3050;
+  --light-3: #212a3a;
+  --light-4: #27313f;
+  --light-5: #181f2b;
 
-  --link-1: #60a5fa;
-  --light-green: #14532d;
+  --link-1: #6ba5f5;
+  --light-green: #0e3324;
 
   /* SOLID */
-  --white-1: #0f172a;
-  --white-2: #1e293b;
-  --black-1: #f8fafc;
-  --black-2: #e2e8f0;
-  --black-3: #cbd5e1;
-  --green-1: #22c55e;
-  --green-2: #16a34a;
-  --green-3: #06b6d4;
-  --yellow-1: #fbbf24;
-  --red-1: #f87171;
-  --red-2: #ec4899;
-  --blue-1: #60a5fa;
-  --purple-1: #a78bfa;
-  --orange-1: #fb923c;
-  --pink-1: #f472b6;
-  --brown-1: #b45309;
+  --white-1: #141c28;
+  --white-2: #1c2534;
+  --black-1: #eef2f8;
+  --black-2: #d3dbe7;
+  --black-3: #a9b5c6;
+  --green-1: #45d98d;
+  --green-2: #2cbf7a;
+  --green-3: #38c0c8;
+  --yellow-1: #efb63f;
+  --red-1: #ff8a80;
+  --red-2: #f585b4;
+  --blue-1: #5cb8e0;
+  --purple-1: #b592f5;
+  --orange-1: #f79b52;
+  --pink-1: #f585b4;
+  --brown-1: #c99b72;
 
-  --border-1: #293548;
+  --border-1: #333e51;
 
   /* TABLE */
-  --table: #334155;
-  --table-odd: #1e293b;
+  --table: #17283f;
+  --table-odd: #181f2b;
 
   /* STATUS */
-  --status-green: #14532d;
-  --status-red: #7f1d1d;
-  --status-yellow: #854d0e;
-  --status-gray: #475569;
-  --status-blue: #1e40af;
-  --status-purple: #5b21b6;
-  --status-orange: #9a3412;
-  --status-pink: #9d174d;
-  --status-brown: #521a0b; /* 3e1b11; */
-  --status-primary-1: #6d28d9;
-  --status-primary-2: #312e81;
+  --status-green: #0e3324;
+  --status-red: #3e1a19;
+  --status-yellow: #3b2d06;
+  --status-gray: #262e3c;
+  --status-blue: #12324a;
+  --status-purple: #2a1f4a;
+  --status-orange: #3d2012;
+  --status-pink: #3d1730;
+  --status-brown: #2b2119; /* 3e1b11; */
+  --status-primary-1: #2c6aaf;
+  --status-primary-2: #16233a;
 
   /* MARKETPLACES */
   --getiryemek: #5d3ebd;
@@ -87,63 +87,66 @@ body[class="light"] {
   --yemeksepeti: #fa0050;
   --gofody: #f1b62a;
   --siparisim: #05407a;
+  --red-3: #3e1a19;
+  --gray-1: #7b8899;
+  --white: #141c28;
 }
 
 .light {
-  --primary-1: #4f46e5;
-  --primary-2: #6d28d9;
+  --primary-1: #1b4fa0;
+  --primary-2: #2f6fd0;
 
-  --gr-1: #64748b;
-  --gr-2: #6b7280;
-  --gr-3: #94a3b8;
-  --gr-4: #f1f5f9;
-  --gr-5: #cbd5e1;
+  --gr-1: #5a6679;
+  --gr-2: #a9b3c4;
+  --gr-3: #6b7789;
+  --gr-4: #edf0f4;
+  --gr-5: #b4bdcc;
 
-  --light-1: #eef2ff;
-  --light-2: #f5f3ff;
-  --light-3: #f1f5f9;
-  --light-4: #e2e8f0;
-  --light-5: #f8fafc;
+  --light-1: #e8f0fc;
+  --light-2: #d8e4f7;
+  --light-3: #e7ebf1;
+  --light-4: #dbe1ea;
+  --light-5: #fafbfc;
 
-  --link-1: #2563eb;
-  --light-green: #dcfce7;
+  --link-1: #2f6fd0;
+  --light-green: #dff3e7;
 
   /* SOLID */
   --white-1: #ffffff;
-  --white-2: #f8fafc;
-  --black-1: #0f172a;
-  --black-2: #1e293b;
-  --black-3: #475569;
-  --green-1: #16a34a;
-  --green-2: #15803d;
-  --green-3: #0d9488;
-  --yellow-1: #d97706;
-  --red-1: #dc2626;
-  --red-2: #db2777;
-  --red-3: #ef4444;
-  --blue-1: #2563eb;
-  --purple-1: #9333ea;
-  --orange-1: #ea580c;
-  --pink-1: #db2777;
-  --brown-1: #92400e;
-  --border-1: #e2e8f0;
+  --white-2: #f6f8fa;
+  --black-1: #0b1220;
+  --black-2: #1e2839;
+  --black-3: #3d4a5e;
+  --green-1: #0f7a46;
+  --green-2: #0b6339;
+  --green-3: #0d6e78;
+  --yellow-1: #8a5a05;
+  --red-1: #c22626;
+  --red-2: #b32562;
+  --red-3: #fbe7e6;
+  --blue-1: #0e6e9c;
+  --purple-1: #6b3bc4;
+  --orange-1: #a8500f;
+  --pink-1: #b32562;
+  --brown-1: #7a4a1e;
+  --border-1: #c9d0dc;
 
   /* TABLE */
-  --table: #f1f5f9;
-  --table-odd: #f8fafc;
+  --table: #e1ebfb;
+  --table-odd: #fafbfc;
 
   /* STATUS */
-  --status-green: #e9ffef;
-  --status-red: #ffe9e9;
-  --status-yellow: #fff6d6;
-  --status-gray: #e4e4e4;
-  --status-blue: #e7f0ff;
-  --status-purple: #f4e6ff;
-  --status-orange: #ffece4;
-  --status-pink: #ffe7f1;
-  --status-brown: #f7ede7;
-  --status-primary-1: #9690f1;
-  --status-primary-2: #f4eefb;
+  --status-green: #e3f4ea;
+  --status-red: #fbe7e6;
+  --status-yellow: #fbf0d8;
+  --status-gray: #e7eaf0;
+  --status-blue: #e3effa;
+  --status-purple: #efe8fb;
+  --status-orange: #fbeadf;
+  --status-pink: #fbe6ef;
+  --status-brown: #f3ebe2;
+  --status-primary-1: #8fb3e8;
+  --status-primary-2: #e8f0fc;
 
   /* MARKETPLACES */
   --getiryemek: #5d3ebd;
@@ -152,26 +155,15 @@ body[class="light"] {
   --yemeksepeti: #fa0050;
   --gofody: #f1b62a;
   --siparisim: #05407a;
+  --gray-1: #6b7789;
+  --white: #ffffff;
 }
 
-section {
-  min-height: 100dvh;
-}
-.light .section_row {
-  grid-template-rows: auto auto auto 1fr;
-  background-color: #ffffff;
-}
-.dark .section_row {
-  grid-template-rows: auto auto auto 1fr;
-  background-color: #0f172a;
-}
 .dark input {
-  font-family: "Lexend Deca", sans-serif;
-  background-color: #1e293b;
+  background-color: var(--white-2);
 }
 .light input {
-  font-family: "Lexend Deca", sans-serif;
-  background-color: #ffffff;
+  background-color: var(--white-1);
 }
 
 .stroke {
@@ -182,7 +174,10 @@ section {
 
 body {
   overflow-x: hidden;
-  font-family: "Lexend Deca", sans-serif;
+  font-family: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* ss01 disambiguates 1 / l / I — matters for Turkish ı/İ and order codes */
+  font-feature-settings: "ss01" 1;
 }
 /* Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-outer-spin-button,
@@ -305,22 +300,87 @@ input[type="number"] {
   /* width: 100%; */
 }
 
-/* CUSTOM SCROLL BAR */
-::-webkit-scrollbar {
-  width: 0.25rem;
-  height: 0.25rem;
+
+/* ---------------------------------------------------------------
+   Global interaction + surface rules (UI system v2)
+   --------------------------------------------------------------- */
+
+:where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--primary-2);
+  outline-offset: 1px;
+  border-radius: inherit;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+tr:focus-visible {
+  outline: 2px solid var(--primary-2);
+  outline-offset: -2px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--gr-5);
-  border-radius: 1rem;
+/* Figures line up in columns without per-cell classes */
+th,
+td,
+.num,
+input[type="number"] {
+  font-variant-numeric: tabular-nums;
 }
 
 ::selection {
-  background-color: var(--primary-1);
-  color: #ffffff;
+  background: var(--primary-2);
+  color: var(--white-1);
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gr-5);
+  border-radius: 5px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* A drop shadow is invisible on near-black; an inset top highlight reads as lifted */
+.dark .shadow-dropdown {
+  box-shadow: 0 4px 16px -2px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+.dark .shadow-modal {
+  box-shadow: 0 24px 56px -12px rgb(0 0 0 / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--light-3) 25%, var(--light-4) 37%, var(--light-3) 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* PRINT IMMUNITY — thermal receipts must not inherit the app palette or the
+   type remap. These four layouts are excluded from every restyle batch. */
+.orders-print-content,
+.orders-print-content * {
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-family: ui-sans-serif, system-ui, sans-serif !important;
+}
+.orders-print-content .font-bold { font-weight: 700 !important; }
+.orders-print-content .text-lg { font-size: 15px !important; line-height: 1.35 !important; }
+.orders-print-content .text-xl { font-size: 18px !important; line-height: 1.3 !important; }
+.orders-print-content .text-3xl { font-size: 26px !important; line-height: 1.2 !important; }

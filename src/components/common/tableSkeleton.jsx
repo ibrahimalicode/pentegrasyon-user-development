@@ -21,7 +21,7 @@ const TableSkeleton = ({
     <div className="w-full text-sm rounded-xl border border-solid border-[--border-1] bg-[--white-1] overflow-hidden">
       <div
         className={cn(
-          "flex items-center gap-6 px-3 bg-[--gr-4] border-b border-solid border-[--border-1]",
+          "flex items-center gap-6 px-3 bg-[--light-3] border-b border-solid border-[--border-1]",
           headerClass
         )}
       >

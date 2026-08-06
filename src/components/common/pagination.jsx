@@ -63,7 +63,7 @@ const CustomPagination = ({
   const rangeEnd = Math.min(pageNumber * itemsPerPage, totalItems);
 
   return (
-    <div className="w-full flex h-10 items-center justify-between gap-3 border-t border-[--border-1] bg-[--gr-4] px-3">
+    <div className="w-full flex h-10 items-center justify-between gap-3 border-t border-[--border-1] bg-[--white-2] px-3">
       <span className="min-w-0 truncate text-2xs font-semibold uppercase tabular-nums text-[--gr-1]">
         {totalItems
           ? `Toplam Sayım: ${rangeStart}–${rangeEnd} / ${totalItems}`

@@ -110,7 +110,7 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
         ref={sidebarRef}
         className={cn(
           "fixed left-0 top-0 z-[999] flex flex-col justify-between w-60 h-[100dvh]",
-          "bg-[--gr-4] border-r border-[--border-1]",
+          "bg-[--white-1] border-r border-[--border-1]",
           "transition-transform duration-300 ease-out",
           // Drawer below lg, permanent from lg up — except on orders, where
           // it stays a drawer so the wide table gets the full width.

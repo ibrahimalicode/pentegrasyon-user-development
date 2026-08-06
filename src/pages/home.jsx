@@ -34,7 +34,7 @@ const Home = () => {
   // cards, popovers) stay on --white-1 so they read as the brightest thing on
   // screen instead of the chrome around them.
   return (
-    <section className="bg-[--gr-4]">
+    <section className="bg-[--white-1]">
       <CourierStatusChange />
       <Header
         openSidebar={openSidebar}

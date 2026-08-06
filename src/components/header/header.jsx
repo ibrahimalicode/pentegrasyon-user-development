@@ -83,11 +83,11 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
     <>
       <header
         className={cn(
-          // 90% --gr-4 written as color-mix on purpose: the `/90` opacity
-          // modifier emits NO rule at all against a hex-valued CSS variable,
-          // which is why the old bg-[color-mix(in_srgb,var(--white-1)_85%,transparent)] header was fully
-          // transparent and the blur was doing all the work.
-          "fixed top-0 right-0 left-0 z-[99] bg-[color-mix(in_srgb,var(--gr-4)_90%,transparent)] backdrop-blur-md border-b border-[--border-1]",
+          // Written as color-mix on purpose: an `/85` opacity modifier emits
+          // NO rule at all against a hex-valued CSS variable, which is why the
+          // translucent header was previously fully transparent with only the
+          // backdrop blur doing the work.
+          "fixed top-0 right-0 left-0 z-[99] bg-[color-mix(in_srgb,var(--white-1)_85%,transparent)] backdrop-blur-md border-b border-[--border-1]",
           !isOrdersPage && "lg:pl-60"
         )}
       >
@@ -124,7 +124,7 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
                 <BellI />
               </div>
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 text-2xs font-semibold bg-[--red-1] text-[--white-1] rounded-full flex justify-center items-center ring-2 ring-[--gr-4]">
+                <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 text-2xs font-semibold bg-[--red-1] text-[--white-1] rounded-full flex justify-center items-center ring-2 ring-[--white-1]">
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </span>
               )}

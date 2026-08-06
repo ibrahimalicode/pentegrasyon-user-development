@@ -54,44 +54,39 @@ const Advert = () => {
     advertData?.url.includes("youtube.com") ||
     advertData?.url.includes("vimeo.com");
 
-  // Normal flow: mt-12 clears the fixed 48px header and the banner then takes
-  // real vertical space. The old `h-16 -mb-16 mt-16` cancelled its own height
-  // so the banner painted on top of the page's own top padding.
   return advertData ? (
-    <div className="w-full flex justify-center relative mt-12 lg:pl-60">
-      <main className="h-16">
-        <a
-          target="_blank"
-          className="h-full w-full object-scale-down"
-          rel="noopener noreferrer"
-          href={advertData?.targetURL}
-        >
-          {isImage ? (
-            <img
-              src={advertData.url}
-              className="h-full w-full object-contain"
-              alt="Advertisement"
-            />
-          ) : isVideo ? (
-            <video
-              src={advertData.url}
-              className="h-full w-full object-contain"
-              autoPlay
-              loop
-              muted
-              controls
-            />
-          ) : (
-            <iframe
-              src={advertData.url}
-              className="h-full w-full pointer-events-none"
-              style={{ border: "none" }}
-              allowFullScreen
-            />
-          )}
-        </a>
-      </main>
-    </div>
+    <main className="h-16 -mb-16 mt-16">
+      <a
+        target="_blank"
+        className="h-full w-full object-scale-down"
+        rel="noopener noreferrer"
+        href={advertData?.targetURL}
+      >
+        {isImage ? (
+          <img
+            src={advertData.url}
+            className="h-full w-full object-contain"
+            alt="Advertisement"
+          />
+        ) : isVideo ? (
+          <video
+            src={advertData.url}
+            className="h-full w-full object-contain"
+            autoPlay
+            loop
+            muted
+            controls
+          />
+        ) : (
+          <iframe
+            src={advertData.url}
+            className="h-full w-full pointer-events-none"
+            style={{ border: "none" }}
+            allowFullScreen
+          />
+        )}
+      </a>
+    </main>
   ) : null;
 };
 

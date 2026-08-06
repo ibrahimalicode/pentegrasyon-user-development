@@ -8,16 +8,16 @@ export default function CustomToast({ color, message, t }) {
   const classNames =
     color === "red"
       ? {
-          elmnt1: "border-[color-mix(in_srgb,var(--red-1)_40%,transparent)]",
+          elmnt1: "border-[--red-1]/40",
           elmnt2: "bg-[--status-red] text-[--red-1]",
         }
       : color === "green"
       ? {
-          elmnt1: "border-[color-mix(in_srgb,var(--green-1)_40%,transparent)]",
+          elmnt1: "border-[--green-1]/40",
           elmnt2: "bg-[--status-green] text-[--green-1]",
         }
       : {
-          elmnt1: "border-[color-mix(in_srgb,var(--brown-1)_40%,transparent)]",
+          elmnt1: "border-[--brown-1]/40",
           elmnt2: "bg-[--status-red] text-[--red-1]",
         };
 
@@ -66,7 +66,7 @@ export default function CustomToast({ color, message, t }) {
             "h-full px-4 flex items-center justify-center",
             "text-sm font-medium text-[--gr-1] transition-colors",
             "hover:bg-[--light-3] hover:text-[--black-2]",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[color-mix(in_srgb,var(--primary-1)_30%,transparent)]"
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[--primary-1]/30"
           )}
         >
           <CloseI />

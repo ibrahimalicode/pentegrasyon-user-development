@@ -73,7 +73,7 @@ const CustomFileInput = ({ onChange, value, accept, className, required }) => {
         "relative flex flex-col items-center justify-center w-full h-64 px-4 text-center",
         "rounded-xl border-2 border-dashed border-[--border-1] bg-[--white-1] text-[--gr-1]",
         "cursor-pointer transition-colors hover:border-[--primary-1] hover:bg-[--light-3]",
-        "focus-within:border-[--primary-1] focus-within:ring-2 focus-within:ring-[color-mix(in_srgb,var(--primary-1)_20%,transparent)]",
+        "focus-within:border-[--primary-1] focus-within:ring-2 focus-within:ring-[--primary-1]/20",
         isDragging && "border-[--primary-1] bg-[--light-1]",
         className
       )}

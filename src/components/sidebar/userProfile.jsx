@@ -38,10 +38,8 @@ function UserProfile({ setOpenSidebar }) {
   const isActive = param["*"] === "profile";
   const fullName = userData?.fullName || "Kullanıcı";
 
-  // 48px sidebar footer. The row IS the footer, so the fill runs edge to edge
-  // and the rail can sit on the sidebar's own left edge.
   return (
-    <div className="shrink-0 border-t border-[--border-1]">
+    <div className="p-3 border-t border-[--border-1] shrink-0">
       <Link
         to="/profile"
         className={cn(
@@ -52,26 +50,27 @@ function UserProfile({ setOpenSidebar }) {
       >
         <div
           className={cn(
-            "group relative flex items-center gap-2 h-12 px-3 cursor-pointer transition-colors",
-            // Same tint + 2px rail as an active nav item — no accent fill in
-            // the chrome.
-            isActive
-              ? "bg-[--white-1] shadow-card"
-              : "hover:bg-[--light-3]"
+            "group flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors",
+            isActive ? "bg-[--light-1]" : "hover:bg-[--light-3]"
           )}
           onClick={() => setOpenSidebar(false)}
         >
-          <div className="flex shrink-0 justify-center items-center size-7 rounded-full bg-[--light-4] text-2xs font-semibold text-[--black-2]">
+          <div
+            className={cn(
+              "flex shrink-0 justify-center items-center size-9 rounded-full text-xs font-semibold",
+              isActive
+                ? "bg-[--primary-1] text-white"
+                : "bg-[--light-1] text-[--primary-1]"
+            )}
+          >
             {initialsOf(fullName) || "K"}
           </div>
 
           <div className="flex flex-col flex-1 min-w-0">
             <span
               className={cn(
-                "text-sm truncate",
-                isActive
-                  ? "font-medium text-[--black-1]"
-                  : "text-[--black-2] group-hover:text-[--black-1]"
+                "text-sm font-medium truncate",
+                isActive ? "text-[--primary-1]" : "text-[--black-1]"
               )}
             >
               {fullName}
@@ -81,10 +80,7 @@ function UserProfile({ setOpenSidebar }) {
             </span>
           </div>
 
-          <ArrowIR
-            strokeWidth={2}
-            className="size-4 shrink-0 text-[--gr-3] transition-transform group-hover:translate-x-0.5"
-          />
+          <ArrowIR className="size-4 shrink-0 text-[--gr-3] group-hover:translate-x-0.5 group-hover:text-[--primary-1] transition-all" />
         </div>
       </Link>
     </div>

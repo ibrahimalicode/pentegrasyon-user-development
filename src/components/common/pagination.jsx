@@ -1,12 +1,7 @@
 import { ArrowIL, ArrowIR } from "../../assets/icon/index";
-import { cn } from "../../lib/utils";
-
-// Table footer bar: 40px, sits on the recessed plane with a hairline top rule
-// so it bonds to the bottom of the table card. Count readout left, pager
-// centre. Nothing is absolutely positioned — the row is a plain flex bar, so
-// it lands at the same y on every route.
-const PAGER_BTN =
-  "inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-md text-sm text-[--black-2] transition-colors hover:bg-[--light-3] active:bg-[--light-4] disabled:opacity-45 disabled:cursor-not-allowed disabled:hover:bg-transparent";
+import { usePopup } from "../../context/PopupContext";
+import PrivacyPolicy from "../../pages/privacyPolicy";
+import { CancelI } from "../../assets/icon";
 
 const CustomPagination = ({
   pageNumber,
@@ -15,6 +10,7 @@ const CustomPagination = ({
   itemsPerPage,
   handlePageChange,
 }) => {
+  const { setPopupContent } = usePopup();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePrevious = () => {
@@ -58,48 +54,39 @@ const CustomPagination = ({
     return pages;
   };
 
-  // Display-only range readout — no effect on what is fetched.
-  const rangeStart = totalItems ? (pageNumber - 1) * itemsPerPage + 1 : 0;
-  const rangeEnd = Math.min(pageNumber * itemsPerPage, totalItems);
-
   return (
-    <div className="w-full flex h-10 items-center justify-between gap-3 border-t border-[--border-1] bg-[--white-2] px-3">
-      <span className="min-w-0 truncate text-2xs font-semibold uppercase tabular-nums text-[--gr-1]">
-        {totalItems
-          ? `Toplam Sayım: ${rangeStart}–${rangeEnd} / ${totalItems}`
-          : null}
-      </span>
-
-      <div className="flex items-center gap-1 shrink-0">
+    <div className="mt-3 relative w-full flex justify-center">
+      <div className="absolute top-0 bottom-0 right-0 flex items-center max-sm:top-14">
         <button
-          type="button"
+          className="text-sm text-[--link-1] max-sm:text-xs"
+          onClick={() => setPopupContent(<PrivacyPopup />)}
+        >
+          Kullanım Şartları
+        </button>
+      </div>
+
+      <div className="flex gap-1">
+        <button
           onClick={handlePrevious}
           disabled={pageNumber === 1}
-          className={cn(PAGER_BTN, "max-sm:px-2")}
+          className="flex gap-2 text-sm items-center px-2 max-sm:pr-3 sm:px-4 py-1 sm:py-2 rounded-md hover:bg-[--light-3] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ArrowIL className="size-4" />
-          <span className="max-sm:sr-only">Önceki</span>
+          <ArrowIL className="w-4" /> Önceki
         </button>
-
-        <div className="flex items-center gap-1">
+        <div className="flex sm:gap-1">
           {getPageNumbers().map((page, index) =>
             page === "..." ? (
-              <span
-                key={index}
-                className="px-1 text-sm text-[--gr-1] select-none"
-              >
+              <span key={index} className="p-2 text-sm">
                 ...
               </span>
             ) : (
               <button
                 key={index}
-                type="button"
-                className={cn(
-                  "inline-flex items-center justify-center min-w-8 h-8 px-2 text-sm tabular-nums rounded-md border border-transparent transition-colors",
+                className={`py-2 px-4 text-sm rounded-lg transition-colors ${
                   pageNumber === page
-                    ? "border-[--primary-2] bg-[--light-1] text-[--primary-2] font-medium"
-                    : "text-[--black-2] hover:bg-[--light-3] active:bg-[--light-4]"
-                )}
+                    ? "bg-[--primary-1] text-white font-medium"
+                    : "hover:bg-[--light-3]"
+                }`}
                 onClick={() => {
                   setPageNumber(page);
                   handlePageChange(page);
@@ -110,22 +97,44 @@ const CustomPagination = ({
             )
           )}
         </div>
-
         <button
-          type="button"
           onClick={handleNext}
           disabled={pageNumber === totalPages}
-          className={cn(PAGER_BTN, "max-sm:px-2")}
+          className="flex gap-2 text-sm items-center px-2 max-sm:pr-3 sm:px-4 py-2 rounded-md hover:bg-[--light-3] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="max-sm:sr-only">Sonraki</span>
-          <ArrowIR className="size-4" />
+          Sonraki
+          <ArrowIR className="w-4" />
         </button>
       </div>
 
-      {/* Balances the count readout so the pager stays optically centred. */}
-      <span aria-hidden="true" className="hidden lg:block w-40 shrink-0" />
+      {totalItems ? (
+        <div className="absolute top-0 bottom-0 left-0 flex items-center max-sm:top-14 max-sm:pb-6 max-sm:-left-14">
+          <span className="text-sm text-[--link-1] max-sm:text-xs">
+            Toplam Sayım: {totalItems}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };
 
 export default CustomPagination;
+
+const PrivacyPopup = () => {
+  const { setPopupContent } = usePopup();
+  return (
+    <div className="pt-8 bg-[--white-1] rounded-lg overflow-clip">
+      <div className="overflow-y-auto h-[95dvh]">
+        <div className="absolute top-2 right-3 z-[50]">
+          <div
+            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-white transition-colors"
+            onClick={() => setPopupContent(null)}
+          >
+            <CancelI />
+          </div>
+        </div>
+        <PrivacyPolicy />
+      </div>
+    </div>
+  );
+};

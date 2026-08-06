@@ -236,53 +236,55 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           </thead>
 
           <tbody>
-            {order.orders.map((order) => (
-              <>
+            {/* Renamed from `order` to `item`: the callback used to shadow the
+                outer `order` prop, which made this block hard to read. */}
+            {order.orders.map((item, i) => (
+              <React.Fragment key={item.id ?? i}>
                 <tr>
-                  <td className="font-medium">
+                  <td className="p-2 text-left font-medium">
                     <div>
-                      <span className="bg-[--gr-1] text-white px-1.5 py-0.5 mr-0.5 rounded-sm">
-                        {order.count}
+                      <span className="bg-[--gr-1] text-[--white-1] px-1.5 py-0.5 mr-0.5 rounded-sm">
+                        {item.count}
                       </span>
-                      {order.name}
+                      {item.name}
                     </div>
                   </td>
-                  <td className="text-right pr-1">
+                  <td className="p-2 text-right align-top">
                     {formatToPrice(
-                      String(order.totalPriceWithOption).replace(".", ","),
+                      String(item.totalPriceWithOption).replace(".", ","),
                     )}
                   </td>
                 </tr>
 
-                {order.displayInfoOptions ? (
-                  <React.Fragment key={order.id}>
-                    <tr className="text-xs">
-                      <td className="pl-1">
-                        {order.displayInfoOptions
-                          .split(",")
-                          .map((info, index) => (
-                            <span key={index} className="block">
-                              {info}
-                            </span>
-                          ))}
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                ) : (
-                  <tr>
-                    <td className="text-xs">{order.displayInfoTitle}</td>
-                    <td className="font-bold text-center">{order.count}</td>
-                    <td className="font-bold text-center">
-                      {formatToPrice(String(order.price).replace(".", ","))}
-                    </td>
-                    <td className="text-right font-bold pr-1">
-                      {formatToPrice(
-                        String(order.totalPriceWithOption).replace(".", ","),
+                {/* Detail line spans both columns. It previously emitted FOUR
+                    cells, which silently widened the whole table to four
+                    columns while the header only declared two — so the "Tutar"
+                    heading no longer sat above the amounts, and the name and
+                    line total were each printed twice. Everything unique to
+                    that row (unit price, and the title when it differs) is
+                    kept here as a muted sub-line. */}
+                <tr className="text-xs">
+                  <td className="pl-4 pb-2 text-[--gr-1]" colSpan={2}>
+                    <span className="block">
+                      {item.count} ×{" "}
+                      {formatToPrice(String(item.price).replace(".", ","))}
+                    </span>
+
+                    {item.displayInfoTitle &&
+                      item.displayInfoTitle !== item.name && (
+                        <span className="block">{item.displayInfoTitle}</span>
                       )}
-                    </td>
-                  </tr>
-                )}
-              </>
+
+                    {item.displayInfoOptions
+                      ?.split(",")
+                      .map((info, index) => (
+                        <span key={index} className="block">
+                          {info.trim()}
+                        </span>
+                      ))}
+                  </td>
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>

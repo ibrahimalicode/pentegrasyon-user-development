@@ -4,8 +4,9 @@ import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 
 //COMP
-import { CancelI } from "../../../assets/icon";
+import { cn } from "../../../lib/utils";
 import { googleMap } from "../../../utils/utils";
+import PopupShell from "../../common/popupShell";
 import CustomInput from "../../common/customInput";
 import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
@@ -15,7 +16,10 @@ import CustomPhoneInput from "../../common/customPhoneInput";
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import { getCities } from "../../../redux/data/getCitiesSlice";
-import { TOOLBAR_BTN_PRIMARY } from "../../../components/common/toolbarStyles";
+import {
+  TOOLBAR_BTN,
+  TOOLBAR_BTN_PRIMARY,
+} from "../../../components/common/toolbarStyles";
 import {
   getDistricts,
   resetGetDistrictsState,
@@ -339,50 +343,60 @@ function AddRestaurantPopup({ onSuccess }) {
   }, [address, addressErr]);
 
   return (
-    <div className=" w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] text-base overflow-visible relative">
-      <div className="flex flex-col bg-[--white-1] relative">
-        <div className="absolute -top-6 right-3 z-[50]">
-          <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
-            onClick={closeForm}
+    <PopupShell
+      title="Restoran Ekle"
+      onClose={closeForm}
+      footer={
+        <>
+          <button type="button" onClick={closeForm} className={TOOLBAR_BTN}>
+            İptal
+          </button>
+          {/* The form lives in the scrollable body, so the submit reaches it
+              via the form attribute rather than nesting. */}
+          <button
+            type="submit"
+            form="add-restaurant-form"
+            disabled={loading}
+            className={TOOLBAR_BTN_PRIMARY}
           >
-            <CancelI />
-          </div>
-        </div>
-
+            Kaydet
+          </button>
+        </>
+      }
+      overlay={
+        // Kept in the DOM while hidden: googleMap() renders into #map, which
+        // has to exist before the overlay becomes visible.
         <div
-          className={`absolute bg-black/15 w-full -top-12 -bottom-8 z-[999] rounded-lg flex flex-col justify-start items-center ${
-            !isMapOpen && "hidden"
+          className={`absolute inset-0 z-30 flex-col bg-[--white-1] ${
+            isMapOpen ? "flex" : "hidden"
           }`}
         >
-          <div id="map" className="size-[400px] rounded-t-md"></div>
+          <div id="map" className="min-h-0 w-full flex-1"></div>
 
-          <div className="w-[400px] px-2 py-1 pt-2 flex bg-[--light-1] rounded-b-md">
-            <div className="w-full gap-2 flex">
-              <div className="text-sm">
-                <span className="text-xs text-[--gr-1]">enlem</span>
-                <p className="border border-solid border-[--border-1]  px-2">
-                  {lat}
-                </p>
-              </div>
-
-              <div className="text-sm">
-                <span className="text-xs text-[--gr-1]">boylam</span>
-                <p className="border border-solid border-[--border-1]  px-2">
-                  {lng}
-                </p>
-              </div>
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-solid border-[--border-1] px-4 py-3">
+            <div className="flex gap-4 text-sm text-[--black-2]">
+              <span>
+                <span className="text-xs text-[--gr-1]">Enlem </span>
+                {lat}
+              </span>
+              <span>
+                <span className="text-xs text-[--gr-1]">Boylam </span>
+                {lng}
+              </span>
             </div>
 
             <div className="flex gap-2">
+              {/* type="button": a bare <button> defaults to submit. */}
               <button
-                className="px-5 py-1 text-sm text-[--red-1] rounded-sm bg-[--status-red] border border-solid border-[--red-1]"
+                type="button"
+                className={cn(TOOLBAR_BTN, "h-9 px-3")}
                 onClick={() => setIsMapOpen(false)}
               >
                 Kapat
               </button>
               <button
-                className="px-5 py-1 text-sm text-[--green-1] rounded-sm bg-[--status-green] border border-solid border-[--green-1]"
+                type="button"
+                className={cn(TOOLBAR_BTN_PRIMARY, "h-9 px-4")}
                 onClick={handleSetMap}
               >
                 Kaydet
@@ -390,166 +404,158 @@ function AddRestaurantPopup({ onSuccess }) {
             </div>
           </div>
         </div>
-
-        <h1 className="self-center text-2xl font-bold">Restoran Ekle</h1>
-        <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
-          <form onSubmit={handleSubmit}>
-            <div className="flex max-sm:flex-col sm:gap-4">
-              <CustomInput
-                required
-                label="Restoran Adı"
-                placeholder="Restoran Adı"
-                className="py-[.45rem] text-sm"
-                value={restaurantData.name}
-                onChange={(e) => {
-                  setRestaurantData((prev) => {
-                    return {
-                      ...prev,
-                      name: e,
-                    };
-                  });
-                }}
-              />
-              <CustomPhoneInput
-                required
-                label="Telefon"
-                placeholder="Telefon"
-                className="py-[.45rem] text-sm"
-                value={restaurantData.phoneNumber}
-                onChange={(phone) => {
-                  setRestaurantData((prev) => {
-                    return {
-                      ...prev,
-                      phoneNumber: phone,
-                    };
-                  });
-                }}
-                maxLength={14}
-              />
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-x-4">
-              <CustomSelect
-                required
-                label="Şehir"
-                style={{ padding: "1px 0px" }}
-                className="text-sm"
-                value={
-                  restaurantData.city
-                    ? restaurantData.city
-                    : { value: null, label: "Şehir seç" }
-                }
-                options={[{ value: null, label: "Şehir seç" }, ...cities]}
-                onChange={(selectedOption) => {
-                  setRestaurantData((prev) => {
-                    return {
-                      ...prev,
-                      city: selectedOption,
-                    };
-                  });
-                }}
-              />
-
-              <CustomSelect
-                required
-                label="İlçe"
-                placeholder="Ad"
-                style={{ padding: "1px 0px" }}
-                className="text-sm"
-                value={
-                  restaurantData.district
-                    ? restaurantData.district
-                    : { value: null, label: "İlçe seç" }
-                }
-                options={[{ value: null, label: "İlçe seç" }, ...districts]}
-                onChange={(selectedOption) => {
-                  setRestaurantData((prev) => {
-                    return {
-                      ...prev,
-                      district: selectedOption,
-                    };
-                  });
-                }}
-              />
-              <CustomSelect
-                required
-                label="Mahalle"
-                placeholder="Ad"
-                style={{ padding: "1px 0px" }}
-                className="text-sm"
-                value={
-                  restaurantData.neighbourhood
-                    ? restaurantData.neighbourhood
-                    : { value: null, label: "Mahalle Seç" }
-                }
-                options={[{ value: null, label: "Mahalle Seç" }, ...neighs]}
-                onChange={(selectedOption) => {
-                  setRestaurantData((prev) => {
-                    return {
-                      ...prev,
-                      neighbourhood: selectedOption,
-                    };
-                  });
-                }}
-              />
-              <CustomTextarea
-                required
-                label="Adres"
-                placeholder="Adres"
-                className={`text-sm max-sm:h-14`}
-                value={restaurantData.address}
-                onChange={(e) => {
-                  setRestaurantData((prev) => {
-                    return {
-                      ...prev,
-                      address: e.target.value,
-                    };
-                  });
-                }}
-              />
-            </div>
-
-            <div onClick={handleOpenMap}>
-              <div className="flex gap-4 pointer-events-none">
-                <CustomInput
-                  required
-                  label="Enlem"
-                  placeholder="Enlem"
-                  className="py-[.45rem] text-sm"
-                  className2="mt-[.5rem] sm:mt-[.5rem]"
-                  value={restaurantData.latitude}
-                  onChange={() => {}}
-                  onClick={() => {}}
-                  readOnly={true}
-                />
-                <CustomInput
-                  required
-                  label="Boylam"
-                  placeholder="Boylam"
-                  className="py-[.45rem] text-sm"
-                  className2="mt-[.5rem] sm:mt-[.5rem]"
-                  value={restaurantData.longitude}
-                  onChange={() => {}}
-                  onClick={() => {}}
-                  readOnly={true}
-                />
-              </div>
-            </div>
-
-            <div className="w-full flex justify-end mt-10">
-              <button
-                disabled={false}
-                className={`py-2 px-3 bg-[--primary-1] text-white rounded-lg ${
-                  isMapOpen && "invisible"
-                }`}
-                type="submit"
-              >
-                Kaydet
-              </button>
-            </div>
-          </form>
+      }
+    >
+      <form id="add-restaurant-form" onSubmit={handleSubmit}>
+        <div className="grid gap-x-4 sm:grid-cols-2">
+          <CustomInput
+            required
+            label="Restoran Adı"
+            placeholder="Restoran Adı"
+            className="text-sm"
+            value={restaurantData.name}
+            onChange={(e) => {
+              setRestaurantData((prev) => {
+                return {
+                  ...prev,
+                  name: e,
+                };
+              });
+            }}
+          />
+          <CustomPhoneInput
+            required
+            label="Telefon"
+            placeholder="Telefon"
+            className="text-sm"
+            value={restaurantData.phoneNumber}
+            onChange={(phone) => {
+              setRestaurantData((prev) => {
+                return {
+                  ...prev,
+                  phoneNumber: phone,
+                };
+              });
+            }}
+            maxLength={14}
+          />
         </div>
-      </div>
-    </div>
+
+        {/* The cascade reads as one unit: city narrows district narrows
+            neighbourhood, left to right on one row. */}
+        <div className="grid gap-x-4 sm:grid-cols-3">
+          <CustomSelect
+            required
+            label="Şehir"
+            className="text-sm"
+            value={
+              restaurantData.city
+                ? restaurantData.city
+                : { value: null, label: "Şehir seç" }
+            }
+            options={[{ value: null, label: "Şehir seç" }, ...cities]}
+            onChange={(selectedOption) => {
+              setRestaurantData((prev) => {
+                return {
+                  ...prev,
+                  city: selectedOption,
+                };
+              });
+            }}
+          />
+
+          <CustomSelect
+            required
+            label="İlçe"
+            className="text-sm"
+            value={
+              restaurantData.district
+                ? restaurantData.district
+                : { value: null, label: "İlçe seç" }
+            }
+            options={[{ value: null, label: "İlçe seç" }, ...districts]}
+            onChange={(selectedOption) => {
+              setRestaurantData((prev) => {
+                return {
+                  ...prev,
+                  district: selectedOption,
+                };
+              });
+            }}
+          />
+          <CustomSelect
+            required
+            label="Mahalle"
+            className="text-sm"
+            value={
+              restaurantData.neighbourhood
+                ? restaurantData.neighbourhood
+                : { value: null, label: "Mahalle Seç" }
+            }
+            options={[{ value: null, label: "Mahalle Seç" }, ...neighs]}
+            onChange={(selectedOption) => {
+              setRestaurantData((prev) => {
+                return {
+                  ...prev,
+                  neighbourhood: selectedOption,
+                };
+              });
+            }}
+          />
+        </div>
+
+        {/* Full-width: pairing the textarea with a select left a dead gap
+            under whichever was shorter. */}
+        <CustomTextarea
+          required
+          label="Adres"
+          placeholder="Adres"
+          className="h-20 text-sm"
+          value={restaurantData.address}
+          onChange={(e) => {
+            setRestaurantData((prev) => {
+              return {
+                ...prev,
+                address: e.target.value,
+              };
+            });
+          }}
+        />
+
+        <div
+          onClick={handleOpenMap}
+          className="cursor-pointer"
+          title="Konumu haritadan seçin"
+        >
+          <div className="pointer-events-none grid gap-x-4 sm:grid-cols-2">
+            <CustomInput
+              required
+              label="Enlem"
+              placeholder="Enlem"
+              className="text-sm"
+              value={restaurantData.latitude}
+              onChange={() => {}}
+              onClick={() => {}}
+              readOnly={true}
+            />
+            <CustomInput
+              required
+              label="Boylam"
+              placeholder="Boylam"
+              className="text-sm"
+              value={restaurantData.longitude}
+              onChange={() => {}}
+              onClick={() => {}}
+              readOnly={true}
+            />
+          </div>
+          {/* The readonly pair opens the map on click — say so, because
+              nothing else hints that these aren't typable. */}
+          <p className="mt-1.5 text-xs text-[--gr-1]">
+            Konumu haritadan seçmek için tıklayın
+          </p>
+        </div>
+      </form>
+    </PopupShell>
   );
 }

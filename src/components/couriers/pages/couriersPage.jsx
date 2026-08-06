@@ -174,7 +174,7 @@ const CouriersPage = () => {
               </button>
 
               <div
-                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md ${
+                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--border-1] rounded-lg shadow-dropdown z-40 ${
                   openFilter ? "visible" : "hidden"
                 }`}
               >

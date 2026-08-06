@@ -110,7 +110,7 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
         ref={sidebarRef}
         className={cn(
           "fixed left-0 top-0 z-[999] flex flex-col justify-between w-60 h-[100dvh]",
-          "bg-[--white-1] border-r border-[--border-1]",
+          "bg-[--gr-4] border-r border-[--border-1]",
           "transition-transform duration-300 ease-out",
           // Drawer below lg, permanent from lg up — except on orders, where
           // it stays a drawer so the wide table gets the full width.
@@ -173,7 +173,10 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
                         // plus a 2px accent rail — the same language the
                         // selected table row uses.
                         isActive
-                          ? "relative bg-[--light-3] text-[--black-1] font-medium before:absolute before:left-0 before:top-1 before:bottom-1 before:w-[2px] before:rounded-full before:bg-[--primary-2]"
+                          // Linear keeps the accent out of navigation
+                          // entirely: the selected item is a plain tint with
+                          // the text and icon promoted to primary.
+                          ? "bg-[--light-3] text-[--black-1] font-medium"
                           : "text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1]"
                       )}
                     >
@@ -181,7 +184,7 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
                         <span
                           className={cn(
                             "shrink-0 [&>svg]:size-4 transition-colors",
-                            isActive ? "text-[--primary-2]" : "text-[--gr-3]"
+                            isActive ? "text-[--black-1]" : "text-[--gr-3]"
                           )}
                         >
                           {item.icon}

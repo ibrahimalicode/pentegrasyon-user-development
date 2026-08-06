@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import url("https://fonts.cdnfonts.com/css/conthrax");
 
 @tailwind base;
@@ -17,68 +17,68 @@
    indigo as the one brand hue. */
 
 body[class="dark"] {
-  background-color: #0f172a;
+  background-color: #0b0c0d;
 }
 
 body[class="light"] {
-  background-color: #f8fafc;
+  background-color: #f4f5f8;
 }
 
 .dark {
-  --primary-1: #6366f1;
-  --primary-2: #8b5cf6;
+  --primary-1: #5e6ad2;
+  --primary-2: #8b93f0;
 
-  --gr-1: #94a3b8;
-  --gr-2: #94a3b8;
-  --gr-3: #cbd5e1;
-  --gr-4: #334155;
-  --gr-5: #475569;
+  --gr-1: #8a8f98;
+  --gr-2: #35383f;
+  --gr-3: #6b7079;
+  --gr-4: #0b0c0d;
+  --gr-5: #3a3d44;
 
-  --light-1: #1e293b;
-  --light-2: #312e81;
-  --light-3: #334155;
-  --light-4: #172033;
-  --light-5: #3e4a5b;
+  --light-1: #1b1e2e;
+  --light-2: #232744;
+  --light-3: #1c1d21;
+  --light-4: #232428;
+  --light-5: #151619;
 
-  --link-1: #60a5fa;
-  --light-green: #14532d;
+  --link-1: #8b93f0;
+  --light-green: #14291f;
 
   /* SOLID */
-  --white-1: #0f172a;
-  --white-2: #1e293b;
-  --black-1: #f8fafc;
-  --black-2: #e2e8f0;
-  --black-3: #cbd5e1;
-  --green-1: #22c55e;
-  --green-2: #16a34a;
-  --green-3: #06b6d4;
-  --yellow-1: #fbbf24;
-  --red-1: #f87171;
-  --red-2: #ec4899;
-  --blue-1: #60a5fa;
-  --purple-1: #a78bfa;
-  --orange-1: #fb923c;
-  --pink-1: #f472b6;
-  --brown-1: #b45309;
+  --white-1: #101113;
+  --white-2: #17181a;
+  --black-1: #f7f8f8;
+  --black-2: #d0d3d8;
+  --black-3: #a5a9b1;
+  --green-1: #68cc94;
+  --green-2: #4cb782;
+  --green-3: #4cc2c2;
+  --yellow-1: #f2c94c;
+  --red-1: #ff6b6b;
+  --red-2: #f06ec4;
+  --blue-1: #4ea7fc;
+  --purple-1: #9b8afb;
+  --orange-1: #f2994a;
+  --pink-1: #f06ec4;
+  --brown-1: #c99b72;
 
-  --border-1: #293548;
+  --border-1: #23252a;
 
   /* TABLE */
-  --table: #334155;
-  --table-odd: #1e293b;
+  --table: #1b1e2e;
+  --table-odd: #151619;
 
   /* STATUS */
-  --status-green: #14532d;
-  --status-red: #7f1d1d;
-  --status-yellow: #854d0e;
-  --status-gray: #475569;
-  --status-blue: #1e40af;
-  --status-purple: #5b21b6;
-  --status-orange: #9a3412;
-  --status-pink: #9d174d;
-  --status-brown: #521a0b; /* 3e1b11; */
-  --status-primary-1: #6d28d9;
-  --status-primary-2: #312e81;
+  --status-green: #14291f;
+  --status-red: #2a1618;
+  --status-yellow: #2a2312;
+  --status-gray: #1c1d21;
+  --status-blue: #12233a;
+  --status-purple: #1e1a35;
+  --status-orange: #2a1d10;
+  --status-pink: #2a1424;
+  --status-brown: #241a12; /* 3e1b11; */
+  --status-primary-1: #3d44a0;
+  --status-primary-2: #1b1e2e;
 
   /* MARKETPLACES */
   --getiryemek: #5d3ebd;
@@ -87,66 +87,66 @@ body[class="light"] {
   --yemeksepeti: #fa0050;
   --gofody: #f1b62a;
   --siparisim: #05407a;
-  --gray-1: #cbd5e1;
-  --white: #0f172a;
-  --red-3: #3e1a19;
+  --gray-1: #6b7079;
+  --white: #101113;
+  --red-3: #2a1618;
 }
 
 .light {
-  --primary-1: #4f46e5;
-  --primary-2: #6d28d9;
+  --primary-1: #5e6ad2;
+  --primary-2: #4f59c4;
 
-  --gr-1: #64748b;
-  --gr-2: #6b7280;
-  --gr-3: #94a3b8;
-  --gr-4: #f1f5f9;
-  --gr-5: #cbd5e1;
+  --gr-1: #6b6f76;
+  --gr-2: #d4d6dd;
+  --gr-3: #8a8f98;
+  --gr-4: #f4f5f8;
+  --gr-5: #c7c9d1;
 
-  --light-1: #eef2ff;
-  --light-2: #f5f3ff;
-  --light-3: #f1f5f9;
-  --light-4: #e2e8f0;
-  --light-5: #f8fafc;
+  --light-1: #eef0fb;
+  --light-2: #e4e7f8;
+  --light-3: #f1f2f5;
+  --light-4: #e9eaef;
+  --light-5: #fafbfc;
 
-  --link-1: #2563eb;
-  --light-green: #dcfce7;
+  --link-1: #5e6ad2;
+  --light-green: #e8f5ee;
 
   /* SOLID */
   --white-1: #ffffff;
-  --white-2: #f8fafc;
-  --black-1: #0f172a;
-  --black-2: #1e293b;
-  --black-3: #475569;
-  --green-1: #16a34a;
-  --green-2: #15803d;
-  --green-3: #0d9488;
-  --yellow-1: #d97706;
-  --red-1: #dc2626;
-  --red-2: #db2777;
-  --red-3: #ef4444;
-  --blue-1: #2563eb;
-  --purple-1: #9333ea;
-  --orange-1: #ea580c;
-  --pink-1: #db2777;
-  --brown-1: #92400e;
-  --border-1: #e2e8f0;
+  --white-2: #fafbfc;
+  --black-1: #22242a;
+  --black-2: #3c4149;
+  --black-3: #5c6169;
+  --green-1: #2f9e68;
+  --green-2: #268055;
+  --green-3: #1f8a8a;
+  --yellow-1: #a9761a;
+  --red-1: #d64545;
+  --red-2: #c93f8e;
+  --red-3: #fdeaea;
+  --blue-1: #2f74d0;
+  --purple-1: #7c5cf0;
+  --orange-1: #c96a12;
+  --pink-1: #c93f8e;
+  --brown-1: #8a5a2b;
+  --border-1: #e6e7eb;
 
   /* TABLE */
-  --table: #f1f5f9;
-  --table-odd: #f8fafc;
+  --table: #eef0fb;
+  --table-odd: #fafbfc;
 
   /* STATUS */
-  --status-green: #e9ffef;
-  --status-red: #ffe9e9;
-  --status-yellow: #fff6d6;
-  --status-gray: #e4e4e4;
-  --status-blue: #e7f0ff;
-  --status-purple: #f4e6ff;
-  --status-orange: #ffece4;
-  --status-pink: #ffe7f1;
-  --status-brown: #f7ede7;
-  --status-primary-1: #9690f1;
-  --status-primary-2: #f4eefb;
+  --status-green: #e8f5ee;
+  --status-red: #fdeaea;
+  --status-yellow: #fbf3dd;
+  --status-gray: #f1f2f5;
+  --status-blue: #e8f1fd;
+  --status-purple: #f0ecfe;
+  --status-orange: #fdf0e3;
+  --status-pink: #fdeaf5;
+  --status-brown: #f5ede4;
+  --status-primary-1: #aab0e8;
+  --status-primary-2: #eef0fb;
 
   /* MARKETPLACES */
   --getiryemek: #5d3ebd;
@@ -155,7 +155,7 @@ body[class="light"] {
   --yemeksepeti: #fa0050;
   --gofody: #f1b62a;
   --siparisim: #05407a;
-  --gray-1: #94a3b8;
+  --gray-1: #8a8f98;
   --white: #ffffff;
 }
 
@@ -174,7 +174,7 @@ body[class="light"] {
 
 body {
   overflow-x: hidden;
-  font-family: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   /* ss01 disambiguates 1 / l / I — matters for Turkish ı/İ and order codes */
   font-feature-settings: "ss01" 1;

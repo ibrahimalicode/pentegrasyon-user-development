@@ -6,7 +6,6 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
-          "Geist",
           "Inter",
           "ui-sans-serif",
           "system-ui",
@@ -15,7 +14,6 @@ module.exports = {
           "sans-serif",
         ],
         mono: [
-          '"Geist Mono"',
           "ui-monospace",
           "SFMono-Regular",
           "Menlo",
@@ -59,9 +57,9 @@ module.exports = {
         DEFAULT: "4px",
         md: "6px",
         lg: "6px",
-        xl: "10px",
-        "2xl": "10px",
-        "3xl": "10px",
+        xl: "8px",
+        "2xl": "8px",
+        "3xl": "8px",
         full: "9999px",
       },
 

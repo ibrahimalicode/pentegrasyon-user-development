@@ -56,7 +56,7 @@ function UserProfile({ setOpenSidebar }) {
             // Same tint + 2px rail as an active nav item — no accent fill in
             // the chrome.
             isActive
-              ? "bg-[--light-3] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[2px] before:rounded-full before:bg-[--primary-2]"
+              ? "bg-[--light-3]"
               : "hover:bg-[--light-3]"
           )}
           onClick={() => setOpenSidebar(false)}

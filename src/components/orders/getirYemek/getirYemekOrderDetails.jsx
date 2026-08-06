@@ -238,54 +238,56 @@ const GetirYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           <tbody>
             {/* Renamed from `order` to `item`: the callback used to shadow the
                 outer `order` prop, which made this block hard to read. */}
-            {order.orders.map((item, i) => (
-              <React.Fragment key={item.id ?? i}>
-                <tr>
-                  <td className="p-2 text-left font-medium">
-                    <div>
-                      <span className="bg-[--gr-1] text-[--white-1] px-1.5 py-0.5 mr-0.5 rounded-sm">
-                        {item.count}
-                      </span>
-                      {item.name}
-                    </div>
-                  </td>
-                  <td className="p-2 text-right align-top">
-                    {formatToPrice(
-                      String(item.totalPriceWithOption).replace(".", ","),
-                    )}
-                  </td>
-                </tr>
+            {order.orders.map((item, i) => {
+              // Only genuinely extra information belongs under a product: the
+              // chosen options, and the title when it differs from the name.
+              // Quantity is already in the badge and the line total is in the
+              // Tutar column, so a "1 × 180" line just repeated them.
+              // filter(Boolean) also drops the empty entry that
+              // "".split(",") produces, which was rendering a blank line.
+              const details = [
+                item.displayInfoTitle !== item.name ? item.displayInfoTitle : null,
+                ...(item.displayInfoOptions?.split(",") ?? []),
+              ]
+                .map((detail) => detail?.trim())
+                .filter(Boolean);
 
-                {/* Detail line spans both columns. It previously emitted FOUR
-                    cells, which silently widened the whole table to four
-                    columns while the header only declared two — so the "Tutar"
-                    heading no longer sat above the amounts, and the name and
-                    line total were each printed twice. Everything unique to
-                    that row (unit price, and the title when it differs) is
-                    kept here as a muted sub-line. */}
-                <tr className="text-xs">
-                  <td className="pl-4 pb-2 text-[--gr-1]" colSpan={2}>
-                    <span className="block">
-                      {item.count} ×{" "}
-                      {formatToPrice(String(item.price).replace(".", ","))}
-                    </span>
-
-                    {item.displayInfoTitle &&
-                      item.displayInfoTitle !== item.name && (
-                        <span className="block">{item.displayInfoTitle}</span>
-                      )}
-
-                    {item.displayInfoOptions
-                      ?.split(",")
-                      .map((info, index) => (
-                        <span key={index} className="block">
-                          {info.trim()}
+              return (
+                <React.Fragment key={item.id ?? i}>
+                  <tr>
+                    <td className="p-2 text-left font-medium">
+                      <div>
+                        <span className="bg-[--gr-1] text-[--white-1] px-1.5 py-0.5 mr-0.5 rounded-sm">
+                          {item.count}
                         </span>
-                      ))}
-                  </td>
-                </tr>
-              </React.Fragment>
-            ))}
+                        {item.name}
+                      </div>
+                    </td>
+                    <td className="p-2 text-right align-top">
+                      {formatToPrice(
+                        String(item.totalPriceWithOption).replace(".", ","),
+                      )}
+                    </td>
+                  </tr>
+
+                  {/* Spans both columns. This row used to emit FOUR cells,
+                      which silently widened the table past its two-column
+                      header. Rendered only when there is something to say, so
+                      products without options add no empty row. */}
+                  {details.length > 0 && (
+                    <tr className="text-xs">
+                      <td className="pl-4 pb-2 text-[--gr-1]" colSpan={2}>
+                        {details.map((detail, index) => (
+                          <span key={index} className="block">
+                            {detail}
+                          </span>
+                        ))}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </tbody>
         </table>
 

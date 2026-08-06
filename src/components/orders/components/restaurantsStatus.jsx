@@ -151,8 +151,11 @@ const RestaurantsStatus = ({ licenses }) => {
 
   // Anchored to the button's left edge (not centered) so it can't overflow
   // the viewport when the button sits near the screen edge.
+  // pt-3 clears the arrow: the ::after is a 16px square offset -top-2, so its
+  // lower 8px sits inside the bubble and its opaque fill was painting over the
+  // first row's marketplace icon. Content now starts below that overlap.
   const toolTipClass = `w-max max-w-[26rem] absolute top-14 left-0 bg-red-100 text-red-800
-                   px-4 py-1 rounded-lg border border-red-200 shadow-dropdown
+                   px-4 pt-3 pb-2 rounded-lg border border-red-200 shadow-dropdown
                    transition-all duration-300 transform z-50
                    ${
                      closedRestaurants.length

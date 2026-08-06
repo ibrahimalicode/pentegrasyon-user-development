@@ -33,4 +33,12 @@ export const TOOLBAR_SELECT_CONTROL = {
   minHeight: "2.25rem",
   height: "2.25rem",
   paddingLeft: 0,
+  // react-select's control wraps by default, which pushed the chevron onto a
+  // second line once the control was squeezed.
+  flexWrap: "nowrap",
+  // Without a floor the control collapsed to ~43px while "15 dk sonra" needs
+  // ~77px, so every value rendered as "15 …". The floor has to cover the
+  // chevron too: ~78px of text + 8px value padding + 36px indicator, plus a
+  // couple of px of slack for wider glyphs ("55" renders wider than "15").
+  minWidth: "8rem",
 };

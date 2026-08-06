@@ -270,9 +270,11 @@ const RestaurantsStatus = ({ licenses }) => {
         }
         className={cn(
           TOOLBAR_BTN,
-          // When restaurants are closed the button becomes an alert.
+          // When restaurants are closed the button becomes an alert. It has to
+          // keep its red fill on hover — TOOLBAR_BTN's neutral hover:bg turned
+          // the alert into a pale grey chip, which read as disabled.
           closedRestaurants.length &&
-            "border-transparent hover:border-transparent hover:text-white " +
+            "border-transparent hover:border-transparent hover:text-white hover:bg-[--red-1] hover:brightness-110 " +
               buttonClass
         )}
       >

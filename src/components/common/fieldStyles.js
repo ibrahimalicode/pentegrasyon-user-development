@@ -53,6 +53,13 @@ export const SELECT_STYLES = {
   menu: (provided) => ({
     ...provided,
     marginTop: "0.25rem",
+    // Size to the longest option rather than to the control, so a narrow
+    // control (the orders toolbar time pickers) no longer clips its own
+    // options to "20 d". Never narrower than the control, and capped so a
+    // long restaurant name can't produce a runaway panel.
+    width: "max-content",
+    minWidth: "100%",
+    maxWidth: "20rem",
     backgroundColor: "var(--white-1)",
     border: "1px solid var(--border-1)",
     borderRadius: "0.5rem",

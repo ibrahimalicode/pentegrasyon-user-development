@@ -7,8 +7,9 @@ import unverifiedOrderPath from "../assets/sound/unverifiedOrder.mp3";
 
 //UTILS
 import { getAuth } from "../redux/api";
-import { CloseI } from "../assets/icon";
 import { usePopup } from "./PopupContext";
+import PopupShell from "../components/common/popupShell";
+import { TOOLBAR_BTN_PRIMARY } from "../components/common/toolbarStyles";
 import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
 
@@ -176,28 +177,30 @@ export const OrdersContextProvider = ({ children }) => {
 
     if (audioContext.state === "suspended" && token && !popupContent) {
       const popupContent = (
-        <main className="bg-[--light-1] rounded-sm p-5">
-          <div className="flex justify-end mb-3">
-            <button
-              onClick={() => setPopupContent(null)}
-              className="text-[--red-1] w-max h-max border border-[--red-1] p-2 rounded-full"
-            >
-              <CloseI />
-            </button>
-          </div>
-          <p className="text-[--black-1]">
-            Ses oynatma tarayıcı tarafından engellendi. Pentegrasyon.net&apos;in
-            sesi çalmasına izin verin.
-          </p>
-          <div className="flex justify-end mt-5">
-            <button
-              onClick={() => setPopupContent(null)}
-              className="px-2.5 py-1.5 bg-[--status-green] text-[--green-1] border border-[--green-1] rounded-sm"
-            >
-              İzin Ver
-            </button>
-          </div>
-        </main>
+        // The popup container is 45rem wide (sized for forms); a two-line
+        // notice floats in a narrower card so it reads as a dialog.
+        <div className="mx-auto max-w-md">
+          <PopupShell
+            title="Ses İzni"
+            onClose={() => setPopupContent(null)}
+            footer={
+              // Any click unlocks the browser's autoplay policy — the
+              // button exists to capture that gesture.
+              <button
+                onClick={() => setPopupContent(null)}
+                className={TOOLBAR_BTN_PRIMARY}
+              >
+                İzin Ver
+              </button>
+            }
+          >
+            <p className="pt-4 text-sm leading-relaxed text-[--black-2]">
+              Yeni sipariş bildirimleri için ses oynatma tarayıcı tarafından
+              engellendi. Pentegrasyon&apos;un sesli bildirim çalmasına izin
+              verin.
+            </p>
+          </PopupShell>
+        </div>
       );
       setPopupContent(popupContent);
       console.warn(

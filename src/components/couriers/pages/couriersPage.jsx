@@ -140,7 +140,7 @@ const CouriersPage = () => {
   }, [filterCouriers]);
 
   return (
-    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 flex flex-col min-h-dvh bg-[--white-1]">
       {/* ACTIONS/BUTTONS */}
       <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
         <div className="flex items-center w-full max-w-sm max-sm:order-2">
@@ -270,7 +270,7 @@ const CouriersPage = () => {
 
       {/* PAGINATION */}
       {couriersData && typeof totalItems === "number" && (
-        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
+        <div className="w-full mt-auto pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}

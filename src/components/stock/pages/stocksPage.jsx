@@ -119,7 +119,7 @@ const StocksPage = () => {
   }, [filterStocks]);
 
   return (
-    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 flex flex-col min-h-dvh bg-[--white-1]">
       {/* TITLE */}
       <div className="w-full text-[--black-2] py-4 text-2xl font-semibold">
         <h2>Stoklar</h2>
@@ -312,7 +312,7 @@ const StocksPage = () => {
 
       {/* PAGINATION */}
       {stocksData && typeof totalItems === "number" && (
-        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
+        <div className="w-full mt-auto pt-4 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}

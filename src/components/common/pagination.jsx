@@ -1,7 +1,10 @@
 import { ArrowIL, ArrowIR } from "../../assets/icon/index";
 import { usePopup } from "../../context/PopupContext";
 import PrivacyPolicy from "../../pages/privacyPolicy";
-import { CancelI } from "../../assets/icon";
+import PopupShell from "./popupShell";
+
+const PAGE_BTN =
+  "inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-lg px-2.5 text-sm text-[--black-2] transition-colors hover:bg-[--light-3] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent";
 
 const CustomPagination = ({
   pageNumber,
@@ -9,6 +12,7 @@ const CustomPagination = ({
   totalItems,
   itemsPerPage,
   handlePageChange,
+  leading,
 }) => {
   const { setPopupContent } = usePopup();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -55,37 +59,41 @@ const CustomPagination = ({
   };
 
   return (
-    <div className="mt-3 relative w-full flex justify-center">
-      <div className="absolute top-0 bottom-0 right-0 flex items-center max-sm:top-14">
-        <button
-          className="text-sm text-[--link-1] max-sm:text-xs"
-          onClick={() => setPopupContent(<PrivacyPopup />)}
-        >
-          Kullanım Şartları
-        </button>
+    // Three regions on one row: meta left, controls centered, terms right.
+    // The old version faked this with absolutely-positioned side blocks and
+    // breakpoint offsets (max-sm:-left-14), which overlapped the controls on
+    // narrow screens. A grid gives the same centered look without the hacks;
+    // below sm the regions stack.
+    <div className="mt-3 grid w-full items-center gap-x-3 gap-y-2 sm:grid-cols-[1fr_auto_1fr]">
+      <div className="flex items-center gap-3 max-sm:justify-center">
+        {leading}
+        {totalItems ? (
+          <span className="whitespace-nowrap text-sm text-[--gr-1]">
+            Toplam Sayım: {totalItems}
+          </span>
+        ) : null}
       </div>
 
-      <div className="flex gap-1">
-        <button
-          onClick={handlePrevious}
-          disabled={pageNumber === 1}
-          className="flex gap-2 text-sm items-center px-2 max-sm:pr-3 sm:px-4 py-1 sm:py-2 rounded-md hover:bg-[--light-3] disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+      <div className="flex justify-center gap-1 max-sm:-order-1">
+        <button onClick={handlePrevious} disabled={pageNumber === 1} className={PAGE_BTN}>
           <ArrowIL className="w-4" /> Önceki
         </button>
-        <div className="flex sm:gap-1">
+        <div className="flex gap-1">
           {getPageNumbers().map((page, index) =>
             page === "..." ? (
-              <span key={index} className="p-2 text-sm">
+              <span
+                key={index}
+                className="inline-flex h-9 items-center px-1 text-sm text-[--gr-1]"
+              >
                 ...
               </span>
             ) : (
               <button
                 key={index}
-                className={`py-2 px-4 text-sm rounded-lg transition-colors ${
+                className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm transition-colors ${
                   pageNumber === page
-                    ? "bg-[--primary-1] text-white font-medium"
-                    : "hover:bg-[--light-3]"
+                    ? "bg-[--primary-1] font-medium text-white"
+                    : "text-[--black-2] hover:bg-[--light-3]"
                 }`}
                 onClick={() => {
                   setPageNumber(page);
@@ -100,20 +108,21 @@ const CustomPagination = ({
         <button
           onClick={handleNext}
           disabled={pageNumber === totalPages}
-          className="flex gap-2 text-sm items-center px-2 max-sm:pr-3 sm:px-4 py-2 rounded-md hover:bg-[--light-3] disabled:opacity-50 disabled:cursor-not-allowed"
+          className={PAGE_BTN}
         >
           Sonraki
           <ArrowIR className="w-4" />
         </button>
       </div>
 
-      {totalItems ? (
-        <div className="absolute top-0 bottom-0 left-0 flex items-center max-sm:top-14 max-sm:pb-6 max-sm:-left-14">
-          <span className="text-sm text-[--link-1] max-sm:text-xs">
-            Toplam Sayım: {totalItems}
-          </span>
-        </div>
-      ) : null}
+      <div className="flex max-sm:justify-center sm:justify-end">
+        <button
+          className="text-sm text-[--link-1] hover:underline"
+          onClick={() => setPopupContent(<PrivacyPopup />)}
+        >
+          Kullanım Şartları
+        </button>
+      </div>
     </div>
   );
 };
@@ -123,18 +132,8 @@ export default CustomPagination;
 const PrivacyPopup = () => {
   const { setPopupContent } = usePopup();
   return (
-    <div className="pt-8 bg-[--white-1] rounded-lg overflow-clip">
-      <div className="overflow-y-auto h-[95dvh]">
-        <div className="absolute top-2 right-3 z-[50]">
-          <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-white transition-colors"
-            onClick={() => setPopupContent(null)}
-          >
-            <CancelI />
-          </div>
-        </div>
-        <PrivacyPolicy />
-      </div>
-    </div>
+    <PopupShell title="Kullanım Şartları" onClose={() => setPopupContent(null)}>
+      <PrivacyPolicy />
+    </PopupShell>
   );
 };

@@ -195,7 +195,11 @@ const OrdersPage = () => {
   return (
     // The fixed header is h-16 (64px), so the old sm:pt-16 put the toolbar
     // flush against it — 5.25rem leaves a 20px gutter below the header.
-    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row max-h-screen">
+    // Flex column at viewport height instead of the section_row grid: the
+    // table area absorbs the slack (and scrolls internally), so the
+    // pagination sits at the bottom of the screen even when the page holds
+    // only a handful of orders.
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 flex flex-col h-dvh bg-[--white-1]">
       {/* ACTIONS/BUTTONS
           One flat wrapping row instead of nested fixed-width groups: the
           search now sits inline with the controls on wide screens, and on a
@@ -234,43 +238,50 @@ const OrdersPage = () => {
         onOpen={closedInfo.openPanel}
       />
 
-      {/* TABLE */}
-      {ordersData?.length && licensesData && !loading ? (
-        <OrdersTable
-          licenses={licensesData}
-          ordersData={ordersData}
-          hasCourier={hasCourier}
-          setOrdersData={setOrdersData}
-          canSelectCourier={canSelectCourier}
-          hasCourierLicense={hasCourierLicense}
-        />
-      ) : loading ? (
-        <TableSkeleton row={11} />
-      ) : (
-        <NoOrdersPlaceholder />
-      )}
+      {/* TABLE — flex-1 min-h-0 hands the table the leftover viewport space
+          so it scrolls internally while the pagination stays put below. */}
+      <div className="flex-1 min-h-0">
+        {ordersData?.length && licensesData && !loading ? (
+          <OrdersTable
+            licenses={licensesData}
+            ordersData={ordersData}
+            hasCourier={hasCourier}
+            setOrdersData={setOrdersData}
+            canSelectCourier={canSelectCourier}
+            hasCourierLicense={hasCourierLicense}
+          />
+        ) : loading ? (
+          <TableSkeleton row={11} />
+        ) : (
+          <NoOrdersPlaceholder />
+        )}
+      </div>
 
       {/* PAGINATION */}
       {ordersData && typeof totalItems === "number" && (
-        <div className="w-full self-end flex justify-center pt-4 text-[--black-2]">
-          <div className="scale-[.8] min-w-20">
-            <CustomSelect
-              className="mt-[0] sm:mt-[0]"
-              className2="mt-[0] sm:mt-[0]"
-              menuPlacement="top"
-              value={itemsPerPage}
-              options={pageNumbers()}
-              onChange={(option) => {
-                handleItemsPerPage(option.value);
-              }}
-            />
-          </div>
+        <div className="w-full shrink-0 text-[--black-2]">
           <CustomPagination
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
             itemsPerPage={itemsPerPage.value}
             totalItems={totalItems}
             handlePageChange={handlePageChange}
+            leading={
+              // Page size lives in the pagination's left region — it used to
+              // sit beside it under a scale-[.8] hack that blurred the text.
+              <div className="min-w-20">
+                <CustomSelect
+                  className="mt-[0] sm:mt-[0]"
+                  className2="mt-[0] sm:mt-[0]"
+                  menuPlacement="top"
+                  value={itemsPerPage}
+                  options={pageNumbers()}
+                  onChange={(option) => {
+                    handleItemsPerPage(option.value);
+                  }}
+                />
+              </div>
+            }
           />
         </div>
       )}

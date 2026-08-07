@@ -87,11 +87,23 @@ const GlassFrame = ({ component, className, className2 }) => {
           </div>
         </div>
 
-        <p className="lg:hidden pb-6 px-6 text-center text-xs text-[--gr-1] relative">
-          Pentegrasyon bir LiwaSoft iştirakidir. · Müşteri Hizmetleri{" "}
-          <a href="tel:08508407807" className="text-[--link-1]">
-            0850 840 78 07
-          </a>
+        {/* Visible at every breakpoint (was lg:hidden): the privacy policy
+            has to be reachable from the auth pages, and on desktop the brand
+            panel's copy of the company line doesn't carry the link. */}
+        <p className="pb-6 px-6 text-center text-xs text-[--gr-1] relative">
+          <span className="lg:hidden">
+            Pentegrasyon bir LiwaSoft iştirakidir. · Müşteri Hizmetleri{" "}
+            <a href="tel:08508407807" className="text-[--link-1]">
+              0850 840 78 07
+            </a>{" "}
+            ·{" "}
+          </span>
+          <Link
+            to="/privacy-policy"
+            className="text-[--link-1] hover:underline"
+          >
+            Gizlilik Politikası ve Kullanım Şartları
+          </Link>
         </p>
       </main>
     </section>

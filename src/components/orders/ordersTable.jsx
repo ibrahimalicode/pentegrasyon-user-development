@@ -159,7 +159,10 @@ const OrdersTable = ({
   // the card's overflow-hidden clipped the sticky header, so it scrolled
   // away with the rows instead of pinning.
   return (
-    <main className="w-full overflow-auto rounded-xl border border-[--border-1] bg-[--white-1]">
+    // max-h-full: the page hands this card a fixed-height slot; capping at
+    // that height is what makes the card scroll internally instead of
+    // growing past the viewport and pushing the pagination off-screen.
+    <main className="w-full max-h-full overflow-auto rounded-xl border border-[--border-1] bg-[--white-1]">
       {/* Denser rows than the standard table: this is the operational
           screen, so more orders on screen matters more than airiness. */}
       <div className="min-w-max">

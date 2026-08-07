@@ -419,7 +419,8 @@ const RestaurantLicensesPage = () => {
       ) : (
         <NoTableData
           Icon={LicenseI}
-          text="Lisansınız bulunmamaktadır. Lütfen lisans ekleyin."
+          title="Bu restorana ait lisans yok"
+          text="Bu restoran için henüz bir lisans eklenmemiş."
         />
       )}
 

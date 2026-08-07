@@ -77,7 +77,8 @@ const MessagesPage = () => {
         ) : (
           <NoTableData
             Icon={MessagesI}
-            text="Henüz herhangi bir mesajınız yok."
+            title="Henüz mesajınız yok"
+            text="Pentegrasyon'dan gelen bildirim ve duyurular burada görünecek."
           />
         )}
       </main>

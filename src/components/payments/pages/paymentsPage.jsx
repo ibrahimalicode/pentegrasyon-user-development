@@ -242,7 +242,8 @@ const PaymentsPage = () => {
       ) : (
         <NoTableData
           Icon={PaymentI}
-          text="Henüz herhangi bir ödeme kaydınız yok."
+          title="Henüz ödeme kaydınız yok"
+          text="Lisans satın alımlarınız ve ödemeleriniz burada listelenecek."
         />
       )}
 

@@ -264,7 +264,9 @@ const CouriersPage = () => {
       ) : (
         <NoTableData
           Icon={CourierI}
-          text="Kuryeniz bulunmamaktadır. Lütfen kurye ekleyin."
+          title="Henüz kuryeniz yok"
+          text="Siparişlerinizi teslimata atayabilmek için bir kurye ekleyin."
+          action={<AddCourier onSuccess={() => setCouriersData(null)} />}
         />
       )}
 

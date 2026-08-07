@@ -324,7 +324,14 @@ const LicensesPage = () => {
       ) : (
         <NoTableData
           Icon={LicenseI}
-          text="Lisansınız bulunmamaktadır. Lütfen lisans ekleyin."
+          title="Henüz lisansınız yok"
+          text="Pazaryeri entegrasyonlarını kullanmaya başlamak için bir lisans ekleyin."
+          action={
+            <AddLicense
+              licenses={licensesData}
+              onSuccess={() => setLicensesData(null)}
+            />
+          }
         />
       )}
 

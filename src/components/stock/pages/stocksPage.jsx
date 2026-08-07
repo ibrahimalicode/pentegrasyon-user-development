@@ -306,7 +306,8 @@ const StocksPage = () => {
       ) : (
         <NoTableData
           Icon={StockI}
-          text="Henüz herhangi bir stok kaydınız yok."
+          title="Henüz stok kaydınız yok"
+          text="Ürünlerinizin stok durumları burada listelenecek."
         />
       )}
 

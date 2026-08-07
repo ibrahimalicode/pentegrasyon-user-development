@@ -291,9 +291,12 @@ const LogsPage = () => {
       ) : loading ? (
         <TableSkeleton />
       ) : (
+        // The old copy said "Lisansınız bulunmamaktadır" — pasted from the
+        // licenses page; this is the activity-log list.
         <NoTableData
           Icon={LogI}
-          text="Lisansınız bulunmamaktadır. Lütfen lisans ekleyin."
+          title="Henüz işlem kaydınız yok"
+          text="Siparişleriniz işlendikçe hareketler burada listelenecek."
         />
       )}
 

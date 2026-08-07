@@ -415,7 +415,9 @@ const RestaurantsPage = () => {
         ) : (
           <NoTableData
             Icon={RestourantI}
-            text={"Henuz Restoranınız Yok. Lütfen Restoran Ekleyin."}
+            title="Henüz restoranınız yok"
+            text="Pazaryeri siparişlerinizi yönetmeye başlamak için ilk restoranınızı ekleyin."
+            action={<AddRestaurant onSuccess={() => handleFilter(true)} />}
           />
         )}
       </div>

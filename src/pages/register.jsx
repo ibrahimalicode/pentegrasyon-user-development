@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import PrivacyPolicy from "./privacyPolicy";
+import { PrivacyPolicyContent } from "./privacyPolicy";
+import PopupShell from "../components/common/popupShell";
 import CustomInput from "../components/common/customInput";
 import CustomSelect from "../components/common/customSelector";
 import CustomCheckbox from "../components/common/customCheckbox";
@@ -26,7 +27,6 @@ import { getDistricts } from "../redux/data/getDistrictsSlice";
 import { registerUser, resetRgisterState } from "../redux/auth/registerSlice";
 
 // ASSETS
-import { CancelI } from "../assets/icon";
 import VerifyCode from "../components/common/verifyCode";
 import GlassFrame from "../components/common/glassFrame";
 
@@ -308,19 +308,9 @@ function PrivacyBtn() {
 
   const PrivacyPopup = () => {
     return (
-      <div className="pt-8 bg-[--white-1] rounded-lg overflow-clip">
-        <div className="overflow-y-auto h-[95dvh]">
-          <div className="absolute top-2 right-3 z-[50]">
-            <div
-              className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-white transition-colors"
-              onClick={closeForm}
-            >
-              <CancelI />
-            </div>
-          </div>
-          <PrivacyPolicy />
-        </div>
-      </div>
+      <PopupShell title="Kullanım Şartları" onClose={closeForm}>
+        <PrivacyPolicyContent />
+      </PopupShell>
     );
   };
 

@@ -1,6 +1,6 @@
 import { ArrowIL, ArrowIR } from "../../assets/icon/index";
 import { usePopup } from "../../context/PopupContext";
-import PrivacyPolicy from "../../pages/privacyPolicy";
+import { PrivacyPolicyContent } from "../../pages/privacyPolicy";
 import PopupShell from "./popupShell";
 
 const PAGE_BTN =
@@ -133,7 +133,7 @@ const PrivacyPopup = () => {
   const { setPopupContent } = usePopup();
   return (
     <PopupShell title="Kullanım Şartları" onClose={() => setPopupContent(null)}>
-      <PrivacyPolicy />
+      <PrivacyPolicyContent />
     </PopupShell>
   );
 };

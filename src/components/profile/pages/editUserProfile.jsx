@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import Button from "../../common/button";
 import CustomInput from "../../common/customInput";
 import { formatEmail } from "../../../utils/utils";
 import CustomSelect from "../../common/customSelector";
 import CustomPhoneInput from "../../common/customPhoneInput";
+import { TOOLBAR_BTN_PRIMARY } from "../../common/toolbarStyles";
 
 // REDUX
 import { getUser } from "../../../redux/user/getUserSlice";
@@ -53,7 +53,7 @@ const EditUserProfile = ({ user, cities }) => {
   function handleSubmit(e) {
     e.preventDefault();
     if (isEqual(userDataBefore, userData)) {
-      toast.error("Hiç bir geğişiklik yapmadınız");
+      toast.error("Hiçbir değişiklik yapmadınız");
     } else {
       dispatch(
         updateUserData({
@@ -76,7 +76,7 @@ const EditUserProfile = ({ user, cities }) => {
       dispatch(getUser());
       dispatch(resetUpdateUserData());
       toast.dismiss(toastId.current);
-      toast.success("Profiliniz başarıyla güncelendi");
+      toast.success("Profiliniz başarıyla güncellendi");
     }
   }, [loading, success, error]);
 
@@ -170,118 +170,109 @@ const EditUserProfile = ({ user, cities }) => {
   }, [districtsSuccess, districts]);
 
   return (
-    <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
+    <section className="w-full max-w-2xl pt-6 min-h-0">
       <form className="w-full" onSubmit={handleSubmit}>
-        <>
-          <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
-            <CustomInput
-              label="Ad"
-              required
-              className="py-3.5"
-              value={userData.firstName}
-              onChange={(e) => {
-                setUserData((pre) => {
-                  return {
-                    ...pre,
-                    firstName: e,
-                  };
-                });
-              }}
-            />
-            <CustomInput
-              label="Soyad"
-              required
-              className="rounded-2xl py-3.5"
-              value={userData.lastName}
-              onChange={(e) => {
-                setUserData((pre) => {
-                  return {
-                    ...pre,
-                    lastName: e,
-                  };
-                });
-              }}
-            />
-          </div>
-          <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
-            <CustomPhoneInput
-              label="Telefon"
-              required
-              disabled
-              className="py-3.5"
-              value={userData.phoneNumber}
-              onChange={(e) => {
-                setUserData((pre) => {
-                  return {
-                    ...pre,
-                    phoneNumber: e,
-                  };
-                });
-              }}
-            />
+        <div className="grid gap-x-4 sm:grid-cols-2">
+          <CustomInput
+            label="Ad"
+            required
+            className="text-sm"
+            value={userData.firstName}
+            onChange={(e) => {
+              setUserData((pre) => {
+                return {
+                  ...pre,
+                  firstName: e,
+                };
+              });
+            }}
+          />
+          <CustomInput
+            label="Soyad"
+            required
+            className="text-sm"
+            value={userData.lastName}
+            onChange={(e) => {
+              setUserData((pre) => {
+                return {
+                  ...pre,
+                  lastName: e,
+                };
+              });
+            }}
+          />
+          <CustomPhoneInput
+            label="Telefon"
+            required
+            disabled
+            className="text-sm"
+            value={userData.phoneNumber}
+            onChange={(e) => {
+              setUserData((pre) => {
+                return {
+                  ...pre,
+                  phoneNumber: e,
+                };
+              });
+            }}
+          />
+          <CustomInput
+            label="E-Posta"
+            required
+            disabled
+            className="text-sm"
+            value={userData.email}
+            onChange={(e) => {
+              setUserData((pre) => {
+                return {
+                  ...pre,
+                  email: formatEmail(e),
+                };
+              });
+            }}
+          />
+          <CustomSelect
+            label="İl"
+            required
+            className="text-sm"
+            options={citiesData}
+            value={userData?.city ? userData.city : { label: "Şehir seç" }}
+            onChange={(selectedOption) => {
+              setUserData((pre) => {
+                return {
+                  ...pre,
+                  city: selectedOption,
+                };
+              });
+            }}
+          />
+          <CustomSelect
+            label="İlçe"
+            required
+            className="text-sm"
+            options={districtsData}
+            value={
+              userData?.district ? userData.district : { label: "İlçe seç" }
+            }
+            onChange={(selectedOption) => {
+              setUserData((pre) => {
+                return {
+                  ...pre,
+                  district: selectedOption,
+                };
+              });
+            }}
+          />
+        </div>
 
-            <CustomInput
-              label="E-Posta"
-              required
-              disabled
-              className="py-3.5"
-              value={userData.email}
-              onChange={(e) => {
-                setUserData((pre) => {
-                  return {
-                    ...pre,
-                    email: formatEmail(e),
-                  };
-                });
-              }}
-            />
-          </div>
-          <div className="w-full max-w-3xl flex max-sm:flex-col sm:gap-10 gap-2 max-sm:items-center">
-            <CustomSelect
-              label="İl"
-              required
-              style={{
-                padding: ".5rem 0",
-              }}
-              options={citiesData}
-              value={userData?.city ? userData.city : { label: "Şehir seç" }}
-              onChange={(selectedOption) => {
-                setUserData((pre) => {
-                  return {
-                    ...pre,
-                    city: selectedOption,
-                  };
-                });
-              }}
-            />
-            <CustomSelect
-              label="İlçe"
-              required
-              style={{
-                padding: ".5rem 0",
-              }}
-              options={districtsData}
-              value={
-                userData?.district ? userData.district : { label: "İlçe seç" }
-              }
-              onChange={(selectedOption) => {
-                setUserData((pre) => {
-                  return {
-                    ...pre,
-                    district: selectedOption,
-                  };
-                });
-              }}
-            />
-          </div>
-        </>
-        <div className="flex justify-end mt-16 sm:mt-52">
-          <Button
-            text="Kaydet"
-            className="bg-[--primary-1] text-white text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+        <div className="flex justify-end mt-8">
+          <button
             type="submit"
             disabled={loading}
-          />
+            className={TOOLBAR_BTN_PRIMARY}
+          >
+            Kaydet
+          </button>
         </div>
       </form>
     </section>

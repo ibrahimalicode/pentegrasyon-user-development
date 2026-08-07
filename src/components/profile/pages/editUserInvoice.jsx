@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 
 //COMP
-import Button from "../../common/button";
+import { TOOLBAR_BTN_PRIMARY } from "../../common/toolbarStyles";
 
 //UTILS
 import EditUserInvoiceById from "../../invoice/editUserInvoice";
@@ -26,25 +26,24 @@ const EditUserInvoice = ({ user }) => {
   );
 
   return (
-    <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
+    <section className="w-full max-w-2xl pt-6 min-h-0">
       <form className="w-full" onSubmit={handleSubmit}>
-        <>
-          <EditUserInvoiceById
-            cities={cities}
-            districts={districts}
-            neighs={neighs}
-            userInvoice={userInvoice}
-            setUserInvoice={setUserInvoice}
-          />
-        </>
+        <EditUserInvoiceById
+          cities={cities}
+          districts={districts}
+          neighs={neighs}
+          userInvoice={userInvoice}
+          setUserInvoice={setUserInvoice}
+        />
 
-        <div className="flex justify-end mt-16">
-          <Button
-            text="Kaydet"
-            className="bg-[--primary-1] text-white text-lg rounded-xl py-[.8rem] sm:px-16 border-[0px]"
+        <div className="flex justify-end mt-8">
+          <button
             type="submit"
             disabled={addLoading || updateLoading}
-          />
+            className={TOOLBAR_BTN_PRIMARY}
+          >
+            Kaydet
+          </button>
         </div>
       </form>
     </section>

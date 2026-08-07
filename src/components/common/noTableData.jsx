@@ -7,8 +7,11 @@ import { cn } from "../../lib/utils";
 const NoTableData = ({ Icon, title, text, action, className }) => {
   return (
     <div
+      // flex-1 fills the slack on the flex-column pages and h-full fills the
+      // fixed-height slot on the pages that wrap the table area — either way
+      // the content centers in the empty region instead of hugging the top.
       className={cn(
-        "w-full flex flex-col justify-center items-center text-center py-16 sm:py-20 px-6",
+        "w-full flex-1 h-full flex flex-col justify-center items-center text-center py-12 px-6",
         className
       )}
     >

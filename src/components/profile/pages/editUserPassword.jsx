@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import CustomInput from "../../common/customInput";
+import { TOOLBAR_BTN_PRIMARY } from "../../common/toolbarStyles";
 
 // REDUX
 import {
@@ -32,7 +33,7 @@ const EditUserPassword = ({ user }) => {
       dispatch(resetUpdateUserPassword());
     } else if (success) {
       toast.dismiss(toastId.current);
-      toast.success("Şifrenız başarıyla güncelendi");
+      toast.success("Şifreniz başarıyla güncellendi");
       setUserPassword({
         password: "",
         confirmPassword: "",
@@ -58,17 +59,21 @@ const EditUserPassword = ({ user }) => {
   }
 
   return (
-    <section className="flex flex-col items-start pt-3.5 pr-20 pl-6 mt-10 w-full bg-[--white-1] min-h-0 max-md:px-5">
+    <section className="w-full max-w-2xl pt-6 min-h-0">
       <form className="w-full" onSubmit={handleSubmit}>
-        <p className="py-4 text-3xl text-[--primary-1] font-bold">
-          Şifrenızı Değiştirin
+        <h3 className="text-base font-semibold text-[--black-1]">
+          Şifrenizi değiştirin
+        </h3>
+        <p className="mt-1 text-sm text-[--gr-1]">
+          Yeni şifreniz 4-20 karakter uzunluğunda olmalıdır.
         </p>
-        <div className="flex gap-4 mt-4 max-sm:flex-col">
+
+        <div className="grid gap-x-4 sm:grid-cols-2">
           <CustomInput
             required
             label="Şifre"
             placeholder="Şifre"
-            className="py-3.5 text-sm"
+            className="text-sm"
             letIcon={true}
             value={userPassword.password}
             onChange={(e) => {
@@ -86,7 +91,7 @@ const EditUserPassword = ({ user }) => {
             required
             label="Şifreyi onayla"
             placeholder="Şifre"
-            className="py-3.5 text-sm"
+            className="text-sm"
             letIcon={true}
             value={userPassword.confirmPassword}
             onChange={(e) => {
@@ -102,11 +107,11 @@ const EditUserPassword = ({ user }) => {
           />
         </div>
 
-        <div className="flex justify-end mt-16">
+        <div className="flex justify-end mt-8">
           <button
             type="submit"
             disabled={loading}
-            className="text-white bg-[--primary-1] rounded-md px-5 py-2.5"
+            className={TOOLBAR_BTN_PRIMARY}
           >
             Kaydet
           </button>

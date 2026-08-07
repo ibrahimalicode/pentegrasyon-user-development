@@ -31,8 +31,9 @@ const MessagesPage = () => {
   }, [messagesData, newMessage]);
 
   return (
-    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 grid grid-cols-1 section_row">
-      <main className="flex flex-col gap-4">
+    <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 flex flex-col min-h-dvh bg-[--white-1]">
+      {/* flex-1 so the empty state can center itself in the free space */}
+      <main className="flex flex-1 flex-col gap-4">
         {messagesData?.length ? (
           messagesData
             .filter((M) => M.platforms == 2)

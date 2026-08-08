@@ -34,7 +34,10 @@ const SalesBar = ({ onTotalsChange }) => {
   );
 
   const [salesData, setSalesData] = useState(null);
-  const [restaurantsData, setRestaurantsData] = useState([]);
+  // null = not fetched yet; [] = fetched and empty. The old initial value of
+  // [] plus a "!length" fetch guard meant an account with no restaurants
+  // refetched forever (~10 req/s): every empty response re-armed the guard.
+  const [restaurantsData, setRestaurantsData] = useState(null);
   const [filterData, setFilterData] = useState({
     restaurantId: null,
     year: "",
@@ -86,8 +89,10 @@ const SalesBar = ({ onTotalsChange }) => {
 
   //GET RESTAURANTS
   useEffect(() => {
-    if (!restaurantsData?.length) {
-      dispatch(getRestaurants({}));
+    if (!restaurantsData) {
+      // Real pagination params: GetRestaurants treats the 0/0 defaults as
+      // "page zero of size zero" and returns an empty list, not "all".
+      dispatch(getRestaurants({ pageNumber: 1, pageSize: 100 }));
     }
   }, [restaurantsData]);
 
@@ -128,7 +133,7 @@ const SalesBar = ({ onTotalsChange }) => {
           <div className="flex justify-end gap-2">
             <CustomSelector
               value={filterData.selectedRestaurant}
-              options={[{ label: "Hepsi", value: "" }, ...restaurantsData]}
+              options={[{ label: "Hepsi", value: "" }, ...(restaurantsData || [])]}
               onChange={(selectedOption) => {
                 const updatedData = {
                   ...filterData,

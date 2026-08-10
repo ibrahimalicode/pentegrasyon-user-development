@@ -4,6 +4,7 @@ import StatCard from "../statCard";
 import SalesBar from "../salesBar";
 import RestaurantsTable from "../restaurantsTable";
 import MarketplaceChart from "../merketplaceChart";
+import DownloadDesktopButton from "../../common/downloadDesktopButton";
 
 const DashboardPage = () => {
   // Order KPIs are derived inside SalesBar (which owns the statistics
@@ -15,6 +16,11 @@ const DashboardPage = () => {
     // the only screen with a different gutter.
     <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-5 min-h-0">
       <div className="flex flex-col gap-4 py-4">
+        {/* The dashboard has no toolbar, so the desktop-app download gets a
+            slim row of its own above the cards. */}
+        <div className="flex justify-end">
+          <DownloadDesktopButton />
+        </div>
         <StatCard orderTotals={orderTotals} />
         {/* Chart beside the donut instead of stacked — the dashboard holds
             little data, so it should fit a screen without scrolling. */}

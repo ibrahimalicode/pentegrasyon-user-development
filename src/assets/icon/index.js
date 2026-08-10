@@ -30,6 +30,7 @@ import BoxInI from "./boxIn";
 import TrendDownI from "./trendDown";
 import TrendUpI from "./trendUp";
 import DownArrowI from "./downArrow";
+import DownloadI from "./download";
 import CloudUI from "./cloudU";
 import AsteriskI from "./asterisk";
 import MenuI from "./menu";
@@ -76,6 +77,7 @@ export {
   TrendDownI,
   TrendUpI,
   DownArrowI,
+  DownloadI,
   CloudUI,
   AsteriskI,
   MenuI,

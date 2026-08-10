@@ -9,6 +9,7 @@ import AddLicense from "../actions/addLicense";
 import CloseI from "../../../assets/icon/close";
 import { LicenseI } from "../../../assets/icon";
 import NoTableData from "../../common/noTableData";
+import DownloadDesktopButton from "../../common/downloadDesktopButton";
 import CustomInput from "../../common/customInput";
 import CustomPagination from "../../common/pagination";
 import TableSkeleton from "../../common/tableSkeleton";
@@ -166,7 +167,8 @@ const LicensesPage = () => {
         </div>
 
         <div className="max-sm:w-full flex justify-end">
-          <div className="flex gap-2 max-sm:order-1 ">
+          <div className="flex gap-2 max-sm:order-1 flex-wrap">
+            <DownloadDesktopButton />
             <div>
               <AddLicense
                 licenses={licensesData}

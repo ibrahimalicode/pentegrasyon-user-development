@@ -97,12 +97,13 @@ const BankPayment = ({ user, step, setStep, setPaymentStatus }) => {
       return result;
     }, []);
 
-    const { licensePackageId, restaurantId } = cartItems[0];
-    const extendLicenseBasket = {
-      licensePackageId,
-      restaurantId,
-      licenseId: currentLicense?.id,
-    };
+    // Array shape: same contract as the card flow — a list of {licenseId,
+    // licensePackageId, restaurantId}; bulk items carry their own licenseId.
+    const extendLicenseBasket = cartItems.map((item) => ({
+      licensePackageId: item.licensePackageId,
+      restaurantId: item.restaurantId,
+      licenseId: item.licenseId ?? currentLicense?.id,
+    }));
 
     // Create a FormData object
     const formData = new FormData();

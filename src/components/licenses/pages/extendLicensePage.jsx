@@ -10,6 +10,7 @@ import DoubleArrowRI from "../../../assets/icon/doubleArrowR";
 
 //STEPS
 import FirstStep from "../extendLicenseSteps/1stStep";
+import BulkFirstStep from "../extendLicenseSteps/bulkFirstStep";
 import SecondStep from "../extendLicenseSteps/2ndStep";
 import ThirdStep from "../extendLicenseSteps/3rdStep";
 import FourthStep from "../extendLicenseSteps/4thStep";
@@ -23,7 +24,7 @@ const ExtendLicensePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { user, restaurant } = location.state || {};
+  const { user, restaurant, bulkLicenses } = location.state || {};
   const currentPath = location.pathname;
 
   const cartItems = useSelector((state) => state.cart.items);
@@ -113,16 +114,29 @@ const ExtendLicensePage = () => {
                   percent={40}
                   measure="rem"
                   component={[
-                    <FirstStep
-                      key={0}
-                      setStep={setStep}
-                      paymentMethod={paymentMethod}
-                      restaurantData={restaurantData}
-                      setPaymentMethod={setPaymentMethod}
-                      setRestaurantData={setRestaurantData}
-                      licensePackageData={licensePackageData}
-                      setLicensePackageData={setLicensePackageData}
-                    />,
+                    // Opened from the licenses page's multi-select, step 1
+                    // becomes a per-license package list; the rest of the
+                    // flow (invoice, payment, result) is shared.
+                    bulkLicenses?.length ? (
+                      <BulkFirstStep
+                        key={0}
+                        setStep={setStep}
+                        bulkLicenses={bulkLicenses}
+                        paymentMethod={paymentMethod}
+                        setPaymentMethod={setPaymentMethod}
+                      />
+                    ) : (
+                      <FirstStep
+                        key={0}
+                        setStep={setStep}
+                        paymentMethod={paymentMethod}
+                        restaurantData={restaurantData}
+                        setPaymentMethod={setPaymentMethod}
+                        setRestaurantData={setRestaurantData}
+                        licensePackageData={licensePackageData}
+                        setLicensePackageData={setLicensePackageData}
+                      />
+                    ),
                     <SecondStep
                       key={1}
                       step={step}

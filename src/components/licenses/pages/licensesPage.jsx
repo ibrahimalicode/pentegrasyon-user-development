@@ -1,5 +1,6 @@
 //MODULES
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,7 +18,11 @@ import CustomSelect from "../../common/customSelector";
 import { usePopup } from "../../../context/PopupContext";
 import MarketPalceIds from "../../../enums/marketPlaceIds";
 import licenseFilterDates from "../../../enums/licenseFilterDates";
-import { TOOLBAR_BTN } from "../../../components/common/toolbarStyles";
+import { getRemainingDays } from "../../../utils/utils";
+import {
+  TOOLBAR_BTN,
+  TOOLBAR_BTN_PRIMARY,
+} from "../../../components/common/toolbarStyles";
 
 // REDUX
 import {
@@ -31,6 +36,7 @@ import {
 
 const LicensesPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loading, success, error, licenses } = useSelector(
     (state) => state.licenses.getLicenses,
@@ -50,6 +56,52 @@ const LicensesPage = () => {
   const itemsPerPage = 8;
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
+
+  // Bulk extension: whole license objects keyed by id (a Map, not a Set),
+  // because the extend page needs the objects and selection has to survive
+  // paging away and back.
+  const [selected, setSelected] = useState(new Map());
+
+  const toggleLicense = (license) =>
+    setSelected((prev) => {
+      const next = new Map(prev);
+      if (next.has(license.id)) next.delete(license.id);
+      else next.set(license.id, license);
+      return next;
+    });
+
+  const togglePage = (pageRows) =>
+    setSelected((prev) => {
+      const next = new Map(prev);
+      const allOnPage = pageRows.every((row) => next.has(row.id));
+      pageRows.forEach((row) =>
+        allOnPage ? next.delete(row.id) : next.set(row.id, row)
+      );
+      return next;
+    });
+
+  // Selects the loaded page's licenses that are expired or expire within
+  // 30 days — the ones the licence rings flag.
+  const selectExpiring = () => {
+    const expiring = (licensesData || []).filter(
+      (license) => getRemainingDays(license.endDateTime) < 30
+    );
+    if (!expiring.length) {
+      toast("Bu sayfada süresi yaklaşan lisans yok", { id: "no-expiring" });
+      return;
+    }
+    setSelected((prev) => {
+      const next = new Map(prev);
+      expiring.forEach((license) => next.set(license.id, license));
+      return next;
+    });
+  };
+
+  const startBulkExtend = () => {
+    navigate("/licenses/extend-license", {
+      state: { bulkLicenses: [...selected.values()] },
+    });
+  };
 
   //HANDLER
   function handleGetLicenses(number, searchVal) {
@@ -168,6 +220,14 @@ const LicensesPage = () => {
 
         <div className="max-sm:w-full flex justify-end">
           <div className="flex gap-2 max-sm:order-1 flex-wrap">
+            <button
+              type="button"
+              onClick={selectExpiring}
+              title="Süresi 30 günden az kalan veya bitmiş lisansları seç"
+              className={TOOLBAR_BTN}
+            >
+              Yaklaşanları Seç
+            </button>
             <DownloadDesktopButton />
             <div>
               <AddLicense
@@ -315,11 +375,39 @@ const LicensesPage = () => {
         </div>
       </div>
 
+      {/* BULK-EXTEND BAR — appears once anything is selected */}
+      {selected.size > 0 && (
+        <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border border-solid border-[--primary-1]/40 bg-[--light-1] px-3 py-2">
+          <p className="text-sm font-medium text-[--black-1]">
+            {selected.size} lisans seçildi
+          </p>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSelected(new Map())}
+              className={TOOLBAR_BTN}
+            >
+              Temizle
+            </button>
+            <button
+              type="button"
+              onClick={startBulkExtend}
+              className={TOOLBAR_BTN_PRIMARY}
+            >
+              Toplu Uzat ({selected.size})
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* TABLE */}
       {licensesData?.length > 0 && !loading && !restaurantsLoading ? (
         <LicensesTable
           inData={licensesData}
           onSuccess={() => setLicensesData(null)}
+          selectedIds={selected}
+          onToggle={toggleLicense}
+          onToggleAll={togglePage}
         />
       ) : loading || restaurantsLoading ? (
         <TableSkeleton />

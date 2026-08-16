@@ -93,12 +93,16 @@ const OnlinePayment = ({
       return result;
     }, []);
 
-    const { licensePackageId, restaurantId } = cartItems[0];
-    const extendLicenseBasket = {
-      licensePackageId,
-      restaurantId,
-      licenseId: currentLicense?.id,
-    };
+    // Array shape: the backend accepts a list of {licenseId,
+    // licensePackageId, restaurantId} since PR #184, so single and bulk
+    // extends go through the same payload. Bulk cart items carry their own
+    // licenseId; the single flow falls back to the license the page was
+    // opened with.
+    const extendLicenseBasket = cartItems.map((item) => ({
+      licensePackageId: item.licensePackageId,
+      restaurantId: item.restaurantId,
+      licenseId: item.licenseId ?? currentLicense?.id,
+    }));
 
     const data = {
       userName: fullName,

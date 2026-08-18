@@ -325,18 +325,23 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
         </table>
 
         <div className="w-full border-t border-[--gr-1]">
-          {Number(order.discountAmountTotal) ? (
+          {/* Toplam mirrors what the product rows above sum to: totalNet,
+              i.e. prices with the platform-sponsored discount already baked
+              in. İndirim is only the remaining (vendor-sponsored) part —
+              showing the full discountAmountTotal here would double-count
+              the platform share and make Toplam − İndirim ≠ Ödenecek. The
+              old header added grandTotal + discountAmountTotal, which
+              printed a list-price total the rows never add up to. */}
+          {Number(order.totalNet) > Number(order.grandTotal) ? (
             <>
               <div className="w-full flex items-center justify-between gap-2">
                 <p>Toplam:</p>
                 <p className="text-base">
                   {formatToPrice(
-                    String(
-                      (
-                        Number(order.grandTotal) +
-                        Number(order.discountAmountTotal)
-                      ).toFixed(2),
-                    ).replace(".", ","),
+                    String(Number(order.totalNet).toFixed(2)).replace(
+                      ".",
+                      ",",
+                    ),
                   )}
                 </p>
               </div>
@@ -345,7 +350,9 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 <p className="text-base">
                   {formatToPrice(
                     String(
-                      Number(order.discountAmountTotal).toFixed(2),
+                      (
+                        Number(order.totalNet) - Number(order.grandTotal)
+                      ).toFixed(2),
                     ).replace(".", ","),
                   )}
                 </p>

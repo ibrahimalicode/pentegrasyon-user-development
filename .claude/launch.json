@@ -4,8 +4,10 @@
     {
       "name": "user-panel",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
-      "port": 9008
+      "runtimeArgs": [
+        "start"
+      ],
+      "port": 9000
     }
   ]
 }

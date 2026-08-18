@@ -220,18 +220,19 @@ const YemekSepetiPrintOrder = ({ order }) => {
       </div>
 
       <div className="text-lg border-y border-black">
-        {Number(order.discountAmountTotal) ? (
+        {/* Same maths as the details popup: the printed rows carry totalNet
+            prices (platform-sponsored discount already baked in), so the
+            header total is totalNet and the iskonto line is only the
+            remaining totalNet − grandTotal. Printing the full
+            discountAmountTotal against a grandTotal+discount "list" total
+            made the slip disagree with its own item lines. */}
+        {Number(order.totalNet) > Number(order.grandTotal) ? (
           <>
             <p className="flex justify-between">
               <span>Hesap Toplamı : </span>
               <span className="font-bold">
                 {formatToPrice(
-                  String(
-                    (
-                      Number(order.grandTotal) +
-                      Number(order.discountAmountTotal)
-                    ).toFixed(2),
-                  ).replace(".", ","),
+                  String(Number(order.totalNet).toFixed(2)).replace(".", ","),
                 )}
               </span>
             </p>
@@ -239,20 +240,18 @@ const YemekSepetiPrintOrder = ({ order }) => {
               <span>
                 %
                 {(
-                  (100 /
-                    (Number(order.grandTotal) +
-                      Number(order.discountAmountTotal))) *
-                  Number(order.discountAmountTotal)
+                  (100 / Number(order.totalNet)) *
+                  (Number(order.totalNet) - Number(order.grandTotal))
                 ).toFixed(2)}{" "}
                 iskonto :{" "}
               </span>{" "}
-              {/* LOOK */}
               <span>
                 {formatToPrice(
-                  String(Number(order.discountAmountTotal).toFixed(2)).replace(
-                    ".",
-                    ",",
-                  ),
+                  String(
+                    (
+                      Number(order.totalNet) - Number(order.grandTotal)
+                    ).toFixed(2),
+                  ).replace(".", ","),
                 )}
               </span>
             </p>

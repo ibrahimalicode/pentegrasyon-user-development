@@ -196,9 +196,12 @@ const LicensesPage = () => {
 
   return (
     <section className="pt-20 sm:pt-[5.25rem] px-[4%] pb-4 flex flex-col min-h-dvh bg-[--white-1]">
-      {/* ACTIONS/BUTTONS */}
-      <div className="w-full flex justify-between items-end mb-6 flex-wrap gap-2">
-        <div className="flex items-center w-full max-w-sm max-sm:order-2">
+      {/* ACTIONS/BUTTONS — one flat wrapping row, same as the orders page:
+          the old justify-between of a fixed-width search against an
+          internally-wrapping button group produced a zigzag at mid widths
+          (buttons on the first row, search and Filtre orphaned below). */}
+      <div className="w-full flex items-center mb-6 flex-wrap gap-2">
+        <div className="flex items-center w-full sm:w-auto sm:flex-1 sm:min-w-56 sm:max-w-sm">
           <form className="w-full" onSubmit={handleSearch}>
             <CustomInput
               onChange={(e) => {
@@ -207,7 +210,9 @@ const LicensesPage = () => {
               }}
               value={searchVal}
               placeholder="Ara..."
-              className2="mt-[0px] w-full"
+              // sm:mt-0 too: CustomInput reserves label space at sm+, which
+              // made the search 64px tall beside 44px buttons.
+              className2="mt-0 sm:mt-0 w-full"
               className="mt-[0px] py-[.7rem] w-[100%] focus:outline-none"
               icon={<CloseI className="w-4 text-[--red-1]" />}
               className4={`top-[20px] right-2 hover:bg-[--light-4] rounded-full px-2 py-1 ${
@@ -218,8 +223,8 @@ const LicensesPage = () => {
           </form>
         </div>
 
-        <div className="max-sm:w-full flex justify-end">
-          <div className="flex gap-2 max-sm:order-1 flex-wrap">
+        <div className="ml-auto flex justify-end">
+          <div className="flex gap-2 flex-wrap justify-end">
             <button
               type="button"
               onClick={selectExpiring}
@@ -236,7 +241,10 @@ const LicensesPage = () => {
               />
             </div>
 
-            <div className="w-full relative" ref={filterLicense}>
+            {/* relative only — w-full here forced the Filtre button onto its
+                own wrap line inside the group, splitting the toolbar into a
+                zigzag at every width. */}
+            <div className="relative" ref={filterLicense}>
               <button
                 className={TOOLBAR_BTN}
                 onClick={() => setOpenFilter(!openFilter)}

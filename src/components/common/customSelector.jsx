@@ -29,10 +29,29 @@ const CustomSelect = ({
       .replace(/ş/g, "s")
       .replace(/ü/g, "u");
 
+  // Some callers (formatLisansPackages) build the option label as an HTML
+  // string — a styled row with package name, duration and price. Those must
+  // go through dangerouslySetInnerHTML or the dropdown prints the literal
+  // markup, which is exactly what happened when this component was rebuilt
+  // without formatOptionLabel.
+  const isHtmlLabel = (l) => typeof l === "string" && l.trim().startsWith("<");
+
+  const formatOptionLabel = (option) =>
+    isHtmlLabel(option?.label) ? (
+      <div
+        className="w-full"
+        dangerouslySetInnerHTML={{ __html: option.label }}
+      />
+    ) : (
+      option?.label
+    );
+
   const filterOption = (option, inputValue) => {
-    const label = normalizeTurkish(option.label);
-    const input = normalizeTurkish(inputValue);
-    return label.includes(input);
+    // HTML labels would match on class names; search their plain value.
+    const haystack = isHtmlLabel(option.label)
+      ? String(option.data?.value ?? "")
+      : option.label;
+    return normalizeTurkish(haystack).includes(normalizeTurkish(inputValue));
   };
 
   return (
@@ -45,6 +64,7 @@ const CustomSelect = ({
         required={required}
         className={cn("text-sm", className)}
         isDisabled={disabled}
+        formatOptionLabel={formatOptionLabel}
         filterOption={filterOption}
         isSearchable={isSearchable !== undefined ? isSearchable : true}
         menuPlacement={menuPlacement || "bottom"}

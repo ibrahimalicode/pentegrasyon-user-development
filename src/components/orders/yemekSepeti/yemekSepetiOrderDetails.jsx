@@ -17,6 +17,22 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
 
+// Discount amounts arrive as strings (backend PR #152); sponsors say who
+// covered each slice of a campaign.
+const discountPrice = (amount) =>
+  formatToPrice(String(parseFloat(amount || 0).toFixed(2)).replace(".", ","));
+
+const SPONSOR_LABELS = { PLATFORM: "YemekSepeti", VENDOR: "Restoran" };
+
+// Inline "-X ₺ name" row used at product/option/child level.
+const DiscountRows = ({ discounts, indent = "pl-2" }) =>
+  (discounts || []).map((d, i) => (
+    <tr key={`disc-${i}`} className="text-xs text-[--red-1]">
+      <td className={indent}>İndirim{d.name ? ` — ${d.name}` : ""}</td>
+      <td className="pr-2 text-right">-{discountPrice(d.amount)}</td>
+    </tr>
+  ));
+
 const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
   const { setSlideBarContent } = useSlideBar();
@@ -229,6 +245,9 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           </div>
         )}
 
+        {/* Discount rows can appear at four levels of the ticket (ticket /
+            product / option / option-child) since backend PR #152; amounts
+            arrive as strings. */}
         <table className="rounded-md overflow-clip h-max">
           <thead className="bg-[--light-3]">
             <tr>
@@ -259,6 +278,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       )}
                     </td>
                   </tr>
+                  <DiscountRows discounts={order.discounts} />
                   {order.options.map((cat) => (
                     <React.Fragment key={cat.id}>
                       <tr className="text-xs px-2">
@@ -283,8 +303,10 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                             )}
                         </td>
                       </tr>
+                      <DiscountRows discounts={cat.discounts} indent="pl-4" />
                       {cat.childrens.map((opt) => (
-                        <tr key={opt.id} className="text-xs">
+                        <React.Fragment key={opt.id}>
+                        <tr className="text-xs">
                           <td className="pl-2">▸ {opt.name}</td>
                           <td
                             className={`pr-2 text-right ${
@@ -303,6 +325,11 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                               )}
                           </td>
                         </tr>
+                        <DiscountRows
+                          discounts={opt.discounts}
+                          indent="pl-6"
+                        />
+                        </React.Fragment>
                       ))}
                     </React.Fragment>
                   ))}
@@ -323,6 +350,40 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
               ))}
           </tbody>
         </table>
+
+        {/* Ticket-level campaigns with who covered what. Informational —
+            the totals arithmetic below stays row-consistent: the platform's
+            sponsorship share is already baked into the product prices, so
+            these amounts don't subtract from Toplam a second time. */}
+        {Number(order.discounts?.length) > 0 && (
+          <div className="w-full border-t border-[--gr-1] pb-1">
+            <p className="pt-1 text-sm font-medium">İndirimler</p>
+            {order.discounts.map((d, i) => (
+              <div key={i} className="text-sm">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate">{d.name || "İndirim"}</span>
+                  <span className="text-[--red-1]">
+                    -{discountPrice(d.amount)}
+                  </span>
+                </div>
+                {d.sponsorships?.length > 0 && (
+                  <p className="text-xs text-[--gr-1]">
+                    {d.sponsorships
+                      .map(
+                        (s) =>
+                          `${discountPrice(s.amount)} ₺ ${
+                            SPONSOR_LABELS[s.sponsor?.toUpperCase()] ||
+                            s.sponsor
+                          }`,
+                      )
+                      .join(" · ")}{" "}
+                    tarafından karşılandı
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="w-full border-t border-[--gr-1]">
           {/* Toplam mirrors what the product rows above sum to: totalNet,

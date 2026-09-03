@@ -93,7 +93,7 @@ const FilterOrders = ({ licenses }) => {
           </button>
 
           <div
-            className={`absolute right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-[999] min-w-max ${
+            className={`absolute right-0 top-12 max-sm:fixed max-sm:inset-x-4 max-sm:top-24 max-sm:w-auto px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] max-w-[calc(100vw-2rem)] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-[999] ${
               openFilter ? "visible" : "hidden"
             }`}
           >
@@ -113,7 +113,7 @@ const FilterOrders = ({ licenses }) => {
                           };
                         });
                       }}
-                      className={`p-2 border border-[--border-1] text-[--gr-1] rounded-md w-40 text-center ${
+                      className={`p-2 border border-[--border-1] text-[--gr-1] rounded-md w-full text-center ${
                         D.id === filter.dateRange &&
                         "text-white bg-[--primary-1]"
                       }`}

@@ -165,7 +165,7 @@ const StocksPage = () => {
               </button>
 
               <div
-                className={`absolute right-[-60px] sm:right-0 top-12 px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-50 ${
+                className={`absolute right-0 top-12 max-sm:fixed max-sm:inset-x-4 max-sm:top-24 max-sm:w-auto px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] max-w-[calc(100vw-2rem)] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-50 ${
                   openFilter ? "visible" : "hidden"
                 }`}
               >

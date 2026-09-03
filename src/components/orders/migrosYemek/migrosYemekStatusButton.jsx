@@ -85,7 +85,7 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
     order.status == 10;
 
   const btnClass =
-    "relative overflow-clip after:absolute after:top-0 after:left-0 after:bg-[var(--after-bg)] after:w-full after:h-full after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-md after:ease-in-out";
+    "relative overflow-clip after:absolute after:top-0 after:left-0 after:bg-[var(--after-bg)] after:w-full after:h-full after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-full after:ease-in-out";
 
   //ORDER ONLY DB ACTION POPUP
   useEffect(() => {
@@ -111,7 +111,7 @@ const MigrosYemekStatusButton = ({ order, setOrdersData }) => {
     <button
       disabled={isDisabled}
       onClick={handleClick}
-      className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed ${
+      className={`w-24 py-3.5 px-2 rounded-full border disabled:py-2.5 disabled:cursor-not-allowed ${
         isDisabled ? pageNumber == 1 && btnClass : "after:translate-x-0"
       }`}
       style={{

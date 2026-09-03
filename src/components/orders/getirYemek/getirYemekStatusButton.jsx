@@ -84,7 +84,7 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     cancelLoading ||
     !nextId;
 
-  const btnClass = `relative overflow-clip dynamic-after after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-[var(--after-bg)] after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-md after:ease-in-out`;
+  const btnClass = `relative overflow-clip dynamic-after after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-[var(--after-bg)] after:transition-transform after:duration-[7000ms] after:-translate-x-full after:rounded-full after:ease-in-out`;
 
   //ORDER ONLY DB ACTION POPUP
   useEffect(() => {
@@ -110,7 +110,7 @@ function GetirYemekStatusButton({ order, setOrdersData }) {
     <button
       disabled={disabled}
       onClick={handleClick}
-      className={`w-24 py-3.5 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed ${
+      className={`w-24 py-3.5 px-2 rounded-full border disabled:py-2.5 disabled:cursor-not-allowed ${
         disabled ? pageNumber == 1 && btnClass : "after:translate-x-0"
       }`}
       style={{

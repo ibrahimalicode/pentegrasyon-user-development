@@ -53,7 +53,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   }
 
   const btnClass =
-    "py-2 px-1 sm:px-4 rounded-md border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
+    "py-2 px-2 sm:px-4 rounded-full border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
   const disabled =
     verifyLoading || prepareLoading || deliverLoading || cancelLoading;
 
@@ -260,7 +260,7 @@ const GetirYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
           "İptal Et"
         )}
       </button>
-      <div className="w-full max-w-16 bg-[--light-3] flex justify-center items-center rounded-md">
+      <div className="w-full max-w-16 bg-[--light-3] flex justify-center items-center rounded-full">
         {<PrintComponent component={<GetirYemekPrintOrder order={order} />} />}
       </div>
     </div>

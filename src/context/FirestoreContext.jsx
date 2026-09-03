@@ -97,12 +97,24 @@ export const FirestoreProvider = ({ children }) => {
     const subcollectionRef = collection(db, `users/${userId}/${subcollection}`);
 
     return onSnapshot(subcollectionRef, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
       if (isInitialLoad) {
         isInitialLoad = false;
         return;
       }
+
+      // The doc that actually changed, not docs[0]: the collection snapshot
+      // is ordered by document id, so with more than one doc the first
+      // entry can be an old record — which froze the live order feed on
+      // whatever happened to sort first.
+      const changes = snapshot
+        .docChanges()
+        .filter((c) => c.type === "added" || c.type === "modified");
+      const changedDoc = changes.length
+        ? changes[changes.length - 1].doc
+        : null;
+      const data = changedDoc
+        ? [{ id: changedDoc.id, ...changedDoc.data() }]
+        : [];
 
       if (data?.length) {
         const fieldsToFormat = [

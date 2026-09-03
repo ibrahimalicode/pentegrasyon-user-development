@@ -223,7 +223,7 @@ const RestaurantsStatus = ({ licenses, onClosedChange }) => {
   }, [closedRestaurants, openPanel]);
 
   const buttonClass =
-    "text-white bg-[--red-1] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.7 animate-pulse relative after:absolute after:inset-0 after:rounded-lg after:border-2 after:border-red-500 after:animate-[emergencyRipple_1s_ease-out_infinite] before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-red-600 before:animate-[emergencyRipple_1s_ease-out_infinite] before:delay-500 flex items-center justify-center transition-all duration-[.3] ease-in-out";
+    "text-white bg-[--red-1] transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.7 animate-pulse relative after:absolute after:inset-0 after:rounded-full after:border-2 after:border-red-500 after:animate-[emergencyRipple_1s_ease-out_infinite] before:absolute before:inset-0 before:rounded-full before:border-2 before:border-red-600 before:animate-[emergencyRipple_1s_ease-out_infinite] before:delay-500 flex items-center justify-center transition-all duration-[.3] ease-in-out";
 
 
   return (

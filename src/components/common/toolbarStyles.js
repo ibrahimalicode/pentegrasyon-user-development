@@ -6,7 +6,7 @@
 export const TOOLBAR_ROW = "flex flex-wrap items-center gap-2";
 
 export const TOOLBAR_STAT =
-  "flex flex-col justify-center h-11 px-3 rounded-lg border border-[--border-1] bg-[--white-1] text-center whitespace-nowrap";
+  "flex flex-col justify-center h-11 px-4 rounded-full border border-[--border-1] bg-[--white-1] text-center whitespace-nowrap";
 
 export const TOOLBAR_STAT_LABEL =
   "text-[0.65rem] font-medium uppercase tracking-wide text-[--gr-1] leading-none";
@@ -15,15 +15,15 @@ export const TOOLBAR_STAT_VALUE =
   "text-sm font-semibold text-[--black-1] leading-none mt-1";
 
 export const TOOLBAR_BTN =
-  "inline-flex items-center justify-center gap-2 h-11 px-4 rounded-lg border border-[--border-1] bg-[--white-1] text-sm font-medium text-[--black-2] hover:bg-[--light-3] hover:border-[--primary-1] hover:text-[--primary-1] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/30 disabled:opacity-60 disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border border-[--border-1] bg-[--white-1] text-sm font-medium text-[--black-2] hover:bg-[--light-3] hover:border-[--primary-1] hover:text-[--primary-1] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/30 disabled:opacity-60 disabled:cursor-not-allowed";
 
 // Primary call-to-action in a toolbar (e.g. "Lisans Ekle").
 export const TOOLBAR_BTN_PRIMARY =
-  "inline-flex items-center justify-center gap-2 h-11 px-4 rounded-lg bg-[--primary-1] text-sm font-semibold text-white hover:bg-[#4338ca] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/40";
+  "inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-[--primary-1] text-sm font-semibold text-white hover:bg-[#4338ca] transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/40";
 
 // Bordered wrapper for an inline label + borderless select pair.
 export const TOOLBAR_SELECT_GROUP =
-  "flex items-center gap-2 h-11 pl-3 pr-1 rounded-lg border border-[--border-1] bg-[--white-1] whitespace-nowrap";
+  "flex items-center gap-2 h-11 pl-4 pr-1 rounded-full border border-[--border-1] bg-[--white-1] whitespace-nowrap";
 
 // react-select overrides that strip the control chrome inside the group.
 export const TOOLBAR_SELECT_CONTROL = {

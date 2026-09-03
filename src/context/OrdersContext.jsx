@@ -157,12 +157,21 @@ export const OrdersContextProvider = ({ children }) => {
       setUnverifiedOrders(hasUnverifiedOrders[0]);
     }
     if (statusChangedOrder) {
-      setOrdersData((prev) => {
-        const updatedOrder = prev?.filter(
-          (O) => O.id !== statusChangedOrder.id,
-        );
-        return formatByDate([...(updatedOrder || []), statusChangedOrder]);
-      });
+      // Same slim-notification caveat as new orders: swap in the full
+      // ticket so the row keeps its prices and dates after the update.
+      dispatch(getTicketById({ ticketId: statusChangedOrder.id })).then(
+        (res) => {
+          const full =
+            res?.meta?.requestStatus === "fulfilled"
+              ? res.payload?.data
+              : null;
+          setOrdersData((prev) => {
+            const rest =
+              prev?.filter((O) => O.id !== statusChangedOrder.id) || [];
+            return formatByDate([...rest, full || statusChangedOrder]);
+          });
+        },
+      );
       setStatusChangedOrder(null);
     }
   }, [ordersData, statusChangedOrder]);
@@ -243,22 +252,25 @@ export const OrdersContextProvider = ({ children }) => {
       (order) => order.id === newOrder.id,
     );
 
-    setOrdersData(
-      isDuplicate
-        ? existingOrders
-        : formatByDate([newOrder, ...existingOrders]),
-    );
-
     if (!isDuplicate) {
-      setOrdersCount((prev) => {
-        return {
-          ...prev,
-          totalProcessedOrders: {
-            ...prev?.totalProcessedOrders,
-            count: prev?.totalProcessedOrders?.count + 1,
-          },
-        };
+      // The Firestore doc is a slim notification, not the full ticket —
+      // prepending it as-is rendered a half-empty row and left the page
+      // total unchanged. Fetch the real order, fall back to the doc only
+      // if that fails.
+      dispatch(getTicketById({ ticketId: newOrder.id })).then((res) => {
+        const full =
+          res?.meta?.requestStatus === "fulfilled" ? res.payload?.data : null;
+        setOrdersData((prev) => {
+          const current = prev || [];
+          if (current.some((order) => order.id === newOrder.id))
+            return current;
+          return formatByDate([full || newOrder, ...current]);
+        });
       });
+
+      // Count comes from the server instead of a local +1, so it can't
+      // drift from what a reload would show.
+      dispatch(getTicketCountStatistics(filterInitialState));
     }
     setNewOrder(null);
   }, [newOrder]);

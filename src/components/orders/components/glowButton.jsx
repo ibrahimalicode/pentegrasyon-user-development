@@ -1,6 +1,6 @@
 const GlowButton = ({ text, onClick }) => {
   const buttonAnimations = {
-    base: "w-24 py-2 px-2 rounded-md border disabled:py-2.5 disabled:cursor-not-allowed relative overflow-hidden bg-gradient-to-r from-green-500 to-green-600",
+    base: "w-24 py-2 px-2 rounded-full border disabled:py-2.5 disabled:cursor-not-allowed relative overflow-hidden bg-gradient-to-r from-green-500 to-green-600",
     hover: "hover:from-green-600 hover:to-green-700",
     animation: "parlamaAnimation",
     shine: `absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-red-500 opacity-70 kaymaAnimation`,

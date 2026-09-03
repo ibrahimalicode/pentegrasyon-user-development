@@ -31,7 +31,7 @@ const SlideBar = () => {
       className={cn(
         "fixed inset-0 items-center transition-colors z-[9999]",
         slideBarContent
-          ? "flex bg-[--black-1]/40 backdrop-blur-[2px]"
+          ? "flex bg-[--black-1]/40"
           : "hidden",
         !slideBarContent?.content && "justify-end"
       )}

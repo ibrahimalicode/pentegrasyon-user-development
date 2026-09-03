@@ -97,7 +97,7 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
           every width, so the backdrop must not be hidden at lg there. */}
       <div
         className={cn(
-          "fixed inset-0 z-[998] bg-slate-950/40 backdrop-blur-[1px] transition-opacity",
+          "fixed inset-0 z-[998] bg-slate-950/40 transition-opacity",
           !isOrdersPage && "lg:hidden",
           openSidebar
             ? "opacity-100"

@@ -20,7 +20,7 @@ const Popup = () => {
     <>
       <div
         className={`fixed top-0 left-0 right-0 bottom-0 justify-center items-center transition-colors p-[2%] z-[99999] ${
-          loadingComponent ? "flex bg-slate-950/40 backdrop-blur-[2px]" : "hidden"
+          loadingComponent ? "flex bg-slate-950/40" : "hidden"
         }`}
       >
         <div
@@ -34,7 +34,7 @@ const Popup = () => {
 
       <div
         className={`fixed top-0 left-0 right-0 bottom-0 justify-center items-center transition-colors p-[2%] z-[9999] ${
-          popupContent ? "flex bg-slate-950/40 backdrop-blur-[2px]" : "hidden"
+          popupContent ? "flex bg-slate-950/40" : "hidden"
         }`}
       >
         <div

@@ -372,18 +372,19 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             these amounts don't subtract from Toplam a second time. */}
         {Number(order.discounts?.length) > 0 && (
           <div className="w-full border-t border-[--gr-1] pb-1">
-            {/* Title + amount per campaign; the split line appears only when
-                more than one sponsor shares the cost — with a single sponsor
-                the title already says who pays. */}
+            {/* Layout per the user's spec: an "İndirimler" header, then per
+                campaign a sponsor-aware title with the amount at the right,
+                and the "tarafından karşılandı" line beneath, left-aligned. */}
+            <p className="pt-1 text-sm font-medium">İndirimler</p>
             {order.discounts.map((d, i) => (
-              <div key={i} className="pt-1 text-sm">
+              <div key={i} className="pt-0.5 text-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium">{discountTitle(d)}</span>
+                  <span>{discountTitle(d)}</span>
                   <span className="text-[--red-1]">
                     {discountPrice(d.amount)} ₺
                   </span>
                 </div>
-                {d.sponsorships?.length > 1 && (
+                {d.sponsorships?.length > 0 && (
                   <p className="text-xs text-[--gr-1]">
                     {d.sponsorships
                       .map(

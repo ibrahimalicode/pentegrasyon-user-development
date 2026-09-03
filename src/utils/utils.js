@@ -530,3 +530,28 @@ export function checkLeng(inChar) {
     return `${inChar?.slice(0, 25)}...`;
   } else return inChar;
 }
+
+// Turkish-aware display casing for person names: the backend stores them as
+// typed ("İbrahim halil çiçek"), which looks sloppy in the UI chrome.
+export function titleCaseTr(name = "") {
+  return name
+    .trim()
+    .split(/\s+/)
+    .map(
+      (word) =>
+        word.charAt(0).toLocaleUpperCase("tr") +
+        word.slice(1).toLocaleLowerCase("tr"),
+    )
+    .join(" ");
+}
+
+// First letters of the first two words, uppercased for avatar chips.
+export function initialsOf(name = "") {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0] || "")
+    .join("")
+    .toLocaleUpperCase("tr");
+}

@@ -8,16 +8,8 @@ import ArrowIR from "../../assets/icon/arrowR";
 
 //UTILS
 import { cn } from "../../lib/utils";
+import { initialsOf, titleCaseTr } from "../../utils/utils";
 import { useProtectPages } from "../../context/ProtectPagesContext";
-
-const initialsOf = (name = "") =>
-  name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("")
-    .toLocaleUpperCase("tr");
 
 function UserProfile({ setOpenSidebar }) {
   const param = useParams();
@@ -36,7 +28,8 @@ function UserProfile({ setOpenSidebar }) {
   }, [user]);
 
   const isActive = param["*"] === "profile";
-  const fullName = userData?.fullName || "Kullanıcı";
+  // Display casing only — the stored name stays as typed.
+  const fullName = titleCaseTr(userData?.fullName || "") || "Kullanıcı";
 
   return (
     <div className="p-3 border-t border-[--border-1] shrink-0">

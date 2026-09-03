@@ -14,6 +14,7 @@ import { BellI, SettingsI, MenuI, SunI, MoonI, UserI } from "../../assets/icon";
 //UTILS
 import sidebarItems from "../../enums/sidebarItems";
 import { cn } from "../../lib/utils";
+import { initialsOf, titleCaseTr } from "../../utils/utils";
 
 //REDUX
 import { getAuth, clearAuth } from "../../redux/api";
@@ -107,22 +108,29 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
           </div>
 
           <div className="flex items-center gap-1">
-            {/* Identity, top-right. Hidden below md — the sidebar drawer
-                already carries it there and the header runs out of room. */}
+            {/* Identity badge, top-right: initials chip + name over e-mail
+                in a bordered pill. Name is display-cased (titleCaseTr) —
+                the backend stores it as typed, which read awkwardly here.
+                Hidden below md, where the sidebar drawer carries identity. */}
             {user?.fullName && (
               <Link
                 to="/profile"
-                className="max-md:hidden mr-2 flex flex-col items-end leading-tight min-w-0 max-w-56 rounded-lg px-2 py-1 hover:bg-[--light-3] transition-colors"
                 title="Profili aç"
+                className="max-md:hidden mr-1.5 flex items-center gap-2.5 rounded-full border border-solid border-[--border-1] bg-[--white-1] py-1 pl-1 pr-3.5 hover:border-[--primary-1]/50 hover:bg-[--light-3] transition-colors"
               >
-                <span className="w-full text-right text-sm font-medium text-[--black-1] truncate">
-                  {user.fullName}
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[--light-1] text-[0.65rem] font-semibold text-[--primary-1]">
+                  {initialsOf(user.fullName) || "K"}
                 </span>
-                {user.email && (
-                  <span className="w-full text-right text-xs text-[--gr-1] truncate">
-                    {user.email}
+                <span className="flex min-w-0 max-w-48 flex-col leading-tight">
+                  <span className="truncate text-xs font-semibold text-[--black-1]">
+                    {titleCaseTr(user.fullName)}
                   </span>
-                )}
+                  {user.email && (
+                    <span className="truncate text-[0.7rem] text-[--gr-1]">
+                      {user.email}
+                    </span>
+                  )}
+                </span>
               </Link>
             )}
 

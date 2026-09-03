@@ -1,5 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+import { integrationConflictMessage } from "../utils/integrationConflict";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 const KEY = import.meta.env.VITE_LOCAL_KEY;
@@ -72,7 +73,12 @@ axiosPrivate.interceptors.response.use(
       errorMessage = "Hesabınız aktif değil";
       toast.error(errorMessage, { id: "403" });
     } else if (error.response) {
-      const resErr = error?.response?.data?.message_TR || null;
+      // Integration conflicts carry a detail object; their raw message_TR
+      // embeds the conflicting owner's e-mail, so it must not be shown
+      // verbatim. integrationConflictMessage returns a privacy-safe text
+      // (and null for every other error, falling through unchanged).
+      const conflictMessage = integrationConflictMessage(error.response.data);
+      const resErr = conflictMessage || error?.response?.data?.message_TR || null;
       if (resErr) {
         errorMessage = resErr;
       } else {

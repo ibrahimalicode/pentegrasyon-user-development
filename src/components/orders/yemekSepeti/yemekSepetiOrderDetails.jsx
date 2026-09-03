@@ -357,13 +357,15 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             these amounts don't subtract from Toplam a second time. */}
         {Number(order.discounts?.length) > 0 && (
           <div className="w-full border-t border-[--gr-1] pb-1">
-            <p className="pt-1 text-sm font-medium">İndirimler</p>
+            {/* Fixed "Restoran İndirimi" label instead of YemekSepeti's raw
+                campaign name ("Discount/Voucher") — per the user's spec the
+                row is title + amount, with the sponsor line underneath. */}
             {order.discounts.map((d, i) => (
-              <div key={i} className="text-sm">
+              <div key={i} className="pt-1 text-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="truncate">{d.name || "İndirim"}</span>
+                  <span className="font-medium">Restoran İndirimi</span>
                   <span className="text-[--red-1]">
-                    -{discountPrice(d.amount)}
+                    {discountPrice(d.amount)} ₺
                   </span>
                 </div>
                 {d.sponsorships?.length > 0 && (

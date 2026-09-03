@@ -24,6 +24,21 @@ const discountPrice = (amount) =>
 
 const SPONSOR_LABELS = { PLATFORM: "YemekSepeti", VENDOR: "Restoran" };
 
+// The row's title names whoever pays for the campaign — calling a fully
+// platform-sponsored discount "Restoran İndirimi" claimed a discount the
+// restaurant never gave.
+const discountTitle = (d) => {
+  const sponsors = new Set(
+    (d.sponsorships || []).map((s) => s.sponsor?.toUpperCase()),
+  );
+  if (sponsors.size === 1) {
+    if (sponsors.has("PLATFORM")) return "YemekSepeti İndirimi";
+    if (sponsors.has("VENDOR")) return "Restoran İndirimi";
+  }
+  if (sponsors.size > 1) return "Kampanya İndirimi";
+  return "İndirim";
+};
+
 // Inline "-X ₺ name" row used at product/option/child level.
 const DiscountRows = ({ discounts, indent = "pl-2" }) =>
   (discounts || []).map((d, i) => (
@@ -357,18 +372,18 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             these amounts don't subtract from Toplam a second time. */}
         {Number(order.discounts?.length) > 0 && (
           <div className="w-full border-t border-[--gr-1] pb-1">
-            {/* Fixed "Restoran İndirimi" label instead of YemekSepeti's raw
-                campaign name ("Discount/Voucher") — per the user's spec the
-                row is title + amount, with the sponsor line underneath. */}
+            {/* Title + amount per campaign; the split line appears only when
+                more than one sponsor shares the cost — with a single sponsor
+                the title already says who pays. */}
             {order.discounts.map((d, i) => (
               <div key={i} className="pt-1 text-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium">Restoran İndirimi</span>
+                  <span className="font-medium">{discountTitle(d)}</span>
                   <span className="text-[--red-1]">
                     {discountPrice(d.amount)} ₺
                   </span>
                 </div>
-                {d.sponsorships?.length > 0 && (
+                {d.sponsorships?.length > 1 && (
                   <p className="text-xs text-[--gr-1]">
                     {d.sponsorships
                       .map(

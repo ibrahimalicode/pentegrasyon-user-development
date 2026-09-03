@@ -30,6 +30,9 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
   const { messagesData } = useMessagesContext();
 
   const { loading, success, error } = useSelector((state) => state.auth.logout);
+  // Fetched globally by FirestoreContext; the slice's resetState keeps the
+  // data, so this is a plain read — no dispatch from the header.
+  const { user } = useSelector((state) => state.user.getUser);
 
   const [open, setOpen] = useState(false);
 
@@ -104,6 +107,25 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
           </div>
 
           <div className="flex items-center gap-1">
+            {/* Identity, top-right. Hidden below md — the sidebar drawer
+                already carries it there and the header runs out of room. */}
+            {user?.fullName && (
+              <Link
+                to="/profile"
+                className="max-md:hidden mr-2 flex flex-col items-end leading-tight min-w-0 max-w-56 rounded-lg px-2 py-1 hover:bg-[--light-3] transition-colors"
+                title="Profili aç"
+              >
+                <span className="w-full text-right text-sm font-medium text-[--black-1] truncate">
+                  {user.fullName}
+                </span>
+                {user.email && (
+                  <span className="w-full text-right text-xs text-[--gr-1] truncate">
+                    {user.email}
+                  </span>
+                )}
+              </Link>
+            )}
+
             <button
               type="button"
               aria-label="Temayı değiştir"

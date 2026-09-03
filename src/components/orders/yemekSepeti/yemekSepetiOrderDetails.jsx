@@ -24,20 +24,6 @@ const discountPrice = (amount) =>
 
 const SPONSOR_LABELS = { PLATFORM: "YemekSepeti", VENDOR: "Restoran" };
 
-// The row's title names whoever pays for the campaign — calling a fully
-// platform-sponsored discount "Restoran İndirimi" claimed a discount the
-// restaurant never gave.
-const discountTitle = (d) => {
-  const sponsors = new Set(
-    (d.sponsorships || []).map((s) => s.sponsor?.toUpperCase()),
-  );
-  if (sponsors.size === 1) {
-    if (sponsors.has("PLATFORM")) return "YemekSepeti İndirimi";
-    if (sponsors.has("VENDOR")) return "Restoran İndirimi";
-  }
-  if (sponsors.size > 1) return "Kampanya İndirimi";
-  return "İndirim";
-};
 
 // Inline "-X ₺ name" row used at product/option/child level.
 const DiscountRows = ({ discounts, indent = "pl-2" }) =>
@@ -378,12 +364,14 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
             <p className="pt-1 text-sm font-medium">İndirimler</p>
             {order.discounts.map((d, i) => (
               <div key={i} className="pt-0.5 text-sm">
-                <div className="flex items-center justify-between gap-2">
-                  <span>{discountTitle(d)}</span>
-                  <span className="text-[--red-1]">
-                    {discountPrice(d.amount)} ₺
-                  </span>
-                </div>
+                {/* No title/amount row — the sponsor line carries both. A
+                    discount without sponsorship data still needs a line, or
+                    the campaign would vanish entirely. */}
+                {!d.sponsorships?.length && (
+                  <p className="text-xs text-[--gr-1]">
+                    {discountPrice(d.amount)} ₺ indirim uygulandı
+                  </p>
+                )}
                 {d.sponsorships?.length > 0 && (
                   <p className="text-xs text-[--gr-1]">
                     {d.sponsorships

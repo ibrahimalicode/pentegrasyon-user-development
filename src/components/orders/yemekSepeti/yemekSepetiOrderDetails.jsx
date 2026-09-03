@@ -68,7 +68,7 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
     <main className="w-full h-[100dvh] bg-[--white-2] text-[--black-2] overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
       <div className="flex items-center -mx-4 text-base bg-[--yemeksepeti] text-white">
         <div className="w-full flex justify-center items-center gap-2">
-          <p>Sipariș Detayı</p>
+          <p>YemekSepeti</p>
         </div>
         <span
           onClick={() => setSlideBarContent(null)}

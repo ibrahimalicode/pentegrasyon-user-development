@@ -70,39 +70,49 @@ const InvoiceData = ({
     }
   }, [addInvError, updateInvError, addInvSucc, updateInvSucc]);
 
+  // Only non-empty fields render — the old summary printed stray commas
+  // for every blank value.
+  const summaryLines = userInvData
+    ? [
+        [userData?.fullName, userInvData.title].filter(Boolean).join(" — "),
+        userInvData.taxNumber && `VKN/TCKN: ${userInvData.taxNumber}`,
+        userInvData.taxOffice && `Vergi Dairesi: ${userInvData.taxOffice}`,
+        userInvData.tradeRegistryNumber &&
+          `Ticaret Sicil No: ${userInvData.tradeRegistryNumber}`,
+        userInvData.mersisNumber && `Mersis No: ${userInvData.mersisNumber}`,
+        [
+          userInvData.address,
+          userInvData.neighbourhood,
+          userInvData.district,
+          userInvData.city,
+        ]
+          .filter(Boolean)
+          .join(", "),
+      ].filter(Boolean)
+    : [];
+
   return (
     <div className="text-xs pt-2 w-full flex flex-col items-center pb-8">
-      <div className="w-full flex flex-col items-center">
-        <span className="text-[--red-1]">{title}</span>
-        {userInvData && !openFatura && (
-          <div className="h-full flex justify-end">
+      {/* Informational, not an error — the old red text read as a warning. */}
+      <span className="px-4 text-center text-[--gr-1]">{title}</span>
+
+      {userInvData && !openFatura ? (
+        <div className="mt-3 w-full max-w-sm rounded-lg border border-solid border-[--border-1] bg-[--white-1] px-3 py-2.5 text-left">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 text-[--black-2]">
+              {summaryLines.map((line, i) => (
+                <p key={i} className={i === 0 ? "font-medium text-[--black-1]" : "pt-0.5"}>
+                  {line}
+                </p>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => setOpenFatura(true)}
-              className="p-2 mt-3 bg-[--primary-2] text-white rounded-md hover:text-[--primary-2] hover:bg-[--white-1] transition-colors duration-300 ease-in-out border border-[--primary-2]"
+              className="shrink-0 rounded-full border border-solid border-[--border-1] px-2.5 py-1 text-xs text-[--black-2] transition-colors hover:border-[--primary-1] hover:text-[--primary-1]"
             >
               Düzenle
             </button>
-          </div>
-        )}
-      </div>
-
-      {userInvData && !openFatura ? (
-        <div className="w-[325px] flex justify-start mt-4">
-          <div>
-            {userData && userData.fullName}, {userInvData && userInvData.title}
-            <p className="pt-1">{userInvData.taxNumber},</p>
-            <p>{userInvData.taxOffice},</p>
-            <p>
-              {userInvData.tradeRegistryNumber &&
-                userInvData.tradeRegistryNumber}
-              ,
-            </p>
-            <p>{userInvData.mersisNumber && userInvData.mersisNumber}</p>
-            <p>
-              {userInvData.address}/{userInvData.city}/{userInvData.district}/
-              {userInvData.neighbourhood}
-            </p>
           </div>
         </div>
       ) : (

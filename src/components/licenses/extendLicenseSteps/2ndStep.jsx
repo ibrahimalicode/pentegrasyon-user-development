@@ -84,7 +84,7 @@ const SecondStep = ({
             onSubmit={(submitFn) => {
               invoiceHandleSubmit.current = submitFn;
             }}
-            title="Bu ödemenin faturası aşağdaki adrese kesilecektir."
+            title="Bu ödemenin faturası aşağıdaki adrese kesilecektir."
           />
         )}
       </div>

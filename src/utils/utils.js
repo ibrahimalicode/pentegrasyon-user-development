@@ -247,12 +247,15 @@ export const formatLisansPackages = (data) => {
 
     const bgColor = bgColors.length > year ? bgColors[year - 1] : bgColors[0];
 
+    // flex-wrap + no fixed widths on the badge/name: the old w-36/w-20/w-12
+    // columns added up to ~360px and overflowed the ~300px select control on
+    // phones, printing the row off the edge.
     return `
-      <div class="flex justify-between items-center">
-        <p class='w-36'>${label}</p>
-        <p class='w-20 text-[--link-1] text-center' > ${year} Yıllık </p>
-        <p class='text-xs text-[--white-1] border rounded-full px-1.5 mx-0.5 py-1 whitespace-nowrap ${bgColor}' > ${description} </p>
-        <p class='w-12' >${price}</p>
+      <div class="flex flex-wrap justify-between items-center gap-x-2 gap-y-1">
+        <p class='min-w-0 flex-1 truncate'>${label}</p>
+        <p class='text-[--link-1] whitespace-nowrap' > ${year} Yıllık </p>
+        <p class='text-xs text-[--white-1] border rounded-full px-1.5 py-1 whitespace-nowrap ${bgColor}' > ${description} </p>
+        <p class='w-12 text-right' >${price}</p>
       </div>`;
   }
 

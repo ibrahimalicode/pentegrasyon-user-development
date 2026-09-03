@@ -6,7 +6,7 @@ const NoOrdersPlaceholder = () => {
   return (
     <main className="flex h-full w-full flex-col items-center justify-center px-6 py-16 text-center">
       <div className="text-[--status-primary-1]">
-        <NoOrdersI className="size-48" fill="currentColor" />
+        <NoOrdersI className="size-72" fill="currentColor" />
       </div>
       <h3 className="mt-2 text-base font-semibold text-[--black-1]">
         Henüz sipariş alınmadı

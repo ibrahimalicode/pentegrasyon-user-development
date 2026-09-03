@@ -25,86 +25,73 @@ export const StatusCard = ({ brandVar, title, logo, notice, children }) => (
   </div>
 );
 
-// Licence health at a glance. The ring shows how much of a one-year licence
-// is left, so it depletes steadily toward expiry — a 64-day licence reads as
+// Licence health at a glance. The bar shows how much of a one-year licence
+// is left, so it drains steadily toward expiry — a 64-day licence reads as
 // nearly spent rather than nearly full — while the colour carries the
 // urgency tier independently.
-const RING_WINDOW_DAYS = 365;
+const LICENSE_WINDOW_DAYS = 365;
 
 export const licenseTone = (days) =>
   days < 30 ? "--red-1" : days < 60 ? "--yellow-1" : "--green-1";
 
-export const LicenseRing = ({ days }) => {
-  const radius = 7;
-  const circumference = 2 * Math.PI * radius;
-  const filled = Math.max(0, Math.min(days / RING_WINDOW_DAYS, 1));
+// End-to-end progress bar under the row.
+export const LicenseBar = ({ days }) => {
+  const filled = Math.max(0, Math.min(days / LICENSE_WINDOW_DAYS, 1));
 
   return (
-    <svg
-      viewBox="0 0 18 18"
+    <div
       aria-hidden="true"
-      className="size-4 shrink-0 -rotate-90"
+      className="mt-2 h-1 w-full overflow-hidden rounded-full bg-[--light-4]"
     >
-      <circle
-        cx="9"
-        cy="9"
-        r={radius}
-        fill="none"
-        strokeWidth="3"
-        className="stroke-[--light-4]"
-      />
-      <circle
-        cx="9"
-        cy="9"
-        r={radius}
-        fill="none"
-        strokeWidth="3"
-        strokeLinecap="round"
+      <div
+        className="h-full rounded-full"
         style={{
-          stroke: `var(${licenseTone(days)})`,
-          strokeDasharray: circumference,
-          strokeDashoffset: circumference * (1 - filled),
+          width: `${filled * 100}%`,
+          backgroundColor: `var(${licenseTone(days)})`,
         }}
       />
-    </svg>
+    </div>
   );
 };
 
-// remainingDays === undefined hides the licence line entirely.
+// remainingDays === undefined hides the licence line and bar entirely.
 export const StatusRow = ({ name, remainingDays, controls, action }) => {
   const hasLicense = Number.isFinite(remainingDays);
   const expired = hasLicense && remainingDays <= 0;
 
   return (
-    // Stacks below sm so the name gets the full width on a phone instead of
-    // being squeezed into a column beside the controls.
-    <div className="flex flex-col gap-2 px-3 py-2.5 sm:flex-row sm:items-center sm:gap-3">
-      {/* min-w-0 + truncate is what stops a long restaurant name from running
-          into the controls; the full name stays available on hover. */}
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm text-[--black-1]" title={name}>
-          {name}
-        </p>
-
-        {hasLicense && (
-          <p
-            className={cn(
-              "mt-0.5 flex items-center gap-1.5 text-xs",
-              remainingDays < 30 ? "text-[--red-1]" : "text-[--gr-1]"
-            )}
-          >
-            <LicenseRing days={remainingDays} />
-            {expired
-              ? "Lisans süresi doldu"
-              : `Lisansın bitimine ${remainingDays} gün kaldı`}
+    <div className="px-3 py-2.5">
+      {/* Stacks below sm so the name gets the full width on a phone instead
+          of being squeezed into a column beside the controls. */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+        {/* min-w-0 + truncate is what stops a long restaurant name from
+            running into the controls; the full name stays on hover. */}
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm text-[--black-1]" title={name}>
+            {name}
           </p>
-        )}
+
+          {hasLicense && (
+            <p
+              className={cn(
+                "mt-0.5 text-xs",
+                remainingDays < 30 ? "text-[--red-1]" : "text-[--gr-1]"
+              )}
+            >
+              {expired
+                ? "Lisans süresi doldu"
+                : `Lisansın ${remainingDays} gün kaldı`}
+            </p>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between gap-4 sm:justify-end">
+          <div className="flex items-center gap-4">{controls}</div>
+          <div className="shrink-0">{action}</div>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4 sm:justify-end">
-        <div className="flex items-center gap-4">{controls}</div>
-        <div className="shrink-0">{action}</div>
-      </div>
+      {hasLicense && <LicenseBar days={remainingDays} />}
     </div>
   );
 };

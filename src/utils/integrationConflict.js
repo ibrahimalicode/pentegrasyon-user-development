@@ -42,7 +42,15 @@ export function integrationConflictMessage(envelope) {
   const label = FIELD_LABELS[detail.conflictField] || detail.conflictField;
   const own = ownUserId();
 
-  if (own && detail.userId && String(detail.userId) === String(own)) {
+  // Since backend PR #206 the response is scope-masked: identity fields are
+  // null when the record belongs to another customer, and isScopeVisible
+  // says explicitly whether it is the caller's own. Prefer that flag; the
+  // auth-id comparison stays as a fallback for older responses.
+  const isOwn =
+    detail.isScopeVisible === true ||
+    (own && detail.userId && String(detail.userId) === String(own));
+
+  if (isOwn) {
     return `Bu ${label} zaten ${
       detail.restaurantName ? `"${detail.restaurantName}" restoranınızda` : "başka bir restoranınızda"
     } kullanılıyor. Aynı bilgiyi iki lisansta kullanamazsınız.`;

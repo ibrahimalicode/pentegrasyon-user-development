@@ -5,7 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
-import { CancelI } from "../../../../assets/icon";
+import PopupShell from "../../../common/popupShell";
+import {
+  TOOLBAR_BTN,
+  TOOLBAR_BTN_PRIMARY,
+} from "../../../common/toolbarStyles";
 import { usePopup } from "../../../../context/PopupContext";
 import licenseTypeIds from "../../../../enums/licenseTypeIds";
 
@@ -144,44 +148,35 @@ const MarketplaceSettingsForm = ({ data, onSuccess, config }) => {
       : "Ekle";
 
   return (
-    <div className="flex flex-col items-center w-full text-base">
-      <div
-        className={`flex flex-col w-full pt-12 pb-8 bg-[--white-1] rounded-lg border-2 border-solid border-[--border-1] text-[--black-2] relative${
-          config.wide ? "" : " max-w-xl"
+    <div className={`mx-auto w-full${config.wide ? "" : " max-w-xl"}`}>
+      <PopupShell
+        title={`${data.restaurantName} · ${
+          licenseTypeIds[data.licenseTypeId].label
         }`}
+        onClose={closeForm}
+        footer={
+          <>
+            <button type="button" onClick={closeForm} className={TOOLBAR_BTN}>
+              İptal
+            </button>
+            <button
+              type="submit"
+              form="marketplace-settings-form"
+              disabled={submitDisabled}
+              className={TOOLBAR_BTN_PRIMARY}
+            >
+              {submitLabel}
+            </button>
+          </>
+        }
       >
-        <div className="absolute top-4 right-3 z-[50]">
-          <div
-            className="text-[--primary-2] p-2 border border-solid border-[--primary-2] rounded-full cursor-pointer hover:bg-[--primary-2] hover:text-[--white-1] transition-colors"
-            onClick={closeForm}
-          >
-            <CancelI />
-          </div>
-        </div>
-
-        <div className="text-center text-xl font-bold">
-          <p>
-            {data.restaurantName} - {licenseTypeIds[data.licenseTypeId].label}
-          </p>
-          <p className="text-lg">Entegrasyon Parametreleri</p>
-        </div>
-
-        <div className="flex flex-col px-4 sm:px-14 mt-9 w-full text-left">
-          <form onSubmit={handleSubmit}>
-            {config.renderFields({ licenseData, setLicenseData, getLoading })}
-
-            <div className="w-full flex justify-end mt-10">
-              <button
-                disabled={submitDisabled}
-                className="text-sm w-20 py-2 px-3 bg-[--primary-1] text-white rounded-md"
-                type="submit"
-              >
-                {submitLabel}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+        <p className="pt-3 text-xs font-medium uppercase tracking-wide text-[--gr-1]">
+          Entegrasyon Parametreleri
+        </p>
+        <form id="marketplace-settings-form" onSubmit={handleSubmit}>
+          {config.renderFields({ licenseData, setLicenseData, getLoading })}
+        </form>
+      </PopupShell>
     </div>
   );
 };

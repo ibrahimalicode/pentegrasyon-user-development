@@ -1,3 +1,5 @@
+import { cn } from "../../lib/utils";
+
 const RestourantI = ({ className, strokeWidth = 1.5 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -5,7 +7,7 @@ const RestourantI = ({ className, strokeWidth = 1.5 }) => (
     viewBox="0 0 24 24"
     strokeWidth={strokeWidth}
     stroke="currentColor"
-    className={`size-6 ${className}`}
+    className={cn("size-6", className)}
   >
     <path
       strokeLinecap="round"

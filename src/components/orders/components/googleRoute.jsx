@@ -6,6 +6,7 @@ import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
 //COMP
 import { cn } from "../../../lib/utils";
+import { RestourantI, UserI } from "../../../assets/icon";
 
 //COMP
 import PopupShell from "../../common/popupShell";
@@ -128,6 +129,20 @@ const MAP_TYPES = [
   { id: "hybrid", label: "Uydu" },
 ];
 
+// Material glyphs (24x24) drawn inside the pins.
+const GLYPH_RESTAURANT =
+  "M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z";
+const GLYPH_PERSON =
+  "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z";
+
+// Brand-colored teardrop map pin with a white badge and glyph, as an
+// inline SVG data URI — replaces the stock freepik/flaticon PNGs.
+const pinIcon = (color, glyphPath) =>
+  "data:image/svg+xml;charset=UTF-8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="60" viewBox="0 0 48 60"><path d="M24 1C12.4 1 3 10.4 3 22c0 15.6 21 37 21 37s21-21.4 21-37C45 10.4 35.6 1 24 1z" fill="${color}" stroke="#ffffff" stroke-width="2"/><circle cx="24" cy="22" r="13" fill="#ffffff"/><g transform="translate(15 13) scale(0.75)" fill="${color}"><path d="${glyphPath}"/></g></svg>`,
+  );
+
 const GoogleRoute = ({
   data,
   name1,
@@ -177,6 +192,7 @@ const GoogleRoute = ({
       <PopupShell title="Teslimat Rotası" onClose={() => setPopupContent(null)}>
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
           <p className="flex min-w-0 items-center text-sm text-[--black-2]">
+            <RestourantI className="mr-1.5 size-5 shrink-0 text-[--gr-1]" />
             <span className="font-semibold text-[--black-1]">{name1}</span>
             <span className="mx-3 h-8 w-px shrink-0 bg-[--border-1]" />
             {/* Courier scene riding name1 → name2, scooter tinted with the
@@ -186,6 +202,7 @@ const GoogleRoute = ({
               <Lottie animationData={themedAnimation} loop autoplay />
             </span>
             <span className="mx-3 h-8 w-px shrink-0 bg-[--border-1]" />
+            <UserI className="mr-1.5 size-5 shrink-0 text-[--gr-1]" />
             <span className="font-semibold text-[--black-1]">{name2}</span>
           </p>
           <div className="flex gap-2">
@@ -254,9 +271,11 @@ const GoogleRoute = ({
                 position={response.routes[0].legs[0].start_location}
                 zIndex={30}
                 icon={{
-                  url: "https://cdn-icons-png.freepik.com/512/12522/12522999.png", //Origin
+                  url: pinIcon(brandColor, GLYPH_RESTAURANT), //Origin
                   // eslint-disable-next-line no-undef
-                  scaledSize: new google.maps.Size(50, 50),
+                  scaledSize: new google.maps.Size(44, 55),
+                  // eslint-disable-next-line no-undef
+                  anchor: new google.maps.Point(22, 55),
                 }}
               />
 
@@ -266,9 +285,11 @@ const GoogleRoute = ({
                 position={response.routes[0].legs[0].end_location}
                 zIndex={30}
                 icon={{
-                  url: "https://cdn-icons-png.flaticon.com/512/1189/1189458.png", //Destination
+                  url: pinIcon(brandColor, GLYPH_PERSON), //Destination
                   // eslint-disable-next-line no-undef
-                  scaledSize: new google.maps.Size(50, 50),
+                  scaledSize: new google.maps.Size(44, 55),
+                  // eslint-disable-next-line no-undef
+                  anchor: new google.maps.Point(22, 55),
                 }}
               />
 

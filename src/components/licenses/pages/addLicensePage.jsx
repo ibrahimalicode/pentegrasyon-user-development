@@ -105,13 +105,12 @@ const AddLicensePage = () => {
           <StepBar step={step} steps={steps} className="max-w-2xl" />
 
           <div className="w-full self-center overflow-x-clip">
+            {/* overflow-x-clip: parked wizard steps extend the scrollable
+                area otherwise — phones could pan sideways across them. */}
             <div
-              className={`w-full h-[32rem] border-0 border-dashed border-[--light-3] rounded-sm relative ${
+              className={`w-full h-[32rem] border-0 border-dashed border-[--light-3] rounded-sm relative overflow-x-clip ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
-              // style={{
-              //   clipPath: "inset(-200px 0px)",
-              // }}
             >
               <div className="w-full h-full">
                 <StepFrame

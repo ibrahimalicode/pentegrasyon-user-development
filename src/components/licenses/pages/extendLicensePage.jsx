@@ -99,13 +99,16 @@ const ExtendLicensePage = () => {
           <StepBar step={step} steps={steps} className="px-10" />
 
           <div className="w-full self-center">
+            {/* overflow-x-clip, not clip-path: the parked steps sit at
+                ±40rem translateX, and clip-path only hides their PAINT —
+                they still extended the page's scrollable area, so phones
+                could pan sideways across the wizard. clip removes both,
+                while overflow-y stays visible for the buttons hanging
+                below the frame. */}
             <div
-              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative ${
+              className={`w-full h-[32rem] border-2 border-dashed border-[--light-3] rounded-sm relative overflow-x-clip ${
                 selectedMethod === "onlinePayment" && step === 2 && "h-[31rem]"
               }`}
-              style={{
-                clipPath: "inset(-200px 0px)",
-              }}
             >
               <div className="w-full h-full">
                 <StepFrame

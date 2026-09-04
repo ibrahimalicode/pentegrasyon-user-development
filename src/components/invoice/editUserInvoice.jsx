@@ -12,7 +12,7 @@ const EditUserInvoiceById = ({
 }) => {
   return (
     <>
-      <div className="flex gap-4 sm:w-1/2">
+      <div className="flex max-sm:flex-col max-sm:gap-0 gap-4 sm:w-1/2">
         <CustomInput
           required={true}
           label="İsim/Ünvan"
@@ -30,7 +30,7 @@ const EditUserInvoiceById = ({
           }}
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex max-sm:flex-col max-sm:gap-0 gap-4">
         <CustomInput
           required={true}
           label="VKN veya TCKN"
@@ -65,7 +65,7 @@ const EditUserInvoiceById = ({
           }}
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex max-sm:flex-col max-sm:gap-0 gap-4">
         <CustomInput
           type="text"
           label="Tic.Sic.No"
@@ -99,7 +99,7 @@ const EditUserInvoiceById = ({
           }}
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex max-sm:flex-col max-sm:gap-0 gap-4">
         <CustomSelect
           required={true}
           label="Şehir"
@@ -143,7 +143,7 @@ const EditUserInvoiceById = ({
           }}
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex max-sm:flex-col max-sm:gap-0 gap-4">
         <CustomSelect
           required={true}
           label="Mahalle"

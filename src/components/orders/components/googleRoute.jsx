@@ -1,8 +1,11 @@
 //MODELS
 import Lottie from "lottie-react";
 import { useMemo, useState } from "react";
-import { DirectionsRenderer, Marker } from "@react-google-maps/api";
+import { DirectionsRenderer, Marker, Polyline } from "@react-google-maps/api";
 import { GoogleMap, DirectionsService } from "@react-google-maps/api";
+
+//COMP
+import { cn } from "../../../lib/utils";
 
 //COMP
 import PopupShell from "../../common/popupShell";
@@ -64,6 +67,67 @@ function themedCourierAnimation(hex) {
   return clone;
 }
 
+// Minimal grey map theme: geometry in neutral greys, POI/transit labels and
+// icons off entirely (they crowded the route), road names kept but thin and
+// light, water/parks in soft pastels so the route line owns the map.
+const MAP_STYLES = [
+  { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#9aa0a6" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }] },
+  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  {
+    featureType: "poi",
+    elementType: "labels",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [{ color: "#ededed" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#dcebdd" }],
+  },
+  { featureType: "transit", stylers: [{ visibility: "off" }] },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#ffffff" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#e8e8e8" }],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#adb3ba" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [{ color: "#ececec" }],
+  },
+  {
+    featureType: "administrative",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#9aa0a6" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#cfe3ef" }],
+  },
+];
+
+const MAP_TYPES = [
+  { id: "roadmap", label: "Harita" },
+  { id: "hybrid", label: "Uydu" },
+];
+
 const GoogleRoute = ({
   data,
   name1,
@@ -76,6 +140,9 @@ const GoogleRoute = ({
   const { lat1, lng1, lat2, lng2 } = data;
   const [response, setResponse] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
+  const [mapType, setMapType] = useState("roadmap");
+
+  const brandColor = MARKETPLACE_COLORS[order?.marketplaceId] ?? "#4f46e5";
 
   const themedAnimation = useMemo(
     () =>
@@ -111,30 +178,58 @@ const GoogleRoute = ({
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
           <p className="flex min-w-0 items-center text-sm text-[--black-2]">
             <span className="font-semibold text-[--black-1]">{name1}</span>
+            <span className="mx-3 h-8 w-px shrink-0 bg-[--border-1]" />
             {/* Courier scene riding name1 → name2, scooter tinted with the
                 order's marketplace color. -my keeps the tall scene from
                 inflating the header row. */}
-            <span
-              className="-my-4 mx-2 inline-block w-36 shrink-0"
-              aria-hidden="true"
-            >
+            <span className="-my-4 inline-block w-36 shrink-0" aria-hidden="true">
               <Lottie animationData={themedAnimation} loop autoplay />
             </span>
+            <span className="mx-3 h-8 w-px shrink-0 bg-[--border-1]" />
             <span className="font-semibold text-[--black-1]">{name2}</span>
           </p>
           <div className="flex gap-2">
-            <div className={TOOLBAR_STAT}>
-              <p className={TOOLBAR_STAT_LABEL}>Mesafe</p>
-              <p className={TOOLBAR_STAT_VALUE}>{routeInfo?.distance || "—"}</p>
+            <div className={cn(TOOLBAR_STAT, "flex-row items-center gap-2 shadow-sm")}>
+              <span aria-hidden="true">📍</span>
+              <span className="text-left">
+                <p className={TOOLBAR_STAT_LABEL}>Mesafe</p>
+                <p className={TOOLBAR_STAT_VALUE}>
+                  {routeInfo?.distance || "—"}
+                </p>
+              </span>
             </div>
-            <div className={TOOLBAR_STAT}>
-              <p className={TOOLBAR_STAT_LABEL}>Süre</p>
-              <p className={TOOLBAR_STAT_VALUE}>{routeInfo?.duration || "—"}</p>
+            <div className={cn(TOOLBAR_STAT, "flex-row items-center gap-2 shadow-sm")}>
+              <span aria-hidden="true">⏱️</span>
+              <span className="text-left">
+                <p className={TOOLBAR_STAT_LABEL}>Süre</p>
+                <p className={TOOLBAR_STAT_VALUE}>
+                  {routeInfo?.duration || "—"}
+                </p>
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-solid border-[--border-1]">
+        <div className="relative overflow-hidden rounded-xl border border-solid border-[--border-1]">
+          {/* Custom segmented Harita/Uydu control; the native mapTypeControl
+              is disabled below. */}
+          <div className="absolute left-3 top-3 z-10 flex rounded-full border border-solid border-[--border-1] bg-[--white-1] p-1 shadow-sm">
+            {MAP_TYPES.map((T) => (
+              <button
+                key={T.id}
+                type="button"
+                onClick={() => setMapType(T.id)}
+                className={cn(
+                  "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
+                  mapType === T.id
+                    ? "bg-[--primary-1] text-white"
+                    : "text-[--gr-1] hover:text-[--black-1]",
+                )}
+              >
+                {T.label}
+              </button>
+            ))}
+          </div>
           <GoogleMap
             id="direction-example"
             mapContainerStyle={{
@@ -143,11 +238,21 @@ const GoogleRoute = ({
             }}
             zoom={10}
             center={{ lat: addDot(lat1), lng: addDot(lng1) }}
+            mapTypeId={mapType}
+            options={{
+              styles: MAP_STYLES,
+              mapTypeControl: false,
+              streetViewControl: false,
+              // Removes the "Klavye kısayolları" link; the map-data/terms
+              // attribution stays (Google ToS requires it).
+              keyboardShortcuts: false,
+            }}
           >
           {response && (
             <>
               <Marker
                 position={response.routes[0].legs[0].start_location}
+                zIndex={30}
                 icon={{
                   url: "https://cdn-icons-png.freepik.com/512/12522/12522999.png", //Origin
                   // eslint-disable-next-line no-undef
@@ -159,10 +264,23 @@ const GoogleRoute = ({
 
               <Marker
                 position={response.routes[0].legs[0].end_location}
+                zIndex={30}
                 icon={{
                   url: "https://cdn-icons-png.flaticon.com/512/1189/1189458.png", //Destination
                   // eslint-disable-next-line no-undef
                   scaledSize: new google.maps.Size(50, 50),
+                }}
+              />
+
+              {/* Soft wide underlay below the crisp brand-colored route
+                  line — reads as a glow. */}
+              <Polyline
+                path={response.routes[0].overview_path}
+                options={{
+                  strokeColor: brandColor,
+                  strokeOpacity: 0.2,
+                  strokeWeight: 12,
+                  zIndex: 1,
                 }}
               />
             </>
@@ -180,6 +298,12 @@ const GoogleRoute = ({
                 options={{
                   directions: response,
                   suppressMarkers: true,
+                  polylineOptions: {
+                    strokeColor: brandColor,
+                    strokeOpacity: 0.95,
+                    strokeWeight: 5,
+                    zIndex: 2,
+                  },
                 }}
               />
             )}

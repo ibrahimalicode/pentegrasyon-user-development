@@ -69,7 +69,7 @@ const GoogleRoute = ({
             {/* Courier parked mid-track while the dashed road streams
                 right-to-left underneath — reads as riding name1 → name2. */}
             <span
-              className="relative mx-3 inline-flex w-24 items-end justify-center pb-1.5"
+              className="relative mx-3 inline-flex w-24 items-end justify-center pb-0.5"
               aria-hidden="true"
             >
               <CourierI

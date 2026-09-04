@@ -315,6 +315,23 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                       ))}
                     </React.Fragment>
                   ))}
+                  {Array.isArray(lineItem.extraIngredients) &&
+                    lineItem.extraIngredients.map((extraIngredient) => (
+                      <tr
+                        key={extraIngredient.id}
+                        className="text-xs text-[--green-1]"
+                      >
+                        <td className="pl-2">+ {extraIngredient.name}</td>
+                        <td className="pr-2 text-right">
+                          {extraIngredient.price > 0 &&
+                            `+${formatToPrice(
+                              String(
+                                Number(extraIngredient.price).toFixed(2),
+                              ).replace(".", ","),
+                            )}`}
+                        </td>
+                      </tr>
+                    ))}
                   {Array.isArray(lineItem.removedIngredients) &&
                     lineItem.removedIngredients.map((removedIngredient) => (
                       <tr

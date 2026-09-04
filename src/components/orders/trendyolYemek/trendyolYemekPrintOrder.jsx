@@ -183,6 +183,30 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                         ))}
                       </React.Fragment>
                     ))}
+                  {/* Extra / removed ingredients never printed before — the
+                      kitchen missed "Sos yok" entirely. */}
+                  {Array.isArray(item.extraIngredients) &&
+                    item.extraIngredients.map((ing) => (
+                      <tr key={ing.id}>
+                        <td className="pl-2">+ {ing.name}</td>
+                        <td className="pr-2 text-right">
+                          {ing.price > 0 &&
+                            formatToPrice(
+                              String(Number(ing.price).toFixed(2)).replace(
+                                ".",
+                                ",",
+                              ),
+                            )}
+                        </td>
+                      </tr>
+                    ))}
+                  {Array.isArray(item.removedIngredients) &&
+                    item.removedIngredients.map((ing) => (
+                      <tr key={ing.id}>
+                        <td className="pl-2 font-bold">− {ing.name} YOK</td>
+                        <td></td>
+                      </tr>
+                    ))}
                   {/* {(order.comment || order.description) && (
                     <tr>
                       <td className="relative text-base">

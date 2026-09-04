@@ -91,7 +91,9 @@ export const OrdersContextProvider = ({ children }) => {
 
   function isOrderUnverifiedInDB(order) {
     if (order.status === 325 || order.status === 400 || order.status === 0) {
-      dispatch(getTicketById({ ticketId: order.id })).then((res) => {
+      dispatch(
+        getTicketById({ ticketId: order.id, marketplaceId: order.marketplaceId }),
+      ).then((res) => {
         if (res?.meta?.requestStatus === "fulfilled") {
           const data = res.payload.data;
           if (data.id === order.id && data.status != order.status)
@@ -146,7 +148,12 @@ export const OrdersContextProvider = ({ children }) => {
     if (statusChangedOrder) {
       // Same slim-notification caveat as new orders: swap in the full
       // ticket so the row keeps its prices and dates after the update.
-      dispatch(getTicketById({ ticketId: statusChangedOrder.id })).then(
+      dispatch(
+        getTicketById({
+          ticketId: statusChangedOrder.id,
+          marketplaceId: statusChangedOrder.marketplaceId,
+        }),
+      ).then(
         (res) => {
           const full =
             res?.meta?.requestStatus === "fulfilled"
@@ -244,7 +251,14 @@ export const OrdersContextProvider = ({ children }) => {
       // prepending it as-is rendered a half-empty row and left the page
       // total unchanged. Fetch the real order, fall back to the doc only
       // if that fails.
-      dispatch(getTicketById({ ticketId: newOrder.id })).then((res) => {
+      // marketplaceId (backend #219) skips the marketplace probe chain —
+      // one query, and no more empty-200 YemekSepeti false positives.
+      dispatch(
+        getTicketById({
+          ticketId: newOrder.id,
+          marketplaceId: newOrder.marketplaceId,
+        }),
+      ).then((res) => {
         const full =
           res?.meta?.requestStatus === "fulfilled" ? res.payload?.data : null;
         setOrdersData((prev) => {

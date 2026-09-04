@@ -333,3 +333,15 @@ input[type="number"] {
     background-position-x: -12px;
   }
 }
+
+/* Fast, small vertical judder for the courier — speed-over-bumps feel to
+   match the streaming road; big amplitudes read as floating, not speed. */
+@keyframes rumble {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}

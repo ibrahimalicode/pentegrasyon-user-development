@@ -325,22 +325,11 @@ input[type="number"] {
   color: #ffffff;
 }
 
-/* Delivery scooter riding restaurant → customer in the route popup.
-   scaleX(-1) keeps the (left-facing) emoji pointed in the travel
-   direction through the whole ride. */
-@keyframes ride {
-  0% {
-    transform: translateX(0) scaleX(-1);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(2.5rem) scaleX(-1);
-    opacity: 0;
+/* Route popup: the courier stays centered while the dashed road under it
+   streams right-to-left, one 12px dash period per loop, so the motion
+   tiles seamlessly and reads as riding restaurant → customer. */
+@keyframes road {
+  to {
+    background-position-x: -12px;
   }
 }

@@ -1,7 +1,9 @@
+import { cn } from "../../lib/utils";
+
 const CourierI = ({ className }) => {
   return (
     <svg
-      className={`size-6 ${className}`}
+      className={cn("size-6", className)}
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

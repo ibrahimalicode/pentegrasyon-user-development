@@ -4,6 +4,7 @@ import { DirectionsRenderer, Marker } from "@react-google-maps/api";
 import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
 //COMP
+import { CourierI } from "../../../assets/icon";
 import PopupShell from "../../common/popupShell";
 import {
   TOOLBAR_STAT,
@@ -54,14 +55,14 @@ const GoogleRoute = ({
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
           <p className="flex min-w-0 items-center text-sm text-[--black-2]">
             <span className="font-semibold text-[--black-1]">{name1}</span>
-            {/* A short dashed "road" the scooter rides across, name1 → name2. */}
+            {/* Courier parked mid-track while the dashed road streams
+                right-to-left underneath — reads as riding name1 → name2. */}
             <span
-              className="mx-3 inline-flex h-8 w-16 items-end overflow-hidden border-b border-dashed border-[--gr-5]"
+              className="relative mx-3 inline-flex w-24 items-end justify-center pb-1.5"
               aria-hidden="true"
             >
-              <span className="animate-[ride_1.8s_linear_infinite] text-2xl leading-none">
-                🛵
-              </span>
+              <CourierI className="size-12 text-[--primary-1]" />
+              <span className="absolute inset-x-0 bottom-0 h-[2px] animate-[road_0.5s_linear_infinite] bg-[repeating-linear-gradient(to_right,var(--gr-5)_0,var(--gr-5)_6px,transparent_6px,transparent_12px)]" />
             </span>
             <span className="font-semibold text-[--black-1]">{name2}</span>
           </p>

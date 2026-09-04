@@ -29,6 +29,7 @@ export const OrdersContextProvider = ({ children }) => {
   const dispatch = useDispatch();
   const token = getAuth()?.token;
   const timeoutRef = useRef(null);
+  const countSyncRef = useRef(null);
   const { popupContent, setPopupContent } = usePopup();
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
@@ -148,10 +149,15 @@ export const OrdersContextProvider = ({ children }) => {
     if (ordersData?.length) {
       const hasUnverifiedOrders = ordersData.filter(
         (order) =>
-          order.status === 325 ||
-          order.status === 400 ||
-          (order.status === 0 && order.marketplaceId !== 2) ||
-          order.packageStatus === "Created",
+          // Only marketplaces the table can render may ring the alarm: an
+          // order from an unmapped marketplace (or a slim doc without a
+          // marketplaceId) has no visible row, so the alarm played over an
+          // apparently clean list — "sound but nothing pending".
+          [0, 1, 2, 3].includes(order.marketplaceId) &&
+          (order.status === 325 ||
+            order.status === 400 ||
+            (order.status === 0 && order.marketplaceId !== 2) ||
+            order.packageStatus === "Created"),
       );
       // console.log(hasUnverifiedOrders[0]);
       setUnverifiedOrders(hasUnverifiedOrders[0]);
@@ -268,9 +274,26 @@ export const OrdersContextProvider = ({ children }) => {
         });
       });
 
-      // Count comes from the server instead of a local +1, so it can't
-      // drift from what a reload would show.
-      dispatch(getTicketCountStatistics(filterInitialState));
+      // Immediate local bump for the toolbar counter…
+      setOrdersCount((prev) =>
+        prev?.totalProcessedOrders
+          ? {
+              ...prev,
+              totalProcessedOrders: {
+                ...prev.totalProcessedOrders,
+                count: (prev.totalProcessedOrders.count || 0) + 1,
+              },
+            }
+          : prev,
+      );
+      // …and ONE trailing server re-sync 30s after the last arrival.
+      // Firing GetTicketCountStatistics per order was a self-inflicted
+      // stampede: the endpoint costs ~15s server-side, so a busy lunch
+      // hour stacked heavy queries and dragged the whole API down.
+      clearTimeout(countSyncRef.current);
+      countSyncRef.current = setTimeout(() => {
+        dispatch(getTicketCountStatistics(filterInitialState));
+      }, 30000);
     }
     setNewOrder(null);
   }, [newOrder]);

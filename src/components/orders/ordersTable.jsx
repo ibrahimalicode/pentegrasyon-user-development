@@ -134,6 +134,12 @@ const OrdersTable = ({
     const TableBodyComp =
       marketplaceTableBodies[order.marketplaceId]?.TableBody;
 
+    // No renderer for this marketplace (GoFody/Siparişim+, or a pushed doc
+    // with a missing marketplaceId): skip the row. Rendering an undefined
+    // component type throws and, without a boundary, used to white-screen
+    // the whole app the moment such an order arrived live.
+    if (!TableBodyComp) return { TableBody: null };
+
     //GET SETTINGS ACCORDING TO MARKETPLACE
     const marketplaceSettings = [getirSett, migrosSett, trendyolSett, ysSett][
       order.marketplaceId

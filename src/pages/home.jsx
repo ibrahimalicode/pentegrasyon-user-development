@@ -8,6 +8,7 @@ import Header from "../components/header/header";
 import Sidebar from "../components/sidebar/sidebar";
 import CourierStatusChange from "../components/couriers/components/courierStatusChange";
 import CustomGeneralLoader from "../components/common/customGeneralLoader";
+import ErrorBoundary from "../components/common/errorBoundary";
 
 //PAGES — lazy so each section (notably the apexcharts-heavy dashboard) is its own chunk
 const Orders = lazy(() => import("./orders"));
@@ -46,6 +47,10 @@ const Home = () => {
       {/* Single place that reserves room for the permanent lg+ sidebar —
           pages used to each repeat lg:ml-[280px], and orders never had it. */}
       <div className={cn(!isOrdersPage && "lg:pl-[280px]")}>
+        {/* Contains any page render crash to the routed content (reload
+            prompt) instead of white-screening the whole app; resets when
+            the route changes. */}
+        <ErrorBoundary resetKey={pathname}>
         <Suspense fallback={<CustomGeneralLoader />}>
           <Routes>
           <Route path="/*" element={<Navigate to="/orders" />} />
@@ -62,6 +67,7 @@ const Home = () => {
             <Route path="/activity-logs/*" element={<Logs />} />
           </Routes>
         </Suspense>
+        </ErrorBoundary>
       </div>
     </section>
   );

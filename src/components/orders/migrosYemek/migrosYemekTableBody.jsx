@@ -140,7 +140,9 @@ const MigrosYemekTableBody = ({
                   lng2: order.customer.longitude,
                 }}
                 name1={order.restaurantName}
-                name2={order.customer.firstName}
+                name2={[order.customer.firstName, order.customer.lastName]
+                  .filter(Boolean)
+                  .join(" ")}
                 order={order}
                 setOrdersData={setOrdersData}
               />

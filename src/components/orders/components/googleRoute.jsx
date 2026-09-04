@@ -4,7 +4,12 @@ import { DirectionsRenderer, Marker } from "@react-google-maps/api";
 import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
 //COMP
-import CloseI from "../../../assets/icon/close";
+import PopupShell from "../../common/popupShell";
+import {
+  TOOLBAR_STAT,
+  TOOLBAR_STAT_LABEL,
+  TOOLBAR_STAT_VALUE,
+} from "../../common/toolbarStyles";
 
 //UTILS & CONT
 import { usePopup } from "../../../context/PopupContext";
@@ -44,36 +49,36 @@ const GoogleRoute = ({
   }
 
   return (
-    <main className="w-full lg:w-[800px] bg-[--white-1] p-5 rounded-md">
-      <div className="flex justify-end">
-        <button
-          onClick={() => setPopupContent(null)}
-          className="text-[--red-1] border border-[--red-1] p-2 rounded-full"
-        >
-          <CloseI />
-        </button>
-      </div>
+    <main className="mx-auto w-full lg:w-[800px]">
+      <PopupShell title="Teslimat Rotası" onClose={() => setPopupContent(null)}>
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
+          <p className="min-w-0 text-sm text-[--black-2]">
+            <span className="font-semibold text-[--black-1]">{name1}</span>
+            <span className="mx-2 text-[--gr-1]">→</span>
+            <span className="font-semibold text-[--black-1]">{name2}</span>
+          </p>
+          <div className="flex gap-2">
+            <div className={TOOLBAR_STAT}>
+              <p className={TOOLBAR_STAT_LABEL}>Mesafe</p>
+              <p className={TOOLBAR_STAT_VALUE}>{routeInfo?.distance || "—"}</p>
+            </div>
+            <div className={TOOLBAR_STAT}>
+              <p className={TOOLBAR_STAT_LABEL}>Süre</p>
+              <p className={TOOLBAR_STAT_VALUE}>{routeInfo?.duration || "—"}</p>
+            </div>
+          </div>
+        </div>
 
-      <div className="text-sm w-full text-center pb-3 text-[--black-1]">
-        <span className="text-[--primary-1]">{name1}</span>
-        <span> ve </span>
-        <span className="text-[--primary-1]">{name2}</span>
-        <span> arasındaki mesafe </span>
-        <span className="text-[--primary-1]">{routeInfo?.distance}</span>
-        <span> ve yaklaşık süre </span>
-        <span className="text-[--primary-1]">{routeInfo?.duration}</span>
-      </div>
-
-      <div className="w-full flex justify-center mt-3">
-        <GoogleMap
-          id="direction-example"
-          mapContainerStyle={{
-            width: "750px",
-            height: "400px",
-          }}
-          zoom={10}
-          center={{ lat: addDot(lat1), lng: addDot(lng1) }}
-        >
+        <div className="overflow-hidden rounded-xl border border-solid border-[--border-1]">
+          <GoogleMap
+            id="direction-example"
+            mapContainerStyle={{
+              width: "100%",
+              height: "420px",
+            }}
+            zoom={10}
+            center={{ lat: addDot(lat1), lng: addDot(lng1) }}
+          >
           {response && (
             <>
               <Marker
@@ -105,16 +110,17 @@ const GoogleRoute = ({
             }}
             callback={directionsCallback}
           />
-          {response && (
-            <DirectionsRenderer
-              options={{
-                directions: response,
-                suppressMarkers: true,
-              }}
-            />
-          )}
-        </GoogleMap>
-      </div>
+            {response && (
+              <DirectionsRenderer
+                options={{
+                  directions: response,
+                  suppressMarkers: true,
+                }}
+              />
+            )}
+          </GoogleMap>
+        </div>
+      </PopupShell>
     </main>
   );
 };

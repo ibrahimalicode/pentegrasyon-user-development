@@ -181,6 +181,35 @@ const TrendyolYemekPrintOrder = ({ order }) => {
                             </td>
                           </tr>
                         ))}
+                        {/* Modifier-level ingredient changes — JSON strings
+                            like subModifier. */}
+                        {(Array.isArray(mod.subExtraIngredients)
+                          ? mod.subExtraIngredients
+                          : JSON.parse(mod.subExtraIngredients || "[]")
+                        ).map((subIng) => (
+                          <tr key={subIng.id}>
+                            <td className="pl-2">▸ + {subIng.name}</td>
+                            <td className="pr-2 text-right">
+                              {subIng.price > 0 &&
+                                formatToPrice(
+                                  String(
+                                    Number(subIng.price).toFixed(2),
+                                  ).replace(".", ","),
+                                )}
+                            </td>
+                          </tr>
+                        ))}
+                        {(Array.isArray(mod.subRemovedIngredients)
+                          ? mod.subRemovedIngredients
+                          : JSON.parse(mod.subRemovedIngredients || "[]")
+                        ).map((subIng) => (
+                          <tr key={subIng.id}>
+                            <td className="pl-2 font-bold">
+                              ▸ − {subIng.name} YOK
+                            </td>
+                            <td></td>
+                          </tr>
+                        ))}
                       </React.Fragment>
                     ))}
                   {/* Extra / removed ingredients never printed before — the

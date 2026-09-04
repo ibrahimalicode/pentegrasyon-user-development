@@ -313,6 +313,34 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                           </td>
                         </tr>
                       ))}
+                      {/* Modifier-level ingredient changes — JSON strings
+                          like subModifier (confirmed backend shape). */}
+                      {(Array.isArray(mod.subExtraIngredients)
+                        ? mod.subExtraIngredients
+                        : JSON.parse(mod.subExtraIngredients || "[]")
+                      ).map((subIng) => (
+                        <tr key={subIng.id} className="text-xs text-[--green-1]">
+                          <td className="pl-2">▸ + {subIng.name}</td>
+                          <td className="pr-2 text-right">
+                            {subIng.price > 0 &&
+                              `+${formatToPrice(
+                                String(Number(subIng.price).toFixed(2)).replace(
+                                  ".",
+                                  ",",
+                                ),
+                              )}`}
+                          </td>
+                        </tr>
+                      ))}
+                      {(Array.isArray(mod.subRemovedIngredients)
+                        ? mod.subRemovedIngredients
+                        : JSON.parse(mod.subRemovedIngredients || "[]")
+                      ).map((subIng) => (
+                        <tr key={subIng.id} className="text-xs text-[--red-1]">
+                          <td className="pl-2">▸ - {subIng.name}</td>
+                          <td className="pr-2 text-right"></td>
+                        </tr>
+                      ))}
                     </React.Fragment>
                   ))}
                   {Array.isArray(lineItem.extraIngredients) &&

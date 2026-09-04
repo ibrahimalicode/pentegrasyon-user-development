@@ -80,7 +80,7 @@ const AutomaticApproval = ({ automationDatas, setAutomationDatas }) => {
             : "text-[--gr-1]"
         )}
       >
-        <span>Otomatik Onay </span>
+        <span>Oto Onay </span>
         <CustomToggle
           className1="scale-[.7]"
           id="automatic-approval"

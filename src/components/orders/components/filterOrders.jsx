@@ -35,12 +35,35 @@ const FilterOrders = ({ licenses }) => {
   } = useOrdersContext();
 
   const [openFilter, setOpenFilter] = useState(false);
+  const [panelStyle, setPanelStyle] = useState(null);
   const uniqueAndActiveLicenses = [
     ...new Set(licenses?.filter((L) => L.isActive).map((L) => L.licenseTypeId)),
   ];
   const filteredMarketplaces = MarketPalceIds.filter((M) =>
     uniqueAndActiveLicenses.includes(M.id)
   );
+
+  // The toolbar wraps, so the Filtre button can land anywhere; a panel
+  // pinned to one viewport corner ends up far from it. Measure the button
+  // on open and drop the panel right under it, clamped so it never runs
+  // off either edge. Below sm the panel is a full-width sheet via classes,
+  // so no inline position there.
+  function toggleFilter() {
+    if (!openFilter && window.matchMedia("(min-width: 640px)").matches) {
+      const rect = filterOrdersRef.current?.getBoundingClientRect();
+      if (rect) {
+        const panelWidth = 22 * 16; // w-[22rem]
+        const left = Math.max(
+          8,
+          Math.min(rect.left, window.innerWidth - panelWidth - 8)
+        );
+        setPanelStyle({ left, top: rect.bottom + 8 });
+      }
+    } else if (!openFilter) {
+      setPanelStyle(null);
+    }
+    setOpenFilter(!openFilter);
+  }
 
   function handleFilter(bool) {
     if (bool) {
@@ -82,20 +105,17 @@ const FilterOrders = ({ licenses }) => {
     <div className="flex justify-end">
       <div className="flex gap-2">
         <div className="w-full relative" ref={filterOrdersRef}>
-          <button
-            className={cn(TOOLBAR_BTN, "w-full")}
-            onClick={() => setOpenFilter(!openFilter)}
-          >
+          <button className={cn(TOOLBAR_BTN, "w-full")} onClick={toggleFilter}>
             Filtre
           </button>
 
           <div
-            // Fixed to the viewport at every width, not anchored to the
-            // button: the orders toolbar wraps, so Filtre can land near the
-            // LEFT edge and a right-anchored 22rem panel ran off-screen
-            // (measured left: -91px). max-h + scroll keeps Uygula reachable
-            // on short screens.
-            className={`fixed right-[4%] top-24 max-sm:inset-x-4 max-sm:w-auto max-h-[calc(100dvh-7rem)] overflow-y-auto px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] max-w-[calc(100vw-2rem)] border border-solid border-[--border-1] rounded-lg shadow-dropdown z-[999] ${
+            // Fixed (not absolute) so no ancestor overflow can crop it;
+            // sm+ gets the measured under-the-button position from
+            // panelStyle, below sm the classes make it a near-full-width
+            // sheet. max-h + scroll keeps Uygula reachable on short screens.
+            style={panelStyle || undefined}
+            className={`fixed top-24 max-sm:inset-x-4 max-sm:w-auto max-h-[calc(100dvh-7rem)] overflow-y-auto px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] max-w-[calc(100vw-2rem)] border border-solid border-[--border-1] rounded-lg shadow-dropdown z-[999] ${
               openFilter ? "visible" : "hidden"
             }`}
           >

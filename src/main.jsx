@@ -15,6 +15,15 @@ import { ProtectPagesProvider } from "./context/ProtectPagesContext";
 import { FirestoreProvider } from "./context/FirestoreContext";
 import { MessagesContextProvider } from "./context/MessagesContext";
 
+// A deploy replaces the hashed chunk files; a tab that was already open
+// keeps requesting the old names on its next lazy navigation and dies with
+// "Failed to fetch dynamically imported module". Vite raises this event for
+// exactly that case — reload once so the tab picks up the new build.
+window.addEventListener("vite:preloadError", (event) => {
+  event.preventDefault();
+  window.location.reload();
+});
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>

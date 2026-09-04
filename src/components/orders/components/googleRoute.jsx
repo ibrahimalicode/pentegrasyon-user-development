@@ -52,9 +52,11 @@ const GoogleRoute = ({
     <main className="mx-auto w-full lg:w-[800px]">
       <PopupShell title="Teslimat Rotası" onClose={() => setPopupContent(null)}>
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
-          <p className="min-w-0 text-sm text-[--black-2]">
+          <p className="flex min-w-0 items-center text-sm text-[--black-2]">
             <span className="font-semibold text-[--black-1]">{name1}</span>
-            <span className="mx-2 text-[--gr-1]">→</span>
+            <span className="mx-2 inline-block animate-bounce text-lg" aria-hidden="true">
+              🛵
+            </span>
             <span className="font-semibold text-[--black-1]">{name2}</span>
           </p>
           <div className="flex gap-2">

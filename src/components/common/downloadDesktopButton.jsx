@@ -1,7 +1,6 @@
 //COMP
 import { cn } from "../../lib/utils";
 import { DownloadI } from "../../assets/icon";
-import { TOOLBAR_BTN } from "./toolbarStyles";
 
 const DESKTOP_APP_URL = "https://liwapos.com/lws/pentegrasyon.exe";
 
@@ -11,7 +10,10 @@ const DownloadDesktopButton = ({ className }) => (
   <a
     href={DESKTOP_APP_URL}
     title="Pentegrasyon masaüstü uygulamasını indir"
-    className={cn(TOOLBAR_BTN, className)}
+    className={cn(
+      "inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-[--green-1] text-sm font-semibold text-white hover:opacity-90 transition-opacity whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--green-1]/40",
+      className
+    )}
   >
     <DownloadI className="size-5" strokeWidth={1.8} />
     Pentegrasyon Desktop

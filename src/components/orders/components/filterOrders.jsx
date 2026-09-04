@@ -20,7 +20,6 @@ import { useOrdersContext } from "../../../context/OrdersContext";
 
 //REDUX
 import { getOrders } from "../../../redux/orders/getOrdersSlice";
-import { getTicketCountStatistics } from "../../../redux/dashboard/statistics/getTicketCountStatisticsSlice";
 
 const FilterOrders = ({ licenses }) => {
   const dispatch = useDispatch();
@@ -58,11 +57,9 @@ const FilterOrders = ({ licenses }) => {
         marketplaceId: filter.marketplaceId,
       };
       dispatch(getOrders(filterData));
-      dispatch(getTicketCountStatistics(filterData));
     } else {
       if (!isEqual(filterInitialState, filter)) {
         setFilter(filterInitialState);
-        dispatch(getTicketCountStatistics(filterInitialState));
         dispatch(getOrders({ page: 1, pageSize: itemsPerPage.value }));
       }
     }

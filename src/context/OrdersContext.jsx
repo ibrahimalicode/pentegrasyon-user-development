@@ -14,10 +14,6 @@ import { useFirestore } from "./FirestoreContext";
 import { formatByDate, formatDate } from "../utils/utils";
 
 //REDUX
-import {
-  getTicketCountStatistics,
-  resetGetTicketCountStatistics,
-} from "../redux/dashboard/statistics/getTicketCountStatisticsSlice";
 import { getTicketById } from "../redux/orders/getTicketByIdSlice";
 import { getOrders, resetGetOrdersState } from "../redux/orders/getOrdersSlice";
 
@@ -29,14 +25,10 @@ export const OrdersContextProvider = ({ children }) => {
   const dispatch = useDispatch();
   const token = getAuth()?.token;
   const timeoutRef = useRef(null);
-  const countSyncRef = useRef(null);
   const { popupContent, setPopupContent } = usePopup();
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
   const { success, error, orders } = useSelector((state) => state.orders.get);
-  const { data: countData, success: countSuccess } = useSelector(
-    (state) => state.dashboard.ordersCount,
-  );
   const { newOrder, setNewOrder, statusChangedOrder, setStatusChangedOrder } =
     useFirestore();
 
@@ -57,7 +49,6 @@ export const OrdersContextProvider = ({ children }) => {
   const [ordersData, setOrdersData] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
-  const [ordersCount, setOrdersCount] = useState(null);
   const [filter, setFilter] = useState(filterInitialState);
   const [unverifiedOrders, setUnverifiedOrders] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -110,7 +101,7 @@ export const OrdersContextProvider = ({ children }) => {
     }
   }
 
-  //GET ORDERS AND COUNT
+  //GET ORDERS
   useEffect(() => {
     if (!ordersData && token) {
       dispatch(
@@ -119,18 +110,8 @@ export const OrdersContextProvider = ({ children }) => {
           pageSize: itemsPerPage.value,
         }),
       );
-      dispatch(getTicketCountStatistics(filterInitialState));
     }
   }, [ordersData, token]);
-
-  //SET ORDER COUNT
-  useEffect(() => {
-    if (countSuccess) {
-      // console.log(countData);
-      setOrdersCount(countData);
-      dispatch(resetGetTicketCountStatistics());
-    }
-  }, [countData, countSuccess]);
 
   //TOAST AND SET ORDERS
   useEffect(() => {
@@ -274,26 +255,10 @@ export const OrdersContextProvider = ({ children }) => {
         });
       });
 
-      // Immediate local bump for the toolbar counter…
-      setOrdersCount((prev) =>
-        prev?.totalProcessedOrders
-          ? {
-              ...prev,
-              totalProcessedOrders: {
-                ...prev.totalProcessedOrders,
-                count: (prev.totalProcessedOrders.count || 0) + 1,
-              },
-            }
-          : prev,
-      );
-      // …and ONE trailing server re-sync 30s after the last arrival.
-      // Firing GetTicketCountStatistics per order was a self-inflicted
-      // stampede: the endpoint costs ~15s server-side, so a busy lunch
-      // hour stacked heavy queries and dragged the whole API down.
-      clearTimeout(countSyncRef.current);
-      countSyncRef.current = setTimeout(() => {
-        dispatch(getTicketCountStatistics(filterInitialState));
-      }, 30000);
+      // The toolbar counter is GetTickets' totalCount; bump it locally so
+      // it moves with the arrival — the next list fetch (filter, page,
+      // refresh) re-trues it from the server anyway.
+      setTotalItems((prev) => (prev || 0) + 1);
     }
     setNewOrder(null);
   }, [newOrder]);
@@ -301,7 +266,6 @@ export const OrdersContextProvider = ({ children }) => {
   return (
     <OrdersContext.Provider
       value={{
-        ordersCount,
         itemsPerPage,
         handleItemsPerPage,
         ordersData,

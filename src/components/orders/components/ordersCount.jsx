@@ -6,14 +6,14 @@ import {
 } from "../../common/toolbarStyles";
 
 const OrdersCount = () => {
-  const { ordersCount } = useOrdersContext();
+  // GetTickets' own totalCount — the separate GetTicketCountStatistics
+  // round-trip (a ~15s query server-side) told us nothing this doesn't.
+  const { totalItems } = useOrdersContext();
 
   return (
     <div className={TOOLBAR_STAT}>
       <p className={TOOLBAR_STAT_LABEL}>Sipariş Sayısı</p>
-      <p className={TOOLBAR_STAT_VALUE}>
-        {ordersCount?.totalProcessedOrders?.count || 0}
-      </p>
+      <p className={TOOLBAR_STAT_VALUE}>{totalItems || 0}</p>
     </div>
   );
 };

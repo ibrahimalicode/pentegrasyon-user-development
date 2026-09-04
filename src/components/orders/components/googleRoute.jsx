@@ -218,7 +218,7 @@ const GoogleRoute = ({
             <div className={cn(TOOLBAR_STAT, "flex-row items-center gap-2 shadow-sm")}>
               <span aria-hidden="true">⏱️</span>
               <span className="text-left">
-                <p className={TOOLBAR_STAT_LABEL}>Süre</p>
+                <p className={TOOLBAR_STAT_LABEL}>Tahmini Varış</p>
                 <p className={TOOLBAR_STAT_VALUE}>
                   {routeInfo?.duration || "—"}
                 </p>

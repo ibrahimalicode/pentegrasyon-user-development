@@ -16,6 +16,17 @@ import {
 import { usePopup } from "../../../context/PopupContext";
 import CourierLocationMin from "./courierLocationMin";
 
+// marketplaceId → brand color token (MARKETPLACES block in index.css), so
+// the riding courier wears the platform's color.
+const MARKETPLACE_COLORS = [
+  "var(--getiryemek)",
+  "var(--migrosyemek)",
+  "var(--trendyol)",
+  "var(--yemeksepeti)",
+  "var(--gofody)",
+  "var(--siparisim)",
+];
+
 const GoogleRoute = ({
   data,
   name1,
@@ -61,7 +72,14 @@ const GoogleRoute = ({
               className="relative mx-3 inline-flex w-24 items-end justify-center pb-1.5"
               aria-hidden="true"
             >
-              <CourierI className="size-12 animate-[rumble_0.25s_ease-in-out_infinite] text-[--primary-1]" />
+              <CourierI
+                className="size-12 animate-[rumble_0.25s_ease-in-out_infinite]"
+                style={{
+                  color:
+                    MARKETPLACE_COLORS[order?.marketplaceId] ??
+                    "var(--primary-1)",
+                }}
+              />
               <span className="absolute inset-x-0 bottom-0 h-[2px] animate-[road_0.5s_linear_infinite] bg-[repeating-linear-gradient(to_right,var(--gr-5)_0,var(--gr-5)_6px,transparent_6px,transparent_12px)]" />
             </span>
             <span className="font-semibold text-[--black-1]">{name2}</span>

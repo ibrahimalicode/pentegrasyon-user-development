@@ -68,19 +68,14 @@ function themedCourierAnimation(hex) {
   return clone;
 }
 
-// Minimal grey map theme: geometry in neutral greys, POI/transit labels and
-// icons off entirely (they crowded the route), road names kept but thin and
-// light, water/parks in soft pastels so the route line owns the map.
+// Minimal grey map theme: geometry in neutral greys, road names kept thin
+// and light, water/parks in soft pastels so the route line owns the map.
+// POI/transit labels and icons stay VISIBLE on purpose — couriers navigate
+// by landmarks (hospital, bakery, mosque), so don't hide them.
 const MAP_STYLES = [
   { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#9aa0a6" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }] },
-  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  {
-    featureType: "poi",
-    elementType: "labels",
-    stylers: [{ visibility: "off" }],
-  },
   {
     featureType: "poi",
     elementType: "geometry",
@@ -91,7 +86,6 @@ const MAP_STYLES = [
     elementType: "geometry",
     stylers: [{ color: "#dcebdd" }],
   },
-  { featureType: "transit", stylers: [{ visibility: "off" }] },
   {
     featureType: "road",
     elementType: "geometry",

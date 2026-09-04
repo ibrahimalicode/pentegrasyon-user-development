@@ -54,8 +54,14 @@ const GoogleRoute = ({
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
           <p className="flex min-w-0 items-center text-sm text-[--black-2]">
             <span className="font-semibold text-[--black-1]">{name1}</span>
-            <span className="mx-2 inline-block animate-bounce text-lg" aria-hidden="true">
-              🛵
+            {/* A short dashed "road" the scooter rides across, name1 → name2. */}
+            <span
+              className="mx-3 inline-flex h-8 w-16 items-end overflow-hidden border-b border-dashed border-[--gr-5]"
+              aria-hidden="true"
+            >
+              <span className="animate-[ride_1.8s_linear_infinite] text-2xl leading-none">
+                🛵
+              </span>
             </span>
             <span className="font-semibold text-[--black-1]">{name2}</span>
           </p>

@@ -196,7 +196,10 @@ const GoogleRoute = ({
             {/* Courier scene riding name1 → name2, scooter tinted with the
                 order's marketplace color. -my keeps the tall scene from
                 inflating the header row. */}
-            <span className="-my-4 inline-block w-36 shrink-0" aria-hidden="true">
+            <span
+              className="-my-2 inline-block w-[5.4rem] shrink-0"
+              aria-hidden="true"
+            >
               <Lottie animationData={themedAnimation} loop autoplay />
             </span>
             <span className="mx-3 h-8 w-px shrink-0 bg-[--border-1]" />
@@ -257,7 +260,6 @@ const GoogleRoute = ({
             options={{
               styles: MAP_STYLES,
               mapTypeControl: false,
-              streetViewControl: false,
               // Removes the "Klavye kısayolları" link; the map-data/terms
               // attribution stays (Google ToS requires it).
               keyboardShortcuts: false,

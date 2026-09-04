@@ -1,11 +1,12 @@
 //MODELS
-import { useState } from "react";
+import Lottie from "lottie-react";
+import { useMemo, useState } from "react";
 import { DirectionsRenderer, Marker } from "@react-google-maps/api";
 import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
 //COMP
-import { CourierI } from "../../../assets/icon";
 import PopupShell from "../../common/popupShell";
+import courierAnimation from "../../../assets/animations/deliveryCourier.json";
 import {
   TOOLBAR_STAT,
   TOOLBAR_STAT_LABEL,
@@ -16,16 +17,52 @@ import {
 import { usePopup } from "../../../context/PopupContext";
 import CourierLocationMin from "./courierLocationMin";
 
-// marketplaceId → brand color token (MARKETPLACES block in index.css), so
-// the riding courier wears the platform's color.
+// marketplaceId → brand color (MARKETPLACES tokens in index.css), so the
+// riding courier wears the platform's color. Hex literals because the
+// Lottie JSON needs raw RGB, not CSS variables.
 const MARKETPLACE_COLORS = [
-  "var(--getiryemek)",
-  "var(--migrosyemek)",
-  "var(--trendyol)",
-  "var(--yemeksepeti)",
-  "var(--gofody)",
-  "var(--siparisim)",
+  "#5d3ebd", // GetirYemek
+  "#2cb54e", // MigrosYemek
+  "#fc903a", // TrendyolYemek
+  "#fa0050", // YemekSepeti
+  "#f1b62a", // GoFody
+  "#05407a", // Siparişim
 ];
+
+// The scooter in the animation is drawn with exactly two theme colors —
+// #ff3333 (body) and #ff4a4a (highlight). Recoloring = clone the JSON and
+// swap those two for the marketplace color and a lightened shade of it.
+const SCOOTER_BODY = [1, 0.2, 0.2];
+const SCOOTER_HIGHLIGHT = [1, 0.290196, 0.290196];
+
+function themedCourierAnimation(hex) {
+  const rgb = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const lightened = rgb.map((v) => v + (1 - v) * 0.25);
+  const isNear = (k, target) =>
+    Array.isArray(k) &&
+    k.length >= 3 &&
+    target.every((t, i) => Math.abs(k[i] - t) < 0.01);
+
+  const walk = (node) => {
+    if (Array.isArray(node)) {
+      node.forEach(walk);
+      return;
+    }
+    if (node && typeof node === "object") {
+      if ((node.ty === "fl" || node.ty === "st") && node.c) {
+        const k = node.c.k;
+        if (isNear(k, SCOOTER_BODY)) node.c.k = [...rgb, k[3] ?? 1];
+        else if (isNear(k, SCOOTER_HIGHLIGHT))
+          node.c.k = [...lightened, k[3] ?? 1];
+      }
+      Object.values(node).forEach(walk);
+    }
+  };
+
+  const clone = JSON.parse(JSON.stringify(courierAnimation));
+  walk(clone);
+  return clone;
+}
 
 const GoogleRoute = ({
   data,
@@ -39,6 +76,14 @@ const GoogleRoute = ({
   const { lat1, lng1, lat2, lng2 } = data;
   const [response, setResponse] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
+
+  const themedAnimation = useMemo(
+    () =>
+      themedCourierAnimation(
+        MARKETPLACE_COLORS[order?.marketplaceId] ?? "#4f46e5",
+      ),
+    [order?.marketplaceId],
+  );
 
   const directionsCallback = (result, status) => {
     if (status === "OK" && !response) {
@@ -66,21 +111,14 @@ const GoogleRoute = ({
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
           <p className="flex min-w-0 items-center text-sm text-[--black-2]">
             <span className="font-semibold text-[--black-1]">{name1}</span>
-            {/* Courier parked mid-track while the dashed road streams
-                right-to-left underneath — reads as riding name1 → name2. */}
+            {/* Courier scene riding name1 → name2, scooter tinted with the
+                order's marketplace color. -my keeps the tall scene from
+                inflating the header row. */}
             <span
-              className="relative mx-3 inline-flex w-24 items-end justify-center pb-0.5"
+              className="-my-4 mx-2 inline-block w-36 shrink-0"
               aria-hidden="true"
             >
-              <CourierI
-                className="size-12 animate-[rumble_0.25s_ease-in-out_infinite]"
-                style={{
-                  color:
-                    MARKETPLACE_COLORS[order?.marketplaceId] ??
-                    "var(--primary-1)",
-                }}
-              />
-              <span className="absolute inset-x-0 bottom-0 h-[2px] animate-[road_0.5s_linear_infinite] bg-[repeating-linear-gradient(to_right,var(--gr-5)_0,var(--gr-5)_6px,transparent_6px,transparent_12px)]" />
+              <Lottie animationData={themedAnimation} loop autoplay />
             </span>
             <span className="font-semibold text-[--black-1]">{name2}</span>
           </p>

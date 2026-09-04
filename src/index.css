@@ -324,24 +324,3 @@ input[type="number"] {
   background-color: var(--primary-1);
   color: #ffffff;
 }
-
-/* Route popup: the courier stays centered while the dashed road under it
-   streams right-to-left, one 12px dash period per loop, so the motion
-   tiles seamlessly and reads as riding restaurant → customer. */
-@keyframes road {
-  to {
-    background-position-x: -12px;
-  }
-}
-
-/* Fast, small vertical judder for the courier — speed-over-bumps feel to
-   match the streaming road; big amplitudes read as floating, not speed. */
-@keyframes rumble {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
-}

@@ -190,7 +190,11 @@ const GoogleRoute = ({
   return (
     <main className="mx-auto w-full lg:w-[800px]">
       <PopupShell title="Teslimat Rotası" onClose={() => setPopupContent(null)}>
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4 pb-4">
+        <div
+          className="my-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-xl px-4 py-3"
+          // ~8% alpha of the marketplace color as a soft tinted ground.
+          style={{ backgroundColor: `${brandColor}14` }}
+        >
           <p className="flex min-w-0 items-center text-sm text-[--black-2]">
             <RestourantI className="mr-1.5 size-5 shrink-0 text-[--gr-1]" />
             <span className="font-semibold text-[--black-1]">{name1}</span>

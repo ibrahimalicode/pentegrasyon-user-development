@@ -38,12 +38,19 @@ const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
     (state) => state.trendyol.cancelTicket,
   );
 
+  // Platform-courier (GO) orders: Trendyol's own courier ships and
+  // delivers, and the status arrives via push (backend #216). The manual
+  // TicketShipped/TicketDeliver endpoints are own-courier only and can
+  // only fail — so past approval the pill shows state, never a CTA.
+  const isPlatformCourier = order?.deliveryType?.toLocaleLowerCase() === "go";
+
   let orderStatus = trendyolYemekOrderStatuses.filter(
     (stat) => stat.id === order.packageStatus,
   )[0];
-  const nextId = trendyolYemekOrderStatuses.filter(
-    (S) => S.id == order.packageStatus,
-  )[0]?.nextId;
+  const nextId = isPlatformCourier
+    ? null
+    : trendyolYemekOrderStatuses.filter((S) => S.id == order.packageStatus)[0]
+        ?.nextId;
 
   if (nextId) {
     orderStatus = trendyolYemekOrderStatuses.filter((s) => s.id === nextId)[0];
@@ -64,7 +71,9 @@ const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
     if (order.packageStatus === "Created") {
       verifyOrder();
       return;
-    } else if (order.packageStatus === "Picking") {
+    }
+    if (isPlatformCourier) return;
+    if (order.packageStatus === "Picking") {
       if (!(remSec(order.approvalDate) > 0)) {
         prepareOrder();
       } else toastStatusError(order.approvalDate, 0);
@@ -80,6 +89,7 @@ const TrendyolYemekStatusButton = ({ order, setOrdersData }) => {
     prepareLoading ||
     deliverLoading ||
     cancelLoading ||
+    (isPlatformCourier && order.packageStatus !== "Created") ||
     order.packageStatus == "Shipped" ||
     order.packageStatus == "Delivered" ||
     order.packageStatus == "UnSupplied" ||

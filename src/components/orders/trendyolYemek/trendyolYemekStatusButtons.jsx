@@ -62,6 +62,11 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
     return new Date(new Date(date).getTime() + 60000 * x);
   }
 
+  // Platform-courier (GO) orders: Trendyol's courier ships and delivers,
+  // status arrives via push (backend #216); the manual endpoints are
+  // own-courier only, so the ship/deliver buttons are hidden entirely.
+  const isPlatformCourier = order?.deliveryType?.toLocaleLowerCase() === "go";
+
   const btnClass =
     "py-2 px-2 sm:px-4 rounded-full border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
   const disabled =
@@ -172,6 +177,18 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
         )}
       </button>
 
+      {isPlatformCourier && (
+        <div className="flex items-center py-2 px-2 sm:px-4 rounded-full border border-[--purple-1] bg-[--status-purple] text-[--black-1]">
+          {order.packageStatus === "Delivered"
+            ? "Trendyol kuryesi teslim etti"
+            : order.packageStatus === "Shipped"
+              ? "Trendyol kuryesi yolda"
+              : "Trendyol kuryesi teslim edecek"}
+        </div>
+      )}
+
+      {!isPlatformCourier && (
+      <>
       <button
         onClick={prepareOrder}
         disabled={prepareDisabled}
@@ -248,6 +265,8 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
           </>
         )}
       </button>
+      </>
+      )}
       <button
         onClick={cancelOrder}
         disabled={cancelDisabled}

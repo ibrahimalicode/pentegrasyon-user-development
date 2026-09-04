@@ -93,7 +93,12 @@ const FilterOrders = ({ licenses }) => {
           </button>
 
           <div
-            className={`absolute right-0 top-12 max-sm:fixed max-sm:inset-x-4 max-sm:top-24 max-sm:w-auto px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] max-w-[calc(100vw-2rem)] border border-solid border-[--light-3] rounded-lg drop-shadow-md -drop-shadow-md z-[999] ${
+            // Fixed to the viewport at every width, not anchored to the
+            // button: the orders toolbar wraps, so Filtre can land near the
+            // LEFT edge and a right-anchored 22rem panel ran off-screen
+            // (measured left: -91px). max-h + scroll keeps Uygula reachable
+            // on short screens.
+            className={`fixed right-[4%] top-24 max-sm:inset-x-4 max-sm:w-auto max-h-[calc(100dvh-7rem)] overflow-y-auto px-4 pb-3 flex flex-col bg-[--white-1] w-[22rem] max-w-[calc(100vw-2rem)] border border-solid border-[--border-1] rounded-lg shadow-dropdown z-[999] ${
               openFilter ? "visible" : "hidden"
             }`}
           >

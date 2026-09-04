@@ -243,6 +243,10 @@ const RestaurantsStatus = ({ licenses, onClosedChange }) => {
         }
         className={cn(
           TOOLBAR_BTN,
+          // Always wear the hover look (primary border/text on light fill)
+          // so the entry point to restaurant statuses stands out in the
+          // toolbar instead of blending in with the other pills.
+          "border-[--primary-1] bg-[--light-3] text-[--primary-1]",
           // When restaurants are closed the button becomes an alert. It has to
           // keep its red fill on hover — TOOLBAR_BTN's neutral hover:bg turned
           // the alert into a pale grey chip, which read as disabled.

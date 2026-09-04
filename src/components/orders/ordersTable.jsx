@@ -190,8 +190,11 @@ const OrdersTable = ({
           </thead>
 
           <tbody>
+            {/* Keyed by ticket id, not index: a pushed order prepends and
+                shifted index keys remounted every row (icons re-fetched,
+                whole table flickered). */}
             {ordersData.map((order, i) => (
-              <React.Fragment key={i}>
+              <React.Fragment key={order.id ?? i}>
                 {getMarketPlaceAssets(order)?.TableBody}
               </React.Fragment>
             ))}

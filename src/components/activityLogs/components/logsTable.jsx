@@ -134,7 +134,7 @@ const LogsTable = ({
                 </td>
                 <td className={TD}>
                   <span
-                    className={`text-xs font-normal px-2.5 py-1 border border-solid rounded-full ${getSourceClass(
+                    className={`text-xs font-normal whitespace-nowrap px-2.5 py-1 border border-solid rounded-full ${getSourceClass(
                       data.source,
                     )}`}
                   >
@@ -144,7 +144,7 @@ const LogsTable = ({
                 <td className={TD}>{data.marketplace || "-"}</td>
                 <td className={TD}>
                   <span
-                    className={`text-xs font-normal px-2.5 py-1 border border-solid rounded-full ${getSeverityClass(
+                    className={`text-xs font-normal whitespace-nowrap px-2.5 py-1 border border-solid rounded-full ${getSeverityClass(
                       data.severity,
                     )}`}
                   >

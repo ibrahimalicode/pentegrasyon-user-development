@@ -22,7 +22,20 @@ import yemekSepetiOrderStatuses from "../../../enums/yemekSepetiOrderStatuses";
 const discountPrice = (amount) =>
   formatToPrice(String(parseFloat(amount || 0).toFixed(2)).replace(".", ","));
 
-const SPONSOR_LABELS = { PLATFORM: "YemekSepeti", VENDOR: "Restoran" };
+// Who paid the discount: sums sponsorship amounts across every campaign.
+// VENDOR is the restaurant's share, PLATFORM is YemekSepeti's.
+const discountSplit = (discounts) => {
+  const split = { vendor: 0, platform: 0 };
+  for (const d of Array.isArray(discounts) ? discounts : []) {
+    for (const s of Array.isArray(d?.sponsorships) ? d.sponsorships : []) {
+      const amount = Number(s?.amount) || 0;
+      const sponsor = s?.sponsor?.toUpperCase();
+      if (sponsor === "VENDOR") split.vendor += amount;
+      else if (sponsor === "PLATFORM") split.platform += amount;
+    }
+  }
+  return split;
+};
 
 
 // Inline "-X ₺ name" row used at product/option/child level.
@@ -63,6 +76,11 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
     return custAdd ? currentCourier?.[0]?.label : "Platform Kuryesi";
   }
   console.log(order);
+
+  const { vendor: discountByVendor, platform: discountByPlatform } =
+    discountSplit(order.discounts);
+  const sponsorPrice = (n) =>
+    formatToPrice(String(Number(n).toFixed(2)).replace(".", ","));
 
   return (
     <main className="w-full h-[100dvh] bg-[--white-2] text-[--black-2] overflow-y-auto px-4 pb-20 text-sm font-normal flex flex-col gap-2 relative">
@@ -352,45 +370,6 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           </tbody>
         </table>
 
-        {/* Ticket-level campaigns with who covered what. Informational —
-            the totals arithmetic below stays row-consistent: the platform's
-            sponsorship share is already baked into the product prices, so
-            these amounts don't subtract from Toplam a second time. */}
-        {Number(order.discounts?.length) > 0 && (
-          <div className="w-full border-t border-[--gr-1] pb-1">
-            {/* Layout per the user's spec: an "İndirimler" header, then per
-                campaign a sponsor-aware title with the amount at the right,
-                and the "tarafından karşılandı" line beneath, left-aligned. */}
-            <p className="pt-1 text-sm font-medium">İndirimler</p>
-            {order.discounts.map((d, i) => (
-              <div key={i} className="pt-0.5 text-sm">
-                {/* No title/amount row — the sponsor line carries both. A
-                    discount without sponsorship data still needs a line, or
-                    the campaign would vanish entirely. */}
-                {!d.sponsorships?.length && (
-                  <p className="text-xs text-[--gr-1]">
-                    {discountPrice(d.amount)} ₺ indirim uygulandı
-                  </p>
-                )}
-                {d.sponsorships?.length > 0 && (
-                  <p className="text-xs text-[--gr-1]">
-                    {d.sponsorships
-                      .map(
-                        (s) =>
-                          `${discountPrice(s.amount)} ₺ ${
-                            SPONSOR_LABELS[s.sponsor?.toUpperCase()] ||
-                            s.sponsor
-                          }`,
-                      )
-                      .join(" · ")}{" "}
-                    tarafından karşılandı
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
         <div className="w-full border-t border-[--gr-1]">
           {/* Toplam mirrors what the product rows above sum to: totalNet,
               i.e. prices with the platform-sponsored discount already baked
@@ -426,6 +405,24 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
               </div>
             </>
           ) : null}
+          {/* Who paid the discount, as labeled sub-rows — same layout as
+              Trendyol/Migros. Sums campaign sponsorships (VENDOR/PLATFORM);
+              a side that paid nothing gets no row. Rendered outside the
+              İndirim branch because the platform's share is baked into the
+              product prices, so a fully platform-sponsored order has
+              totalNet === grandTotal yet still deserves its row. */}
+          {discountByVendor > 0 && (
+            <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
+              <p>Restoran İndirimi:</p>
+              <p>{sponsorPrice(discountByVendor)}</p>
+            </div>
+          )}
+          {discountByPlatform > 0 && (
+            <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
+              <p>Platform İndirimi:</p>
+              <p>{sponsorPrice(discountByPlatform)}</p>
+            </div>
+          )}
           <div className="w-full flex items-center justify-between gap-2">
             <p>Ödenecek Tutar:</p>
             <p className="font-bold text-base">

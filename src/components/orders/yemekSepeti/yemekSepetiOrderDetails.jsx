@@ -419,7 +419,10 @@ const YemekSepetiOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
           )}
           {discountByPlatform > 0 && (
             <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
-              <p>Platform İndirimi:</p>
+              {/* "fiyata dahil": YS bakes the platform share into the
+                  product prices, so this amount is not part of the İndirim
+                  row above — unlike Trendyol/Migros. */}
+              <p>Platform İndirimi (fiyata dahil):</p>
               <p>{sponsorPrice(discountByPlatform)}</p>
             </div>
           )}

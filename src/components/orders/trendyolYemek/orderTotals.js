@@ -50,3 +50,27 @@ export function calculateTrendyolOrderTotals(order) {
     payableTotal,
   };
 }
+
+// Who paid the discount: sums coupon + promotion amounts across every
+// package item. amount.seller is the restaurant's share, amount.trendyol
+// the platform's; either can be null (→ 0). Ticket-level fields carry no
+// split, so this is the only source.
+export function calculateTrendyolDiscountSplit(order) {
+  let sellerTotal = 0;
+  let platformTotal = 0;
+
+  for (const lineItem of Array.isArray(order?.orders) ? order.orders : []) {
+    for (const item of Array.isArray(lineItem?.items) ? lineItem.items : []) {
+      const entries = [
+        item?.coupon,
+        ...(Array.isArray(item?.promotions) ? item.promotions : []),
+      ];
+      for (const entry of entries) {
+        sellerTotal += toNumber(entry?.amount?.seller);
+        platformTotal += toNumber(entry?.amount?.trendyol);
+      }
+    }
+  }
+
+  return { sellerTotal, platformTotal };
+}

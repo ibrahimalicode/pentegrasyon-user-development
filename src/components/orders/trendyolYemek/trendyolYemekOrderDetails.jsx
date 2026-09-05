@@ -17,7 +17,10 @@ import courierServiceTypes from "../../../enums/courierServiceType";
 import { formatDateString, formatToPrice } from "../../../utils/utils";
 import { PaymentMethods } from "../../../enums/trendyolPaymentMethods";
 import trendyolYemekOrderStatuses from "../../../enums/trendyolYemekOrderStatuses";
-import { calculateTrendyolOrderTotals } from "./orderTotals";
+import {
+  calculateTrendyolOrderTotals,
+  calculateTrendyolDiscountSplit,
+} from "./orderTotals";
 
 const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
   const { statusChangedOrder, setStatusChangedOrder } = useFirestore();
@@ -53,6 +56,11 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
     discountTotal: calculatedDiscount,
     payableTotal: calculatedPayableTotal,
   } = calculateTrendyolOrderTotals(sideOrder);
+  const { sellerTotal: discountBySeller, platformTotal: discountByTrendyol } =
+    calculateTrendyolDiscountSplit(sideOrder);
+
+  const sponsorPrice = (n) =>
+    formatToPrice(String(Number(n).toFixed(2)).replace(".", ","));
 
   console.log(order);
 
@@ -419,6 +427,27 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                   )}
                 </p>
               </div>
+              {/* Who paid the discount — same wording as the YemekSepeti
+                  sponsor lines. Split comes from items[].coupon/promotions
+                  amounts; when neither side is itemized, fall back to the
+                  plain "indirim uygulandı" line. */}
+              {discountBySeller > 0 && (
+                <p className="text-xs text-[--gr-1]">
+                  {sponsorPrice(discountBySeller)} ₺ Restoran tarafından
+                  karşılandı
+                </p>
+              )}
+              {discountByTrendyol > 0 && (
+                <p className="text-xs text-[--gr-1]">
+                  {sponsorPrice(discountByTrendyol)} ₺ Trendyol tarafından
+                  karşılandı
+                </p>
+              )}
+              {!discountBySeller && !discountByTrendyol && (
+                <p className="text-xs text-[--gr-1]">
+                  {sponsorPrice(calculatedDiscount)} ₺ indirim uygulandı
+                </p>
+              )}
             </>
           ) : null}
           <div className="w-full flex items-center justify-between gap-2">

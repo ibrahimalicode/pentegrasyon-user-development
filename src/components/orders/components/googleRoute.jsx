@@ -1,6 +1,6 @@
 //MODELS
 import Lottie from "lottie-react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { DirectionsRenderer, Marker, Polyline } from "@react-google-maps/api";
 import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
@@ -18,6 +18,7 @@ import {
 } from "../../common/toolbarStyles";
 
 //UTILS & CONT
+import { getTheme } from "../../../utils/localStorage";
 import { usePopup } from "../../../context/PopupContext";
 import CourierLocationMin from "./courierLocationMin";
 
@@ -118,6 +119,54 @@ const MAP_STYLES = [
   },
 ];
 
+// Dark-theme counterpart of MAP_STYLES: same muting philosophy on dark
+// greys so the brand-colored route still owns the map.
+const MAP_STYLES_DARK = [
+  { elementType: "geometry", stylers: [{ color: "#23252e" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#9aa0a6" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#1b1c23" }] },
+  {
+    featureType: "poi",
+    elementType: "geometry",
+    stylers: [{ color: "#2a2c37" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#243024" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#383a46" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#2b2d38" }],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#8f939e" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "geometry",
+    stylers: [{ color: "#4a4d5c" }],
+  },
+  {
+    featureType: "administrative",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#9aa0a6" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#17222e" }],
+  },
+];
+
 const MAP_TYPES = [
   { id: "roadmap", label: "Harita" },
   { id: "hybrid", label: "Uydu" },
@@ -150,6 +199,19 @@ const GoogleRoute = ({
   const [response, setResponse] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
   const [mapType, setMapType] = useState("roadmap");
+  // Street View's own exit arrow lives top-left, under our custom map-type
+  // control — track the panorama so we can swap the control for an
+  // explicit exit button while it is open.
+  const [inStreetView, setInStreetView] = useState(false);
+  const panoramaRef = useRef(null);
+
+  const handleMapLoad = (map) => {
+    const panorama = map.getStreetView();
+    panoramaRef.current = panorama;
+    panorama.addListener("visible_changed", () =>
+      setInStreetView(panorama.getVisible()),
+    );
+  };
 
   const brandColor = MARKETPLACE_COLORS[order?.marketplaceId] ?? "#4f46e5";
 
@@ -230,24 +292,36 @@ const GoogleRoute = ({
 
         <div className="relative overflow-hidden rounded-xl border border-solid border-[--border-1]">
           {/* Custom segmented Harita/Uydu control; the native mapTypeControl
-              is disabled below. */}
-          <div className="absolute left-3 top-3 z-10 flex rounded-full border border-solid border-[--border-1] bg-[--white-1] p-1 shadow-sm">
-            {MAP_TYPES.map((T) => (
-              <button
-                key={T.id}
-                type="button"
-                onClick={() => setMapType(T.id)}
-                className={cn(
-                  "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
-                  mapType === T.id
-                    ? "bg-[--primary-1] text-white"
-                    : "text-[--gr-1] hover:text-[--black-1]",
-                )}
-              >
-                {T.label}
-              </button>
-            ))}
-          </div>
+              is disabled below. While Street View is open it becomes an
+              exit button instead — it used to sit exactly over the
+              panorama's own back arrow, leaving no way out. */}
+          {inStreetView ? (
+            <button
+              type="button"
+              onClick={() => panoramaRef.current?.setVisible(false)}
+              className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-full bg-[--primary-1] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
+            >
+              ← Haritaya Dön
+            </button>
+          ) : (
+            <div className="absolute left-3 top-3 z-10 flex rounded-full border border-solid border-[--border-1] bg-[--white-1] p-1 shadow-sm">
+              {MAP_TYPES.map((T) => (
+                <button
+                  key={T.id}
+                  type="button"
+                  onClick={() => setMapType(T.id)}
+                  className={cn(
+                    "rounded-full px-4 py-1.5 text-xs font-semibold transition-colors",
+                    mapType === T.id
+                      ? "bg-[--primary-1] text-white"
+                      : "text-[--gr-1] hover:text-[--black-1]",
+                  )}
+                >
+                  {T.label}
+                </button>
+              ))}
+            </div>
+          )}
           <GoogleMap
             id="direction-example"
             mapContainerStyle={{
@@ -257,8 +331,9 @@ const GoogleRoute = ({
             zoom={10}
             center={{ lat: addDot(lat1), lng: addDot(lng1) }}
             mapTypeId={mapType}
+            onLoad={handleMapLoad}
             options={{
-              styles: MAP_STYLES,
+              styles: getTheme() === "dark" ? MAP_STYLES_DARK : MAP_STYLES,
               mapTypeControl: false,
               // Removes the "Klavye kısayolları" link; the map-data/terms
               // attribution stays (Google ToS requires it).

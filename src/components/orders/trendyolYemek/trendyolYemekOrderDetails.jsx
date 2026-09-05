@@ -427,27 +427,16 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                   )}
                 </p>
               </div>
-              {/* Who paid the discount — same wording as the YemekSepeti
-                  sponsor lines. Split comes from items[].coupon/promotions
-                  amounts; when neither side is itemized, fall back to the
-                  plain "indirim uygulandı" line. */}
-              {discountBySeller > 0 && (
-                <p className="text-xs text-[--gr-1]">
-                  {sponsorPrice(discountBySeller)} ₺ Restoran tarafından
-                  karşılandı
-                </p>
-              )}
-              {discountByTrendyol > 0 && (
-                <p className="text-xs text-[--gr-1]">
-                  {sponsorPrice(discountByTrendyol)} ₺ Trendyol tarafından
-                  karşılandı
-                </p>
-              )}
-              {!discountBySeller && !discountByTrendyol && (
-                <p className="text-xs text-[--gr-1]">
-                  {sponsorPrice(calculatedDiscount)} ₺ indirim uygulandı
-                </p>
-              )}
+              {/* Who paid the discount, as labeled sub-rows (split from
+                  items[].coupon/promotions amounts). */}
+              <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
+                <p>Restoran İndirimi:</p>
+                <p>{sponsorPrice(discountBySeller)}</p>
+              </div>
+              <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
+                <p>Platform İndirimi:</p>
+                <p>{sponsorPrice(discountByTrendyol)}</p>
+              </div>
             </>
           ) : null}
           <div className="w-full flex items-center justify-between gap-2">

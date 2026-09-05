@@ -330,30 +330,35 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                   )}
                 </p>
               </div>
-              {/* Who paid the discount — same wording as the YemekSepeti
-                  sponsor lines. restaurant/migrosDiscountedPrice are the
-                  PRICES AFTER each side's own discount (verified: they
-                  equal totalPrice on undiscounted tickets), so each share
-                  is totalPrice minus that side's price. */}
+              {/* Who paid the discount, as labeled sub-rows.
+                  restaurant/migrosDiscountedPrice are the PRICES AFTER
+                  each side's own discount (verified: they equal totalPrice
+                  on undiscounted tickets), so each share is totalPrice
+                  minus that side's price. */}
               {[
                 {
-                  label: "Restoran",
+                  label: "Restoran İndirimi:",
                   share: order.totalPrice - order.restaurantDiscountedPrice,
                 },
                 {
-                  label: "Migros",
+                  label: "Platform İndirimi:",
                   share: order.totalPrice - order.migrosDiscountedPrice,
                 },
-              ]
-                .filter((S) => Number.isFinite(S.share) && S.share > 0.009)
-                .map((S) => (
-                  <p key={S.label} className="text-xs text-[--gr-1]">
+              ].map((S) => (
+                <div
+                  key={S.label}
+                  className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]"
+                >
+                  <p>{S.label}</p>
+                  <p>
                     {formatToPrice(
-                      String(S.share.toFixed(2)).replace(".", ","),
-                    )}{" "}
-                    ₺ {S.label} tarafından karşılandı
+                      String(
+                        (Number.isFinite(S.share) ? S.share : 0).toFixed(2),
+                      ).replace(".", ","),
+                    )}
                   </p>
-                ))}
+                </div>
+              ))}
             </>
           ) : null}
           <div className="w-full flex items-center justify-between gap-2">

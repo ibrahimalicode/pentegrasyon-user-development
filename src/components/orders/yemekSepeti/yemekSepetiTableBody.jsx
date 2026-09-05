@@ -186,7 +186,7 @@ const YemekSepetiTableBody = ({
             )}
           >
             {order.expressDelivery
-              ? "YS Kuryesi"
+              ? "Platform Kuryesi"
               : (() => {
                   const custAdd = order?.customer?.deliveryMainArea;
                   const currentCourier = courierServiceTypes.filter(

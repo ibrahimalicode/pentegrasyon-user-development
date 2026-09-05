@@ -7,7 +7,10 @@ import { formatDateString, formatToPrice } from "../../../utils/utils";
 
 //COMP
 import QrGenerator from "../../common/qrGenerator";
-import { TrendyolYemekAddress } from "../components/marketplaceAddresses";
+import {
+  TrendyolYemekAddress,
+  trendyolAddressText,
+} from "../components/marketplaceAddresses";
 import { PaymentMethods } from "../../../enums/trendyolPaymentMethods";
 
 const TrendyolYemekPrintOrder = ({ order }) => {
@@ -54,14 +57,14 @@ const TrendyolYemekPrintOrder = ({ order }) => {
         {order?.customer?.district && (
           <p>
             <span className="font-bold">Bölge: </span>{" "}
-            <span> {order?.customer?.district}</span>
+            <span> {trendyolAddressText(order?.customer?.district)}</span>
           </p>
         )}
 
         {order.customer.addressDescription && (
           <div className="flex">
             <p className="font-bold pr-1">Tarif: </p>
-            <div> {order.customer.addressDescription}</div>
+            <div> {trendyolAddressText(order.customer.addressDescription)}</div>
           </div>
         )}
         <p>

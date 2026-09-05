@@ -4,7 +4,10 @@ import React, { useEffect, useState } from "react";
 //COMP
 import CloseI from "../../../assets/icon/close";
 import TrendyolYemekStatusButtons from "./trendyolYemekStatusButtons";
-import { TrendyolYemekAddress } from "../components/marketplaceAddresses";
+import {
+  TrendyolYemekAddress,
+  trendyolAddressText,
+} from "../components/marketplaceAddresses";
 
 //CONTEXT
 import { useSlideBar } from "../../../context/SlideBarContext";
@@ -197,7 +200,9 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
 
         <div className="flex border-t border-[--gr-3] py-2">
           <p className="w-1/2">Adres Tarifi</p>
-          <p className="w-1/2 text-end">{order.customer.addressDescription}</p>
+          <p className="w-1/2 text-end">
+            {trendyolAddressText(order.customer.addressDescription)}
+          </p>
         </div>
       </div>
 

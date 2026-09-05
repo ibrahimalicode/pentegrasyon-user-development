@@ -65,7 +65,23 @@ export const MigrosYemekAddress = ({ order, className }) => {
   );
 };
 
+// Trendyol GO tickets fill every customer address field with a "TGO Yemek"
+// (older tickets: "Trendyol Yemek") placeholder — the real address stays
+// with Trendyol's courier. Show "Kurye Bilgisinde" instead of the raw
+// placeholder wherever such a field is displayed.
+const TRENDYOL_ADDRESS_PLACEHOLDERS = ["TGO Yemek", "Trendyol Yemek"];
+export const trendyolAddressText = (value) =>
+  TRENDYOL_ADDRESS_PLACEHOLDERS.includes(value) ? "Kurye Bilgisinde" : value;
+
 export const TrendyolYemekAddress = ({ order, className }) => {
+  if (TRENDYOL_ADDRESS_PLACEHOLDERS.includes(order.customer.address1)) {
+    return (
+      <div className={`flex flex-wrap ${className}`}>
+        <p>Kurye Bilgisinde</p>
+      </div>
+    );
+  }
+
   const customerAddress = `
     ${order.customer.city},
     ${order.customer.district},

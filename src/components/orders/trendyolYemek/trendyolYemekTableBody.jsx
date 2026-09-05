@@ -152,6 +152,7 @@ const TrendyolYemekTableBody = ({
             order?.deliveryType?.toLocaleLowerCase() !== "go"
               ? "Gel Al"
               : (order.customer.addressDescription != "Trendyol Yemek" &&
+                  order.customer.addressDescription != "TGO Yemek" &&
                   checkLeng(order?.customer?.addressDescription)) ||
                 "Kurye Bilgisinde"}
 

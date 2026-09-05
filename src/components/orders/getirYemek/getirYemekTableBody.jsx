@@ -194,7 +194,7 @@ const GetirYemekTableBody = ({
                 ? currentCourier[0].id === 0 && order?.courier?.username
                   ? order?.courier?.username
                   : currentCourier[0].label
-                : "Getir Kuryesi";
+                : "Platform Kuryesi";
             })()}
           </button>
         </td>

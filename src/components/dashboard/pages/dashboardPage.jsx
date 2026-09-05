@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import StatCard from "../statCard";
 import SalesBar from "../salesBar";
+import OrdersTimeline from "../ordersTimeline";
 import RestaurantsTable from "../restaurantsTable";
 import MarketplaceChart from "../merketplaceChart";
 import DownloadDesktopButton from "../../common/downloadDesktopButton";
@@ -30,6 +31,7 @@ const DashboardPage = () => {
           </div>
           <MarketplaceChart />
         </div>
+        <OrdersTimeline />
         <RestaurantsTable />
       </div>
     </section>

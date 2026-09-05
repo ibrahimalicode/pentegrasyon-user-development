@@ -9,7 +9,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // just looking at the list, and the overlay made the whole page blink on
 // every new order / status change. Excluded from BOTH matchers so the
 // counter stays balanced.
-const SILENT_ACTIONS = ["Tickets/GetTicketById"];
+const SILENT_ACTIONS = ["Tickets/GetTicketById", "Tickets/GetTicketTimeline"];
 const isSilent = (type) => SILENT_ACTIONS.some((a) => type.startsWith(a + "/"));
 
 const loadingSlice = createSlice({

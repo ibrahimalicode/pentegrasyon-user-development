@@ -344,21 +344,21 @@ const MigrosYemekOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                   label: "Platform İndirimi:",
                   share: order.totalPrice - order.migrosDiscountedPrice,
                 },
-              ].map((S) => (
-                <div
-                  key={S.label}
-                  className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]"
-                >
-                  <p>{S.label}</p>
-                  <p>
-                    {formatToPrice(
-                      String(
-                        (Number.isFinite(S.share) ? S.share : 0).toFixed(2),
-                      ).replace(".", ","),
-                    )}
-                  </p>
-                </div>
-              ))}
+              ]
+                .filter((S) => Number.isFinite(S.share) && S.share > 0.009)
+                .map((S) => (
+                  <div
+                    key={S.label}
+                    className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]"
+                  >
+                    <p>{S.label}</p>
+                    <p>
+                      {formatToPrice(
+                        String(S.share.toFixed(2)).replace(".", ","),
+                      )}
+                    </p>
+                  </div>
+                ))}
             </>
           ) : null}
           <div className="w-full flex items-center justify-between gap-2">

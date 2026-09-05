@@ -428,15 +428,20 @@ const TrendyolOrderDetails = ({ order, setOrdersData, licenseSettings }) => {
                 </p>
               </div>
               {/* Who paid the discount, as labeled sub-rows (split from
-                  items[].coupon/promotions amounts). */}
-              <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
-                <p>Restoran İndirimi:</p>
-                <p>{sponsorPrice(discountBySeller)}</p>
-              </div>
-              <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
-                <p>Platform İndirimi:</p>
-                <p>{sponsorPrice(discountByTrendyol)}</p>
-              </div>
+                  items[].coupon/promotions amounts); a side that paid
+                  nothing gets no row. */}
+              {discountBySeller > 0 && (
+                <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
+                  <p>Restoran İndirimi:</p>
+                  <p>{sponsorPrice(discountBySeller)}</p>
+                </div>
+              )}
+              {discountByTrendyol > 0 && (
+                <div className="w-full flex items-center justify-between gap-2 text-xs text-[--gr-1]">
+                  <p>Platform İndirimi:</p>
+                  <p>{sponsorPrice(discountByTrendyol)}</p>
+                </div>
+              )}
             </>
           ) : null}
           <div className="w-full flex items-center justify-between gap-2">

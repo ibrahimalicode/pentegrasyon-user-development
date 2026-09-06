@@ -11,7 +11,6 @@ import RestaurantStatuses from "../../../enums/restaurantStatuses";
 import RestaurantStatusToggle, {
   staleNote,
 } from "../components/restaurantStatusToggle";
-import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 import { StatusCard, StatusRow } from "../components/statusCard";
 
 //REDUX
@@ -197,12 +196,6 @@ const YemekSepetiRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                   disabled={updateRestaurantLoading || !isActive(key)}
                   stale={restaurant.isAvailabilityStale}
                   note={staleNote(restaurant)}
-                />
-              }
-              action={
-                <DeleteIntegrationInfo
-                  restaurant={restaurant}
-                  onSuccess={onSuccess}
                 />
               }
             />

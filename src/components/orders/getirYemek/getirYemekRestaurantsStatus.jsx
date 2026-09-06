@@ -11,7 +11,6 @@ import RestaurantStatusToggle, {
   staleNote,
 } from "../components/restaurantStatusToggle";
 import { StatusCard, StatusRow } from "../components/statusCard";
-import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
 import {
@@ -204,12 +203,6 @@ const GetirYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                     />
                   )}
                 </>
-              }
-              action={
-                <DeleteIntegrationInfo
-                  onSuccess={onSuccess}
-                  restaurant={restaurant}
-                />
               }
             />
           );

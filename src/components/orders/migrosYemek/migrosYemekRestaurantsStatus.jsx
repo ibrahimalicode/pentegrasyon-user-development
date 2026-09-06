@@ -12,7 +12,6 @@ import RestaurantStatusToggle, {
   staleNote,
 } from "../components/restaurantStatusToggle";
 import { StatusCard, StatusRow } from "../components/statusCard";
-import DeleteIntegrationInfo from "../components/deleteIntegrationInfo";
 
 //REDUX
 import {
@@ -139,12 +138,6 @@ const MigrosYemekRestaurantsStatus = ({ statRest, licenses, onSuccess }) => {
                       MigrosYemek/UpdateRestaurantCourierStatus does not
                       exist (only GetirYemek has one); it always 404'd. */}
                 </>
-              }
-              action={
-                <DeleteIntegrationInfo
-                  onSuccess={onSuccess}
-                  restaurant={restaurant}
-                />
               }
             />
           );

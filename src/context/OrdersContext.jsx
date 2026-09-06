@@ -25,6 +25,7 @@ export const OrdersContextProvider = ({ children }) => {
   const dispatch = useDispatch();
   const token = getAuth()?.token;
   const timeoutRef = useRef(null);
+  const recheckRef = useRef(null);
   const { popupContent, setPopupContent } = usePopup();
   const unverifiedOrderSoundRef = useRef(new Audio(unverifiedOrderPath));
 
@@ -90,13 +91,22 @@ export const OrdersContextProvider = ({ children }) => {
   }
 
   function isOrderUnverifiedInDB(order) {
-    if (order.status === 325 || order.status === 400 || order.status === 0) {
+    if (
+      order.status === 325 ||
+      order.status === 400 ||
+      order.status === 0 ||
+      order.packageStatus === "Created"
+    ) {
       dispatch(
         getTicketById({ ticketId: order.id, marketplaceId: order.marketplaceId }),
       ).then((res) => {
         if (res?.meta?.requestStatus === "fulfilled") {
           const data = res.payload.data;
-          if (data.id === order.id && data.status != order.status)
+          if (
+            data.id === order.id &&
+            (data.status != order.status ||
+              data.packageStatus != order.packageStatus)
+          )
             setStatusChangedOrder(data);
         }
       });
@@ -220,9 +230,20 @@ export const OrdersContextProvider = ({ children }) => {
         isOrderUnverifiedInDB(unverifiedOrders);
         console.log("Sound played");
       }, 4000);
+      // Keep re-checking the DB while the alarm rings. With Oto Onay the
+      // backend can approve AFTER the panel hydrated the new order; if the
+      // status push is late or missed, the old one-shot check (4s in)
+      // found nothing changed yet and the row rang "Onayla" until a
+      // manual refresh even though it was already accepted.
+      recheckRef.current = setInterval(() => {
+        isOrderUnverifiedInDB(unverifiedOrders);
+      }, 12000);
     } else {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (recheckRef.current) {
+        clearInterval(recheckRef.current);
       }
       unverifiedOrderSound.loop = false;
       unverifiedOrderSound.pause();
@@ -233,6 +254,9 @@ export const OrdersContextProvider = ({ children }) => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (recheckRef.current) {
+        clearInterval(recheckRef.current);
       }
     };
   }, [unverifiedOrders, token]);

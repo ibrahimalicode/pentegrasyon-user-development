@@ -1,5 +1,8 @@
-import { useState } from "react";
+//MODULES
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
+//COMP
 import StatCard from "../statCard";
 import SalesBar from "../salesBar";
 import OrdersTimeline from "../ordersTimeline";
@@ -7,10 +10,38 @@ import RestaurantsTable from "../restaurantsTable";
 import MarketplaceChart from "../merketplaceChart";
 import DownloadDesktopButton from "../../common/downloadDesktopButton";
 
+//REDUX
+import {
+  getLicenses,
+  resetGetLicenses,
+} from "../../../redux/licenses/getLicensesSlice";
+
 const DashboardPage = () => {
+  const dispatch = useDispatch();
   // Order KPIs are derived inside SalesBar (which owns the statistics
   // fetch and its filters) and lifted here so the cards can show them.
   const [orderTotals, setOrderTotals] = useState(null);
+
+  // The marketplace charts only show marketplaces the user actually holds
+  // a license for; null = not resolved yet (charts fall back to the four
+  // majors so a failed fetch never blanks them).
+  const { licenses } = useSelector((state) => state.licenses.getLicenses);
+  const [licensedMarketplaceIds, setLicensedMarketplaceIds] = useState(null);
+
+  useEffect(() => {
+    if (!licensedMarketplaceIds) {
+      dispatch(getLicenses({ pageNumber: 0, pageSize: 0 }));
+    }
+  }, [licensedMarketplaceIds]);
+
+  useEffect(() => {
+    if (licenses?.data) {
+      setLicensedMarketplaceIds([
+        ...new Set(licenses.data.map((L) => L.licenseTypeId)),
+      ]);
+      dispatch(resetGetLicenses());
+    }
+  }, [licenses]);
 
   return (
     // px-[4%] matches every other page; the old px-16 made the dashboard
@@ -29,9 +60,9 @@ const DashboardPage = () => {
           <div className="xl:col-span-2 min-w-0">
             <SalesBar onTotalsChange={setOrderTotals} />
           </div>
-          <MarketplaceChart />
+          <MarketplaceChart licensedMarketplaceIds={licensedMarketplaceIds} />
         </div>
-        <OrdersTimeline />
+        <OrdersTimeline licensedMarketplaceIds={licensedMarketplaceIds} />
         <RestaurantsTable />
       </div>
     </section>

@@ -3,49 +3,48 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetGetOrderStatistics } from "../../redux/dashboard/statistics/getOrderStatisticsSlice";
 
-const initialData = {
-  series: [0, 0, 0, 0, 0, 0],
-  colors: [
-    "var(--getiryemek)",
-    "var(--migrosyemek)",
-    "var(--trendyol)",
-    "var(--yemeksepeti)",
-    "var(--gofody)",
-    "var(--siparisim)",
-  ],
-  labels: [
-    "GetirYemek",
-    "MigrosYemek",
-    "Trendyol",
-    "Yemeksepeti",
-    "GoFody",
-    "Siparişim+",
-  ],
-};
+// The four supported marketplaces; GoFody/Siparişim+ have no panel
+// support and no licenses, so they no longer occupy legend slots.
+const MARKETPLACES = [
+  { id: 0, label: "GetirYemek", color: "var(--getiryemek)" },
+  { id: 1, label: "MigrosYemek", color: "var(--migrosyemek)" },
+  { id: 2, label: "Trendyol", color: "var(--trendyol)" },
+  { id: 3, label: "Yemeksepeti", color: "var(--yemeksepeti)" },
+];
 
-const MarketplaceChart = () => {
+const MarketplaceChart = ({ licensedMarketplaceIds }) => {
   const dispatch = useDispatch();
   const { data: ordersData } = useSelector(
     (state) => state.dashboard.getOrderStatistics
   );
-  const [data, setData] = useState(initialData);
+  // counts keyed by marketplaceId; the visible slice set is projected from
+  // this at render so the license filter can arrive before or after.
+  const [counts, setCounts] = useState({});
 
   useEffect(() => {
     if (!ordersData) return;
-    ordersData.map((d) =>
-      setData((prev) => {
-        const updatedData = [...prev.series];
-        updatedData[d.marketplaceId] = d.totalCount;
-        return {
-          ...prev,
-          series: [...updatedData],
-        };
-      })
-    );
+    setCounts((prev) => {
+      const updated = { ...prev };
+      for (const d of ordersData) updated[d.marketplaceId] = d.totalCount;
+      return updated;
+    });
     dispatch(resetGetOrderStatistics());
   }, [ordersData]);
 
   useEffect(() => {
+    // Only marketplaces the user holds a license for; before the license
+    // list resolves (or if it fails), all four majors.
+    const visible = MARKETPLACES.filter(
+      (m) =>
+        !licensedMarketplaceIds?.length ||
+        licensedMarketplaceIds.includes(m.id)
+    );
+    const data = {
+      series: visible.map((m) => counts[m.id] || 0),
+      colors: visible.map((m) => m.color),
+      labels: visible.map((m) => m.label),
+    };
+
     const chartElement = document.getElementById("donut-chart");
     const cleanup = initChart(chartElement, data);
 
@@ -53,7 +52,7 @@ const MarketplaceChart = () => {
     return () => {
       if (cleanup) cleanup();
     };
-  }, [data]);
+  }, [counts, licensedMarketplaceIds]);
 
   return (
     <main className="w-full flex flex-col bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card p-5">

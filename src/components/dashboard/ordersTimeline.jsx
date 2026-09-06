@@ -29,33 +29,31 @@ const WINDOW_MS = 24 * 60 * 60 * 1000;
 // also excluded from the global loader in loadingSlice).
 const REFRESH_MS = 60 * 1000;
 
-function buildSeries(tickets) {
+function buildSeries(tickets, marketplaces) {
   const now = Date.now();
   const firstBucket = Math.floor((now - WINDOW_MS) / BUCKET_MS) * BUCKET_MS;
   const bucketCount = Math.ceil((now - firstBucket) / BUCKET_MS);
-  const counts = MARKETPLACE_SERIES.map(() =>
-    new Array(bucketCount).fill(0),
-  );
+  const counts = marketplaces.map(() => new Array(bucketCount).fill(0));
 
   for (const t of tickets || []) {
     // Timeline dates are Turkey local time without offset — parsed as
     // local, the same convention as the rest of the panel.
     const ts = new Date(t.createdDateTime).getTime();
     const bucket = Math.floor((ts - firstBucket) / BUCKET_MS);
-    const seriesIdx = MARKETPLACE_SERIES.findIndex(
+    const seriesIdx = marketplaces.findIndex(
       (m) => m.id === t.marketplaceId,
     );
     if (seriesIdx >= 0 && bucket >= 0 && bucket < bucketCount)
       counts[seriesIdx][bucket] += 1;
   }
 
-  return MARKETPLACE_SERIES.map((m, i) => ({
+  return marketplaces.map((m, i) => ({
     name: m.name,
     data: counts[i].map((c, j) => [firstBucket + j * BUCKET_MS, c]),
   }));
 }
 
-const OrdersTimeline = () => {
+const OrdersTimeline = ({ licensedMarketplaceIds }) => {
   const dispatch = useDispatch();
   const { data, error } = useSelector((state) => state.orders.timeline);
   const { newOrder } = useFirestore();
@@ -114,16 +112,29 @@ const OrdersTimeline = () => {
   //RENDER / UPDATE CHART
   useEffect(() => {
     if (!tickets || !chartElRef.current) return;
-    const series = buildSeries(tickets);
+    // Only marketplaces the user holds a license for; before the license
+    // list resolves (or if it fails), all four majors.
+    const marketplaces = MARKETPLACE_SERIES.filter(
+      (m) =>
+        !licensedMarketplaceIds?.length ||
+        licensedMarketplaceIds.includes(m.id),
+    );
+    const series = buildSeries(tickets, marketplaces);
 
     if (chartRef.current) {
-      chartRef.current.updateSeries(series);
-      return;
+      // Colors are baked in at creation, so a changed marketplace set
+      // needs a rebuild, not an updateSeries.
+      if (chartRef.current.__seriesKey === marketplaces.length) {
+        chartRef.current.updateSeries(series);
+        return;
+      }
+      chartRef.current.destroy();
+      chartRef.current = null;
     }
 
     chartRef.current = new ApexCharts(chartElRef.current, {
       series,
-      colors: MARKETPLACE_SERIES.map((m) => m.color),
+      colors: marketplaces.map((m) => m.color),
       chart: {
         type: "line",
         height: 280,
@@ -161,8 +172,9 @@ const OrdersTimeline = () => {
         x: { format: "HH:mm" },
       },
     });
+    chartRef.current.__seriesKey = marketplaces.length;
     chartRef.current.render();
-  }, [tickets]);
+  }, [tickets, licensedMarketplaceIds]);
 
   //DESTROY ON UNMOUNT
   useEffect(() => {

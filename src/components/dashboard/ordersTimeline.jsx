@@ -30,9 +30,12 @@ const WINDOW_MS = 24 * 60 * 60 * 1000;
 const REFRESH_MS = 60 * 1000;
 
 function buildSeries(tickets, marketplaces) {
+  // Buckets anchored to NOW, not to clock boundaries: every re-render
+  // slides the whole window left, so the chart visibly scrolls with time
+  // (boundary-aligned buckets only jumped twice an hour).
   const now = Date.now();
-  const firstBucket = Math.floor((now - WINDOW_MS) / BUCKET_MS) * BUCKET_MS;
-  const bucketCount = Math.ceil((now - firstBucket) / BUCKET_MS);
+  const firstBucket = now - WINDOW_MS;
+  const bucketCount = Math.ceil(WINDOW_MS / BUCKET_MS);
   const counts = marketplaces.map(() => new Array(bucketCount).fill(0));
 
   for (const t of tickets || []) {
@@ -47,10 +50,14 @@ function buildSeries(tickets, marketplaces) {
       counts[seriesIdx][bucket] += 1;
   }
 
-  return marketplaces.map((m, i) => ({
-    name: m.name,
-    data: counts[i].map((c, j) => [firstBucket + j * BUCKET_MS, c]),
-  }));
+  return {
+    series: marketplaces.map((m, i) => ({
+      name: m.name,
+      data: counts[i].map((c, j) => [firstBucket + j * BUCKET_MS, c]),
+    })),
+    rangeStart: firstBucket,
+    rangeEnd: now,
+  };
 }
 
 const OrdersTimeline = ({ licensedMarketplaceIds }) => {
@@ -63,14 +70,17 @@ const OrdersTimeline = ({ licensedMarketplaceIds }) => {
   const seenIdsRef = useRef(new Set());
   const [tickets, setTickets] = useState(null);
   const [unavailable, setUnavailable] = useState(false);
+  // Bumped by the interval so the window slides even when a refetch
+  // returns nothing new (or fails).
+  const [renderTick, setRenderTick] = useState(0);
 
   //GET TIMELINE + 60s LIVE REFRESH
   useEffect(() => {
     dispatch(getTicketTimeline({ lastHours: 24 }));
-    const timer = setInterval(
-      () => dispatch(getTicketTimeline({ lastHours: 24 })),
-      REFRESH_MS,
-    );
+    const timer = setInterval(() => {
+      dispatch(getTicketTimeline({ lastHours: 24 }));
+      setRenderTick((t) => t + 1);
+    }, REFRESH_MS);
     return () => clearInterval(timer);
   }, []);
 
@@ -119,13 +129,19 @@ const OrdersTimeline = ({ licensedMarketplaceIds }) => {
         !licensedMarketplaceIds?.length ||
         licensedMarketplaceIds.includes(m.id),
     );
-    const series = buildSeries(tickets, marketplaces);
+    const { series, rangeStart, rangeEnd } = buildSeries(
+      tickets,
+      marketplaces,
+    );
 
     if (chartRef.current) {
       // Colors are baked in at creation, so a changed marketplace set
-      // needs a rebuild, not an updateSeries.
+      // needs a rebuild, not an update.
       if (chartRef.current.__seriesKey === marketplaces.length) {
-        chartRef.current.updateSeries(series);
+        chartRef.current.updateOptions({
+          series,
+          xaxis: { min: rangeStart, max: rangeEnd },
+        });
         return;
       }
       chartRef.current.destroy();
@@ -158,6 +174,8 @@ const OrdersTimeline = ({ licensedMarketplaceIds }) => {
       },
       xaxis: {
         type: "datetime",
+        min: rangeStart,
+        max: rangeEnd,
         labels: { datetimeUTC: false, format: "HH:mm" },
         tooltip: { enabled: false },
       },
@@ -174,7 +192,7 @@ const OrdersTimeline = ({ licensedMarketplaceIds }) => {
     });
     chartRef.current.__seriesKey = marketplaces.length;
     chartRef.current.render();
-  }, [tickets, licensedMarketplaceIds]);
+  }, [tickets, licensedMarketplaceIds, renderTick]);
 
   //DESTROY ON UNMOUNT
   useEffect(() => {

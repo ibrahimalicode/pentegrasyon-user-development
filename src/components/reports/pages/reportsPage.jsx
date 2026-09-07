@@ -270,12 +270,19 @@ const RestaurantReport = ({ report }) => {
         </p>
       </div>
 
+      {/* Every order is either approved or cancelled — no in-between
+          state is shown anywhere in the report. */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 pt-4">
         <Kpi
-          label="Sipariş"
-          value={report.orderCount}
+          label="Onaylanan Sipariş"
+          value={report.orderCount - report.cancelledCount}
           percent={report.orderCountChangePercent}
-          note={`${report.completedCount} tamamlandı`}
+          note={`toplam ${report.orderCount} sipariş`}
+        />
+        <Kpi
+          label="İptal Edilen"
+          value={report.cancelledCount}
+          note={`%${report.cancelRate} iptal oranı`}
         />
         <Kpi
           label="Ciro"
@@ -287,11 +294,6 @@ const RestaurantReport = ({ report }) => {
           label="Ortalama Sepet"
           value={`${price(report.averageBasket)} ₺`}
           percent={report.averageBasketChangePercent}
-        />
-        <Kpi
-          label="İptal Oranı"
-          value={`%${report.cancelRate}`}
-          note={`${report.cancelledCount} sipariş`}
         />
       </div>
 
@@ -325,7 +327,9 @@ const RestaurantReport = ({ report }) => {
             rows={report.marketplaces.map((m) => ({
               key: m.marketplaceId,
               label: m.name,
-              value: m.orderCount,
+              // Approved = not cancelled, matching the KPI split.
+              value: m.orderCount - m.cancelledCount,
+              cancelled: m.cancelledCount,
               color: MARKETPLACE_COLORS[m.marketplaceId],
               revenue: m.revenue,
               share: m.revenueShare,
@@ -335,7 +339,10 @@ const RestaurantReport = ({ report }) => {
             valueFormatter={(r) => (
               <>
                 <p>
-                  {r.value} sipariş · %{pct(r.value, report.orderCount)}
+                  {r.value} onaylı
+                  {r.cancelled > 0 && (
+                    <span className="text-[--red-1]"> · {r.cancelled} iptal</span>
+                  )}
                 </p>
                 <p className="text-[--gr-1]">
                   {price(r.revenue)} ₺ · %{Math.round(r.share)}
@@ -466,6 +473,13 @@ const ReportsPage = () => {
   const [report, setReport] = useState(null);
   const [failed, setFailed] = useState(false);
 
+  // The account-level payload carries no cancelled figure; sum the
+  // restaurants so the two-category split holds here too.
+  const accountCancelled = (report?.restaurants || []).reduce(
+    (sum, r) => sum + (r.cancelledCount || 0),
+    0,
+  );
+
   function fetchReport(type, customRange) {
     setFailed(false);
     if (type === "custom") {
@@ -559,20 +573,25 @@ const ReportsPage = () => {
                 } restoran`}
               />
               <Kpi
-                label="Toplam Sipariş"
-                value={report.orderCount}
+                label="Onaylanan Sipariş"
+                value={report.orderCount - accountCancelled}
                 percent={report.orderCountChangePercent}
-                note={`${report.completedCount} tamamlandı`}
+                note={`toplam ${report.orderCount} sipariş`}
+              />
+              <Kpi
+                label="İptal Edilen"
+                value={accountCancelled}
+                note={`%${
+                  report.orderCount
+                    ? ((accountCancelled / report.orderCount) * 100).toFixed(1)
+                    : 0
+                } iptal oranı`}
               />
               <Kpi
                 label="Toplam Ciro"
                 value={`${price(report.revenue)} ₺`}
                 percent={report.revenueChangePercent}
-              />
-              <Kpi
-                label="Önceki Dönem"
-                value={report.previousOrderCount}
-                note={`${price(report.previousRevenue)} ₺`}
+                note={`Önceki dönem ${price(report.previousRevenue)} ₺`}
               />
             </div>
           )}

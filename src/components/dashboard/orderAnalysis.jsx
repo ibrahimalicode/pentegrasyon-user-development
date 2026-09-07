@@ -202,8 +202,17 @@ const OrderAnalysis = ({ rows, unavailable }) => {
 
   const kpis = stats
     ? [
-        { label: "Toplam Sipariş", value: stats.total },
-        { label: "İptal Oranı", value: `%${stats.cancelRate.toFixed(1)}` },
+        // Two categories only: an order is either approved or cancelled.
+        {
+          label: "Onaylanan Sipariş",
+          value: stats.total - stats.cancelled,
+          note: `toplam ${stats.total} sipariş`,
+        },
+        {
+          label: "İptal Edilen",
+          value: stats.cancelled,
+          note: `%${stats.cancelRate.toFixed(1)} iptal oranı`,
+        },
         {
           label: "Tekrar Sipariş Veren",
           value: `%${stats.repeatRate.toFixed(0)}`,

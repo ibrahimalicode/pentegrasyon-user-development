@@ -151,13 +151,13 @@ const StatCard = ({ orderTotals }) => {
 
                 {card.active != null && (
                   <div className="flex gap-2 shrink-0">
-                    <div className="flex items-center gap-1.5 rounded-full bg-[--status-green] px-2.5 py-1">
+                    <div className="flex items-center gap-1.5 rounded-lg bg-[--status-green] px-2.5 py-1">
                       <span className="text-xs font-semibold text-[--green-1]">
                         {card.active}
                       </span>
                       <span className="text-xs text-[--green-1]">Aktif</span>
                     </div>
-                    <div className="flex items-center gap-1.5 rounded-full bg-[--light-3] px-2.5 py-1">
+                    <div className="flex items-center gap-1.5 rounded-lg bg-[--light-3] px-2.5 py-1">
                       <span className="text-xs font-semibold text-[--gr-1]">
                         {card.passive}
                       </span>

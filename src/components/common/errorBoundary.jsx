@@ -41,7 +41,7 @@ class ErrorBoundary extends React.Component {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-[--primary-1] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#4338ca]"
+            className="mt-2 inline-flex h-11 items-center justify-center rounded-lg bg-[--primary-1] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#4338ca]"
           >
             Sayfayı Yenile
           </button>

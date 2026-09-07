@@ -109,7 +109,7 @@ const InvoiceData = ({
             <button
               type="button"
               onClick={() => setOpenFatura(true)}
-              className="shrink-0 rounded-full border border-solid border-[--border-1] px-2.5 py-1 text-xs text-[--black-2] transition-colors hover:border-[--primary-1] hover:text-[--primary-1]"
+              className="shrink-0 rounded-lg border border-solid border-[--border-1] px-2.5 py-1 text-xs text-[--black-2] transition-colors hover:border-[--primary-1] hover:text-[--primary-1]"
             >
               Düzenle
             </button>

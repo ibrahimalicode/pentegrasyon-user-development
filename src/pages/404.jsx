@@ -9,7 +9,7 @@ const NotFound = ({ showGoBack = true }) => {
     <section className="bg-[--white]">
       <div className="container flex pt-48 sm:pt-0 sm:items-center min-h-screen px-6 py-12 mx-auto">
         <div className="flex flex-col items-center max-w-sm mx-auto text-center">
-          <p className="p-3 w-32 font-medium text-[--red-1] rounded-full bg-[--light-1]">
+          <p className="p-3 w-32 font-medium text-[--red-1] rounded-lg bg-[--light-1]">
             <WarnI />
           </p>
           <h1 className="mt-3 text-2xl font-semibold text-[--black-1] md:text-3xl">

@@ -31,7 +31,7 @@ const EditCourierIsActive = ({ courierData, onSuccess }) => {
         courierData.isActive
           ? "text-[--green-1] bg-[--status-green] border-[--green-1]"
           : "text-[--red-1] bg-[--status-red] border-[--red-1]"
-      } px-3 py-1 border border-solid rounded-full`}
+      } px-3 py-1 border border-solid rounded-lg`}
       onClick={handleClick}
     >
       ● {courierData.isActive ? "Aktif" : "Pasif"}

@@ -134,7 +134,7 @@ function Header({
               <Link
                 to="/profile"
                 title="Profili aç"
-                className="max-md:hidden mr-1.5 flex items-center gap-2.5 rounded-full border border-solid border-[--border-1] bg-[--white-1] py-1 pl-1 pr-3.5 hover:border-[--primary-1]/50 hover:bg-[--light-3] transition-colors"
+                className="max-md:hidden mr-1.5 flex items-center gap-2.5 rounded-lg border border-solid border-[--border-1] bg-[--white-1] py-1 pl-1 pr-3.5 hover:border-[--primary-1]/50 hover:bg-[--light-3] transition-colors"
               >
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[--light-1] text-[0.65rem] font-semibold text-[--primary-1]">
                   {initialsOf(user.fullName) || "K"}

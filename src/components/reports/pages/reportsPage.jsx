@@ -527,7 +527,7 @@ const ReportsPage = () => {
         {/* Period picker */}
         <main className="w-full p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex rounded-full border border-solid border-[--border-1] p-0.5">
+            <div className="flex rounded-lg border border-solid border-[--border-1] p-0.5">
               {PERIODS.map((p) => (
                 <button
                   key={p.id}
@@ -537,7 +537,7 @@ const ReportsPage = () => {
                     if (p.id !== "custom") fetchReport(p.id, range);
                   }}
                   className={cn(
-                    "rounded-full px-4 py-1.5 text-xs font-medium transition-colors whitespace-nowrap",
+                    "rounded-lg px-4 py-1.5 text-xs font-medium transition-colors whitespace-nowrap",
                     periodType === p.id
                       ? "bg-[--primary-1] text-white"
                       : "text-[--gr-1] hover:text-[--black-1]",

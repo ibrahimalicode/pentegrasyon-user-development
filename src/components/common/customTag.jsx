@@ -6,7 +6,7 @@ const CustomTag = ({ onClick, data }) => {
     <div
       key={data.id}
       className={cn(
-        "w-44 flex items-center justify-between gap-2 py-1.5 pl-3 pr-1.5 rounded-full",
+        "w-44 flex items-center justify-between gap-2 py-1.5 pl-3 pr-1.5 rounded-lg",
         "border border-solid border-[--border-1] bg-[--light-3]",
         "text-xs text-[--black-3] whitespace-nowrap"
       )}

@@ -254,7 +254,7 @@ export const formatLisansPackages = (data) => {
       <div class="flex flex-wrap justify-between items-center gap-x-2 gap-y-1">
         <p class='min-w-0 flex-1 truncate'>${label}</p>
         <p class='text-[--link-1] whitespace-nowrap' > ${year} Yıllık </p>
-        <p class='text-xs text-[--white-1] border rounded-full px-1.5 py-1 whitespace-nowrap ${bgColor}' > ${description} </p>
+        <p class='text-xs text-[--white-1] border rounded-lg px-1.5 py-1 whitespace-nowrap ${bgColor}' > ${description} </p>
         <p class='w-12 text-right' >${price}</p>
       </div>`;
   }

@@ -19,6 +19,7 @@ import { formatDate } from "../../../utils/utils";
 import {
   getLicenses,
   resetGetLicenses,
+  resetGetLicensesState,
 } from "../../../redux/licenses/getLicensesSlice";
 import {
   getOrderFacts,
@@ -52,7 +53,10 @@ const DashboardPage = () => {
       setLicensedMarketplaceIds([
         ...new Set(licenses.data.map((L) => L.licenseTypeId)),
       ]);
+      // Clear the success flag too — leaving it set while nulling the data
+      // handed the licenses page a "success" with nothing in it.
       dispatch(resetGetLicenses());
+      dispatch(resetGetLicensesState());
     }
   }, [licenses]);
 

@@ -162,7 +162,11 @@ const LicensesPage = () => {
       toast.error(error.message);
       dispatch(resetGetLicensesState());
     }
-    if (success) {
+    // `licenses` guard: the slice is shared (the dashboard also fetches
+    // licenses for its marketplace filters) and resetGetLicenses() nulls
+    // the data while leaving success true — arriving here from another
+    // page then crashed the whole screen.
+    if (success && licenses) {
       setTotalItems(licenses.totalCount);
       dispatch(getRestaurantsMap(licenses.data));
       dispatch(resetGetLicensesState());

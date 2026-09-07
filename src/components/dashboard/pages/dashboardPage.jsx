@@ -12,6 +12,9 @@ import MarketplaceChart from "../merketplaceChart";
 import PaymentCourierSplits from "../paymentCourierSplits";
 import DownloadDesktopButton from "../../common/downloadDesktopButton";
 
+//CONTEXT
+import { useFirestore } from "../../../context/FirestoreContext";
+
 //UTILS
 import { formatDate } from "../../../utils/utils";
 
@@ -35,6 +38,7 @@ const DashboardPage = () => {
   // Order KPIs are derived inside SalesBar (which owns the statistics
   // fetch and its filters) and lifted here so the cards can show them.
   const [orderTotals, setOrderTotals] = useState(null);
+  const { ordersVersion } = useFirestore();
 
   // The marketplace charts only show marketplaces the user actually holds
   // a license for; null = not resolved yet (charts fall back to the four
@@ -82,11 +86,13 @@ const DashboardPage = () => {
     );
   }
 
+  // Re-pull on mount and whenever orders change. Facts sync nightly, so
+  // today's orders land here only after that run — the card says so.
   useEffect(() => {
     factsBuffer.rows = [];
     factsBuffer.page = 1;
     fetchFactsPage(1);
-  }, []);
+  }, [ordersVersion]);
 
   useEffect(() => {
     if (factsData) {

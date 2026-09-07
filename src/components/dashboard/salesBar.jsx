@@ -1,9 +1,12 @@
 //MODULES
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //COMP
 import CustomSelector from "../common/customSelector";
+
+//CONTEXT
+import { useFirestore } from "../../context/FirestoreContext";
 
 //UTILS
 import years from "../../enums/years";
@@ -33,6 +36,9 @@ const SalesBar = ({ onTotalsChange }) => {
     (state) => state.restaurants.getRestaurants
   );
 
+  const { ordersVersion } = useFirestore();
+  const filterRef = useRef({});
+
   const [salesData, setSalesData] = useState(null);
   // null = not fetched yet; [] = fetched and empty. The old initial value of
   // [] plus a "!length" fetch guard meant an account with no restaurants
@@ -48,8 +54,15 @@ const SalesBar = ({ onTotalsChange }) => {
   });
 
   function handleFilter(inData) {
+    filterRef.current = inData;
     dispatch(getOrderStatistics(inData));
   }
+
+  // Live: re-pull the statistics whenever an order arrives or changes
+  // status, keeping the current restaurant/year/month filter.
+  useEffect(() => {
+    if (ordersVersion > 0) dispatch(getOrderStatistics(filterRef.current));
+  }, [ordersVersion]);
 
   //GET STAT DATA
   useEffect(() => {

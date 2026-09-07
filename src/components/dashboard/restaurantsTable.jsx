@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+//CONTEXT
+import { useFirestore } from "../../context/FirestoreContext";
+
 //UTILS
 import { formatToPrice } from "../../utils/utils";
 
@@ -23,6 +26,7 @@ import { cn } from "../../lib/utils";
 
 const RestaurantsTable = () => {
   const dispatch = useDispatch();
+  const { ordersVersion } = useFirestore();
   const [restaurantsData, setRestaurantsData] = useState(null);
   const { error, data, loading } = useSelector(
     (state) => state.dashboard.restaurantSales
@@ -33,6 +37,11 @@ const RestaurantsTable = () => {
       dispatch(getRestaurantSalesStatistics());
     }
   }, [restaurantsData]);
+
+  // Live: approved/cancelled figures follow order events.
+  useEffect(() => {
+    if (ordersVersion > 0) dispatch(getRestaurantSalesStatistics());
+  }, [ordersVersion]);
 
   useEffect(() => {
     if (error) {

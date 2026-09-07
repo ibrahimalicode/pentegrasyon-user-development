@@ -9,6 +9,9 @@ import CustomDatePicker from "../../common/customdatePicker";
 import { TOOLBAR_BTN_PRIMARY } from "../../common/toolbarStyles";
 import NoTableData from "../../common/noTableData";
 
+//CONTEXT
+import { useFirestore } from "../../../context/FirestoreContext";
+
 //UTILS
 import { formatDate, formatToPrice } from "../../../utils/utils";
 
@@ -471,6 +474,7 @@ const ReportsPage = () => {
     (state) => state.reports.getUserReport,
   );
 
+  const { ordersVersion } = useFirestore();
   const [periodType, setPeriodType] = useState(1);
   const [range, setRange] = useState({ start: "", end: "" });
   const [report, setReport] = useState(null);
@@ -498,9 +502,13 @@ const ReportsPage = () => {
     dispatch(getUserReport({ periodType: type }));
   }
 
+  // Re-pull on mount and whenever an order arrives or changes status.
+  // Reports read the nightly-synced fact table, so today's orders appear
+  // after that run — the header says so.
   useEffect(() => {
-    fetchReport(1, range);
-  }, []);
+    if (periodType === "custom") fetchReport("custom", range);
+    else fetchReport(periodType, range);
+  }, [ordersVersion]);
 
   useEffect(() => {
     if (data) {
@@ -518,7 +526,7 @@ const ReportsPage = () => {
       <div className="flex flex-col gap-4 py-4">
         {/* Period picker */}
         <main className="w-full p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex rounded-full border border-solid border-[--border-1] p-0.5">
               {PERIODS.map((p) => (
                 <button
@@ -564,6 +572,11 @@ const ReportsPage = () => {
                 </button>
               </div>
             )}
+
+            {/* Reports read the nightly-synced fact table. */}
+            <p className="text-xs text-[--gr-1]">
+              Veriler her gece eşitlenir · bugünkü siparişler yarın yansır
+            </p>
           </div>
 
           {report && (

@@ -51,6 +51,7 @@ export const FirestoreProvider = ({ children }) => {
   const [automaticApprovalDatas, setAutomaticApprovalDatas] = useState(null);
   const [courierStatus, setCourierStatus] = useState(null);
   const [courierLocation, setCourierLocation] = useState(null);
+  const [ordersVersion, setOrdersVersion] = useState(0);
 
   //GET USER
   useEffect(() => {
@@ -138,6 +139,13 @@ export const FirestoreProvider = ({ children }) => {
 
         setState(convertedData);
         console.log(subcollection, convertedData, new Date());
+
+        // A counter nobody consumes/clears: OrdersContext resets newOrder
+        // and statusChangedOrder as it handles them, so screens that only
+        // want to know "orders changed" (dashboard, reports) can't rely on
+        // those. They watch this instead.
+        if (subcollection === "newTicket" || subcollection === "ticketStatus")
+          setOrdersVersion((v) => v + 1);
 
         if (subcollection === "newTicket") {
           const newOrderSound = newOrderSounds[data[0].marketplaceId];
@@ -229,6 +237,7 @@ export const FirestoreProvider = ({ children }) => {
         setCourierStatus,
         courierLocation,
         setCourierLocation,
+        ordersVersion,
       }}
     >
       {children}

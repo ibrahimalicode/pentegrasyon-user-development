@@ -7,6 +7,13 @@ const sidebarItems = [
     show: true,
   },
   {
+    text: "Raporlar",
+    to: "/reports",
+    path: "reports",
+    id: "reports",
+    show: true,
+  },
+  {
     text: "Restoranlar",
     to: "/restaurants",
     path: "restaurants",

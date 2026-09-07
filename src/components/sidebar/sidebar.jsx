@@ -21,6 +21,7 @@ import { useProtectPages } from "../../context/ProtectPagesContext";
 // ICONS
 import {
   DashboardI,
+  DocI,
   RestourantI,
   LicenseI,
   LogI,
@@ -45,8 +46,10 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage, collapsed }) {
 
   const [sidebarData, setSidebarData] = useState(null);
 
+  // Index-matched with sidebarItems — keep the two lists in step.
   const sidebarIcons = [
     { icon: <DashboardI /> },
+    { icon: <DocI /> },
     { icon: <RestourantI /> },
     { icon: <CourierI /> },
     { icon: <LicenseI /> },
@@ -174,7 +177,10 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage, collapsed }) {
                       </div>
 
                       <div className="flex items-center shrink-0">
-                        {unverifiedOrders && index == 5 && (
+                        {/* Keyed by id, not position — inserting a menu
+                            item used to move the alarm bell to whichever
+                            row happened to land on index 5. */}
+                        {unverifiedOrders && item.id === "tickets" && (
                           <Lottie
                             className="size-6 rounded-full overflow-hidden"
                             animationData={bell_anim}

@@ -22,6 +22,7 @@ const Restaurants = lazy(() => import("./restaurants"));
 const ProtectedPages = lazy(() => import("./protectedPages"));
 const Stocks = lazy(() => import("./stocks"));
 const Logs = lazy(() => import("./activityLogs"));
+const Reports = lazy(() => import("./reports"));
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -77,6 +78,7 @@ const Home = () => {
           <Route path="/payments/*" element={<Payments />} />
           <Route path="/messages/*" element={<Messages />} />
             <Route path="/activity-logs/*" element={<Logs />} />
+            <Route path="/reports/*" element={<Reports />} />
           </Routes>
         </Suspense>
         </ErrorBoundary>

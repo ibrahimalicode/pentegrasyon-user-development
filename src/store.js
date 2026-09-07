@@ -26,6 +26,7 @@ import loadingSlice from "./redux/loadingSlice";
 import stocksSlice from "./redux/stocks";
 import trendyolYemekSlice from "./redux/trendyol";
 import logsSlice from "./redux/activityLogs";
+import reportsSlice from "./redux/reports";
 
 const store = configureStore({
   reducer: {
@@ -54,6 +55,7 @@ const store = configureStore({
     isLoading: loadingSlice,
     stocks: stocksSlice,
     logs: logsSlice,
+    reports: reportsSlice,
   },
 });
 

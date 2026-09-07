@@ -92,10 +92,13 @@ function Header({
       <header
         className={cn(
           "fixed top-0 right-0 left-0 z-[99] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1]",
-          !isOrdersPage && "lg:pl-[280px]"
+          !isOrdersPage && !collapsed && "lg:pl-[280px]"
         )}
       >
-        <nav className="w-full h-16 flex justify-between items-center gap-3 max-md:px-4 px-[4%]">
+        {/* Small left padding so the hamburger hugs the sidebar's border
+            (or the screen edge when collapsed) instead of drifting with
+            the page gutter. */}
+        <nav className="w-full h-16 flex justify-between items-center gap-3 max-md:px-4 pl-3 pr-[4%]">
           <div className="flex items-center gap-3 min-w-0">
             {/* On orders the sidebar is collapsed at every width, so the
                 toggle has to stay reachable on desktop too. */}

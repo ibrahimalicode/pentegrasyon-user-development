@@ -1,6 +1,6 @@
 //MODELS
 import Lottie from "lottie-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DirectionsRenderer, Marker, Polyline } from "@react-google-maps/api";
 import { GoogleMap, DirectionsService } from "@react-google-maps/api";
 
@@ -215,6 +215,41 @@ const GoogleRoute = ({
 
   const brandColor = MARKETPLACE_COLORS[order?.marketplaceId] ?? "#4f46e5";
 
+  // The route draws itself from the restaurant to the customer instead of
+  // appearing all at once.
+  const [drawnCount, setDrawnCount] = useState(0);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    if (!response) return;
+    const total = response.routes[0].overview_path?.length ?? 0;
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      total < 3
+    ) {
+      setDrawnCount(total);
+      return;
+    }
+
+    const DURATION = 1400;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min((now - start) / DURATION, 1);
+      // easeOutCubic: quick off the restaurant, settling into the address
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDrawnCount(Math.max(2, Math.round(eased * total)));
+      if (t < 1) rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [response]);
+
+  const drawnPath = response
+    ? response.routes[0].overview_path.slice(0, drawnCount)
+    : [];
+  const routeDone =
+    !!response && drawnCount >= response.routes[0].overview_path.length;
+
   const themedAnimation = useMemo(
     () =>
       themedCourierAnimation(
@@ -356,9 +391,16 @@ const GoogleRoute = ({
 
               <CourierLocationMin order={order} setOrdersData={setOrdersData} />
 
+              {/* Destination pin lands when the line reaches it, so the
+                  eye follows the route to the address. */}
               <Marker
                 position={response.routes[0].legs[0].end_location}
                 zIndex={30}
+                opacity={routeDone ? 1 : 0}
+                animation={
+                  // eslint-disable-next-line no-undef
+                  routeDone ? google.maps.Animation.DROP : null
+                }
                 icon={{
                   url: pinIcon(brandColor, GLYPH_PERSON), //Destination
                   // eslint-disable-next-line no-undef
@@ -369,14 +411,26 @@ const GoogleRoute = ({
               />
 
               {/* Soft wide underlay below the crisp brand-colored route
-                  line — reads as a glow. */}
+                  line — reads as a glow. Both grow together. */}
               <Polyline
-                path={response.routes[0].overview_path}
+                path={drawnPath}
                 options={{
                   strokeColor: brandColor,
                   strokeOpacity: 0.2,
                   strokeWeight: 12,
                   zIndex: 1,
+                }}
+              />
+
+              {/* The route itself; DirectionsRenderer's own line is
+                  suppressed so this animated one is the only route. */}
+              <Polyline
+                path={drawnPath}
+                options={{
+                  strokeColor: brandColor,
+                  strokeOpacity: 0.95,
+                  strokeWeight: 5,
+                  zIndex: 2,
                 }}
               />
             </>
@@ -394,12 +448,8 @@ const GoogleRoute = ({
                 options={{
                   directions: response,
                   suppressMarkers: true,
-                  polylineOptions: {
-                    strokeColor: brandColor,
-                    strokeOpacity: 0.95,
-                    strokeWeight: 5,
-                    zIndex: 2,
-                  },
+                  // Our animated polylines draw the route.
+                  suppressPolylines: true,
                 }}
               />
             )}

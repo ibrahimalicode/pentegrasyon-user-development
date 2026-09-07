@@ -51,8 +51,10 @@ const RestaurantsTable = () => {
             <thead>
               <tr className={THEAD_ROW}>
                 <th className={TH}>Restoran Adı</th>
-                <th className={cn(TH, "text-center")}>Toplam Satış</th>
-                <th className={cn(TH, "text-center")}>Toplam Tutarı</th>
+                <th className={cn(TH, "text-center")}>Onaylanan Satış</th>
+                <th className={cn(TH, "text-center")}>Onaylanan Tutar</th>
+                <th className={cn(TH, "text-center")}>İptal Edilen Satış</th>
+                <th className={cn(TH, "text-center")}>İptal Edilen Tutar</th>
                 <th className={cn(TH, "text-right")}>İl</th>
               </tr>
             </thead>
@@ -61,9 +63,25 @@ const RestaurantsTable = () => {
               {restaurantsData.map((rest, index) => (
                 <tr key={index} className={TR}>
                   <td className={TD}>{rest.restaurantName}</td>
-                  <td className={cn(TD, "text-center")}>{rest.totalCount}</td>
+                  <td className={cn(TD, "text-center")}>
+                    {rest.approvedCount}
+                  </td>
+                  {/* The endpoint's totalAmount IS the approved amount
+                      (backend sums ApprovedAmount into it). */}
                   <td className={cn(TD, "text-center")}>
                     {formatToPrice(String(rest.totalAmount).replace(".", ","))}
+                  </td>
+                  <td className={cn(TD, "text-center text-[--red-1]")}>
+                    {rest.rejectedCount}
+                  </td>
+                  {/* rejectedAmount is not projected by the endpoint yet;
+                      lights up automatically once the backend adds it. */}
+                  <td className={cn(TD, "text-center text-[--red-1]")}>
+                    {rest.rejectedAmount != null
+                      ? formatToPrice(
+                          String(rest.rejectedAmount).replace(".", ","),
+                        )
+                      : "—"}
                   </td>
                   <td className={cn(TD, "text-right")}>{rest.city}</td>
                 </tr>

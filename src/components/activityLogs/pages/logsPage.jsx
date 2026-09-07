@@ -64,7 +64,9 @@ const LogsPage = () => {
     toDate: null,
   });
 
-  const itemsPerPage = 8;
+  // 8 rows made same-day logs look "missing" — a day's orders spilled onto
+  // page 2 before anyone noticed the pager. (Backend allows up to 200.)
+  const itemsPerPage = 20;
   const [pageNumber, setPageNumber] = useState(1);
   const [totalItems, setTotalItems] = useState(null);
 

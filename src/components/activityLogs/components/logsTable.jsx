@@ -121,7 +121,9 @@ const LogsTable = ({
                 )}
                 <td className={TD}>
                   {formatDateString({
-                    dateString: data.createdAt,
+                    // createdAt is UTC; createdAtTr is Turkey time. Showing
+                    // the UTC value put every log 3 hours in the past.
+                    dateString: data.createdAtTr || data.createdAt,
                     hour: true,
                     min: true,
                   })}

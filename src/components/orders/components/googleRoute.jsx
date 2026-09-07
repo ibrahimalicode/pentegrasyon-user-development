@@ -205,7 +205,10 @@ const GoogleRoute = ({
   const [inStreetView, setInStreetView] = useState(false);
   const panoramaRef = useRef(null);
 
+  const mapRef = useRef(null);
+
   const handleMapLoad = (map) => {
+    mapRef.current = map;
     const panorama = map.getStreetView();
     panoramaRef.current = panorama;
     panorama.addListener("visible_changed", () =>
@@ -225,23 +228,60 @@ const GoogleRoute = ({
     const total = response.routes[0].overview_path?.length ?? 0;
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      // A hidden tab never fires rAF; show the finished route instead of
+      // an empty map.
+      document.visibilityState === "hidden" ||
       total < 3
     ) {
       setDrawnCount(total);
       return;
     }
 
-    const DURATION = 1400;
-    const start = performance.now();
-    const step = (now) => {
-      const t = Math.min((now - start) / DURATION, 1);
-      // easeOutCubic: quick off the restaurant, settling into the address
-      const eased = 1 - Math.pow(1 - t, 3);
-      setDrawnCount(Math.max(2, Math.round(eased * total)));
-      if (t < 1) rafRef.current = requestAnimationFrame(step);
+    let idleListener = null;
+    let startTimer = null;
+    let fallbackTimer = null;
+    let started = false;
+
+    const run = () => {
+      if (started) return;
+      started = true;
+      const DURATION = 1400;
+      const start = performance.now();
+      const step = (now) => {
+        const t = Math.min((now - start) / DURATION, 1);
+        // easeOutCubic: quick off the restaurant, settling into the address
+        const eased = 1 - Math.pow(1 - t, 3);
+        setDrawnCount(Math.max(2, Math.round(eased * total)));
+        if (t < 1) rafRef.current = requestAnimationFrame(step);
+      };
+      rafRef.current = requestAnimationFrame(step);
     };
-    rafRef.current = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(rafRef.current);
+
+    // DirectionsRenderer fits the map to the route the moment the response
+    // lands, so drawing right away would finish while the camera is still
+    // flying. Wait for the map to settle (idle), plus a beat, so the user
+    // actually watches the line leave the restaurant.
+    const armStart = () => {
+      startTimer = setTimeout(run, 250);
+    };
+
+    if (mapRef.current && window.google?.maps?.event) {
+      idleListener = window.google.maps.event.addListenerOnce(
+        mapRef.current,
+        "idle",
+        armStart,
+      );
+    }
+    // The map may already be idle (or the event never arrives) — never let
+    // the route stay invisible.
+    fallbackTimer = setTimeout(run, 1500);
+
+    return () => {
+      if (idleListener) window.google.maps.event.removeListener(idleListener);
+      clearTimeout(startTimer);
+      clearTimeout(fallbackTimer);
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [response]);
 
   const drawnPath = response

@@ -9,6 +9,7 @@ import OrdersTimeline from "../ordersTimeline";
 import OrderAnalysis from "../orderAnalysis";
 import RestaurantsTable from "../restaurantsTable";
 import MarketplaceChart from "../merketplaceChart";
+import PaymentCourierSplits from "../paymentCourierSplits";
 import DownloadDesktopButton from "../../common/downloadDesktopButton";
 
 //UTILS
@@ -120,11 +121,11 @@ const DashboardPage = () => {
           <div className="xl:col-span-2 min-w-0">
             <SalesBar onTotalsChange={setOrderTotals} />
           </div>
-          <MarketplaceChart
-            licensedMarketplaceIds={licensedMarketplaceIds}
-            factsRows={factsRows}
-          />
+          <MarketplaceChart licensedMarketplaceIds={licensedMarketplaceIds} />
         </div>
+        {/* Own full-width row: the splits were squeezing the donut card
+            into a tower; side by side here, stacked on mobile. */}
+        <PaymentCourierSplits factsRows={factsRows} />
         <OrdersTimeline licensedMarketplaceIds={licensedMarketplaceIds} />
         <OrderAnalysis rows={factsRows} unavailable={factsUnavailable} />
         <RestaurantsTable />

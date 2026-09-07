@@ -1,16 +1,9 @@
 //MODULES
 import ApexCharts from "apexcharts";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 //UTILS
-import { formatDate, formatToPrice } from "../../utils/utils";
-
-//REDUX
-import {
-  getOrderFacts,
-  resetGetOrderFacts,
-} from "../../redux/orders/getOrderFactsSlice";
+import { formatToPrice } from "../../utils/utils";
 
 const MARKETPLACES = [
   { id: 0, label: "GetirYemek", color: "#5d3ebd" },
@@ -20,9 +13,6 @@ const MARKETPLACES = [
 ];
 
 const DAY_LABELS = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
-const PAGE_SIZE = 5000;
-// Safety cap: 3 pages = 15k orders / 30 days, far above any single account.
-const MAX_PAGES = 3;
 
 const price = (n) =>
   formatToPrice(String(Number(n || 0).toFixed(2)).replace(".", ","));
@@ -127,57 +117,13 @@ const barChartOptions = (categories, series, colors) => ({
   tooltip: { y: { formatter: (v) => `${v} sipariş` } },
 });
 
-const OrderAnalysis = () => {
-  const dispatch = useDispatch();
-  const { data, error } = useSelector((state) => state.orders.facts);
-
+// `rows` (last-30-days OrderFacts) are fetched once by DashboardPage and
+// shared with the donut card's payment/courier splits.
+const OrderAnalysis = ({ rows, unavailable }) => {
   const dayChartElRef = useRef(null);
   const hourChartElRef = useRef(null);
-  const rowsRef = useRef([]);
-  const pageRef = useRef(1);
-  const [stats, setStats] = useState(null);
-  const [unavailable, setUnavailable] = useState(false);
 
-  function fetchPage(pageNumber) {
-    dispatch(
-      getOrderFacts({
-        pageNumber,
-        pageSize: PAGE_SIZE,
-        startDateTime: formatDate(
-          new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        ),
-        endDateTime: formatDate(new Date()),
-      }),
-    );
-  }
-
-  //GET FACTS (paged; a single page covers normal volumes)
-  useEffect(() => {
-    rowsRef.current = [];
-    pageRef.current = 1;
-    fetchPage(1);
-  }, []);
-
-  //ACCUMULATE PAGES → STATS
-  useEffect(() => {
-    if (data) {
-      rowsRef.current = [...rowsRef.current, ...(data.data || [])];
-      const morePages =
-        data.hasNextPage && pageRef.current < MAX_PAGES;
-      dispatch(resetGetOrderFacts());
-      if (morePages) {
-        pageRef.current += 1;
-        fetchPage(pageRef.current);
-      } else {
-        setStats(buildStats(rowsRef.current));
-        setUnavailable(false);
-      }
-    }
-    if (error) {
-      if (!stats) setUnavailable(true);
-      dispatch(resetGetOrderFacts());
-    }
-  }, [data, error]);
+  const stats = useMemo(() => (rows ? buildStats(rows) : null), [rows]);
 
   //RENDER BAR CHARTS
   useEffect(() => {

@@ -11,11 +11,22 @@ import RestaurantsTable from "../restaurantsTable";
 import MarketplaceChart from "../merketplaceChart";
 import DownloadDesktopButton from "../../common/downloadDesktopButton";
 
+//UTILS
+import { formatDate } from "../../../utils/utils";
+
 //REDUX
 import {
   getLicenses,
   resetGetLicenses,
 } from "../../../redux/licenses/getLicensesSlice";
+import {
+  getOrderFacts,
+  resetGetOrderFacts,
+} from "../../../redux/orders/getOrderFactsSlice";
+
+const FACTS_PAGE_SIZE = 5000;
+// Safety cap: 3 pages = 15k orders / 30 days, far above any single account.
+const FACTS_MAX_PAGES = 3;
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -44,6 +55,54 @@ const DashboardPage = () => {
     }
   }, [licenses]);
 
+  // Last-30-days OrderFacts rows — fetched ONCE here and shared by the
+  // analysis section and the payment/courier splits in the donut card.
+  const { data: factsData, error: factsError } = useSelector(
+    (state) => state.orders.facts,
+  );
+  const [factsRows, setFactsRows] = useState(null);
+  const [factsUnavailable, setFactsUnavailable] = useState(false);
+  const [factsBuffer] = useState({ rows: [], page: 1 });
+
+  function fetchFactsPage(pageNumber) {
+    dispatch(
+      getOrderFacts({
+        pageNumber,
+        pageSize: FACTS_PAGE_SIZE,
+        startDateTime: formatDate(
+          new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        ),
+        endDateTime: formatDate(new Date()),
+      }),
+    );
+  }
+
+  useEffect(() => {
+    factsBuffer.rows = [];
+    factsBuffer.page = 1;
+    fetchFactsPage(1);
+  }, []);
+
+  useEffect(() => {
+    if (factsData) {
+      factsBuffer.rows = [...factsBuffer.rows, ...(factsData.data || [])];
+      const morePages =
+        factsData.hasNextPage && factsBuffer.page < FACTS_MAX_PAGES;
+      dispatch(resetGetOrderFacts());
+      if (morePages) {
+        factsBuffer.page += 1;
+        fetchFactsPage(factsBuffer.page);
+      } else {
+        setFactsRows(factsBuffer.rows);
+        setFactsUnavailable(false);
+      }
+    }
+    if (factsError) {
+      if (!factsRows) setFactsUnavailable(true);
+      dispatch(resetGetOrderFacts());
+    }
+  }, [factsData, factsError]);
+
   return (
     // px-[4%] matches every other page; the old px-16 made the dashboard
     // the only screen with a different gutter.
@@ -61,10 +120,13 @@ const DashboardPage = () => {
           <div className="xl:col-span-2 min-w-0">
             <SalesBar onTotalsChange={setOrderTotals} />
           </div>
-          <MarketplaceChart licensedMarketplaceIds={licensedMarketplaceIds} />
+          <MarketplaceChart
+            licensedMarketplaceIds={licensedMarketplaceIds}
+            factsRows={factsRows}
+          />
         </div>
         <OrdersTimeline licensedMarketplaceIds={licensedMarketplaceIds} />
-        <OrderAnalysis />
+        <OrderAnalysis rows={factsRows} unavailable={factsUnavailable} />
         <RestaurantsTable />
       </div>
     </section>

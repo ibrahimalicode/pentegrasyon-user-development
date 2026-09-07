@@ -63,7 +63,10 @@ const radialOptions = (present, total) => {
             show: true,
             label: dominant.label,
             fontSize: "10px",
-            formatter: () => `%${Math.round((dominant.count / total) * 100)}`,
+            formatter: () =>
+              `${dominant.count} · %${Math.round(
+                (dominant.count / total) * 100,
+              )}`,
           },
         },
       },
@@ -73,7 +76,9 @@ const radialOptions = (present, total) => {
       position: "bottom",
       fontSize: "12px",
       formatter: (name, opts) =>
-        `${name} %${opts.w.globals.series[opts.seriesIndex]}`,
+        `${name} ${present[opts.seriesIndex]?.count ?? 0} · %${
+          opts.w.globals.series[opts.seriesIndex]
+        }`,
     },
     stroke: { lineCap: "round" },
   };
@@ -96,10 +101,10 @@ const donutOptions = (present, total) => ({
     show: true,
     position: "bottom",
     fontSize: "12px",
-    formatter: (name, opts) =>
-      `${name} %${Math.round(
-        (opts.w.globals.series[opts.seriesIndex] / total) * 100,
-      )}`,
+    formatter: (name, opts) => {
+      const count = opts.w.globals.series[opts.seriesIndex];
+      return `${name} ${count} · %${Math.round((count / total) * 100)}`;
+    },
   },
 });
 
@@ -113,7 +118,7 @@ const SplitLegend = ({ present, total }) => (
         />
         {e.label}{" "}
         <span className="tabular-nums text-[--black-1]">
-          %{Math.round((e.count / total) * 100)}
+          {e.count} · %{Math.round((e.count / total) * 100)}
         </span>
       </span>
     ))}
@@ -191,8 +196,8 @@ const Split = ({ type, title, entries, total }) => {
                   }}
                 />
               </span>
-              <span className="w-10 shrink-0 text-right tabular-nums text-[--black-1]">
-                %{Math.round((e.count / total) * 100)}
+              <span className="w-20 shrink-0 text-right tabular-nums text-[--black-1]">
+                {e.count} · %{Math.round((e.count / total) * 100)}
               </span>
             </div>
           ))}

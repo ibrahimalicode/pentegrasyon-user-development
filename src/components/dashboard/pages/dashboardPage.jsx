@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import StatCard from "../statCard";
 import SalesBar from "../salesBar";
 import OrdersTimeline from "../ordersTimeline";
+import OrderAnalysis from "../orderAnalysis";
 import RestaurantsTable from "../restaurantsTable";
 import MarketplaceChart from "../merketplaceChart";
 import DownloadDesktopButton from "../../common/downloadDesktopButton";
@@ -63,6 +64,7 @@ const DashboardPage = () => {
           <MarketplaceChart licensedMarketplaceIds={licensedMarketplaceIds} />
         </div>
         <OrdersTimeline licensedMarketplaceIds={licensedMarketplaceIds} />
+        <OrderAnalysis />
         <RestaurantsTable />
       </div>
     </section>

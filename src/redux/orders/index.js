@@ -9,12 +9,14 @@ import getRestaurantsStatusSlice from "./getRestaurantsStatusSlice";
 import getAutomationVariablesSlice from "./getAutomationVariablesSlice";
 import getTicketByIdSlice from "./getTicketByIdSlice";
 import getTicketTimelineSlice from "./getTicketTimelineSlice";
+import getOrderFactsSlice from "./getOrderFactsSlice";
 import getCouriersForOrdersSlice from "./getCouriersForOrdersSlice";
 
 const ordersSlice = combineReducers({
   get: getOrdersSlice,
   getByID: getTicketByIdSlice,
   timeline: getTicketTimelineSlice,
+  facts: getOrderFactsSlice,
   updateCourier: updateOrderCourierSlice,
   getWithCouriers: getCouriersForOrdersSlice,
   getAutomationVariables: getAutomationVariablesSlice,

@@ -166,6 +166,9 @@ const DaysChart = ({ days }) => {
         height: 260,
         width: "100%",
         toolbar: { show: false },
+        // Wheel/drag zoom hijacked page scrolling over the chart.
+        zoom: { enabled: false },
+        selection: { enabled: false },
         foreColor: "var(--black-1)",
         fontFamily: "inherit",
         locales: [TR_LOCALE],

@@ -106,6 +106,7 @@ const barChartOptions = (categories, series, colors) => ({
     width: "100%",
     foreColor: "var(--black-1)",
     toolbar: { show: false },
+    zoom: { enabled: false },
     fontFamily: "inherit",
   },
   plotOptions: { bar: { borderRadius: 2, columnWidth: "70%" } },

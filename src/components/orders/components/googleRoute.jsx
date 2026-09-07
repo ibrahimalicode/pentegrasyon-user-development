@@ -299,19 +299,19 @@ const GoogleRoute = ({
             <button
               type="button"
               onClick={() => panoramaRef.current?.setVisible(false)}
-              className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-lg bg-[--primary-1] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
+              className="absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-[20px] bg-[--primary-1] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
             >
               ← Haritaya Dön
             </button>
           ) : (
-            <div className="absolute left-3 top-3 z-10 flex rounded-lg border border-solid border-[--border-1] bg-[--white-1] p-1 shadow-sm">
+            <div className="absolute left-3 top-3 z-10 flex rounded-[20px] border border-solid border-[--border-1] bg-[--white-1] p-1 shadow-sm">
               {MAP_TYPES.map((T) => (
                 <button
                   key={T.id}
                   type="button"
                   onClick={() => setMapType(T.id)}
                   className={cn(
-                    "rounded-lg px-4 py-1.5 text-xs font-semibold transition-colors",
+                    "rounded-[20px] px-4 py-1.5 text-xs font-semibold transition-colors",
                     mapType === T.id
                       ? "bg-[--primary-1] text-white"
                       : "text-[--gr-1] hover:text-[--black-1]",

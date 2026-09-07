@@ -68,7 +68,7 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   const isPlatformCourier = order?.deliveryType?.toLocaleLowerCase() === "go";
 
   const btnClass =
-    "py-2 px-2 sm:px-4 rounded-lg border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
+    "py-2 px-2 sm:px-4 rounded-[20px] border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
   const disabled =
     verifyLoading || prepareLoading || deliverLoading || cancelLoading;
 
@@ -178,7 +178,7 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
       </button>
 
       {isPlatformCourier && (
-        <div className="flex items-center py-2 px-2 sm:px-4 rounded-lg border border-[--purple-1] bg-[--status-purple] text-[--black-1]">
+        <div className="flex items-center py-2 px-2 sm:px-4 rounded-[20px] border border-[--purple-1] bg-[--status-purple] text-[--black-1]">
           {order.packageStatus === "Delivered"
             ? "Trendyol kuryesi teslim etti"
             : order.packageStatus === "Shipped"
@@ -290,7 +290,7 @@ const TrendyolYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
           "İptal Et"
         )}
       </button>
-      <div className="w-full max-w-16 bg-[--light-3] flex justify-center items-center rounded-lg">
+      <div className="w-full max-w-16 bg-[--light-3] flex justify-center items-center rounded-[20px]">
         {
           <PrintComponent
             component={<TrendyolYemekPrintOrder order={order} />}

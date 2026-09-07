@@ -38,7 +38,7 @@ const LicenseSettings = ({ licenseData, onSuccess, inline }) => {
       className={
         inline
           ? cn(
-              "w-auto whitespace-nowrap rounded-lg border border-solid border-[--border-1] px-3 py-1.5 text-xs text-[--gr-1] hover:border-[--primary-1] hover:text-[--primary-1]",
+              "w-auto whitespace-nowrap rounded-[20px] border border-solid border-[--border-1] px-3 py-1.5 text-xs text-[--gr-1] hover:border-[--primary-1] hover:text-[--primary-1]",
               // Integration parameters need an active license.
               !licenseData.isActive && "opacity-50 cursor-not-allowed",
             )

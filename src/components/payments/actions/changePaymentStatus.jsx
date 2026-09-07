@@ -9,7 +9,7 @@ const ChangePaymentStatus = ({ payment }) => {
   return (
     <>
       <span
-        className={`text-xs font-normal px-3 py-1 border border-solid rounded-lg cursor-pointer ${statusClass} `}
+        className={`text-xs font-normal px-3 py-1 border border-solid rounded-[20px] cursor-pointer ${statusClass} `}
         ref={paymentStatusRef}
       >
         ● {PaymentStatus[payment?.status]?.label}

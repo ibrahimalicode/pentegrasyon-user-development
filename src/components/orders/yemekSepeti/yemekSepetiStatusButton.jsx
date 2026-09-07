@@ -109,7 +109,7 @@ const YemekSepetiStatusButton = ({ order, setOrdersData }) => {
     <button
       disabled={isDisabled}
       onClick={handleClick}
-      className={`w-24 py-3.5 px-2 rounded-lg border disabled:py-2.5 disabled:cursor-not-allowed ${
+      className={`w-24 py-3.5 px-2 rounded-[20px] border disabled:py-2.5 disabled:cursor-not-allowed ${
         isDisabled ? pageNumber == 1 && btnClass : "after:translate-x-0"
       }`}
       style={{

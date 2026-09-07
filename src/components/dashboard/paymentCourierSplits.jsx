@@ -243,7 +243,7 @@ const PaymentCourierSplits = ({ factsRows }) => {
         <h2 className="text-base font-semibold whitespace-nowrap text-[--black-1]">
           Ödeme ve Kurye
         </h2>
-        <div className="flex rounded-lg border border-solid border-[--border-1] bg-[--white-1] p-0.5">
+        <div className="flex rounded-[20px] border border-solid border-[--border-1] bg-[--white-1] p-0.5">
           {SPLIT_CHART_TYPES.map((t) => (
             <button
               key={t.id}
@@ -253,7 +253,7 @@ const PaymentCourierSplits = ({ factsRows }) => {
                 localStorage.setItem(SPLIT_CHART_KEY, t.id);
               }}
               className={cn(
-                "rounded-lg px-3 py-1 text-xs font-medium transition-colors",
+                "rounded-[20px] px-3 py-1 text-xs font-medium transition-colors",
                 splitType === t.id
                   ? "bg-[--primary-1] text-white"
                   : "text-[--gr-1] hover:text-[--black-1]",

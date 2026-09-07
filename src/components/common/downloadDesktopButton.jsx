@@ -11,7 +11,7 @@ const DownloadDesktopButton = ({ className }) => (
     href={DESKTOP_APP_URL}
     title="Pentegrasyon masaüstü uygulamasını indir"
     className={cn(
-      "inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg bg-[--green-1] text-sm font-semibold text-white hover:opacity-90 transition-opacity whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--green-1]/40",
+      "inline-flex items-center justify-center gap-2 h-11 px-5 rounded-[20px] bg-[--green-1] text-sm font-semibold text-white hover:opacity-90 transition-opacity whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--green-1]/40",
       className
     )}
   >

@@ -22,7 +22,7 @@ const ExtendLicense = ({ licenseData, inline }) => {
     <ActionButton
       className={
         inline
-          ? "w-auto whitespace-nowrap rounded-lg border border-solid border-[--border-1] px-3 py-1.5 text-xs hover:border-[--primary-1] hover:text-[--primary-1]"
+          ? "w-auto whitespace-nowrap rounded-[20px] border border-solid border-[--border-1] px-3 py-1.5 text-xs hover:border-[--primary-1] hover:text-[--primary-1]"
           : undefined
       }
       element={<ExtendI className="w-[1.1rem]" />}

@@ -63,7 +63,7 @@ const MigrosYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
   }
 
   const btnClass =
-    "py-2 px-2 sm:px-4 rounded-lg border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
+    "py-2 px-2 sm:px-4 rounded-[20px] border text-[--black-1] disabled:cursor-not-allowed disabled:opacity-50";
   const disabled =
     verifyLoading || prepareLoading || deliverLoading || cancelLoading;
 
@@ -251,7 +251,7 @@ const MigrosYemekStatusButtons = ({ order, setOrdersData, setSideOrder }) => {
           "İptal Et"
         )}
       </button>
-      <div className="w-full max-w-16 bg-[--light-3]flex justify-center items-center rounded-lg">
+      <div className="w-full max-w-16 bg-[--light-3]flex justify-center items-center rounded-[20px]">
         {<PrintComponent component={<MigrosYemekPrintOrder order={order} />} />}
       </div>
     </div>

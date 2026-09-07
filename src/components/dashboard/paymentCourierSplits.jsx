@@ -43,11 +43,13 @@ const radialOptions = (present, total) => ({
   },
   plotOptions: {
     radialBar: {
-      hollow: { size: "35%" },
+      // Wide hollow so long labels ("Restoran Kuryesi", "Kapıda
+      // (Nakit/Kart)") fit inside instead of clipping on the ring.
+      hollow: { size: "58%" },
       track: { background: "var(--light-3)" },
       dataLabels: {
-        name: { fontSize: "12px" },
-        value: { fontSize: "14px", formatter: (v) => `%${v}` },
+        name: { fontSize: "11px", offsetY: -4 },
+        value: { fontSize: "16px", offsetY: 4, formatter: (v) => `%${v}` },
       },
     },
   },

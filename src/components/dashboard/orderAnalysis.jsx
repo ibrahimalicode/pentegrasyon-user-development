@@ -40,6 +40,9 @@ function buildStats(rows) {
     daysByMp: MARKETPLACES.map(() => new Array(7).fill(0)),
     hoursByMp: MARKETPLACES.map(() => new Array(24).fill(0)),
     marketplaces: {},
+    marketplaceRevenue: {},
+    // which platform funded how much discount
+    discountPlatformByMp: {},
     discountPlatform: 0,
     discountRestaurant: 0,
     discountTotal: 0,
@@ -65,7 +68,14 @@ function buildStats(rows) {
     }
     stats.marketplaces[r.marketplaceId] =
       (stats.marketplaces[r.marketplaceId] || 0) + 1;
+    if (!r.isCancelled)
+      stats.marketplaceRevenue[r.marketplaceId] =
+        (stats.marketplaceRevenue[r.marketplaceId] || 0) +
+        (Number(r.netAmount) || 0);
     stats.discountPlatform += Number(r.discountPlatform) || 0;
+    stats.discountPlatformByMp[r.marketplaceId] =
+      (stats.discountPlatformByMp[r.marketplaceId] || 0) +
+      (Number(r.discountPlatform) || 0);
     stats.discountRestaurant += Number(r.discountRestaurant) || 0;
     stats.discountTotal += Number(r.discountTotal) || 0;
     if (r.customerKey)
@@ -211,11 +221,37 @@ const OrderAnalysis = () => {
         percent: stats.total
           ? (stats.marketplaces[m.id] / stats.total) * 100
           : 0,
+        revenue: stats.marketplaceRevenue[m.id] || 0,
+        revenuePercent: stats.netSum
+          ? ((stats.marketplaceRevenue[m.id] || 0) / stats.netSum) * 100
+          : 0,
       }))
     : [];
 
-  const discountMax = stats
-    ? Math.max(stats.discountPlatform, stats.discountRestaurant, 1)
+  // İndirim Finansmanı rows: each marketplace's own platform funding in
+  // its brand color, then the restaurant's own funding as one row.
+  const fundingRows = stats
+    ? [
+        ...MARKETPLACES.filter(
+          (m) => (stats.discountPlatformByMp[m.id] || 0) > 0.009,
+        ).map((m) => ({
+          label: m.label,
+          amount: stats.discountPlatformByMp[m.id],
+          color: m.color,
+        })),
+        ...(stats.discountRestaurant > 0.009
+          ? [
+              {
+                label: "Restoran",
+                amount: stats.discountRestaurant,
+                color: "var(--gr-1)",
+              },
+            ]
+          : []),
+      ]
+    : [];
+  const discountMax = fundingRows.length
+    ? Math.max(...fundingRows.map((d) => d.amount))
     : 1;
 
   const kpis = stats
@@ -307,14 +343,18 @@ const OrderAnalysis = () => {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
             <div>
               <p className="pb-2 text-sm font-medium text-[--black-1]">
-                Pazaryeri Dağılımı
+                Pazaryeri Dağılımı{" "}
+                <span className="text-xs font-normal text-[--gr-1]">
+                  · sipariş adedi ve ciro payı
+                </span>
               </p>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2.5">
                 {marketplaceRows.map((m) => (
                   <div key={m.id} className="flex items-center gap-3 text-sm">
                     <span className="w-28 shrink-0 text-[--black-2]">
                       {m.label}
                     </span>
+                    {/* bar = order-count share */}
                     <span className="h-2 flex-1 overflow-hidden rounded-full bg-[--light-3]">
                       <span
                         className="block h-full rounded-full"
@@ -324,8 +364,13 @@ const OrderAnalysis = () => {
                         }}
                       />
                     </span>
-                    <span className="w-20 shrink-0 text-right tabular-nums text-[--black-1]">
-                      {m.count} · %{m.percent.toFixed(0)}
+                    <span className="w-36 shrink-0 text-right tabular-nums">
+                      <p className="text-[--black-1]">
+                        {m.count} sipariş · %{m.percent.toFixed(0)}
+                      </p>
+                      <p className="text-xs text-[--gr-1]">
+                        {price(m.revenue)} ₺ · %{m.revenuePercent.toFixed(0)}
+                      </p>
                     </span>
                   </div>
                 ))}
@@ -338,19 +383,13 @@ const OrderAnalysis = () => {
                   · toplam {price(stats.discountTotal)} ₺
                 </span>
               </p>
+              {fundingRows.length === 0 && (
+                <p className="text-xs text-[--gr-1]">
+                  Son 30 günde indirim bulunmuyor.
+                </p>
+              )}
               <div className="flex flex-col gap-2">
-                {[
-                  {
-                    label: "Platform",
-                    amount: stats.discountPlatform,
-                    color: "var(--primary-1)",
-                  },
-                  {
-                    label: "Restoran",
-                    amount: stats.discountRestaurant,
-                    color: "var(--green-1)",
-                  },
-                ].map((d) => (
+                {fundingRows.map((d) => (
                   <div
                     key={d.label}
                     className="flex items-center gap-3 text-sm"

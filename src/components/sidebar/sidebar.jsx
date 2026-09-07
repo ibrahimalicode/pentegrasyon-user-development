@@ -35,7 +35,7 @@ import {
 //REDUX
 import { getUserLock } from "../../redux/user/getUserLockSlice";
 
-function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
+function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage, collapsed }) {
   const param = useParams();
   const sidebarRef = useRef();
   const dispatch = useDispatch();
@@ -98,7 +98,7 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
       <div
         className={cn(
           "fixed inset-0 z-[998] bg-slate-950/40 transition-opacity",
-          !isOrdersPage && "lg:hidden",
+          !isOrdersPage && !collapsed && "lg:hidden",
           openSidebar
             ? "opacity-100"
             : "opacity-0 pointer-events-none invisible"
@@ -112,10 +112,11 @@ function Sidebar({ openSidebar, setOpenSidebar, isOrdersPage }) {
           "fixed left-0 top-0 z-[999] flex flex-col justify-between w-[280px] h-[100dvh]",
           "bg-[--white-1] border-r border-[--border-1]",
           "transition-transform duration-300 ease-out",
-          // Drawer below lg, permanent from lg up — except on orders, where
-          // it stays a drawer so the wide table gets the full width.
+          // Drawer below lg, permanent from lg up — except on orders (wide
+          // table gets the full width) and when the user collapsed it from
+          // the header hamburger.
           openSidebar ? "translate-x-0 shadow-modal" : "-translate-x-full",
-          !isOrdersPage && "lg:translate-x-0 lg:shadow-none"
+          !isOrdersPage && !collapsed && "lg:translate-x-0 lg:shadow-none"
         )}
       >
         <div className="flex flex-col w-full min-h-0">

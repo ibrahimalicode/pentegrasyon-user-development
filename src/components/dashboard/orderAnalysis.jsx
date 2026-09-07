@@ -36,6 +36,9 @@ function buildStats(rows) {
     netCount: 0,
     days: new Array(7).fill(0),
     hours: new Array(24).fill(0),
+    // per-marketplace day/hour matrices → stacked chart series
+    daysByMp: MARKETPLACES.map(() => new Array(7).fill(0)),
+    hoursByMp: MARKETPLACES.map(() => new Array(24).fill(0)),
     marketplaces: {},
     discountPlatform: 0,
     discountRestaurant: 0,
@@ -49,10 +52,17 @@ function buildStats(rows) {
       stats.netSum += Number(r.netAmount) || 0;
       stats.netCount += 1;
     }
+    const mpIdx = MARKETPLACES.findIndex((m) => m.id === r.marketplaceId);
     const day = Number(r.orderDayOfWeek);
-    if (day >= 1 && day <= 7) stats.days[day - 1] += 1;
+    if (day >= 1 && day <= 7) {
+      stats.days[day - 1] += 1;
+      if (mpIdx >= 0) stats.daysByMp[mpIdx][day - 1] += 1;
+    }
     const hour = Number(r.orderHour);
-    if (hour >= 0 && hour <= 23) stats.hours[hour] += 1;
+    if (hour >= 0 && hour <= 23) {
+      stats.hours[hour] += 1;
+      if (mpIdx >= 0) stats.hoursByMp[mpIdx][hour] += 1;
+    }
     stats.marketplaces[r.marketplaceId] =
       (stats.marketplaces[r.marketplaceId] || 0) + 1;
     stats.discountPlatform += Number(r.discountPlatform) || 0;
@@ -84,11 +94,14 @@ function buildStats(rows) {
   };
 }
 
-const barChartOptions = (categories, data, name) => ({
-  series: [{ name, data }],
-  colors: ["var(--primary-1)"],
+// One stacked series per marketplace present in the data, brand colors,
+// legend on top — the total bar height stays the overall busy-ness.
+const barChartOptions = (categories, series, colors) => ({
+  series,
+  colors,
   chart: {
     type: "bar",
+    stacked: true,
     height: 210,
     width: "100%",
     foreColor: "var(--black-1)",
@@ -98,6 +111,7 @@ const barChartOptions = (categories, data, name) => ({
   plotOptions: { bar: { borderRadius: 3, columnWidth: "60%" } },
   dataLabels: { enabled: false },
   grid: { borderColor: "var(--border-1)", strokeDashArray: 4 },
+  legend: { position: "top", horizontalAlign: "right" },
   xaxis: { categories, labels: { rotate: 0 } },
   yaxis: { labels: { formatter: (v) => Math.round(v) } },
   tooltip: { y: { formatter: (v) => `${v} sipariş` } },
@@ -159,9 +173,18 @@ const OrderAnalysis = () => {
   useEffect(() => {
     if (!stats || !dayChartElRef.current || !hourChartElRef.current) return;
 
+    const present = MARKETPLACES.map((m, i) => ({ ...m, idx: i })).filter(
+      (m) => stats.marketplaces[m.id],
+    );
+    const colors = present.map((m) => m.color);
+
     const dayChart = new ApexCharts(
       dayChartElRef.current,
-      barChartOptions(DAY_LABELS, stats.days, "Sipariş"),
+      barChartOptions(
+        DAY_LABELS,
+        present.map((m) => ({ name: m.label, data: stats.daysByMp[m.idx] })),
+        colors,
+      ),
     );
     dayChart.render();
 
@@ -169,8 +192,8 @@ const OrderAnalysis = () => {
       hourChartElRef.current,
       barChartOptions(
         [...Array(24).keys()].map((h) => String(h).padStart(2, "0")),
-        stats.hours,
-        "Sipariş",
+        present.map((m) => ({ name: m.label, data: stats.hoursByMp[m.idx] })),
+        colors,
       ),
     );
     hourChart.render();
@@ -213,12 +236,14 @@ const OrderAnalysis = () => {
 
   return (
     <main className="w-full p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-3">
         <h2 className="text-base font-semibold whitespace-nowrap text-[--black-1]">
           Sipariş Analizi
         </h2>
         {/* Facts sync nightly at 02:30 — history, not the live feed. */}
-        <p className="text-xs text-[--gr-1]">Son 30 gün · gece eşitlenir</p>
+        <p className="text-xs text-[--gr-1] whitespace-nowrap">
+          Son 30 gün · gece eşitlenir
+        </p>
       </div>
 
       {unavailable && (

@@ -23,7 +23,13 @@ import { logout, resetLogoutState } from "../../redux/auth/logoutSlice";
 const iconButton =
   "flex justify-center items-center size-9 rounded-lg text-[--gr-1] hover:bg-[--light-3] hover:text-[--black-1] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--primary-1]/40";
 
-function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
+function Header({
+  openSidebar,
+  setOpenSidebar,
+  isOrdersPage,
+  collapsed,
+  setCollapsed,
+}) {
   const toastId = useRef();
   const param = useParams();
   const dispatch = useDispatch();
@@ -96,8 +102,17 @@ function Header({ openSidebar, setOpenSidebar, isOrdersPage }) {
             <button
               type="button"
               aria-label="Menüyü aç/kapat"
-              className={cn(iconButton, !isOrdersPage && "lg:hidden")}
-              onClick={() => setOpenSidebar(!openSidebar)}
+              className={iconButton}
+              onClick={() => {
+                // Desktop non-orders pages have the sidebar pinned; there
+                // the hamburger collapses/expands it. Everywhere else it
+                // opens the drawer overlay, as before.
+                const isDesktop = window.matchMedia(
+                  "(min-width: 1024px)",
+                ).matches;
+                if (isDesktop && !isOrdersPage) setCollapsed(!collapsed);
+                else setOpenSidebar(!openSidebar);
+              }}
             >
               <MenuI />
             </button>

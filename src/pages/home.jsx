@@ -25,6 +25,15 @@ const Logs = lazy(() => import("./activityLogs"));
 
 const Home = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
+  // Desktop-only collapse for the pinned sidebar (the header hamburger
+  // toggles it); persisted so the choice survives reloads.
+  const [collapsed, setCollapsedState] = useState(
+    () => localStorage.getItem("SIDEBAR_COLLAPSED") === "1",
+  );
+  const setCollapsed = (value) => {
+    setCollapsedState(value);
+    localStorage.setItem("SIDEBAR_COLLAPSED", value ? "1" : "0");
+  };
   const { pathname } = useLocation();
 
   // Orders is the operational main screen and its table is wide, so the
@@ -38,15 +47,18 @@ const Home = () => {
         openSidebar={openSidebar}
         setOpenSidebar={setOpenSidebar}
         isOrdersPage={isOrdersPage}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
       />
       <Sidebar
         openSidebar={openSidebar}
         setOpenSidebar={setOpenSidebar}
         isOrdersPage={isOrdersPage}
+        collapsed={collapsed}
       />
       {/* Single place that reserves room for the permanent lg+ sidebar —
           pages used to each repeat lg:ml-[280px], and orders never had it. */}
-      <div className={cn(!isOrdersPage && "lg:pl-[280px]")}>
+      <div className={cn(!isOrdersPage && !collapsed && "lg:pl-[280px]")}>
         {/* Contains any page render crash to the routed content (reload
             prompt) instead of white-screening the whole app; resets when
             the route changes. */}

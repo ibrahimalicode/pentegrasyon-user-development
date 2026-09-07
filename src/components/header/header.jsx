@@ -91,8 +91,8 @@ function Header({
     <>
       <header
         className={cn(
-          "fixed top-0 right-0 left-0 z-[99] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1]",
-          !isOrdersPage && !collapsed && "lg:pl-[280px]"
+          "fixed top-0 right-0 left-0 z-[99] bg-[--white-1]/85 backdrop-blur-md border-b border-[--border-1] transition-[padding] duration-300 ease-out",
+          !isOrdersPage && (collapsed ? "lg:pl-[76px]" : "lg:pl-[240px]")
         )}
       >
         {/* Small left padding so the hamburger hugs the sidebar's border

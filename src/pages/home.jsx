@@ -59,7 +59,12 @@ const Home = () => {
       />
       {/* Single place that reserves room for the permanent lg+ sidebar —
           pages used to each repeat lg:ml-[280px], and orders never had it. */}
-      <div className={cn(!isOrdersPage && !collapsed && "lg:pl-[280px]")}>
+      <div
+        className={cn(
+          "transition-[padding] duration-300 ease-out",
+          !isOrdersPage && (collapsed ? "lg:pl-[76px]" : "lg:pl-[240px]"),
+        )}
+      >
         {/* Contains any page render crash to the routed content (reload
             prompt) instead of white-screening the whole app; resets when
             the route changes. */}

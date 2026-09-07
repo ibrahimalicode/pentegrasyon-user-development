@@ -11,7 +11,7 @@ import { cn } from "../../lib/utils";
 import { initialsOf, titleCaseTr } from "../../utils/utils";
 import { useProtectPages } from "../../context/ProtectPagesContext";
 
-function UserProfile({ setOpenSidebar }) {
+function UserProfile({ setOpenSidebar, rail }) {
   const param = useParams();
   const { protectedPages } = useProtectPages();
   const { user } = useSelector((state) => state.user.getUser);
@@ -42,8 +42,10 @@ function UserProfile({ setOpenSidebar }) {
         )}
       >
         <div
+          title={rail ? fullName : undefined}
           className={cn(
             "group flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors",
+            rail && "justify-center",
             isActive ? "bg-[--light-1]" : "hover:bg-[--light-3]"
           )}
           onClick={() => setOpenSidebar(false)}
@@ -59,6 +61,7 @@ function UserProfile({ setOpenSidebar }) {
             {initialsOf(fullName) || "K"}
           </div>
 
+          {!rail && (
           <div className="flex flex-col flex-1 min-w-0">
             <span
               className={cn(
@@ -72,8 +75,11 @@ function UserProfile({ setOpenSidebar }) {
               {userData?.rol || "Kullanıcı"}
             </span>
           </div>
+          )}
 
-          <ArrowIR className="size-4 shrink-0 text-[--gr-3] group-hover:translate-x-0.5 group-hover:text-[--primary-1] transition-all" />
+          {!rail && (
+            <ArrowIR className="size-4 shrink-0 text-[--gr-3] group-hover:translate-x-0.5 group-hover:text-[--primary-1] transition-all" />
+          )}
         </div>
       </Link>
     </div>

@@ -35,6 +35,37 @@ const PERIODS = [
 const price = (n) =>
   formatToPrice(String(Number(n || 0).toFixed(2)).replace(".", ","));
 
+const TR_MONTHS = [
+  "Ocak",
+  "Şubat",
+  "Mart",
+  "Nisan",
+  "Mayıs",
+  "Haziran",
+  "Temmuz",
+  "Ağustos",
+  "Eylül",
+  "Ekim",
+  "Kasım",
+  "Aralık",
+];
+
+// "1–31 Ağustos 2026" / "28 Ağustos – 3 Eylül 2026" — labels like "Geçen
+// Ay" or "Çarşamba" don't say which actual days they cover.
+const dayRange = (startIso, endIso) => {
+  if (!startIso || !endIso) return "";
+  const s = new Date(startIso);
+  const e = new Date(endIso);
+  const sameMonth = s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear();
+  return sameMonth
+    ? `${s.getDate()}–${e.getDate()} ${TR_MONTHS[s.getMonth()]} ${e.getFullYear()}`
+    : `${s.getDate()} ${TR_MONTHS[s.getMonth()]} – ${e.getDate()} ${
+        TR_MONTHS[e.getMonth()]
+      } ${e.getFullYear()}`;
+};
+
+const pct = (part, whole) => (whole ? Math.round((part / whole) * 100) : 0);
+
 // Apex ships English month/day names only; the panel is Turkish.
 const TR_LOCALE = {
   name: "tr",
@@ -178,7 +209,10 @@ const Bars = ({ rows, max, valueFormatter }) => (
   <div className="flex flex-col gap-1.5">
     {rows.map((r) => (
       <div key={r.key} className="flex items-center gap-3 text-xs">
-        <span className="w-28 shrink-0 truncate text-[--black-2]">
+        <span
+          className="w-28 shrink-0 truncate text-[--black-2]"
+          title={r.title}
+        >
           {r.label}
         </span>
         <span className="h-2 flex-1 overflow-hidden rounded-full bg-[--light-3]">
@@ -190,7 +224,7 @@ const Bars = ({ rows, max, valueFormatter }) => (
             }}
           />
         </span>
-        <span className="w-24 shrink-0 text-right tabular-nums text-[--black-1]">
+        <span className="w-32 shrink-0 text-right tabular-nums text-[--black-1]">
           {valueFormatter(r)}
         </span>
       </div>
@@ -205,6 +239,16 @@ const RestaurantReport = ({ report }) => {
   const payMax = Math.max(...report.paymentKinds.map((p) => p.orderCount), 1);
   // Only hours with orders — a full 24-row list is mostly zeros.
   const activeHours = report.hours.filter((h) => h.orderCount > 0);
+  // Which calendar days each weekday covers, e.g. Çarşamba → "2, 9, 16, 23".
+  const weekdayDates = {};
+  for (const d of report.days || []) {
+    const date = new Date(d.date);
+    // JS Sunday=0; the API uses Monday=1..Sunday=7.
+    const key = date.getDay() === 0 ? 7 : date.getDay();
+    (weekdayDates[key] ||= []).push(
+      `${date.getDate()} ${TR_MONTHS[date.getMonth()]}`,
+    );
+  }
 
   return (
     <main className="w-full p-5 bg-[--white-1] rounded-xl border border-solid border-[--border-1] shadow-card">
@@ -213,8 +257,16 @@ const RestaurantReport = ({ report }) => {
           {report.restaurantName}
         </h3>
         <p className="text-xs text-[--gr-1]">
-          {report.periodLabel} · {report.activeDays}/{report.daysInPeriod} gün
-          aktif · {report.comparisonLabel}
+          {dayRange(report.periodStart, report.periodEnd)} ·{" "}
+          {report.activeDays}/{report.daysInPeriod} gün aktif ·{" "}
+          {report.comparisonLabel}
+          {report.previousPeriodStart && (
+            <>
+              {" "}
+              (
+              {dayRange(report.previousPeriodStart, report.previousPeriodEnd)})
+            </>
+          )}
         </p>
       </div>
 
@@ -278,7 +330,18 @@ const RestaurantReport = ({ report }) => {
               revenue: m.revenue,
               share: m.revenueShare,
             }))}
-            valueFormatter={(r) => `${r.value} · %${Math.round(r.share)}`}
+            // Bar is the order share; the ₺ line underneath is the revenue
+            // share, which can differ a lot (bigger baskets on one app).
+            valueFormatter={(r) => (
+              <>
+                <p>
+                  {r.value} sipariş · %{pct(r.value, report.orderCount)}
+                </p>
+                <p className="text-[--gr-1]">
+                  {price(r.revenue)} ₺ · %{Math.round(r.share)}
+                </p>
+              </>
+            )}
           />
         </div>
 
@@ -300,16 +363,27 @@ const RestaurantReport = ({ report }) => {
 
         <div>
           <p className="pb-2 text-sm font-medium text-[--black-1]">
-            Günlere Göre
+            Günlere Göre{" "}
+            <span className="text-xs font-normal text-[--gr-1]">
+              · dönemde kaç kez geçtiği parantezde
+            </span>
           </p>
           <Bars
             max={weekdayMax}
             rows={report.weekdays.map((w) => ({
               key: w.dayOfWeek,
-              label: w.name,
+              // "Çarşamba" alone doesn't say which dates it covers.
+              label: `${w.name}${
+                weekdayDates[w.dayOfWeek]?.length
+                  ? ` (${weekdayDates[w.dayOfWeek].length})`
+                  : ""
+              }`,
+              title: weekdayDates[w.dayOfWeek]?.join(", "),
               value: w.orderCount,
             }))}
-            valueFormatter={(r) => `${r.value} sipariş`}
+            valueFormatter={(r) =>
+              `${r.value} · %${pct(r.value, report.orderCount)}`
+            }
           />
         </div>
 
@@ -321,10 +395,14 @@ const RestaurantReport = ({ report }) => {
             max={hourMax}
             rows={activeHours.map((h) => ({
               key: h.hour,
-              label: `${String(h.hour).padStart(2, "0")}:00`,
+              label: `${String(h.hour).padStart(2, "0")}:00–${String(
+                (h.hour + 1) % 24,
+              ).padStart(2, "0")}:00`,
               value: h.orderCount,
             }))}
-            valueFormatter={(r) => `${r.value} sipariş`}
+            valueFormatter={(r) =>
+              `${r.value} · %${pct(r.value, report.orderCount)}`
+            }
           />
         </div>
       </div>
@@ -346,17 +424,19 @@ const RestaurantReport = ({ report }) => {
             rows={[
               {
                 key: "platform",
-                label: "Pazaryeri",
+                label: "Pazaryeri karşıladı",
                 value: report.discountPlatform,
               },
               {
                 key: "restaurant",
-                label: "Restoran",
+                label: "Siz karşıladınız",
                 value: report.discountRestaurant,
                 color: "var(--green-1)",
               },
             ]}
-            valueFormatter={(r) => `${price(r.value)} ₺`}
+            valueFormatter={(r) =>
+              `${price(r.value)} ₺ · %${pct(r.value, report.discountTotal)}`
+            }
           />
         </div>
         <div>
@@ -474,7 +554,9 @@ const ReportsPage = () => {
               <Kpi
                 label="Dönem"
                 value={report.periodLabel}
-                note={`${report.restaurants?.length || 0} restoran`}
+                note={`${dayRange(report.periodStart, report.periodEnd)} · ${
+                  report.restaurants?.length || 0
+                } restoran`}
               />
               <Kpi
                 label="Toplam Sipariş"

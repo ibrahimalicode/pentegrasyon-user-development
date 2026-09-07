@@ -97,13 +97,8 @@ const LicensesTable = ({
                     onSuccess={onSuccess}
                   />
                 </td>
-                <td className={cn(TD, "w-14 relative")}>
-                  <LicensesActions
-                    index={index}
-                    licenseData={data}
-                    itemsPerPage={inData.length}
-                    onSuccess={onSuccess}
-                  />
+                <td className={cn(TD, "whitespace-nowrap")}>
+                  <LicensesActions licenseData={data} onSuccess={onSuccess} />
                 </td>
               </tr>
             ))}

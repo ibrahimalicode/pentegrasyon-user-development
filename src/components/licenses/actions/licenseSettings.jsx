@@ -1,4 +1,5 @@
 //COMP
+import { cn } from "../../../lib/utils";
 import { SettingsI } from "../../../assets/icon";
 import ActionButton from "../../common/actionButton";
 import { usePopup } from "../../../context/PopupContext";
@@ -8,7 +9,7 @@ import MigrosYemekLicenseSettings from "./marketplaceLicenseSettings/migrosYemek
 import PaketNetLicenseSettings from "./marketplaceLicenseSettings/paketNetLicenseSettings";
 import TrendyolYemekLicenseSettings from "./marketplaceLicenseSettings/trendyolYemekLicenseSettings";
 
-const LicenseSettings = ({ licenseData, onSuccess }) => {
+const LicenseSettings = ({ licenseData, onSuccess, inline }) => {
   const { setPopupContent } = usePopup();
 
   const LicenseSettingsPopups = [
@@ -34,7 +35,15 @@ const LicenseSettings = ({ licenseData, onSuccess }) => {
 
   return (
     <ActionButton
-      className="text-[--gr-1]"
+      className={
+        inline
+          ? cn(
+              "w-auto whitespace-nowrap rounded-full border border-solid border-[--border-1] px-3 py-1.5 text-xs text-[--gr-1] hover:border-[--primary-1] hover:text-[--primary-1]",
+              // Integration parameters need an active license.
+              !licenseData.isActive && "opacity-50 cursor-not-allowed",
+            )
+          : "text-[--gr-1]"
+      }
       element={<SettingsI className="w-[1.1rem]" />}
       element2="Entegrasyon"
       onClick={handlePopup}

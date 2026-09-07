@@ -31,37 +31,53 @@ const SPLIT_CHART_TYPES = [
   { id: "donut", label: "Donut" },
 ];
 
-const radialOptions = (present, total) => ({
-  series: present.map((e) => Math.round((e.count / total) * 100)),
-  labels: present.map((e) => e.label),
-  colors: present.map((e) => e.color),
-  chart: {
-    type: "radialBar",
-    height: 240,
-    foreColor: "var(--black-1)",
-    fontFamily: "inherit",
-  },
-  plotOptions: {
-    radialBar: {
-      // Wide hollow so long labels ("Restoran Kuryesi", "Kapıda
-      // (Nakit/Kart)") fit inside instead of clipping on the ring.
-      hollow: { size: "58%" },
-      track: { background: "var(--light-3)" },
-      dataLabels: {
-        name: { fontSize: "11px", offsetY: -4 },
-        value: { fontSize: "16px", offsetY: 4, formatter: (v) => `%${v}` },
+const radialOptions = (present, total) => {
+  // Each series draws its own ring inside the previous one, so a wide
+  // hollow leaves 5 payment kinds as hairlines. Shrink the hollow (and
+  // grow the canvas) as rings are added; the center label still needs
+  // room for "Kapıda (Nakit/Kart)".
+  const count = present.length;
+  const hollow = count <= 1 ? "58%" : count === 2 ? "50%" : count === 3 ? "42%" : "34%";
+  const dominant = present.reduce((a, b) => (b.count > a.count ? b : a));
+
+  return {
+    series: present.map((e) => Math.round((e.count / total) * 100)),
+    labels: present.map((e) => e.label),
+    colors: present.map((e) => e.color),
+    chart: {
+      type: "radialBar",
+      height: count > 3 ? 300 : 260,
+      foreColor: "var(--black-1)",
+      fontFamily: "inherit",
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: { size: hollow },
+        track: { background: "var(--light-3)", margin: count > 3 ? 3 : 6 },
+        dataLabels: {
+          name: { fontSize: "10px", offsetY: -2 },
+          value: { fontSize: "15px", offsetY: 2, formatter: (v) => `%${v}` },
+          // Resting state names the dominant kind instead of Apex's
+          // "Total", which sums the percentages to a meaningless number.
+          total: {
+            show: true,
+            label: dominant.label,
+            fontSize: "10px",
+            formatter: () => `%${Math.round((dominant.count / total) * 100)}`,
+          },
+        },
       },
     },
-  },
-  legend: {
-    show: true,
-    position: "bottom",
-    fontSize: "12px",
-    formatter: (name, opts) =>
-      `${name} %${opts.w.globals.series[opts.seriesIndex]}`,
-  },
-  stroke: { lineCap: "round" },
-});
+    legend: {
+      show: true,
+      position: "bottom",
+      fontSize: "12px",
+      formatter: (name, opts) =>
+        `${name} %${opts.w.globals.series[opts.seriesIndex]}`,
+    },
+    stroke: { lineCap: "round" },
+  };
+};
 
 const donutOptions = (present, total) => ({
   series: present.map((e) => e.count),

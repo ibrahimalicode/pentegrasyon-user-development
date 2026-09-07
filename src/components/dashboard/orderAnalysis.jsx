@@ -94,21 +94,21 @@ function buildStats(rows) {
   };
 }
 
-// One stacked series per marketplace present in the data, brand colors,
-// legend on top — the total bar height stays the overall busy-ness.
+// One series per marketplace present in the data, brand colors, legend on
+// top — GROUPED bars (each marketplace its own bar beside the others per
+// category), not stacked segments.
 const barChartOptions = (categories, series, colors) => ({
   series,
   colors,
   chart: {
     type: "bar",
-    stacked: true,
     height: 210,
     width: "100%",
     foreColor: "var(--black-1)",
     toolbar: { show: false },
     fontFamily: "inherit",
   },
-  plotOptions: { bar: { borderRadius: 3, columnWidth: "60%" } },
+  plotOptions: { bar: { borderRadius: 2, columnWidth: "70%" } },
   dataLabels: { enabled: false },
   grid: { borderColor: "var(--border-1)", strokeDashArray: 4 },
   legend: { position: "top", horizontalAlign: "right" },
@@ -261,7 +261,7 @@ const OrderAnalysis = () => {
       {stats && stats.total > 0 && (
         <div className="flex flex-col gap-5 pt-4">
           {/* KPI row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
             {kpis.map((kpi) => (
               <div
                 key={kpi.label}
@@ -281,7 +281,7 @@ const OrderAnalysis = () => {
           </div>
 
           {/* Busy-ness charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
             <div className="min-w-0">
               <p className="pb-1 text-sm font-medium text-[--black-1]">
                 Günlere Göre{" "}
@@ -304,7 +304,7 @@ const OrderAnalysis = () => {
           </div>
 
           {/* Marketplace split + discount funding */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
             <div>
               <p className="pb-2 text-sm font-medium text-[--black-1]">
                 Pazaryeri Dağılımı
